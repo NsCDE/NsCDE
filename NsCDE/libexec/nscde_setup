@@ -1,0 +1,307 @@
+#!/bin/ksh
+
+VERBOSE=0
+
+if [ -z $HOME ]; then
+   echo "Error: HOME is not set cannot continue."
+   exit 3
+fi
+
+if [ -z $NSCDE_ROOT ]; then
+   echo "Error: NSCDE_ROOT is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_ROOT" ]; then
+   echo "Error: NSCDE_ROOT does not exist. Cannot continue."
+   exit 5
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   echo "Error: FVWM_USERDIR is not set cannot continue."
+   exit 6
+fi
+
+function setup_nscde
+{
+   if (($VERBOSE == 1)); then
+      echo ""
+      echo "#####################################################################"
+      echo "#"
+      echo "# NsCDE First Run Setup"
+      echo "#"
+      echo "#####################################################################"
+      echo ""
+   fi
+
+   if [ -z $NSCDE_PALETTE ]; then
+      NSCDE_PALETTE="Broica.dp"
+   fi
+
+   if [ -z $NSCDE_PALETTE_NCOLORS ]; then
+      NSCDE_PALETTE_NCOLORS=8
+   fi
+
+   if (($INTERACTIVE == 1)); then
+      echo "Enter RETURN to run this script"
+      read RET
+   fi
+
+   if [ ! -e "${FVWM_USERDIR}/NsCDE-Colorset.conf" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Generating NsCDE fvwm Colorset ..."
+      fi
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+       -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/NsCDE-Colorset.conf"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/NsCDE-Colorset.conf already exists."
+      fi
+   fi
+
+   if (($VERBOSE == 1)); then
+      echo "Setting up X resources in $HOME/.NsCDE - pieces that do not exist:"
+      echo "(Xdefaults, Xdefaults.local, Xdefaults.fontdefs, app-defaults) ..."
+   fi
+
+   # Xdefaults includes
+   if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+       -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/Xdefaults already exists."
+      fi
+   fi
+
+   if [ ! -e "${FVWM_USERDIR}/Xdefaults.local" ]; then
+      touch "${FVWM_USERDIR}/Xdefaults.local"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/Xdefaults.local already exists."
+      fi
+   fi
+
+   if [ ! -e "${FVWM_USERDIR}/Xdefaults.fontdefs" ]; then
+      cp "${NSCDE_ROOT}/share/templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/Xdefaults.fontdefs already exists."
+      fi
+   fi
+
+   if [ ! -e "${FVWM_USERDIR}/Xdefaults.mouse" ]; then
+      cp "${NSCDE_ROOT}/share/templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/Xdefaults.mouse already exists."
+      fi
+   fi
+
+   # Xdefaults pieces dir (XAPPLRESDIR)
+   if [ ! -e "${FVWM_USERDIR}/app-defaults" ]; then
+      mkdir -p "${FVWM_USERDIR}/app-defaults"
+      for appres in $NSCDE_ROOT/share/templates/app-defaults/*.tmpl
+      do
+         appres="${appres%.tmpl}"
+         $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+          -n $NSCDE_PALETTE_NCOLORS -i ${appres}.tmpl -c > $FVWM_USERDIR/app-defaults/${appres##*/}
+      done
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/app-defaults already exists."
+      fi
+   fi
+
+   # Bare background before backer setup
+   if [ ! -e "${FVWM_USERDIR}/.BGdefault" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Writing default background pixel ${FVWM_USERDIR}/.BGdefault ..."
+      fi
+      cp ${NSCDE_ROOT}/share/templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/.BGdefault already exists."
+      fi
+   fi
+
+   # Initial NsCDE.conf after InitFunction is run
+   if [ ! -e "${FVWM_USERDIR}/NsCDE.conf" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Initializing default ${FVWM_USERDIR}/NsCDE.conf ..."
+      fi
+      cp ${NSCDE_ROOT}/config/NsCDE.conf ${FVWM_USERDIR}/NsCDE.conf
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/NsCDE.conf already exists."
+      fi
+   fi
+
+   # GeometryDB ini
+   if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Initializing default empty ${FVWM_USERDIR}/GeoDB.ini ..."
+      fi
+      touch ${FVWM_USERDIR}/GeoDB.ini
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/GeoDB.ini already exists."
+      fi
+   fi
+
+   # Misc paths
+   if (($VERBOSE == 1)); then
+      echo "Making additional subdirectories in ${FVWM_USERDIR} ..."
+   fi
+   mkdir -p ${FVWM_USERDIR}/{palettes,templates,fontsets,backdrops,photos}
+
+   # Disable "fancy" curors
+   if [ ! -e "$HOME/.icons/default/index.theme" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Writing $HOME/.icons/default/index.theme ..."
+      fi
+      mkdir -p "$HOME/.icons/default"
+      echo -ne '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.icons/default/index.theme already exists."
+      fi
+   fi
+
+   # Make sure $HOME/.gtkrc-2.0 and $HOME/.config/gtk-3.0/settings.ini exists,
+   # if not, set it up with defaults and generate theme with starting or environment palette.
+
+   # Gtk2
+   if [ ! -e "$HOME/.gtkrc-2.0" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Writing $HOME/.gtkrc-2.0 ..."
+      fi
+      echo -ne 'gtk-key-theme-name = "Emacs"\ngtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
+      echo -ne 'gtk-button-images = 0\ngtk-menu-images = 0\n' >> "$HOME/.gtkrc-2.0"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.gtkrc-2.0 already exists."
+      fi
+   fi
+
+   # Gtk3
+   if [ ! -e "$HOME/.config/gtk-3.0/settings.ini" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Writing $HOME/.config/gtk-3.0/settings.ini ..."
+      fi
+      mkdir -p "$HOME/.config/gtk-3.0"
+      echo -ne "[Settings]\ngtk-theme-name = NsCDE\ngtk-cursor-theme-name = dmz-aa\ngtk-button-images = 0\n" > "$HOME/.config/gtk-3.0/settings.ini"
+      echo -ne "gtk-menu-images = 0\ngtk-application-prefer-dark-theme = 1\ngtk-font-name = DejaVu Serif Book 10\n" >> "$HOME/.config/gtk-3.0/settings.ini"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.config/gtk-3.0/settings.ini already exists."
+      fi
+   fi
+
+   # Gtk2 and Gtk3 themes
+   if [ ! -e "$HOME/.themes/NsCDE" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Generating default theme for Gtk2/Gtk3 in $HOME/.themes/NsCDE ..."
+      fi
+      mkdir -p "$HOME/.themes"
+      $NSCDE_ROOT/libexec/themegen.py $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE $NSCDE_PALETTE_NCOLORS True True
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.themes/NsCDE already exists."
+      fi
+   fi
+
+   # Qt4 and Qt5
+   if [ ! -r "$HOME/.config/Trolltech.conf" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Integrating Qt4 with generated Gtk2 theme ..."
+      fi
+      mkdir -p "$HOME/.config"
+      echo -ne '[Qt]\nstyle=GTK+\n' > "$HOME/.config/Trolltech.conf"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.config/Trolltech.conf already exists."
+      fi
+   fi
+
+   if [ ! -e "$HOME/.config/qt5ct/qt5ct.conf" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Integrating Qt5 with generated Gtk2 theme ..."
+      fi
+      mkdir -p "$HOME/.config/qt5ct"
+      echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\n' > "$HOME/.config/qt5ct/qt5ct.conf"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.config/qt5ct/qt5ct.conf already exists."
+      fi
+   fi
+
+   # Stalonetray - if it doesn't have configuration yet ready.
+   if [ ! -e "${HOME}/.stalonetrayrc" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Setting default ${HOME}/.stalonetrayrc ..."
+      fi
+      cp ${NSCDE_ROOT}/share/templates/dot_stalonetrayrc ${HOME}/.stalonetrayrc
+   else
+      if (($VERBOSE == 1)); then
+         echo "${HOME}/.stalonetrayrc already exists."
+      fi
+   fi
+
+   if (($VERBOSE == 1)); then
+      sleep 1
+      echo '... done!'
+      echo ""
+      echo "Please select palette (default: Broica), integrations you want and confirm with OK"
+      sleep 2
+      echo ""
+      FvwmCommand 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
+      echo "Logout and login again for full changes to take effect."
+      echo ""
+      echo "You can set \$[infostore.terminal] variable to your favorite"
+      echo "terminal program in \$HOME/.NsCDE/NsCDE.conf or leave autodiscovery."
+      echo ""
+   fi
+
+   if (($INTERACTIVE == 1)); then
+      echo "Press RETURN to exit."
+      read RET
+      exit 0
+   fi
+}
+
+if [ ! -d "$FVWM_USERDIR" ]; then
+   INTERACTIVE=0
+   VERBOSE=1
+   setup_nscde > $HOME/NsCDE-Setup.log
+fi
+
+while getopts fivh Option
+do
+   case $Option in
+   f)
+      unset IVF
+      setup_nscde
+   ;;  
+   i)
+      unset IVF
+      INTERACTIVE=1
+   ;;
+   v)
+      unset IVF
+      VERBOSE=1
+   ;;
+   h)
+      echo "Usage: ${0##*/} [ -f ] [ -i ] [ -v ] [ -h ]"
+   ;;
+   esac
+done
+
+if [ -n $IVF ]; then
+   if [[ "$IVF" == "1" ]]; then
+      VERBOSE=1
+      INTERACTIVE=1
+      setup_nscde
+   fi
+fi
+

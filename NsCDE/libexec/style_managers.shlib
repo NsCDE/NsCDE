@@ -1,0 +1,222 @@
+# NsCDE: routines common for Style Managers ColorMgr and BackdropMgr
+# FvwmScript backgroud workers
+
+# Scans system and user path for palettes and stores them in SysPalettes and UserPalettes variables
+# Used in other API functions and in managers
+function FindPalettes
+{
+   if [ -z $NSCDE_ROOT ]; then
+      echo "No NSCDE_ROOT defined. Exiting."
+      exit 2
+   fi
+
+   SysPalettes=$(ls -1 ${NSCDE_ROOT}/share/palettes/*.dp | awk -F "/" '{print $NF}' | sed 's/\.dp$//g')
+
+   if [ -d "${FVWM_USERDIR}/palettes" ]; then
+      ls -1 ${FVWM_USERDIR}/palettes/*.dp > /dev/null 2>&1
+      if (($? == 0)); then
+         UserPalettes=$(ls -1 ${FVWM_USERDIR}/palettes/*.dp | awk -F "/" '{print $NF}' | sed 's/\.dp$//g')
+      fi
+   fi
+}
+
+# Scans system and user path for backdrops and stores them in SysBackdrops and UserBackdrops variables
+# Used in other API functions and in managers
+function FindBackdrops
+{
+   if [ -z $NSCDE_ROOT ]; then
+      echo "No NSCDE_ROOT defined. Exiting."
+      exit 2
+   fi
+
+   SysBackdrops=$(ls -1 ${NSCDE_ROOT}/share/backdrops/*.pm | awk -F "/" '{print $NF}' | sed 's/\.pm$//g')
+
+   if [ -d "${FVWM_USERDIR}/backdrops" ]; then
+      ls -1 ${FVWM_USERDIR}/backdrops/*.pm > /dev/null 2>&1
+      if (($? == 0)); then
+         UserBackdrops=$(ls -1 ${FVWM_USERDIR}/backdrops/*.pm | awk -F "/" '{print $NF}' | sed 's/\.pm$//g')
+      fi
+   fi
+}
+
+# Scans system and user path for photos and stores them in SysPhotos and UserPhotos variables
+# Used in other API functions and in managers
+function FindPhotos
+{
+   if [ -z $NSCDE_ROOT ]; then
+      echo "No NSCDE_ROOT defined. Exiting."
+      exit 2
+   fi
+
+   SysPhotos=$(ls -1 ${NSCDE_ROOT}/share/photos/*.png | awk -F "/" '{print $NF}' | sed 's/\.png$//g')
+
+   if [ -d "${FVWM_USERDIR}/photos" ]; then
+      ls -1 ${FVWM_USERDIR}/photos/*.png > /dev/null 2>&1
+      if (($? == 0)); then
+         UserPhotos=$(ls -1 ${FVWM_USERDIR}/photos/*.png | awk -F "/" '{print $NF}' | sed 's/\.png$//g')
+      fi
+   fi
+}
+
+# Finds backdrop, places it's base name in Backdropname and full path in
+# BackdropNamePath variable, if in echo mode, echoes full path with extension
+# which is suitable for usage in FvwmScript GetOutput.
+function GetBackdrop
+{
+   Backdropname="$1"
+   if [ -s "${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm" ]; then
+      if (($EchoInfo == 1)); then
+         echo "${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm"
+      fi
+      export BackdropNamePath="${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm"
+      export Backdropname
+   elif [ -s "${FVWM_USERDIR}/backdrops/${Backdropname}.pm" ]; then
+      if (($EchoInfo == 1)); then
+        echo "${FVWM_USERDIR}/backdrops/${Backdropname}.pm"
+      fi
+      export BackdropNamePath="${FVWM_USERDIR}/backdrops/${Backdropname}.pm"
+      export Backdropname
+   fi
+}
+
+# Finds palette, places it's base name in Palettename and full path in
+# PaletteNamePath variable, if in echo mode, echoes full path with extension
+# which is suitable for usage in FvwmScript GetOutput.
+function GetPalette
+{
+   Palettename="$1"
+   if [ -s "${NSCDE_ROOT}/share/palettes/${Palettename}.dp" ]; then
+      if (($EchoInfo == 1)); then
+         echo "${NSCDE_ROOT}/share/palettes/${Palettename}.dp"
+      fi
+      export PaletteNamePath="${NSCDE_ROOT}/share/palettes/${Palettename}.dp"
+      export Palettename
+   elif [ -s "${FVWM_USERDIR}/palettes/${Palettename}.dp" ]; then
+      if (($EchoInfo == 1)); then
+        echo "${FVWM_USERDIR}/palettes/${Palettename}.dp"
+      fi
+      export PaletteNamePath="${FVWM_USERDIR}/palettes/${Palettename}.dp"
+      export Palettename
+   fi
+}
+
+# Finds photo, places it's base name in Photoname and full path in
+# PhotoNamePath variable, if in echo mode, echoes full path with extension
+# which is suitable for usage in FvwmScript GetOutput.
+function GetPhoto
+{
+   Photoname="$1"
+   if [ -s "${NSCDE_ROOT}/share/photos/${Photoname}.png" ]; then
+      if (($EchoInfo == 1)); then
+         echo "${NSCDE_ROOT}/share/photos/${Photoname}.png"
+      fi
+      export PhotoNamePath="${NSCDE_ROOT}/share/photos/${Photoname}.png"
+      export Photoname
+   elif [ -s "${FVWM_USERDIR}/photos/${Photoname}.png" ]; then
+      if (($EchoInfo == 1)); then
+        echo "${FVWM_USERDIR}/photos/${Photoname}.png"
+      fi
+      export PhotoNamePath="${FVWM_USERDIR}/photos/${Photoname}.png"
+      export Photoname
+   fi
+}
+
+# Generates Palette Menu for ColorMgr and BackdropMgr List widgets
+function GeneratePaletteMenu
+{
+   FindPalettes
+
+   for palette in $SysPalettes $UserPalettes
+   do
+      echo -ne "${palette}|"
+   done | sed 's/|$/\n/g'
+}
+
+# Generates Backdrop Menu for ColorMgr and BackdropMgr List widgets
+function GenerateBackdropMenu
+{
+   FindBackdrops
+
+   for backdrop in $SysBackdrops $UserBackdrops
+   do
+      echo -ne "${backdrop}|"
+   done | sed 's/|$/\n/g'
+}
+
+# Generates Photo Menu for ColorMgr and BackdropMgr List widgets
+function GeneratePhotoMenu
+{
+   FindPhotos
+
+   for photo in $SysPhotos $UserPhotos
+   do
+      echo -ne "${photo}|"
+   done | sed 's/|$/\n/g'
+}
+
+# Takes Number from FvwmScript List widget and finds base name of the Palette
+function GetPaletteByNumber
+{
+   FindPalettes
+
+   Palettenum="$1"
+
+   cnt=0
+   for palette in $SysPalettes $UserPalettes
+   do
+      (( cnt = cnt + 1 ))
+      if [ $Palettenum == $cnt ]; then
+         echo $palette
+      fi
+   done
+}
+
+# Takes Number from FvwmScript List widget and finds base name of the Backdrop
+function GetBackdropByNumber
+{
+   FindBackdrops
+
+   Backdropnum="$1"
+
+   cnt=0
+   for backdrop in $SysBackdrops $UserBackdrops
+   do
+      (( cnt = cnt + 1 ))
+      if [ $Backdropnum == $cnt ]; then
+         echo $backdrop
+      fi
+   done
+}
+
+# Takes Number from FvwmScript List widget and finds base name of the Photo
+function GetPhotoByNumber
+{
+   FindPhotos
+
+   Photonum="$1"
+
+   cnt=0
+   for photo in $SysPhotos $UserPhotos
+   do
+      (( cnt = cnt + 1 ))
+      if [ $Photonum == $cnt ]; then
+         echo $photo
+      fi
+   done
+}
+
+# Takes the name of the Palette, finds and prints it's number in FvwmScript List widget
+function GetPaletteByName
+{
+   FindPalettes
+
+   cnt=0
+   for palette in $SysPalettes $UserPalettes
+   do
+      ((cnt = cnt + 1))
+      if [[ "$palette" == "$1" || "${palette}.dp" == "$1" ]]; then
+         echo $cnt
+      fi
+   done
+}
+

@@ -1,0 +1,33 @@
+pclock v0.13.1
+--------------
+
+pclock is a simple analog clock program designed primarily to run under the
+Window Maker window manager. Any 64x64 pixmap may be used as a background,
+including tiles. Contributions of interesting backgrounds are welcome.
+
+One current limitation is that the clock hands are drawn within the mask of
+the background XPM file.
+
+To build:
+  edit src/Makefile
+  make
+
+Use ``pclock --help'' for instructions.
+
+This program has only been tested with Linux and Window Maker, on a
+high-color display. It should work on 8-bit displays if you use backgrounds
+with small numbers of colors!
+
+Note: you might find it useful to run multiple clocks in different
+timezones, this can be accomplished by using the following command for each
+clock:
+
+  env TZ=<timezone> pclock
+
+Just replace <timezone> with the name of a timezone (on my computer, they
+are in /usr/share/zoneinfo, one example is ``US/Pacific''). Watch out
+though, Window Maker doesn't remember the command correctly so you may need
+to edit your config files by hand to add back the ``env TZ=..'' part.
+
+Alexander@Kourakos.com
+http://www.kourakos.com/~awk/pclock/

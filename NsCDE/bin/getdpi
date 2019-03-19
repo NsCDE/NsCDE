@@ -1,0 +1,27 @@
+#!/bin/ksh
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+type -p xdpyinfo > /dev/null 2>&1
+if (($? == 0)); then
+   dpi1=$(xdpyinfo 2>/dev/null | egrep "resolution:.*dots per inch" | awk '{ print $2 }')
+   DPI=${dpi1##*x}
+   if [ "x$DPI" == "x" ]; then
+      DPI=96
+   fi
+else
+   DPI=96
+fi
+
+if (($DPI <= 85)); then
+   NSCDE_DPI=75
+elif (($DPI > 85 && $DPI < 108)); then
+   NSCDE_DPI=96
+elif (($DPI >= 108 && $DPI < 132)); then
+   NSCDE_DPI=120
+elif (($DPI >= 132)); then
+   NSCDE_DPI=144
+fi
+
+echo $NSCDE_DPI

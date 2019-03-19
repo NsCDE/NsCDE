@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.11. Subpanel Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-PowerSaveMgr.html" title="4.10. Power Save Manager"><link rel="next" href="NsCDE-SubpanelSettings.html" title="4.12. Subpanel Settings"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.11. Subpanel Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-PowerSaveMgr.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-SubpanelSettings.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-SubpanelMgr"></a>4.11. Subpanel Manager</h3></div></div></div><p>
+Only in NsCDE. Tool written for managing FvwmButtons transient Subpanels which
+are opened from the Front Panel. It is called from <span class="emphasis"><em>Install Icon</em></span> action on
+every Subpanel. This tool exists because FvwmButtons doesn't implement drag
+and drop, and there is no application manager present, since this part of CDE
+functions cannot be easy implemented even if some file manager is taken to act
+as application manager.
+</p><p>
+Subpanel Manager has list of all applications which are providing system menu
+with it's presence (patched version of fvwm-menu-desktop is used in the
+background), and list of applications provided in the current Subpanel from
+which tool is called by "Install Icon".
+This lists are displayed on the top of the window side by side: system menu
+applications on the left, and current Subpanel items on the right list.
+There are 3 text fields: <span class="guilabel">Name</span>, <span class="guilabel">Command</span>
+and <span class="guilabel">Icon File</span>. This fields are
+automatically populated when some item from mentioned lists is clicked, but it
+can also be populated manually if user wishes to add a custom application,
+Fvwm Module, Fvwm Function or other entry manually on the Subpanel.
+Subpanel Manager can also remove existing entries from the Subpanel or modify
+them.
+</p><p>
+Subpanel Manager implements this helper functions for modifying and applying
+settings on new items:
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Launcher Type</p></li><li class="listitem"><p>Execute in Terminal</p></li><li class="listitem"><p>Do not check for command existence</p></li><li class="listitem"><p>Icon indicator</p></li></ul></div><p>
+
+
+</p><p>
+This tool is not well designed and will be rewritten on the first occasion.
+Subpanel configuration files <code class="filename">NsCDE-SubpanelX.conf</code>, where
+<span class="emphasis"><em>X</em></span> is 1-10 can be edited by
+hand in <code class="varname">$FVWM_USERDIR</code> if order of entries is important, or something needs to
+be changed on existing entries.
+
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-PowerSaveMgr.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-SubpanelSettings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.10. Power Save Manager </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.12. Subpanel Settings</td></tr></table></div></body></html>

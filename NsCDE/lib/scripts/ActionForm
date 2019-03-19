@@ -1,0 +1,166 @@
+WindowTitle {Question}
+WindowSize 400 134
+Colorset 22
+
+Init
+Begin
+        Set $TaskText = (GetScriptArgument 1)
+        Set $OkStr = (GetScriptArgument 2)
+        Set $CancelStr = (GetScriptArgument 3)
+        Set $NewWindowTitle = (GetScriptArgument 4)
+        Set $Action1 = (GetScriptArgument 5)
+        Set $Action2 = (GetScriptArgument 6)
+
+        If $NewWindowTitle <> {} Then
+        Begin
+           ChangeWindowTitle $NewWindowTitle
+        End
+
+        If $TaskText == {} Then
+        Begin
+           ChangeTitle 1 {Please select option you want:}
+        End
+        Else
+        Begin
+           Set $Txt1Cmd = {echo '} $TaskText {' | fold -w 48 -s | sed -n 1p}
+           Set $Txt2Cmd = {echo '} $TaskText {' | fold -w 48 -s | sed -n 2p}
+           Set $Txt1 = (GetOutput $Txt1Cmd 1 -1)
+           Set $Txt2 = (GetOutput $Txt2Cmd 1 -1)
+           ChangeTitle 1 $Txt1
+           If $Txt2 == {} Then
+           Begin
+              HideWidget 2
+              ChangePosition 1 64 30
+           End
+           Else
+           Begin
+              ChangeTitle 2 $Txt2
+           End
+        End
+
+        If $OkStr == {} Then
+        Begin
+           ChangeTitle 4 {OK}
+        End
+        Else
+        Begin
+           ChangeTitle 4 $OkStr
+        End
+
+        If $CancelStr == {} Then
+        Begin
+           ChangeTitle 5 {Cancel}
+        End
+        Else
+        Begin
+           ChangeTitle 5 $CancelStr
+        End
+
+	WarpPointer 2
+	Key Escape A 5 1 {Quit}
+	Key Return A 4 1 {Go}
+End
+
+Widget 1
+   Property
+   Size 380 20
+   Position 64 16
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 380 20
+   Position 64 38
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size 32 32
+   Position 16 20
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {}
+   Icon NsCDE/Question.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 96 0
+   Position 16 94
+   Type PushButton
+   Title {OK}
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 4 1
+         Quit
+      End
+   1 :
+   Begin
+      Do $Action1
+   End
+End
+
+Widget 5
+   Property
+   Size 96 0
+   Position 288 94
+   Type PushButton
+   Title {Dismiss}
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 5 1
+         Quit
+      End
+   1 :
+   Begin
+      If $Action2 == {Nop} Then
+      Begin
+         Quit
+      End
+      Else
+      Begin
+         Do $Action2
+      End
+   End
+End
+
+Widget 6
+   Property
+   Size 392 0
+   Position 4 80
+   Type Rectangle
+   Flags NoReliefString NoFocus
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+

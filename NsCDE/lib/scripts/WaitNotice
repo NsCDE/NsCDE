@@ -1,0 +1,104 @@
+WindowTitle {WaitNotice}
+WindowSize 402 146
+WindowPosition 500 500
+Colorset 22
+
+Init
+Begin
+   Set $MainFontCmd = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+   Set $MainFont = {Shadow=1 0 SE:} $MainFontCmd
+
+   ChangeFont 1 $MainFont
+   ChangeFont 2 $MainFont
+   ChangeFont 3 $MainFont
+
+   Set $TextLine1 = (GetScriptArgument 1)
+   Set $TextLine2 = (GetScriptArgument 2)
+   Set $TextLine3 = (GetScriptArgument 3)
+
+   If $TextLine1 <> {} Then
+   Begin
+      ChangeTitle 1 $TextLine1
+   End
+
+   If $TextLine2 <> {} Then
+   Begin
+      ChangeTitle 2 $TextLine2
+   End
+
+   If $TextLine3 <> {} Then
+   Begin
+      ChangeTitle 3 $TextLine3
+   End
+
+   Set $Duration = (GetScriptArgument 4)
+
+   If $Duration == {} Then
+   Begin
+      Set $Duration = 1000
+   End
+
+   Do {Schedule 60 All (WaitNotice) Move 50-50w 50-50w}
+   Do {Schedule } $Duration { SendToModule WaitNotice SendString 3 1 Quit}
+End
+
+Widget 1
+   Property
+   Size 370 20
+   Position 16 38
+   Type ItemDraw
+   Flags NoReliefString
+   Title { }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+
+Widget 2
+   Property
+   Size 370 20
+   Position 20 62
+   Type ItemDraw
+   Flags NoReliefString
+   Title { Action in Progress ... }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 3
+   Property
+   Size 370 20
+   Position 20 86
+   Type ItemDraw
+   Flags NoReliefString
+   Title { }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+      1 :
+      Begin
+         If (LastString) == {Quit} Then
+         Begin
+            Quit
+         End
+      End
+End
+
+Widget 4
+   Property
+   Size 390 134
+   Position 6 6
+   Type Rectangle
+End
+

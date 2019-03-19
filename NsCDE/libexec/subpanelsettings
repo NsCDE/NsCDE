@@ -1,0 +1,47 @@
+#!/bin/ksh
+
+IFS=" "
+
+function GetSubpanelData
+{
+   egrep "^InfoStoreAdd ${Name}-Name\ .*" "$CfName" | awk '{ $1=$2=""; print $0 }' | sed 's/^ \+//g; s/"//g'
+   egrep "^InfoStoreAdd ${Name}-Width\ .*" "$CfName" | awk '{ print $3 }' | sed 's/"//g'
+   egrep "^InfoStoreAdd ${Name}-Rows\ .*" "$CfName" | awk '{ print $3 }' | sed 's/"//g'
+}
+
+function WriteSubpanelData
+{
+   TmpData=$(mktemp --suffix=.subpaneltmp)
+   echo $SubmittedData | while IFS="," read newname newwidth newrownum
+   do
+      newname=$(echo "$newname" | tr -d '"' | sed 's/ \+/ /g' | tr -d '[:cntrl:]')
+      echo "InfoStoreAdd ${Name}-Name \"$newname\"" > $TmpData
+      echo "InfoStoreAdd ${Name}-Width $newwidth" >> $TmpData
+      echo "InfoStoreAdd ${Name}-Rows $newrownum" >> $TmpData
+      egrep -v "^InfoStoreAdd ${Name}-(Name|Width|Rows\ .*)" $CfName >> $TmpData
+      if (($? == 0)); then
+         cat $TmpData > $CfName
+         rm $TmpData
+      fi
+   done
+}
+
+while getopts N:C:gw: Option
+do
+   case $Option in
+      N)
+         Name="$OPTARG"
+      ;;
+      C)
+         CfName="$OPTARG"
+      ;;
+      g)
+         GetSubpanelData
+      ;;
+      w)
+         SubmittedData="$OPTARG"
+         WriteSubpanelData
+      ;;
+   esac
+done
+

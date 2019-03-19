@@ -1,0 +1,2324 @@
+WindowTitle {Style Manager - Window}
+WindowSize 386 756
+WindowPosition 340 320
+Colorset 22
+
+Init
+Begin
+   # Select Window Behavior Tab for a start
+   SendSignal 4 1
+
+   Set $SectionNameFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
+   ChangeFont 3 $SectionNameFont
+
+   Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
+   Set $AnimateFile = {$FVWM_USERDIR/NsCDE-Animate.conf}
+
+   # Do not load default by default
+   Set $CopySysToUserBeforeChanges = 0
+
+   # Initialize new configuration if there is no $ConfigurationFile
+   Set $CheckConfigFileExistance = (GetOutput {ls $FVWM_USERDIR/NsCDE.conf 2>/dev/null} 1 -1)
+   If $CheckConfigFileExistance == {} Then
+   Begin
+      Set $CopyNsCDEConfCmd = {cp -f "$NSCDE_ROOT/config/NsCDE.conf" "} $ConfigurationFile {"}
+      Set $CopyNsCDEConf = (GetOutput $CopyNsCDEConfCmd 1 -1)
+   End
+
+   # Fill in existing values across widgets
+   SendSignal 2 1
+
+   If (GetValue 11) == 0 Then
+   Begin
+      Set $RaiseWinTimeChange = 0
+      ChangeForeColor 18 {gray}
+   End
+End
+
+Widget 1
+   Property
+   Size 62 32
+   Position 10 12
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {}
+   Colorset 45
+   Icon NsCDE/WinMgrStyle.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 80 10
+   Position 296 12
+   Type PushButton
+   Flags NoReliefString
+   Title {Default}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # A Cunning plan to take defaults from system configurations by redefining
+         # ConfigurationFile and AnimateFile to their system paths, send signal to
+         # routine 1 od this widget to re-read and re-set the values, and then to
+         # put ConfigurationFile and AnimateFile variables back for writing with OK.
+         Set $ConfigurationFile = {$NSCDE_ROOT/config/NsCDE.conf}
+         Set $AnimateFile = {$NSCDE_ROOT/config/NsCDE-Animate.conf}
+         SendSignal 2 1
+         Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
+         Set $AnimateFile = {$FVWM_USERDIR/NsCDE-Animate.conf}
+
+         # Signal to OK button that default has been loaded, and if
+         # clicked, to copy system default configuration files in
+         # place, and then apply any eventual changes and/or differencies
+         # on that copy.
+         Set $CopySysToUserBeforeChanges = 1
+      End
+      1 :
+      Begin
+         # Focus Check
+         Set $MouseFocusCheckCmd = {egrep 'Style[[:space:]]+\*[[:space:]].*MouseFocus' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $MouseFocusCheck = (GetOutput $MouseFocusCheckCmd 1 -1)
+         If $MouseFocusCheck <> {} Then
+         Begin
+            ChangeValue 7 1
+            ChangeValue 8 0
+            ChangeValue 9 0
+         End
+         Set $SloppyFocusCheckCmd = {egrep 'Style[[:space:]]+\*[[:space:]].*SloppyFocus' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $SloppyFocusCheck = (GetOutput $SloppyFocusCheckCmd 1 -1)
+         If $SloppyFocusCheck <> {} Then
+         Begin
+            ChangeValue 7 0
+            ChangeValue 8 1
+            ChangeValue 9 0
+         End
+      
+         Set $ClickToFocusCheckCmd = {egrep 'Style[[:space:]]+\*[[:space:]].*ClickToFocus' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $ClickToFocusCheck = (GetOutput $ClickToFocusCheckCmd 1 -1)
+         If $ClickToFocusCheck <> {} Then
+         Begin
+            ChangeValue 7 0
+            ChangeValue 8 0
+            ChangeValue 9 1
+         End
+      
+         Set $AutoRaiseFocusCheckCmd = {egrep 'InfoStoreAdd[[:space:]]+autoraisefocus[[:space:]]+(0|1)' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $AutoRaiseFocusCheck = (GetOutput $AutoRaiseFocusCheckCmd 1 3)
+         If $AutoRaiseFocusCheck == 1 Then
+         Begin
+            ChangeValue 11 1
+         End
+
+         Set $RaiseTransientCheckCmd = {egrep '.*Style[[:space:]]+\*.*[[:space:]]+DontRaiseTransient,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $RaiseTransientCheck = (GetOutput $RaiseTransientCheckCmd 1 -1)
+         If $RaiseTransientCheck <> {} Then
+         Begin
+            ChangeValue 12 1
+         End
+
+         Set $LowerTransientCheckCmd = {egrep '.*Style[[:space:]]+\*.*[[:space:]]+LowerTransient,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $LowerTransientCheck = (GetOutput $LowerTransientCheckCmd 1 -1)
+         If $LowerTransientCheck <> {} Then
+         Begin
+            ChangeValue 13 1
+         End
+
+         Set $StackTransientParentCheckCmd = {egrep '.*Style[[:space:]]+\*.*[[:space:]]+StackTransientParent,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $StackTransientParentCheck = (GetOutput $StackTransientParentCheckCmd 1 -1)
+         If $StackTransientParentCheck <> {} Then
+         Begin
+            ChangeValue 14 1
+         End
+
+         Set $OpaqueMoveSizeCheckCmd = {egrep '([[:space:]]+)?OpaqueMoveSize[[:space:]]+' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $OpaqueMoveSizeCheck = (GetOutput $OpaqueMoveSizeCheckCmd 1 2)
+         If $OpaqueMoveSizeCheck <> 0 Then
+         Begin
+            ChangeValue 15 1
+         End
+
+         Set $AutoRaiseTimeCheckCmd = {egrep '([[:space:]]+)?InfoStoreAdd[[:space:]]+afrmilisecs[[:space:]]+.*' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $AutoRaiseTimeCheck = (GetOutput $AutoRaiseTimeCheckCmd 1 3)
+         If $AutoRaiseTimeCheck <> {} Then
+         Begin
+            ChangeValue 18 $AutoRaiseTimeCheck
+         End
+         Else
+         Begin
+            ChangeValue 18 120
+         End
+
+         Set $MoveThresholdCheckCmd = {egrep 'MoveThreshold[[:space:]]+[1-9].*' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $MoveThresholdCheck = (GetOutput $MoveThresholdCheckCmd 1 2)
+         If $MoveThresholdCheck <> {} Then
+         Begin
+            ChangeValue 20 $MoveThresholdCheck
+         End
+         Else
+         Begin
+            ChangeValue 20 6
+         End
+
+         Set $IconBoxCheckCmd = {egrep 'InfoStoreAdd[[:space:]]+iconbox[[:space:]]+(0|1)' "}
+              $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $IconBoxCheck = (GetOutput $IconBoxCheckCmd 1 3)
+         If $IconBoxCheck == {} Then
+         Begin
+            SendSignal 21 0
+         End
+         Else
+         Begin
+            If $IconBoxCheck == 0 Then
+            Begin
+               SendSignal 21 0
+               SendSignal 22 1
+
+               Set $IconFillBLCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconFill[[:space:]]+bottom[[:space:]]+left,?' "}
+                   $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+               Set $IconFillBL = (GetOutput $IconFillBLCmd 1 -1)
+               If $IconFillBL <> {} Then
+               Begin
+                  ChangeValue 23 1
+                  ChangeValue 24 0
+                  ChangeValue 25 0
+                  ChangeValue 26 0
+               End
+
+               Set $IconFillTLCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconFill[[:space:]]+top[[:space:]]+left,?' "}
+                   $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+               Set $IconFillTL = (GetOutput $IconFillTLCmd 1 -1)
+               If $IconFillTL <> {} Then
+               Begin
+                  ChangeValue 23 0
+                  ChangeValue 24 1
+                  ChangeValue 25 0
+                  ChangeValue 26 0
+               End
+
+               Set $IconFillBRCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconFill[[:space:]]+bottom[[:space:]]+right,?' "}
+                   $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+               Set $IconFillBR = (GetOutput $IconFillBRCmd 1 -1)
+               If $IconFillBR <> {} Then
+               Begin
+                  ChangeValue 23 0
+                  ChangeValue 24 0
+                  ChangeValue 25 1
+                  ChangeValue 26 0
+               End
+
+               Set $IconFillTRCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconFill[[:space:]]+top[[:space:]]+right,?' "}
+                   $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+               Set $IconFillTR = (GetOutput $IconFillTRCmd 1 -1)
+               If $IconFillTR <> {} Then
+               Begin
+                  ChangeValue 23 0
+                  ChangeValue 24 0
+                  ChangeValue 25 0
+                  ChangeValue 26 1
+               End
+            End
+            Else
+            Begin
+               SendSignal 21 1
+               SendSignal 22 0
+            End
+         End
+
+         Set $IconSizeCheckCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconSize[[:space:]]+[1-9].*[[:space:]]+[1-9].*,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | sed 's/\(.*\) IconSize\+ \(.*\)/\2/g'}
+         Set $IconSizeCheckDefault = (GetOutput $IconSizeCheckCmd 1 1)
+         Set $IconSizeCheckMax = (GetOutput $IconSizeCheckCmd 1 3)
+         If $IconSizeCheckDefault <> {} Then
+         Begin
+            ChangeValue 28 $IconSizeCheckDefault
+         End
+         Else
+         Begin
+            ChangeValue 28 48
+         End
+         If $IconSizeCheckMax <> {} Then
+         Begin
+            ChangeValue 30 $IconSizeCheckMax
+         End
+         Else
+         Begin
+            ChangeValue 30 80
+         End
+
+         Set $RaiseFPOnPgChgCmd = {egrep 'InfoStoreAdd[[:space:]]+pageraisefp[[:space:]]+(0|1)' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $RaiseFPOnPgChg = (GetOutput $RaiseFPOnPgChgCmd 1 3)
+         If $RaiseFPOnPgChg <> {} Then
+         Begin
+            ChangeValue 31 $RaiseFPOnPgChg
+         End
+         Else
+         Begin
+            ChangeValue 31 1
+         End
+
+         Set $ShowPagerOnPgChgCmd = {egrep 'InfoStoreAdd[[:space:]]+pageshowrootpager[[:space:]]+(0|1)' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $ShowPagerOnPgChg = (GetOutput $ShowPagerOnPgChgCmd 1 3)
+         If $ShowPagerOnPgChg <> {} Then
+         Begin
+            ChangeValue 32 $ShowPagerOnPgChg
+         End
+         Else
+         Begin
+            ChangeValue 32 0
+         End
+
+         Set $EdgeThicknessDisabledCheckCmd = {egrep 'EdgeThickness[[:space:]]+0' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $EdgeThicknessDisabledCheck = (GetOutput $EdgeThicknessDisabledCheckCmd 1 2)
+         If $EdgeThicknessDisabledCheck <> {} Then
+         Begin
+            If $EdgeThicknessDisabledCheck == 0 Then
+            Begin
+               ChangeValue 33 1
+               ChangeValue 34 0
+               ChangeValue 35 0
+            End
+         End
+         Else
+         Begin
+            ChangeValue 33 0
+         End
+
+         Set $EdgeThickness1pxCheckCmd = {egrep 'EdgeThickness[[:space:]]+1' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $EdgeThickness1pxCheck = (GetOutput $EdgeThickness1pxCheckCmd 1 2)
+         If $EdgeThickness1pxCheck <> {} Then
+         Begin
+            If $EdgeThickness1pxCheck == 1 Then
+            Begin
+               ChangeValue 33 0
+               ChangeValue 34 1
+               ChangeValue 35 0
+            End
+         End
+         Else
+         Begin
+            ChangeValue 34 0
+         End
+
+         Set $EdgeThickness2pxCheckCmd = {egrep 'EdgeThickness[[:space:]]+2' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $EdgeThickness2pxCheck = (GetOutput $EdgeThickness2pxCheckCmd 1 2)
+         If $EdgeThickness2pxCheck <> {} Then
+         Begin
+            If $EdgeThickness2pxCheck == 2 Then
+            Begin
+               ChangeValue 33 0
+               ChangeValue 34 0
+               ChangeValue 35 1
+            End
+            Else
+            Begin
+               ChangeValue 35 0
+            End
+         End
+
+         Set $PageEdgeResistanceCmd = {egrep 'EdgeResistance[[:space:]]+[1-9].*' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $PageEdgeResistance = (GetOutput $PageEdgeResistanceCmd 1 2)
+         If $PageEdgeResistance <> {} Then
+         Begin
+            ChangeValue 37 $PageEdgeResistance
+         End
+         Else
+         Begin
+            ChangeValue 37 400
+         End
+
+         Set $PageEdgeMoveResistanceCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*EdgeMoveResistance[[:space:]]+[1-9].*,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | sed 's/\(.*\) EdgeMoveResistance\+ \(.*\)/\2/g;s/,//g'}
+         Set $PageEdgeMoveResistance = (GetOutput $PageEdgeMoveResistanceCmd 1 1)
+         If $PageEdgeMoveResistance <> {} Then
+         Begin
+            ChangeValue 39 $PageEdgeMoveResistance
+         End
+         Else
+         Begin
+            ChangeValue 39 90
+         End
+
+         Set $PageEdgeMoveDelayCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*EdgeMoveDelay[[:space:]]+[1-9].*,?' "}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | sed 's/\(.*\) EdgeMoveDelay\+ \(.*\)/\2/g;s/,//g'}
+         Set $PageEdgeMoveDelay = (GetOutput $PageEdgeMoveDelayCmd 1 1)
+         If $PageEdgeMoveDelay <> {} Then
+         Begin
+            ChangeValue 41 $PageEdgeMoveDelay
+         End
+         Else
+         Begin
+            ChangeValue 41 90
+         End
+
+         Set $AnimationEnabledCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Effect[[:space:]]+None' "}
+             $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         Set $AnimationEnabledCheck = (GetOutput $AnimationEnabledCheckCmd 1 3)
+         If $AnimationEnabledCheck <> {None} Then
+         Begin
+            ChangeValue 42 1
+            SendSignal 42 1
+
+            Set $AnimationEffectCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Effect[[:space:]]+(Frame|Lines|Flip|Turn|Zoom3D|Twist|Random)' "}
+                $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $AnimationEffectCheck = (GetOutput $AnimationEffectCheckCmd 1 3)
+            If $AnimationEffectCheck == {Frame} Then
+            Begin
+               ChangeValue 44 1
+            End
+            If $AnimationEffectCheck == {Lines} Then
+            Begin
+               ChangeValue 44 2
+            End
+            If $AnimationEffectCheck == {Flip} Then
+            Begin
+               ChangeValue 44 3
+            End
+            If $AnimationEffectCheck == {Turn} Then
+            Begin
+               ChangeValue 44 4
+            End
+            If $AnimationEffectCheck == {Zoom3D} Then
+            Begin
+               ChangeValue 44 5
+            End
+            If $AnimationEffectCheck == {Twist} Then
+            Begin
+               ChangeValue 44 6
+            End
+            If $AnimationEffectCheck == {Random} Then
+            Begin
+               ChangeValue 44 7
+            End
+
+            Set $AnimationFrameDelayCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Delay[[:space:]]+[0-9]*' "}
+                $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $AnimationFrameDelayCheck = (GetOutput $AnimationFrameDelayCheckCmd 1 3)
+            If $AnimationFrameDelayCheck <> {} Then
+            Begin
+               ChangeValue 46 $AnimationFrameDelayCheck
+            End
+            Else
+            Begin
+               ChangeValue 46 10
+            End
+
+            Set $AnimationRevolutionTwistCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Twist[[:space:]]+[0-9]*' "}
+                $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $AnimationRevolutionTwistCheck = (GetOutput $AnimationRevolutionTwistCheckCmd 1 3)
+            If $AnimationRevolutionTwistCheck <> {} Then
+            Begin
+               ChangeValue 48 $AnimationRevolutionTwistCheck
+            End
+            Else
+            Begin
+               ChangeValue 48 10
+            End
+
+            Set $AnimationOutlineWidthCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Width[[:space:]]+[0-9]*' "}
+                $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $AnimationOutlineWidthCheck = (GetOutput $AnimationOutlineWidthCheckCmd 1 3)
+            If $AnimationOutlineWidthCheck <> {} Then
+            Begin
+               ChangeValue 50 $AnimationOutlineWidthCheck
+            End
+            Else
+            Begin
+               ChangeValue 50 3
+            End
+
+            Set $AnimationIterationsCheckCmd = {egrep '\*FvwmAnimate:[[:space:]]+Iterations[[:space:]]+[0-9]*' "}
+                $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $AnimationIterationsCheck = (GetOutput $AnimationIterationsCheckCmd 1 3)
+            If $AnimationIterationsCheck <> {} Then
+            Begin
+               ChangeValue 52 $AnimationIterationsCheck
+            End
+            Else
+            Begin
+               ChangeValue 52 20
+            End
+         End
+         Else
+         Begin
+            ChangeValue 42 0
+            SendSignal 42 1
+         End
+      End
+End
+
+Widget 3
+   Property
+   Size 200 12
+   Position 8 74
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {Configuration Section }
+   Colorset 45
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 120 12
+   Position 206 68
+   Type PopupMenu
+   Flags NoReliefString
+   Value 1
+   Title { Window Behavior| Window Icons| Page Edges| Animation}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangePosition 16 12 482
+         ChangePosition 10 12 260
+         SendSignal 4 1
+         Do {All ("Window Style Manager") RefreshWindow}
+      End
+      1 :
+      Begin
+         If (GetValue 4) == 1 Then
+         Begin
+            ShowWidget 7
+            ShowWidget 8
+            ShowWidget 9
+            ShowWidget 11
+            ShowWidget 12
+            ShowWidget 13
+            ShowWidget 14
+            ShowWidget 15
+            ShowWidget 17
+            ShowWidget 18
+            ShowWidget 19
+            ShowWidget 20
+            ChangeTitle 5 {Window Behavior}
+
+            HideWidget 21
+            HideWidget 22
+            HideWidget 23
+            HideWidget 24
+            HideWidget 25
+            HideWidget 26
+            HideWidget 27
+            HideWidget 28
+            HideWidget 29
+            HideWidget 30
+
+            HideWidget 31
+            HideWidget 32
+            HideWidget 33
+            HideWidget 34
+            HideWidget 35
+            HideWidget 36
+            HideWidget 37
+            HideWidget 38
+            HideWidget 39
+            HideWidget 40
+            HideWidget 41
+
+            HideWidget 42
+            HideWidget 43
+            HideWidget 44
+            HideWidget 45
+            HideWidget 46
+            HideWidget 47
+            HideWidget 48
+            HideWidget 49
+            HideWidget 50
+            HideWidget 51
+            HideWidget 52
+         End
+
+         If (GetValue 4) == 2 Then
+         Begin
+            HideWidget 7
+            HideWidget 8
+            HideWidget 9
+            HideWidget 11
+            HideWidget 12
+            HideWidget 13
+            HideWidget 14
+            HideWidget 15
+            HideWidget 17
+            HideWidget 18
+            HideWidget 19
+            HideWidget 20
+
+            HideWidget 31
+            HideWidget 32
+            HideWidget 33
+            HideWidget 34
+            HideWidget 35
+            HideWidget 36
+            HideWidget 37
+            HideWidget 38
+            HideWidget 39
+            HideWidget 40
+            HideWidget 41
+
+            HideWidget 42
+            HideWidget 43
+            HideWidget 44
+            HideWidget 45
+            HideWidget 46
+            HideWidget 47
+            HideWidget 48
+            HideWidget 49
+            HideWidget 50
+            HideWidget 51
+            HideWidget 52
+
+            ChangePosition 16 12 482
+            ChangePosition 10 12 260
+            Do {All ("Window Style Manager") RefreshWindow}
+            ShowWidget 21
+            ShowWidget 22
+            ShowWidget 23
+            ShowWidget 24
+            ShowWidget 25
+            ShowWidget 26
+            ShowWidget 27
+            ShowWidget 28
+            ShowWidget 29
+            ShowWidget 30
+            ChangeTitle 5 {Window Icons}
+         End
+
+         If (GetValue 4) == 3 Then
+         Begin
+            HideWidget 7
+            HideWidget 8
+            HideWidget 9
+            HideWidget 11
+            HideWidget 12
+            HideWidget 13
+            HideWidget 14
+            HideWidget 15
+            HideWidget 17
+            HideWidget 18
+            HideWidget 19
+            HideWidget 20
+
+            HideWidget 21
+            HideWidget 22
+            HideWidget 23
+            HideWidget 24
+            HideWidget 25
+            HideWidget 26
+            HideWidget 27
+            HideWidget 28
+            HideWidget 29
+            HideWidget 30
+
+            ChangePosition 16 12 398
+            ChangePosition 10 12 260
+            Do {All ("Window Style Manager") RefreshWindow}
+
+            ShowWidget 31
+            ShowWidget 32
+            ShowWidget 33
+            ShowWidget 34
+            ShowWidget 35
+            ShowWidget 36
+            ShowWidget 37
+            ShowWidget 38
+            ShowWidget 39
+            ShowWidget 40
+            ShowWidget 41
+            ChangeTitle 5 {Desk Page Edges}
+
+            HideWidget 42
+            HideWidget 43
+            HideWidget 44
+            HideWidget 45
+            HideWidget 46
+            HideWidget 47
+            HideWidget 48
+            HideWidget 49
+            HideWidget 50
+            HideWidget 51
+            HideWidget 52
+         End
+
+         If (GetValue 4) == 4 Then
+         Begin
+            HideWidget 7
+            HideWidget 8
+            HideWidget 9
+            HideWidget 11
+            HideWidget 12
+            HideWidget 13
+            HideWidget 14
+            HideWidget 15
+            HideWidget 17
+            HideWidget 18
+            HideWidget 19
+            HideWidget 20
+
+            HideWidget 21
+            HideWidget 22
+            HideWidget 23
+            HideWidget 24
+            HideWidget 25
+            HideWidget 26
+            HideWidget 27
+            HideWidget 28
+            HideWidget 29
+            HideWidget 30
+
+            HideWidget 31
+            HideWidget 32
+            HideWidget 33
+            HideWidget 34
+            HideWidget 35
+            HideWidget 36
+            HideWidget 37
+            HideWidget 38
+            HideWidget 39
+            HideWidget 40
+            HideWidget 41
+
+            ShowWidget 42
+            ShowWidget 43
+            ShowWidget 44
+            ShowWidget 45
+            ShowWidget 46
+            ShowWidget 47
+            ShowWidget 48
+            ShowWidget 49
+            ShowWidget 50
+            ShowWidget 51
+            ShowWidget 52
+
+            ChangePosition 16 12 1000
+            ChangePosition 10 12 204
+            Do {All ("Window Style Manager") RefreshWindow}
+            ChangeTitle 5 {Window Animation}
+         End
+      End
+End
+
+Widget 5
+   Property
+   Size 0 0
+   Position 18 112
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Window Behavior }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Size 368 570
+   Position 8 120
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# -------------------------------------------------------------
+
+Widget 7
+   Property
+   Title {Only Pointer Inside Window Makes Focus}
+   Position 22 150
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 7 1
+         ChangeValue 8 0
+         ChangeValue 9 0
+         Set $FocusPolicyChange = 1
+         Set $check_w7_cmd = {egrep '(SloppyFocus|MouseFocus|ClickToFocus)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 8
+   Property
+   Title {Point In Window To Make Active}
+   Position 22 186
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 7 0
+         ChangeValue 8 1
+         ChangeValue 9 0
+         Set $FocusPolicyChange = 1
+         Set $check_w8_cmd = {egrep '(SloppyFocus|MouseFocus|ClickToFocus)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 9
+   Property
+   Title {Click In Window To Make Active}
+   Position 22 222
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 7 0
+         ChangeValue 8 0
+         ChangeValue 9 1
+         Set $FocusPolicyChange = 1
+         Set $check_w9_cmd = {egrep '(SloppyFocus|MouseFocus|ClickToFocus)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 10
+   Property
+   Size 360 0
+   Position 12 260
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 11
+   Property
+   Title { Raise Window When Made Active}
+   Position 20 274
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RaiseWindowWhenMadeActiveChange = 1
+         Set $check_w11_cmd = {egrep 'InfoStoreAdd[[:space:]]+autoraisefocus' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+
+         If (GetValue 11) == 1 Then
+         Begin
+            Set $RaiseWinTimeChange = 1
+            ChangeColorset 18 22
+         End
+         Else
+         Begin
+            Set $RaiseWinTimeChange = 0
+            ChangeForeColor 18 {gray}
+         End
+      End
+End
+
+Widget 12
+   Property
+   Title { Allow Primary Windows On Top}
+   Position 20 314
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $AllowPrimaryWindowsOnTopChange = 1
+         Set $check_w12_cmd = {egrep 'RaiseTransient' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 13
+   Property
+   Title { Lower Transient With Primary Window}
+   Position 20 354
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $LowerTransientWithPrimaryChange = 1
+         Set $check_w13_cmd = {egrep '[[:space:]]+(Dont)?LowerTransient' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 14
+   Property
+   Title { Raise/Lower Primaries With Transients}
+   Position 20 394
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $StartTransParentChange = 1
+         Set $check_w14_cmd = {egrep '[[:space:]]+(Dont)?StackTransientParent' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 15
+   Property
+   Title { Show Contents During Move}
+   Position 20 436
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $ShowContentsDuringMoveChange = 1
+         Set $check_w15_cmd = {egrep 'OpaqueMoveSize' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 16
+   Property
+   Size 360 0
+   Position 12 482
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Size 0 0
+   Position 14 500
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Time After Which Active Window Is Raised}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 18
+   Property
+   Size 348 20
+   Position 18 526
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 10
+   MaxValue 10000
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 11) == 1 Then
+         Begin
+            Set $RaiseWinTimeChange = 1
+            Set $check_w18_cmd = {egrep 'InfoStoreAdd[[:space:]]+afrmilisecs' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+         Else
+         Begin
+            Set $RaiseWinTimeChange = 0
+            Set $check_w18_cmd = {true}
+         End
+      End
+End
+
+Widget 19
+   Property
+   Size 0 0
+   Position 14 598
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Manual Window Movement Threshold}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 20
+   Property
+   Size 348 20
+   Position 18 618
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 0
+   MaxValue 100
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $ManualWinMoveThresholdChange = 1
+         Set $check_w20_cmd = {egrep 'MoveThreshold[[:space:]]+[0-9]*' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+# --------------------------------------------------------------------
+
+Widget 21
+   Property
+   Title {Use Icon Box}
+   Position 22 158
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 21 1
+      End
+      1 :
+      Begin
+         ChangeValue 21 1
+         ChangeValue 22 0
+         ChangeForeColor 23 {gray}
+         ChangeForeColor 24 {gray}
+         ChangeForeColor 25 {gray}
+         ChangeForeColor 26 {gray}
+         ChangeForeColor 27 {gray}
+         ChangeForeColor 28 {gray}
+         ChangeForeColor 29 {gray}
+         ChangeForeColor 30 {gray}
+         Set $IconPlacementChange = 1
+         Set $check_w21_w22_cmd = {egrep 'InfoStoreAdd[[:space:]]+iconbox' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 22
+   Property
+   Title {Place On Workspace}
+   Position 22 206
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 22 1
+      End
+      1 :
+      Begin
+         ChangeValue 21 0
+         ChangeValue 22 1
+
+         # What to do here?
+         # ChangeValue 23 0
+         # ChangeValue 24 1
+         # ChangeValue 25 0
+         # ChangeValue 26 0
+
+         ChangeColorset 23 22
+         ChangeColorset 24 22
+         ChangeColorset 25 22
+         ChangeColorset 26 22
+         ChangeColorset 27 22
+         ChangeColorset 28 22
+         ChangeColorset 29 22
+         ChangeColorset 30 22
+         Set $IconPlacementChange = 1
+         Set $check_w21_w22_cmd = {egrep 'InfoStoreAdd[[:space:]]+iconbox' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+
+Widget 23
+   Property
+   Title {Place Icons Left From Bottom To Top}
+   Position 22 288
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            ChangeValue 23 1
+            ChangeValue 24 0
+            ChangeValue 25 0
+            ChangeValue 26 0
+            Set $WorkspaceIconsPlacementChange = 1
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 24
+   Property
+   Title {Place Icons Left From Top To Bottom}
+   Position 22 338
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            ChangeValue 23 0
+            ChangeValue 24 1
+            ChangeValue 25 0
+            ChangeValue 26 0
+            Set $WorkspaceIconsPlacementChange = 1
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 25
+   Property
+   Title {Place Icons Right From Bottom To Top}
+   Position 22 388
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            ChangeValue 23 0
+            ChangeValue 24 0
+            ChangeValue 25 1
+            ChangeValue 26 0
+            Set $WorkspaceIconsPlacementChange = 1
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 26
+   Property
+   Title {Place Icons Right From Top To Bottom}
+   Position 22 438
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            ChangeValue 23 0
+            ChangeValue 24 0
+            ChangeValue 25 0
+            ChangeValue 26 1
+            Set $WorkspaceIconsPlacementChange = 1
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 27
+   Property
+   Size 0 0
+   Position 14 496
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Default Icon Size}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 28
+   Property
+   Size 348 20
+   Position 18 522
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 16
+   MaxValue 96
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            Set $DefaultIconSizeChange = 1
+            Set $check_w28_cmd = {egrep '^([[:space:]+])?Style[[:space:]]+\*[[:space:]]+IconSize[[:space:]]+[[:digit:]]+[[:space:]]+[[:digit:]]+([[:space:]]+[[:digit:]]+[[:space:]]+[[:digit:]]+)?(,|$)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 29
+   Property
+   Size 0 0
+   Position 14 594
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Maximum Icon Size}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 30
+   Property
+   Size 348 20
+   Position 18 614
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 18
+   MaxValue 128
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 0 Then
+         Begin
+            Set $MaxIconSizeChange = 1
+            Set $check_w30_cmd = {egrep '^([[:space:]+])?Style[[:space:]]+\*[[:space:]]+IconSize[[:space:]]+.*' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+# --------------------------------------------------------------------
+
+Widget 31
+   Property
+   Title { Raise Front Panel On Page Change}
+   Position 20 156
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RaiseFPOnPageChangeChange = 1
+         Set $check_w31_cmd = {egrep 'InfoStoreAdd[[:space:]]+pageraisefp' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 32
+   Property
+   Title { Pager Preview On Page Change}
+   Position 20 206
+   Flags NoReliefString
+   Type CheckBox
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $PagerPreviewOnPageChangeChange = 1
+         Set $check_w32_cmd = {egrep 'InfoStoreAdd[[:space:]]+pageshowrootpager' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 33
+   Property
+   Title {Disable Page Change On Screen Edge}
+   Position 20 278
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 33 1
+         ChangeValue 34 0
+         ChangeValue 35 0
+         Set $PageChangeOnScreenEdgeChange = 1
+         Set $check_w33_cmd = {egrep 'EdgeThickness[[:space:]]+[0-2]' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 34
+   Property
+   Title {Page Change On Screen Edge (1px)}
+   Position 20 318
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 33 0
+         ChangeValue 34 1
+         ChangeValue 35 0
+         Set $PageChangeOnScreenEdgeChange = 1
+         Set $check_w34_cmd = {egrep 'EdgeThickness[[:space:]]+[0-2]' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 35
+   Property
+   Title {Page Change On Screen Edge (2px)}
+   Position 20 358
+   Flags NoReliefString
+   Type RadioButton
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 33 0
+         ChangeValue 34 0
+         ChangeValue 35 1
+         Set $PageChangeOnScreenEdgeChange = 1
+         Set $check_w35_cmd = {egrep 'EdgeThickness[[:space:]]+[0-2]' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 36
+   Property
+   Size 0 0
+   Position 14 408
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Page Edge Resistance}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 37
+   Property
+   Size 348 20
+   Position 18 428
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 0
+   MaxValue 10000
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $PageEdgeResistanceChange = 1
+         Set $check_w37_cmd = {egrep 'EdgeResistance[[:space:]]+[[:digit:]]+' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 38
+   Property
+   Size 0 0
+   Position 14 500
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Edge Window Move Resistance}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 39
+   Property
+   Size 348 20
+   Position 18 526
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 0
+   MaxValue 100
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $EdgeWindowMoveResistanceChange = 1
+         Set $check_w39_cmd = {egrep '^([[:space:]+])?Style[[:space:]]+\*[[:space:]]+(.*)EdgeMoveResistance[[:space:]]+[[:digit:]]+(,|[[:space:]]+|$)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+Widget 40
+   Property
+   Size 0 0
+   Position 14 598
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Edge Window Move Delay}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 41
+   Property
+   Size 348 20
+   Position 18 618
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 1
+   MaxValue 10000
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $EdgeWindowMoveDelayChange = 1
+         Set $check_w41_cmd = {egrep '^([[:space:]+])?Style[[:space:]]+\*[[:space:]]+(.*)EdgeMoveDelay[[:space:]]+[[:digit:]]+(,|[[:space:]]+|$)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+      End
+End
+
+# --------------------------------------------------------------------
+
+Widget 42
+   Property
+   Title { Animate Window Iconification}
+   Position 20 156
+   Flags NoReliefString
+   Type CheckBox
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 42 1
+      End
+      1 :
+      Begin
+         If (GetValue 42) == 0 Then
+         Begin
+            ChangeForeColor 43 {gray}
+            ChangeForeColor 44 {gray}
+            ChangeForeColor 45 {gray}
+            ChangeForeColor 46 {gray}
+            ChangeForeColor 47 {gray}
+            ChangeForeColor 48 {gray}
+            ChangeForeColor 49 {gray}
+            ChangeForeColor 50 {gray}
+            ChangeForeColor 51 {gray}
+            ChangeForeColor 52 {gray}
+         End
+         Else
+         Begin
+            ChangeColorset 43 22
+            ChangeColorset 44 22
+            ChangeColorset 45 22
+            ChangeColorset 46 22
+            ChangeColorset 47 22
+            ChangeColorset 48 22
+            ChangeColorset 49 22
+            ChangeColorset 50 22
+            ChangeColorset 51 22
+            ChangeColorset 52 22
+
+            # Initialize new configuration if there is no $AnimateFile
+            Set $CheckAnimateFileExistance = (GetOutput {ls $FVWM_USERDIR/NsCDE-Animate.conf 2>/dev/null} 1 -1)
+            If $CheckAnimateFileExistance == {} Then
+            Begin
+               Set $CopyAnimateConfCmd = {cp -f "$NSCDE_ROOT/config/NsCDE-Animate.conf" "} $AnimateFile {"}
+               Set $CopyAnimateConf = (GetOutput $CopyAnimateConfCmd 1 -1)
+            End
+
+            Set $AnimateWindowIconificationChange = 1
+            Set $check_w42_cmd = {egrep '([[:space:]]+)?\*FvwmAnimate:[[:space:]]+Effect[[:space:]]+(.*)' "} $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 43
+   Property
+   Title { Animation Effect: }
+   Position 16 238
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 44
+   Property
+   Title {   Frame |   Lines |   Flip |   Turn |   Zoom3D |   Twist |   Random }
+   Position 200 232
+   Flags NoReliefString NoFocus
+   Type PopupMenu
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # Refresh bug workaround.
+         Do {All ("Window Style Manager") RefreshWindow}
+         # Just trigger yourself with calling widget 42
+         ChangeValue 42 0
+         ChangeValue 42 1
+      End
+End
+
+Widget 45
+   Property
+   Size 0 0
+   Position 14 290
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Animation Frame Delay}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 46
+   Property
+   Size 348 20
+   Position 18 310
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 0
+   MaxValue 100
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $AnimateWindowIconificationChange == 1 Then
+         Begin
+            Set $AnimationFrameDelayChange = 1
+            Set $check_w46_cmd = {egrep '([[:space:]]+)?\*FvwmAnimate:[[:space:]]+Delay[[:space:]]+[[:digit:]]+' "} $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 47
+   Property
+   Size 0 0
+   Position 14 388
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Animation Revolution Twist}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 48
+   Property
+   Size 348 20
+   Position 18 414
+   Type HScrollBar
+   Flags NoReliefString
+   Value 1
+   MinValue 1
+   MaxValue 100
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $AnimateWindowIconificationChange == 1 Then
+         Begin
+            Set $AnimationRevolutionTwistChange = 1
+            Set $check_w48_cmd = {egrep '([[:space:]]+)?\*FvwmAnimate:[[:space:]]+Twist[[:space:]]+[[:digit:]]+' "} $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 49
+   Property
+   Size 0 0
+   Position 14 492
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Outline Width}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 50
+   Property
+   Size 348 20
+   Position 18 512
+   Type HScrollBar
+   Flags NoReliefString
+   Value 0
+   MinValue 1
+   MaxValue 10
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $AnimateWindowIconificationChange == 1 Then
+         Begin
+            Set $AnimationOutlineWidthChange = 1
+            Set $check_w50_cmd = {egrep '([[:space:]]+)?\*FvwmAnimate:[[:space:]]+Width[[:space:]]+[[:digit:]]+' "} $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+Widget 51
+   Property
+   Size 0 0
+   Position 14 588
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title { Animation Iterations}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 52
+   Property
+   Size 348 20
+   Position 18 616
+   Type HScrollBar
+   Flags NoReliefString
+   Value 1
+   MinValue 1
+   MaxValue 200
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $AnimateWindowIconificationChange == 1 Then
+         Begin
+            Set $AnimationIterationsChange = 1
+            Set $check_w52_cmd = {egrep '([[:space:]]+)?\*FvwmAnimate:[[:space:]]+Iterations[[:space:]]+[[:digit:]]+' "} $AnimateFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+         End
+      End
+End
+
+# --------------------------------------------------------------------
+
+Widget 121
+   Property
+   Size 380 0
+   Position 2 702
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 122
+   Property
+   Size 100 20
+   Position 12 714
+   Type PushButton
+   Flags NoReliefString
+   Title {OK}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $CopySysToUserBeforeChanges == 1 Then
+         Begin
+            Set $CopyNsCDEConfCmd = {cp -f "$NSCDE_ROOT/config/NsCDE.conf" "} $ConfigurationFile {"}
+            Set $CopyNsCDEConf = (GetOutput $CopyNsCDEConfCmd 1 -1)
+
+            Set $CopyAnimateConfCmd = {sleep 1; cp -f "$NSCDE_ROOT/config/NsCDE-Animate.conf" "} $AnimateFile {"}
+            Set $CopyAnimateConf = (GetOutput $CopyAnimateConfCmd 1 -1)
+         End
+
+         SendSignal 122 1
+
+         # Ask for configuration reload
+         Do {f_RunQuickScriptDialog ActionForm "Restart NsCDE After This Changes?" Yes No "Restart NsCDE" Restart Nop}
+
+         # Finished
+         Quit
+      End
+      1 :
+      Begin
+         # Window Behavior -------------------------------------------------------------------------------------------------------
+         # FocusPolicy - Widgets 7 8 and 9 (radio buttons)
+         If $FocusPolicyChange == 1 Then
+         Begin
+            Set $check_w7 = (GetOutput $check_w7_cmd 1 -1)
+            Set $check_w8 = (GetOutput $check_w8_cmd 1 -1)
+            Set $check_w9 = (GetOutput $check_w9_cmd 1 -1)
+            If (GetValue 7) == 1 Then
+            Begin
+               If $check_w7 == {} Then
+               Begin
+                  Set $FocusPolicyCmd = {echo 'Style * MouseFocus' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $FocusPolicyCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(SloppyFocus\|ClickToFocus\)/\1MouseFocus/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            If (GetValue 8) == 1 Then
+            Begin
+               If $check_w8 == {} Then
+               Begin
+                  Set $FocusPolicyCmd = {echo 'Style * SloppyFocus' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $FocusPolicyCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|ClickToFocus\)/\1SloppyFocus/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            If (GetValue 9) == 1 Then
+            Begin
+               If $check_w9 == {} Then
+               Begin
+                  Set $FocusPolicyCmd = {echo 'Style * ClickToFocus' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $FocusPolicyCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|SloppyFocus\)/\1ClickToFocus/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $FocusPolicyDo = (GetOutput $FocusPolicyCmd 1 -1)
+         End
+
+         # Widget 11: Raise Window When Made Active (check box)
+         If $RaiseWindowWhenMadeActiveChange == 1 Then
+         Begin
+            Set $check_w11 = (GetOutput $check_w11_cmd 1 -1)
+            If (GetValue 11) == 1 Then
+            Begin
+               If $check_w11 == {} Then
+               Begin
+                  Set $RaiseWindowWhenMadeActiveCmd = {echo 'InfoStoreAdd autoraisefocus 1' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w11 == {} Then
+               Begin
+                  Set $RaiseWindowWhenMadeActiveCmd = {echo 'InfoStoreAdd autoraisefocus 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $RaiseWindowWhenMadeActiveDo = (GetOutput $RaiseWindowWhenMadeActiveCmd 1 -1)
+         End
+
+         # Widget 12: Allow Primary Windows On Top (check box)
+         If $AllowPrimaryWindowsOnTopChange == 1 Then
+         Begin
+            If (GetValue 12) == 1 Then
+            Begin
+               Set $check_w12 = (GetOutput $check_w12_cmd 1 -1)
+               If $check_w12 == {} Then
+               Begin
+                  Set $AllowPrimaryWindowsOnTopCmd = {echo 'Style * DontRaiseTransient' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)RaiseTransient/\1DontRaiseTransient/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               Set $check_w12 = (GetOutput $check_w12_cmd 1 -1)
+               If $check_w12 == {} Then
+               Begin
+                  Set $AllowPrimaryWindowsOnTopCmd = {echo 'Style * RaiseTransient' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontRaiseTransient/\1RaiseTransient/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $AllowPrimaryWindowsOnTopDo = (GetOutput $AllowPrimaryWindowsOnTopCmd 1 -1)
+         End
+
+         # Widget 13: Lower Transient With Primary Window (check box)
+         If $LowerTransientWithPrimaryChange == 1 Then
+         Begin
+            Set $check_w13 = (GetOutput $check_w13_cmd 1 -1)
+            If (GetValue 13) == 1 Then
+            Begin
+               If $check_w13 == {} Then
+               Begin
+                  Set $LowerTransientWithPrimaryCmd = {echo 'Style * LowerTransient' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontLowerTransient/\1LowerTransient/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w13 == {} Then
+               Begin
+                  Set $LowerTransientWithPrimaryCmd = {echo 'Style * DontLowerTransient' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)LowerTransient/\1DontLowerTransient/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $LowerTransientWithPrimaryDo = (GetOutput $LowerTransientWithPrimaryCmd 1 -1)
+         End
+
+         # Widget 14: Lower Transient With Primary Window (check box)
+         If $StartTransParentChange == 1 Then
+         Begin
+            Set $check_w14 = (GetOutput $check_w14_cmd 1 -1)
+            If (GetValue 14) == 1 Then
+            Begin
+               If $check_w14 == {} Then
+               Begin
+                  Set $StartTransParentCmd = {echo 'Style * StackTransientParent' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $StartTransParentCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontStackTransientParent/\1StackTransientParent/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w14 == {} Then
+               Begin
+                  Set $StartTransParentCmd = {echo 'Style * DontStackTransientParent' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $StartTransParentCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)StackTransientParent/\1DontStackTransientParent/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $StartTransParentDo = (GetOutput $StartTransParentCmd 1 -1)
+         End
+
+         # Widget 15: Show Contents During Move (check box)
+         If $ShowContentsDuringMoveChange == 1 Then
+         Begin
+            Set $check_w15 = (GetOutput $check_w15_cmd 1 -1)
+            If (GetValue 15) == 1 Then
+            Begin
+               If $check_w15 == {} Then
+               Begin
+                  Set $ShowContentsDuringMoveCmd = {echo 'OpaqueMoveSize 100' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $ShowContentsDuringMoveCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\1100/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w15 == {} Then
+               Begin
+                  Set $StartTransParentCmd = {echo 'Style * OpaqueMoveSize 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $StartTransParentCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\10/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $ShowContentsDuringMoveDo = (GetOutput $ShowContentsDuringMoveCmd 1 -1)
+         End
+
+         # Widget 18: Time After Which Active Window Is Raised (HScrollBar)
+         If $RaiseWinTimeChange == 1 Then
+         Begin
+            Set $check_w18 = (GetOutput $check_w18_cmd 1 -1)
+            If $check_w18 == {} Then
+            Begin
+               Set $RaiseWinTimeCmd = {echo 'InfoStoreAdd afrmilisecs } (GetValue 18) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               Set $RaiseWinTimeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+afrmilisecs[[:space:]]\+\)[0-9].*/\1} (GetValue 18) {/g' -f "} $ConfigurationFile {"}
+            End
+            Set $RaiseWinTimeDo = (GetOutput $RaiseWinTimeCmd 1 -1)
+         End
+
+         # Widget 20: Manual Window Movement Threshold (HScrollBar)
+         If $ManualWinMoveThresholdChange == 1 Then
+         Begin
+            Set $check_w20 = (GetOutput $check_w20_cmd 1 -1)
+            If $check_w20 == {} Then
+            Begin
+               Set $ManualWinMoveThresholdCmd = {echo 'MoveThreshold } (GetValue 20) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               Set $ManualWinMoveThresholdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?MoveThreshold[[:space:]]\+\)[0-9].*/\1} (GetValue 20) {/g' -f "} $ConfigurationFile {"}
+            End
+            Set $ManualWinMoveThresholdDo = (GetOutput $ManualWinMoveThresholdCmd 1 -1)
+         End
+
+         # Icons -----------------------------------------------------------------------------------------------------------
+
+         # Widget 21-22: Use Icon Box (radio button)
+         If $IconPlacementChange == 1 Then
+         Begin
+            Set $check_w21_w22 = (GetOutput $check_w21_w22_cmd 1 -1)
+            If (GetValue 21) == 1 Then
+            Begin
+               If $check_w21_w22 == {} Then
+               Begin
+                  Set $IconPlacementChangeCmd = {echo 'InfoStoreAdd iconbox 1' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $IconPlacementChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)0/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w21_w22 == {} Then
+               Begin
+                  Set $IconPlacementChangeCmd = {echo 'InfoStoreAdd iconbox 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $IconPlacementChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)1/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $IconPlacementChangeDo = (GetOutput $IconPlacementChangeCmd 1 -1)
+         End
+
+         # Widget 23 - 26: Workspace Icons Placement (radio buttons)
+         If $WorkspaceIconsPlacementChange == 1 Then
+         Begin
+            Set $check_w23-w26 = (GetOutput $check_w23-w26_cmd 1 -1)
+
+            # Examine radio buttons 23 - 26
+            If (GetValue 23) == 1 Then
+            Begin
+               If $check_w23-w26 == {} Then
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox 1 1 -1 -1, IconFill bottom left' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1bottom left/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            If (GetValue 24) == 1 Then
+            Begin
+               If $check_w23-w26 == {} Then
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox 1 1 -1 -1, IconFill top left' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1top left/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            If (GetValue 25) == 1 Then
+            Begin
+               If $check_w23-w26 == {} Then
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox 1 1 -1 -1, IconFill bottom right' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1bottom right/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            If (GetValue 26) == 1 Then
+            Begin
+               If $check_w23-w26 == {} Then
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox 1 1 -1 -1, IconFill top right' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1top right/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $WorkspaceIconsPlacementDo = (GetOutput $WorkspaceIconsPlacementCmd 1 -1)
+         End
+
+         # Widget 28 Default Icon Size (HScrollBar)
+         If $DefaultIconSizeChange == 1 Then
+         Begin
+            If (GetValue 30) <= (GetValue 28) Then
+            Begin
+               ChangeValue 30 (Add (GetValue 28) 2)
+            End
+
+            Set $check_w28 = (GetOutput $check_w28_cmd 1 -1)
+            If $check_w28 == {} Then
+            Begin
+               Set $DefaultIconSizeCmd = {echo 'Style * IconSize } (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               # Disgusting
+               Set $DefaultIconSizeCmd = {$NSCDE_ROOT/bin/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
+            End
+            Set $DefaultIconSizeDo = (GetOutput $DefaultIconSizeCmd 1 -1)
+         End
+
+         # Widget 30: Maximum Icon Size (HScrollBar)
+         If $MaxIconSizeChange == 1 Then
+         Begin
+            If (GetValue 28) >= (GetValue 30) Then
+            Begin
+               ChangeValue 28 (Add (GetValue 30) -2)
+            End
+
+            Set $check_w30 = (GetOutput $check_w30_cmd 1 -1)
+            If $check_w30 == {} Then
+            Begin
+               Set $MaxIconSizeCmd = {echo 'Style * IconSize } (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               # Disgusting
+               Set $MaxIconSizeCmd = {$NSCDE_ROOT/bin/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
+            End
+            Set $MaxIconSizeDo = (GetOutput $MaxIconSizeCmd 1 -1)
+         End
+
+         # Edges -----------------------------------------------------------------------------------------------------------
+
+         # Widget 31: Raise Front Panel On Page Change (check box)
+         If $RaiseFPOnPageChangeChange == 1 Then
+         Begin
+            Set $check_w31 = (GetOutput $check_w31_cmd 1 -1)
+            If (GetValue 31) == 1 Then
+            Begin
+               If $check_w31 == {} Then
+               Begin
+                  Set $RaiseFPOnPageChangeCmd = {echo 'InfoStoreAdd pageraisefp 1' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w31 == {} Then
+               Begin
+                  Set $RaiseFPOnPageChangeCmd = {echo 'InfoStoreAdd pageraisefp 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $RaiseFPOnPageChangeDo = (GetOutput $RaiseFPOnPageChangeCmd 1 -1)
+         End
+
+         # Widget 32: Pager Preview On Page Change (check box)
+         If $PagerPreviewOnPageChangeChange == 1 Then
+         Begin
+            Set $check_w32 = (GetOutput $check_w32_cmd 1 -1)
+            If (GetValue 32) == 1 Then
+            Begin
+               If $check_w32 == {} Then
+               Begin
+                  Set $PagerPreviewOnPageChangeCmd = {echo 'InfoStoreAdd pageshowrootpager 1' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w32 == {} Then
+               Begin
+                  Set $PagerPreviewOnPageChangeCmd = {echo 'InfoStoreAdd pageshowrootpager 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $PagerPreviewOnPageChangeDo = (GetOutput $PagerPreviewOnPageChangeCmd 1 -1)
+         End
+
+         # Widgets 33, 34 and 35 - Page Edge Change Policy (radio buttons)
+         If $PageChangeOnScreenEdgeChange == 1 Then
+         Begin
+            Set $check_w33 = (GetOutput $check_w33_cmd 1 -1)
+            Set $check_w34 = (GetOutput $check_w34_cmd 1 -1)
+            Set $check_w35 = (GetOutput $check_w35_cmd 1 -1)
+
+            If (GetValue 33) == 1 Then
+            Begin
+               If $check_w33 == {} Then
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {echo 'EdgeThickness 0' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(1\|2\)/\10/g' -f "} $ConfigurationFile {"}
+               End
+            End
+
+            If (GetValue 34) == 1 Then
+            Begin
+               If $check_w34 == {} Then
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {echo 'EdgeThickness 1' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|2\)/\11/g' -f "} $ConfigurationFile {"}
+               End
+            End
+
+            If (GetValue 35) == 1 Then
+            Begin
+               If $check_w35 == {} Then
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {echo 'EdgeThickness 2' >> "} $ConfigurationFile {"}
+               End
+               Else
+               Begin
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|1\)/\12/g' -f "} $ConfigurationFile {"}
+               End
+            End
+            Set $PageChangeOnScreenEdgeDo = (GetOutput $PageChangeOnScreenEdgeCmd 1 -1)
+         End
+
+         # Widget 37: Page Edge Resistance (HScrollBar)
+         If $PageEdgeResistanceChange == 1 Then
+         Begin
+            Set $check_w37 = (GetOutput $check_w37_cmd 1 -1)
+            If $check_w37 == {} Then
+            Begin
+               Set $PageEdgeResistanceCmd = {echo 'EdgeResistance } (GetValue 37) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               Set $PageEdgeResistanceCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?EdgeResistance[[:space:]]\+\)[[:digit:]]\+/\1} (GetValue 37) {/g' -f "} $ConfigurationFile {"}
+            End
+            Set $PageEdgeResistanceDo = (GetOutput $PageEdgeResistanceCmd 1 -1)
+         End
+
+         # Widget 39: Edge Window Move Resistance (HScrollBar)
+         If $EdgeWindowMoveResistanceChange == 1 Then
+         Begin
+            Set $check_w39 = (GetOutput $check_w39_cmd 1 -1)
+            If $check_w39 == {} Then
+            Begin
+               Set $EdgeWindowMoveResistanceCmd = {echo 'Style * EdgeMoveResistance } (GetValue 39) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               Set $EdgeWindowMoveResistanceCmd = {$NSCDE_ROOT/bin/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveResistance[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 39) {\6\7/g' -f "} $ConfigurationFile {"}
+            End
+            Set $EdgeWindowMoveResistanceDo = (GetOutput $EdgeWindowMoveResistanceCmd 1 -1)
+         End
+
+         # Widget 41: Edge Window Move Delay (HScrollBar)
+         If $EdgeWindowMoveDelayChange == 1 Then
+         Begin
+            Set $check_w41 = (GetOutput $check_w41_cmd 1 -1)
+            If $check_w41 == {} Then
+            Begin
+               Set $EdgeWindowMoveDelayCmd = {echo 'Style * EdgeMoveDelay } (GetValue 41) {' >> "} $ConfigurationFile {"}
+            End
+            Else
+            Begin
+               Set $EdgeWindowMoveDelayCmd = {$NSCDE_ROOT/bin/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveDelay[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 41) {\6\7/g' -f "} $ConfigurationFile {"}
+            End
+            Set $EdgeWindowMoveDelayDo = (GetOutput $EdgeWindowMoveDelayCmd 1 -1)
+         End
+
+         # Animation --------------------------------------------------------------------------------------------------------
+
+         # Widget 42: Animate Window Iconification (check box)
+         If $AnimateWindowIconificationChange == 1 Then
+         Begin
+            If (GetValue 44) == 1 Then
+               Set $AnimEffect = {Frame}
+            If (GetValue 44) == 2 Then
+               Set $AnimEffect = {Lines}
+            If (GetValue 44) == 3 Then
+               Set $AnimEffect = {Flip}
+            If (GetValue 44) == 4 Then
+               Set $AnimEffect = {Turn}
+            If (GetValue 44) == 5 Then
+               Set $AnimEffect = {Zoom3D}
+            If (GetValue 44) == 6 Then
+               Set $AnimEffect = {Twist}
+            If (GetValue 44) == 7 Then
+               Set $AnimEffect = {Random}
+
+            Set $check_w42 = (GetOutput $check_w42_cmd 1 -1)
+            If (GetValue 42) == 0 Then
+            Begin
+               If $check_w42 == {} Then
+               Begin
+                  Set $AnimateWindowIconificationCmd = {echo '*FvwmAnimate: Effect None' >> "} $AnimateFile {"}
+               End
+               Else
+               Begin
+                  Set $AnimateWindowIconificationCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1None/g' -f "} $AnimateFile {"}
+               End
+            End
+            Else
+            Begin
+               If $check_w42 == {} Then
+               Begin
+                  Set $AnimateWindowIconificationCmd = {echo '*FvwmAnimate: Effect } $AnimEffect {' >> "} $AnimateFile {"}
+               End
+               Else
+               Begin
+                  Set $AnimateWindowIconificationCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1} $AnimEffect {/g' -f "} $AnimateFile {"}
+               End
+            End
+            Set $AnimateWindowIconificationDo = (GetOutput $AnimateWindowIconificationCmd 1 -1)
+         End
+
+         # Widget 46: Animation Frame Delay (HScrollBar)
+         If $AnimationFrameDelayChange == 1 Then
+         Begin
+            Set $check_w46 = (GetOutput $check_w46_cmd 1 -1)
+            If $check_w46 == {} Then
+            Begin
+               Set $AnimationFrameDelayCmd = {echo '*FvwmAnimate: Delay } (GetValue 46) {' >> "} $AnimateFile {"}
+            End
+            Else
+            Begin
+               Set $AnimationFrameDelayCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Delay[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 46) {/g' -f "} $AnimateFile {"}
+            End
+            Set $AnimationFrameDelayDo = (GetOutput $AnimationFrameDelayCmd 1 -1)
+         End
+
+         # Widget 48: Animation Revolution Twist (HScrollBar)
+         If $AnimationRevolutionTwistChange == 1 Then
+         Begin
+            Set $check_w48 = (GetOutput $check_w48_cmd 1 -1)
+            If $check_w48 == {} Then
+            Begin
+               Set $AnimationRevolutionTwistCmd = {echo '*FvwmAnimate: Twist } (GetValue 48) {' >> "} $AnimateFile {"}
+            End
+            Else
+            Begin
+               Set $AnimationRevolutionTwistCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Twist[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 48) {/g' -f "} $AnimateFile {"}
+            End
+            Set $AnimationRevolutionTwistDo = (GetOutput $AnimationRevolutionTwistCmd 1 -1)
+         End
+
+         # Widget 50: Animation Outline Width (HScrollBar)
+         If $AnimationOutlineWidthChange == 1 Then
+         Begin
+            Set $check_w50 = (GetOutput $check_w50_cmd 1 -1)
+            If $check_w50 == {} Then
+            Begin
+               Set $AnimationOutlineWidthCmd = {echo '*FvwmAnimate: Width } (GetValue 50) {' >> "} $AnimateFile {"}
+            End
+            Else
+            Begin
+               Set $AnimationOutlineWidthCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Width[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 50) {/g' -f "} $AnimateFile {"}
+            End
+            Set $AnimationOutlineWidthDo = (GetOutput $AnimationOutlineWidthCmd 1 -1)
+         End
+
+         # Widget 52: Animation Iterations (HScrollBar)
+         If $AnimationIterationsChange == 1 Then
+         Begin
+            Set $check_w52 = (GetOutput $check_w52_cmd 1 -1)
+            If $check_w52 == {} Then
+            Begin
+               Set $AnimationIterationsCmd = {echo '*FvwmAnimate: Iterations } (GetValue 52) {' >> "} $AnimateFile {"}
+            End
+            Else
+            Begin
+               Set $AnimationIterationsCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Iterations[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 52) {/g' -f "} $AnimateFile {"}
+            End
+            Set $AnimationIterationsDo = (GetOutput $AnimationIterationsCmd 1 -1)
+         End
+
+      # End of "1 :"
+      End
+End
+
+Widget 123
+   Property
+   Size 100 20
+   Position 142 714
+   Type PushButton
+   Flags NoReliefString
+   Title {Dismiss}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 124
+   Property
+   Size 100 20
+   Position 272 714
+   Type PushButton
+   Flags NoReliefString
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Window Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-WindowMgr.html}
+      End
+End
+

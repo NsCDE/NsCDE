@@ -1,0 +1,29 @@
+#!/bin/ksh
+
+# Called from f_FrontPanelAction to populate Front Panel Actions
+
+Button="$1"
+MouseBtn="$2"
+
+SysActionFile="$NSCDE_ROOT/config/FrontPanel.actions"
+if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+   UserActionFile="$FVWM_USERDIR/FrontPanel.actions"
+else
+   UserActionFile="/dev/null"
+fi
+
+ActionLine=$(egrep "^${Button},.*,${MouseBtn},.*,.*" $UserActionFile $SysActionFile | head -1)
+if [ "x${ActionLine}" != "x" ]; then
+   echo $ActionLine | while IFS="," read button icon mousebutton check cmd
+   do
+      if [ "$check" == "NOCHK" ]; then
+         echo "Exec exec $cmd"
+      elif [ "$check" == "FVWM" ]; then
+         echo "$cmd"
+      else
+         echo "Test (x $check) Exec exec $cmd"
+      fi
+   done
+else
+   echo "Nop"
+fi

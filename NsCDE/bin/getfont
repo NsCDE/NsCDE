@@ -1,0 +1,97 @@
+#!/bin/ksh
+
+if [ -z $NSCDE_ROOT ]; then
+   echo "No \$NSCDE_ROOT set. Exiting."
+   exit 3
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   echo "No \$FVWM_USERDIR set. Exiting."
+   exit 4
+fi
+
+if [ -z $NSCDE_DPI ]; then
+   NSCDE_DPI=96
+fi
+
+function Defaults
+{
+   if [ -z $FnSpacing ]; then
+      FnSpacing="variable"
+   fi
+
+   if [ -z $FnType ]; then
+      FnType="normal"
+   fi
+
+   if [ -z $FnSize ]; then
+      FnSize="medium"
+   fi
+}
+
+function GetFont
+{
+   Defaults
+
+   if [ "x$FnFile" == "x" ]; then
+      sysfncffile="${NSCDE_ROOT}/config/NsCDE-Font-${NSCDE_DPI}dpi.conf"
+      if [ -s "${FVWM_USERDIR}/NsCDE-Font-${NSCDE_DPI}dpi.conf" ]; then
+         fncnffile="${FVWM_USERDIR}/NsCDE-Font-${NSCDE_DPI}dpi.conf"
+         avoiddoublegrep=0
+      else
+         fncnffile="$sysfncffile"
+         avoiddoublegrep=1
+      fi
+   else
+      if [ -s "$FnFile" ]; then
+         fncnffile="$FnFile"
+         sysfncnffile="$FnFile"
+      else
+         echo "Error: Cannot read $FnFile"
+         exit 3
+      fi
+   fi
+
+   RequestedFont="font.${FnSpacing}.${FnType}.${FnSize}"
+   Catch=$(egrep "$RequestedFont" "$fncnffile")
+   if (($? != 0)); then
+      if (($avoiddoublegrep == 1)); then
+         Catch=$(egrep "$RequestedFont" "$sysfncffile")
+      fi
+   fi
+
+   Catch2="${Catch/InfoStoreAdd font./}"
+   Catch3="${Catch2#*\"}"
+   echo "${Catch3/\"/}"
+}
+
+while getopts f:vmt:s:h Option
+do
+   case $Option in
+      f)
+         FnFile="$OPTARG"
+      ;;
+      d)
+         NSCDE_DPI="$OPTARG"
+      ;;
+      m)
+         FnSpacing="monospaced"
+      ;;
+      v)
+         FnSpacing="variable"
+      ;;
+      t)
+         FnType="$OPTARG"
+      ;;
+      s)
+         FnSize="$OPTARG"
+      ;;
+      h)
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -h ]"
+         exit 0
+      ;;
+   esac
+done
+
+GetFont
+

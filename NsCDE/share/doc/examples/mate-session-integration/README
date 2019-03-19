@@ -1,0 +1,9 @@
+# Copy nscde-session.desktop to /usr/share/xsessions/
+
+# Copy nscde.desktop to $HOME/.config/autostart/nscde.desktop
+
+# Edit registry. One of this DWORDs are required, not sure which one and on
+# which version of MATE
+gsettings set org.mate.session.required-components windowmanager nscde
+dconf write /desktop/mate/session/required_components/windowmanager "'nscde'"
+

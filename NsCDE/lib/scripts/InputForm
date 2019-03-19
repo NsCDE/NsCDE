@@ -1,0 +1,163 @@
+WindowTitle {User Input Required}
+WindowSize 300 120
+Colorset 22
+
+Init
+Begin
+   Set $TaskText = (GetScriptArgument 1)
+   If $TaskText == {} Then
+   Begin
+      ChangeTitle 1 {Enter Required Parameter:}
+   End
+   Else
+   Begin
+      ChangeTitle 1 $TaskText
+   End
+
+   WarpPointer 2
+   Key Escape A 5 1 {Quit}
+   Key Return A 4 1 {Go}
+
+   # Nasty workaround because ForeColor of the TextField
+   # widget is not applied and global value is used anyway.
+   # How it works: if wanted Colorset is applied with
+   # ChangeColorset to (any?) other widget after initialization
+   # of the script, colorset foreground color will be properly
+   # applied to TextField widget too. Even if fake widget is
+   # hidden, this workaround still works as it should. 
+   # We define hidden PushButton widhet on the end of the script
+   # and send string "workaround" to routine 1 of the TextField
+   # widget ("1 : " can be attached to any widget in fact ...).
+   # This routine than changes the colorset of the hidden
+   # PushButton widget, and this then triggers change in buggy
+   # TextField to be applied.
+   # This bug can be seen when default colorset for the script has
+   # different foreground color than colorset applied to the
+   # TextField widget. Another possible workaround is to define
+   # globally back/fore/sh/hi colors for the script instead of
+   # (or after definition) of a colorset, but this is unflexible,
+   # since script background cannot be changed dinamically or
+   # from outside of the script as colorset functionality allows.
+   Do {Schedule 50 SendToModule InputForm SendString 10 1 workaround}
+   Do {Schedule 250 SendToModule InputForm SendString 10 1 workaround}
+   Do {Schedule 350 SendToModule InputForm SendString 10 1 workaround}
+End
+
+Widget 1
+   Property
+   Size 0 0
+   Position 72 4
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   Title {Enter Required Parameter: }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 210 20
+   Position 74 28
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size 32 32
+   Position 16 20
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {}
+   Icon NsCDE/Question.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 96 0
+   Position 16 80
+   Type PushButton
+   Title {OK}
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 4 1
+         Quit
+      End
+   1 :
+   Begin
+      SendToScript (GetScriptFather) (GetTitle 2)
+   End
+End
+
+Widget 5
+   Property
+   Size 96 0
+   Position 188 80
+   Type PushButton
+   Title {Dismiss}
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 5 1
+         Quit
+      End
+   1 :
+   Begin
+      SendToScript (GetScriptFather) {Cancel}
+   End
+End
+
+Widget 6
+   Property
+   Size 292 0
+   Position 4 64
+   Type Rectangle
+   Flags NoReliefString NoFocus
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 10
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Flags NoReliefString NoFocus Hidden
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      1 :
+      Begin
+         If (LastString) == {workaround} Then
+         Begin
+            ChangeColorset 10 20
+         End
+      End
+End
+

@@ -1,0 +1,118 @@
+WindowTitle {FPCheckMailApplet}
+WindowSize 59 57
+Colorset 21
+
+Init
+Begin
+   Set $LetterStateUp = 0
+End
+
+Widget 1
+   Property
+   Position 0 0
+   Size 59 57
+   Type ItemDraw
+   Flags NoReliefString
+   Icon NsCDE/Mail.s.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $LetterStateUp == 1 Then
+         Begin
+            ChangeIcon 1 NsCDE/Mail.s.xpm
+            Set $LetterStateUp = 0
+            HideWidget 2
+         End
+         Do {Schedule 2000 f_CheckMail}
+         ChangeColorset 1 24
+         Do {f_ClearFrontPanelPressed}
+         Do {Schedule 50 InfoStoreAdd fplastpressed Btn5}
+         Do {f_UnclickScript 250 CheckMailApplet 1 2 unclick}
+      End
+      1 :
+      Begin
+         # Extract command and account name from string received
+         # from SendToModule
+         Set $CheckLetterUp = (StrCopy (LastString) 1 8)
+         Set $CheckLetterDown = (StrCopy (LastString) 1 10)
+         # If command from SendToModule is "LetterUp", extract
+         # account name from the rest of string into LetterUpArg2
+         If $CheckLetterUp == {LetterUp} Then
+         Begin
+            Set $LetterUpArg2 = (StrCopy (LastString) 10 18)
+         End
+
+         # Check if command was LetterUp
+         If $CheckLetterUp == {LetterUp} Then
+         Begin
+            # Change Icon to raised letter if current state is
+            # not raised icon already, change title of LetterUpArg2
+            # and show widget 2 which contains account name
+            If $LetterStateUp == 0 Then
+            Begin
+               ChangeIcon 1 NsCDE/NewMail.s.xpm
+               Set $LetterStateUp = 1
+               If $LetterUpArg2 <> {} Then
+               Begin
+                  ChangeTitle 2 $LetterUpArg2
+                  ShowWidget 2
+               End
+            End
+            Else
+            Begin
+               # If Letter icon is raised one already, then
+               # only change account name
+               If (GetTitle 2) <> $LetterUpArg2 Then
+               Begin
+                  If $LetterUpArg2 <> {} Then
+                  Begin
+                     ChangeTitle 2 $LetterUpArg2
+                  End
+               End
+            End
+         End
+
+         # If command LetterDown has been received via SendToModule
+         # change icon to closed mailbox and hide widget with account
+         # name
+         If $CheckLetterDown == {LetterDown} Then
+         Begin
+            If $LetterStateUp == 1 Then
+            Begin
+               ChangeIcon 1 NsCDE/Mail.s.xpm
+               Set $LetterStateUp = 0
+               HideWidget 2
+            End
+         End
+      End
+      2 :
+      # Focus hilight stuff on the front panel
+      Begin
+         If (LastString) == {unclick} Then
+         Begin
+            ChangeColorset 1 29
+         End
+         If (LastString) == {unselect} Then
+         Begin
+            ChangeColorset 1 21
+         End
+      End
+End
+
+Widget 2
+   Property
+   Position 5 39
+   Size 0 0
+   Type ItemDraw
+   Flags NoReliefString Hidden
+   BackColor {#949494949494}
+   ForeColor {#000000000000}
+   Title { xxxxxxxx }
+   Font "xft:::pixelsize=9"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End

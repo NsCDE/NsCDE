@@ -1,0 +1,486 @@
+WindowTitle {Style Manager - Mouse}
+WindowSize 444 388
+Colorset 22
+
+Init
+Begin
+   Set $userid = (GetOutput {id -un} 1 -1)
+   Set $hostid = (GetOutput {hostid} 1 -1)
+   Set $tmpFile = {/tmp/._FvwmScript-PointerMgr.tmp.} $userid {.} $hostid
+   Set $clickOne = 0
+
+   Set $xsetfile = (GetOutput {echo $FVWM_USERDIR/Xset.conf} -1 1)
+   Set $XSETFILE = $xsetfile
+
+   # FVWM MenuStyle DoubleClick
+   Set $NSCDEFILE = (GetOutput {echo $FVWM_USERDIR/NsCDE.conf} -1 1)
+
+   # X Resources Integration
+   Set $XRDBFILE = (GetOutput {echo $FVWM_USERDIR/Xdefaults.mouse} -1 1)
+
+   # Qt/KDE Integration
+   Set $KDEFILE = (GetOutput {ls -1 "$HOME/.kde/share/config/kdeglobals" 2>/dev/null} -1 1)
+   If $KDEFILE == {} Then
+   Begin
+      Set $KDEFILE = (GetOutput {ls -1 "$HOME/.kde4/share/config/kdeglobals" 2>/dev/null} -1 1)
+   End
+   If $KDEFILE == {} Then
+   Begin
+      Set $KDEFILE = (GetOutput {ls -1 "$HOME/.config/kdeglobals" 2>/dev/null} -1 1)
+   End
+
+   # GTK2 Integration
+   Set $GTK2FILE = (GetOutput {echo $HOME/.gtkrc-2.0} -1 1)
+
+   # GTK3 Integration
+   Set $GTK3FILE = (GetOutput {echo $HOME/.config/gtk-3.0/settings.ini} -1 1)
+
+   Set $pos=0
+   Set $finish=1
+   While $finish == {1} Do
+   Begin
+      Set $pos = (Add $pos 1)
+      Set $tmp = (GetOutput {xset -q} $pos 1)
+      If $tmp == {Pointer} Then
+         Set $finish=0
+      If $pos=={50} Then
+         Set $finish=0
+   End
+   If $pos == {50} Then
+   Begin
+      Do {Exec sh -c "echo 'PointerSetup: incompatible xset'"}
+      Quit
+   End
+
+   Set $pos = (Add $pos 1)
+   Set $tmp = (GetOutput {xset -q} $pos 2)
+   Set $pos2 = 1
+   While (StrCopy $tmp $pos2 $pos2) <> {/} Do
+   Set $pos2 = (Add $pos2 1)
+   Set $pos2 = (Add $pos2 -1)
+
+   Set $dclickTimeOut = {egrep '^([[:space:]]+)?InfoStoreAdd[[:space:]]+menudclicktm' "} $NSCDEFILE {"}
+   Set $dclickTime = (GetOutput $dclickTimeOut 1 3)
+
+   ChangeValue 11 $dclickTime
+   ChangeValue 13 (Div (Mult (StrCopy $tmp 1 $pos2) 20) (StrCopy $tmp (Add $pos2 2) 256))
+   ChangeValue 15 (GetOutput {xset -q} $pos 4)
+
+   # Initial state
+   Set $NotClicked = 1
+End
+
+Widget 1
+   Property
+   Size 154 128
+   Position 6 6
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 0 0
+   Position 12 12
+   Type ItemDraw
+   Icon NsCDE/Mouse-Setup.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $clickOne == 0 Then
+         Begin
+            Do {Exec cp /dev/null "} $tmpFile {"}
+            Set $counter = {while $(usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
+            Do {Exec } $counter
+            Set $clickOne = 1
+         End
+         Else
+         Begin
+            If $clickOne == 1 Then
+            Set $countOut = {wc -l "} $tmpFile {" | cut -d" " -f 1}
+            Set $count = (GetOutput $countOut 1 -1)
+            If $count <= 2 Then
+            Begin
+               If $NotClicked == 1 Then
+               Begin
+                  ChangeIcon 2 NsCDE/Mouse-Setup-Clicked.xpm
+                  Set $NotClicked = 0
+               End
+               Else
+               Begin
+                  ChangeIcon 2 NsCDE/Mouse-Setup.xpm
+                  Set $NotClicked = 1
+               End
+               Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+               Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+            End
+            Else
+            Begin
+               Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+               Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+            End
+            Set $clickOne = 0
+         End
+   End
+   1 :
+   Begin
+      If (LastString) == {aide} Then
+      Begin
+         ChangeIcon 2 NsCDE/Mouse-Setup-Clicked.xpm
+         Set $NotClicked = 0
+         Do {Exec rm -f "} $tmpFile {"}
+      End
+   End
+End
+
+Widget 3
+   Property
+   Size 0 0
+   Position 12 112
+   Type ItemDraw
+   Flags NoReliefString NoFocus Right
+   Title {Test Double-Click}
+End
+
+Widget 4
+   Property
+   Size 142 0
+   Position 144 112
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus Hidden
+   Title {First: }
+End
+
+Widget 5
+   Property
+   Size 142 0
+   Position 290 112
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus Hidden
+   Title {Second: }
+End
+
+Widget 6
+   Property
+   Size 90 0
+   Position 346 8
+   Flags NoReliefString
+   Type PushButton
+   Title {Default}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 8 1
+         ChangeValue 9 0
+         ChangeValue 11 450
+         ChangeValue 13 60
+         ChangeValue 15 8
+         Do {Exec xset m 60/20 8}
+         Do {Exec xmodmap -e "pointer = 1 2 3"}
+         Do {MenuStyle * DoubleClickTime 450}
+         WarpPointer 18
+         ChangeColorset 18 21
+      End
+End
+
+Widget 7
+   Property
+   Position 178 60
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {Handedness: }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Position 286 62
+   Flags NoReliefString
+   Type RadioButton
+   Title { Right }
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeColorset 18 21
+         ChangeValue 8 1
+         ChangeValue 9 0
+      End
+End
+
+Widget 9
+   Property
+   Position 376 62
+   Flags NoReliefString
+   Type RadioButton
+   Title {Left}
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeColorset 18 21
+         ChangeValue 9 1
+         ChangeValue 8 0
+      End
+End
+
+Widget 10
+   Property
+   Position 10 162
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {Double-Click }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 11
+   Property
+   Size 310 0
+   Position 120 144
+   Flags NoReliefString
+   MinValue 50
+   MaxValue 2500
+   Value 450
+   Type HScrollBar
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeColorset 18 21
+         # ChangeIcon 2 NsCDE/Mouse-Setup.xpm
+         # Set $NotClicked = 1
+         Set $clickOne = 0
+
+         Set $existOut = {"$(cat } $tmpFile {)" 2>/dev/null}
+         Set $exist = (GetOutput $existOut 1 -1)
+
+         If $exist == {} Then
+         Begin
+            Do {Nop}
+         End
+         Else
+         Begin
+            Do {Exec kill $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && > } $tmpFile
+            Do {Exec kill -9 $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && > } $tmpFile
+         End
+      End
+End
+
+Widget 12
+   Property
+   Size 0 0
+   Position 10 224
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Acceleration }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 13
+   Property
+   Size 310 0
+   Position 120 204
+   Flags NoReliefString
+   MinValue 5
+   MaxValue 100
+   Type HScrollBar
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeColorset 18 21
+      End
+End
+
+Widget 14
+   Property
+   Size 106 1
+   Position 6 286
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Threshold }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 15
+   Property
+   Size 310 0
+   Position 120 264
+   MinValue 2
+   MaxValue 20
+   Flags NoReliefString
+   Type HScrollBar
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeColorset 18 21
+      End
+End
+
+Widget 16
+   Property
+   Size 440 0
+   Position 2 334
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Size 90 0
+   Position 12 348
+   Flags NoReliefString
+   Type PushButton
+   Title {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Exec xset m } (GetValue 13) {/20 } (GetValue 15)
+
+         Do {MenuStyle * DoubleClickTime } (GetValue 11)
+         Do {Exec kill $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
+         Do {Exec kill -9 $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
+
+         If (GetValue 8) == 1 Then
+            Do {Exec xmodmap -e "pointer = 1 2 3"}
+         Else
+            Do {Exec xmodmap -e "pointer = 3 2 1"}
+      End
+End
+
+Widget 18
+   Property
+   Size 90 0
+   Position 122 348
+   Flags NoReliefString
+   Type PushButton
+   Title {Save}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # Workaround for FvwmScript WriteToFile which truncates existing file if it
+         # doesn't find script's signature in it.
+         Set $CheckEntryCmd = {egrep -q '^#PointerMgr,[1-9]*' "} $XSETFILE {"; echo $?}
+         Set $CheckEntry = (GetOutput $CheckEntryCmd 1 -1)
+
+         If $CheckEntry <> 0 Then
+         Begin
+            Set $PrepareFileCmd = {echo -ne '#PointerMgr,00000\n#end\n' >> "} $XSETFILE {"}
+            Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
+         End
+
+         Do {Exec xset m } (GetValue 13) {/20 } (GetValue 15)
+         WriteToFile $XSETFILE {xset m } (GetValue 13) {/20 } (GetValue 15)
+
+         # Menu Double Click Time in FVWM
+         Do {MenuStyle * DoubleClickTime } (GetValue 11)
+         Set $WriteNsCDECmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
+         Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
+
+         # Sync X Resources
+         Set $WriteXresourcesCmd = {echo -ne "! Warning: This file is managed and will be overwritten by PointerMgr when it is used.\n*.multiClickTime: } (GetValue 11) {\n*multiClickTime: } (GetValue 11) {\n" > "} $XRDBFILE {"}
+         Set $WriteXresources = (GetOutput $WriteXresourcesCmd 1 -1)
+
+         # KDE Integration - only if kdeglobals is found
+         If $KDEFILE <> {} Then
+         Begin
+            Set $WriteKdeGlobalsCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "} $KDEFILE {" -s KDE -k DoubleClickInterval -v } (GetValue 11)
+            Set $WriteKdeGlobals = (GetOutput $WriteKdeGlobalsCmd 1 -1)
+         End
+
+         # GTK3 Integration - only if settings.ini is found
+         If $GTK3FILE <> {} Then
+         Begin
+            Set $WriteGtk3SettingsCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "} $GTK3FILE {" -s Settings -k gtk-double-click-time -v } (GetValue 11)
+            Set $WriteGtk3Settings = (GetOutput $WriteGtk3SettingsCmd 1 -1)
+         End
+
+         # GTK2 Integration - only if gtkrc-2.0 is found
+         If $GTK2FILE <> {} Then
+         Begin
+            Set $WriteGtk2SettingsCmd = {$NSCDE_ROOT/bin/confset.py -t properties -c "} $GTK2FILE {" -k gtk-double-click-time -v } (GetValue 11)
+            Set $WriteGtk2Settings = (GetOutput $WriteGtk2SettingsCmd 1 -1)
+         End
+
+         If (GetValue 8) == 1 Then
+         Begin
+            Do {Exec xmodmap -e "pointer = 1 2 3 4 5"}
+            WriteToFile $XSETFILE {xmodmap -e "pointer = 1 2 3 4 5"}
+         End
+         Else
+         Begin
+            Do {Exec xmodmap -e "pointer = 3 2 1 4 5"}
+            WriteToFile $XSETFILE {xmodmap -e "pointer = 3 2 1 4 5"}
+         End
+
+         Do {Exec chmod +x "} $XSETFILE {"}
+         Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && rm -f "} $tmpFile {"}
+         Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && rm -f "} $tmpFile {"}
+
+         Quit
+      End
+End
+
+Widget 19
+   Property
+   Size 90 0
+   Position 232 348
+   Flags NoReliefString
+   Type PushButton
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Mouse Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-PointerMgr.html}
+      End
+End
+
+Widget 20
+   Property
+   Size 90 0
+   Position 342 348
+   Flags NoReliefString
+   Type PushButton
+   Title {Dismiss}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Exec kill `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile
+         Do {Exec kill -9 `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile
+         Quit
+      End
+End
+

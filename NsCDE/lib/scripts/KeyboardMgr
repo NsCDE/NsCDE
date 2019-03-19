@@ -1,0 +1,274 @@
+WindowTitle {Style Manager - Keyboard}
+WindowSize 460 350
+Colorset 22
+
+Init
+Begin
+   Set $genfile= (GetOutput {sh -c "echo $FVWM_USERDIR/Xset.conf"} -1 1)
+   Set $FILE = $genfile
+
+   ChangeValue 9 (GetOutput  {xset -q | egrep 'auto repeat:' } 0 7)
+   If (GetOutput  {xset -q | egrep 'auto repeat:' } 0 3)==on Then
+   Begin
+      ChangeValue 3 1
+   End
+   ChangeValue 5 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 4)
+   ChangeValue 7 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 7)
+
+   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   ChangeFont 5 $HScrollBarFont
+   ChangeFont 7 $HScrollBarFont
+   ChangeFont 9 $HScrollBarFont
+End
+
+Widget 1
+Property
+   Position 10 4
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {}
+   Icon CDE/DtKeybd.l.pm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+Property
+   Size 100 0
+   Position 352 8
+   Flags NoReliefString
+   Type PushButton
+   Title {Default}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Exec xset r on r rate 512 16 c 50}
+         ChangeValue 3 1
+         ChangeValue 5 512
+         ChangeValue 7 16
+         ChangeValue 9 50
+         ShowWidget 4
+         ShowWidget 5
+         ShowWidget 6
+         ShowWidget 7
+         WarpPointer 12
+      End
+End
+
+Widget 3
+   Property
+   Position 10 68
+   Flags NoReliefString
+   Type CheckBox
+   Title { Auto Repeat}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 3) == 0 Then
+         Begin
+            HideWidget 4
+            HideWidget 5
+            HideWidget 6
+            HideWidget 7
+         End
+         Else
+         Begin
+            ShowWidget 4
+            ShowWidget 5
+            ShowWidget 6
+            ShowWidget 7
+         End
+      End
+End
+
+Widget 4
+   Property
+   Position 8 120
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {   Start Delay }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
+   Size 328 1
+   Position 120 100
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 0
+   MaxValue 10000
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Position 8 180
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Repeat Delay }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 328 1
+   Position 120 160
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 0
+   MaxValue 255
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Position 8 242
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Click Volume }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 328 1
+   Position 120 224
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 0
+   MaxValue 100
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 452 0
+   Position 2 296
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 11
+   Property
+   Size 100 0
+   Position 10 310
+   Flags NoReliefString
+   Type PushButton
+   Title {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+
+         Do {Exec xset c } (GetValue 9)
+         If (GetValue 3) == 1 Then
+            Do {Exec xset r on r rate } (GetValue 5) { } (GetValue 7)
+         Else
+            Do {Exec xset r off}
+      End
+End
+
+Widget 12
+   Property
+   Size 100 0
+   Position 123 310
+   Flags NoReliefString
+   Type PushButton
+   Title {Save}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # Workaround for FvwmScript WriteToFile which truncates existing file if it
+         # doesn't find script's signature in it.
+         Set $CheckEntryCmd = {egrep -q '^#KeyboardMgr,[1-9]*' "} $FILE {"; echo $?}
+         Set $CheckEntry = (GetOutput $CheckEntryCmd 1 -1)
+
+         If $CheckEntry <> 0 Then
+         Begin
+            Set $PrepareFileCmd = {echo -ne '#KeyboardMgr,00000\n#end\n' >> "} $FILE {"}
+            Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
+         End
+
+         Do {Exec xset c } (GetValue 9)
+         If (GetValue 3) == 1 Then
+         Begin
+            Do {Exec xset r on r rate }  (GetValue 5) { } (GetValue 7)
+            WriteToFile $FILE {xset r on r rate }  (GetValue 5) { } (GetValue 7) { c } (GetValue 9)
+         End
+         Else
+         Begin
+            Do {Exec xset r off}
+            WriteToFile $FILE {xset r off c } (GetValue 9)
+         End
+         Do {Exec chmod +x } $FILE
+         Quit
+     End
+End
+
+Widget 13
+   Property
+   Size 100 0
+   Position 235 310
+   Flags NoReliefString
+   Type PushButton
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Keyboard Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-KeyboardMgr.html}
+      End
+End
+
+Widget 14
+   Property
+   Size 100 0
+   Position 348 310
+   Flags NoReliefString
+   Type PushButton
+   Title {Dismiss}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+

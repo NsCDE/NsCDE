@@ -1,0 +1,252 @@
+diff -urN fvwm/modules/FvwmButtons/draw.c fvwm-patched/modules/FvwmButtons/draw.c
+--- fvwm/modules/FvwmButtons/draw.c	2019-03-17 19:42:23.011098391 +0100
++++ fvwm-patched/modules/FvwmButtons/draw.c	2019-03-18 08:43:53.019328502 +0100
+@@ -661,9 +661,19 @@
+ 					break;
+ 				}
+ 			}
+-			DrawTrianglePattern(
+-				Dpy, MyWindow, NormalGC, ShadowGC, None,
+-				ix, iy, iw, ih, 0, dir, 1, 0, 0);
++
++			if (b->indicator_sunkraise == 2)
++			{
++				DrawTrianglePattern(
++					Dpy, MyWindow, ShadowGC, NormalGC, None,
++					ix, iy, iw, ih, 0, dir, 1, 0, 0);
++			}
++			else
++			{
++				DrawTrianglePattern(
++					Dpy, MyWindow, NormalGC, ShadowGC, None,
++					ix, iy, iw, ih, 0, dir, 1, 0, 0);
++			}
+ 		}
+ 	} /* panel indicator */
+ 
+diff -urN fvwm/modules/FvwmButtons/FvwmButtons.1.in fvwm-patched/modules/FvwmButtons/FvwmButtons.1.in
+--- fvwm/modules/FvwmButtons/FvwmButtons.1.in	2019-03-18 08:42:41.004490262 +0100
++++ fvwm-patched/modules/FvwmButtons/FvwmButtons.1.in	2019-03-18 08:44:48.931426514 +0100
+@@ -181,6 +181,16 @@
+ Specifies the number of rows of buttons to be created. The default
+ is 2 rows.
+ 
++.IP "*FvwmButtons: WindowName \fIname\fP"
++If FvwmButtons has a titlebar enabled as a style, (for example, some
++transient subpanel), this option can set Window name and Icon name to
++a string provided by the user with this parameter. If omitted, default
++for Window and Icon name is window resource name which itself is
++simply FvwmButtons, or is derived from the alias by which FvwmButtons
++configuration is made. This enables setting a title with spaces and big
++number of non-ASCII strings which cannot be part of the FvwmButtons
++alias otherwise.
++
+ .IP "*FvwmButtons: (\fIoptions\fP) [\fItitle icon command\fP]"
+ Specifies the contents of a button in the buttonbox. The following
+ \fIoptions\fP, separated by commas or whitespace, can be given a
+@@ -445,7 +455,11 @@
+ specifies the maximum width and height of the indicator.  Without
+ this size FvwmButtons will make the indicator fit the button. You
+ will probably want to use the \fIPadding\fP option to leave a few
+-pixels between the indicator and the frame of the button.
++pixels between the indicator and the frame of the button. Second
++option to the indicator may be given which enters the look of the
++triangle. If this keyword is \fIin\fP, triangle will appear pressed in
++look, while \fIout\fP will make triangle to appear depressed. If this
++keyword is omitted, default will be \fIout\fP or depressed.
+ 
+ The \fIposition\fP option allows one to place the panel. The syntax
+ is:
+diff -urN fvwm/modules/FvwmButtons/FvwmButtons.c fvwm-patched/modules/FvwmButtons/FvwmButtons.c
+--- fvwm/modules/FvwmButtons/FvwmButtons.c	2019-03-17 19:42:23.010098407 +0100
++++ fvwm-patched/modules/FvwmButtons/FvwmButtons.c	2019-03-18 08:43:53.019328502 +0100
+@@ -193,6 +193,8 @@
+ Bool swallowed = False;
+ Window swallower_win = 0;
+ 
++char windowname[128];
++
+ /* ------------------------------ Misc functions ----------------------------*/
+ 
+ #ifdef DEBUG
+@@ -853,6 +855,11 @@
+ 	 * indent buttons correctly */
+ 	SendText(fd, "Send_WindowList", 0);
+ 
++	if (UberButton->c->flags.b_WindowName == 1)
++	{
++		change_window_name(windowname);
++	}
++
+ #ifdef DEBUG_INIT
+ 	fprintf(stderr, "OK\n%s: Startup complete\n", MyName);
+ #endif
+@@ -3425,3 +3432,23 @@
+ 	SendText(fd, cmd, 0);
+ 	free(cmd);
+ }
++
++/*
++ *  Change the window name displayed in the title bar.
++ *  a helper function borrowed from FvwmIdent for
++ *  WindowName functionality
++ */
++void change_window_name(char *str)
++{
++	XTextProperty name;
++
++	if (XStringListToTextProperty(&str, 1, &name) == 0)
++	{
++		fprintf(stderr,"FvwmButtons: cannot allocate window name");
++		return;
++	}
++	XSetWMName(Dpy, MyWindow, &name);
++	XSetWMIconName(Dpy, MyWindow, &name);
++	XFree(name.value);
++}
++
+diff -urN fvwm/modules/FvwmButtons/FvwmButtons.h fvwm-patched/modules/FvwmButtons/FvwmButtons.h
+--- fvwm/modules/FvwmButtons/FvwmButtons.h	2019-03-17 19:42:23.010098407 +0100
++++ fvwm-patched/modules/FvwmButtons/FvwmButtons.h	2019-03-18 08:43:53.020328485 +0100
+@@ -76,6 +76,7 @@
+ 	unsigned b_PressIcon      : 1; /* Use alternate Icon on press */
+ 	unsigned b_PressColorset  : 1; /* Use alternate Colorset on press */
+ 	unsigned b_PressTitle     : 1; /* Use alternate Title text on press */
++	unsigned b_WindowName     : 1; /* Use alternate Window and Icon name */
+ } flags_type;
+ 
+ /* Flags for b->swallow */
+@@ -224,6 +225,8 @@
+ 	int slide_delay_ms;          /* b_Panel */
+ 	int indicator_size;          /* b_Panel */
+ 	panel_flags_type panel_flags;
++	int indicator_sunkraise;     /* b_Panel */
++	char ch_indicator_sunkraise; /* b_Panel */
+ };
+ 
+ #include "button.h"
+@@ -245,6 +248,8 @@
+ char *GetButtonAction(button_info*,int);
+ void ButtonPressProcess(button_info *b, char **act);
+ 
++void change_window_name(char *str);
++
+ /* ----------------------------- global variables -------------------------- */
+ 
+ extern Display *Dpy;
+@@ -262,5 +267,7 @@
+ extern GC ShadowGC;
+ extern FlocaleWinString *FwinString;
+ 
++extern char windowname[128];
++
+ /* ---------------------------------- misc --------------------------------- */
+ 
+diff -urN fvwm/modules/FvwmButtons/parse.c fvwm-patched/modules/FvwmButtons/parse.c
+--- fvwm/modules/FvwmButtons/parse.c	2019-03-17 19:42:23.012098374 +0100
++++ fvwm-patched/modules/FvwmButtons/parse.c	2019-03-18 08:43:53.020328485 +0100
+@@ -396,7 +396,7 @@
+ 	char **ss, unsigned int *flags, unsigned int *mask, char *direction,
+ 	int *steps, int *delay, panel_flags_type *panel_flags,
+ 	int *indicator_size, int *rela_x, int *rela_y, char *position,
+-	char *context)
++	char *context, int *indicator_sunkraise, char *ch_indicator_sunkraise)
+ {
+ 	char *swallowopts[] =
+ 	{
+@@ -425,6 +425,10 @@
+ 	char *t, *s = *ss;
+ 	int n;
+ 
++	char *instr = "in";
++	char *outstr = "out";
++	char *clean_is;
++
+ 	while (*s && *s != ')')
+ 	{
+ 		s = trimleft(s);
+@@ -515,7 +519,37 @@
+ 			n = 0;
+ 			(*panel_flags).panel_indicator = 1;
+ 			*indicator_size = 0;
+-			sscanf(s, "%d%n", indicator_size, &n);
++			sscanf(s, "%d %s%n", indicator_size, ch_indicator_sunkraise, &n);
++
++			/* Remove comma from %s of sscanf */
++                        clean_is = strchr(ch_indicator_sunkraise, ',');
++                        if (clean_is != NULL)
++                        {
++                            *clean_is = '\0';
++                        }
++
++			if (*ch_indicator_sunkraise == *instr)
++			{
++				*indicator_sunkraise = 2;
++			}
++			if (*ch_indicator_sunkraise == *outstr)
++			{
++				*indicator_sunkraise = 1;
++			}
++
++			/* Not defined - parse indicator size without in/out after it */
++			if (*indicator_sunkraise < 1 || *indicator_sunkraise > 2)
++			{
++				*indicator_sunkraise = 1;
++				s = trimleft(s);
++				n = n - 1;
++				sscanf(s, "%d%n", indicator_size, &n);
++				if (*indicator_size < 0 || *indicator_size > 100)
++				{
++					*indicator_size = 0;
++				}
++			}
++
+ 			if (*indicator_size < 0 || *indicator_size > 100)
+ 			{
+ 				*indicator_size = 0;
+@@ -1148,7 +1182,9 @@
+ 							&b->relative_x,
+ 							&b->relative_y,
+ 							&b->slide_position,
+-							&b->slide_context);
++							&b->slide_context,
++							&b->indicator_sunkraise,
++							&b->ch_indicator_sunkraise);
+ 					}
+ 				}
+ 				t = seekright(&s);
+@@ -1777,6 +1813,7 @@
+ 		"colorset",
+ 		"activecolorset",
+ 		"presscolorset",
++		"windowname",
+ 		NULL
+ 	};
+ 	int i, j, k;
+@@ -1924,7 +1961,25 @@
+ 			ub->c->flags.b_PressColorset = 0;
+ 		}
+ 		break;
+-
++	case 15: /* WindowName */
++	{
++		i = sscanf(s, "%126[^\n]", windowname);
++		if (i > 0)
++		{
++			ub->c->flags.b_WindowName = 1;
++		}
++		else
++		{
++			ub->c->flags.b_WindowName = 0;
++		}
++#ifdef DEBUG_PARSER
++		if (windowname == 0)
++		{
++			fprintf(stderr, "%s\n", windowname);
++		}
++#endif
++		break;
++	}
+ 	default:
+ 		s = trimleft(s);
+ 		ParseButton(ubb, s);

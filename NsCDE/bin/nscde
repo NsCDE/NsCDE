@@ -1,0 +1,61 @@
+#!/bin/ksh
+
+if [ -z $HOME ]; then
+   echo "Error: HOME not set." >&2
+   exit 2
+fi
+
+export NSCDE_VERSION="0.9.b52"
+if [ "$1" == "-V" ]; then
+   echo "NsCDE Version $NSCDE_VERSION"
+   exit 0
+else
+   export FVWM_OPTS="$@"
+fi
+
+DpiInfo=$(LC_ALL=C xdpyinfo | egrep 'resolution:.*dots per inch' | awk '{ print $2 }')
+export DPI="${DpiInfo##*x}"
+
+if [ "x$DPI" == "x" ]; then
+   DPI=96
+fi
+
+if (($DPI <= 85)); then
+   NSCDE_DPI=75
+elif (($DPI > 85 && $DPI < 108)); then
+   NSCDE_DPI=96
+elif (($DPI >= 108 && $DPI < 132)); then
+   NSCDE_DPI=120
+elif (($DPI >= 132)); then
+   NSCDE_DPI=144
+fi
+
+export FVWM_USERDIR="${HOME}/.NsCDE"
+export NSCDE_ROOT=/opt/NsCDE
+export FVWM_DATADIR="${NSCDE_ROOT}/config"
+
+echo "$PATH" | egrep -q "/opt\/NsCDE\/bin"
+if (($? != 0)); then
+   export PATH="${PATH}:${NSCDE_ROOT}"
+fi
+
+FVWM_BIN=$(whence -p fvwm)
+
+if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
+   cd $HOME
+   xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
+fi
+export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
+
+if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
+   ksh "${FVWM_USERDIR}/Xset.conf"
+fi
+
+if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
+   exec $FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS
+else
+   exec $FVWM_BIN -f ${NSCDE_ROOT}/config/NsCDE-Main.conf $FVWM_OPTS
+fi
+
+exit 0
+

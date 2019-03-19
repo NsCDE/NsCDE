@@ -1,0 +1,115 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>15. Similarities and differences in usage and look between CDE and NsCDE</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Additional-Software.html" title="14. Additional recommended software"><link rel="next" href="NsCDE-Patches-FVWM.html" title="16. Patches for FVWM"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">15. Similarities and differences in usage and look between CDE and NsCDE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Additional-Software.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Similar-Different"></a>15. Similarities and differences in usage and look between CDE and NsCDE</h2></div></div></div><p>
+NsCDE is not a mere clone of CDE. Under the first visual impression,
+there are unintentional and intentional differences.
+</p><p>
+First of all, it is not a standalone Window Manager or Desktop
+Environment written in some language(s). It is a patchwork which
+owns 80% of it's functionality to wonderful and powerful Window Manager
+of FVWM. Other parts are configurations, scripts and programs which are making the whole
+thing to function like the combination of the CDE experience and modern
+powerful X Window Manager. Here are some things that I can recall to
+be different - for the worse or for the better, user's opinion may vary.
+</p><p>
+What is similar or the same:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>There is a recognizable titlebar and buttons</p></li><li class="listitem"><p>Titlebar buttons have the same basic (left click) actions as CDE</p></li><li class="listitem"><p>Color themes and theming</p></li><li class="listitem"><p>Front Panel and subpanels</p></li><li class="listitem"><p>Workspace Manager</p></li><li class="listitem"><p>Workspace Menu / Root Menu (right click on the root window)</p></li><li class="listitem"><p>Workspaces (desks)</p></li><li class="listitem"><p>Most of the icons reused</p></li><li class="listitem"><p>Backdrops</p></li><li class="listitem"><p>Style Manager launcher and most of the Style Managers</p></li><li class="listitem"><p>Occupy Workspace dialog</p></li><li class="listitem"><p>Workstation Info window (as found in Solaris CDE)</p></li><li class="listitem"><p>FpLite (not with the same function)</p></li><li class="listitem"><p>Front Panel clock, calendar and check mail</p></li><li class="listitem"><p>Icon positioning</p></li><li class="listitem"><p>Look and feel via FVWM Styles</p></li><li class="listitem"><p>Nice vintage but somewhat irritating wait cursor in the sand clock shape</p></li><li class="listitem"><p>Various misc small imitations ...</p></li></ul></div><p>
+Differencies exist: for worse or better. They are described here in detail
+with complete explanations:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  Workspace Manager has a four fixed choices for workspaces (desks). As in CDE four is a
+  default, but combinations with 2, 6 and 8 are possible. If reduced to
+  2 desks, WSM buttons will grow in width to fill fixed space of the WSM
+  FvwmScript applet. If 6 or 8 desks are configured, buttons will shrink
+  and will be narrower. For that reason, in 6 and 8 desks mode it is not
+  possible to have page indicator (<code class="filename">WSM.conf</code>: WSPPG) on the right side
+  of the desk buttons,
+  but this doesn't exist in CDE anyway, since CDE doesn't have concept
+  of pages (in my best knowledge). This means that Front Panel has always a
+  fixed width which is ok for a distinctive look and for screens with
+  smaller resolutions - it will not grow or shrink depending of number
+  of desks and their buttons shown in WSM.
+</p></li><li class="listitem"><p>
+  No drag and drop. This is specially visible in <span class="emphasis"><em>Install Icon</em></span> action
+  which actually calls custom tool Subpanel Manager for this actions.
+  Subpanel Manager itself will be rewritten in a nicer and less buggy
+  way on the first good occasion.
+</p></li><li class="listitem"><p>
+  No Dt Actions builder, and never will be. Write FvwmScript scripts
+    or use some toolkit in combination with python, perl ...
+</p></li><li class="listitem"><p>
+  No Application Manager. If integration with <span class="emphasis"><em>Install Icon</em></span> and
+    possibly menus will be possible with some file manager, it may be
+    (re)invented in the future.
+</p></li><li class="listitem"><p>
+  Keybindings are 90% custom made, and user have a choice to use it
+    or - partially or totally rewrite it. There are more
+    functions and actions in NsCDE than in CDE, and hence there are
+    a lot of key bindings.
+</p></li><li class="listitem"><p>
+  Mouse bindings - some actions like Workspace Menu in CDE are
+    mimicked in NsCDE, titlebar and titlebar buttons too, but since
+    there is no much of them in original CDE anyway, there is a plenty of
+    custom mouse bindings and mouse bindings in combination with
+    modifier keys. As for keybindings apply: use it or write your own.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> has numerous new functions: Gtk and Qt
+    integration, X resources integration is optional, and it has even
+    a possibility to run a custom script with required parameters of
+    current palette and number of colors for external and marginal color
+    scheme integrations - like <span class="command"><strong>Gkrellm</strong></span> for example.
+    Palette color editor is missing. It should be possible to write it
+    in the FvwmScript in some future version update.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-FontMgr.html" title="4.6. Font Style Manager">Font Style Manager</a> is totally NsCDE oriented and doesn't work much
+    as font management in CDE. NsCDE supports XFT fonts (disable
+    antialiasing if you want <span class="emphasis"><em>extreme</em></span> original look) and it combines 5
+    groups of fonts in 3 sizes described in this documentation.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-KeyboardMgr.html" title="4.7. Keyboard Style Manager">Keyboard Style Manager</a> implements all options
+    supported by the xset(1)
+    on PC. CDE original in default installation at least, seems to have
+    only auto-repeat and click volume controls.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-PointerMgr.html" title="4.9. Mouse Style Manager">Mouse Style Manager</a> does not have
+    configurable middle mouse (button
+    2) action since this is not applicable very much on today's GUI widgets.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-BeepMgr.html" title="4.3. Beep Style Manager">Beep Style Manager</a> has a additional Beep
+  button for testing during setup.
+</p></li><li class="listitem"><p>
+  Screensaver Style Manager is in fact Xscreensaver setup. Perfect
+  drop in replacement and much fancier than original.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-WindowMgr.html" title="4.15. Window Style Manager">Window Style Manager</a>
+  manages much more of window, icon, pages and animation
+  behavior than original program in CDE, and even this is a small subset of
+  options in FVWM. See it's documentation and fvwm(1) man page.
+</p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-PowerSaveMgr.html" title="4.10. Power Save Manager">Power Style Manager</a> is actually very
+   rare in Style Manager across
+   old CDE setups. It manages DPMS setting of the monitor with xset(1).
+</p></li><li class="listitem"><p>
+  Startup Style Manager is available only if NsCDE is started under some X Session
+  Manager. It detects supported DE's and starts appropriate settings
+  tool for that desktop environment if it is found.
+</p></li><li class="listitem"><p>
+  Pages: not present in CDE in best of my knowledge. Only workspaces (desks) in
+  original. PageIndicator is a custom widget which is using place
+  left bottom of the Workspace Manager. It can change current page
+  or invoke ("...") graphical pager - FvwmPager(1) for a current workspace (desk).
+</p></li><li class="listitem"><p>
+  Custom keyboard and mouse actions on titlebars, buttons and root window.
+</p></li><li class="listitem"><p>
+  WsPgMgr - Manage Workspaces and Pages. NsCDE invention.
+</p></li><li class="listitem"><p>
+  FpLite is measuring system load, not desktop activity. It has much
+    more fine grained indication of activity with colors, and it's
+    height is 3x of the original for a better visibility. On click it is
+    calling FVWM function which will run terminal program with top or similar
+    program, or anything else if use overrides that function in local configuration.
+</p></li><li class="listitem"><p>
+  Calendar and Mail widgets are placeholders and simple indicators
+  which are expected to be extended with already named functions
+  to do what user wants.
+</p></li><li class="listitem"><p>
+  Probably some more small differences.
+</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Additional-Software.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">14. Additional recommended software </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 16. Patches for FVWM</td></tr></table></div></body></html>

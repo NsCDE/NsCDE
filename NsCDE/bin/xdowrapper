@@ -1,0 +1,43 @@
+#!/bin/ksh
+
+type -qp xdotool
+if (($? != 0)); then
+   echo "No xdotool found. Exiting." >&2
+   exit 1
+fi
+
+function xdofunc
+{
+   userid=$(id -u)
+   for subp in {1..10}
+   do
+      pgrep -U $userid -xf ".*FvwmButtons.*-transientpanel NsCDE-Subpanel${subp}" >/dev/null
+      if (($? == 0)); then
+         xdotool search --name "NsCDE-Subpanel${subp}" > /dev/null 2>&1
+         if (($? == 0)); then
+            echo "Refreshing subpanel NsCDE-Subpanel${subp}" >&2
+            FvwmCommand "Exec exec xdotool search --name NsCDE-Subpanel${subp} \
+                         set_window --name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\" \
+                         --icon-name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\""
+         fi
+      fi
+   done
+}
+
+cnt=0
+while $(sleep 1)
+do
+   if (($cnt == 10)); then
+      exit 10
+   fi
+
+   xdotool search --name "NsCDE-Subpanel*" > /dev/null
+   if (($? == 0)); then
+      xdofunc
+   else
+      exit 0
+   fi
+
+   (( cnt = cnt + 1 ))
+done
+

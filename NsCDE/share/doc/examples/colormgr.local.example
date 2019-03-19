@@ -1,0 +1,66 @@
+#!/bin/ksh
+
+PPATH="$1"
+NCOLORS="$2"
+
+if [ -z $PPATH ]; then
+   PPATH=$NSCDE_ROOT/share/palettes/Sun.dp
+fi
+
+if [ -z $NCOLORS ]; then
+   NCOLORS=4
+fi
+
+# Gkrellm
+if [ -d "$FVWM_USERDIR/templates/Gkrellm" ]; then
+   cd "$FVWM_USERDIR/templates/Gkrellm" || exit 1
+   if [ ! -d "${HOME}/.gkrellm2/themes/NsCDE" ]; then
+      mkdir -p "${HOME}/.gkrellm2/themes/NsCDE"
+   fi
+
+   for dir in net timer host uptime clock cal mem sensors apm
+   do
+      if [ ! -d "${HOME}/.gkrellm2/themes/NsCDE/$dir" ]; then
+         mkdir -p "${HOME}/.gkrellm2/themes/NsCDE/$dir"
+      fi
+   done
+
+   for pm in *.xpm
+   do
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
+       -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
+   done
+
+   for pm in timer/*.xpm net/*.xpm host/*.xpm uptime/*.xpm clock/*.xpm cal/*.xpm mem/*.xpm sensors/*.xpm apm/*.xpm
+   do
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
+       -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
+   done
+
+   cp -f gkrellmrc ${HOME}/.gkrellm2/themes/NsCDE/
+fi
+
+# mate-terminal
+whence -q mate-terminal
+if (($? == 0)); then
+   TEMP1=$(mktemp --suffix=".dconfgen1")
+   echo dconf write /org/mate/terminal/profiles/default/background-color \"\'NSCDE_BG_COLOR_4\'\" > $TEMP1
+   echo dconf write /org/mate/terminal/profiles/default/foreground-color \"\'NSCDE_FG_COLOR_4\'\" >> $TEMP1
+   TEMP2=$(mktemp --suffix=".dconfgen2")
+   $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
+    -i $TEMP1 -c > $TEMP2
+   chmod 0755 $TEMP2
+   sh $TEMP2
+   sleep 1
+   rm -f $TEMP1 $TEMP2
+fi
+
+# Stalonetray
+if [ -r "$HOME/.stalonetrayrc" ]; then
+   st_back=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -l | grep sel_color_5 | cut -d" " -f 2)
+   echo "$st_back" | egrep -q '^#[[:xdigit:]]{12}'
+   if (($? == 0)); then
+      $NSCDE_ROOT/bin/ised -c "s/^\([[:space:]]\+\)\?background[[:space:]]\+\(\"#.*\"\)/background \"${st_back}\"/g" -f $HOME/.stalonetrayrc
+   fi
+fi
+

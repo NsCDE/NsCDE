@@ -1,0 +1,227 @@
+#!/bin/ksh
+
+# NsCDE: colormgr shell script
+# BackdropMgr FvwmScript backgroud worker
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Defaults for -t and -e.
+PreviewMode=0
+EchoInfo=0
+
+# Load common functions
+if [ -f "${NSCDE_ROOT}/libexec/style_managers.shlib" ]; then
+   . ${NSCDE_ROOT}/libexec/style_managers.shlib
+else
+   echo "Error: cannot source ${NSCDE_ROOT}/libexec/style_managers.shlib."
+   exit 1
+fi
+
+#
+# Local BackdropMgr specific functions
+#
+
+# Sanity check file importing new pixmap for Backdrops
+function CheckBackdrop
+{
+   if [ -x $(type -p file) ]; then
+      file $1 | grep -q 'X pixmap image'
+      if (($? == 0)); then
+         echo "xpixmap"
+      else
+         echo "notxpixmap"
+      fi
+   fi
+}
+
+# Sanity check file importing new Photo
+function CheckPicture
+{
+   if [ -x $(type -p file) ]; then
+      file $1 | grep -q 'PNG image data'
+      if (($? == 0)); then
+         echo "pic"
+      else
+         echo "notpic"
+      fi
+   fi
+}
+
+function GenerateBackdropPreview
+{
+   if (($PreviewMode == 1)); then
+      EchoInfo=0
+   fi
+
+   GetBackdrop $1
+
+   if [ -z $Desk ]; then
+      Desk=1
+   fi
+
+   echo $Desk | grep -q ':'
+   if (($? == 0)); then
+      echo $Desk | while IFS=":" read deskno colorvariant
+      do
+         Desk=$deskno
+         ColorDesk=$colorvariant
+      done
+   else
+      ColorDesk=$Desk
+   fi
+
+   if (($Ncolors == 4)); then
+      ColorVariant=3
+   fi
+
+   if (($Ncolors == 8)); then
+      case $ColorDesk in
+      1|5)
+         ColorVariant=3
+      ;;
+      2|6)
+         ColorVariant=5
+      ;;
+      3|7)
+         ColorVariant=6
+      ;;
+      4|8)
+         ColorVariant=7
+      ;;
+      esac
+   fi
+
+   if (($PreviewMode == 0)); then
+      mkdir -p ${FVWM_USERDIR}/backer
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${BackdropNamePath} -P $ColorVariant \
+       -b > ${FVWM_USERDIR}/backer/Desk${Desk}-${1}.pm
+
+      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
+      if (($? == 0)); then
+         TEMP=$(mktemp)
+         sed "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" < ${FVWM_USERDIR}/NsCDE-Backdrops.conf > $TEMP
+         cat $TEMP > ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+         rm -f $TEMP
+      else
+         echo "Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]/backer/Desk${Desk}-${1}.pm" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+      fi
+   else
+      mkdir -p ${FVWM_USERDIR}/tmp
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${BackdropNamePath} -P $ColorVariant \
+       -b > ${FVWM_USERDIR}/tmp/backer-${1}.pm
+       echo ${FVWM_USERDIR}/tmp/backer-${1}.pm
+   fi
+}
+
+function GeneratePhotoPreview
+{
+   if (($PreviewMode == 1)); then
+      EchoInfo=0
+   fi
+
+   GetPhoto $1
+
+   if (($PreviewMode == 0)); then
+      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
+      if (($? == 0)); then
+         TEMP=$(mktemp)
+         if [ -s "$PhotoNamePath" ]; then
+            sededpath=$(echo "$PhotoNamePath" | sed 's/\//\\\//g')
+            sed "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap $sededpath/g" < ${FVWM_USERDIR}/NsCDE-Backdrops.conf > $TEMP
+            cat $TEMP > ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+            rm -f $TEMP
+         else
+            echo "Error getting image path for $1."
+         fi
+      else
+         if [ -s "$PhotoNamePath" ]; then
+            echo "Colorset 3${Desk} TiledPixmap $PhotoNamePath" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+         else
+            echo "Error getting image path for $1."
+         fi
+      fi
+
+   else
+      # Must be the same width size as ItemDraw preview wiget (4) in FvwmScript BackdropMgr
+      mkdir -p ${FVWM_USERDIR}/tmp
+      convert -resize 260 $PhotoNamePath ${FVWM_USERDIR}/tmp/backer-${1}.png
+      echo ${FVWM_USERDIR}/tmp/backer-${1}.png
+   fi
+}
+
+# Main getopt loop.
+# Options:
+# -t is for preview performance (places temporary files in FVWM_USERDIR/tmp
+# -e is echo mode - information for FvwmScript ColorMgr and BackdropMgr
+# -C is for checking backdrop sanity
+# -T is for checking photo sanity
+# -c is for specifying number of colors to use (4 or 8)
+# -D desk number argument for backdrop background variant when ncolors == 8
+# -g retrives palette path, files variables and echoes if in echo mode
+# -G get backdrop path, files variables and echoes if in echo mode
+# -b Generates backdrops preview or final backdrops in user's directory, writes NsCDE-Backdrops.conf
+# -s Generates photo preview or writes definition of final photo path defnition in user's NsCDE-Backdrops.conf
+# -p generates backdrop menu
+# -P generates photo menu
+# -F Retreives photo pathname from number in FvwmScript List widget
+# -f Retreives photo pathname from photo logical name
+# -n Retreives backdrop logical name from number in FvwmScript List widget
+# -h Help
+while getopts teC:T:c:D:pg:G:b:n:PF:f:s:h Option
+do
+   case $Option in
+      t)
+         export PreviewMode=1
+      ;;
+      e)
+         export EchoInfo=1
+      ;;
+      C)
+         CheckBackdrop $OPTARG
+      ;;
+      T)
+         CheckPicture $OPTARG
+      ;;
+      c)
+         Ncolors="$OPTARG"
+      ;;
+      D)
+         Desk="$OPTARG"
+      ;;
+      g)
+         GetPalette "$OPTARG"
+      ;;
+      G)
+         GetBackdrop "$OPTARG"
+      ;;
+      b)
+         GenerateBackdropPreview "$OPTARG"
+      ;;
+      s)
+         GeneratePhotoPreview "$OPTARG"
+      ;;
+      p)
+         GenerateBackdropMenu
+      ;;
+      P)
+         GeneratePhotoMenu
+      ;;
+      F)
+         GetPhotoByNumber "$OPTARG"
+      ;;
+      f)
+         GetPhoto "$OPTARG"
+      ;;
+      n)
+         GetBackdropByNumber $OPTARG
+      ;;
+      h)
+         echo "Usage: ${0##*/} <options ...>"
+      ;;
+   esac
+done

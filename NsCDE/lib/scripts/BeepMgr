@@ -1,0 +1,282 @@
+###
+#
+# FvwmScript-BellSetup modified for NsCDE
+#
+###
+
+WindowTitle {Style Manager - Beep}
+WindowSize 384 310
+Colorset 22
+
+Init
+Begin
+   Set $genfile= (GetOutput {sh -c "echo $FVWM_USERDIR/Xset.conf"} -1 1)
+   Set $FILE = $genfile
+
+   Set $pos=0
+   Set $finish=1
+   While $finish == {1} Do
+   Begin
+      Set $pos = (Add $pos 1)
+      Set $tmp = (GetOutput {xset -q} $pos 1)
+      If $tmp == {bell} Then
+         Set $finish=0
+      If $pos == {50} Then
+         Set $finish=0
+   End
+
+   If $pos == {50} Then
+   Begin
+      Do {FvwmForm ErrMsgForm TITLE="Beep Style Manager" TEXT="Uncompatible xset(1) detected. Exiting."}
+      Quit
+   End
+
+   Set $SAVEDVOL = (GetOutput  {xset -q} $pos 3)
+   Set $SAVEDPITCH = (GetOutput  {xset -q} $pos 6)
+   Set $SAVEDDURA = (GetOutput  {xset -q} $pos 9)
+
+   ChangeValue 4 $SAVEDVOL
+   ChangeValue 6 $SAVEDPITCH
+   ChangeValue 8 $SAVEDDURA
+
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   ChangeFont 3 $LabelFont
+   ChangeFont 5 $LabelFont
+   ChangeFont 7 $LabelFont
+   ChangeFont 4 $HScrollBarFont
+   ChangeFont 6 $HScrollBarFont
+   ChangeFont 8 $HScrollBarFont
+End
+
+Widget 1
+   Property
+   Position 12 10
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Beep.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 82 0
+   Position 290 14
+   Flags NoReliefString
+   Type PushButton
+   Title {Default}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 4 50
+         ChangeValue 6 1800
+         ChangeValue 8 128
+         WarpPointer 11
+         Do {Exec xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
+      End
+End
+
+Widget 3
+   Property
+   Position 48 70
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Volume }
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 250 1
+   Position 120 48
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 0
+   MaxValue 100
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
+   Position 36 138
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Pitch(Hz) }
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6 # Pitch
+   Property
+   Size 250 1
+   Position 120 116
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 82
+   MaxValue 9000
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Position 6 202
+   Flags NoReliefString NoFocus Right
+   Type ItemDraw
+   Title {Duration(ms) }
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8 # Duration
+   Property
+   Size 250 1
+   Position 120 182
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 10
+   MaxValue 2500
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 380 0
+   Position 2 258
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 72 0
+   Position 10 270
+   Flags NoReliefString
+   Type PushButton
+   Title {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Exec xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
+         Set $SAVEDVOL = (GetValue 4)
+         Set $SAVEDPITCH = (GetValue 6)
+         Set $SAVEDDURA = (GetValue 8)
+      End
+End
+
+Widget 11
+   Property
+   Size 72 0
+   Position 104 270
+   Flags NoReliefString
+   Type PushButton
+   Title {Save}
+   Main
+   Case message of
+      SingleClic :
+      Begin
+          Do {Exec xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
+
+          # Workaround for FvwmScript WriteToFile which truncates existing file if it
+          # doesn't find script's signature in it.
+          Set $CheckEntryCmd = {egrep -q '^#BeepMgr,[1-9]*' "} $FILE {"; echo $?}
+          Set $CheckEntry = (GetOutput $CheckEntryCmd 1 -1)
+
+          If $CheckEntry <> 0 Then
+          Begin
+             Set $PrepareFileCmd = {echo -ne '#BeepMgr,00000\n#end\n' >> "} $FILE {"}
+             Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
+          End
+
+          WriteToFile $FILE {xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
+          Quit
+       End
+End
+
+Widget 12
+   Property
+   Size 72 0
+   Position 72 14
+   Flags NoReliefString
+   Type PushButton
+   Title {Beep}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $HOP = {xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
+         Do {Exec } $HOP
+         # wait
+         Set $dum = (GetOutput $HOP 1 -1)
+         Do {Beep}
+         Do {Exec xset b } $SAVEDVOL { } $SAVEDPITCH { } $SAVEDDURA
+      End
+End
+
+Widget 13
+   Property
+   Size 72 0
+   Position 300 270
+   Flags NoReliefString
+   Type PushButton
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Beep Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-BeepMgr.html}
+      End
+End
+
+Widget 14
+   Property
+   Size 72 0
+   Position 200 270
+   Flags NoReliefString
+   Type PushButton
+   Title {Dismiss}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+

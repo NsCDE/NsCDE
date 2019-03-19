@@ -1,0 +1,939 @@
+WindowTitle {Workspaces and Pages Manager}
+WindowSize 348 448
+Colorset 22
+
+Init
+Begin
+   Set $DeskNo = (GetScriptArgument 1)
+   Set $PageMatrixX = (GetScriptArgument 2)
+   Set $PageMatrixY = (GetScriptArgument 3)
+   Set $MaxDeskNo = 8
+
+   # Default DeskNo and PageNo
+   If $DeskNo == {} Then
+   Begin
+      Do {None ("Workspaces and Pages Manager Warning")}
+          { FvwmForm ErrMsgForm TITLE="Workspaces and Pages Manager Warning"}
+          { TEXT="Warning: DeskNo and/or PageNo are not set. Using 4 as default."}
+
+      Set $DeskNo = 4
+      Set $PageMatrixX = 2
+      Set $PageMatrixY = 2
+   End
+
+   # Multiply Pages X and Y to get number of pages
+   Set $PageNo = (Mult $PageMatrixX $PageMatrixY)
+
+   # Total number of pages
+   Set $PagesTotal = (Mult $PageNo $DeskNo)
+
+   # Configuration source selection
+   Set $UserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/WSM.conf ] && echo 1 || echo 0'} 1 1)
+   If $UserConfig == 1 Then
+   Begin
+      Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
+   End
+   Else
+   Begin
+      Set $ConfFile = {$NSCDE_ROOT/config/WSM.conf}
+      Set $CreateUserConfig = 1
+   End
+
+   # NsCDE.conf configuration source selection
+   Set $NsCDEUserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/NsCDE.conf ] && echo 1 || echo 0'} 1 1)
+   If $NsCDEUserConfig == 1 Then
+   Begin
+      Set $NsCDEConfFile = {$FVWM_USERDIR/NsCDE.conf}
+      Set $CreateNsCDEUserConfig = 0
+   End
+   Else
+   Begin
+      Set $NsCDEConfFile = {$NSCDE_ROOT/config/NsCDE.conf}
+      Set $CreateNsCDEUserConfig = 1
+   End
+
+   # Font size/type setup
+   If $DeskNo < 8 Then
+   Begin
+      If $DeskNo > 4 Then
+      Begin
+         # Font for 6 buttons variant
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+      End
+      Else
+      Begin
+         # Font for 2 and/or 4 buttons variant
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+      End
+   End
+   Else
+   Begin
+      # Font for 8 or more buttons variant
+      Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   End
+   Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
+
+   # Button names for desks
+   Set $btnname = 0
+   While $btnname < $MaxDeskNo Do
+   Begin
+      Set $btnname = (Add $btnname 1) 
+      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' } $ConfFile { | cut -d":" -f3}
+      Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
+      Set $NameDeskStr = { } $NameDesk
+
+      ChangeFont $btnname $MainFontRegular
+      ChangeTitle $btnname $NameDeskStr
+   End
+
+   # Desk info
+   Set $SetTitleDsk = {Nr. of Desks:  } $DeskNo
+   ChangeTitle 16 $SetTitleDsk
+
+   # Pages info
+   Set $SetTitlePgDsk = {Pages per Desk:  } $PageNo
+   ChangeTitle 17 $SetTitlePgDsk
+
+   # Total desks * pages info
+   Set $SetTitlePgTotal = {Total Pages:  } $PagesTotal
+   ChangeTitle 18 $SetTitlePgTotal
+
+   # For statistics in widgets 15, 16, 17, fill the value used later
+   Set $TmpDesks = $DeskNo
+   ChangeValue 11 $DeskNo
+   SendSignal 11 1
+
+   # Initialize working variables with default from this app init.
+   Set $VTmpPageNo = $PageMatrixY
+   Set $HTmpPageNo = $PageMatrixX
+   ChangeValue 13 $VTmpPageNo
+   ChangeValue 15 $HTmpPageNo
+
+   # Keys
+   Key Return A 24 1 {ReturnFromRename}
+   Key Escape A 24 2 {ReturnFromRename}
+
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   ChangeFont 12 $SmallFont
+   ChangeFont 14 $SmallFont
+
+   # Nasty workaround because ForeColor of the TextField
+   # widget is not applied and global value is used anyway.
+   # How it works: if wanted Colorset is applied with
+   # ChangeColorset to (any?) other widget after initialization
+   # of the script, colorset foreground color will be properly
+   # applied to TextField widget too. Even if fake widget is
+   # hidden, this workaround still works as it should. 
+   # We define hidden PushButton widhet on the end of the script
+   # and send string "workaround" to routine 1 of the TextField
+   # widget ("1 : " can be attached to any widget in fact ...).
+   # This routine than changes the colorset of the hidden
+   # PushButton widget, and this then triggers change in buggy
+   # TextField to be applied.
+   # This bug can be seen when default colorset for the script has
+   # different foreground color than colorset applied to the
+   # TextField widget. Another possible workaround is to define
+   # globally back/fore/sh/hi colors for the script instead of
+   # (or after definition) of a colorset, but this is unflexible,
+   # since script background cannot be changed dinamically or
+   # from outside of the script as colorset functionality allows.
+   # Called wherever "ShowWidget 24" is called, as "SendSignal 25 1"
+End
+
+Widget 9
+   Property
+   Position 10 8
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {Manage Number of Workspaces and Pages}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Position 38 54
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Icon NsCDE/FpMask.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 1
+Property
+    Flags NoReliefString
+    Position 50 61
+    Size 124 26
+    Type PushButton
+    Title { One }
+    Flags Left
+    Colorset 40
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          ChangePosition 24 50 61
+          Set $MyTitle = (GetTitle 1)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 1
+       End
+End
+
+Widget 2
+Property
+    Flags NoReliefString
+    Position 178 61
+    Size 124 26
+    Type PushButton
+    Title { Two }
+    Flags Left
+    Colorset 42
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          If $TmpDesks == 2 Then
+             ChangePosition 24 50 93
+          If $TmpDesks == 4 Then
+             ChangePosition 24 178 61
+          If $TmpDesks == 6 Then
+             ChangePosition 24 136 61
+          If $TmpDesks == 8 Then
+             ChangePosition 24 116 61
+          Set $MyTitle = (GetTitle 2)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 2
+       End
+End
+
+Widget 3
+Property
+    Flags NoReliefString
+    Position 50 93
+    Size 124 26
+    Type PushButton
+    Title { Three }
+    Flags Left
+    Colorset 44
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          If $TmpDesks == 4 Then
+             ChangePosition 24 50 93
+          If $TmpDesks == 6 Then
+             ChangePosition 24 222 61
+          If $TmpDesks == 8 Then
+             ChangePosition 24 181 61
+          Set $MyTitle = (GetTitle 3)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 3
+       End
+End
+
+Widget 4
+Property
+    Flags NoReliefString
+    Position 178 93
+    Size 124 26
+    Type PushButton
+    Title { Four }
+    Flags Left
+    Colorset 46
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          If $TmpDesks == 4 Then
+             ChangePosition 24 178 93
+          If $TmpDesks == 6 Then
+             ChangePosition 24 50 93
+          If $TmpDesks == 8 Then
+             ChangePosition 24 245 61
+          Set $MyTitle = (GetTitle 4)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 4
+       End
+End
+
+Widget 5
+Property
+    Flags NoReliefString Hidden
+    Position 1 93
+    Size 60 26
+    Type PushButton
+    Title { Five }
+    Flags Left
+    Colorset 40
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          If $TmpDesks == 6 Then
+             ChangePosition 24 136 93
+          If $TmpDesks == 8 Then
+             ChangePosition 24 50 93
+          Set $MyTitle = (GetTitle 5)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 5
+       End
+End
+
+Widget 6
+Property
+    Flags NoReliefString Hidden
+    Position 65 93
+    Size 60 26
+    Type PushButton
+    Title { Six }
+    Flags Left
+    Colorset 42
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          If $TmpDesks == 6 Then
+             ChangePosition 24 222 93
+          If $TmpDesks == 8 Then
+             ChangePosition 24 116 93
+          Set $MyTitle = (GetTitle 6)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 6
+       End
+End
+
+Widget 7
+Property
+    Flags NoReliefString Hidden
+    Position 130 93
+    Size 60 26
+    Type PushButton
+    Title {Seven}
+    Flags Left
+    Colorset 44
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          ChangePosition 24 181 93
+          Set $MyTitle = (GetTitle 7)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 7
+       End
+End
+
+Widget 8
+Property
+    Flags NoReliefString Hidden
+    Position 194 93
+    Size 60 26
+    Type PushButton
+    Title {Eight}
+    Flags Left
+    Colorset 46
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          ChangePosition 24 245 93
+          Set $MyTitle = (GetTitle 8)
+          ChangeTitle 24 $MyTitle
+          ChangeMinValue 24 99
+          ShowWidget 24
+          SendSignal 25 1
+          Set $Txt = 1
+          Set $CalledBy = 8
+       End
+End
+
+
+Widget 11
+   Property
+   Position 16 160
+   Size 316 10
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 0
+   Value 4
+   MaxValue 8
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 11) == 1 Then
+            ChangeValue 11 2
+         If (GetValue 11) == 3 Then
+            ChangeValue 11 4
+         If (GetValue 11) == 5 Then
+            ChangeValue 11 6
+         If (GetValue 11) == 7 Then
+            ChangeValue 11 8
+
+         Set $TmpDesks = (GetValue 11)
+         Set $SetTitleDsk = {Nr. of Desks:  } $TmpDesks
+         ChangeTitle 16 $SetTitleDsk
+
+         Set $HTmpPageNo = (GetValue 15)
+         Set $VTmpPageNo = (GetValue 13)
+         Set $TmpPageNo = (Mult $VTmpPageNo $HTmpPageNo)
+         Set $TmpPagesTotal = (Mult $TmpPageNo $TmpDesks)
+
+         Set $SetTitlePgTotal = {Total Pages:  } $TmpPagesTotal
+         ChangeTitle 18 $SetTitlePgTotal
+
+         SendSignal 11 1
+      End
+      1 :
+      Begin
+         If $TmpDesks == 0 Then
+         Begin
+            HideWidget 1
+            HideWidget 2
+            HideWidget 3
+            HideWidget 4
+            HideWidget 5
+            HideWidget 6
+            HideWidget 7
+            HideWidget 8
+         End
+
+         If $TmpDesks == 2 Then
+         Begin
+            ShowWidget 1
+            ShowWidget 2
+            HideWidget 3
+            HideWidget 4
+            HideWidget 5
+            HideWidget 6
+            HideWidget 7
+            HideWidget 8
+            ChangeSize 1 253 26
+            ChangeSize 2 253 26
+            ChangeSize 24 253 25
+            ChangePosition 1 50 61
+            ChangePosition 2 50 93
+         End
+
+         If $TmpDesks == 4 Then
+         Begin
+            ShowWidget 1
+            ShowWidget 2
+            ShowWidget 3
+            ShowWidget 4
+            HideWidget 5
+            HideWidget 6
+            HideWidget 7
+            HideWidget 8
+            ChangeSize 1 124 26
+            ChangeSize 2 124 26
+            ChangeSize 3 124 26
+            ChangeSize 4 124 26
+            ChangeSize 24 124 26
+            ChangePosition 1 50 61
+            ChangePosition 2 178 61
+            ChangePosition 3 50 93
+            ChangePosition 4 178 93
+         End
+
+         If $TmpDesks == 6 Then
+         Begin
+            ShowWidget 1
+            ShowWidget 2
+            ShowWidget 3
+            ShowWidget 4
+            ShowWidget 5
+            ShowWidget 6
+            HideWidget 7
+            HideWidget 8
+            ChangeSize 1 82 26
+            ChangeSize 2 82 26
+            ChangeSize 3 82 26
+            ChangeSize 4 82 26
+            ChangeSize 5 82 26
+            ChangeSize 6 82 26
+            ChangeSize 24 82 26
+            ChangePosition 2 136 61
+            ChangePosition 3 222 61
+            ChangePosition 4 50 93
+            ChangePosition 5 136 93
+            ChangePosition 6 222 93
+         End
+
+         If $TmpDesks == 8 Then
+         Begin
+            ShowWidget 1
+            ShowWidget 2
+            ShowWidget 3
+            ShowWidget 4
+            ShowWidget 5
+            ShowWidget 6
+            ShowWidget 7
+            ShowWidget 8
+            ChangeSize 1 60 26
+            ChangeSize 2 60 26
+            ChangeSize 3 60 26
+            ChangeSize 4 60 26
+            ChangeSize 5 60 26
+            ChangeSize 6 60 26
+            ChangeSize 7 60 26
+            ChangeSize 8 60 26
+            ChangeSize 24 60 26
+            ChangePosition 2 116 61
+            ChangePosition 3 181 61
+            ChangePosition 4 245 61
+            ChangePosition 5 50 93
+            ChangePosition 6 116 93
+            ChangePosition 7 181 93
+            ChangePosition 8 245 93
+         End
+      End
+End
+
+Widget 12
+   Property
+   Position 10 226
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {Nr. of Vertical Pages}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 13
+   Property
+   Position 15 246
+   Size 146 20
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 1
+   MaxValue 4
+   Value 2
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $VTmpPageNo = (GetValue 13)
+         Set $HTmpPageNo = (GetValue 15)
+         Set $TmpPageNo = (Mult $VTmpPageNo $HTmpPageNo)
+         Set $TmpPagesTotal = (Mult $TmpPageNo $TmpDesks)
+
+         Set $SetTitlePgDsk = {Pages per Desk:  } $TmpPageNo
+         ChangeTitle 17 $SetTitlePgDsk
+
+         Set $SetTitlePgTotal = {Total Pages:  } $TmpPagesTotal
+         ChangeTitle 18 $SetTitlePgTotal
+      End
+End
+
+Widget 14
+   Property
+   Position 182 226
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {Nr. of Horizontal Pages}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 15
+   Property
+   Position 188 246
+   Size 146 20
+   Flags NoReliefString
+   Type HScrollBar
+   MinValue 1
+   MaxValue 4
+   Value 2
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $VTmpPageNo = (GetValue 13)
+         Set $HTmpPageNo = (GetValue 15)
+         Set $TmpPageNo = (Mult $VTmpPageNo $HTmpPageNo)
+         Set $TmpPagesTotal = (Mult $TmpPageNo $TmpDesks)
+
+         Set $SetTitlePgDsk = {Pages per Desk:  } $TmpPageNo
+         ChangeTitle 17 $SetTitlePgDsk
+
+         Set $SetTitlePgTotal = {Total Pages:  } $TmpPagesTotal
+         ChangeTitle 18 $SetTitlePgTotal
+      End
+End
+
+Widget 16
+   Property
+   Position 12 318
+   Size 200 20
+   Flags NoReliefString NoFocus Left
+   Type ItemDraw
+   Title {Nr. of Desks: }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Position 12 338
+   Size 200 20
+   Flags NoReliefString NoFocus Left
+   Type ItemDraw
+   Title {Pages per Desk: }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 18
+   Property
+   Position 12 358
+   Size 200 20
+   Flags NoReliefString NoFocus Left
+   Type ItemDraw
+   Title {Total Pages: }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 19
+   Property
+   Position 284 324
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Icon NsCDE/SDtWsSwitch.l.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 20
+   Property
+   Position 3 392
+   Size 344 0
+   Flags NoReliefString NoFocus
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 21
+   Property
+   Position 16 406
+   Size 80 20
+   Flags NoReliefString
+   Type PushButton
+   Title {OK}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $Action = 0
+         Set $PerformRestart = 0
+
+         # Prepare file path from external variable to WriteToFile expanded, non-variable name
+         Set $ExpandFile = (GetOutput {sh -c "echo $FVWM_USERDIR/NsCDE.conf"} -1 1)
+
+         # Perform action only if new value in $TmpDeks is not equal to app start value in $DeskNo
+         If $TmpDesks <> $DeskNo Then
+         Begin
+            Set $Action = 1
+            Set $DSAction = 1
+         End
+
+         If $VTmpPageNo <> $PageMatrixY Then
+         Begin
+            Set $Action = 1
+            Set $PVAction = 1
+         End
+
+         If $HTmpPageNo <> $PageMatrixX Then
+         Begin
+            Set $Action = 1
+            Set $PHAction = 1
+         End
+
+         If $Action == 1 Then
+         Begin
+            If $CreateNsCDEUserConfig == 1 Then
+            Begin
+               Set $CopyConfigcmd = {[ ! -s "} $ExpandFile {" ] && cp -f $FVWM_DATADIR/NsCDE.conf '} $ExpandFile {' 2>&1}
+               Set $CopyConfig = (GetOutput $CopyConfigcmd 1 -1)
+               If $CopyConfig <> {} Then
+               Begin
+                  Do {FvwmForm ErrMsgForm2 TITLE="Copy Error" TEXT1="Error creating $[FVWM_USERDIR]/NsCDE.conf:" TEXT2="} $CopyConfig {"}
+                  Quit
+               End
+               Else
+               Begin
+                  If $DSAction == 1 Then
+                  Begin
+                     SendSignal 21 1
+                     Set $PerformRestart = 1
+                  End
+
+                  If $PVAction == 1 Then
+                  Begin
+                     SendSignal 21 2
+                     Set $PerformRestart = 1
+                  End
+
+                  If $PHAction == 1 Then
+                  Begin
+                     SendSignal 21 3
+                     Set $PerformRestart = 1
+                  End
+               End
+            End
+            Else
+            Begin
+               If $DSAction == 1 Then
+               Begin
+                  SendSignal 21 1
+                  Set $PerformRestart = 1
+               End
+
+               If $PVAction == 1 Then
+               Begin
+                  SendSignal 21 2
+                  Set $PerformRestart = 1
+               End
+
+               If $PHAction == 1 Then
+               Begin
+                  SendSignal 21 3
+                  Set $PerformRestart = 1
+               End
+            End
+         End
+         If $PerformRestart == 1 Then
+         Begin
+            Do {Schedule 320 Restart}
+         End
+         Else
+         Begin
+            If (GetTitle 22) == {Close} Then
+            Begin
+               Do {KillModule FvwmScript WSM}
+            End
+         End
+         Quit
+     End
+     1 :
+     Begin
+        Set $DStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+desknum' '} $ExpandFile {' ; echo $?}
+        Set $DStringToCheck = (GetOutput $DStringToCheckCmd 1 -1)
+        If $DStringToCheck == 0 Then
+        Begin
+           Do {InfoStoreAdd desknum } $TmpDesks
+           Set $WriteDeskCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+desknum[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $TmpDesks {/g' -f "} $ExpandFile {"}
+           Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
+        End
+
+        If $DStringToCheck == 2 Then
+        Begin
+           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $DStringToCheck { occured while checking config file } $ExpandFile {"}
+           Quit
+        End
+
+        If $DStringToCheck == 1 Then
+        Begin
+           Do {InfoStoreAdd desknum } $TmpDesks
+           Set $WriteDeskCmd = {echo 'InfoStoreAdd desknum } $TmpDesks {' >> '} $ExpandFile {'}
+           Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
+        End
+     End
+     2 :
+     Begin
+        Set $PVStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixY' '} $ExpandFile {' ; echo $?}
+        Set $PVStringToCheck = (GetOutput $PVStringToCheckCmd 1 -1)
+        If $PVStringToCheck == 0 Then
+        Begin
+           Do {InfoStoreAdd pagematrixY } $VTmpPageNo
+           Set $WritePVCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixY[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $VTmpPageNo {/g' -f "} $ExpandFile {"}
+           Set $WritePV = (GetOutput $WritePVCmd 1 -1)
+        End
+
+        If $PVStringToCheck == 2 Then
+        Begin
+           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $PVStringToCheck { occured while checking config file } $ExpandFile {"}
+           Quit
+        End
+
+        If $PVStringToCheck == 1 Then
+        Begin
+           Do {InfoStoreAdd pagematrixY } $VTmpPageNo
+           Set $WritePVCmd = {echo 'InfoStoreAdd pagematrixY } $VTmpPageNo {' >> '} $ExpandFile {'}
+           Set $WritePV = (GetOutput $WritePVCmd 1 -1)
+        End
+     End
+     3 :
+     Begin
+        Set $PHStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixX' '} $ExpandFile {' ; echo $?}
+        Set $PHStringToCheck = (GetOutput $PHStringToCheckCmd 1 -1)
+        If $PHStringToCheck == 0 Then
+        Begin
+           Do {InfoStoreAdd pagematrixX } $HTmpPageNo
+           Set $WritePHCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixX[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $HTmpPageNo {/g' -f "} $ExpandFile {"}
+           Set $WritePH = (GetOutput $WritePHCmd 1 -1)
+        End
+        If $PHStringToCheck == 2 Then
+        Begin
+           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $PHStringToCheck { occured while checking config file } $ExpandFile {"}
+           Quit
+        End
+
+        If $PHStringToCheck == 1 Then
+        Begin
+           Do {InfoStoreAdd pagematrixX } $HTmpPageNo
+           Set $WritePHCmd = {echo 'InfoStoreAdd pagematrixX } $HTmpPageNo {' >> '} $ExpandFile {'}
+           Set $WritePH = (GetOutput $WritePHCmd 1 -1)
+        End
+     End
+End
+
+Widget 22
+   Property
+   Position 132 406
+   Size 80 20
+   Flags NoReliefString
+   Type PushButton
+   Title {Cancel}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetTitle 22) == {Close} Then
+         Begin
+            Do {KillModule FvwmScript WSM}
+         End
+         Quit
+      End
+End
+
+Widget 23
+   Property
+   Position 250 406
+   Size 80 20
+   Flags NoReliefString
+   Type PushButton
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Workspace and Pages Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-WsPgMgr.html}
+      End
+End
+
+Widget 24
+   Property
+   Flags NoReliefString Hidden
+   Position 2 2
+   Size 124 26
+   Type TextField
+   Title {}
+   Flags Left
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         Set $NewButtonLabel = (GetTitle 24)
+         Set $NewButtonLabelDisplay = { } (GetTitle 24)
+         If $NewButtonLabel == {} Then
+         Begin
+            Set $NewButtonLabel = {Desk} $CalledBy
+            Set $NewButtonLabelDisplay = { Desk} $CalledBy
+         End
+         Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
+         ChangeTitle $CalledBy $NewButtonLabelDisplay
+         HideWidget 24
+         ChangeTitle 22 {Close}
+      End
+      2 :
+      Begin
+         HideWidget 24
+      End
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 25
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Flags NoReliefString NoFocus Hidden
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         ChangeColorset 25 20
+         ChangeColorset 24 20
+      End
+End
+

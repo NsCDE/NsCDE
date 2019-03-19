@@ -1,0 +1,33 @@
+#!/bin/ksh
+
+# Wrapper for sed used heavily in FvwmScript scripts
+# We are not using "sed -i" since GNU sed is not present on
+# all systems, specially not under it's original name.
+# This should work with almost any sed(1). Result is kept
+# in memory variable and written to a file on the end. No
+# tmp files are created in the process.
+
+OIFS="$IFS"
+IFS=" "
+
+while getopts s:c:f:h Option
+do
+   case $Option in
+   s)
+      SEDOPTS="$OPTARG"
+   ;;
+   c)
+      SEDCODE="$OPTARG"
+   ;;
+   f)
+      IFILE="${OPTARG}"
+   ;;
+   h)
+      echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
+      exit 0
+   ;;
+   esac
+done
+
+RESULT=$(cat "${IFILE}" | sed $SEDOPTS "$SEDCODE")
+echo "$RESULT" > "$IFILE"

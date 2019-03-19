@@ -1,0 +1,107 @@
+WindowTitle {FPMonthDayApplet}
+WindowSize 59 57
+Colorset 21
+
+Init
+Begin
+   Set $MainFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   ChangeFont 3 $MainFont
+   ChangeFont 4 $MainFont
+
+   Set $month = (GetOutput {exec date +%h} 1 1)
+   ChangeTitle  3 $month
+   Set $day = (GetOutput {exec date +%e} 1 1)
+   ChangeTitle 4 $day
+End
+
+PeriodicTasks
+Begin
+   If (RemainderOfDiv (GetTime) 30) == 0 Then
+   Begin
+      Set $prevmtitle = $month
+      Set $month =  (GetOutput {exec date +%h} 1 1)
+      If $prevmtitle <> $month Then
+         ChangeTitle 3 $month
+
+      Set $prevdtitle = $day
+      Set $day = (GetOutput {exec date +%e} 1 1)
+      If $prevdtitle <> $day Then
+         ChangeTitle 4 $day
+   End
+End
+
+Widget 2
+   Property
+   Position 0 0
+   Size 59 57
+   Type ItemDraw
+   Flags NoReliefString Left
+   Icon CDE/FpCM.l.pm
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_Calendar}
+         ChangeColorset 2 24
+         Do {f_ClearFrontPanelPressed}
+         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
+         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+      End
+      1 :
+      Begin
+         If (LastString) == {unclick} Then
+         Begin
+            ChangeColorset 2 29
+         End
+         If (LastString) == {unselect} Then
+         Begin
+            ChangeColorset 2 21
+         End
+      End
+End
+
+Widget 3
+   Property
+   Position 16 11
+   Size 0 17
+   Type ItemDraw
+   ForeColor {#000000}
+   BackColor {#bdbdbd}
+   Flags NoReliefString Center
+   Title {XXX}
+   Font "xft:::pixelsize=12"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_Calendar}
+         ChangeColorset 2 24
+         Do {f_ClearFrontPanelPressed}
+         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
+         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+      End
+End
+
+Widget 4
+   Property
+   Position 19 27
+   Size 0 0
+   Type ItemDraw
+   ForeColor {black}
+   BackColor {#bdbdbd}
+   Flags NoReliefString Center
+   Title {XX}
+   Font "xft:::pixelsize=12"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_Calendar}
+         ChangeColorset 2 24
+         Do {f_ClearFrontPanelPressed}
+         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
+         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+      End
+End
+

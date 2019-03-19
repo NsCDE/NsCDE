@@ -1,0 +1,320 @@
+UseGettext
+WindowLocaleTitle {File Picker}
+WindowSize 420 540 # Taille
+Colorset 22
+
+Init
+ Begin
+  Set $PWD=(GetScriptArgument 1)
+  Set $POS=50
+  Set $LOOP=1
+  While $LOOP==1 Do
+  Begin
+   If (StrCopy $PWD $POS $POS)=={/} Then
+    Set $LOOP=0
+   If $POS==0 Then
+    Set $LOOP=0
+   Set $POS=(Add $POS -1)
+  End
+  Set $PWD=(StrCopy $PWD 1 $POS)
+  Set $CMD2={cd;cd } $PWD {; pwd}
+  Set $PWD=(GetOutput $CMD2 0 0)
+  Set $OPT={ }
+  Set $CMD={cd } $PWD {; ls} $OPT {-1 -F}
+  Set $LS=(GetOutput $CMD 1 -1)
+  Set $ID=2
+  While (GetOutput $CMD $ID -1) <> {} Do
+  Begin
+   Set $LS=$LS {|} (GetOutput $CMD $ID -1)
+   Set $ID=(Add $ID 1)
+  End
+  ChangeTitle 7 $LS
+  ChangeTitle 5 $PWD
+  ChangeTitle 9 {}
+
+  Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s small} 1 -1)
+  ChangeFont 12 $FontBoldMedium
+
+  Set $W13Visible = 0
+ End
+
+Widget 1
+Property
+ Size 85 20
+ Position 35 496
+ Flags NoReliefString
+ Type PushButton
+ LocaleTitle {OK}
+Main
+ Case message of
+  SingleClic :
+  Begin
+   SendToScript (GetScriptFather) $PWD {/} (GetTitle 9)
+   Quit
+  End
+End
+
+Widget 2
+Property
+ Size 85 20
+ Position 300 496
+ Flags NoReliefString
+ Type PushButton
+ LocaleTitle {Cancel}
+Main
+ Case message of
+  SingleClic :
+  Begin
+   Quit
+  End
+End
+
+Widget 3
+Property
+ Position 10 10
+ Flags NoReliefString
+ Size 400 330
+ Type Rectangle
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 4
+Property
+ Position 20 15
+ Size 320 20
+ Flags NoReliefString NoFocus Left
+ Type ItemDraw
+ LocaleTitle {Path:}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 5
+Property
+ Position 25 38
+ Flags NoReliefString NoFocus Left
+ Size 270 0
+ Type ItemDraw
+ Title {*}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 10
+Property
+ Position 20 36
+ Size 380 26
+ Type Rectangle
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+
+Widget 6
+Property
+ Position 20 348
+ Flags NoReliefString
+ Size 50 18
+ Title {Up}
+ Type PushButton
+Main
+ Case message of
+  SingleClic :
+  Begin
+   Set $CMD={cd } $PWD {/..; pwd}
+   Set $PWD=(GetOutput $CMD 0 0)
+   Set $CMD={cd } $PWD {; ls} $OPT {-1 -F}
+   Set $LS=(GetOutput $CMD 1 -1)
+   Set $ID=2
+   While (GetOutput $CMD $ID -1) <> {} Do
+   Begin
+    Set $LS=$LS {|} (GetOutput $CMD $ID -1)
+    Set $ID=(Add $ID 1)
+   End
+   ChangeTitle 7 $LS
+   ChangeTitle 5 $PWD
+   ChangeTitle 9 {}
+  End
+End
+
+Widget 11
+Property
+ Position 92 348
+ Flags NoReliefString
+ Size 50 18
+ Title {Home}
+ Type PushButton
+Main
+ Case message of
+  SingleClic :
+  Begin
+   Set $PWD={~/}
+   Set $CMD={cd } $PWD {; ls} $OPT {-1 -F}
+   Set $LS=(GetOutput $CMD 1 -1)
+   Set $ID=2
+   While (GetOutput $CMD $ID -1) <> {} Do
+   Begin
+    Set $LS=$LS {|} (GetOutput $CMD $ID -1)
+    Set $ID=(Add $ID 1)
+   End
+   ChangeTitle 7 $LS
+   ChangeTitle 5 $PWD
+   ChangeTitle 9 {}
+  End
+End
+
+Widget 12
+Property
+ Position 20 386
+ Flags NoReliefString
+ Type CheckBox
+ Title { Show hidden files}
+Main
+ Case message of
+  SingleClic :
+  Begin
+   If (GetValue 12) == 1 Then
+    Set $OPT={ -A }
+   Else
+    Set $OPT={ }
+   Set $CMD={cd } $PWD {; ls} $OPT {-1 -F}
+   Set $LS=(GetOutput $CMD 1 -1)
+   Set $ID=2
+   While (GetOutput $CMD $ID -1) <> {} Do
+   Begin
+    Set $LS=$LS {|} (GetOutput $CMD $ID -1)
+    Set $ID=(Add $ID 1)
+   End
+   ChangeTitle 7 $LS
+   ChangeTitle 5 $PWD
+   ChangeTitle 9 {}  
+  End
+End
+
+Widget 7
+Property
+ Position 20 72
+ Flags NoReliefString
+ Size 380 254
+ Type List
+ Title {}
+ Colorset 20
+Main
+ Case message of
+  SingleClic :
+  Begin
+   Set $CMD3={cd } $PWD {; ls} $OPT {-1}
+   Set $PWD2=$PWD {/} (GetOutput $CMD3 (GetValue 7) -1)
+   Set $CMD2={cd } $PWD {;cd } $PWD2 { 2>/dev/null; pwd}
+   Set $PWD2=(GetOutput $CMD2 0 0)
+   If $PWD2 <> $PWD Then
+   Begin
+    Set $PWD = $PWD2
+    Set $CMD={cd } $PWD {; ls} $OPT {-1 -F}
+    Set $LS=(GetOutput $CMD 1 -1)
+    Set $ID=2
+    While (GetOutput $CMD $ID -1) <> {} Do
+    Begin
+     Set $LS=$LS {|} (GetOutput $CMD $ID -1)
+     Set $ID=(Add $ID 1)
+    End
+    ChangeTitle 7 $LS
+    ChangeTitle 5 $PWD
+    ChangeTitle 9 {}
+   End
+   Else
+   Begin
+    ChangeTitle 9 (GetOutput $CMD3 (GetValue 7) -1)
+    Set $FileExamine = (GetOutput $CMD3 (GetValue 7) -1)
+    Set $IsIconCmd = {ls } $PWD2 {/} $FileExamine { | egrep '.*\.(png|pm|bm|xpm|gif|jpg|jpeg)'}
+    Set $IsIcon = (GetOutput $IsIconCmd 1 -1)
+    If $IsIcon == {} Then
+    Begin
+       If $W13Visible == 1 Then
+       Begin
+          HideWidget 13
+          Set $W13Visible = 0
+       End
+    End
+    Else
+    Begin
+       If $W13Visible == 0 Then
+       Begin
+          ShowWidget 13
+          Set $W13Visible = 1
+       End
+       ChangeIcon 13 $IsIcon
+    End
+   End
+  End
+End
+
+Widget 8
+Property
+ Position 18 414
+ Flags NoReliefString NoFocus
+ Type ItemDraw
+ LocaleTitle {Selected file:}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 9
+Property
+ Position 18 436
+ Flags NoReliefString
+ Size 386 20
+ Type TextField
+ Title {}
+ Colorset 20
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 13
+Property
+ Position 316 344
+ Size 86 86
+ Flags NoReliefString NoFocus Hidden
+ Type ItemDraw
+ Title {}
+ Icon NsCDE/Noicon.xpm
+ Colorset 22
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 14
+Property
+ Position 4 480
+ Flags NoReliefString
+ Size 410 0
+ Type Rectangle
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End

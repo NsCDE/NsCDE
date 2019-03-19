@@ -1,0 +1,117 @@
+WindowTitle { Choose a Palette }
+WindowSize 280 300
+Colorset 22
+
+Init
+Begin
+   Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+   ChangeTitle 3 $Palettes
+End
+
+Widget 1
+   Property
+   Size 20 32
+   Position 10 2
+   Type ItemDraw
+   Flags NoReliefString
+   Title {}
+   Icon NsCDE/DtColor.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+Property
+   Position 164 20
+   Type RadioButton
+   Flags NoReliefString
+   Title { Default }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 3 0
+         Set $Palette = {DEFAULT}
+      End
+End
+
+
+Widget 3
+   Property
+   Position 10 50
+   Size 260 182
+   Type List
+   Flags NoReliefString
+   Colorset 20
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $PaletteCmd = {$NSCDE_ROOT/libexec/colormgr -n } (GetValue 3)
+         Set $Palette = (GetOutput $PaletteCmd 1 -1)
+      End
+End
+
+Widget 4
+Property
+   Size 270 0
+   Position 4 244
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 5
+Property
+   Size 60 20
+   Position 16 258
+   Type PushButton
+   Flags NoReliefString
+   Title { OK }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {SendToModule BackdropMgr SendString 10 1 } $Palette
+         Quit
+      End
+End
+
+Widget 6
+Property
+   Size 60 20
+   Position 110 258
+   Type PushButton
+   Flags NoReliefString
+   Title {Cancel}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 7
+Property
+   Size 60 20
+   Position 204 258
+   Type PushButton
+   Flags NoReliefString
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Backdrop Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-PaletteDialog.html}
+      End
+End
+

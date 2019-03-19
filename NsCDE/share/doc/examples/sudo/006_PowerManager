@@ -1,0 +1,12 @@
+# For NsCDE logout / exit SysActionDialog
+
+Runas_Alias     TOOR = root
+
+Cmnd_Alias	POWERMGR = /usr/sbin/pm-suspend, /usr/sbin/pm-hibernate, \
+                           /usr/sbin/pm-suspend-hybrid, /sbin/init 6, /sbin/init 0
+
+user1	ALL  = (TOOR)	NOPASSWD: POWERMGR
+user2	ALL  = (TOOR)	NOPASSWD: POWERMGR
+user3	ALL  = (TOOR)	NOPASSWD: POWERMGR
+userN	ALL  = (TOOR)	NOPASSWD: POWERMGR
+

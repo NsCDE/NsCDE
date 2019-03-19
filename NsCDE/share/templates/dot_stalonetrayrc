@@ -1,0 +1,131 @@
+#
+# For NsCDE, helper configuration
+#
+
+# color can be specified as an HTML hex triplet or
+# as a name from rgb.txt, note that '#' must be quoted
+background "#bdbdbdbdbdbd"
+
+# set trays window decorations; possible values for
+# decspec are: all, title, border, none
+decorations border
+
+# specifies dimensions of typical icon slot
+icon_size 24
+
+# tray's geometry in standard X notation; width and
+# height are specified in slot_size multiples
+geometry 3x3-10-10
+
+# set dockapp mode, which can be either simple (for
+# e.g. OpenBox, wmaker for WindowMaker, or none
+# (default). NEW in 0.8.
+dockapp_mode simple
+
+# enable fuzzy edges and set fuzziness level. level
+# can be from 0 (disabled) to 3; this setting works
+# with tinting and/or transparent and/or pixmap
+# backgrounds
+# fuzzy_edges [<level>]
+
+# one of N, S, E, W, NW, NE, SW, SE; tray will grow
+# in the direction opposite to one specified by
+# grow_gravity; if horizontal or vertical
+# direction is not specified, tray will not grow in
+# that direction
+grow_gravity SE
+
+# icon placement gravity, one of NW, NE, SW, SE
+# icon_gravity NW
+icon_gravity NW
+
+# controls the amount of logging output, level can
+# be err (default), info, or trace (enabled only
+# when stalonetray configured with --enable-debug)
+# NEW in 0.8.
+# log_level err
+
+# enable specific kludges to work around
+# non-conforming WMs and/or stalonetray bugs.
+# NEW in 0.8. Argument is a
+# comma-separated list of
+# * fix_window_pos - fix tray window position on
+# erroneous moves by WM
+# * force_icon_size - ignore resize events on all
+# icons; force their size to be equal to
+# icon_size
+# * use_icon_hints - use icon window hints to
+# dtermine icon size
+# kludges kludge[,kludge]
+kludges fix_window_pos,force_icons_size
+
+# maximal tray dimensions; 0 in width/height means
+# no limit
+max_geometry 0x0
+
+# disables shrink-back mode
+no_shrink true
+
+# whether to use pseudo-transparency 
+# (looks better when reparented into smth like FvwmButtons)
+# parent_bg [<bool>]
+
+# enable/disable scrollbars; mode is either
+# vertical, horizontal, all or none (default)
+# NEW in 0.8.
+scrollbars none
+
+# scrollbars step in pixels; default is slot_size / 4
+# scrollbars-size <size>
+# scrollbars-step 8
+
+# scrollbars step in pixels; default is slot_size / 2
+# scrollbars-step <step>
+# scrollbars-step 32
+
+# specifies size of icon slot, defaults to
+# icon_size NEW in 0.8.
+slot_size 26
+
+# hide tray`s window from the taskbar
+# skip_taskbar [<bool>]
+skip_taskbar true
+
+# make a tray`s window sticky across the
+# desktops/pages
+sticky true
+
+# set tinting color
+tint_color black
+
+# set tinting level; level ranges from 0 (disabled) to 255
+# tint_level <level>
+tint_level 0
+
+# whether to use root-transparency (background
+# image must be set with Esetroot or compatible utility)
+# transparent [<bool>]
+transparent false
+
+# whether to use vertical layout (horisontal layout
+# is used by default)
+vertical true
+
+# set the EWMH-compatible window layer; one of:
+# bootom, normal, top
+window_layer normal
+
+# enable/disable window struts for tray window (to
+# avoid converting of tray window by maximized
+# windows); mode defines to which screen border tray
+# will be attached; it can be either top, bottom,
+# left, right, none or auto (default)
+# window_strut <mode>
+window_strut auto
+
+# set the EWMH-compatible window type; one of:
+# desktop, dock, normal, toolbar, utility
+window_type dock
+
+# whether to operate on X server synchronously (SLOOOOW)
+xsync false

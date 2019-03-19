@@ -1,0 +1,86 @@
+/* XPM */
+/* $XConsortium: Fptrsh.l.pm /main/3 1995/07/18 17:05:32 drk $ */
+/*********************************************************************
+*  (c) Copyright 1993, 1994 Hewlett-Packard Company	
+*  (c) Copyright 1993, 1994 International Business Machines Corp.
+*  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
+*  (c) Copyright 1993, 1994 Unix System Labs, Inc., a subsidiary of
+*      Novell, Inc.
+**********************************************************************/
+
+/* Designed by the User Interaction Design Group, Hewlett-Packard. */
+static char *trash48[]={
+/* width height ncolors cpp [x_hot y_hot] */
+"48 48 21 1 0 0",
+/* colors */
+"  c none m none s none",
+"/    s topShadowColor m white c #bdbdbdbdbdbd",
+"=    s background    m black c #949494949494",
+";    s selectColor m white c #737373737373",
+"\    s bottomShadowColor m black c #636363636363",
+"x s iconColor1 c black     m black",
+". s iconColor2 c white     m white",
+"r s iconColor3 c red       m black",
+"g s iconColor4 c green     m white",
+"b s iconColor5 c blue      m black",
+"y s iconColor6 c yellow    m black",
+"c s iconColor7 c cyan      m white",
+"m s iconColor8 c magenta   m white",
+"1    s iconGray1     m white c #dededededede",
+"2    s iconGray2     m white c #bdbdbdbdbdbd",
+"3    s iconGray3     m white c #adadadadadad",
+"4    s iconGray4     m white c #949494949494",
+"5    s iconGray5     m black c #737373737373",
+"6    s iconGray6     m black c #636363636363",
+"7    s iconGray7     m black c #424242424242",
+"8    s iconGray8     m black c #212121212121",
+/* pixels */
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"              \\\\\\\\\\\\\\\\\\\//             ",
+"              \411111111111111134\\/            ",
+"              \14111111111111111114\/           ",
+"              \121222222222222222217/           ",
+"              \121222222222222222217/           ",
+"              \721222222222222222217/           ",
+"              \177777777777777777777/           ",
+"              \312222222222222222227/           ",
+"              \432444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \432444444444444444447/           ",
+"              \332444444444444444447/           ",
+"              \43244444xxxxxx4444447/           ",
+"              /x3244444x111111544447/           ",
+"               /x244444xxxxxx5544447/           ",
+"                /xxxxxxxxxxxxxxxxxxx/           ",
+"                 ///////     ////////           ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+"                                                ",
+};

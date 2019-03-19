@@ -1,0 +1,48 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.3. Workspace Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-applets-docks-panels.html" title="3. Applets Docks and Panels"><link rel="prev" href="NsCDE-Subpanels.html" title="3.2. Subpanels"><link rel="next" href="NsCDE-PageIndicator.html" title="3.4. Page Indicator"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3. Workspace Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Subpanels.html">Prev</a> </td><th width="60%" align="center">3. Applets Docks and Panels</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-PageIndicator.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Workspace-Manager"></a>3.3. Workspace Manager</h3></div></div></div><p>
+Workspace Manager is a Widget in the center of the Front Panel. Visually, it
+replicates in almost a pixel similarity with the center of the CDE's Workspace
+Manager's buttons, but with a few exceptions beneath the surface and further
+configuration:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+ There is a limited number for possible of desks. There can be no odd number of
+  desks, and combinations are: 2, 4, 6 and 8. Default is of course 4.
+</p></li><li class="listitem"><p>
+ Buttons are not fixed in width size as in CDE. They are not extending a
+  width of the Front Panel, rather they are more wide in 2-buttons
+  combination, and narrow in 6 and 8 button combination.
+</p></li><li class="listitem"><p>
+ As in CDE, desk names can be renamed. There is a keyboard combination in
+  FvwmScript WSM which enters rename mode: Ctrl+Space on the current active
+  desk, while pointer is inside WSM. <span class="keysym">Ctrl+Enter</span> saves new name. Names are
+  synchronized with FVWM desktop names and used in the rest of the
+  configuration. Names are saved in <code class="filename">$FVWM_USERDIR/WSM.conf</code>
+</p></li><li class="listitem"><p>
+ Addition: right mouse button on desk button brings contextual menu. From
+  this menu, global (all desks and their pages), or local (pages of the one
+  desk) FvwmPager - visual pager can be called. Below this menu options, there
+  is an option to bring up Window List, and small submenu for changing the active page
+  on the current desk.
+</p></li><li class="listitem"><p>
+ If <code class="filename">$FVWM_USERDIR/WSM.conf</code> value <span class="emphasis"><em>WSPPG</em></span> is 1,
+  then in 2 or 4 desks/buttons
+  mode a small current page indicator is show on the right side of the button.
+  In addition to PageIndicator southwest of the WSM. Disabled (0) by default.
+  <code class="filename">WSM.conf</code> (system wide: <code class="filename">$NSCDE_ROOT/config/WSM.conf</code>) is
+  a separate configuration
+  file read by WSM, PageIndicator, WsPgMgr and such. Not a FVWM configuration file.
+</p></li><li class="listitem"><p>
+ Number of Desks and Pages can be configured with Workspace and Page Manager
+  tool which is called with right pointer click on Front Panel's left button
+  and selected from the menu.
+</p></li></ul></div><p>
+State of the buttons is synchronized by FVWM function called from FvwmEvent(1)
+module whenever desks and pages are changed by other means, such as keyboard
+shortcut, mouse move, or <span class="command"><strong>FvwmCommand(1)</strong></span>.
+</p><p>
+In 4 color palette mode, all WSM buttons are of the same color, while in 8 colors
+mode, there are four color variations from the given palette.
+</p><p>
+Desks in NsCDE are named and numbered from 1, while in FVWM, they start from
+0. This fact required additional effort while coding FvwmScripts and making
+default and core configuration.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Subpanels.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-applets-docks-panels.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-PageIndicator.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2. Subpanels </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.4. Page Indicator</td></tr></table></div></body></html>

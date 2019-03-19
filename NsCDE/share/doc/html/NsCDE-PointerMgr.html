@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.9. Mouse Style Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-OccupyWorkspace.html" title="4.8. Occupy Workspace"><link rel="next" href="NsCDE-PowerSaveMgr.html" title="4.10. Power Save Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.9. Mouse Style Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-OccupyWorkspace.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-PowerSaveMgr.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-PointerMgr"></a>4.9. Mouse Style Manager</h3></div></div></div><p>
+Mouse Style Manager tool manages pointer - that is, mouse settings. It's
+duties are few more than only xset(1) <span class="emphasis"><em>m</em></span> command. Namely:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Mouse acceleration (xset)
+</p></li><li class="listitem"><p>
+Threshold (xset)
+</p></li><li class="listitem"><p>
+Double-Click
+</p></li><li class="listitem"><p>
+Handedness (xmodmap)
+</p></li></ul></div><p>
+</p><p>
+Acceleration and Threshold are standard xset(1) <span class="emphasis"><em>m</em></span> options
+and man page for xset(1) should be consulted.
+</p><p>
+<span class="emphasis"><em>Handedness</em></span> can be set to flip left and right mouse button functions, while
+<span class="emphasis"><em>Double Click</em></span> is in fact most complex: it has test area where user can test
+double click speed (pixmap will change on double-click success), and this
+setting is changing:
+</p><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+ FVWM MenuStyle DoubleClick value (<code class="filename">$FVWM_USERDIR/NsCDE.conf</code>)
+</p></li><li class="listitem"><p>
+ X Resources multiClickTime resource in <code class="filename">$FVWM_USERDIR/Xdefaults.mouse</code>
+</p></li><li class="listitem"><p>
+ Qt/KDE settings in <code class="filename">$HOME/.kde/share/config/kdeglobals</code> (or similar path) if
+  found
+</p></li><li class="listitem"><p>
+ Gtk2 (<code class="filename">$HOME/.gtkrc-2.0</code>) if file exists
+</p></li><li class="listitem"><p>
+ Gtk3 (<code class="filename">$HOME/.config/gtk-3.0/settings.ini</code>) if file exists
+</p></li></ul></div><p>
+</p><p>
+Double-Click value is in milliseconds in all mentioned configurations.
+<span class="guibutton">Apply</span> button applies <span class="command"><strong>xset</strong></span> and
+<span class="command"><strong>xmodmap</strong></span> values set in runtime, but not double-click settings.
+</p><p>
+<span class="guibutton">Save</span> button saves changes in <code class="filename">$FVWM_USERDIR/Xset.conf</code>
+and all other optional files for widget and FVWM integration.
+<span class="guibutton">Default</span> button will set handedness for right-handed, double-click on 450,
+acceleration on 60, and threshold on 8, apply xset and xmodmap values, FVWM
+<span class="emphasis"><em>MenuStyle</em></span> <span class="emphasis"><em>DoubleClickTime</em></span> and will warp pointer
+to <span class="guibutton">Save</span> button for actions to be written in config files.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-OccupyWorkspace.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-PowerSaveMgr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.8. Occupy Workspace </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.10. Power Save Manager</td></tr></table></div></body></html>

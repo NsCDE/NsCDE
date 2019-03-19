@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.10. Power Save Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-PointerMgr.html" title="4.9. Mouse Style Manager"><link rel="next" href="NsCDE-SubpanelMgr.html" title="4.11. Subpanel Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.10. Power Save Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-PointerMgr.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-SubpanelMgr.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-PowerSaveMgr"></a>4.10. Power Save Manager</h3></div></div></div><p>
+This tool manages screen DPMS values. It uses standard <span class="command"><strong>xset(1)</strong></span> to set screen
+<span class="emphasis"><em>standby</em></span>, <span class="emphasis"><em>suspend</em></span> and <span class="emphasis"><em>off</em></span> times.
+Values are from 0 to 65535. Standby time cannot be bigger than suspend and/or off time, and
+suspend time cannot be bigger than off time.
+</p><p>
+It has a checkbox which enables or disables DPMS management at all.
+Values are written in <code class="filename">$FVWM_USERDIR/Xset.conf</code>.
+</p><p>
+If <code class="filename">$HOME/.xscreensaver</code> is present and has DPMS options
+in it, they will be synchronized with xset <span class="emphasis"><em>dpms</em></span> options
+written in <code class="filename">Xset.conf</code>.
+<span class="guibutton">Apply</span> button applies runtime (but not xscreensaver) while
+<span class="guibutton">Save</span> button writes configuration file and <code class="filename">$HOME/.xscreensaver</code>
+DPMS settings if this file exists. <span class="guibutton">Default</span> button will set the following defaults:
+DPMS <span class="emphasis"><em>on</em></span>, standby <span class="emphasis"><em>1200 seconds</em></span>, suspend <span class="emphasis"><em>1800
+seconds</em></span>, and off time <span class="emphasis"><em>2400 seconds</em></span>, apply this settings on runtime,
+and point mouse to <span class="guibutton">Save</span> button for changes to be written.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-PointerMgr.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-SubpanelMgr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.9. Mouse Style Manager </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.11. Subpanel Manager</td></tr></table></div></body></html>

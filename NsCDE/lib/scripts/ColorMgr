@@ -1,0 +1,807 @@
+WindowTitle {Style Manager - Color}
+WindowSize 448 546
+Colorset 22
+
+Init
+Begin
+   # CurrDesk - for Backdrop syncronization during preview
+   Set $CurrDesk = (Add (GetScriptArgument 1) 1)
+   If $CurrDesk == {} Then
+   Begin
+      Set $CurrDesk = 1
+   End
+
+   # Defined as NSCDE_PALETTE_NCOLORS in NsCDE-Colorset.conf
+   Set $Ncolors = (GetScriptArgument 2)
+   If $Ncolors == {} Then
+   Begin
+      Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="No colors number scheme defined. Setting default to 8."}
+      Set $Ncolors = 8
+   End
+
+   If $Ncolors == 4 Then
+   Begin
+      HideWidget 10
+      HideWidget 12
+      HideWidget 14
+      HideWidget 16
+      ChangeSize 9 64 72
+      ChangeSize 11 64 72
+      ChangeSize 13 64 72
+      ChangeSize 15 64 72
+   End
+   If $Ncolors == 8 Then
+   Begin
+      ShowWidget 10
+      ShowWidget 12
+      ShowWidget 14
+      ShowWidget 16
+      ChangeSize 9 64 32
+      ChangeSize 11 64 32
+      ChangeSize 13 64 32
+      ChangeSize 15 64 32
+   End
+
+   Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+   ChangeTitle 3 $Palettes
+
+   Set $Performed = 0
+   Set $PreviewParam = {}
+   Set $PreviewContaminated = 0
+
+   Set $Current = (GetOutput {echo $NSCDE_PALETTE} 1 -1)
+   Set $CurrentPaletteValueCmd = {$NSCDE_ROOT/libexec/colormgr -N } $Current
+   Set $CurrentPaletteValue = (GetOutput $CurrentPaletteValueCmd 1 -1)
+   If $CurrentPaletteValue <> {} Then
+   Begin
+      ChangeValue 3 $CurrentPaletteValue
+      SendSignal 3 1
+   End
+
+   # Set different font for some elements
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   ChangeFont 21 $SmallFont
+   ChangeFont 22 $SmallFont
+   ChangeFont 23 $SmallFont
+   ChangeFont 24 $SmallFont
+   ChangeFont 25 $SmallFont
+   ChangeFont 26 $SmallFont
+   ChangeFont 27 $SmallFont
+   ChangeFont 32 $SmallFont
+
+   Set $GtkStr = {00}
+   Set $Gtk2Str = 0
+   Set $Gtk3Str = 0
+End
+
+PeriodicTasks
+Begin
+   Set $MSG=(ReceivFromScript $BROWSER)
+   If $MSG <> {No message} Then
+   Begin
+     Do {SendToModule ColorMgr SendString 5 1 } $MSG
+   End
+End
+
+QuitFunc
+Begin
+   Do {Exec exec rm -f } $FullColor { $FVWM_USERDIR/tmp/NsCDE-Colorset-Preview.conf $FVWM_USERDIR/tmp/*-Preview $FVWM_USERDIR/tmp/backer-*.pm}
+End
+
+Widget 1
+   Property
+   Size 4 0
+   Position 16 8
+   Type ItemDraw
+   Flags NoReliefString Left
+   Title { Palettes }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 432 186
+   Position 8 18
+   Type Rectangle
+End
+
+Widget 3
+   Property
+   Size 248 164
+   Position 20 30
+   Type List
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 3 1
+      End
+      1 :
+      Begin
+         Set $PalNumToNameCmd =  {$NSCDE_ROOT/libexec/colormgr -n } (GetValue 3)
+         Set $PalNumToName = (GetOutput $PalNumToNameCmd 1 -1)
+         ChangeTitle 7 $PalNumToName
+
+         Set $PalletePathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $PalNumToName
+         Set $PalletePath = (GetOutput $PalletePathCmd 1 -1)
+
+         Set $PaletteColorsCatCmd = {cat } $PalletePath
+         ChangeBackColor 9 (GetOutput $PaletteColorsCatCmd 1 1)
+         ChangeBackColor 10 (GetOutput $PaletteColorsCatCmd 5 1)
+         ChangeBackColor 11 (GetOutput $PaletteColorsCatCmd 2 1)
+         ChangeBackColor 12 (GetOutput $PaletteColorsCatCmd 6 1)
+         ChangeBackColor 13 (GetOutput $PaletteColorsCatCmd 3 1)
+         ChangeBackColor 14 (GetOutput $PaletteColorsCatCmd 7 1)
+         ChangeBackColor 15 (GetOutput $PaletteColorsCatCmd 4 1)
+         ChangeBackColor 16 (GetOutput $PaletteColorsCatCmd 8 1)
+
+         Set $FullColorCmd = {$NSCDE_ROOT/libexec/colormgr -c } $Ncolors { -f } $PalletePath
+         Set $FullColor = (GetOutput $FullColorCmd 1 -1)
+         ChangeIcon 17 $FullColor
+      End
+End
+
+Widget 4
+   Property
+   Size 120 22
+   Position 296 44
+   Type PushButton
+   Flags NoReliefString
+   Title { Preview |  Preview |  Revert  }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $PreviewContaminated = 1
+         Set $PreviewMode = 1
+         Set $PreviewParam = {-t}
+         SendSignal 30 1
+         If $PerformBackdropSync <> {} Then
+         Begin
+            Do {Exec exec fvwm-root } $PerformBackdropSync
+         End
+         Do {Read } $PerformPaletteChange
+         Do {Schedule 120 Refresh}
+
+         If (GetValue 4) == 2 Then
+         Begin
+            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+            Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
+            Do {f_Readcfg Backdrops}
+            Do {f_Readcfg Colorset}
+            Set $PreviewContaminated = 0
+         End
+      End
+End
+
+Widget 5
+   Property
+   Size 120 22
+   Position 296 100
+   Type PushButton
+   Flags NoReliefString
+   Title { Add ... }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $ARG={FilePicker }
+         Set $BROWSER=(LaunchScript $ARG )
+      End
+      1 :
+      Begin
+         Set $CheckPaletteFileCmd = {$NSCDE_ROOT/libexec/colormgr -C } (LastString)
+         Set $CheckPaletteFile = (GetOutput $CheckPaletteFileCmd 1 -1)
+         If $CheckPaletteFile == 8 Then
+         Begin
+            Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/palettes/}
+            Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+            ChangeTitle 3 $Palettes
+         End
+         Else
+         Begin
+            Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="Selected file is not a valid Palette."}
+         End
+      End
+End
+
+Widget 6
+   Property
+   Size 120 22
+   Position 296 154
+   Type PushButton
+   Flags NoReliefString
+   Title { Delete ... }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $DelPalNumToNameCmd =  {$NSCDE_ROOT/libexec/colormgr -n } (GetValue 3)
+         Set $DelPalNumToName = (GetOutput $DelPalNumToNameCmd 1 -1)
+         Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $DelPalNumToName
+         Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
+         Do {FvwmForm ColorMgrForm QUESTION="Delete Palette } $DelPalNumToName {" PATHNAME="} $CheckDelPath {"}
+      End
+      1 :
+      Begin
+         If (LastString) == {confirmed} Then
+         Begin
+            Set $RmPaletteCmd = {rm -f } $CheckDelPath { 2>&1}
+            Set $RmPalette = (GetOutput $RmPaletteCmd 1 -1)
+            If $RmPalette <> {} Then
+            Begin
+               Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="} $RmPalette {"}
+            End
+            Else
+            Begin
+               Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+               ChangeTitle 3 $Palettes
+            End
+         End
+      End
+End
+
+Widget 7
+   Property
+   Size 22 0
+   Position 16 206
+   Type ItemDraw
+   Flags NoReliefString
+   Title {  Palette Name  }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Size 432 100
+   Position 8 216
+   Type Rectangle
+End
+
+Widget 9
+   Property
+   Size 64 32
+   Position 22 230
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 64 32
+   Position 22 274
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 11
+   Property
+   Size 64 32
+   Position 100 230
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 12
+   Property
+   Size 64 32
+   Position 100 274
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 13
+   Property
+   Size 64 32
+   Position 178 230
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 14
+   Property
+   Size 64 32
+   Position 178 274
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 15
+   Property
+   Size 64 32
+   Position 256 230
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 16
+   Property
+   Size 64 32
+   Position 256 274
+   Type ItemDraw
+   Title {}
+   BackColor {#ffffffffffff}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Size 86 76
+   Position 338 230
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/None.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 18
+   Property
+   Size 422 20
+   Position 12 326
+   Type PushButton
+   Flags NoReliefString
+   Title {Number Of Colors ...}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Module FvwmScript NColorsDialog } $Ncolors
+      End
+      1 :
+      Begin
+         Set $Ncolors = (LastString)
+         If $Ncolors == 4 Then
+         Begin
+            HideWidget 10
+            HideWidget 12
+            HideWidget 14
+            HideWidget 16
+            ChangeSize 9 64 72
+            ChangeSize 11 64 72
+            ChangeSize 13 64 72
+            ChangeSize 15 64 72
+         End
+         If $Ncolors == 8 Then
+         Begin
+            ShowWidget 10
+            ShowWidget 12
+            ShowWidget 14
+            ShowWidget 16
+            ChangeSize 9 64 32
+            ChangeSize 11 64 32
+            ChangeSize 13 64 32
+            ChangeSize 15 64 32
+         End
+      End
+End
+
+Widget 19
+   Property
+   Size 80 0
+   Position 20 360
+   Type ItemDraw
+   Flags NoReliefString Left
+   Title { Integration Options }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 20
+   Property
+   Size 432 116
+   Position 8 370
+   Type Rectangle
+End
+
+Widget 21
+   Property
+   Size 60 24
+   Position 16 384
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { Backdrops}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 22
+   Property
+   Size 60 24
+   Position 16 418
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { X Resources}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 23
+   Property
+   Size 60 24
+   Position 138 384
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Title { GTK2 Theme}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 23) == 0 Then
+         Begin
+            ChangeValue 25 0
+            ChangeValue 26 0
+         End
+      End
+End
+
+Widget 24
+   Property
+   Size 60 24
+   Position 138 418
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Title { GTK3 Theme}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 25
+   Property
+   Size 60 24
+   Position 262 384
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Title { Use Qt 4 Gtk Engine}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 23 1
+      End
+End
+
+Widget 26
+   Property
+   Size 60 24
+   Position 262 418
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Title { Use Qt 5 Gtk Engine}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         ChangeValue 23 1
+      End
+End
+
+Widget 27
+   Property
+   Size 60 24
+   Position 16 452
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Font "xft:::pixelsize=14"
+   Title { Run $FVWM_USERDIR/libexec/colormgr.local (if exists)}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 28
+   Property
+   Size 442 1
+   Position 3 494
+   Type Rectangle
+End
+
+Widget 29
+   Property
+   Size 80 26
+   Position 16 506
+   Type PushButton
+   Flags NoReliefString
+   Title {OK}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $Performed == 0 Then
+         Begin
+            # Remove preview mode if present.
+            Set $PreviewMode = 0
+            Set $PreviewParam = {}
+            SendSignal 30 1
+         End
+         Do {Exec exec pkill -U $(id -un) -xf '\/opt\/NsCDE\/bin\/pclock.*'}
+         Do {Schedule 360 Restart}
+         Quit
+      End
+End
+
+Widget 30
+   Property
+   Size 80 26
+   Position 128 506
+   Type PushButton
+   Flags NoReliefString
+   Title {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # Remove preview mode if present.
+         Set $PreviewMode = 0
+         Set $PreviewParam = {}
+         SendSignal 30 1
+         Set $Performed = 1
+      End
+      1 :
+      Begin
+         If $PreviewMode == 0 Then
+         Begin
+            Do {Module FvwmScript WaitNotice "Working ..." "Please wait for changes to be applied" "and NsCDE restarted." 3200}
+         End
+         Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -F}
+         Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
+         Set $PerformProgBitsChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -P}
+         Set $PerformProgBitsChange = (GetOutput $PerformProgBitsChangeCmd 1 -1)
+
+         If (GetValue 22) == 1 Then
+         Begin
+            Set $PerformXresourceChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -X}
+            Set $PerformXresourceChange = (GetOutput $PerformXresourceChangeCmd 2 -1)
+
+            # Reload X resources immediately.
+            If $PreviewMode == 0 Then
+            Begin
+               Set $ReloadXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+               Set $ReloadXresources = (GetOutput $ReloadXresourcesCmd 1 -1)
+            End
+         End
+
+         If (GetValue 21) == 1 Then
+         Begin
+            Set $PerformBackdropSyncCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -b}
+            # 1st and 2nd lines are pallete path/name and backdrop template, the rest is sorted in desk num order from 3-10 (8)
+            Set $bpospreview = (Add $CurrDesk 2)
+            Set $PerformBackdropSync = (GetOutput $PerformBackdropSyncCmd $bpospreview -1)
+         End
+
+         # A big if around GTK/QT integration to avoid if we are in preview mode
+         If $PreviewMode == 0 Then
+         Begin
+            If (GetValue 23) == 1 Then
+            Begin
+               Set $Gtk2Str = 1
+            End
+
+            If (GetValue 24) == 1 Then
+            Begin
+               Set $Gtk3Str = 1
+            End
+
+            Set $GtkStr = $Gtk2Str $Gtk3Str
+
+            If $GtkStr == {11} Then
+            Begin
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { True True}
+               Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
+
+               Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2 <> 0 Then
+               Begin
+                  Set $DoGtkrc2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+               End
+
+               Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckGtk3Exist <> 0 Then
+               Begin
+                  Set $MkGtk3 = (GetOutput {mkdir -p "$HOME/.config/gtk-3.0"} 1 -1)
+               End
+
+               Set $CheckGtkrc3 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3 <> 0 Then
+               Begin
+                  Set $DoGtkrc3 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+               End
+            End
+
+            If $GtkStr == {10} Then
+            Begin
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { True False}
+               Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
+
+               Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2 <> 0 Then
+               Begin
+                  Set $DoGtkrc2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+               End
+            End
+
+            If $GtkStr == {01} Then
+            Begin
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False True}
+               Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
+
+               Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckGtk3Exist <> 0 Then
+               Begin
+                  Set $MkGtk3 = (GetOutput {mkdir -p "$HOME/.config/gtk-3.0"} 1 -1)
+               End
+
+               Set $CheckGtkrc3 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3 <> 0 Then
+               Begin
+                  Set $DoGtkrc3 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+               End
+            End
+
+            If $GtkStr == {00} Then
+            Begin
+               Set $PerformGtk2Cmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False False}
+               Set $PerformGtk2 = (GetOutput $PerformGtk2Cmd 1 -1)
+            End
+
+            If (GetValue 25) == 1 Then
+            Begin
+               Set $CheckDotConfigExist = (GetOutput {ls -1d "$HOME/.config" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckDotConfigExist <> 0 Then
+               Begin
+                  Set $MkDotConf = (GetOutput {mkdir -p "$HOME/.config"} 1 -1)
+               End
+               Set $DoTroll = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'} 1 -1)
+            End
+
+            If (GetValue 26) == 1 Then
+            Begin
+               Set $CheckDotConfigExist = (GetOutput {ls -1d "$HOME/.config/qt5ct" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckDotConfigExist <> 0 Then
+               Begin
+                  Set $MkDotConf = (GetOutput {mkdir -p "$HOME/.config/qt5ct"} 1 -1)
+               End
+               Set $DoQt5Ct1 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2} 1 -1)
+               Set $DoQt5Ct2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+            End
+
+            If (GetValue 27) == 1 Then
+            Begin
+               Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/colormgr.local" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckUserCustomScriptExist == 0 Then
+               Begin
+                  Set $RunUserScriptCmd = {$FVWM_USERDIR/libexec/colormgr.local } $PalletePath { } $Ncolors
+                  Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
+               End
+            End
+         End
+         Do {f_Readcfg Backdrops}
+         Do {f_Readcfg Colorset}
+      End
+End
+
+Widget 31
+   Property
+   Size 80 26
+   Position 240 506
+   Type PushButton
+   Flags NoReliefString
+   Title {Close}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $PreviewContaminated == 1 Then
+         Begin
+            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+            Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
+            Do {f_Readcfg Backdrops}
+            Do {f_Readcfg Colorset}
+            Do {Schedule 120 Refresh}
+         End
+         Quit
+      End
+End
+
+Widget 32
+   Property
+   Size 80 26
+   Position 352 506
+   Type PushButton
+   Flags NoReliefString
+   Title {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Color Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-ColorMgr.html}
+      End
+End
+

@@ -1,0 +1,175 @@
+#!/bin/ksh
+
+IFS=" "
+if [ -z $NSCDE_ROOT ]; then
+   echo "No NSCDE_ROOT is set. Stop." >&2
+   exit 1
+fi
+
+# Default value if not set (see -x below)
+NoCheckForCmd=0
+
+function subpanelcommon
+{
+   FileToVar="$(<${SubpanelMenuTmpFile})"
+   ItemMax=$(echo $FileToVar | wc -l)
+   Head=$(echo $FileToVar | sed -e :a -e '/\\$/N; s/\\\n//; ta; s/ \+/ /g' | egrep -v "\*${PanelName}.*Icon.*Action.*")
+   SubpanelCustomName=$(echo $FileToVar | egrep "InfoStoreAdd NsCDE-Subpanel.?.-Name" | awk -F'"' '{ print $2 }')
+   InstIcon=$(echo $FileToVar | sed -e :a -e '/\\$/N; s/\\\n//; ta; s/ \+/ /g' | egrep "Module FvwmScript SubpanelMgr")
+   Items=$(echo $FileToVar | sed -e :a -e '/\\$/N; s/\\\n//; ta; s/ \+/ /g' | egrep "\*${PanelName}.*Icon.*Action.*" | egrep -v '(Module FvwmScript SubpanelMgr|Id TitleId)')
+
+   NamesFromItems=$(echo "$Items" | cut -d'"' -f2)
+   IconsFromItems=$(echo "$Items" | awk '{ for (i=1 ; i<=NF ; i++) if ($i == "Icon") print $(i+1) }' | sed 's/,$//g')
+   CmdsFromItems=$(echo "$Items" | sed -e :a -e '/\\$/N; s/\\\n//; ta; s/ \+/ /g' | egrep "\*${PanelName}.*Icon.*Action.*" | egrep -v '(FvwmScript SubpanelMgr|Id TitleId)' | awk '{ for (i=1 ; i<=NF ; i++) if ($i == "Exec") for (i=i+1 ; i<=NF ; ++i) printf $i""FS ; print "" }' | sed 's/^exec \(.*\)$/\1/g; s/)//g; s/ *$//g')
+   if [ "x$CmdsFromItems" == "x" ]; then
+      CmdsFromItems=$(echo "$Items" | sed -e :a -e '/\\$/N; s/\\\n//; ta; s/ \+/ /g' | egrep "\*${PanelName}.*Icon.*Action.*" | egrep -v '(FvwmScript SubpanelMgr|Id TitleId)' | awk '{ for (i=1 ; i<=NF ; i++) if ($i == "Module") for (i=i+1 ; i<=NF ; ++i) printf $i""FS ; print "" }' | sed 's/)//g; s/ *$//g')
+   fi
+}
+
+# -p = panel name
+# -f = panel conf file name
+# -t = temp file for all apps
+# -T = temporary file for local subpanel
+# -a = apps list generator
+# -m = apps menu generator
+# -i = single item (numeric) from apps menu
+# -M = existing subpanel menu generator
+# -I = single item (numeric) from subpanel menu
+# -L = exec type (Exec exec, Module ...)
+# -N = Program Name
+# -O = Icon PathName
+# -C = Cmd Name
+# -c = create (tmp: append to new menu)
+# -n = print Subpanel Custom name from subpanel file (requires -f file -T tmpfile)
+# -x = do not check for application command existance
+# -h = help
+while getopts p:f:t:T:i:I:amML:N:O:C:cdnxh Option
+do
+   case $Option in
+      p)
+         PanelName="$OPTARG"
+      ;;
+      f)
+         PanelConfFile="$OPTARG"
+      ;;
+      t)
+         AppListTempFile="$OPTARG"
+      ;;
+      T)
+         SubpanelMenuTmpFile="$OPTARG"
+         if [ ! -s $SubpanelMenuTmpFile ]; then
+            cp -f $PanelConfFile $SubpanelMenuTmpFile
+         fi
+      ;;
+      a) 
+         if [ "$AppListTempFile" != "" ]; then
+            $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --plain-list | sed 's/^ITEM:%//g' | sort -u > ${AppListTempFile}
+         else
+            echo "Error: No AppListTempFile defined." >&2
+         fi
+      ;;
+      m) 
+         if [ "$AppListTempFile" != "" ]; then
+            if [ ! -s ${AppListTempFile} ]; then
+               $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --plain-list | sed 's/^ITEM:%//g' | sort -u > ${AppListTempFile}
+            fi
+            cat $AppListTempFile | cut -d'%' -f 1 | sed 's/$/|&/g' | tr -d '\n' | sed 's/|$//g'
+         else
+            echo "Error: No AppListTempFile defined." >&2
+         fi
+      ;;
+      i)
+         ItemNo="$OPTARG"
+         if [ "$AppListTempFile" != "" ]; then
+            sed -n ${ItemNo}p < $AppListTempFile | tr '%' '\n'
+         else
+            echo "Error: No AppListTempFile defined." >&2
+         fi
+      ;;
+      M)
+         if [ "$SubpanelMenuTmpFile" != "" ]; then
+            subpanelcommon
+            echo "$NamesFromItems" | tr '\n' '|' | sed 's/|$//g'
+         else
+            echo "Error: No SubpanelMenuTmpFile defined." >&2
+         fi
+      ;;
+      I)
+         ItemNo="$OPTARG"
+         subpanelcommon
+         echo $NamesFromItems | sed -n ${ItemNo}p
+         echo $IconsFromItems | sed -n ${ItemNo}p
+         echo $CmdsFromItems | sed -n ${ItemNo}p
+      ;;
+      L)
+         case "$OPTARG" in
+         'execcmd') LaunchType="Exec exec"
+         ;;
+         'fvwmmodule') LaunchType="Module"
+         ;;
+         'fvwmfunction') LaunchType="Function"
+         ;;
+         'other') LaunchType="Other"
+         ;;
+         esac
+      ;;
+      N)
+         AppName="$OPTARG"
+      ;;
+      O)
+         IconName="$OPTARG"
+      ;;
+      C)
+         CmdName="$OPTARG"
+      ;;
+      x)
+         NoCheckForCmd=1
+      ;;
+      c)
+         [ "$LaunchType" == "" ] && exit 1
+         [ "$AppName" == "" ] && exit 1
+         [ "$IconName" == "" ] && exit 1
+         [ "$CmdName" == "" ] && exit 1
+         [ "$SubpanelMenuTmpFile" == "" ] && exit 1
+         [ "$PanelName" == "" ] && exit 1
+
+         if [[ "$LaunchType" == "Function" || "$LaunchType" == "Other" ]]; then
+            LaunchType=""
+         fi
+
+         CmdName=$(echo "$CmdName" | sed 's/"/\\"/g' | tr -d "'")
+
+         egrep -qw "\*${PanelName}:.*\"${AppName}\".*Action.*${CmdName}" $SubpanelMenuTmpFile
+         if (($? != 0)); then
+            if (($NoCheckForCmd == 1)); then
+               echo "Test (x ${CmdName%% *}) *${PanelName}: (Size \$[infostore.${PanelName}-Width] 32, Frame 0, PressColorset 26, Title(side, left) "\"$AppName\"" Icon "\"$IconName\"", Action $LaunchType $CmdName)" >> $SubpanelMenuTmpFile
+            else
+               echo "*${PanelName}: (Size \$[infostore.${PanelName}-Width] 32, Frame 0, PressColorset 26, Title(side, left) "\"$AppName\"" Icon "\"$IconName\"", Action $LaunchType $CmdName)" >> $SubpanelMenuTmpFile
+            fi
+         else
+            FvwmCommand "SendToModule SubpanelMgr SendString 21 1 Already present on subpanel ${PanelName}."
+         fi
+      ;;
+      d)
+         [ "$AppName" == "" ] && exit 1
+         [ "$IconName" == "" ] && exit 1
+         [ "$SubpanelMenuTmpFile" == "" ] && exit 1
+         [ "$PanelName" == "" ] && exit 1
+
+         egrep -qw "$AppName" $SubpanelMenuTmpFile
+         if (($? == 0)); then
+            TmpTmp=$(mktemp --suffix=.dtmp)
+            egrep -v "\"$AppName\"".*Icon.*"${IconName}" $SubpanelMenuTmpFile >> $TmpTmp
+            mv -f $TmpTmp $SubpanelMenuTmpFile
+         fi
+      ;;
+      n)
+         subpanelcommon
+         echo "$SubpanelCustomName"
+      ;;
+      h)
+         echo "Usage: $0 p:f:t:T:i:I:amMh"
+      ;;
+   esac
+done
+

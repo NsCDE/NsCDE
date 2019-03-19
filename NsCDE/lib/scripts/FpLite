@@ -1,0 +1,71 @@
+WindowTitle {FpLite}
+WindowSize 36 34
+Colorset 21
+
+Init
+Begin
+   Set $CurrentIcon = {NsCDE/Fplite.s.pm}
+End
+
+PeriodicTasks
+Begin
+   If (RemainderOfDiv (GetTime) 10) == 0 Then
+   Begin
+      Set $Getloadavg100 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 1 -1)
+      Set $Getloadavg10 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 2 -1)
+      Set $Getloadavg1 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 3 -1)
+
+      If $Getloadavg100 <= 100 Then
+      Begin
+         Set $IconName = {NsCDE/Fplite_lowload_} $Getloadavg10 {.s.pm}
+         If $CurrentIcon <> $IconName Then
+         Begin
+            ChangeIcon 1 $IconName
+            Set $CurrentIcon = $IconName
+         End
+      End
+
+      If $Getloadavg100 > 100 Then
+      Begin
+         If $Getloadavg100 >= 1000 Then
+         Begin
+            ChangeIcon 1 NsCDE/Fplite_highload_99.s.pm
+         End
+         Else
+         Begin
+            Set $IconName = {NsCDE/Fplite_highload_} $Getloadavg1 {.s.pm}
+            If $CurrentIcon <> $IconName Then
+            Begin
+               ChangeIcon 1 $IconName
+               Set $CurrentIcon = $IconName
+            End
+         End
+      End
+   End
+End
+
+Widget 1
+Property
+   Position 0 0
+   Size 36 34
+   Type ItemDraw
+   Flags NoReliefString
+   Title {}
+   Icon NsCDE/Fplite.s.pm
+      Main
+         Case message of
+         SingleClic :
+         Begin
+            ChangeColorset 1 25
+            Do {f_FpLiteClickAction}
+            Do {f_UnclickScript 1200 FpLite 1 1 21} 
+         End
+         1 :
+         Begin
+            If (LastString) == 21 Then
+            Begin
+               ChangeColorset 1 21
+            End
+         End
+End
+

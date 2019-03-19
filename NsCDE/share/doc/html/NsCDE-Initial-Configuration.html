@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>12. Initial Configuration</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Startup.html" title="11. NsCDE Startup"><link rel="next" href="NsCDE-Integrations.html" title="13. Integration with X resources and widgets"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">12. Initial Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Startup.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Integrations.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Initial-Configuration"></a>12. Initial Configuration</h2></div></div></div><p>
+Upon the first (successful) start, <code class="filename">~/.NsCDE,</code>
+that is <code class="varname">$FVWM_USERDIR</code> is created, and only icons subdirectory
+is created as <span class="command"><strong>nscde-fvwm-menu-desktop</strong></span> is run. User will be presented with a default
+system setup and with default color theme <span class="emphasis"><em>Broica</em></span> in 8 colors, and
+<code class="function">f_FindTerm</code> function will try hard to find some usable terminal
+application and run it with setup. If Gkrellm, pnmixer and/or stalonetray programs are installed,
+on the system and found, they will be run too.
+</p><p>
+Initial setup is a simple script (<span class="command"><strong>$NSCDE_ROOT/libexec/nscde_setup</strong></span>) from
+the terminal which will run automatically and will set up the following:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>X resources in <code class="filename">~/.NsCDE</code></p></li><li class="listitem"><p>Default background color (pre-FvwmBacker) from default theme</p></li><li class="listitem"><p>Default <code class="filename">~/.NsCDE/NsCDE.conf</code></p></li><li class="listitem"><p>New empty <code class="filename">~/.NsCDE/GeoDB.ini</code></p></li><li class="listitem"><p> <code class="filename">~/.icons/default/index.theme</code>
+ (default X cursor scheme)</p></li><li class="listitem"><p> <code class="filename">~/.gtkrc-2.0</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/gtk-3.0/settings.ini</code> </p></li><li class="listitem"><p> <code class="filename">~/.themes/NsCDE</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/Trolltech.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/qt5ct/qt5ct.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/.stalonetrayrc</code> </p></li></ul></div><p>
+Note that no file from the above list will be overwritten if it already
+exists in it's place. It will be skipped, but GTK and Qt theme
+integration files can be still written with <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a>.
+After <span class="command"><strong>nscde_setup</strong></span> script finishes setup,
+<a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> will be run and
+user asked to confirm default theme or change it. <span class="emphasis"><em>Do not</em></span> avoid this
+step, since some program bits are not fully setup on bare defaults,
+(like a clock background) and must be
+generated in the <code class="filename">~/.NsCDE/icons/NsCDE</code> directory.
+</p><p>
+After <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager's</a>
+<span class="guibutton">OK</span> button is pressed, theme will be
+regenerated. Gtk and Qt themes will be regenerated only if their
+checkboxes in <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> are checked in.
+Setup script after the finish will ask user to press <span class="keysym">RETURN</span> to exit.
+This is for user's convenience to read output of the setup for
+informative and/or diagnostic reasons.
+It is advised after this setup to open <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
+and set up InfoStoreAdd internal FVWM variables for <code class="varname">terminal</code>,
+<code class="varname">filemgr</code> and <code class="varname">xeditor</code> to user's favorite programs for
+functions.
+</p><p>
+Layout of the <code class="varname">$FVWM_USERDIR</code> after the initial
+setup should look like this:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>app-defaults/</p></li><li class="listitem"><p>backdrops/</p></li><li class="listitem"><p>palettes/</p></li><li class="listitem"><p>fontsets/</p></li><li class="listitem"><p>templates/</p></li><li class="listitem"><p>photos/</p></li><li class="listitem"><p>backer/</p></li><li class="listitem"><p>GeoDB.ini</p></li><li class="listitem"><p>icons/</p></li><li class="listitem"><p>icons/NsCDE/</p></li><li class="listitem"><p>NsCDE-Backdrops.conf</p></li><li class="listitem"><p>NsCDE-Colorset.conf</p></li><li class="listitem"><p>NsCDE.conf</p></li><li class="listitem"><p>tmp/</p></li><li class="listitem"><p>Xdefaults</p></li><li class="listitem"><p>Xdefaults.fontdefs</p></li><li class="listitem"><p>Xdefaults.local</p></li><li class="listitem"><p>Xdefaults.mouse</p></li></ul></div><p>
+It is advised to logout and login from the X session after this,
+and check if everything looks ok. Also, it is a good idea to start
+using programs from the menu and examine environment around for a
+half an hour or so, before running Style Manager (2nd button right
+of the Workspace Manager on the Front Panel) to customize other
+aspects of the interface. NsCDE is now ready for usage.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Startup.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Integrations.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">11. NsCDE Startup </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 13. Integration with X resources and widgets</td></tr></table></div></body></html>

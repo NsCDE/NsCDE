@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>2. Components of the NsCDE</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="next" href="NsCDE-components-applets-tools.html" title="2.2. Applets and GUI Tools"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. Components of the NsCDE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-components-applets-tools.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-components"></a>2. Components of the NsCDE</h2></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-components-overview"></a>2.1. Components overview</h3></div></div></div><p>
+NsCDE is a wrapper and a bunch of configurations, scripts and apps around
+FVWM. FVWM is in my opinion a model of free choice for people who like to have
+things set up by their own wishes and who are aware what real freedom of
+choice is. A stunning contrast to policies forced on Linux users in the last
+decade from the mainstream desktop players.
+</p><p>
+NsCDE is by default rooted in <code class="filename">/opt/NsCDE</code> ($NSCDE_ROOT),
+but it can be relocated with only one variable changed in main
+wrapper <code class="filename">bin/nscde</code> and <code class="filename">NsCDE-Main.conf</code>.
+</p><p>
+It is not using your existing <code class="filename">$HOME/.fvwm</code>
+but sets <code class="varname">$FVWM_USERDIR</code> to <code class="filename">$HOME/.NsCDE</code>,
+and uses <code class="filename">/opt/NsCDE/config</code> as a sources of configuration.
+</p><p>
+Configuration model is a bit complex, but very flexible: configuration options
+are grouped in logical order. Configuration files are names
+<code class="filename">NsCDE-&lt;group&gt;.conf</code>. For example, <code class="filename">NsCDE-Functions.conf</code>
+for FVWM functions. Each
+configuration file can have two exclusive sources, and one additional. For
+example, if user doesn't have <code class="filename">$FVWM_USERDIR/NsCDE-Functions.conf</code>, then
+<code class="filename">$NSCDE_ROOT/config/NsCDE-Functions.conf</code> is read as default. Additionally, if
+<code class="filename">$FVWM_USERDIR/NsCDE-Functions.local</code> exists, it will be read in addition to
+conf file, from wherever it was read. This is intended as a primary mechanism
+for customization: If user doesn't need to override and change a lot of
+"system" configuration, but just add it's own in addition to existing, local
+file is place for such customization (of course, most parts of the existing FVWM
+configuration can be overridden or destroyed and recreated even in local files.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-components-applets-tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Not so Common Desktop Environment (NsCDE) Manual </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2. Applets and GUI Tools</td></tr></table></div></body></html>

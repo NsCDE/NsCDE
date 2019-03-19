@@ -1,0 +1,22 @@
+Warning about theme integration for GTK2, GTK3, Qt4 and Qt5:
+
+GTK2 and GTK3 theme will be overidden by desktop session manager no
+matter what .gtkrc-2.0 and/or .config/gtk-3.0/settings.ini are
+configured properly.
+
+Every "desktop environment" has it's own application to change this.
+
+Under LXDE run lxappearance to set NsCDE theme.
+Under MATE, run mate-appearance-properties.
+Under KDE, run settings, or "kcmshell5 kde-gtk-config"
+Under GNOME, gnome-tweaks (make sure gtk-3.0 symlink in points to 
+
+You will also have to set "sh $HOME/.NsCDE/Xset.conf". Putting it
+in $HOME/.config/autostart as "xset.desktop" manually or by desk
+tool does not give expected result. You should probably use
+$FVWM_USERDIR/NsCDE-Init.conf SessionInitFunction and make it Exec.
+
+Also, from autostarted applications which are outside FVWM process
+group, NSCDE_* and FVWM_* and any other variables set from NsCDE
+configurations will not be set. XAPPLRESDIR will be absent too.
+FVWM's SessionInitFunction is your best chance.

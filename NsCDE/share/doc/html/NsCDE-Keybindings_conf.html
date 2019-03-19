@@ -1,0 +1,126 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.17. NsCDE-Keybindings.conf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained"><link rel="prev" href="NsCDE-Init_conf.html" title="7.16. NsCDE-Init.conf"><link rel="next" href="NsCDE-Main_conf.html" title="7.18. NsCDE-Main.conf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.17. NsCDE-Keybindings.conf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Init_conf.html">Prev</a> </td><th width="60%" align="center">7. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Main_conf.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Keybindings_conf"></a>7.17. NsCDE-Keybindings.conf</h3></div></div></div><p>
+For CDE clone and CDE compatibility, key bindings are a bit problematic area. In my local
+installation of open sourced CDE in virtual machine with CentOS 7,
+(didn't bothered to install Solaris 10 to examine their flavor again), key
+bindings are almost non-existent. <span class="keysym">Alt+F4</span> usually closes the window and
+that's it. Because of this fact, and because NsCDE is not only a visual
+clone of the CDE, but it aims to provide more functionality and to be
+useful <span class="emphasis"><em>daily driver</em></span> for user to enjoy in familiar look and feel (hated
+by a lot of people) and to be seriously productive in the same time,
+comfortable and quick, to have good graphic (such as anti-aliased fonts,
+but this also can be turned off), a set of useful key bindings is
+defined by default. This default keybindings set can be extended, partially
+overridden, or completely replaced (copy the <code class="filename">NsCDE-Keybinding.conf</code> in
+<code class="varname">$FVWM_USERDIR</code> and edit, or even write from scratch). Defaults are
+author's <span class="emphasis"><em>daily driver</em></span>. For explanation what is the context, and what
+modifier, see FVWM explanation (copied from original default FVWM
+config and extended a bit). Namely:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>,
+  <span class="keysym">left</span> and <span class="keysym">right</span> with ctrl modifier are
+    moving viewport from page to page in any context.
+</p></li><li class="listitem"><p>
+  the same combination, but with <span class="keysym">meta</span> (<span class="keysym">mod4</span>) is moving viewport by
+    4% of the screen. (<span class="keysym">Ctrl</span> moves 100%)
+</p></li><li class="listitem"><p>
+  the same combination, but with <span class="keysym">shift</span> modifier moves mouse by 1%
+    of the screen
+</p></li><li class="listitem"><p>
+  <span class="keysym">Ctrl+Meta+cursor keys</span> are changing first 4 desks
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Tab</span> are cycling trough the desks
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Shift+cursor keys</span> are moving currently focused window
+    between first four desks
+</p></li><li class="listitem"><p>
+  <span class="keysym">Menu (Compose)</span> key pops up root menu in any context
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Menu</span> combination pops up window operations menu
+</p></li><li class="listitem"><p>
+  <span class="keysym">Ctrl+Menu</span> moves Root Pager (if enabled) beneath the pointer or 
+    iconifies Root Pager if RootPager already has the pointer - toggle
+    action
+</p></li><li class="listitem"><p>
+  <span class="keysym">Ctrl+ISO_Level3_Shift</span> (right alt) moves Root Pager (if enabled) beneath
+    the pointer or iconifies Root Pager if RootPager already has the pointer
+    - toggle action
+</p></li><li class="listitem"><p>
+  <span class="keysym">Shift+Menu</span> pops up Window List of all windows on the current desk
+</p></li><li class="listitem"><p>
+  Key <span class="keysym">Alt+Space</span> in the context of the window, frame corners, frame
+    sides, title bar and icon (ovoids root window context!) calls
+    Occupy Space dialog for window moving between the desks.
+</p></li><li class="listitem"><p>
+  Key <span class="keysym">Meta+Space</span> in the context of the window, frame corners, frame
+    sides and a title bar pops up Window Options context menu
+</p></li><li class="listitem"><p>
+  Key <span class="keysym">Meta+Space</span> in the context of the icon, pops up Icon Options
+    context menu
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F1</span> regenerates and refreshes the window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F2</span> iconifies (deiconifies if in icon context)
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F3</span> shares or rolls up the window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F4</span> enters resize mode which can be finished with cursors keys
+    and enter
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F5</span> enters move mode which can be finished with cursors keys
+    and enter
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F6</span> raises or lowers the window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F7</span> maximizes window 100% (whole screen + decorations)
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F8</span> maximizes window ~ 80% - avoids Front Panel
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F9</span> is empty
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F10</span> deletes a window (see fvwm(1))
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+F10</span> closes a window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Shift+Meta+Alt+F10</span> forcefully destroys a window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F11</span> is empty
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F12</span> calls xrefresh
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+Tab</span> calls WindowList with windows sorted by desks
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+L</span> activates screensaver, that is, locks the screen
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+Insert</span> takes a screenshot of the root window with 200 ms delay
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F1</span> invokes default terminal app ($[infostore.terminal])
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F2</span> invokes Exec dialog
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F3</span> toggles visibility of the titlebar
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F4</span> toggles window's sticky state
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F6</span> saves geometry information for a current window in GeoDB.ini
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F7</span> centers the window in the middle of the screen
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F8</span> reads <code class="filename">GeoDB.ini</code> and if it finds an entry for the current
+    resolution and <code class="varname">$[w.class],</code> it resizes and moves a window according to
+    the specification in <code class="varname">$FVWM_USERDIR/GeoDB.ini</code> 
+</p></li><li class="listitem"><p>
+  In the context of the Front Panel, <span class="keysym">Alt+cursor</span> keys are moving the
+    pointer by the 1% in all four given directions
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F9</span> in the context of the known terminal application windows
+    scratches the window to some 75%x72% of the screen, which is also a
+    menu option in this windows called <span class="emphasis"><em>Wide Terminal</em></span>
+</p></li><li class="listitem"><p>
+  <span class="keysym">Ctrl+Escape</span> will raise Front Panel and reposition it to it's default
+    place on the screen
+</p></li><li class="listitem"><p>
+  <span class="keysym">Shift+Escape</span> will do the same as <span class="keysym">Ctrl+Escape,</span> but Front Panel is
+    after repositioning shaded to bottom border of the screen. Invoking
+    this key sequence again will unshade the Front Panel. Middle mouse
+    button on the borders of the frame has the same effect
+</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Init_conf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Main_conf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.16. NsCDE-Init.conf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.18. NsCDE-Main.conf</td></tr></table></div></body></html>

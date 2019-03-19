@@ -1,0 +1,208 @@
+WindowTitle { X11 Session or System Action }
+WindowSize 460 180
+Colorset 22
+
+Init
+   Begin
+      WarpPointer 6
+
+      Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
+
+      ChangeFont 6 $FontBoldMedium
+      ChangeValue 4 1
+
+      Key Escape A 2 1 {No}
+      Key Return C 2 3 {Yes}
+
+      Do {CursorStyle ROOT CursorExit.xpm}
+End
+
+Widget 1
+   Property
+   Size 20 32
+   Position 16 20
+   Type ItemDraw
+   Flags NoReliefString
+   Title {}
+   Colorset 22
+   Icon NsCDE/Question.xpm
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 2
+  Property
+  Size 120 0
+  Position 56 18
+  Type ItemDraw
+  Flags NoReliefString
+  Title {User Confirmation:}
+  Colorset 22
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+      1 :
+         Begin
+	    Set $qstr = (LastString)
+	    If $qstr == {No} Then
+	    Do {CursorStyle ROOT left_ptr}
+	    Quit
+         End
+      2 :
+         Begin
+	    Set $estr = (LastString)
+	    If $estr == {Yes} Then
+	    Begin
+               Do {f_QuitAndExit}
+               Quit
+            End
+         End
+End
+
+Widget 3
+   Property
+   Size 320 0
+   Position 56 36
+   Type ItemDraw
+   Flags NoReliefString
+   Title {X Window System or Operating System Action}
+   Colorset 22
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 4
+   Property
+   Size 300 20
+   Position 20 74
+   Type PopupMenu
+   Value 0
+   Flags NoReliefString
+   Title {   X Window System: Logout|   X Window System: Window Manager Restart   |   X Window System: Failsafe (xterm)|   Operating System: Shutdown|   Operating System: Reboot|   Operating System: Suspend/Sleep|   Operating System: Hibernate}
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 5
+Property
+   Size 464 1
+   Position 2 120
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 6
+Property
+   Size 80 20
+   Position 20 140
+   Type PushButton
+   Flags NoReliefString
+   Title { Confirm }
+Main
+Case message of
+   SingleClic :
+      Begin
+         # X11 WM Quit
+         If (GetValue 4) == 1 Then
+         Begin
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Logging out" "..." 2000}
+            Do {f_QuitAndExit}
+            Quit
+         End
+
+         # X11 WM Restart
+         If (GetValue 4) == 2 Then
+         Begin
+            Do {Restart}
+            Quit
+	 End
+
+         # X11 Failsafe
+         If (GetValue 4) == 3 Then
+         Begin
+            Do {CursorStyle ROOT left_ptr}
+	    Do {Restart xterm -n '"X Console"' -T '"X Console"'}
+            Quit
+         End
+
+         # OS Shutdown
+         If (GetValue 4) == 4 Then
+         Begin
+            Do {f_QuitAndShutdown 0}
+            Quit
+         End
+
+         # OS Reboot
+         If (GetValue 4) == 5 Then
+         Begin
+            Do {f_QuitAndShutdown 6}
+            Quit
+         End
+
+         # OS Suspend / Sleep
+         If (GetValue 4) == 6 Then
+         Begin
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
+            Do {Exec sudo pm-suspend}
+            Quit
+         End
+
+         # OS Hibernate
+         If (GetValue 4) == 7 Then
+         Begin
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
+            Do {Exec sudo pm-hibernate}
+            Quit
+         End
+      End
+End
+
+Widget 7
+Property
+   Size 80 20
+   Position 190 140
+   Type PushButton
+   Title { Dismiss }
+   Flags NoReliefString
+Main
+   Case message of
+      SingleClic :
+         Begin
+	    Do {CursorStyle ROOT left_ptr}
+	    Quit
+         End
+End
+
+Widget 8
+Property
+   Size 80 20
+   Position 360 140
+   Type PushButton
+   Title { Help }
+   Flags NoReliefString
+Main
+   Case message of
+      SingleClic :
+         Begin
+	    Do {f_DisplayURL "System Action Dialog" $[NSCDE_ROOT]/share/doc/html/NsCDE-SysActionDialog.html}
+         End
+End
+

@@ -1,0 +1,673 @@
+WindowTitle {Style Manager}
+WindowSize 720 110
+WindowPosition 30 30
+Colorset 22
+
+Init
+Begin
+   Key Q C 1 1 {Quit}
+   ChangeTitle 27 {Color}
+   ChangeTitle 28 {Font}
+   ChangeTitle 29 {Backdrop}
+   ChangeTitle 30 {Keyboard}
+   ChangeTitle 31 {Mouse}
+   ChangeTitle 32 {Beep}
+   ChangeTitle 33 {Screen}
+   ChangeTitle 34 {Window}
+   ChangeTitle 35 {Power}
+   ChangeTitle 36 {Startup}
+
+   Set $IconFnClean = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $IconFn = {Shadow=2 0 SE:} $IconFnClean {:antialias=0}
+
+   ChangeFont 27 $IconFn
+   ChangeFont 28 $IconFn
+   ChangeFont 29 $IconFn
+   ChangeFont 30 $IconFn
+   ChangeFont 31 $IconFn
+   ChangeFont 32 $IconFn
+   ChangeFont 33 $IconFn
+   ChangeFont 34 $IconFn
+   ChangeFont 35 $IconFn
+   ChangeFont 36 $IconFn
+
+   # Make the same as ItemDraw which differs the rest of the app from menu
+   ChangeColorset 7 21
+   ChangeColorset 8 21
+   ChangeColorset 9 21
+   ChangeColorset 10 21
+   ChangeColorset 11 21
+   ChangeColorset 12 21
+   ChangeColorset 13 21
+   ChangeColorset 14 21
+   ChangeColorset 15 21
+   ChangeColorset 16 21
+
+   ChangeColorset 27 21
+   ChangeColorset 28 21
+   ChangeColorset 29 21
+   ChangeColorset 30 21
+   ChangeColorset 31 21
+   ChangeColorset 32 21
+   ChangeColorset 33 21
+   ChangeColorset 34 21
+   ChangeColorset 35 21
+   ChangeColorset 36 21
+
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+
+   ChangeFont 1 $DefaultFont
+   ChangeFont 2 $DefaultFont
+   ChangeFont 3 $DefaultFont
+   ChangeFont 4 $DefaultFont
+End
+
+Widget 1 # Handler
+   Property
+   Type Menu
+   Position 0 0
+   Flags NoReliefString Left Hidden
+   Value 0
+   Title {}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         Quit
+      End
+End
+
+Widget 2
+   Property
+   Type Menu
+   Position 0 10
+   Flags NoReliefString Left
+   Value 0
+   Font "xft:::pixelsize=14"
+   Title {File|Exit     Ctrl+Q}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 2) == {1} Then
+         Begin
+            Quit
+         End
+      End
+End
+
+Widget 3 # Handler
+   Property
+   Type Menu
+   Position 0 0
+   Font "xft:::pixelsize=14"
+   Flags NoReliefString Left Hidden
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         Quit
+      End
+End
+
+Widget 4
+   Property
+   Type Menu
+   Position 0 0
+   Flags NoReliefString Right
+   Value 0
+   Title {Help|Style Manager Help}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 4) == 1 Then
+         Begin
+            Do {f_DisplayURL "Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-GUI-Tools.html}
+         End
+      End
+End
+
+# Background different from menu if ncolors == 8
+Widget 5
+   Property
+   Size 720 107
+   Position 0 25
+   Flags NoReliefString
+   Type ItemDraw
+   Colorset 21
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Select Frame and Press/Unpress worker.
+Widget 6
+   Property
+   Size 62 86
+   Position 4 31
+   Flags NoReliefString Hidden
+   Type ItemDraw
+   Colorset 2
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         If (StrCopy (LastString) 1 7) == {pressed} Then
+         Begin
+            Set $IconWidget = (StrCopy (LastString) 9 10)
+            Set $TextWidget = (StrCopy (LastString) 12 13)
+            If (StrCopy $IconWidget 1 1) == {0} Then
+            Begin
+               Set $NIconWidget = (StrCopy $IconWidget 2 2)
+               ChangeColorset $NIconWidget 28
+            End
+            Else
+            Begin
+               ChangeColorset $IconWidget 28
+            End
+            ChangeColorset $TextWidget 28
+            Do {Schedule 250 SendToModule StyleMgr SendString 6 1 unpressme_} $IconWidget {_} $TextWidget
+         End
+         If (StrCopy (LastString) 1 9) == {unpressme} Then
+         Begin
+            Set $IconWidget = (StrCopy (LastString) 11 12)
+            Set $TextWidget = (StrCopy (LastString) 14 15)
+            If (StrCopy $IconWidget 1 1) == {0} Then
+            Begin
+               Set $NIconWidget = (StrCopy $IconWidget 2 2)
+               ChangeColorset $NIconWidget 21
+            End
+            Else
+            Begin
+               ChangeColorset $IconWidget 21
+            End
+            ChangeColorset $TextWidget 21
+         End
+      End
+      2 :
+      Begin
+         # IconWidget is from "6 1" - if it is initialized to non-zero
+         # this means something has been clicked and frame widget (6)
+         # has moved to some sane position for uncovering.
+         If $IconWidget <> {} Then
+         Begin
+            If (LastString) == {hideframe} Then
+            Begin
+               HideWidget 6
+            End
+            If (LastString) == {showframe} Then
+            Begin
+               ShowWidget 6
+            End
+         End
+      End
+End
+
+
+Widget 7
+   Property
+   Size 60 60
+   Position 8 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Color.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 7 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_07_27}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 7 27
+         ChangeSize 6 62 78
+         Do {None (ColorMgr) Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]}
+      End
+End
+
+Widget 27
+   Property
+   Size 60 28
+   Position 8 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 7 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_07_27}
+      End
+End
+
+
+Widget 8
+   Property
+   Size 60 60
+   Position 78 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Font.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 8 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_08_28}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 77 27
+         ChangeSize 6 62 78
+         Do {None (FontMgr) Module FvwmScript FontMgr}
+      End
+End
+
+Widget 28
+   Property
+   Size 60 28
+   Position 78 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 8 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_08_28}
+      End
+End
+
+Widget 9
+   Property
+   Size 78 60
+   Position 146 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Backdrop.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 9 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_09_29}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 145 27
+         ChangeSize 6 80 78
+         Do {None (BackdropMgr) Module FvwmScript BackdropMgr $[desk.n] $[infostore.desknum]}
+      End
+End
+
+Widget 29
+   Property
+   Size 78 28
+   Position 146 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 9 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_09_29}
+      End
+End
+
+Widget 10
+   Property
+   Size 78 60
+   Position 229 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Keybd.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 10 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_10_30}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 228 27
+         ChangeSize 6 80 78
+         Do {None (KeyboardMgr) Module FvwmScript KeyboardMgr}
+      End
+End
+
+Widget 30
+   Property
+   Size 78 28
+   Position 229 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 10 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_10_30}
+      End
+End
+
+Widget 11
+   Property
+   Size 60 60
+   Position 310 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Mouse.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 11 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_11_31}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 309 27
+         ChangeSize 6 62 78
+         Do {None (PointerMgr) Module FvwmScript PointerMgr}
+      End
+End
+
+Widget 31
+   Property
+   Size 60 28
+   Position 310 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 11 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_11_31}
+      End
+End
+
+Widget 12
+   Property
+   Size 58 60
+   Position 372 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Beep.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 12 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_12_32}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+          ChangePosition 6 371 27
+          ChangeSize 6 60 78
+          Do {None (BeepMgr) Module FvwmScript BeepMgr}
+      End
+End
+
+Widget 32
+   Property
+   Size 58 28
+   Position 372 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 12 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_12_32}
+      End
+End
+
+Widget 13
+   Property
+   Size 60 60
+   Position 432 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Screen.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 13 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_13_33}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 431 27
+         ChangeSize 6 62 78
+         Do {None (xscreensaver-demo) f_Xscreensaver -prefs}
+      End
+End
+
+Widget 33
+   Property
+   Size 60 28
+   Position 432 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 13 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_13_33}
+      End
+End
+
+Widget 14
+   Property
+   Size 68 60
+   Position 502 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-WinMgr.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 14 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_14_34}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 501 27
+         ChangeSize 6 70 78
+         Do {None (WindowMgr) Module FvwmScript WindowMgr}
+      End
+End
+
+Widget 34
+   Property
+   Size 68 28
+   Position 502 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 14 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_14_34}
+      End
+End
+
+Widget 15
+   Property
+   Size 60 60
+   Position 576 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/SDtpowermgr.m.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 15 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_15_35}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 575 27
+         ChangeSize 6 62 78
+         Do {None (PowerSaveMgr) Module FvwmScript PowerSaveMgr}
+      End
+End
+
+Widget 35
+   Property
+   Size 60 28
+   Position 576 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 15 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_15_35}
+      End
+End
+
+Widget 16
+   Property
+   Size 66 60
+   Position 646 28
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Start.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 16 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_16_36}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 645 27
+         ChangeSize 6 68 78
+         Set $CheckSessionManager = (GetOutput {echo $SESSION_MANAGER} 1 -1)
+         Set $CheckDesk = (GetOutput {echo $XDG_CURRENT_DESKTOP} 1 -1)
+         Set $CheckDeskRc = {NotListed}
+         If $CheckSessionManager <> {} Then
+         Begin
+            If $CheckDesk == {MATE} Then
+            Begin
+               Do {Test (x mate-session-properties) Exec exec mate-session-properties}
+               Do {Test (!x mate-session-properties) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No mate-session-properties found."}
+               Set $CheckDeskRc = {Listed}
+            End
+            If $CheckDesk == {LXDE} Then
+            Begin
+               Do {Test (x lxsession-edit) Exec exec lxsession-edit}
+               Do {Test (!x lxsession-edit) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No lxsession-edit found."}
+               Set $CheckDeskRc = {Listed}
+            End
+            If $CheckDesk == {GNOME} Then
+            Begin
+               Do {Test (x gnome-tweaks) Exec exec gnome-tweaks}
+               Do {Test (!x gnome-tweaks) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No gnome-tweaks found."}
+               Set $CheckDeskRc = {Listed}
+            End
+            If $CheckDesk == {KDE} Then
+            Begin
+               Do {Test (x kcmshell5) Exec exec kcmshell5 kcmsmserver autostart kcmkded}
+               Do {Test (!x kcmshell5) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No kcmshell5 found."}
+               Set $CheckDeskRc = {Listed}
+            End
+
+            If $CheckDeskRc == {NotListed} Then
+            Begin
+               Do {FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="Session Manager from desktop } $CheckDesk { not (yet) supported."}
+            End
+         End
+         Else
+         Begin
+            Do {FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="NsCDE appears not to be running under the X Session Manager."}
+         End
+      End
+End
+
+Widget 36
+   Property
+   Size 66 28
+   Position 646 76
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 16 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_16_36}
+      End
+End
+

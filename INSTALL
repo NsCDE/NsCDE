@@ -1,0 +1,229 @@
+                Not so Common Desktop Environment (NsCDE) Manual
+
+Installation Dependencies
+
+    For NsCDE to work, essential software is FVWM Window Manager. Almost all
+   is based on it. Since NsCDE is heavy user of infostore internal variables
+   and other new features of FVWM, development has been done on FVWM versions
+   2.6.7 and 2.6.8. At this time, this are recommended, if not mandatory
+   versions of FVWM for NsCDE. Other dependencies, that is, software used by
+   NsCDE is:
+
+     *  Korn Shell 93. All shell script routines inside configuration, helper
+       scripts and FvwmScript helpers are written with ksh. It is not sure if
+       pdksh can be drop in replacement, but in tests on Arch Linux with mksh
+       it became clear that mksh cannot replace Korn Shell. Korn Shell is
+       available and it is free.
+
+     *  Xorg utils (Fedora/CentOS RPM xorg-x11-utils) - xdpyinfo, xprop ...
+
+     *  Util xdotool - only if FVWM is not patched with WindowName patch for
+       the FvwmButtons
+
+     *  ImageMagick - really needed.
+
+     *  Xscreensaver - optional, but Screen Style Manager will not work
+       without it. Something needs to be installed for locking the screen.
+
+     *  cpp - C preprocessor for xrdb functionality - for X resources
+       integration. Used by xrdb(1).
+
+     *  xorg-x11-server-utils (CentOS, Fedora name) - xrdb, xset, xrefresh
+       mandatory for startup, some style managers and menus.
+
+     *  python-yaml - needed for python part of the color theme management
+       and for Gtk+Qt integration.
+
+     *  PyQt4 or possibly python-qt4, or python2-qt4. This is unfortunate
+       dependency which is further dependent on Qt libraries. NsCDE tries to
+       have as less as possible dependencies, specially indirect
+       (dependencies of dependent dependencies of dependencies ...). Gtk/Qt
+       integration is borrowed from CDEtheme Motif/CDE theme project and
+       adapted for use with FVWM (instead of heavy Xfce dependency) or
+       standalone engine. In part of the Theme.py code, some png pixmaps are
+       cut and colored with functions from this API. With present job and
+       lack of time, there was no time to do this without PyQt4 for the first
+       public release.
+
+         On CentOS, Fedora, Ubuntu and probably Debian, also on FreeBSD,
+       there should be no problem to install this with package manager, but
+       in tests on Arch Linux, PyQt4 was obsoleted and user will have a hard
+       time getting source from AUR and compiling huge bunch of Qt4
+       libraries. There is possibility to replace PyQt4 with PyQt5 imports in
+       code and it will work, no matter that it will segfault and core dump
+       on the exit.
+
+     *  Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins
+       (optional) There is a great chance this libraries and some usefull
+       programs using them are already installed on user's system. If Gtk and
+       Qt integration is activated in [70]Color Style Manager, there is no
+       point not to have it installed.
+
+         Notice about Qt4 and Qt5: qt4-config (or qt-config) and qt5ct:
+       Although colors will be applied, for font setting to take effect,
+       qtconfig-qt4 (or qtconfig) must be run, something changed back and
+       forth, and then applied/saved - no matter that you will see fonts of
+       your choice already selected. This can be considered a bug. Same goes
+       for Qt5.
+
+         Notice about Qt5: QT_QPA_PLATFORMTHEME environment variable must be
+       set, and be set to qt5ct value in order to run qt5ct configurator.
+
+     *  Recommended fonts for as close as possible CDE look are DejaVu Serif
+       for variable, and DejaVu Sans Mono for monospaced fonts. Check should
+       be made if this fonts are installed on the system. For Solaris CDE
+       look, Lucida Sans and monospaced Lucida Sans Typewriter should be
+       installed, selected and used instead. (optional)
+
+     *  Open Motif 2 libraries for some programs, although it is not used in
+       any part of the NsCDE. (optional)
+
+     *  Stalonetray for "tray" facility (optional)
+
+     *  xterm
+
+     *  python3 (FVWM)
+
+     *  python34-pyxdg or python3-pyxdg or ... (FVWM)
+
+     *  libstroke (FVWM)
+
+     *  perl-File-MimeInfo (on some platforms and some fvwm packages)
+
+   --------------------------------------------------------------------------
+
+Installation
+
+    When FVWM and all/most above mentioned dependencies are met, NsCDE can be
+   used. Present installation is very simple:
+
+     $ su - || sudo -i
+     # umask 0022
+     # cd /tmp
+     # tar xpzf /whatever/you/put/NsCDE-<version>.tar.gz
+     # cp -rp NsCDE-<version>/NsCDE /opt
+
+     ... and optionally:
+
+     # cd /usr/local/bin || cd /usr/bin
+     ln -s /opt/NsCDE/bin/nscde
+
+    That's it. NsCDE is installed.
+
+   --------------------------------------------------------------------------
+
+NsCDE Startup
+
+    Session can be started from the $HOME/.xsession in last command line as
+   exec nscde, or exec /opt/NsCDE/bin/nscde or ssh-agent nscde or with
+   gpg-agent, lxsession or whatever.
+
+    If supported by the X Display Manager which is in use, an xsession file
+   /opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop can be
+   put in /usr/share/xsessions (or in whatever place your system and your X
+   Display Manager reads this files) and then selected from the manager's
+   menu or similar selector. See the rest of the X Session Manager
+   integration examples are in directory /opt/NsCDE/share/doc/examples/ for
+   MATE, KDE, LXDE and similar DE integrations and play with this if you
+   like.
+
+   --------------------------------------------------------------------------
+
+Initial Configuration
+
+    Upon the first (successful) start, ~/.NsCDE, that is $FVWM_USERDIR is
+   created, and only icons subdirectory is created as nscde-fvwm-menu-desktop
+   is run. User will be presented with a default system setup and with
+   default color theme Broica in 8 colors, and f_FindTerm function will try
+   hard to find some usable terminal application and run it with setup. If
+   Gkrellm, pnmixer and/or stalonetray programs are installed, on the system
+   and found, they will be run too.
+
+    Initial setup is a simple script ($NSCDE_ROOT/libexec/nscde_setup) from
+   the terminal which will run automatically and will set up the following:
+
+     * X resources in ~/.NsCDE
+
+     * Default background color (pre-FvwmBacker) from default theme
+
+     * Default ~/.NsCDE/NsCDE.conf
+
+     * New empty ~/.NsCDE/GeoDB.ini
+
+     * ~/.icons/default/index.theme (default X cursor scheme)
+
+     * ~/.gtkrc-2.0
+
+     * ~/.config/gtk-3.0/settings.ini
+
+     * ~/.themes/NsCDE
+
+     * ~/.config/Trolltech.conf
+
+     * ~/.config/qt5ct/qt5ct.conf
+
+     * ~/.stalonetrayrc
+
+    Note that no file from the above list will be overwritten if it already
+   exists in it's place. It will be skipped, but GTK and Qt theme integration
+   files can be still written with [71]Color Style Manager. After nscde_setup
+   script finishes setup, [72]Color Style Manager will be run and user asked
+   to confirm default theme or change it. Do not avoid this step, since some
+   program bits are not fully setup on bare defaults, (like a clock
+   background) and must be generated in the ~/.NsCDE/icons/NsCDE directory.
+
+    After [73]Color Style Manager's OK button is pressed, theme will be
+   regenerated. Gtk and Qt themes will be regenerated only if their
+   checkboxes in [74]Color Style Manager are checked in. Setup script after
+   the finish will ask user to press RETURN to exit. This is for user's
+   convenience to read output of the setup for informative and/or diagnostic
+   reasons. It is advised after this setup to open $FVWM_USERDIR/NsCDE.conf
+   and set up InfoStoreAdd internal FVWM variables for terminal, filemgr and
+   xeditor to user's favorite programs for functions.
+
+    Layout of the $FVWM_USERDIR after the initial setup should look like
+   this:
+
+     * app-defaults/
+
+     * backdrops/
+
+     * palettes/
+
+     * fontsets/
+
+     * templates/
+
+     * photos/
+
+     * backer/
+
+     * GeoDB.ini
+
+     * icons/
+
+     * icons/NsCDE/
+
+     * NsCDE-Backdrops.conf
+
+     * NsCDE-Colorset.conf
+
+     * NsCDE.conf
+
+     * tmp/
+
+     * Xdefaults
+
+     * Xdefaults.fontdefs
+
+     * Xdefaults.local
+
+     * Xdefaults.mouse
+
+    It is advised to logout and login from the X session after this, and
+   check if everything looks ok. Also, it is a good idea to start using
+   programs from the menu and examine environment around for a half an hour
+   or so, before running Style Manager (2nd button right of the Workspace
+   Manager on the Front Panel) to customize other aspects of the interface.
+   NsCDE is now ready for usage.
+

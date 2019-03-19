@@ -1,0 +1,63 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.4. Color Style Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-BeepMgr.html" title="4.3. Beep Style Manager"><link rel="next" href="NsCDE-ExecDialog.html" title="4.5. Exec Dialog"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.4. Color Style Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-BeepMgr.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-ExecDialog.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-ColorMgr"></a>4.4. Color Style Manager</h3></div></div></div><p>
+With Backdrop Style Manager, this is probably the most important theme tool in (Ns)CDE. This tool
+applies colors to the widgets, menus, applications and backdrops. As in CDE,
+it reads color information from the palette files in
+<code class="filename">$NSCDE_ROOT/share/palettes</code> and
+<code class="filename">$FVWM_USERDIR/palettes</code>. Palettes are the 16bpp
+color definitions (8 of them). This colors and border bg/fg/sel colors
+calculated from them are the base of the look of pretty much all of the things
+on the screen. Colors can be applied in 4 or 8 colors mode. Most notable
+palettes are <span class="emphasis"><em>Broica</em></span> in 8-colors mode and <span class="emphasis"><em>Solaris</em></span>
+(called <span class="emphasis"><em>Default</em></span> on SunOS) in 4 colors mode.
+</p><p>
+Color Style Manager as most tools is written in FvwmScript with background
+shell helper and color calculation and generator routines. Visually it tries
+to be as much as possible similar to the original CDE, but since it has some
+new features, there are some new buttons and commands introduced.
+Tool has a list of the palettes (system + user), preview button which can
+temporary apply some palette on the current desk backdrop and FVWM based
+applications (FrontPanel, other scripts ...)
+</p><p>
+As in Backdrop Style Manager there are <span class="guibutton">Add</span> and <span class="guibutton">Delete</span>
+button actions. System palettes cannot be deleted, while local can be added to
+<code class="filename">$FVWM_USERDIR/palettes</code> and applied immediately.
+</p><p>
+There are 8 spaces with colors from the currently selected palette (4 spaces
+in 4-color mode) and generated XPM file with all 40 colors displayed.
+Button <span class="guibutton">Number of Colors</span> calls transient window where user can select 4 or 8
+color mode. System default on modern desktop is 8.
+</p><p>
+What is most important new feature in Color Style Manager are integration
+options. This are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+ Own currently used backdrop synchronization (default)
+</p></li><li class="listitem"><p>
+ X resources in <code class="filename">$FVWM_USERDIR/Xdefaults</code> (default)
+</p></li><li class="listitem"><p>
+ GTK2
+</p></li><li class="listitem"><p>
+ GTK3
+</p></li><li class="listitem"><p>
+ Qt4
+</p></li><li class="listitem"><p>
+ Qt5
+</p></li><li class="listitem"><p>
+ User's <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> script if exists, called with
+  the path of the applied palette and number of colors.
+</p></li></ul></div><p>
+The last integration is used to integrate what default widget integrations
+cannot reach. For example Gkrellm skin or some terminal preferences.
+Qt/Qt5 integration is easy, since this toolkits can use their <span class="emphasis"><em>GTK</em></span> engine to
+integrate self with GTK theme. All that Color Style Manager has to do is to
+define GTK engine in <code class="filename">~/.config/Trolltech.conf</code> and
+<code class="filename">~/.config/qt5ct/qt5ct.conf</code> for colors from the new palette to be used.
+</p><p>
+GTK2 and GTK3 are heavy work part. Here, we are using work derived from one
+CDE theme for XFCE desktop and GTK2 + GTK3, purified and adapted for NsCDE
+(see <a class="xref" href="NsCDE-Credits.html" title="17. Credits">Section 17, &#8220;Credits&#8221;</a>).
+This is written in python. If turned on, this will produce
+<code class="filename">$HOME/.themes/NsCDE</code>
+directory with the theme for GTK2 and GTK3, and will edit <code class="filename">$HOME/.gtkrc-2.0</code> and
+<code class="filename">$HOME/.config/gtk-3.0/settings.ini</code> to put or change
+<code class="varname">gtk-theme-name</code> value.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-BeepMgr.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-ExecDialog.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.3. Beep Style Manager </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.5. Exec Dialog</td></tr></table></div></body></html>
