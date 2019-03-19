@@ -6,14 +6,14 @@ Introduction
 
   What is NsCDE?
 
-    In a nutshell, NsCDE is the CDE clone. Tehnically, it can be considered a
+   In a nutshell, NsCDE is the CDE clone. Tehnically, it can be considered a
    heavy FVWM theme enriched with additional free software tools and
    applications, combining all this components into something which can be
    called lightweight hybrid desktop environment. It can even be integrated
    into existing desktop environments as a window manager wrapper for session
    handling and additional DE functionality.
 
-    NsCDE's main goal is to revive look and feel of the Common Desktop
+   NsCDE's main goal is to revive look and feel of the Common Desktop
    Environment found on many UNIX and unix-like systems during nineties and
    first decade of the 21 century, but with a slightly polished interface
    (XFT, unicode, dynamic changes, rich key and mouse bindings, desk pages,
@@ -24,12 +24,12 @@ Introduction
    look and feel which mainstream abadoned for some new fashion, and ... in a
    nutshell, giving to user the best of the both worlds.
 
-    Main driver behind NsCDE is the excellent FVWM window manager with it's
+   Main driver behind NsCDE is the excellent FVWM window manager with it's
    endless options for customization, GUI Script engine, Colorsets, and
    modules. NsCDE is largely a wrapper around FVWM - something like a
    heavyweight theme, sort of.
 
-    Other main components are GTK2, GTK3, Qt4 and Qt5 theme for unifying look
+   Other main components are GTK2, GTK3, Qt4 and Qt5 theme for unifying look
    and feel for the most Unix/Linux applications, custom scripts which are
    helpers and backend workers for GUI parts and some data from the original
    CDE, as icons, palettes, and backdrops.
@@ -38,7 +38,7 @@ Introduction
 
   Why NsCDE?
 
-    Since the 90-ties, I have always liked this environment and it's somewhat
+   Since the 90-ties, I have always liked this environment and it's somewhat
    crude socrealistic look in a contrast to "modern" Windows and GNOME
    approach which is going in the opposite taste from what I always liked to
    see on my screen. I have created this environment for my own usage 8-10
@@ -50,17 +50,17 @@ Introduction
    idea came to do it even better, and put on the web for everyone else who
    may like this idea of modern CDE.
 
-    NsCDE is intended for a people which doesn't like "modern" hypes,
+   NsCDE is intended for a people which doesn't like "modern" hypes,
    interfaces that try to mimic Mac and Windows and reimplementing their
    ideas for non-technical user's desktops, and reimplementing them poorly.
    Older and mature system administrators, programmers and generally people
    from the Unix background are more likely to have attraction to NsCDE. It
    is probably not well suited for beginners.
 
-    Of course, question arises: why not simply use original original CDE now
+   Of course, question arises: why not simply use original original CDE now
    when it is open sourced?
 
-    Apart from desirable look, because it has it's own problems: it is a
+   Apart from desirable look, because it has it's own problems: it is a
    product from 90-ties, based on Motif and time has passed since then. In
    CDE there is no really XFT font rendering, no immediate application
    dynamic changes. Beside that, I have found dtwm, CDE's window manager
@@ -79,20 +79,20 @@ Components of the NsCDE
 
   Components overview
 
-    NsCDE is a wrapper and a bunch of configurations, scripts and apps around
+   NsCDE is a wrapper and a bunch of configurations, scripts and apps around
    FVWM. FVWM is in my opinion a model of free choice for people who like to
    have things set up by their own wishes and who are aware what real freedom
    of choice is. A stunning contrast to policies forced on Linux users in the
    last decade from the mainstream desktop players.
 
-    NsCDE is by default rooted in /opt/NsCDE ($NSCDE_ROOT), but it can be
+   NsCDE is by default rooted in /opt/NsCDE ($NSCDE_ROOT), but it can be
    relocated with only one variable changed in main wrapper bin/nscde and
    NsCDE-Main.conf.
 
-    It is not using your existing $HOME/.fvwm but sets $FVWM_USERDIR to
+   It is not using your existing $HOME/.fvwm but sets $FVWM_USERDIR to
    $HOME/.NsCDE, and uses /opt/NsCDE/config as a sources of configuration.
 
-    Configuration model is a bit complex, but very flexible: configuration
+   Configuration model is a bit complex, but very flexible: configuration
    options are grouped in logical order. Configuration files are names
    NsCDE-<group>.conf. For example, NsCDE-Functions.conf for FVWM functions.
    Each configuration file can have two exclusive sources, and one
