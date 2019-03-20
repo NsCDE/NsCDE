@@ -1,0 +1,123 @@
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/CheckBox.c fvwm-2.5.17/modules/FvwmScript/Widgets/CheckBox.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/CheckBox.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/CheckBox.c	2006-08-20 22:48:55.000000000 +0200
+@@ -42,7 +42,7 @@
+   mask = 0;
+   Attr.background_pixel = xobj->TabColor[back];
+   mask |= CWBackPixel;
+-  Attr.cursor = XCreateFontCursor(dpy,XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy,XC_left_ptr);
+   mask |= CWCursor;  /* Curseur pour la fenetre / Cursor for the window */
+ 
+   xobj->win = XCreateWindow(dpy, *xobj->ParentWin,
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/HScrollBar.c fvwm-2.5.17/modules/FvwmScript/Widgets/HScrollBar.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/HScrollBar.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/HScrollBar.c	2006-08-20 22:48:55.000000000 +0200
+@@ -92,7 +92,7 @@
+   mask = 0;
+   Attr.background_pixel = xobj->TabColor[back];
+   mask |= CWBackPixel;
+-  Attr.cursor = XCreateFontCursor(dpy,XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy,XC_left_ptr);
+   mask |= CWCursor;             /* Curseur pour la fenetre */
+ 
+   xobj->win = XCreateWindow(dpy, *xobj->ParentWin,
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/List.c fvwm-2.5.17/modules/FvwmScript/Widgets/List.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/List.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/List.c	2006-08-20 22:48:55.000000000 +0200
+@@ -47,7 +47,7 @@
+   mask = 0;
+   Attr.background_pixel = xobj->TabColor[back];
+   mask |= CWBackPixel;
+-  Attr.cursor = XCreateFontCursor(dpy,XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy,XC_left_ptr);
+   mask |= CWCursor;  /* Curseur pour la fenetre / Window cursor */
+   xobj->win = XCreateWindow(dpy, *xobj->ParentWin,
+ 			  xobj->x, xobj->y, xobj->width, xobj->height, 0,
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/Menu.c fvwm-2.5.17/modules/FvwmScript/Widgets/Menu.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/Menu.c	2006-03-25 17:15:43.000000000 +0100
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/Menu.c	2006-08-20 22:48:55.000000000 +0200
+@@ -47,7 +47,7 @@
+   mask = 0;
+   Attr.background_pixel = xobj->TabColor[back];
+   mask |= CWBackPixel;
+-  Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+   mask |= CWCursor;
+   xobj->win = XCreateWindow(dpy, *xobj->ParentWin,
+ 			    xobj->x, xobj->y, xobj->width, xobj->height, 0,
+@@ -193,7 +193,7 @@
+   mask |=  CWBorderPixel;
+   Attr.colormap = Pcmap;
+   mask |= CWColormap;
+-  Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+   /* Curseur pour la fenetre / cursor for the window */
+   mask |= CWCursor;
+   Attr.override_redirect = True;
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/PopupMenu.c fvwm-2.5.17/modules/FvwmScript/Widgets/PopupMenu.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/PopupMenu.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/PopupMenu.c	2006-08-20 22:48:55.000000000 +0200
+@@ -47,7 +47,7 @@
+   mask = 0;
+   Attr.background_pixel = xobj->TabColor[back];
+   mask |= CWBackPixel;
+-  Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+   mask |= CWCursor;             /* Curseur pour la fenetre / window cursor */
+ 
+   xobj->win = XCreateWindow(dpy, *xobj->ParentWin,
+@@ -187,7 +187,7 @@
+   mask |= CWBorderPixel;
+   Attr.colormap = Pcmap;
+   mask |= CWColormap;
+-  Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++  Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+   mask |= CWCursor;             /* Curseur pour la fenetre / Window cursor */
+   Attr.override_redirect = True;
+   mask |= CWOverrideRedirect;
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/PushButton.c fvwm-2.5.17/modules/FvwmScript/Widgets/PushButton.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/PushButton.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/PushButton.c	2006-08-20 22:48:55.000000000 +0200
+@@ -45,7 +45,7 @@
+ 	}
+ 
+ 	mask = 0;
+-	Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++	Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+ 	mask |= CWCursor;
+ 	Attr.background_pixel = xobj->TabColor[back];
+ 	mask |= CWBackPixel;
+@@ -294,7 +294,7 @@
+ 			mask |= CWBorderPixel;
+ 			Attr.colormap = Pcmap;
+ 			mask |= CWColormap;
+-			Attr.cursor = XCreateFontCursor(dpy, XC_hand2);
++			Attr.cursor = XCreateFontCursor(dpy, XC_left_ptr);
+ 			mask |= CWCursor;         /* Curseur pour la fenetre */
+ 			Attr.override_redirect = True;
+ 			mask |= CWOverrideRedirect;
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/RadioButton.c fvwm-2.5.17/modules/FvwmScript/Widgets/RadioButton.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/RadioButton.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/RadioButton.c	2006-08-20 22:48:55.000000000 +0200
+@@ -40,7 +40,7 @@
+ 	}
+ 
+ 	mask=0;
+-	Attr.cursor=XCreateFontCursor(dpy,XC_hand2);
++	Attr.cursor=XCreateFontCursor(dpy,XC_left_ptr);
+ 	mask|=CWCursor;                /* Curseur pour la fenetre */
+ 	Attr.background_pixel=xobj->TabColor[back];
+ 	mask|=CWBackPixel;
+diff -ur t/fvwm-2.5.17/modules/FvwmScript/Widgets/VScrollBar.c fvwm-2.5.17/modules/FvwmScript/Widgets/VScrollBar.c
+--- t/fvwm-2.5.17/modules/FvwmScript/Widgets/VScrollBar.c	2003-06-29 21:53:25.000000000 +0200
++++ fvwm-2.5.17/modules/FvwmScript/Widgets/VScrollBar.c	2006-08-20 22:48:55.000000000 +0200
+@@ -94,7 +94,7 @@
+ 	mask = 0;
+ 	Attr.background_pixel = xobj->TabColor[back];
+ 	mask |= CWBackPixel;
+-	Attr.cursor = XCreateFontCursor(dpy,XC_hand2);
++	Attr.cursor = XCreateFontCursor(dpy,XC_left_ptr);
+ 	mask |= CWCursor;             /* Curseur pour la fenetre */
+ 
+ 	xobj->win = XCreateWindow(
