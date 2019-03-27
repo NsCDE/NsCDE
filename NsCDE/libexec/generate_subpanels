@@ -1,0 +1,100 @@
+#!/bin/ksh
+
+if [ -z $HAS_WINDOWNAME ]; then
+   HAS_WINDOWNAME=0
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   if [[ -z $SYSMODE ]]; then
+      echo "Error: FVWM_USERDIR is not set."
+      exit 2
+   fi
+fi
+
+for subpn in {1..10}
+do
+   egrep -q "^S${subpn},NAME," "$FVWM_USERDIR/Subpanels.actions"
+   if (($? == 0)); then
+      spactfile="$FVWM_USERDIR/Subpanels.actions"
+   else
+      spactfile="$NSCDE_ROOT/config/Subpanels.actions"
+   fi
+
+   Name=$(egrep "S${subpn},NAME," $spactfile | cut -d"," -f3)
+   Width=$(egrep "S${subpn},WIDTH," $spactfile | cut -d"," -f3)
+
+   EntryRows=$(egrep "^S${subpn},ENTRY," $spactfile | wc -l)
+   Rows=$(($EntryRows + 3))
+
+   Enabled=$(egrep "S${subpn},ENABLED," $spactfile | cut -d"," -f3)
+
+   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Name \"$Name\""
+   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Width $Width"
+   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Rows $Rows"
+   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Enabled $Enabled"
+   echo ""
+   if (($HAS_WINDOWNAME == 0)); then
+      echo "Schedule 3200 Exec exec xdotool search --name NsCDE-Subpanel${subpn} set_window --name \"\$[infostore.NsCDE-Subpanel${subpn}-Name]\" --icon-name \"\$[infostore.NsCDE-Subpanel${subpn}-Name]\""
+      echo ""
+   fi
+
+   echo "DestroyModuleConfig NsCDE-Subpanel${subpn}: *"
+
+   echo ""
+
+   echo "*NsCDE-Subpanel${subpn}: Colorset 49"
+   if (($HAS_WINDOWNAME == 1)); then
+      echo "*NsCDE-Subpanel${subpn}: WindowName \$[infostore.NsCDE-Subpanel${subpn}-Name]"
+   fi
+   echo "*NsCDE-Subpanel${subpn}: Font Shadow=1 0 SE:\$[infostore.font.variable.normal.medium]"
+   echo "*NsCDE-Subpanel${subpn}: (Frame 1, Padding 0 0, \\"
+   echo " Container(Rows \$[infostore.NsCDE-Subpanel${subpn}-Rows], Columns 1,Frame 0, Padding 4 2))"
+   echo ""
+
+   echo "*NsCDE-Subpanel${subpn}: (Size \$[infostore.NsCDE-Subpanel${subpn}-Width] 32, Frame 1, \\"
+   echo " PressColorset 26, Title(side, left) \"Install Icon\" Icon NsCDE/FpInstIcon.xpm, \\"
+   echo " Action \"Module FvwmScript SubpanelMgr ${subpn}\")"
+   echo ""
+
+   egrep -v '^#' $spactfile | egrep "^S${subpn},ENTRY," | while IFS="," read subp esign title check iconfile cmdargs
+   do
+      subp="${subp##*S}"
+      if [ "$check" == "FVWM-M" ]; then
+         echo "*NsCDE-Subpanel${subp}: \\"
+         echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
+         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Icon \"$iconfile\", \\"
+         echo " Action Module $cmdargs)"
+         echo ""
+      elif [ "$check" == "FVWM-F" ]; then
+         echo "*NsCDE-Subpanel${subp}: \\"
+         echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
+         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Icon \"$iconfile\", \\"
+         echo " Action $cmdargs)"
+         echo ""
+      elif [ "$check" == "NOCHK" ]; then
+         echo "*NsCDE-Subpanel${subp}: \\"
+         echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
+         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Icon \"$iconfile\", \\"
+         echo "Action Exec exec $cmdargs)"
+         echo ""
+      elif [ "${check%%:*}" == "CHECK" ]; then
+         echo "Test (x ${check##*:}) *NsCDE-Subpanel${subp}: \\"
+         echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
+         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Icon \"$iconfile\", \\"
+         echo " Action Exec exec $cmdargs)"
+         echo ""
+      else
+         echo "Test (x ${cmdargs%% *}) *NsCDE-Subpanel${subp}: \\"
+         echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
+         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Icon \"$iconfile\", \\"
+         echo " Action Exec exec $cmdargs)"
+         echo ""
+      fi
+   done
+done
+
