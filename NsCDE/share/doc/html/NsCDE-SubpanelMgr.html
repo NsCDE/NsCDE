@@ -6,9 +6,9 @@ and drop, and there is no application manager present, since this part of CDE
 functions cannot be easy implemented even if some file manager is taken to act
 as application manager.
 </p><p>
-Subpanel Manager has list of all applications which are providing system menu
+Subpanel Manager has a list of all applications which are providing system menu
 with it's presence (patched version of fvwm-menu-desktop is used in the
-background), and list of applications provided in the current Subpanel from
+background), and the list of applications provided in the current Subpanel from
 which tool is called by "Install Icon".
 This lists are displayed on the top of the window side by side: system menu
 applications on the left, and current Subpanel items on the right list.
@@ -17,20 +17,34 @@ and <span class="guilabel">Icon File</span>. This fields are
 automatically populated when some item from mentioned lists is clicked, but it
 can also be populated manually if user wishes to add a custom application,
 Fvwm Module, Fvwm Function or other entry manually on the Subpanel.
-Subpanel Manager can also remove existing entries from the Subpanel or modify
-them.
+Special type of "Check for ..." is meant for entries which in command field are
+defining for the first command something common like shell, <span class="command"><strong>env</strong></span> etc.
+If we want to override a pointless check existance for this, and define other command
+string for checking, popdown menu option <span class="guilabel">Check for ...</span> can be selected,
+and small text field below popdown menu will appear, where this command can be specified.
+Subpanel Manager can also remove existing entries from the Subpanel.
 </p><p>
 Subpanel Manager implements this helper functions for modifying and applying
 settings on new items:
 
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Launcher Type</p></li><li class="listitem"><p>Execute in Terminal</p></li><li class="listitem"><p>Do not check for command existence</p></li><li class="listitem"><p>Icon indicator</p></li></ul></div><p>
-
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Type (exec, module, function, other, check-for)</p></li><li class="listitem"><p>Do not check for command existence</p></li><li class="listitem"><p>Icon indicator</p></li></ul></div><p>
 
 </p><p>
-This tool is not well designed and will be rewritten on the first occasion.
-Subpanel configuration files <code class="filename">NsCDE-SubpanelX.conf</code>, where
-<span class="emphasis"><em>X</em></span> is 1-10 can be edited by
-hand in <code class="varname">$FVWM_USERDIR</code> if order of entries is important, or something needs to
-be changed on existing entries.
-
+To place some new application from the left (all applications) list in exact place
+on the subpanel, select an existing entry on the subpanel (right) list. When left
+arrow button is clicked, new application will appear on the list exactly below that
+one which has been previously selected, otherwise, default is to place new entries
+as second entry on the subpanel's list of applications.
+</p><p>
+Click on the icon indicator will open simple file browser which can be used to find,
+see as preview, and set icon for manual entries which are not part of the applications
+list, or an alternative icon for program from applications list.
+<span class="guibutton">Apply</span> button regenerates subpanel, while <span class="guibutton">Save</span>
+button does this and also quits Subpanel Manager.
+</p><p>
+Subpanels configuration file <code class="filename">Subpanels.actions</code>, can be edited by
+hand in <code class="varname">$FVWM_USERDIR</code> if something needs to be changed on existing
+entries. If editing by hand, <code class="filename">$NSCDE_ROOT/libexec/generate_subpanels</code>
+must be used to generate FVWM configuration output which must be redirected into
+<code class="filename">$FVWM_USERDIR/NsCDE-Subpanels.conf</code>.
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-PowerSaveMgr.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-SubpanelSettings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.10. Power Save Manager </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.12. Subpanel Settings</td></tr></table></div></body></html>

@@ -9,6 +9,11 @@ Begin
    Set $SubpanelNoCmd = {echo "} $SubpanelResName {" | sed 's/NsCDE-Subpanel//g'}
    Set $SubpanelNo = (GetOutput $SubpanelNoCmd 1 -1)
 
+   If $SubpanelNo == {} Then
+   Begin
+      Quit
+   End
+
    # Find out if we are going to read subpanel data from the system or user Subpanels.actions file
    Set $ChkActionsCmd = {egrep '^S} $SubpanelNo {,.*' "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null}
    Set $ChkActions = (GetOutput $ChkActionsCmd 1 -1)
@@ -49,6 +54,8 @@ Begin
 
    # Prepare regenerate command
    Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_ROOT/libexec/generate_subpanels" > "$FVWM_USERDIR/NsCDE-Subpanels.conf"}
+
+   Set $ResetDone = 0
 
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
@@ -100,28 +107,31 @@ Widget 2
       Case message of
       SingleClic :
       Begin
-         If $NeedInitLocalCopy == 0 Then
-         Begin
-            # Make sure Subpanels.actions exists in $FVWM_USERDIR
-            Set $ExistanceEnsureCmd = {[ ! -r ] "} $UserSubpanelActionsFile {" && touch "} $UserSubpanelActionsFile {"}
-            Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
+         # Make sure Subpanels.actions exists in $FVWM_USERDIR
+         Set $ExistanceEnsureCmd = {[ ! -r ] "} $UserSubpanelActionsFile {" && touch "} $UserSubpanelActionsFile {"}
+         Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
 
-            Set $ResetCfCmd = {$NSCDE_ROOT/bin/ised -c 's/^S} $SubpanelNo {,//g' -f "} $UserSubpanelActionsFile {"}
-            Set $ResetCf = (GetOutput $ResetCfCmd 1 -1)
+         Set $ResetCfCmd = {$NSCDE_ROOT/bin/ised -c '/^S} $SubpanelNo {,.*/d' -f "} $UserSubpanelActionsFile {"}
+         Set $ResetCf = (GetOutput $ResetCfCmd 1 -1)
 
-            Set $WindowTitlePrint = {Subpanel } $SubpanelSysDisplayName { Settings}
-            ChangeWindowTitle $WindowTitlePrint
-            ChangeTitle 1 $WindowTitlePrint
-            ChangeTitle 5 $SubpanelSysDisplayName
-            ChangeTitle 8 $SubpanelSysWidth
-            ChangeValue 11 $SubpanelSysEnabled
+         Set $WindowTitlePrint = {Subpanel } $SubpanelSysDisplayName { Settings}
+         ChangeWindowTitle $WindowTitlePrint
+         ChangeTitle 1 $WindowTitlePrint
+         ChangeTitle 5 $SubpanelSysDisplayName
+         ChangeTitle 8 $SubpanelSysWidth
+         ChangeValue 11 $SubpanelSysEnabled
 
-            Set $ChangeDetectString = $SubpanelDisplayName $SubpanelWidth $SubpanelEnabled
+         # Stupid TextField colorset bug workaround
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
 
-            Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
-            Do {f_ReadCfg Subpanels}
-            Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
-         End
+         Set $ChangeDetectString = $SubpanelDisplayName $SubpanelWidth $SubpanelEnabled
+
+         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+         Do {f_ReadCfg Subpanels}
+         Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
+
+         Set $ResetDone = 1
       End
 End
 
@@ -158,6 +168,7 @@ Widget 5
       Case message of
       SingleClic :
       Begin
+         Set $ResetDone = 0
       End
 End
 
@@ -173,6 +184,10 @@ Widget 6
       SingleClic :
       Begin
          ChangeTitle 5 $SubpanelSysDisplayName
+
+         # Stupid TextField colorset bug workaround
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
       End
 End
 
@@ -217,6 +232,10 @@ Widget 9
       SingleClic :
       Begin
          ChangeTitle 8 $SubpanelSysWidth
+
+         # Stupid TextField colorset bug workaround
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
+         Do {SendToModule SubpanelSettings SendString 17 1 workaround}
       End
 End
 
@@ -287,6 +306,11 @@ Widget 14
             Quit
          End
 
+         If $ResetDone == 1 Then
+         Begin
+            Quit
+         End
+
          Set $NewSubpanelEnabled = (GetValue 11)
          Set $NewSubpanelName = (GetTitle 5)
          Set $NewSubpanelWidth = (GetTitle 8)
@@ -296,6 +320,7 @@ Widget 14
 
          Set $ExistanceEnsureCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ROWS|ENABLED),.*" "} $UserSubpanelActionsFile{" 2>/dev/null | wc -l}
          Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
+
          If $ExistanceEnsure == 3 Then
          Begin
             Set $WriteNewSubpanelConfCmd = {$NSCDE_ROOT/bin/ised -c 's/^S} $SubpanelNo {,NAME,\(.*\)/S} $SubpanelNo {,NAME,} $NewSubpanelName
@@ -309,8 +334,10 @@ Widget 14
          Begin
             Set $WriteNewSubpanelConfCmd = {echo -ne "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
              {\nS} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
-             {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n\n" >> "} $UserSubpanelActionsFile {"}
+             {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n" >> "} $UserSubpanelActionsFile {"}
             Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)
+            Set $AddTheRestFromSysCmd = {egrep ^S} $SubpanelNo {,ENTRY,.* "} $SystemSubpanelActionsRead {" >> "} $UserSubpanelActionsFile {"}
+            Set $AddTheRestFromSys = (GetOutput $AddTheRestFromSysCmd 1 -1)
             Set $ExistanceOK = 1
          End
 
@@ -375,6 +402,7 @@ Widget 17
    Type PushButton
    Flags NoReliefString NoFocus Hidden
    Title {XXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Colorset 20
    Main
       Case message of
       SingleClic :
@@ -384,9 +412,9 @@ Widget 17
       Begin
          If (LastString) == {workaround} Then
          Begin
-            ChangeColorset 17 20
             ChangeColorset 5 20
             ChangeColorset 8 20
+            ChangeColorset 17 20
          End
       End
 End

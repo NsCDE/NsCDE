@@ -4,7 +4,7 @@ are also as much as possible similar to original CDE forms of the same
 purpose. Some applications in them are predefined, and discovered if
 installed, and the rest is up to user to populate.
 Their purpose is not to show all possible GUI applications installed on the
-system as right-click root menu. They are for favorite, important and often
+system as right-click root menu. They are meant for favorite, important and often
 used apps.
 </p><p>
 There is one main difference between CDE and NsCDE subpanels: <span class="emphasis"><em>Install Icon</em></span>
@@ -19,21 +19,20 @@ Settings" controls. First one kills process module, re-reads it's
 configuration and starts it on the next click on Front Panel subpanel
 launcher. Subpanel Settings is the small and simple FvwmScript tool which
 allows one to rename Subpanel, set it's width for application titles to fit if
-necessary, and to set maximum number of items possible to be installed and
-active in that particular Subpanel (by default, this number is 25, but
-includes also <span class="emphasis"><em>Install Icon</em></span> action).
+necessary, and to enable or disable that particular Subpanel.
 </p><p>
-On the first change with Install Icon or Subpanel Settings, configuration file
-<code class="filename">NsCDE-SubpanelX.conf</code>,
-where <span class="emphasis"><em>X</em></span> is a subpanel's number on the Front Panel from
-left to right is copied as default from the system config to the
-<code class="varname">$FVWM_USERDIR</code>, from where it is read instead of default system from now on.
-Of course, as anything else, they can be edited in text editor. Syntax is
-from the FvwmButtons(1) but if user wants to retain look and feel, configuration
-lines must remain long, and follow exact configuration line with all
-parameters in order to be just items on the Subpanel with icon and title.
-On the top of every Subpanel configuration, there are 3 FVWM internal
-infostore variables: for width, number of rows, and Subpanel name.
+On the first change with <span class="emphasis"><em>Install Icon</em></span> or <span class="emphasis"><em>Subpanel Settings</em></span>,
+non-FVWM configuration file <span class="emphasis"><em>Subpanels.actions</em></span> will be created in the
+<code class="varname">$FVWM_USERDIR</code>, from where all subpanels changed from default will be read
+by the <code class="filename">$NSCDE_ROOT/libexec/generate_subpanels</code>, while the rest will be
+generated from the <code class="filename">$NSCDE_ROOT/config/Subpanels.actions</code>. This file can also
+be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
+calling <code class="filename">generate_subpanels</code> and then <code class="function">f_ReadCfg Subpanels</code>.
+Generated file is called <code class="filename">NsCDE-Subpanels.conf</code> and it is expected in the
+<code class="varname">$FVWM_USERDIR</code>. If not found there,
+<code class="filename">$NSCDE_ROOT/config/NsCDE-Subpanels.conf</code> will be read instead.
+Syntax of the Subpanels.actions is explained in the
+<a class="link" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained">Configuration files explained</a> section.
 </p><p>
 Presently, there is one workaround here: as much as FVWM, and specially FvwmButtons are
 very flexible and configurable, no title for the buttons app can be set apart
@@ -44,9 +43,9 @@ Since there is no configuration option for subpanel to set Window Title, we are 
 tool <span class="command"><strong>xdotool(1)</strong></span> which is run on Subpanel initialization with a delay of 3,2
 seconds (internal workaround for xdotool) and this then takes infostore
 variable <code class="varname">NsCDE-SubpanelX-Name</code> and sets literal, system default or user picked
-name of the subpanel. Other option is to apply FvwmButtons patch which introduces a
+name of the subpanel. Presently, an alternative option is to apply FvwmButtons patch which introduces a
 <span class="emphasis"><em>WindowName</em></span> option to it's configuration. Of course, patch will be proposed
-to thee upstream FVWM for wider use.
+to the upstream FVWM.
 </p><p>
 The rest about Subpanel, or to say their visible outfit, and their main function
 are the same as in CDE - a nice, heavyweight and elegant application launchers.
