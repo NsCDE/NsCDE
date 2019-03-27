@@ -425,7 +425,7 @@ are also as much as possible similar to original CDE forms of the same
 purpose. Some applications in them are predefined, and discovered if
 installed, and the rest is up to user to populate.
 Their purpose is not to show all possible GUI applications installed on the
-system as right-click root menu. They are for favorite, important and often
+system as right-click root menu. They are meant for favorite, important and often
 used apps.
 </para>
 <para>
@@ -442,23 +442,24 @@ Settings" controls. First one kills process module, re-reads it's
 configuration and starts it on the next click on Front Panel subpanel
 launcher. Subpanel Settings is the small and simple FvwmScript tool which
 allows one to rename Subpanel, set it's width for application titles to fit if
-necessary, and to set maximum number of items possible to be installed and
-active in that particular Subpanel (by default, this number is 25, but
-includes also <emphasis>Install Icon</emphasis> action).
+necessary, and to enable or disable that particular Subpanel.
 </para>
+
 <para>
-On the first change with Install Icon or Subpanel Settings, configuration file
-<filename>NsCDE-SubpanelX.conf</filename>,
-where <emphasis>X</emphasis> is a subpanel's number on the Front Panel from
-left to right is copied as default from the system config to the
-<varname>$FVWM_USERDIR</varname>, from where it is read instead of default system from now on.
-Of course, as anything else, they can be edited in text editor. Syntax is
-from the FvwmButtons(1) but if user wants to retain look and feel, configuration
-lines must remain long, and follow exact configuration line with all
-parameters in order to be just items on the Subpanel with icon and title.
-On the top of every Subpanel configuration, there are 3 FVWM internal
-infostore variables: for width, number of rows, and Subpanel name.
+On the first change with <emphasis>Install Icon</emphasis> or <emphasis>Subpanel Settings</emphasis>,
+non-FVWM configuration file <emphasis>Subpanels.actions</emphasis> will be created in the
+<varname>$FVWM_USERDIR</varname>, from where all subpanels changed from default will be read
+by the <filename>$NSCDE_ROOT/libexec/generate_subpanels</filename>, while the rest will be
+generated from the <filename>$NSCDE_ROOT/config/Subpanels.actions</filename>. This file can also
+be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
+calling <filename>generate_subpanels</filename> and then <function>f_ReadCfg Subpanels</function>.
+Generated file is called <filename>NsCDE-Subpanels.conf</filename> and it is expected in the
+<varname>$FVWM_USERDIR</varname>. If not found there,
+<filename>$NSCDE_ROOT/config/NsCDE-Subpanels.conf</filename> will be read instead.
+Syntax of the Subpanels.actions is explained in the
+<link linkend="NsCDE-Configuration-Files">Configuration files explained</link> section.
 </para>
+
 <para>
 Presently, there is one workaround here: as much as FVWM, and specially FvwmButtons are
 very flexible and configurable, no title for the buttons app can be set apart
@@ -469,9 +470,9 @@ Since there is no configuration option for subpanel to set Window Title, we are 
 tool <command>xdotool(1)</command> which is run on Subpanel initialization with a delay of 3,2
 seconds (internal workaround for xdotool) and this then takes infostore
 variable <varname>NsCDE-SubpanelX-Name</varname> and sets literal, system default or user picked
-name of the subpanel. Other option is to apply FvwmButtons patch which introduces a
+name of the subpanel. Presently, an alternative option is to apply FvwmButtons patch which introduces a
 <emphasis>WindowName</emphasis> option to it's configuration. Of course, patch will be proposed
-to thee upstream FVWM for wider use.
+to the upstream FVWM.
 </para>
 <para>
 The rest about Subpanel, or to say their visible outfit, and their main function
@@ -1158,9 +1159,9 @@ functions cannot be easy implemented even if some file manager is taken to act
 as application manager.
 </para>
 <para>
-Subpanel Manager has list of all applications which are providing system menu
+Subpanel Manager has a list of all applications which are providing system menu
 with it's presence (patched version of fvwm-menu-desktop is used in the
-background), and list of applications provided in the current Subpanel from
+background), and the list of applications provided in the current Subpanel from
 which tool is called by "Install Icon".
 This lists are displayed on the top of the window side by side: system menu
 applications on the left, and current Subpanel items on the right list.
@@ -1169,46 +1170,60 @@ and <guilabel>Icon File</guilabel>. This fields are
 automatically populated when some item from mentioned lists is clicked, but it
 can also be populated manually if user wishes to add a custom application,
 Fvwm Module, Fvwm Function or other entry manually on the Subpanel.
-Subpanel Manager can also remove existing entries from the Subpanel or modify
-them.
+Special type of "Check for ..." is meant for entries which in command field are
+defining for the first command something common like shell, <command>env</command> etc.
+If we want to override a pointless check existance for this, and define other command
+string for checking, popdown menu option <guilabel>Check for ...</guilabel> can be selected,
+and small text field below popdown menu will appear, where this command can be specified.
+Subpanel Manager can also remove existing entries from the Subpanel.
 </para>
 <para>
 Subpanel Manager implements this helper functions for modifying and applying
 settings on new items:
 
 <itemizedlist>
-<listitem><para>Launcher Type</para></listitem>
-<listitem><para>Execute in Terminal</para></listitem>
+<listitem><para>Type (exec, module, function, other, check-for)</para></listitem>
 <listitem><para>Do not check for command existence</para></listitem>
 <listitem><para>Icon indicator</para></listitem>
 </itemizedlist>
 
-
 </para>
-<para>
-This tool is not well designed and will be rewritten on the first occasion.
-Subpanel configuration files <filename>NsCDE-SubpanelX.conf</filename>, where
-<emphasis>X</emphasis> is 1-10 can be edited by
-hand in <varname>$FVWM_USERDIR</varname> if order of entries is important, or something needs to
-be changed on existing entries.
 
+<para>
+To place some new application from the left (all applications) list in exact place
+on the subpanel, select an existing entry on the subpanel (right) list. When left
+arrow button is clicked, new application will appear on the list exactly below that
+one which has been previously selected, otherwise, default is to place new entries
+as second entry on the subpanel's list of applications.
+</para>
+
+<para>
+Click on the icon indicator will open simple file browser which can be used to find,
+see as preview, and set icon for manual entries which are not part of the applications
+list, or an alternative icon for program from applications list.
+<guibutton>Apply</guibutton> button regenerates subpanel, while <guibutton>Save</guibutton>
+button does this and also quits Subpanel Manager.
+</para>
+
+<para>
+Subpanels configuration file <filename>Subpanels.actions</filename>, can be edited by
+hand in <varname>$FVWM_USERDIR</varname> if something needs to be changed on existing
+entries. If editing by hand, <filename>$NSCDE_ROOT/libexec/generate_subpanels</filename>
+must be used to generate FVWM configuration output which must be redirected into
+<filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>.
 </para>
 </sect2>
-
-
 
 <sect2 id="NsCDE-SubpanelSettings">
 <title>Subpanel Settings</title>
 <para>
 A small helper dialog with functions to change display name of the subpanel,
 width of the subpanel if titles require wider (or short ones narrower) panel
-frame. Maximum subpanel items controls how many items can subpanel contain.
-Everything after this number is error. This number reserves one place for
-<emphasis>Install Icon</emphasis> entry. <guibutton>Reset</guibutton> button
-will erase user configuration and load system default one for given subpanel.
-Name, width and max items all have
+frame, end enabled/disabled state of the subpanel.
+Button <guibutton>Reset</guibutton> will erase user configuration and load
+system default one for given subpanel. Name, width and enablement all have
 their own <guibutton>Default</guibutton> button right of the text field. If pressed, it will load
-system defaults for name, width and number of items. All buttons are doing
+system defaults for name, width and subpanel's enablement state. All buttons are doing
 in memory changes until <guibutton>OK</guibutton> is pressed,
 except <guibutton>Reset</guibutton> button which acts immediately.
 <guibutton>Close</guibutton> button closes dialog without changes except if <guibutton>Reset</guibutton>
@@ -1525,7 +1540,7 @@ pointer button.
 <para>
 Dialog which uses custom text and asks user for action.
 Action is then executed (<guibutton>OK</guibutton>) or aborted (<guibutton>Dismiss</guibutton>).
-Example of usage is restart dialog and subpanel enablement dialog. Application must
+Example of usage is restart dialog. Application must
 provide in argument vector question text, title text, buttons text,
 and buttons actions when calling this dialog.
 </para>
@@ -2642,6 +2657,7 @@ with a huge set of <option>Style</option> commands.
 </para>
 </sect2>
 
+<!-- TU SAM -->
 <sect2 id="NsCDE-SubpanelXY_conf">
 <title>NsCDE-Subpanel&lt;XY&gt;.conf</title>
 <para>
