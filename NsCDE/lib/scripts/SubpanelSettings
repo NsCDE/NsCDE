@@ -4,50 +4,51 @@ Colorset 22
 
 Init
 Begin
-   Set $SubpanelName = (GetScriptArgument 1)
-   Set $SubpanelConfNameCmd = {echo '} $SubpanelName {' | sed 's/^NsCDE-//g'}
-   Set $SubpanelConfName = (GetOutput $SubpanelConfNameCmd 1 -1)
-   Set $SubpanelDisplayNameVar = $SubpanelName {-Name}
-   Set $SubpanelWidthVar = $SubpanelName {-Width}
-   Set $SubpanelRowsVar = $SubpanelName {-Rows}
+   # Extract subpanel number from the end of subpanel's window resource name
+   Set $SubpanelResName = (GetScriptArgument 1)
+   Set $SubpanelNoCmd = {echo "} $SubpanelResName {" | sed 's/NsCDE-Subpanel//g'}
+   Set $SubpanelNo = (GetOutput $SubpanelNoCmd 1 -1)
 
-   Set $SubpanelConfigExistanceCmd = {[[ -r "$FVWM_USERDIR/} $SubpanelName {.conf" ]] && echo 1 || echo 0}
-   Set $SubpanelConfigExistance = (GetOutput $SubpanelConfigExistanceCmd 1 1)
-
-   If $SubpanelConfigExistance == 0 Then
+   # Find out if we are going to read subpanel data from the system or user Subpanels.actions file
+   Set $ChkActionsCmd = {egrep '^S} $SubpanelNo {,.*' "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null}
+   Set $ChkActions = (GetOutput $ChkActionsCmd 1 -1)
+   If $ChkActions <> {} Then
    Begin
-      Set $ConfDirPath = {$NSCDE_ROOT/config}
-      Set $NeedInitLocalCopy = 1
+      Set $SubpanelActionsRead = {$FVWM_USERDIR/Subpanels.actions}
    End
    Else
    Begin
-      Set $ConfDirPath = {$FVWM_USERDIR}
-      Set $NeedInitLocalCopy = 0
+      Set $SubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
    End
+   Set $UserSubpanelActionsFile = {$FVWM_USERDIR/Subpanels.actions}
+   Set $SystemSubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
 
-   Set $SubpanelDataCmd = {$NSCDE_ROOT/libexec/subpanelsettings -C "} $ConfDirPath {/} $SubpanelName {.conf" -N } $SubpanelName { -g}
-   Set $SubpanelDisplayName = (GetOutput $SubpanelDataCmd 1 -1)
-   Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 2 -1)
-   Set $SubpanelRows = (GetOutput $SubpanelDataCmd 3 -1)
+   # Fill subpanel parameters in variables
+   Set $SubpanelDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SubpanelActionsRead {" | sort | cut -d"," -f3}
+   Set $SubpanelEnabled = (GetOutput $SubpanelDataCmd 1 -1)
+   Set $SubpanelDisplayName = (GetOutput $SubpanelDataCmd 2 -1)
+   Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 3 -1)
+
+   # Fill discovered values into widgets and titles
    Set $WindowTitlePrint = {Subpanel } $SubpanelDisplayName { Settings}
    ChangeWindowTitle $WindowTitlePrint
    ChangeTitle 1 $WindowTitlePrint
    ChangeTitle 5 $SubpanelDisplayName
    ChangeTitle 8 $SubpanelWidth
-   ChangeTitle 11 $SubpanelRows
+   ChangeValue 11 $SubpanelEnabled
 
-   Set $SubpanelSysDataCmd = {$NSCDE_ROOT/libexec/subpanelsettings -C "$NSCDE_ROOT/config/} $SubpanelName {.conf" -N } $SubpanelName { -g}
-   Set $SubpanelSysDisplayName = (GetOutput $SubpanelSysDataCmd 1 -1)
-   Set $SubpanelSysWidth = (GetOutput $SubpanelSysDataCmd 2 -1)
-   Set $SubpanelSysRows = (GetOutput $SubpanelSysDataCmd 3 -1)
-
-   # Ta daaa ...
-   Do {SendToModule FrontPanel PressButton } $SubpanelName
+   # Fill system defaults in variables - for resetting
+   Set $SubpanelSysDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SystemSubpanelActionsRead {" | sort | cut -d"," -f3}
+   Set $SubpanelSysEnabled = (GetOutput $SubpanelSysDataCmd 1 -1)
+   Set $SubpanelSysDisplayName = (GetOutput $SubpanelSysDataCmd 2 -1)
+   Set $SubpanelSysWidth = (GetOutput $SubpanelSysDataCmd 3 -1)
 
    # Cursor on the end of input form please
    ChangeMinValue 5 9999
    ChangeMinValue 8 9999
-   ChangeMinValue 11 9999
+
+   # Prepare regenerate command
+   Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_ROOT/libexec/generate_subpanels" > "$FVWM_USERDIR/NsCDE-Subpanels.conf"}
 
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
@@ -101,27 +102,25 @@ Widget 2
       Begin
          If $NeedInitLocalCopy == 0 Then
          Begin
-            Set $ResetCfCmd = {[[ -r "$FVWM_USERDIR/} $SubpanelName {.conf" ]] && rm -f "$FVWM_USERDIR/} $SubpanelName {.conf"}
-            Set $ResetCf = (GetOutput $ResetCfCmd 1 -1)
-            Set $ConfDirPath = {$NSCDE_ROOT/config}
-            Set $NeedInitLocalCopy = 1
+            # Make sure Subpanels.actions exists in $FVWM_USERDIR
+            Set $ExistanceEnsureCmd = {[ ! -r ] "} $UserSubpanelActionsFile {" && touch "} $UserSubpanelActionsFile {"}
+            Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
 
-            Set $SubpanelDataCmd = {$NSCDE_ROOT/libexec/subpanelsettings -C "} $ConfDirPath {/} $SubpanelName {.conf" -N } $SubpanelName { -g}
-            Set $SubpanelDisplayName = (GetOutput $SubpanelDataCmd 1 -1)
-            Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 2 -1)
-            Set $SubpanelRows = (GetOutput $SubpanelDataCmd 3 -1)
-            Set $WindowTitlePrint = {Subpanel } $SubpanelDisplayName { Settings}
+            Set $ResetCfCmd = {$NSCDE_ROOT/bin/ised -c 's/^S} $SubpanelNo {,//g' -f "} $UserSubpanelActionsFile {"}
+            Set $ResetCf = (GetOutput $ResetCfCmd 1 -1)
+
+            Set $WindowTitlePrint = {Subpanel } $SubpanelSysDisplayName { Settings}
             ChangeWindowTitle $WindowTitlePrint
             ChangeTitle 1 $WindowTitlePrint
-            ChangeTitle 5 $SubpanelDisplayName
-            ChangeTitle 8 $SubpanelWidth
-            ChangeTitle 11 $SubpanelRows
+            ChangeTitle 5 $SubpanelSysDisplayName
+            ChangeTitle 8 $SubpanelSysWidth
+            ChangeValue 11 $SubpanelSysEnabled
 
-            Set $ChangeDetectString = $SubpanelDisplayName $SubpanelWidth $SubpanelRows
+            Set $ChangeDetectString = $SubpanelDisplayName $SubpanelWidth $SubpanelEnabled
 
-            Do {f_ReadCfg } $SubpaneConfName
-            Do {KillModule FvwmButtons } $SubpanelName
-            Do {Schedule 800 SendToModule FrontPanel PressButton } $SubpanelName
+            Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+            Do {f_ReadCfg Subpanels}
+            Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
          End
       End
 End
@@ -227,7 +226,7 @@ Widget 10
    Size 30 20
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Maximum Subpanel Items: }
+   Title {This Subpanel is Enabled: }
    Main
       Case message of
       SingleClic :
@@ -239,10 +238,9 @@ Widget 11
    Property
    Position 222 160
    Size 48 20
-   Type TextField
+   Type CheckBox
    Flags NoReliefString Left
    Title {}
-   Colorset 20
    Main
       Case message of
       SingleClic :
@@ -261,7 +259,7 @@ Widget 12
       Case message of
       SingleClic :
       Begin
-         ChangeTitle 11 $SubpanelSysRows
+         ChangeValue 11 $SubpanelSysEnabled
       End
 End
 
@@ -278,32 +276,61 @@ Widget 14
    Position 10 232
    Flags NoReliefString
    Type PushButton
-   Title {OK}
+   Title { OK }
    Main
       Case message of
       SingleClic :
       Begin
-         Set $ChangeFields = (GetTitle 5) (GetTitle 8) (GetTitle 11)
+         Set $ChangeFields = (GetTitle 5) (GetTitle 8) (GetValue 11)
          If $ChangeFields == $ChangeDetectString Then
          Begin
             Quit
          End
 
-         If $NeedInitLocalCopy == 1 Then
-         Begin
-            Set $ForkConfigCmd = {cp -f "} $ConfDirPath {/} $SubpanelName {.conf" "$FVWM_USERDIR/} $SubpanelName {.conf"}
-            Set $ForkConfig = (GetOutput $ForkConfigCmd 1 -1)
-            Set $NeedInitLocalCopy = 0
-            Set $ConfDirPath = {$FVWM_USERDIR}
-         End
+         Set $NewSubpanelEnabled = (GetValue 11)
          Set $NewSubpanelName = (GetTitle 5)
          Set $NewSubpanelWidth = (GetTitle 8)
-         Set $NewSubpanelRows = (GetTitle 11)
-         Set $WriteNewSubpanelConfCmd = {$NSCDE_ROOT/libexec/subpanelsettings -C "} $ConfDirPath {/} $SubpanelName {.conf" -N '} $SubpanelName {' -w '} $NewSubpanelName {,} $NewSubpanelWidth {,} $NewSubpanelRows {'}
-         Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)
-         Do {f_ReadCfg } $SubpanelConfName
-         Do {KillModule FvwmButtons } $SubpanelName
-         Do {Schedule 800 SendToModule FrontPanel PressButton } $SubpanelName
+
+         # Make sure Subpanels.actions exists in $FVWM_USERDIR
+         Set $ExistanceOK = 0
+
+         Set $ExistanceEnsureCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ROWS|ENABLED),.*" "} $UserSubpanelActionsFile{" 2>/dev/null | wc -l}
+         Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
+         If $ExistanceEnsure == 3 Then
+         Begin
+            Set $WriteNewSubpanelConfCmd = {$NSCDE_ROOT/bin/ised -c 's/^S} $SubpanelNo {,NAME,\(.*\)/S} $SubpanelNo {,NAME,} $NewSubpanelName
+             {/g; s/^S} $SubpanelNo {,ENABLED,\(.*\)/S} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
+             {/g; s/^S} $SubpanelNo {,WIDTH,\(.*\)/S} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {/g' -f "} $UserSubpanelActionsFile {"}
+            Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)
+            Set $ExistanceOK = 1
+         End
+
+         If $ExistanceEnsure == 0 Then
+         Begin
+            Set $WriteNewSubpanelConfCmd = {echo -ne "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
+             {\nS} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
+             {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n\n" >> "} $UserSubpanelActionsFile {"}
+            Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)
+            Set $ExistanceOK = 1
+         End
+
+         If $ExistanceOK == 0 Then
+         Begin
+            Do {FvwmForm ErrMsgForm2 TITLE="Subpanel Settings" TEXT1="Subpanel } $SubpanelNo
+             { has errors in declaration." TEXT2="Edit } $UserSubpanelActionsFile
+             { to fix it and then rerun this tool."}
+         End
+
+         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+
+         If $GenerateFvwmButtonsCfg <> {} Then
+         Begin
+            Do {FvwmForm ErrMsgForm2 TITLE="Subpanel Settings" TEXT1="Unexpected output from generate_subpanels command:"}
+               { TEXT2="} $GenerateFvwmButtonsCfg {"}
+         End
+
+         Do {f_ReadCfg Subpanels}
+         Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
          Quit
       End
 End
@@ -360,7 +387,6 @@ Widget 17
             ChangeColorset 17 20
             ChangeColorset 5 20
             ChangeColorset 8 20
-            ChangeColorset 11 20
          End
       End
 End

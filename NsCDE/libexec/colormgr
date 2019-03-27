@@ -73,6 +73,15 @@ function ProgBits
        -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
    done
 
+   # Arrows for SubpanelMgr and possibly other FvwmScript programs
+   for xpm in ArrowLeftP.xpm ArrowLeft.xpm ArrowRightP.xpm ArrowRight.xpm
+   do
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
+       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
+   done
+
    # Front Panel Clock
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
     -p ${PaletteNamePath} -n $Ncolors \

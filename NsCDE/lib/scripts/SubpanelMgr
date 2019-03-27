@@ -1,55 +1,80 @@
 WindowTitle {Subpanels Manager}
-WindowSize 644 558
+WindowSize 606 572
 Colorset 22
 
 Init
 Begin
-   Set $Subpanel = (GetScriptArgument 1)
-   Set $UserSubpanelConf = (GetScriptArgument 2)
-   Set $ItemsNo = (GetOutput $ItemsNoOut 1 -1)
+   Set $SubpanelNo = (GetScriptArgument 1)
 
-   Set $SubpanelConfigExistanceOut = {[[ -r $FVWM_USERDIR/} $UserSubpanelConf { ]] && echo 1 || echo 0}
-   Set $SubpanelConfigExistance = (GetOutput $SubpanelConfigExistanceOut 1 1)
-
-   If $SubpanelConfigExistance == 0 Then
+   If $SubpanelNo == {} Then
    Begin
-      Set $ConfDirPath = {$NSCDE_ROOT/config}
-      Set $NeedInitLocalCopy = 1
+      Quit
+   End
+
+   # Fill the App List on the left with all apps found by fvwm-menu-desktop
+   Set $AppListTmpFileCmd = {mktemp --suffix=.AppLst}
+   Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
+   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
+   Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
+   Set $FmtAppListCmd = {cut -d"%" -f 3 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+   Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
+   ChangeTitle 3 $FmtAppList
+
+   # Find out if we are going to read subpanel data from the system or user Subpanels.actions file
+   Set $ChkActionsCmd = {egrep '^S} $SubpanelNo {,.*' "$FVWM_USERDIR/Subpanels.actions"}
+   Set $ChkActions = (GetOutput $ChkActionsCmd 1 -1)
+   If $ChkActions <> {} Then
+   Begin
+      Set $SubpanelActionsRead = {$FVWM_USERDIR/Subpanels.actions}
    End
    Else
    Begin
-      Set $ConfDirPath = {$FVWM_USERDIR}
-      Set $NeedInitLocalCopy = 0
+      Set $SubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
    End
+   Set $UserSubpanelActionsFile = {$FVWM_USERDIR/Subpanels.actions}
+   Set $SystemSubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
 
-   Set $ALTOUT = {mktemp --suffix=.App}
-   Set $DMTOUT = {mktemp --suffix=.Subpanel}
-   Set $AppListTempFile = (GetOutput $ALTOUT 1 1)
-   Set $SubpanelMenuTmpFile = (GetOutput $DMTOUT 1 1)
+   # Fill the Subpanel app List on the right with all entries found there.
+   Set $SubpListTmpFileCmd = {mktemp --suffix=.SubpLst}
+   Set $SubpListTmpFile = (GetOutput $SubpListTmpFileCmd 1 -1)
+   Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
+   Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
+   Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+   Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
+   ChangeTitle 4 $FmtSubpList
 
-   # Menu generator will run apps list creation if AppListTempFile is still empty
-   Set $ItemsOut = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -t } $AppListTempFile { -m}
-   Set $AvailableApps = (GetOutput $ItemsOut 1 -1)
-   ChangeTitle 3 $AvailableApps
-
-   Set $SubpanelMenuOut = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -T } $SubpanelMenuTmpFile { -M}
-   Set $SubpanelMenu = (GetOutput $SubpanelMenuOut 1 -1)
-   ChangeTitle 4 $SubpanelMenu
+   Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3}
+   Set $SubpanelName = (GetOutput $SubpanelNameCmd 1 -1)
+   Set $NewWinTitle = {Subpanels Manager: Subpanel } $SubpanelNo { (} $SubpanelName {)}
+   ChangeWindowTitle $NewWinTitle
 
    # Defaults
-   Set $SubpanelCustomNameCmd = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -T } $SubpanelMenuTmpFile { -n}
-   Set $SubpanelCustomName = (GetOutput $SubpanelCustomNameCmd 1 -1)
-   Set $NewTitle1 = {Existing Items in Subpanel } $SubpanelCustomName
-   # Set $NewTitle1 = {Existing Items in Subpanel } $Subpanel
-   ChangeTitle 1 $NewTitle1
+   Set $NewAppType = {}
+   Set $Perform = 1
 
-   Set $NewWindowTitle = {Subpanelers Manager (} $SubpanelCustomName {)}
-   ChangeWindowTitle $NewWindowTitle
-
-   Set $W21Visible = 0
-
-   # Ta daaa ...
-   Do {Schedule 100 SendToModule FrontPanel PressButton } $Subpanel
+   # Nasty workaround because ForeColor of the TextField
+   # widget is not applied and global value is used anyway.
+   # How it works: if wanted Colorset is applied with
+   # ChangeColorset to (any?) other widget after initialization
+   # of the script, colorset foreground color will be properly
+   # applied to TextField widget too. Even if fake widget is
+   # hidden, this workaround still works as it should.
+   # We define hidden PushButton widhet on the end of the script
+   # and send string "workaround" to routine 1 of the TextField
+   # widget ("1 : " can be attached to any widget in fact ...).
+   # This routine than changes the colorset of the hidden
+   # PushButton widget, and this then triggers change in buggy
+   # TextField to be applied.
+   # This bug can be seen when default colorset for the script has
+   # different foreground color than colorset applied to the
+   # TextField widget. Another possible workaround is to define
+   # globally back/fore/sh/hi colors for the script instead of
+   # (or after definition) of a colorset, but this is unflexible,
+   # since script background cannot be changed dinamically or
+   # from outside of the script as colorset functionality allows.
+   Do {Schedule 50 SendToModule SubpanelMgr SendString 25 1 workaround}
+   Do {Schedule 250 SendToModule SubpanelMgr SendString 25 1 workaround}
+   Do {Schedule 350 SendToModule SubpanelMgr SendString 25 1 workaround}
 End
 
 PeriodicTasks
@@ -57,21 +82,20 @@ Begin
    Set $MSG=(ReceivFromScript $BROWSER)
    If $MSG <> {No message} Then
    Begin
-      ChangeTitle 10 $MSG
-      ChangeIcon 15 $MSG
+      ChangeTitle 12 $MSG
+      ChangeIcon 17 $MSG
    End
 End
 
 QuitFunc
 Begin
-   Do {Exec exec rm -f } $AppListTempFile
-   Do {Exec exec rm -f } $SubpanelMenuTmpFile
+   Do {Exec exec rm -f "} $AppListTmpFile {" "} $SubpListTmpFile {" "} $SubpListTmpNewFile {" "} $SubpNewActionsPart {"}
 End
 
 Widget 1
    Property
    Size 280 20
-   Position 332 16
+   Position 312 10
    Type ItemDraw
    Flags NoReliefString Left
    Title {Existing Items in Subpanel:}
@@ -86,7 +110,7 @@ End
 Widget 2
    Property
    Size 280 20
-   Position 12 16
+   Position 12 10
    Type ItemDraw
    Flags NoReliefString Left
    Title {Available Applications:}
@@ -100,91 +124,315 @@ End
 
 Widget 3
    Property
-   Size 300 204
-   Position 12 44
+   Size 280 202
+   Position 12 40
    Type List
    Flags NoReliefString
+   Value 0
    Title {}
    Colorset 20
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 17) <> {Add} Then
-         Begin
-            ChangeValue 4 0
-            ChangeTitle 17 {Add}
-            ChangeColorset 6 20
-            ChangeColorset 8 20
-            ChangeColorset 10 20
-         End
+         Set $FocusOnList = {Applications}
 
-         If $W21Visible == 1 Then
-         Begin
-            HideWidget 21
-            Set $W21Visible = 0
-         End
+         ChangeColorset 8 20
+         ChangeColorset 10 20
+         ChangeColorset 12 20
 
-         Set $AppsNameIconCmdOut = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -t } $AppListTempFile { -i } (GetValue 3)
-         Set $ItemName = (GetOutput $AppsNameIconCmdOut 1 -1)
-         Set $IconPath = (GetOutput $AppsNameIconCmdOut 2 -1)
-         Set $CmdName = (GetOutput $AppsNameIconCmdOut 3 -1)
-         ChangeTitle 6 $ItemName
-         ChangeTitle 8 $CmdName
-         ChangeTitle 10 $IconPath
-         ChangeIcon 15 $IconPath
+         # Hide this if it was selected in previous click
+         HideWidget 15
+         HideWidget 16
+
+         Set $SelectedIndex = (GetValue 3)
+         Set $GetAppIdxNameCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 3}
+         Set $GetAppIdxIconCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 4}
+         Set $GetAppIdxCmdCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 5}
+         Set $GetAppIdxName = (GetOutput $GetAppIdxNameCmd 1 -1)
+         Set $GetAppIdxIcon = (GetOutput $GetAppIdxIconCmd 1 -1)
+         Set $GetAppIdxCmd = (GetOutput $GetAppIdxCmdCmd 1 -1)
+         ChangeTitle 8 $GetAppIdxName
+         ChangeTitle 10 $GetAppIdxCmd
+         ChangeTitle 12 $GetAppIdxIcon
+         ChangeIcon 17 $GetAppIdxIcon
+
+         # Take Widget 4 value and hide it while selecting from this list
+         # use it later as entry point below
+         Set $SubpListSelected = (GetValue 4)
+
+         # Fix this if it was changed by Widget 4 List click
+         ChangeValue 14 1
+         ChangeValue 18 0
+         ShowWidget 18
+
+         # Stupid TextField colorset bug workaround
+         ChangeColorset 25 20
       End
 End
 
 Widget 4
    Property
-   Size 300 204
-   Position 332 44
+   Size 280 202
+   Position 312 40
    Type List
    Flags NoReliefString
+   Value 0
    Title {}
    Colorset 20
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 17) == {Add} Then
+         Set $FocusOnList = {Subpanel}
+
+         ChangeColorset 8 22
+         ChangeColorset 10 22
+         ChangeColorset 12 22
+
+         # Stupid TextField colorset bug workaround
+         ChangeColorset 25 22
+
+         Set $SelectedSubpIndex = (GetValue 4)
+         Set $GetSubpIdxNameCmd = {egrep "^} $SelectedSubpIndex {,.*" "} $SubpListTmpFile {" | cut -d"," -f 4}
+         Set $GetSubpIdxTypeCmd = {egrep "^} $SelectedSubpIndex {,.*" "} $SubpListTmpFile {" | cut -d"," -f 5}
+         Set $GetSubpIdxIconCmd = {egrep "^} $SelectedSubpIndex {,.*" "} $SubpListTmpFile {" | cut -d"," -f 6}
+         Set $GetSubpIdxCmdCmd = {egrep "^} $SelectedSubpIndex {,.*" "} $SubpListTmpFile {" | cut -d"," -f 7}
+         Set $GetSubpIdxName = (GetOutput $GetSubpIdxNameCmd 1 -1)
+         Set $GetSubpIdxType = (GetOutput $GetSubpIdxTypeCmd 1 -1)
+         Set $GetSubpIdxIcon = (GetOutput $GetSubpIdxIconCmd 1 -1)
+         Set $GetSubpIdxCmd = (GetOutput $GetSubpIdxCmdCmd 1 -1)
+         ChangeTitle 8 $GetSubpIdxName
+         ChangeTitle 10 $GetSubpIdxCmd
+         ChangeTitle 12 $GetSubpIdxIcon
+         ChangeIcon 17 $GetSubpIdxIcon
+
+         If $GetSubpIdxType == {FVWM-M} Then
          Begin
-            ChangeValue 3 0
-            ChangeTitle 17 {Remove}
-            ChangeColorset 6 22
-            ChangeColorset 8 22
-            ChangeColorset 10 22
+            ChangeValue 14 2
+            ChangeValue 18 0
+            HideWidget 18
+         End
+         If $GetSubpIdxType == {FVWM-F} Then
+         Begin
+            ChangeValue 14 3
+            ChangeValue 18 0
+            HideWidget 18
+         End
+         If $GetSubpIdxType == {OTHER} Then
+         Begin
+            ChangeValue 14 4
+            ChangeValue 18 0
+            HideWidget 18
+         End
+         If $GetSubpIdxType == {} Then
+         Begin
+            ChangeValue 14 1
+            ChangeValue 18 0
+            ShowWidget 18
+         End
+         If $GetSubpIdxType == {NOCHK} Then
+         Begin
+            ChangeValue 14 1
+            ChangeValue 18 1
+            ShowWidget 18
          End
 
-         If $W21Visible == 1 Then
+         If (StrCopy $GetSubpIdxType 1 6) == {CHECK:} Then
          Begin
-            HideWidget 21
-            Set $W21Visible = 0
+            ChangeValue 14 5
+            ChangeValue 18 0
+            ShowWidget 18
+
+            ShowWidget 15
+            ShowWidget 16
+
+            ChangeTitle 16 (StrCopy $GetSubpIdxType 7 99)
+         End
+         Else
+         Begin
+            HideWidget 15
+            HideWidget 16
          End
 
-         Set $SubpanelConfExistanceOut = {ls -1 { } $ConfDirPath {/} $UserSubpanelConf { 2>/dev/null}
-         Set $SubpanelConfExistance = (GetOutput $SubpanelConfExistanceOut 1 -1)
-         Set $NameIconCmdOut = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -T } $SubpanelMenuTmpFile { -I } (GetValue 4)
-         Set $NameForName = (GetOutput $NameIconCmdOut 1 -1)
-         Set $IconForName = (GetOutput $NameIconCmdOut 2 -1)
-         Set $CmdForName = (GetOutput $NameIconCmdOut 3 -1)
-         ChangeTitle 6 $NameForName
-         ChangeTitle 8 $CmdForName
-         ChangeTitle 10 $IconForName
-         Set $DequoteIconForNameCmd = {echo } $IconForName { | sed 's/"//g'}
-         Set $DequoteIconForName = (GetOutput $DequoteIconForNameCmd 1 -1)
-         ChangeIcon 15 $DequoteIconForName
-      End
-      1 :
-      Begin
+         # We are now working with subpanel list, not all apps list,
+         # unselect selected on apps list.
+         ChangeValue 3 0
+
+         # Stupid TextField colorset bug workaround
+         ChangeColorset 25 22
       End
 End
 
 Widget 5
    Property
+   Size 40 40
+   Position 132 248
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 22
+   Icon NsCDE/ArrowRight.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $FocusOnList == {Applications} Then
+         Begin
+            ChangeIcon 5 NsCDE/ArrowRightP.xpm
+
+            If $SubpListSelected == 0 Then
+            Begin
+               Set $SubpListSelected = 1
+            End
+            Set $NewRowNo = (Add $SubpListSelected 1)
+
+            If (GetValue 14) == 1 Then
+               Set $NewAppType = {}
+            If (GetValue 14) == 2 Then
+               Set $NewAppType = {FVWM-M}
+            If (GetValue 14) == 3 Then
+               Set $NewAppType = {FVWM-F}
+            If (GetValue 14) == 4 Then
+               Set $NewAppType = {OTHER}
+            If (GetValue 14) == 5 Then
+               Set $NewAppType = {CHECK:}
+
+            If (GetValue 18) == 1 Then
+               Set $NewAppType = {NOCHK}
+
+            If (GetValue 14) == 5 Then
+            Begin
+               Set $WhatToCheck = (GetTitle 16)
+               Set $CleanWhatToCheckCmd = {echo "} $WhatToCheck {" | tr -d '[[:cntrl:]][[:punct:]][[:blank:]]'}
+               Set $CleanWhatToCheck = (GetOutput $CleanWhatToCheckCmd 1 -1)
+               Set $NewAppType = $NewAppType $CleanWhatToCheck
+            End
+
+            Set $CheckCharsTitleCmd = {echo "} (GetTitle 8) {" | egrep "(,|')"}
+            Set $CheckCharsTitle = (GetOutput $CheckCharsTitleCmd 1 -1)
+            If $CheckCharsTitle <> {} Then
+            Begin
+               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application name cannot contain , or ' chars."}
+               Set $Perform = 0
+            End
+            Else
+            Begin
+               Set $Perform = 1
+            End
+
+            Set $CheckCharsIconCmd = {echo "} (GetTitle 12) {" | egrep "(,|')"}
+            Set $CheckCharsIcon = (GetOutput $CheckCharsIconCmd 1 -1)
+            If $CheckCharsIcon <> {} Then
+            Begin
+               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application icon name cannot contain , or ' chars."}
+               Set $Perform = 0
+            End
+            Else
+            Begin
+               Set $Perform = 1
+            End
+
+            Set $CheckCharsCmdCmd = {echo "} (GetTitle 10) {" | egrep "(,|')"}
+            Set $CheckCharsCmd = (GetOutput $CheckCharsCmdCmd 1 -1)
+            If $CheckCharsCmd <> {} Then
+            Begin
+               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application command line cannot contain , or ' chars."}
+               Set $Perform = 0
+            End
+            Else
+            Begin
+               Set $Perform = 1
+            End
+
+            If $Perform == 1 Then
+            Begin
+               Set $NewAppToSubpCmd = {echo '} $NewRowNo {,S} $SubpanelNo {,ENTRY,} (GetTitle 8) {,} $NewAppType {,} (GetTitle 12) {,} (GetTitle 10) {'}
+               Set $NewAppToSubp = (GetOutput $NewAppToSubpCmd 1 -1)
+
+               Set $SubpListTmpNewFileCmd = {mktemp --suffix=.SubpNewLst}
+               Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
+
+               Set $CreateNewListCmd = {(sed -n '1,} $SubpListSelected {p' < "} $SubpListTmpFile {"; echo '} $NewAppToSubp
+                                    {'; sed -n '} $NewRowNo {,$p' < "} $SubpListTmpFile {") > "} $SubpListTmpNewFile {"}
+               Set $CreateNewList = (GetOutput $CreateNewListCmd 1 -1)
+
+               Set $SubpListMoveTmpFileCmd = {cut -d"," -f 2- < "} $SubpListTmpNewFile {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
+               Set $SubpListMoveTmpFile = (GetOutput $SubpListMoveTmpFileCmd 1 -1)
+
+               Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+               Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
+
+               ChangeTitle 4 $FmtSubpList
+               Do {Exec exec rm -f "} $SubpListTmpNewFile {"}
+            End
+         End
+
+         Do {Schedule 250 SendToModule SubpanelMgr SendString 5 1 unpress}
+      End
+
+      1 :
+      Begin
+         ChangeIcon 5 NsCDE/ArrowRight.xpm
+      End
+End
+
+Widget 6
+   Property
+   Size 40 40
+   Position 432 248
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 22
+   Icon NsCDE/ArrowLeft.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # Remove entries from a panel.
+         If $FocusOnList == {Subpanel} Then
+         Begin
+            ChangeIcon 6 NsCDE/ArrowRightP.xpm
+
+            If (GetValue 4) > 0 Then
+            Begin
+               Set $SubpListTmpNewFileCmd = {mktemp --suffix=.SubpNewLst}
+               Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
+
+               Set $RemoveAppFromSubpCmd = {egrep -v "^} (GetValue 4) {,.*" "} $SubpListTmpFile {" > "} $SubpListTmpNewFile {"}
+               Set $RemoveAppFromSubp = (GetOutput $RemoveAppFromSubpCmd 1 -1)
+               Set $SubpListMoveTmpFileCmd = {cut -d"," -f 2- < "} $SubpListTmpNewFile {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
+               Set $SubpListMoveTmpFile = (GetOutput $SubpListMoveTmpFileCmd 1 -1)
+
+               If (GetValue 14) == 5 Then
+               Begin
+                  ChangeTitle 16 {}
+                  ChangeValue 4 0
+                  ChangeValue 14 1
+                  HideWidget 15
+                  HideWidget 16
+               End
+
+               Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+               Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
+               ChangeTitle 4 $FmtSubpList
+
+               Do {Exec exec rm -f "} $SubpListTmpNewFile {"}
+            End
+         End
+
+         Do {Schedule 250 SendToModule SubpanelMgr SendString 6 1 unpress}
+      End
+
+      1 :
+      Begin
+         ChangeIcon 6 NsCDE/ArrowLeft.xpm
+      End
+End
+
+Widget 7
+   Property
    Size 280 20
-   Position 12 254
+   Position 12 284
    Type ItemDraw
    Flags NoReliefString Left
    Title {Name:}
@@ -196,40 +444,10 @@ Widget 5
       End
 End
 
-Widget 6
-   Property
-   Size 460 24
-   Position 12 278
-   Type TextField
-   Flags NoReliefString
-   Title {}
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-Widget 7
-   Property
-   Size 280 20
-   Position 12 318
-   Type ItemDraw
-   Flags NoReliefString Left
-   Title {Command:}
-   Colorset 22
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
 Widget 8
    Property
-   Size 460 24
-   Position 12 342
+   Size 424 24
+   Position 12 308
    Type TextField
    Flags NoReliefString
    Title {}
@@ -244,10 +462,10 @@ End
 Widget 9
    Property
    Size 280 20
-   Position 12 382
+   Position 12 346
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Icon File:}
+   Title {Command:}
    Colorset 22
    Main
       Case message of
@@ -258,8 +476,8 @@ End
 
 Widget 10
    Property
-   Size 460 24
-   Position 12 406
+   Size 424 24
+   Position 12 370
    Type TextField
    Flags NoReliefString
    Title {}
@@ -274,10 +492,10 @@ End
 Widget 11
    Property
    Size 280 20
-   Position 490 254
+   Position 12 412
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Launcher Type:}
+   Title {Icon File:}
    Colorset 22
    Main
       Case message of
@@ -288,34 +506,26 @@ End
 
 Widget 12
    Property
-   Size 128 26
-   Position 490 276
-   Type PopupMenu
+   Size 424 24
+   Position 12 438
+   Type TextField
    Flags NoReliefString
-   Title {Exec Command|Fvwm Module|Fvwm Function|Other}
-   Colorset 22
+   Title {}
+   Colorset 20
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetValue 12) == 1 Then
-            Set $LaunchType = {execcmd}
-         If (GetValue 12) == 2 Then
-            Set $LaunchType = {fvwmmodule}
-         If (GetValue 12) == 3 Then
-            Set $LaunchType = {fvwmfunction}
-         If (GetValue 12) == 4 Then
-            Set $LaunchType = {other}
       End
 End
 
 Widget 13
    Property
-   Size 280 20
-   Position 494 318
+   Size 290 20
+   Position 542 280
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Execute in Terminal}
+   Title {Type:}
    Colorset 22
    Main
       Case message of
@@ -326,11 +536,36 @@ End
 
 Widget 14
    Property
-   Size 80 26
-   Position 494 342
-   Type CheckBox
-   Flags NoReliefString Left
-   Value 0
+   Size 128 26
+   Position 450 306
+   Type PopupMenu
+   Flags NoReliefString
+   Title {Exec Command|Fvwm Module|Fvwm Function|Other|Check For ...}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 14) == 5 Then
+         Begin
+            ShowWidget 15
+            ShowWidget 16
+         End
+         Else
+         Begin
+            HideWidget 15
+            HideWidget 16
+         End
+      End
+End
+
+Widget 15
+   Property
+   Size 280 20
+   Position 450 346
+   Type ItemDraw
+   Flags NoReliefString Left Hidden
+   Title {Check for this cmd:}
    Colorset 22
    Main
       Case message of
@@ -339,14 +574,29 @@ Widget 14
       End
 End
 
-Widget 15
+Widget 16
+   Property
+   Size 140 26
+   Position 450 370
+   Type TextField
+   Flags NoReliefString Left Hidden
+   Value 0
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
    Property
    Size 66 66
-   Position 522 380
+   Position 480 418
    Type ItemDraw
    Flags NoReliefString
    Title {}
-   Icon CDE/DtBkdrp.l.pm
+   Icon CDE/Dtdeflt.m.pm
    Colorset 22
    Main
       Case message of
@@ -357,10 +607,10 @@ Widget 15
       End
 End
 
-Widget 22
+Widget 18
    Property
    Size 280 26
-   Position 12 448
+   Position 12 480
    Type CheckBox
    Flags NoReliefString Left
    Value 0
@@ -373,111 +623,61 @@ Widget 22
       End
 End
 
-Widget 16
+Widget 19
    Property
-   Size 634 1
-   Position 3 486
+   Size 602 1
+   Position 3 516
    Type Rectangle
 End
 
-Widget 17
+Widget 20
    Property
-   Size 80 26
-   Position 32 508
+   Size 120 26
+   Position 12 532
    Type PushButton
    Flags NoReliefString
-   Title {Add}
+   Title {Apply}
    Colorset 22
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 17) == {Add} Then
-            SendSignal 17 1
-         If (GetTitle 17) == {Apply} Then
-            SendSignal 17 1
-         If (GetTitle 17) == {Remove} Then
-            SendSignal 17 2
+         SendSignal 20 1
       End
       1 :
       Begin
-         If $LaunchType == {} Then
-         Begin
-            Set $LaunchType = {execcmd}
-         End
+         Set $SubpNewActionsPartCmd = {mktemp --suffix=.SubpNewActP}
+         Set $SubpNewActionsPart = (GetOutput $SubpNewActionsPartCmd 1 -1)
 
-         If (GetTitle 17) == {Apply} Then
-         Begin
-            # GetOutput is used because Do is asynchrounus
-            Set $RemoveCmd = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-            $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile {" -L }
-            $LaunchType { -N "} $NameForName {" -O "} (GetTitle 10) {" -C '} (GetTitle 8) {' -d}
-            Set $Remove = (GetOutput $RemoveCmd 1 -1)
+         Set $CreateUserActionsCfgCmd = {[ ! -r "} $UserSubpanelActionsFile {" ] && touch "} $UserSubpanelActionsFile {"}
+         Set $CreateUserActionsCfg = (GetOutput $CreateUserActionsCfgCmd 1 -1)
 
-            If (GetValue 22) == 0 Then
-            Begin
-               Set $AddCmd = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-               $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile {" -L }
-               $LaunchType { -N "} (GetTitle 6) {" -O "} (GetTitle 10) {" -C '} (GetTitle 8) {' -x -c}
-               Set $Add = (GetOutput $AddCmd 1 -1)
-            End
-            Else
-            Begin
-               Set $AddCmd = {$NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-               $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile {" -L }
-               $LaunchType { -N "} (GetTitle 6) {" -O "} (GetTitle 10) {" -C '} (GetTitle 8) {' -c}
-               Set $Add = (GetOutput $AddCmd 1 -1)
-            End
-         End
+         Set $TransferRestOfTheActionsCmd = {egrep -v "^S} $SubpanelNo {," "} $UserSubpanelActionsFile {" > "} $SubpNewActionsPart {"}
+         Set $TransferRestOfTheActions = (GetOutput $TransferRestOfTheActionsCmd 1 -1)
 
-         If (GetTitle 17) == {Add} Then
-         Begin
-            If (GetValue 22) == 0 Then
-            Begin
-               Do {Exec exec $NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-               $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile {" -L }
-               $LaunchType { -N "} (GetTitle 6) {" -O "} (GetTitle 10) {" -C '} (GetTitle 8) {' -x -c}
-            End
-            Else
-            Begin
-               Do {Exec exec $NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-               $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile {" -L }
-               $LaunchType { -N "} (GetTitle 6) {" -O "} (GetTitle 10) {" -C '} (GetTitle 8) {' -c}
-            End
-         End
+         Set $WriteActionsFileCmd = {(egrep "^S} $SubpanelNo {,(NAME|WIDTH|ROWS|ENABLED),.*" "} $SubpanelActionsRead {"; cut -d"," -f 2- < "} 
+                                     $SubpListTmpFile {") >> "} $SubpNewActionsPart {"}
+         Set $WriteActionsFile = (GetOutput $WriteActionsFileCmd 1 -1)
 
-         Set $SubpanelMenuOut = {sleep 1; $NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -T } $SubpanelMenuTmpFile { -M}
-         Set $SubpanelMenu = (GetOutput $SubpanelMenuOut 1 -1)
-         ChangeTitle 4 $SubpanelMenu
+         Set $BackupActionsFileCmd = {mkdir -p "$FVWM_USERDIR/tmp"; cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"}
+         Set $BackupActionsFile = (GetOutput $BackupActionsFileCmd 1 -1)
 
-         If (GetTitle 17) == {Apply} Then
-         Begin
-            ChangeTitle 17 {Add}
-            ChangeColorset 6 22
-            ChangeColorset 8 22
-            ChangeColorset 10 22
-         End
-      End
-      2 :
-      Begin
-         Do {Exec exec $NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f }
-         $ConfDirPath {/} $UserSubpanelConf { -T "} $SubpanelMenuTmpFile
-         {" -N "} (GetTitle 6) {" -O "} (GetTitle 10) {" -d}
+         Set $WriteFinalActionsFileCmd = {cat "} $SubpNewActionsPart {" > "$FVWM_USERDIR/Subpanels.actions"}
+         Set $WriteFinalActionsFile = (GetOutput $WriteFinalActionsFileCmd 1 -1)
 
-         Set $SubpanelMenuOut = {sleep 1; $NSCDE_ROOT/libexec/subpanelmgr -p } $Subpanel { -f } $ConfDirPath {/} $UserSubpanelConf { -T } $SubpanelMenuTmpFile { -M}
-         Set $SubpanelMenu = (GetOutput $SubpanelMenuOut 1 -1)
-         ChangeTitle 4 $SubpanelMenu
-         ChangeTitle 6 {}
-         ChangeTitle 8 {}
-         ChangeTitle 10 {}
-         ChangeIcon 15 CDE/DtBkdrp.l.pm
+         Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_ROOT/libexec/generate_subpanels" > "$FVWM_USERDIR/NsCDE-Subpanels.conf"}
+         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+
+         Do {f_ReadCfg Subpanels}
+         Do {Schedule 400 KillModule FvwmButtons NsCDE-Subpanel} $SubpanelNo
+         Do {Schedule 1800 Exec exec $NSCDE_ROOT/bin/xdowrapper}
       End
 End
 
-Widget 18
+Widget 21
    Property
-   Size 80 26
-   Position 360 508
+   Size 120 26
+   Position 168 532
    Type PushButton
    Flags NoReliefString
    Title {Save}
@@ -486,43 +686,15 @@ Widget 18
       Case message of
       SingleClic :
       Begin
-         If $NeedInitLocalCopy == 1 Then
-         Begin
-            Do {Exec exec cp -f } $ConfDirPath {/} $UserSubpanelConf { $[FVWM_USERDIR]/$UserSubpanelConf}
-            Set $ConfDirPath = {$FVWM_USERDIR}
-         End
-
-         Do {Exec exec mv -f } $SubpanelMenuTmpFile { } $ConfDirPath {/} $UserSubpanelConf { 2>/dev/null}
-         Do {Read $[FVWM_USERDIR]/} $UserSubpanelConf
-         Do {KillModule FvwmButtons } $Subpanel
-         Do {Schedule 800 SendToModule FrontPanel PressButton } $Subpanel
+         SendSignal 20 1
          Quit
       End
 End
 
-Widget 19
+Widget 22
    Property
-   Size 80 26
-   Position 196 508
-   Type PushButton
-   Flags NoReliefString
-   Title {Edit}
-   Colorset 22
-   Main
-      Case message of
-      SingleClic :
-      Begin
-         ChangeTitle 17 {Apply}
-         ChangeColorset 6 20
-         ChangeColorset 8 20
-         ChangeColorset 10 20
-      End
-End
-
-Widget 20
-   Property
-   Size 80 26
-   Position 532 508
+   Size 120 26
+   Position 322 532
    Type PushButton
    Flags NoReliefString
    Title {Cancel}
@@ -535,7 +707,23 @@ Widget 20
       End
 End
 
-Widget 21
+Widget 23
+   Property
+   Size 120 26
+   Position 476 532
+   Type PushButton
+   Flags NoReliefString
+   Title {Help}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Subpanel Settings" $[NSCDE_ROOT]/share/doc/html/NsCDE-SubpanelMgr.html}
+      End
+End
+
+Widget 24
    Property
    Size 460 20
    Position 12 440
@@ -548,14 +736,30 @@ Widget 21
       Case message of
       SingleClic :
       Begin
-         HideWidget 21
-         Set $W21Visible = 0
       End
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 25
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Flags NoReliefString NoFocus Hidden
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      # Nasty workaround because ForeColor of the TextField
+      # widget is not applied and global value is used anyway.
+      # See end of the Init procedure for explanation.
       1 :
       Begin
-         ShowWidget 21
-         ChangeTitle 21 (LastString)
-         Set $W21Visible = 1
+         If (LastString) == {workaround} Then
+         Begin
+            ChangeColorset 25 20
+         End
       End
 End
 
