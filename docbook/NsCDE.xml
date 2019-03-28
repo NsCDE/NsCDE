@@ -1265,6 +1265,8 @@ then version of the FVWM and version of the NsCDE. Last it shows time
 when system was last booted. This dialog can be found on the <emphasis>System</emphasis>
 or fourth Subpanel of the Front Panel in default configuration, under
 the entry <emphasis>Workstation Info</emphasis>.
+In the context of it's window, keys <keysym>Escape</keysym>, <keysym>Return</keysym> and
+<keysym>Q</keysym> will close a window.
 
 </para>
 </sect2>
@@ -2076,10 +2078,6 @@ config and extended a bit). Namely:
 </para></listitem>
 
 <listitem><para>
-  <keysym>Meta+Tab</keysym> are cycling trough the desks
-</para></listitem>
-
-<listitem><para>
   <keysym>Meta+Shift+cursor keys</keysym> are moving currently focused window
     between first four desks
 </para></listitem>
@@ -2122,6 +2120,14 @@ config and extended a bit). Namely:
 <listitem><para>
   Key <keysym>Meta+Space</keysym> in the context of the icon, pops up Icon Options
     context menu
+</para></listitem>
+
+<listitem><para>
+Key <keysym>Alt+Insert</keysym> will give a focus to the last opened window
+</para></listitem>
+
+<listitem><para>
+Key <keysym>Meta+Insert</keysym> will warp a pointer and give a focus to the last opened window
 </para></listitem>
 
 <listitem><para>
@@ -2183,7 +2189,20 @@ config and extended a bit). Namely:
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+Tab</keysym> calls WindowList with windows sorted by desks
+  <keysym>Ctrl+Tab</keysym> Will open WindowList in the middle of the screen for a current workspace (desk)
+</para></listitem>
+
+<listitem><para>
+  <keysym>Shift+Tab</keysym> Will open WindowList in the middle of the screen for all workspaces (desks)
+</para></listitem>
+
+<listitem><para>
+  <keysym>Alt+Tab</keysym> is cycling trough pages of the active desk from up to down
+  and then right up to down
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Tab</keysym> is cycling trough the all workspaces (desks)
 </para></listitem>
 
 <listitem><para>
@@ -2225,11 +2244,6 @@ config and extended a bit). Namely:
 </para></listitem>
 
 <listitem><para>
-  In the context of the Front Panel, <keysym>Alt+cursor</keysym> keys are moving the
-    pointer by the 1% in all four given directions
-</para></listitem>
-
-<listitem><para>
   <keysym>Meta+F9</keysym> in the context of the known terminal application windows
     scratches the window to some 75%x72% of the screen, which is also a
     menu option in this windows called <emphasis>Wide Terminal</emphasis>
@@ -2245,6 +2259,22 @@ config and extended a bit). Namely:
     after repositioning shaded to bottom border of the screen. Invoking
     this key sequence again will unshade the Front Panel. Middle mouse
     button on the borders of the frame has the same effect
+</para></listitem>
+
+<listitem><para>
+  <keysym>Alt+Escape</keysym> outside of the Front Panel focus will give Front Panel a focus and
+  warp pointer in the middle of the Front Panel. If focus plus pointer is already on the  Front Panel
+  previous window will be selected for the focus and pointer warped in the center of that window.
+</para></listitem>
+
+<listitem><para>
+In the context of the Front Panel, <keysym>Alt + 1-10</keysym> will pop up subpanels 1 to 10
+and warp pointer to it
+</para></listitem>
+
+<listitem><para>
+In the context of the any subpanel, <keysym>Alt + 1-10</keysym> will pop down this subpanel
+and warp pointer to Front Panel
 </para></listitem>
 
 </itemizedlist>
@@ -2299,6 +2329,17 @@ and even menus called or dinamically generated from FvwmScript(1).
   <guimenuitem>m_QuickMenu</guimenuitem> beneath m_Applications. Empty by default. Intended to be
     destroyed and recreated by the user (<filename>NsCDE-Menus.local</filename>) with own
     favorites.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_NsCDEHelpMenu</guimenuitem> beneath Quick Menu. Contains links to this documentation
+  in PDF and HTML forms.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_NsCDEMenu</guimenuitem> on the top of generated Applications menu.
+  Contains entries to various the NsCDE internal tools.
+  in PDF and HTML forms.
 </para></listitem>
 
 <listitem><para>

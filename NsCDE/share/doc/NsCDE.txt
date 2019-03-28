@@ -1072,7 +1072,8 @@ GUI Tools
    of the FVWM and version of the NsCDE. Last it shows time when system was
    last booted. This dialog can be found on the System or fourth Subpanel of
    the Front Panel in default configuration, under the entry Workstation
-   Info.
+   Info. In the context of it's window, keys Escape, Return and Q will close
+   a window.
 
    --------------------------------------------------------------------------
 
@@ -1743,8 +1744,6 @@ Configuration files explained
 
      *   Ctrl+Meta+cursor keys are changing first 4 desks
 
-     *   Meta+Tab are cycling trough the desks
-
      *   Meta+Shift+cursor keys are moving currently focused window between
        first four desks
 
@@ -1771,6 +1770,11 @@ Configuration files explained
 
      *   Key Meta+Space in the context of the icon, pops up Icon Options
        context menu
+
+     *  Key Alt+Insert will give a focus to the last opened window
+
+     *  Key Meta+Insert will warp a pointer and give a focus to the last
+       opened window
 
      *   Alt+F1 regenerates and refreshes the window
 
@@ -1802,7 +1806,16 @@ Configuration files explained
 
      *   Alt+F12 calls xrefresh
 
-     *   Alt+Tab calls WindowList with windows sorted by desks
+     *   Ctrl+Tab Will open WindowList in the middle of the screen for a
+       current workspace (desk)
+
+     *   Shift+Tab Will open WindowList in the middle of the screen for all
+       workspaces (desks)
+
+     *   Alt+Tab is cycling trough pages of the active desk from up to down
+       and then right up to down
+
+     *   Meta+Tab is cycling trough the all workspaces (desks)
 
      *   Meta+Alt+L activates screensaver, that is, locks the screen
 
@@ -1825,9 +1838,6 @@ Configuration files explained
        resolution and $[w.class], it resizes and moves a window according to
        the specification in $FVWM_USERDIR/GeoDB.ini
 
-     *   In the context of the Front Panel, Alt+cursor keys are moving the
-       pointer by the 1% in all four given directions
-
      *   Meta+F9 in the context of the known terminal application windows
        scratches the window to some 75%x72% of the screen, which is also a
        menu option in this windows called Wide Terminal
@@ -1839,6 +1849,17 @@ Configuration files explained
        after repositioning shaded to bottom border of the screen. Invoking
        this key sequence again will unshade the Front Panel. Middle mouse
        button on the borders of the frame has the same effect
+
+     *   Alt+Escape outside of the Front Panel focus will give Front Panel a
+       focus and warp pointer in the middle of the Front Panel. If focus plus
+       pointer is already on the Front Panel previous window will be selected
+       for the focus and pointer warped in the center of that window.
+
+     *  In the context of the Front Panel, Alt + 1-10 will pop up subpanels 1
+       to 10 and warp pointer to it
+
+     *  In the context of the any subpanel, Alt + 1-10 will pop down this
+       subpanel and warp pointer to Front Panel
 
    --------------------------------------------------------------------------
 
@@ -1878,6 +1899,12 @@ Configuration files explained
      *   m_QuickMenu beneath m_Applications. Empty by default. Intended to be
        destroyed and recreated by the user (NsCDE-Menus.local) with own
        favorites.
+
+     *   m_NsCDEHelpMenu beneath Quick Menu. Contains links to this
+       documentation in PDF and HTML forms.
+
+     *   m_NsCDEMenu on the top of generated Applications menu. Contains
+       entries to various the NsCDE internal tools. in PDF and HTML forms.
 
      *   m_MoveToPage: invoked from the 1st titlebar button. Moves window to
        the specified page on desk

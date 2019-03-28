@@ -5,6 +5,10 @@ Colorset 22
 
 Init
 Begin
+   Key Escape A 36 1 {Quit}
+   Key Return A 36 1 {Quit}
+   Key Q A 36 1 {Quit}
+
    Set $WidgetFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
    ChangeFont 36 $WidgetFont
 
@@ -535,6 +539,10 @@ Widget 36
     Main
        Case message of
        SingleClic :
+       Begin
+          SendSignal 36 1
+       End
+       1 :
        Begin
           Quit
        End
