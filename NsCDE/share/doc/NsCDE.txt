@@ -382,7 +382,7 @@ Applets Docks and Panels
    same purpose. Some applications in them are predefined, and discovered if
    installed, and the rest is up to user to populate. Their purpose is not to
    show all possible GUI applications installed on the system as right-click
-   root menu. They are for favorite, important and often used apps.
+   root menu. They are meant for favorite, important and often used apps.
 
     There is one main difference between CDE and NsCDE subpanels: Install
    Icon action calls special NsCDE tool for actions defining. There is no
@@ -396,21 +396,19 @@ Applets Docks and Panels
    it's configuration and starts it on the next click on Front Panel subpanel
    launcher. Subpanel Settings is the small and simple FvwmScript tool which
    allows one to rename Subpanel, set it's width for application titles to
-   fit if necessary, and to set maximum number of items possible to be
-   installed and active in that particular Subpanel (by default, this number
-   is 25, but includes also Install Icon action).
+   fit if necessary, and to enable or disable that particular Subpanel.
 
-    On the first change with Install Icon or Subpanel Settings, configuration
-   file NsCDE-SubpanelX.conf, where X is a subpanel's number on the Front
-   Panel from left to right is copied as default from the system config to
-   the $FVWM_USERDIR, from where it is read instead of default system from
-   now on. Of course, as anything else, they can be edited in text editor.
-   Syntax is from the FvwmButtons(1) but if user wants to retain look and
-   feel, configuration lines must remain long, and follow exact configuration
-   line with all parameters in order to be just items on the Subpanel with
-   icon and title. On the top of every Subpanel configuration, there are 3
-   FVWM internal infostore variables: for width, number of rows, and Subpanel
-   name.
+    On the first change with Install Icon or Subpanel Settings, non-FVWM
+   configuration file Subpanels.actions will be created in the $FVWM_USERDIR,
+   from where all subpanels changed from default will be read by the
+   $NSCDE_ROOT/libexec/generate_subpanels, while the rest will be generated
+   from the $NSCDE_ROOT/config/Subpanels.actions. This file can also be
+   edited by hand (ok, not by hand, but editor will suffice) and the result
+   may be applied by calling generate_subpanels and then f_ReadCfg Subpanels.
+   Generated file is called NsCDE-Subpanels.conf and it is expected in the
+   $FVWM_USERDIR. If not found there, $NSCDE_ROOT/config/NsCDE-Subpanels.conf
+   will be read instead. Syntax of the Subpanels.actions is explained in the
+   [23]Configuration files explained section.
 
     Presently, there is one workaround here: as much as FVWM, and specially
    FvwmButtons are very flexible and configurable, no title for the buttons
@@ -422,9 +420,9 @@ Applets Docks and Panels
    is run on Subpanel initialization with a delay of 3,2 seconds (internal
    workaround for xdotool) and this then takes infostore variable
    NsCDE-SubpanelX-Name and sets literal, system default or user picked name
-   of the subpanel. Other option is to apply FvwmButtons patch which
-   introduces a WindowName option to it's configuration. Of course, patch
-   will be proposed to thee upstream FVWM for wider use.
+   of the subpanel. Presently, an alternative option is to apply FvwmButtons
+   patch which introduces a WindowName option to it's configuration. Of
+   course, patch will be proposed to the upstream FVWM.
 
     The rest about Subpanel, or to say their visible outfit, and their main
    function are the same as in CDE - a nice, heavyweight and elegant
@@ -590,23 +588,23 @@ GUI Tools
    to be called. It is called from 7th button on the Front Panel. It has big
    icons for calling:
 
-     * [23]Color Style Manager
+     * [24]Color Style Manager
 
-     * [24]Font Style Manager
+     * [25]Font Style Manager
 
-     * [25]Backdrop Style Manager
+     * [26]Backdrop Style Manager
 
-     * [26]Keyboard Style Manager
+     * [27]Keyboard Style Manager
 
-     * [27]Mouse Style Manager
+     * [28]Mouse Style Manager
 
-     * [28]Beep Style Manager
+     * [29]Beep Style Manager
 
      * Xscreensaver Demo (setup)
 
-     * [29]Window Style Manager
+     * [30]Window Style Manager
 
-     * [30]Power Style Manager
+     * [31]Power Style Manager
 
      * Startup Style Manager
 
@@ -615,7 +613,7 @@ GUI Tools
    message is displayed: either that NsCDE was not started under X Session
    Management, or X Session Manager is not recognized, and it's setup tool
    cannot be run. Currently, only MATE, LXDE, KDE and GNOME session managers
-   are recognized and their respective tools called. See [31]the Section
+   are recognized and their respective tools called. See [32]the Section
    called NsCDE Startup about running NsCDE under X Session Manager for more
    information about this matter.
 
@@ -738,7 +736,7 @@ GUI Tools
 
     GTK2 and GTK3 are heavy work part. Here, we are using work derived from
    one CDE theme for XFCE desktop and GTK2 + GTK3, purified and adapted for
-   NsCDE (see [32]the Section called Credits). This is written in python. If
+   NsCDE (see [33]the Section called Credits). This is written in python. If
    turned on, this will produce $HOME/.themes/NsCDE directory with the theme
    for GTK2 and GTK3, and will edit $HOME/.gtkrc-2.0 and
    $HOME/.config/gtk-3.0/settings.ini to put or change gtk-theme-name value.
@@ -985,33 +983,51 @@ GUI Tools
    since this part of CDE functions cannot be easy implemented even if some
    file manager is taken to act as application manager.
 
-    Subpanel Manager has list of all applications which are providing system
-   menu with it's presence (patched version of fvwm-menu-desktop is used in
-   the background), and list of applications provided in the current Subpanel
-   from which tool is called by "Install Icon". This lists are displayed on
-   the top of the window side by side: system menu applications on the left,
-   and current Subpanel items on the right list. There are 3 text fields:
-   Name, Command and Icon File. This fields are automatically populated when
-   some item from mentioned lists is clicked, but it can also be populated
-   manually if user wishes to add a custom application, Fvwm Module, Fvwm
-   Function or other entry manually on the Subpanel. Subpanel Manager can
-   also remove existing entries from the Subpanel or modify them.
+    Subpanel Manager has a list of all applications which are providing
+   system menu with it's presence (patched version of fvwm-menu-desktop is
+   used in the background), and the list of applications provided in the
+   current Subpanel from which tool is called by "Install Icon". This lists
+   are displayed on the top of the window side by side: system menu
+   applications on the left, and current Subpanel items on the right list.
+   There are 3 text fields: Name, Command and Icon File. This fields are
+   automatically populated when some item from mentioned lists is clicked,
+   but it can also be populated manually if user wishes to add a custom
+   application, Fvwm Module, Fvwm Function or other entry manually on the
+   Subpanel. Special type of "Check for ..." is meant for entries which in
+   command field are defining for the first command something common like
+   shell, env etc. If we want to override a pointless check existance for
+   this, and define other command string for checking, popdown menu option
+   Check for ... can be selected, and small text field below popdown menu
+   will appear, where this command can be specified. Subpanel Manager can
+   also remove existing entries from the Subpanel.
 
     Subpanel Manager implements this helper functions for modifying and
    applying settings on new items:
 
-     * Launcher Type
-
-     * Execute in Terminal
+     * Type (exec, module, function, other, check-for)
 
      * Do not check for command existence
 
      * Icon indicator
 
-    This tool is not well designed and will be rewritten on the first
-   occasion. Subpanel configuration files NsCDE-SubpanelX.conf, where X is
-   1-10 can be edited by hand in $FVWM_USERDIR if order of entries is
-   important, or something needs to be changed on existing entries.
+    To place some new application from the left (all applications) list in
+   exact place on the subpanel, select an existing entry on the subpanel
+   (right) list. When left arrow button is clicked, new application will
+   appear on the list exactly below that one which has been previously
+   selected, otherwise, default is to place new entries as second entry on
+   the subpanel's list of applications.
+
+    Click on the icon indicator will open simple file browser which can be
+   used to find, see as preview, and set icon for manual entries which are
+   not part of the applications list, or an alternative icon for program from
+   applications list. Apply button regenerates subpanel, while Save button
+   does this and also quits Subpanel Manager.
+
+    Subpanels configuration file Subpanels.actions, can be edited by hand in
+   $FVWM_USERDIR if something needs to be changed on existing entries. If
+   editing by hand, $NSCDE_ROOT/libexec/generate_subpanels must be used to
+   generate FVWM configuration output which must be redirected into
+   $FVWM_USERDIR/NsCDE-Subpanels.conf.
 
    --------------------------------------------------------------------------
 
@@ -1019,19 +1035,17 @@ GUI Tools
 
     A small helper dialog with functions to change display name of the
    subpanel, width of the subpanel if titles require wider (or short ones
-   narrower) panel frame. Maximum subpanel items controls how many items can
-   subpanel contain. Everything after this number is error. This number
-   reserves one place for Install Icon entry. Reset button will erase user
-   configuration and load system default one for given subpanel. Name, width
-   and max items all have their own Default button right of the text field.
-   If pressed, it will load system defaults for name, width and number of
-   items. All buttons are doing in memory changes until OK is pressed, except
-   Reset button which acts immediately. Close button closes dialog without
-   changes except if Reset has been pressed. This dialog is called from
-   subpanel menu which can be popped with the left (and only) button on
-   subpanel's titlebar. It is called Subpanel Settings. It reloads
-   configuration of the given subpanel after applying changes and exiting
-   with OK.
+   narrower) panel frame, end enabled/disabled state of the subpanel. Button
+   Reset will erase user configuration and load system default one for given
+   subpanel. Name, width and enablement all have their own Default button
+   right of the text field. If pressed, it will load system defaults for
+   name, width and subpanel's enablement state. All buttons are doing in
+   memory changes until OK is pressed, except Reset button which acts
+   immediately. Close button closes dialog without changes except if Reset
+   has been pressed. This dialog is called from subpanel menu which can be
+   popped with the left (and only) button on subpanel's titlebar. It is
+   called Subpanel Settings. It reloads configuration of the given subpanel
+   after applying changes and exiting with OK.
 
    --------------------------------------------------------------------------
 
@@ -1065,7 +1079,7 @@ GUI Tools
   Window Style Manager
 
       In the beginning, this GUI tool has been exact copy of the CDE
-     [33]Window Style Manager. In a way, this was bad. While providing exact
+     [34]Window Style Manager. In a way, this was bad. While providing exact
      copy of the same named CDE tool. It was ignoring the fact we are using
      FVWM as a WM and framework for NsCDE, and FVWM has couple hundred more
      options, and it is tens times more powerful than CDE's dtwm, and
@@ -1084,7 +1098,7 @@ GUI Tools
      configurations on the rest three tabs. Tabs are implemented as popup
      menu on the top right side of the window - choosing an option from that
      menu changes displayed options - a poor man's tabs in a way. Some of
-     options provided by [34]Window Style Manager are not full set of this
+     options provided by [35]Window Style Manager are not full set of this
      options if configured manually in FVWM configuration, but for needs of
      CDE clone this is more than enough.
 
@@ -1268,10 +1282,9 @@ Helper Dialogs
   ActionForm - FvwmScript
 
     Dialog which uses custom text and asks user for action. Action is then
-   executed (OK) or aborted (Dismiss). Example of usage is restart dialog and
-   subpanel enablement dialog. Application must provide in argument vector
-   question text, title text, buttons text, and buttons actions when calling
-   this dialog.
+   executed (OK) or aborted (Dismiss). Example of usage is restart dialog.
+   Application must provide in argument vector question text, title text,
+   buttons text, and buttons actions when calling this dialog.
 
    --------------------------------------------------------------------------
 
@@ -1279,7 +1292,7 @@ Helper Dialogs
 
     Similar as ActionForm, but button actions are not provided in command
    line, but signal about chosen action is sent to the calling program
-   ("father" FvwmScript usually). Used only in [35]Font Style Manager for
+   ("father" FvwmScript usually). Used only in [36]Font Style Manager for
    now.
 
    --------------------------------------------------------------------------
@@ -1291,7 +1304,7 @@ Helper Dialogs
    browser with up and home shortcuts, path view and show/hide button for
    hidden (files starting with a dot) files.
 
-    Used in [36]Backdrop Style Manager, Subpanel Manager, and [37]Color Style
+    Used in [37]Backdrop Style Manager, Subpanel Manager, and [38]Color Style
    Manager for adding backdrops, photos, icons and palettes.
 
    --------------------------------------------------------------------------
@@ -1300,7 +1313,7 @@ Helper Dialogs
 
     Form with text field which asks user to name something. If OK is pressed,
    string is sent to the parent script for further processing. Used in
-   [38]Font Style Manager.
+   [39]Font Style Manager.
 
    --------------------------------------------------------------------------
 
@@ -1314,16 +1327,16 @@ Helper Dialogs
    duration time it was called by some function or other FvwmScript program.
    If clicked, it will dissapear immediately.
 
-    Used by [39]Color Style Manager, SysActionDialog and a documetation view
+    Used by [40]Color Style Manager, SysActionDialog and a documetation view
    function f_DisplayURL.
 
    --------------------------------------------------------------------------
 
   NColorsDialog - FvwmScript
 
-    A [40]Color Style Manager part
+    A [41]Color Style Manager part
 
-    Helper dialog to select 4, 8 or default color scheme in [41]Color Style
+    Helper dialog to select 4, 8 or default color scheme in [42]Color Style
    Manager. It changes number of colors while browsing, previewing or
    choosing a color theme.
 
@@ -1331,9 +1344,9 @@ Helper Dialogs
 
   PaletteDialog - FvwmScript
 
-    A [42]Backdrop Style Manager part
+    A [43]Backdrop Style Manager part
 
-    Helper dialog which provides a list of palettes to the [43]Backdrop Style
+    Helper dialog which provides a list of palettes to the [44]Backdrop Style
    Manager when user wants to use color schemes from another palette from
    currently used in user's setup. This is NsCDE addon functionality, not
    present in original CDE. Additionally, background variants from custom
@@ -1377,15 +1390,15 @@ Backdrops, Palettes and Fonts
    not used if symbolic name on the same line is set.
 
     Default backdrops are set from the $NSCDE_ROOT/share/defaults/backer
-   until user does not redefine/set his own with [44]Backdrop Style Manager.
+   until user does not redefine/set his own with [45]Backdrop Style Manager.
    Default palette is Broica in 8 colors variant.
 
-    Backdrops generated by [45]Backdrop Style manager are put in user's
+    Backdrops generated by [46]Backdrop Style manager are put in user's
    $FVWM_USERDIR/backer/DeskN-<backdropname>.pm and defined in
    $FVWM_USERDIR/NsCDE-Backdrops.conf as colorsets of TiledPixmap type. NsCDE
    reserved FVWM colorsets numbers for backdrops are from 31-38 for all eight
    possible desktops. This file is read by FvwmBacker(1) FVWM module. It is
-   automatically generated when user makes first change with [46]Backdrop
+   automatically generated when user makes first change with [47]Backdrop
    Style Manager.
 
     Until then, file $NSCDE_ROOT/config/NsCDE-Backdrops.conf is read, which
@@ -1478,7 +1491,7 @@ Configuration files explained
    TiledPixmap colorset type. In the system configuration, static
    non-generated configuration defines pre-generated default backdrops of
    default Broica color scheme. When user makes the first change with
-   [47]Backdrop Style Manager, user's private copy of this file is created in
+   [48]Backdrop Style Manager, user's private copy of this file is created in
    $FVWM_USERDIR. In NsCDE, colorsets 31 - 38 are reserved for backdrops (or
    png, xpm photos).
 
@@ -1504,26 +1517,26 @@ Configuration files explained
     Definition of all colorsets minus colorsets 31 - 38 which are reserved
    for the backdrops. System-wide file has predefined color values for
    default color scheme (Broica), while user's file in $FVWM_USERDIR is
-   created on first change made with [48]Color Style Manager. Apart from FVWM
+   created on first change made with [49]Color Style Manager. Apart from FVWM
    colorsets, this file exports in environment two variables: NSCDE_PALETTE
    with the name of the color palette used in generation of the file, and
    NSCDE_PALETTE_NCOLORS which is either 4 or 8, depending which color
-   variant has been used in [49]Color Style Manager.
+   variant has been used in [50]Color Style Manager.
 
    --------------------------------------------------------------------------
 
   NsCDE.conf
 
     This file defines various FVWM and NsCDE defaults. System wide
-   configuration are static defaults which can be loaded by [50]Window Style
+   configuration are static defaults which can be loaded by [51]Window Style
    Manager or by erasing user's copy of the file. User's copy of the
-   NsCDE.conf contains all options (minus FvwmAnimate) from [51]Window Style
+   NsCDE.conf contains all options (minus FvwmAnimate) from [52]Window Style
    Manager's set of options, but it has some options such as FVWM infostore
    variables for default terminal and file manager applications, graphical
    editor, and such. Infostore variables desknum, pagematrixX and pagematrixY
    are managed by the Workspace and Pages Manager while menudclicktm
    infostore variable is managed by the Pointer Style Manager. In NsCDE.conf,
-   defaults for page edges, focus, icons, and such are defined. See [52]the
+   defaults for page edges, focus, icons, and such are defined. See [53]the
    Section called Window Style Manager and fvwm(1) for details. Since this is
    read by FVWM, user can set in this file local variables and additional
    configuration options if needful, which are not covered in other parts of
@@ -1556,7 +1569,7 @@ Configuration files explained
 
     ... where $DPI is either 120, 144, 75 or 96.
 
-    This files are static when system wide, but generated by [53]Font Style
+    This files are static when system wide, but generated by [54]Font Style
    Manager in $FVWM_USERDIR. Every X server's DPI state selects and reads one
    of this files - the one which exactly or approximately matches current DPI
    in this order:
@@ -1672,7 +1685,7 @@ Configuration files explained
 
   NsCDE-IconMan.conf
 
-    If Use Icon Box option is selected in the [54]Window Style Manager,
+    If Use Icon Box option is selected in the [55]Window Style Manager,
    infostore variable iconbox will be defined as non-zero, and FvwmIconMan(1)
    module will be started on login from the NsCDE-Main.conf. This file,
    NsCDE-IconMan.conf contains default configuration of that module.
@@ -2074,7 +2087,7 @@ Configuration files explained
    Otherwise, a plain FVWM configuration can be done which can drastically
    differ from NsCDE, since FVWM has much more options and variants for a
    huge number of tastes. Style '*' options are partially overridden or
-   extended in NsCDE.conf which can be generated with [55]Window Style
+   extended in NsCDE.conf which can be generated with [56]Window Style
    Manager or simply copied from $NSCDE_ROOT/config to $FVWM_USERDIR and
    edited to suit.
 
@@ -2101,27 +2114,64 @@ Configuration files explained
 
    --------------------------------------------------------------------------
 
-  NsCDE-Subpanel<XY>.conf
+  Subpanels.actions
 
-    ... where <XY> is the number of subpanel from left to right on the Front
-   Panel: 1 - 10.
+    This file is not FVWM configuration file. It is written by the
+   [57]Subpanels Manager, [58]Subpanel Settings, or manually with editor, and
+   read by the $NSCDE_ROOT/libexec/generate_subpanels command which will
+   generate [59]NsCDE-Subpanels.conf file in user's $FVWM_USERDIR. The syntax
+   of this file is simple. It is CSV-like file where values are delimited
+   with a comma ",". Every line belongs to one of the ten subpanels. Comma
+   and "'" characters cannot be part of the field values. This values are:
 
-    A bit messy, but every subpanel has it's own configuration file. This
-   files are predefined in the system configuration and can be copied
-   manually to user's $FVWM_USERDIR, or Install Icon action of every subpanel
-   can call Subpanels Manager tool to add and remove entries on the subpanel.
-   Every NsCDE-SubpanelX.conf which is edited will be automatically created
-   in user's $FVWM_USERDIR since it will differ from the system one.
-   Subpanels 2, 5 and 6 are disabled by default, but can be activated with a
-   very quick double middle pointer click on the empty launcher without
-   arrow: a question popup will appear on the screen asking user if he wants
-   to enable this subpanel. In present release, subpanel configuration are
-   really ugly, and they must be in one line for every subpanel entry because
-   of Subpanels Manager very basic parsing capabilities. In future, this will
-   be rewritten in a similar manner as Front Panel simple CSV-like config
-   file, while subpanel FvwmButtons configuration should be generated with
-   entries from the action file. See FvwmButtons(1) for more information
-   about syntax and options in configuration lines.
+     *   S<X>: where <X> is a number from 1 to 10 indicates which subpanel's
+       line is this
+
+     *   NAME, WIDTH, ENABLED, ENTRY: second line indicates subpanel's
+       display name, subpanel's width regarding font and long application
+       names on the menu, state of enablement, and entries defined for this
+       subpanel. ENTRY lines can be multiple (as much as screen resolution
+       allows), other values must be unique for every subpanel.
+
+     *   For NAME, WIDTH and ENABLED, there is only a third parameter: for a
+       NAME the name of the subpanel, WIDTH is an integer (reasonable values:
+       120 - 260), and enabled is boolean 1 or 0.
+
+     *   For ENTRY lines, there are fields application title, check type,
+       icon path and name, and command with arguments fields that must be
+       defined. Title is name of the entry. For example "Firefox" or
+       "Workstation Info". Check type can be one of "FVWM-M" for FVWM module,
+       "FVWM-F" for FVWM function, "OTHER" (currently unused),
+       CHECK:<appname> where <appname> is the command which should be checked
+       for existance instead of the first string of the command field, empty
+       space (nothing between commas: ,,), and NOCHK which indicates that no
+       check for a command existance should be done in NsCDE-Subpanels.conf.
+       Most of the entries will default to empty which will prepend Test (x
+       <appname>) to the entry specification in the resulting FvwmButtons(8)
+       config. Icon is full path of the icon file (32x32) which should belong
+       to the application. and the rest of the line is application's calling
+       command, possibly with options and arguments.
+
+   --------------------------------------------------------------------------
+
+  NsCDE-Subpanels.conf
+
+    This file is generated by the $NSCDE_ROOT/libexec/generate_subpanels. It
+   is static in system directory, but changable and easly generated in the
+   $FVWM_USERDIR It contains FvwmButtons(8) definitions of all 10 possible
+   subpanels which can be popped up from the [60]Front Panel. There are 3
+   ways to regenerate this file: [61]Subpanels Manager tool called from the
+   Install Icon, [62]Subpanel Settings tool called from the titlebar popdown
+   menu on every subpanel as Subpanel Settings or manually by calling
+   $NSCDE_ROOT/libexec/generate_subpanels which will read user's or system
+   [63]Subpanels.actions for every subpanel and if it is defined in user's
+   one, take this one while generating NsCDE-Subpanels.conf. In system
+   default, subpanels 2, 5 and 6 are disabled by default, but can be
+   activated with a very quick double middle pointer click on the empty
+   launcher without arrow: a [64]Subpanel Settings application will appear on
+   the screen which has a checkbox "This Subpanel is Enabled" which will be
+   checked out by default, and can be checked in, and OK will enable subpanel
+   with initial system defaults for name, width and application entries.
 
    --------------------------------------------------------------------------
 
@@ -2164,7 +2214,7 @@ System and User NsCDE Tree Layout
 
      *   lib/progbits
 
-         Template X pixmap files used by [56]Color Style Manager for
+         Template X pixmap files used by [65]Color Style Manager for
        producing user's copy in the $FVWM_USERDIR/icons/NsCDE/ this pixmaps
        are invalid as pictures in their source form since they contain
        internal macros for replacement with real colors. System starting
@@ -2215,7 +2265,7 @@ System and User NsCDE Tree Layout
 
      *   share/fontsets
 
-         Default font sets used by the [57]Font Style Manager
+         Default font sets used by the [66]Font Style Manager
 
      *   share/icons/CDE
 
@@ -2228,8 +2278,8 @@ System and User NsCDE Tree Layout
 
      *   share/palettes
 
-         CDE palettes plus a bunch of new custom palettes. Used by [58]Color
-       Style Manager and [59]Backdrop Style Manager, as well as
+         CDE palettes plus a bunch of new custom palettes. Used by [67]Color
+       Style Manager and [68]Backdrop Style Manager, as well as
        libexec/themegen.py, libexec/backdropmgr, libexec/colormgr,
        libexec/nscde_palette_colorgen.py
 
@@ -2237,13 +2287,13 @@ System and User NsCDE Tree Layout
 
          A couple of nice free photos collected and resized for various
        screen resolutions. Can be used instead of backdrops (selectable from
-       [60]Backdrop Style Manager) or in $HOME/.xscreensaver for some
+       [69]Backdrop Style Manager) or in $HOME/.xscreensaver for some
        screensavers which are loading photos.
 
      *   share/templates/app-defaults
 
          X resources for a particular X applications (like XTerm) which are
-       processed by the [61]Color Style Manager for user to be put into
+       processed by the [70]Color Style Manager for user to be put into
        $FVWM_USERDIR/app-defaults (if enabled). Referenced by the usual
        XAPPLRESDIR environment variable.
 
@@ -2263,7 +2313,7 @@ System and User NsCDE Tree Layout
 
          Here is the patch for fvwm 2.6.7 and 2.6.8 which adds additional
        small features to fvwm, so we can achieve even more similarity between
-       NsCDE and CDE. See [62]the Section called Patches for FVWM for the
+       NsCDE and CDE. See [71]the Section called Patches for FVWM for the
        details.
 
      *   src/pclock-0.13.1
@@ -2286,27 +2336,27 @@ System and User NsCDE Tree Layout
 
      *   app-defaults/ directory: X resources referenced by the usual
        XAPPLRESDIR environment variable. Files inside are (will be) generated
-       by the [63]Color Style Manager
+       by the [72]Color Style Manager
 
      *   backdrops/ directory: If created, user can put custom backdrop
-       sources here, and they can than be selected by the [64]Backdrop Style
+       sources here, and they can than be selected by the [73]Backdrop Style
        Manager and processed with current or custom color scheme.
 
      *   photos/ directory: User's photos which can be used instead of
-       backdrops if selected in [65]Backdrop Style Manager or configured in
+       backdrops if selected in [74]Backdrop Style Manager or configured in
        NsCDE-Backdrops.conf manually.
 
      *   backer/ directory: Generated backdrops referenced by Colorsets 31-38
        for FvwmBacker
 
      *   fontsets/ directory: If created, user can put or generate with
-       [66]Font Style Manager own fontsets here.
+       [75]Font Style Manager own fontsets here.
 
      *   icons/ directory: Populated by dynamic menu action
        libexec/nscde-fvwm-menu-desktop. If directory does not exist, script
        will create it.
 
-     *   icons/NsCDE/ directory: NsCDE custom icons. Put here by [67]Color
+     *   icons/NsCDE/ directory: NsCDE custom icons. Put here by [76]Color
        Style Manager and the rest of the tools. Since icons from here are
        referenced with a relative path, whatever is missing here, will be
        loaded from system's $NSCDE_ROOT/share/icons/NsCDE automatically.
@@ -2315,7 +2365,7 @@ System and User NsCDE Tree Layout
        and put here, as well as fontmgr.local and other user's hooks.
 
      *   palettes/ directory: User can put custom palette files here, and
-       they can than be selected by the [68]Color Style Manager and processed
+       they can than be selected by the [77]Color Style Manager and processed
        for a preview or applied as new theme.
 
      *   templates/ directory: Here, local subdirectory of app-defaults with
@@ -2344,7 +2394,7 @@ System and User NsCDE Tree Layout
          XYZ is here placeholder/example for Style, Functions, Keybindings,
        Init, Menus etc ...
 
-     *   NsCDE.conf: managed by [69]Window Style Manager, Workspaces and
+     *   NsCDE.conf: managed by [78]Window Style Manager, Workspaces and
        Pages Manager, Pointer Style Manager and users own editor manually.
        See the rest of the documentation.
 
@@ -2435,7 +2485,7 @@ Installation Dependencies
      *  Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins
        (optional) There is a great chance this libraries and some usefull
        programs using them are already installed on user's system. If Gtk and
-       Qt integration is activated in [70]Color Style Manager, there is no
+       Qt integration is activated in [79]Color Style Manager, there is no
        point not to have it installed.
 
          Notice about Qt4 and Qt5: qt4-config (or qt-config) and qt5ct:
@@ -2545,15 +2595,15 @@ Initial Configuration
 
     Note that no file from the above list will be overwritten if it already
    exists in it's place. It will be skipped, but GTK and Qt theme integration
-   files can be still written with [71]Color Style Manager. After nscde_setup
-   script finishes setup, [72]Color Style Manager will be run and user asked
+   files can be still written with [80]Color Style Manager. After nscde_setup
+   script finishes setup, [81]Color Style Manager will be run and user asked
    to confirm default theme or change it. Do not avoid this step, since some
    program bits are not fully setup on bare defaults, (like a clock
    background) and must be generated in the ~/.NsCDE/icons/NsCDE directory.
 
-    After [73]Color Style Manager's OK button is pressed, theme will be
+    After [82]Color Style Manager's OK button is pressed, theme will be
    regenerated. Gtk and Qt themes will be regenerated only if their
-   checkboxes in [74]Color Style Manager are checked in. Setup script after
+   checkboxes in [83]Color Style Manager are checked in. Setup script after
    the finish will ask user to press RETURN to exit. This is for user's
    convenience to read output of the setup for informative and/or diagnostic
    reasons. It is advised after this setup to open $FVWM_USERDIR/NsCDE.conf
@@ -2625,7 +2675,7 @@ Integration with X resources and widgets
     Special private paths for X resources are used in order not to mess with
    user's maybe existing resources and files. If wanted, custom app-defaults
    files can be places in $FVWM_USERDIR/app-defaults or even better,
-   $FVWM_USERDIR/templates/app-defaults and reworked for [75]Color Style
+   $FVWM_USERDIR/templates/app-defaults and reworked for [84]Color Style
    Manager integration, because if find in that directory, and with .tmpl
    extension, it will be processed in the same way as system files from
    $NSCDE_ROOT/share/templates/app-defaults/ and put in
@@ -2633,7 +2683,7 @@ Integration with X resources and widgets
 
     Plain custom X resources can be put in $FVWM_USERDIR/Xdefaults.local.
    This file will not be overwritten by Style Managers. X resources
-   integration is turned on by default in [76]Color Style Manager.
+   integration is turned on by default in [85]Color Style Manager.
 
    --------------------------------------------------------------------------
 
@@ -2642,14 +2692,14 @@ Integration with X resources and widgets
     $NSCDE_ROOT/libexec/themegen.py with $NSCDE_ROOT/lib/python and with
    $NSCDE_ROOT/share/templates/integration/gtk2_gtk3_qt are parts of the
    optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
-   [77]Color Style Manager or manually with the
+   [86]Color Style Manager or manually with the
    $NSCDE_ROOT/libexec/themegen.py, with proper options, this will produce
    $HOME/.themes/NsCDE directory with either or both Gtk2 and Gtk3 themes.
    $HOME/.gtkrc-2.0 and $HOME/.config/gtk-3.0/settings.ini will be edited to
    point to this directory with gtk-theme-name option. Excessive button
    images on menus and buttons will be turned off of course.
 
-    If Qt4 and/or Qt5 integration is also selected in [78]Color Style
+    If Qt4 and/or Qt5 integration is also selected in [87]Color Style
    Manager, files $HOME/.config/Trolltech.conf and
    $HOME/.config/qt5ct/qt5ct.conf will be edited to use "GTK2" Qt theme
    engine. This means, there is no Qt4 and/or Qt5 integration without at
@@ -2662,7 +2712,7 @@ Integration with X resources and widgets
 
   Custom application integration
 
-    If $FVWM_USERDIR/libexec/colormgr.local exists, [79]Color Style Manager
+    If $FVWM_USERDIR/libexec/colormgr.local exists, [88]Color Style Manager
    will run it if it's checkbox is selected. This script or program will be
    run with a full path of CDE palette file followed by the number of colors
    selected in interface (4 or 8). This can be useful for regenerating
@@ -2708,7 +2758,7 @@ Additional recommended software
    editor like dconf-editor or or dconf gsettings must be used for
    non-interactive or CLI editing. See the example in
    $NSCDE_ROOT/share/doc/examples/colormgr.local.example on how to integrate
-   mate-terminal with a [80]Color Style Manager. Second (if not first) best
+   mate-terminal with a [89]Color Style Manager. Second (if not first) best
    choice is Urxvt, but since it does not have a menu nor a real tabs,
    tmux(1), screen(1) or possibly tabbed(1) can be used for the same
    functionality. Suggestions for more dtterm-like alternative are welcome.
@@ -2730,7 +2780,7 @@ Additional recommended software
 
     Another nice and useful app is Gkrellm for which NsCDE has a ready
    drop-in theme called (of course) NsCDE in share/doc/examples and it can be
-   put in user's ~/.gkrellm2/themes and integrated with [81]Color Style
+   put in user's ~/.gkrellm2/themes and integrated with [90]Color Style
    Manager with the $NSCDE_ROOT/share/doc/examples/colormgr.local.example
    which can be installed as $FVWM_USERDIR/libexec/colormgr.local.
 
@@ -2838,7 +2888,7 @@ Similarities and differences in usage and look between CDE and NsCDE
        mouse bindings and mouse bindings in combination with modifier keys.
        As for keybindings apply: use it or write your own.
 
-     *   [82]Color Style Manager has numerous new functions: Gtk and Qt
+     *   [91]Color Style Manager has numerous new functions: Gtk and Qt
        integration, X resources integration is optional, and it has even a
        possibility to run a custom script with required parameters of current
        palette and number of colors for external and marginal color scheme
@@ -2846,31 +2896,31 @@ Similarities and differences in usage and look between CDE and NsCDE
        missing. It should be possible to write it in the FvwmScript in some
        future version update.
 
-     *   [83]Font Style Manager is totally NsCDE oriented and doesn't work
+     *   [92]Font Style Manager is totally NsCDE oriented and doesn't work
        much as font management in CDE. NsCDE supports XFT fonts (disable
        antialiasing if you want extreme original look) and it combines 5
        groups of fonts in 3 sizes described in this documentation.
 
-     *   [84]Keyboard Style Manager implements all options supported by the
+     *   [93]Keyboard Style Manager implements all options supported by the
        xset(1) on PC. CDE original in default installation at least, seems to
        have only auto-repeat and click volume controls.
 
-     *   [85]Mouse Style Manager does not have configurable middle mouse
+     *   [94]Mouse Style Manager does not have configurable middle mouse
        (button 2) action since this is not applicable very much on today's
        GUI widgets.
 
-     *   [86]Beep Style Manager has a additional Beep button for testing
+     *   [95]Beep Style Manager has a additional Beep button for testing
        during setup.
 
      *   Screensaver Style Manager is in fact Xscreensaver setup. Perfect
        drop in replacement and much fancier than original.
 
-     *   [87]Window Style Manager manages much more of window, icon, pages
+     *   [96]Window Style Manager manages much more of window, icon, pages
        and animation behavior than original program in CDE, and even this is
        a small subset of options in FVWM. See it's documentation and fvwm(1)
        man page.
 
-     *   [88]Power Style Manager is actually very rare in Style Manager
+     *   [97]Power Style Manager is actually very rare in Style Manager
        across old CDE setups. It manages DPMS setting of the monitor with
        xset(1).
 
@@ -2987,7 +3037,7 @@ Ideas and Tasks for future improvements
        be more flexible with applications which have multiple windows with
        the same class name.
 
-     *   Palette color editor in [89]Color Style Manager is missing. It
+     *   Palette color editor in [98]Color Style Manager is missing. It
        should be possible to write it in the FvwmScript(1).
 
      *   Find or write the replacement for PyQt4/PyQt5 API in Gtk/Qt theme
@@ -3006,6 +3056,4 @@ Ideas and Tasks for future improvements
        scope.
 
      *   ...
-
-References
 
