@@ -1,7 +1,9 @@
 Not so Common Desktop Environment (NsCDE)
 
 Notice: for a full documentation, see NsCDE/share/doc/*
+
 Notice: for a set of photos, also download https://github.com/NsCDE/NsCDE-photos.git
+
 See here for screenshots: https://imgur.com/gallery/nHkw35X
 
 Author will like to apologize for bad english in docs. A rand() function putting
