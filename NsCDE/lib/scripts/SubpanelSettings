@@ -42,6 +42,15 @@ Begin
    ChangeTitle 8 $SubpanelWidth
    ChangeValue 11 $SubpanelEnabled
 
+   If (GetValue 11) == 0 Then
+   Begin
+      Set $SubpanelInitiallyDisabled = 1
+   End
+   Else
+   Begin
+      Set $SubpanelInitiallyDisabled = 0
+   End
+
    # Fill system defaults in variables - for resetting
    Set $SubpanelSysDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SystemSubpanelActionsRead {" | sort | cut -d"," -f3}
    Set $SubpanelSysEnabled = (GetOutput $SubpanelSysDataCmd 1 -1)
@@ -356,6 +365,29 @@ Widget 14
                { TEXT2="} $GenerateFvwmButtonsCfg {"}
          End
 
+         # Case where disabled subpanel has been enabled
+         If (GetValue 11) == 1 Then
+         Begin
+            If $SubpanelInitiallyDisabled == 1 Then
+            Begin
+               Do {f_ReadCfg Subpanels}
+               Do {f_RestartFrontPanel}
+               Quit
+            End
+         End
+
+         # Case where enabled subpanel has been disabled
+         If (GetValue 11) == 0 Then
+         Begin
+            If $SubpanelInitiallyDisabled == 0 Then
+            Begin
+               Do {f_ReadCfg Subpanels}
+               Do {f_RestartFrontPanel}
+               Quit
+            End
+         End
+
+         # Rest functions
          Do {f_ReadCfg Subpanels}
          Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
          Quit
