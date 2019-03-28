@@ -449,10 +449,10 @@ necessary, and to enable or disable that particular Subpanel.
 On the first change with <emphasis>Install Icon</emphasis> or <emphasis>Subpanel Settings</emphasis>,
 non-FVWM configuration file <emphasis>Subpanels.actions</emphasis> will be created in the
 <varname>$FVWM_USERDIR</varname>, from where all subpanels changed from default will be read
-by the <filename>$NSCDE_ROOT/libexec/generate_subpanels</filename>, while the rest will be
+by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>, while the rest will be
 generated from the <filename>$NSCDE_ROOT/config/Subpanels.actions</filename>. This file can also
 be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
-calling <filename>generate_subpanels</filename> and then <function>f_ReadCfg Subpanels</function>.
+calling <command>generate_subpanels</command> and then <function>f_ReadCfg Subpanels</function>.
 Generated file is called <filename>NsCDE-Subpanels.conf</filename> and it is expected in the
 <varname>$FVWM_USERDIR</varname>. If not found there,
 <filename>$NSCDE_ROOT/config/NsCDE-Subpanels.conf</filename> will be read instead.
@@ -1208,7 +1208,7 @@ button does this and also quits Subpanel Manager.
 <para>
 Subpanels configuration file <filename>Subpanels.actions</filename>, can be edited by
 hand in <varname>$FVWM_USERDIR</varname> if something needs to be changed on existing
-entries. If editing by hand, <filename>$NSCDE_ROOT/libexec/generate_subpanels</filename>
+entries. If editing by hand, <command>$NSCDE_ROOT/libexec/generate_subpanels</command>
 must be used to generate FVWM configuration output which must be redirected into
 <filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>.
 </para>
@@ -2657,32 +2657,77 @@ with a huge set of <option>Style</option> commands.
 </para>
 </sect2>
 
-<!-- TU SAM -->
-<sect2 id="NsCDE-SubpanelXY_conf">
-<title>NsCDE-Subpanel&lt;XY&gt;.conf</title>
+<!-- HERE -->
+<sect2 id="Subpanels_actions">
+<title>Subpanels.actions</title>
 <para>
-... where <emphasis>&lt;XY&gt;</emphasis> is the number of subpanel from
-left to right on the Front Panel: 1 - 10.
+This file is not FVWM configuration file. It is written by the 
+<link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link>, 
+<link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
+manually with editor, and read by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>
+command which will generate
+<link linkend="NsCDE-Subpanels_conf"><filename>NsCDE-Subpanels.conf</filename></link> file in user's
+<varname>$FVWM_USERDIR</varname>.
+The syntax of this file is simple. It is CSV-like file where values are delimited with a comma ",".
+Every line belongs to one of the ten subpanels. Comma and "'" characters cannot be part of
+the field values. This values are:
 </para>
+
+<itemizedlist>
+<listitem><para>
+   S&lt;X&gt;: where &lt;X&gt; is a number from 1 to 10 indicates which subpanel's line is this
+</para></listitem>
+<listitem><para>
+   NAME, WIDTH, ENABLED, ENTRY: second line indicates subpanel's display name, subpanel's width
+   regarding font and long application names on the menu, state of enablement, and entries defined
+   for this subpanel. ENTRY lines can be multiple (as much as screen resolution allows), other values
+   must be unique for every subpanel.
+</para></listitem>
+<listitem><para>
+   For NAME, WIDTH and ENABLED, there is only a third parameter: for a NAME the name of the subpanel,
+   WIDTH is an integer (reasonable values: 120 - 260), and enabled is boolean 1 or 0.
+</para></listitem>
+<listitem><para>
+   For ENTRY lines, there are fields application title, check type, icon path and name,
+   and command with arguments fields that must be defined. Title is name of the entry. For example
+   "Firefox" or "Workstation Info". Check type can be one of "FVWM-M" for FVWM module, "FVWM-F" for
+   FVWM function, "OTHER" (currently unused), CHECK:&lt;appname&gt; where &lt;appname&gt; is the
+   command which should be checked for existance instead of the first string of the command field,
+   empty space (nothing between commas: <emphasis>,,</emphasis>), and NOCHK
+   which indicates that no check for
+   a command existance should be done in <filename>NsCDE-Subpanels.conf</filename>.
+   Most of the entries will default to <emphasis>empty</emphasis> which will prepend
+   <option>Test (x &lt;appname&gt;)</option> to the entry specification in the resulting
+   FvwmButtons(8) config.
+   Icon is full path of the icon file (32x32) which should belong
+   to the application. and the rest of the line is application's calling command, possibly
+   with options and arguments.
+</para></listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="NsCDE-Subpanels_conf">
+<title>NsCDE-Subpanels.conf</title>
 <para>
-A bit messy, but every subpanel has it's own configuration file. This files
-are predefined in the system configuration and can be copied manually to
-user's <varname>$FVWM_USERDIR,</varname> or <emphasis>Install Icon</emphasis>
-action of every subpanel can call
-Subpanels Manager tool to add and remove entries on the subpanel.
-Every <filename>NsCDE-SubpanelX.conf</filename> which is edited will be automatically created in
-user's <varname>$FVWM_USERDIR</varname> since it will differ from the system one. Subpanels
-2, 5 and 6 are disabled by default, but can be activated with a very quick double middle
-pointer click on the empty launcher without arrow: a question popup will
-appear on the screen asking user if he wants to enable this subpanel.
-In present release, subpanel configuration are really ugly, and they must
-be in one line for every subpanel entry because of Subpanels Manager
-very basic parsing capabilities. In future, this will be rewritten in a
-similar manner as Front Panel simple CSV-like config file, while subpanel
-FvwmButtons configuration should be generated with entries from the action
-file. See FvwmButtons(1) for more information about syntax and options in
-configuration lines.
+This file is generated by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>.
+It is static in system directory, but changable and easly generated in the <varname>$FVWM_USERDIR</varname>
+It contains FvwmButtons(8) definitions of all 10 possible subpanels which can be popped up from the
+<link linkend="NsCDE-FrontPanel">Front Panel</link>. There are 3 ways to regenerate this file:
+<link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link> tool called from
+the <emphasis>Install Icon</emphasis>, <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> tool
+called from the titlebar popdown menu on every subpanel as <emphasis>Subpanel Settings</emphasis> or
+manually by calling <command>$NSCDE_ROOT/libexec/generate_subpanels</command> which will
+read user's or system <link linkend="Subpanels_actions"><filename>Subpanels.actions</filename></link> for
+every subpanel and if it is defined in user's one, take this one while generating NsCDE-Subpanels.conf.
+In system default, subpanels 2, 5 and 6 are disabled by default, but can be activated with a very quick
+double middle pointer click on the empty launcher without arrow: a
+<link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> application will appear on the screen
+which has a checkbox <guilabel>"This Subpanel is Enabled"</guilabel> which will be checked out by
+default, and can be checked in, and <guibutton>OK</guibutton> will enable subpanel with initial
+system defaults for name, width and application entries.
 </para>
+
 </sect2>
 
 </sect1>
