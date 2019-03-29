@@ -10,7 +10,7 @@ Init
 
       ChangeFont 6 $FontBoldMedium
 
-      Set $ReadLastVal = (GetOutput {egrep '[1-7]' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
+      Set $ReadLastVal = (GetOutput {egrep '^[1-7]$' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
       If $ReadLastVal <> {} Then
       Begin
          ChangeValue 4 $ReadLastVal
