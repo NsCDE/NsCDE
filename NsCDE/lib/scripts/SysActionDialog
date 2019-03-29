@@ -9,7 +9,16 @@ Init
       Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
 
       ChangeFont 6 $FontBoldMedium
-      ChangeValue 4 1
+
+      Set $ReadLastVal = (GetOutput {egrep '[1-7]' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
+      If $ReadLastVal <> {} Then
+      Begin
+         ChangeValue 4 $ReadLastVal
+      End
+      Else
+      Begin
+         ChangeValue 4 1
+      End
 
       Key Escape A 2 1 {No}
       Key Return C 2 3 {Yes}
@@ -120,6 +129,8 @@ Case message of
          # X11 WM Quit
          If (GetValue 4) == 1 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Logging out" "..." 2000}
             Do {f_QuitAndExit}
@@ -129,6 +140,8 @@ Case message of
          # X11 WM Restart
          If (GetValue 4) == 2 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {Restart}
             Quit
 	 End
@@ -136,6 +149,8 @@ Case message of
          # X11 Failsafe
          If (GetValue 4) == 3 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
 	    Do {Restart xterm -n '"X Console"' -T '"X Console"'}
             Quit
@@ -144,6 +159,8 @@ Case message of
          # OS Shutdown
          If (GetValue 4) == 4 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {f_QuitAndShutdown 0}
             Quit
          End
@@ -151,6 +168,8 @@ Case message of
          # OS Reboot
          If (GetValue 4) == 5 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {f_QuitAndShutdown 6}
             Quit
          End
@@ -158,6 +177,8 @@ Case message of
          # OS Suspend / Sleep
          If (GetValue 4) == 6 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
             Do {Exec sudo pm-suspend}
@@ -167,6 +188,8 @@ Case message of
          # OS Hibernate
          If (GetValue 4) == 7 Then
          Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
             Do {Exec sudo pm-hibernate}
