@@ -11,6 +11,20 @@ There is one main difference between CDE and NsCDE subpanels: <span class="empha
 action calls special NsCDE tool for actions defining. There is no drag and
 drop from the app manager (which also doesn't exist).
 </p><p>
+Each Subpanel's application item or entry has additional third mouse pointer button action which
+will pop up dinamically populated contextual menu named after item's title. Here, there are actions
+to move up or down item for one space on the subpanel, to move item to the beginning or the end of
+the subpanel's application list, as well as to delete item from the subpanel (warning message will
+appear before deletion is really performed). First menu item is the same as menu name: title of
+the application from submenu. If clicked, it will perform default action as if item's title or icon
+was clicked on the submenu itself. This is a kind of a escape from the contextual menu, but to
+still use subpanel's default action without repeating opening of a submenu again.
+If move or delete action is silently not performed, this is most likely the situation where
+user's <code class="filename">$FVWM_USERDIR/Subpanels.actions</code> is newer than
+<code class="filename">$FVWM_USERDIR/NsCDE-Subpanels.conf</code>, and must be rebuilt for configuration
+actions to take a place properly. In that case, repeated operation must succeed, otherwise,
+see X session error log for details.
+</p><p>
 Subpanels, like in CDE has titlebars but as windows on screen they are without
 borders and handles. They have only left menu button like other windows, but
 with one exception: there are no actions for closing window and re-positioning
