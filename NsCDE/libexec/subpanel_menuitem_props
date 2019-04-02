@@ -1,0 +1,313 @@
+#!/bin/ksh
+
+# Function: examine_entrypart
+# Purpose: detect and count missing
+# entries until next valid one
+function examine_entrypart
+{
+   direction="$1"
+   ouraddr="$2"
+   addrbefore=$(($ouraddr - 1))
+   addrafter=$(($ouraddr + 1))
+
+   if [ "$direction" == "up" ]; then
+      addrrange={$addrbefore..1}
+   else
+      addrrange={$addrafter..$endaddr}
+   fi
+
+   for addr in $addrrange
+   do
+      echo "$entrypart" | sed -n "${addr}p" | while IFS="," read subp esign title check iconfile cmdargs
+      do
+         cmd="${cmdargs%% *}"
+         if [ "$check" != "" ]; then
+            if [ "${check%%:*}" == "CHECK" ]; then
+               whence -qp "${check#*:}"
+               if (($? != 0)); then
+                  echo 1
+               else
+                  break 2
+               fi
+            else
+               break 2
+            fi
+         fi
+         if [ "$check" == "" ]; then
+            whence -qp $cmd
+            if (($? != 0)); then
+               echo 1
+            else
+               break 2
+            fi
+         fi
+      done
+   done
+}
+
+function actions_file_sanity
+{
+   pexist=$(egrep "^S${subpid},(NAME|WIDTH|ENABLED)," "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null | wc -l)
+   if (($pexist != 3)); then
+      egrep "^S${subpid}," "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+   fi
+}
+
+function subpanels_file_tstamp
+{
+   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/NsCDE-Subpanels.conf" ]]; then
+      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/NsCDE-Subpanels.conf" ]; then
+         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/NsCDE-Subpanels.conf ... regenerating latest one." >&2
+         $NSCDE_ROOT/libexec/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
+         FvwmCommand "f_ReadCfg Subpanels"
+         FvwmCommand "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
+         exit 0
+      fi
+   fi
+}
+
+function manage_entry
+{
+   if [ ! -d "$FVWM_USERDIR/tmp" ]; then
+      mkdir -p "$FVWM_USERDIR/tmp"
+   fi
+
+   export TMPDIR="$FVWM_USERDIR/tmp"
+
+   if [[ -z $NSCDE_DEBUG ]]; then
+      tmpfile=$(mktemp)
+      exec > "$tmpfile"
+   fi
+
+   IFS=" "
+
+   restoffile=$(egrep -v "^S${subpid}," "$FVWM_USERDIR/Subpanels.actions")
+   subpinfopart=$(egrep "^S${subpid},(NAME|WIDTH|ENABLED)," "$FVWM_USERDIR/Subpanels.actions")
+   entrypart=$(egrep "^S${subpid},ENTRY," "$FVWM_USERDIR/Subpanels.actions")
+   endaddr=$(echo "$entrypart" | wc -l)
+
+   if [ "$ACTION" == "up" ]; then
+      if (($entryid == 1)); then
+         if [[ -n $DISPLAY ]]; then
+            FvwmCommand "FvwmForm ErrMsgForm2 TITLE=\"Subpanel Properties\" \
+                        TEXT1=\"Item '$TITLE'\" \
+                        TEXT2=\"is on the top of the Subpanel $subpid.\""
+         fi
+         # Important to exit here, else Subpanels.actions will be clobbered
+         exit 0
+      else
+         empties=$(examine_entrypart up $entryid | wc -l)
+
+         entrybefore=$(($entryid - 2 - $empties))
+         entryafter=$(($entryid - 1 - $empties))
+         restentries=$(($entryid + 1))
+         entryidminusone=$(($entryid - 1))
+
+         firstpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         secondpart=$(echo "$entrypart" | sed -n "${entryid}p")
+         thirdpart=$(echo "$entrypart" | sed -n "${entryafter},${entryidminusone}p")
+         restpart=$(echo "$entrypart" | sed -n "${restentries},\$p")
+
+         echo "$restoffile"
+         echo ""
+         echo "$subpinfopart"
+
+         echo "$firstpart"
+         echo "$secondpart"
+         echo "$thirdpart"
+
+         if [ "x$restpart" != "x" ]; then
+            echo "$restpart"
+         fi
+      fi
+   fi
+
+   if [ "$ACTION" == "down" ]; then
+      if (($entryid == $endaddr)); then
+         if [[ -n $DISPLAY ]]; then
+            FvwmCommand "FvwmForm ErrMsgForm2 TITLE=\"Subpanel Properties\" \
+                        TEXT1=\"Item '$TITLE'\" \
+                        TEXT2=\"is on the bottom of the Subpanel $subpid.\""
+         fi
+         # Important to exit here, else Subpanels.actions will be clobbered
+         exit 0
+      else
+         empties=$(examine_entrypart down $entryid | wc -l)
+
+         entrybefore=$(($entryid - 1))
+         entryafter=$(($entryid + 1 + $empties))
+         entryidplusone=$(($entryid + 1))
+         entryidplusempties=$(($entryid + $empties))
+         restpart=$(($entryafter + 1))
+
+         firstpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         secondpart=$(echo "$entrypart" | sed -n "${entryafter}p")
+         thirdpart=$(echo "$entrypart" | sed -n "${entryid}p")
+
+         restdiff=$(echo "$entrypart" | sed -n "${entryidplusone},${entryidplusempties}p")
+
+         restpart=$(echo "$entrypart" | sed -n "${restpart},\$p")
+
+         echo "$restoffile"
+         echo ""
+         echo "$subpinfopart"
+
+         if (($entryid != 1)); then
+            echo "$firstpart"
+         fi
+
+         if [ "x$secondpart" != "x" ]; then
+            echo "$secondpart"
+         fi
+
+         if (($entryidplusone <= $entryidplusempties)); then
+            echo "$restdiff"
+         fi
+
+         echo "$thirdpart"
+
+         if [ "x$restpart" != "x" ]; then
+            echo "$restpart"
+         fi
+      fi
+   fi
+
+   if [ "$ACTION" == "begin" ]; then
+      if (($entryid == 1)); then
+         if [[ -n $DISPLAY ]]; then
+            FvwmCommand "FvwmForm ErrMsgForm2 TITLE=\"Subpanel Properties\" \
+                        TEXT1=\"Item '$TITLE'\" \
+                        TEXT2=\"is already on the top of the Subpanel $subpid.\""
+         fi
+         # Important to exit here, else Subpanels.actions will be clobbered
+         exit 0
+      else
+         entrybefore=$(($entryid - 1))
+         entryafter=$(($entryid + 1))
+
+         firstpart=$(echo "$entrypart" | sed -n "${entryid}p")
+         secondpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         restpart=$(echo "$entrypart" | sed -n "${entryafter},\$p")
+
+         echo "$restoffile"
+         echo ""
+         echo "$subpinfopart"
+         echo "$firstpart"
+         echo "$secondpart"
+         echo "$restpart"
+      fi
+   fi
+
+   if [ "$ACTION" == "end" ]; then
+      if (($entryid == $endaddr)); then
+         if [[ -n $DISPLAY ]]; then
+            FvwmCommand "FvwmForm ErrMsgForm2 TITLE=\"Subpanel Properties\" \
+                        TEXT1=\"Item '$TITLE'\" \
+                        TEXT2=\"is already on the bottom of the Subpanel $subpid.\""
+         fi
+         # Important to exit here, else Subpanels.actions will be clobbered
+         exit 0
+      else
+         entrybefore=$(($entryid - 1))
+         entryafter=$(($entryid + 1))
+
+         firstpart=$(echo "$entrypart" | sed -n "${entryid}p")
+         secondpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         restpart=$(echo "$entrypart" | sed -n "${entryafter},\$p")
+
+         echo "$restoffile"
+         echo ""
+         echo "$subpinfopart"
+         echo "$secondpart"
+         echo "$restpart"
+         echo "$firstpart"
+      fi
+   fi
+
+   if [ "$ACTION" == "delete" ]; then
+      entrybefore=$(($entryid - 1))
+      entryafter=$(($entryid + 1))
+
+      firstpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+      restpart=$(echo "$entrypart" | sed -n "${entryafter},\$p")
+
+      echo "$restoffile"
+      echo ""
+      echo "$subpinfopart"
+
+      if (($entryid > 1)); then
+         echo "$firstpart"
+      fi
+
+      if (($entryid != $endaddr)); then
+         echo "$restpart"
+      fi
+   fi
+
+   if [[ -z $NSCDE_DEBUG ]]; then
+      egrep -q "^S${subpid},NAME,.*" "$tmpfile"
+      if (($? == 0)); then
+         cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"
+         cat "$tmpfile" > "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_ROOT/libexec/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
+         FvwmCommand "f_ReadCfg Subpanels"
+         FvwmCommand "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
+         rm "$tmpfile"
+      else
+         if [[ -n $DISPLAY ]]; then
+            FvwmCommand "FvwmForm ErrMsgForm2 TITLE=\"Subpanel Properties\" \
+                        TEXT1=\"Action for item '$TITLE'\" \
+                        TEXT2=\"not performed on Subpanel $subpid. Errors in $tmpfile found.\""
+         else
+            echo "Action for item $TITLE not performed on Subpanel $subpid. Errors in $tmpfile found." >&2
+         fi
+         exit 2
+      fi
+   fi
+
+   if [ -f "$tmpfile" ]; then
+      echo "Removing stale tmp file $tmpfile" >&2
+      rm -f "$tmpfile"
+   fi
+}
+
+function delete_confirm
+{
+   if [[ -n $DISPLAY ]]; then
+      FvwmCommand "f_RunQuickScriptDialog ActionForm \"Delete item \\\"$TITLE\\\" from the subpanel ${subpid}?\" \
+                   Yes No \"Confirm Entry Deletion\" \"f_DeleteFromSubpanel $subpid $entryid\" Nop"
+   fi
+}
+
+function exec_entry
+{
+   FvwmCommand "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
+}
+
+while getopts p:s:a:t:ed Option
+do
+   case $Option in
+      p)
+         subpid="$OPTARG"
+      ;;
+      s)
+         entryid="$OPTARG"
+      ;;
+      a)
+         ACTION="$OPTARG"
+         subpanels_file_tstamp
+         actions_file_sanity
+         manage_entry
+      ;;
+      t)
+         TITLE="$OPTARG"
+      ;;
+      e)
+         exec_entry
+      ;;
+      d)
+         delete_confirm
+      ;;
+   esac
+done
+

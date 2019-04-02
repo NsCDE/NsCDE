@@ -56,45 +56,60 @@ do
    echo " Action \"Module FvwmScript SubpanelMgr ${subpn}\")"
    echo ""
 
+   id=1
    egrep -v '^#' $spactfile | egrep "^S${subpn},ENTRY," | while IFS="," read subp esign title check iconfile cmdargs
    do
       subp="${subp##*S}"
+      newid="Btn-${subpn}-${id}"
+      entryid="${newid##*-}"
       if [ "$check" == "FVWM-M" ]; then
          echo "*NsCDE-Subpanel${subp}: \\"
          echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
-         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Frame 0, Id $newid, PressColorset 26, Title(side, left) \"$title\" \\"
          echo " Icon \"$iconfile\", \\"
-         echo " Action Module $cmdargs)"
+         echo " Action (Mouse 1) Module ${cmdargs}, \\"
+         echo " Action (Mouse 2) Nop, \\"
+         echo " Action (Mouse 3) f_SubpanelPropsMenu ${subpn} $entryid \"$title\")"
          echo ""
       elif [ "$check" == "FVWM-F" ]; then
          echo "*NsCDE-Subpanel${subp}: \\"
          echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
-         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Frame 0, Id $newid, PressColorset 26, Title(side, left) \"$title\" \\"
          echo " Icon \"$iconfile\", \\"
-         echo " Action $cmdargs)"
+         echo " Action (Mouse 1) ${cmdargs}, \\"
+         echo " Action (Mouse 2) Nop, \\"
+         echo " Action (Mouse 3) f_SubpanelPropsMenu ${subpn} $entryid \"$title\")"
          echo ""
       elif [ "$check" == "NOCHK" ]; then
          echo "*NsCDE-Subpanel${subp}: \\"
          echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
-         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Frame 0, Id $newid, PressColorset 26, Title(side, left) \"$title\" \\"
          echo " Icon \"$iconfile\", \\"
-         echo "Action Exec exec $cmdargs)"
+         echo " Action (Mouse 1) Exec exec ${cmdargs}, \\"
+         echo " Action (Mouse 2) Nop, \\"
+         echo " Action (Mouse 3) f_SubpanelPropsMenu ${subpn} $entryid \"$title\")"
          echo ""
       elif [ "${check%%:*}" == "CHECK" ]; then
          echo "Test (x ${check##*:}) *NsCDE-Subpanel${subp}: \\"
          echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
-         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Frame 0, Id $newid, PressColorset 26, Title(side, left) \"$title\" \\"
          echo " Icon \"$iconfile\", \\"
-         echo " Action Exec exec $cmdargs)"
+         echo " Action (Mouse 1) Exec exec ${cmdargs}, \\"
+         echo " Action (Mouse 2) Nop, \\"
+         echo " Action (Mouse 3) f_SubpanelPropsMenu ${subpn} $entryid \"$title\")"
          echo ""
       else
          echo "Test (x ${cmdargs%% *}) *NsCDE-Subpanel${subp}: \\"
          echo " (Size \$[infostore.NsCDE-Subpanel${subp}-Width] 32, \\"
-         echo " Frame 0, PressColorset 26, Title(side, left) \"$title\" \\"
+         echo " Frame 0, Id $newid, PressColorset 26, Title(side, left) \"$title\" \\"
          echo " Icon \"$iconfile\", \\"
-         echo " Action Exec exec $cmdargs)"
+         echo " Action (Mouse 1) Exec exec ${cmdargs}, \\"
+         echo " Action (Mouse 2) Nop, \\"
+         echo " Action (Mouse 3) f_SubpanelPropsMenu ${subpn} $entryid \"$title\")"
          echo ""
       fi
+
+      ((id = id + 1))
    done
 done
 
