@@ -60,6 +60,7 @@ function subpanels_file_tstamp
          echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/NsCDE-Subpanels.conf ... regenerating latest one." >&2
          $NSCDE_ROOT/libexec/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
          FvwmCommand "f_ReadCfg Subpanels"
+         sleep 1
          FvwmCommand "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          exit 0
       fi
