@@ -76,7 +76,7 @@ Begin
          End
          Else
          Begin
-            Set $PgMenuTitle = $pgdesc
+            Set $PgMenuTitle = $p {: } $pgdesc
          End
       End
       Else
@@ -87,13 +87,13 @@ Begin
          End
          Else
          Begin
-            Set $PgMenuTitle = $PgMenuTitle {|} $pgdesc
+            Set $PgMenuTitle = $PgMenuTitle {|} $p {: } $pgdesc
          End
       End
 
    End
 
-   Set $PgMenuTitleFinal = {...|} $PgMenuTitle
+   Set $PgMenuTitleFinal = {    Pager ...|} $PgMenuTitle
    ChangeTitle 3 $PgMenuTitleFinal
 
    # Initial states
@@ -199,7 +199,7 @@ Property
    Type PopupMenu
    Flags NoReliefString Hidden
    Colorset 22
-   Title {...................}
+   Title {......................}
       Main
          Case message of
          SingleClic :
