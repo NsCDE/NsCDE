@@ -16,6 +16,7 @@ Begin
    WarpPointer 2
    Key Escape A 2 1 {Quit}
    Key H A 6 1 {DisplayHelp}
+   Key A A 3 1 {AllWSPToggle}
    Key Return A 2 3 {Go}
    Key Down A 2 2 {Down}
    Key Up A 2 2 {Up}
@@ -141,6 +142,24 @@ Widget 3
       Case message of
       SingleClic :
       Begin
+         SendSignal 3 1
+      End
+      1 :
+      Begin
+         # Keyboard "A" handling
+         If (LastString) == {AllWSPToggle} Then
+         Begin
+            If (GetValue 3) == 0 Then
+            Begin
+               ChangeValue 3 1
+            End
+            Else
+            Begin
+               ChangeValue 3 0
+            End
+         End
+
+         # Called with click
          If (GetValue 3) == 1 Then
          Begin
             If $WinName == {} Then
@@ -200,7 +219,7 @@ Widget 6
       Case message of
       SingleClic :
       Begin
-         Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
+         SendSignal 6 1
       End
       1 :
       Begin
