@@ -36,17 +36,18 @@ Widget 1
    Main
       Case message of
       1 :
+      Begin
+         ChangeValue 2 (Add (LastString) 1)
+         If $DeskNo == {} Then
          Begin
-            ChangeValue 2 (Add (LastString) 1)
-            If $DeskNo == {} Then
-            Begin
-               Set $DeskNo = (Add (LastString) 1)
-            End
+            Set $DeskNo = (Add (LastString) 1)
          End
+      End
       2 :
-         Begin
-            ChangeTitle 2 (LastString)
-         End
+      Begin
+         Set $WorkSpaces = (LastString)
+         ChangeTitle 2 $WorkSpaces
+      End
 End
 
 Widget 4
@@ -81,7 +82,9 @@ Widget 2
       Begin
          Set $qstr = (LastString)
          If $qstr == {Quit} Then
-         Quit
+         Begin
+            Quit
+         End
       End
       2 :
       Begin
@@ -137,17 +140,24 @@ Widget 3
    Main
       Case message of
       SingleClic :
+      Begin
+         If (GetValue 3) == 1 Then
          Begin
-	    If (GetValue 3) == 1 Then
-	    Begin
-	       If $WinName == {} Then
-	          Begin
-	             Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
-	          End
+            If $WinName == {} Then
+            Begin
+               Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
+            End
 
-	    Set $DeskNo = 999
-	    ChangeTitle 2 { All Workspaces}
-	    ChangeValue 2 1
+            Set $OldDeskNo = $DeskNo
+            Set $DeskNo = 999
+            ChangeTitle 2 { All Workspaces}
+            ChangeValue 2 1
+         End
+         If (GetValue 3) == 0 Then
+         Begin
+            ChangeTitle 2 $WorkSpaces
+            ChangeValue 2 $OldDeskNo
+            Set $DeskNo = $OldDeskNo
          End
       End
 End
@@ -168,13 +178,13 @@ Widget 5
       1 :
       Begin
          If $DeskNo == 999 Then
-            Begin
-               Do {WindowId } $WinId { Stick}
-            End
+         Begin
+            Do {WindowId } $WinId { Stick}
+         End
          Else
-            Begin
-               Do {f_OccupyDesk } $WinId { 0 } (Add $DeskNo -1)
-            End
+         Begin
+            Do {f_OccupyDesk } $WinId { 0 } (Add $DeskNo -1)
+         End
          Quit
       End
 End
@@ -187,15 +197,15 @@ Widget 6
    Title {Help}
    Flags NoReliefString
    Main
-     Case message of
-     SingleClic :
-     Begin
-        Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
-     End
-     1 :
-     Begin
-        Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
-     End
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
+      End
 End
 
 Widget 8
@@ -208,9 +218,9 @@ Widget 8
    Main
       Case message of
       SingleClic :
-         Begin
-            Quit
-         End
+      Begin
+         Quit
+      End
 End
 
 Widget 7
@@ -232,22 +242,22 @@ Widget 9
    Main
       Case message of
       1 :
-         Begin
-            Set $WinIdPlusName = (LastString)
+      Begin
+         Set $WinIdPlusName = (LastString)
 
-            If $WinIdPlusName == {$[w.id] $[w.name]} Then
-            Begin
-               Set $WinId = {}
+         If $WinIdPlusName == {$[w.id] $[w.name]} Then
+         Begin
+            Set $WinId = {}
                Set $WinName = {}
-            End
-            Else
-            Begin
-               Set $WinIdOut = {echo "} $WinIdPlusName {"}
-               Set $WinId = (GetOutput $WinIdOut 1 1)
-               Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-32}
-               Set $WinName = (GetOutput $WinNameOut 1 -1)
-               ChangeTitle 9 $WinName
-            End
          End
+         Else
+         Begin
+            Set $WinIdOut = {echo "} $WinIdPlusName {"}
+            Set $WinId = (GetOutput $WinIdOut 1 1)
+            Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-20}
+            Set $WinName = (GetOutput $WinNameOut 1 -1)
+            ChangeTitle 9 $WinName
+         End
+      End
 End
 
