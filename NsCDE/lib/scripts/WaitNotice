@@ -40,6 +40,9 @@ Begin
 
    Do {Schedule 60 All (WaitNotice) Move 50-50w 50-50w}
    Do {Schedule } $Duration { SendToModule WaitNotice SendString 3 1 Quit}
+
+   # Key bindings
+   Key Escape A 1 1 {KeyQuit}
 End
 
 Widget 1
@@ -52,6 +55,10 @@ Widget 1
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 1 1
+      End
+      1 :
       Begin
          Quit
       End
