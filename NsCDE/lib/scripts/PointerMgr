@@ -68,6 +68,10 @@ Begin
 
    # Initial state
    Set $NotClicked = 1
+
+   # Key bindings
+   Key Escape A 20 1 {KeyClose}
+   Key Q C 20 1 {KeyClose}
 End
 
 Widget 1
@@ -477,6 +481,10 @@ Widget 20
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 20 1
+      End
+      1 :
       Begin
          Do {Exec kill `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile
          Do {Exec kill -9 `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile

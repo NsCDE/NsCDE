@@ -49,6 +49,10 @@ Begin
 
    # XScreenSaver Integration / sync in DPMS part
    Set $XSCREENSAVERCONF = (GetOutput {echo $HOME/.xscreensaver} -1 1)
+
+   # Key bindings
+   Key Escape A 3 1 {KeyClose}
+   Key Q C 3 1 {KeyClose}
 End
  
 Widget 1
@@ -277,6 +281,10 @@ Widget 3
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 3 1
+      End
+      1 :
       Begin
          Quit
       End

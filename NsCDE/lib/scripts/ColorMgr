@@ -45,6 +45,9 @@ Begin
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
+   # For Keybindings not to go beyond min and max
+   Set $ListTotal = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p | tr '|' '\n' | wc -l} 1 -1)
+
    Set $Performed = 0
    Set $PreviewParam = {}
    Set $PreviewContaminated = 0
@@ -57,6 +60,12 @@ Begin
       ChangeValue 3 $CurrentPaletteValue
       SendSignal 3 1
    End
+
+   # Keybindings
+   Key Q C 31 1 {KeyClose}
+   Key P A 4 1 {KeyPreview}
+   Key Down A 3 2 {KeyDown}
+   Key Up A 3 2 {KeyUp}
 
    # Set different font for some elements
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
@@ -146,6 +155,36 @@ Widget 3
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
          ChangeIcon 17 $FullColor
       End
+      2 :
+      Begin
+         If (LastString) == {KeyDown} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 3) 1)
+            If (GetValue 3) < $ListTotal Then
+            Begin
+               ChangeValue 3 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 3 1
+            End
+         End
+
+         If (LastString) == {KeyUp} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 3) -1)
+            If (GetValue 3) > 1 Then
+            Begin
+               ChangeValue 3 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 3 $ListTotal
+            End
+         End
+
+         SendSignal 3 1
+      End
 End
 
 Widget 4
@@ -158,6 +197,10 @@ Widget 4
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 4 1
+      End
+      1 :
       Begin
          Set $PreviewContaminated = 1
          Set $PreviewMode = 1
@@ -777,6 +820,10 @@ Widget 31
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 31 1
+      End
+      1 :
       Begin
          If $PreviewContaminated == 1 Then
          Begin

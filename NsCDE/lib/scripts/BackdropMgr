@@ -32,6 +32,10 @@ Begin
    Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
    ChangeTitle 5 $Backdrops
 
+   # For Keybindings not to go beyond min and max
+   Set $ListTotalB = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p | tr '|' '\n' | wc -l} 1 -1)
+   Set $ListTotalP = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P | tr '|' '\n' | wc -l} 1 -1)
+
    # Defaults
    Set $ColorVariant = 0
    Set $Performed = 0
@@ -42,6 +46,12 @@ Begin
    # For a start, select 1st Backdrop and display preview
    ChangeValue 5 1
    SendSignal 5 1
+
+   # Keybindings
+   Key Q C 18 1 {KeyClose}
+   Key P A 11 1 {KeyPreview}
+   Key Down A 5 3 {KeyDown}
+   Key Up A 5 3 {KeyUp}
 
    # Set different font for some elements
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
@@ -156,6 +166,52 @@ Widget 5
          Set $PhotoPreviewCmd = {$NSCDE_ROOT/libexec/backdropmgr -t -e -D } $ColorVariant { -s "} $PhotoName {"}
          Set $PhotoPreview = (GetOutput $PhotoPreviewCmd 1 -1)
          ChangeIcon 4 $PhotoPreview
+      End
+      3 :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            Set $ListTotal = $ListTotalB
+         End
+         Else
+         Begin
+            Set $ListTotal = $ListTotalP
+         End
+
+         If (LastString) == {KeyDown} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 5) 1)
+            If (GetValue 5) < $ListTotal Then
+            Begin
+               ChangeValue 5 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 5 1
+            End
+         End
+
+         If (LastString) == {KeyUp} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 5) -1)
+            If (GetValue 5) > 1 Then
+            Begin
+               ChangeValue 5 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 5 $ListTotal
+            End
+         End
+
+         If $PhotoMode == 0 Then
+         Begin
+            SendSignal 5 1
+         End
+         Else
+         Begin
+            SendSignal 5 2
+         End
       End
 End
 
@@ -312,6 +368,16 @@ Widget 11
       Case message of
       SingleClic :
       Begin
+         SendSignal 11 1
+      End
+      1 :
+      Begin
+         # Called from keybinding
+         If (LastString) == {KeyPreview} Then
+         Begin
+            ChangeValue 11 1
+         End
+
          If (GetValue 11) == 1 Then
          Begin
             If $PhotoMode == 0 Then
@@ -592,6 +658,10 @@ Widget 18
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 18 1
+      End
+      1 :
       Begin
          If $PreviewContaminated == 1 Then
          Begin

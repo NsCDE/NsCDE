@@ -47,6 +47,10 @@ Begin
    ChangeFont 4 $HScrollBarFont
    ChangeFont 6 $HScrollBarFont
    ChangeFont 8 $HScrollBarFont
+
+   # Key bindings
+   Key Escape A 14 1 {KeyClose}
+   Key Q C 14 1 {KeyClose}
 End
 
 Widget 1
@@ -275,6 +279,10 @@ Widget 14
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 14 1
+      End
+      1 :
       Begin
          Quit
       End

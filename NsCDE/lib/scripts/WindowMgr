@@ -33,6 +33,10 @@ Begin
       Set $RaiseWinTimeChange = 0
       ChangeForeColor 18 {gray}
    End
+
+   # Key bindings
+   Key Escape A 123 1 {KeyClose}
+   Key Q C 123 1 {KeyClose}
 End
 
 Widget 1
@@ -2302,6 +2306,10 @@ Widget 123
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 123 1
+      End
+      1 :
       Begin
          Quit
       End

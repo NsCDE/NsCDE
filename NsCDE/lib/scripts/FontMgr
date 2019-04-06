@@ -62,6 +62,9 @@ Begin
 
    Set $FontsetMenu = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
    ChangeTitle 4 $FontsetMenu
+
+   # Key bindings
+   Key Q C 33 1 {KeyClose}
 End
 
 # In PeriodicTasks be careful not to mess messages from two different dialogs.
@@ -1136,6 +1139,10 @@ Widget 33
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 33 1
+      End
+      1 :
       Begin
          Quit
       End

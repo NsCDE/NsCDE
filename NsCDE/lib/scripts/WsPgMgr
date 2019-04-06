@@ -117,6 +117,10 @@ Begin
    ChangeFont 12 $SmallFont
    ChangeFont 14 $SmallFont
 
+   # Key bindings
+   Key Escape A 22 1 {KeyClose}
+   Key Q C 22 1 {KeyClose}
+
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
    # How it works: if wanted Colorset is applied with
@@ -857,6 +861,10 @@ Widget 22
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 22 1
+      End
+      1 :
       Begin
          If (GetTitle 22) == {Close} Then
          Begin

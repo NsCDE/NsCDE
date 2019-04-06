@@ -6,6 +6,9 @@ Init
 Begin
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
+
+   # Keybindings
+   Key Escape A 6 1 {KeyClose}
 End
 
 Widget 1
@@ -95,6 +98,10 @@ Property
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 6 1
+      End
+      1 :
       Begin
          Quit
       End
