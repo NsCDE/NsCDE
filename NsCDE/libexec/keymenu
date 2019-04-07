@@ -1,0 +1,107 @@
+#!/bin/ksh
+
+function config_for_menu
+{
+   LINE="$1"
+   if [ "x$UserLines" != "x" ]; then
+      keybind=$(echo "$UserLines" | egrep "$LINE" | awk '{ print $2, $3, $4 }')
+      if [ "x$keybind" == "x" ]; then
+         keybind=$(echo "$SysLines" | egrep "$LINE" | awk '{ print $2, $3, $4 }')
+      fi
+   else
+      keybind=$(echo "$SysLines" | egrep "$LINE" | awk '{ print $2, $3, $4 }')
+   fi
+
+   echo "$keybind" | while read key context modifiers
+   do
+      token_modifiers=$(echo $modifiers | sed 's/\(.\)/\1 /g')
+      for m in $token_modifiers
+      do
+         case $m in
+            'M') echo -ne "Alt+" ;;
+            'S') echo -ne "Shift+" ;;
+            'C') echo -ne "Ctrl+" ;;
+            '4') echo -ne "Meta+" ;;
+            'A') true ;;
+            'N') true ;;
+         esac
+      done
+      echo "$key"
+   done
+}
+
+function config_for_keybinding
+{
+   LINE="$1"
+   if [ "x$UserLines" != "x" ]; then
+      keycfline=$(echo "$UserLines" | egrep "$LINE" | cut -d" " -f 2-)
+      if [ "x$keycfline" == "x" ]; then
+         keycfline=$(echo "$SysLines" | egrep "$LINE" | cut -d" " -f 2-)
+      fi
+   else
+      keycfline=$(echo "$SysLines" | egrep "$LINE" | cut -d" " -f 2-)
+   fi
+
+   echo "Silent Key $keycfline"
+}
+
+function enlist_kms
+{
+   OIFS="$IFS"
+   IFS=" "
+   if [ -r "$FVWM_USERDIR/Keymenu.actions" ]; then
+      UserLines=$(awk '{ print $1 }' < "$FVWM_USERDIR/Keymenu.actions")
+   else
+      UserLines=""
+   fi
+
+   SysLines=$(awk '{ print $1 }' < $NSCDE_ROOT/config/Keymenu.actions)
+
+   IFS="$OIFS"
+   KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | sort -u)
+}
+
+function fill_lines
+{
+   if [ -r "$FVWM_USERDIR/Keymenu.actions" ]; then
+      UserLines=$(<"$FVWM_USERDIR/Keymenu.actions")
+   else
+      UserLines=""
+   fi
+   SysLines=$(<$NSCDE_ROOT/config/Keymenu.actions)
+}
+
+while getopts m:k:b:a Option
+do
+   case $Option in
+      m)
+         fill_lines
+
+         Keybinding=$(config_for_menu "$OPTARG")
+         echo "InfoStoreAdd $OPTARG \"$Keybinding\""
+      ;;
+      k)
+         fill_lines
+         config_for_keybinding "$OPTARG"
+      ;;
+      b)
+         fill_lines
+
+         Keybinding=$(config_for_menu "$OPTARG")
+         echo "InfoStoreAdd $OPTARG \"$Keybinding\""
+         config_for_keybinding "$OPTARG"
+      ;;
+      a)
+         enlist_kms
+         fill_lines
+
+         for kms in $KmsLines
+         do
+            Keybinding=$(config_for_menu "$kms")
+            echo "InfoStoreAdd $kms \"$Keybinding\""
+            config_for_keybinding "$kms"
+         done
+      ;;
+   esac
+done
+
