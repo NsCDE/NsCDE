@@ -29,7 +29,7 @@ End
 Widget 1
    Property
    Size 4 20
-   Position 6 10
+   Position 4 10
    Type ItemDraw
    Flags NoReliefString
    Title {Window: }
@@ -54,7 +54,7 @@ End
 Widget 4
    Property
    Size 4 20
-   Position 6 38
+   Position 4 38
    Type ItemDraw
    Flags NoReliefString
    Title {Workspaces:      }
@@ -252,7 +252,7 @@ End
 Widget 9
    Property
    Size 226 20
-   Position 76 10
+   Position 74 10
    Type ItemDraw
    Flags NoReliefString
    Flags Left
@@ -273,8 +273,15 @@ Widget 9
          Begin
             Set $WinIdOut = {echo "} $WinIdPlusName {"}
             Set $WinId = (GetOutput $WinIdOut 1 1)
-            Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-20}
+            Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-22 | fold -w 38 -s}
             Set $WinName = (GetOutput $WinNameOut 1 -1)
+            Set $WinNameLenOut = {echo "} $WinName {" | wc -c}
+            Set $WinNameLen = (GetOutput $WinNameLenOut 1 -1)
+            If $WinNameLen > 34 Then
+            Begin
+               Set $WinNameOut = {echo "} $WinName {" | fold -w 32 | sed "s/\(.\)\(.\)\(.\)$/...'/g"}
+               Set $WinName = (GetOutput $WinNameOut 1 -1)
+            End
             ChangeTitle 9 $WinName
          End
       End
