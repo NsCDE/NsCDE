@@ -1,5 +1,5 @@
 WindowTitle {Occupy Workspace}
-WindowSize 296 278
+WindowSize 296 296
 Colorset 22
 
 Init
@@ -17,13 +17,17 @@ Begin
    Key Escape A 2 1 {Quit}
    Key H A 6 1 {DisplayHelp}
    Key A A 3 1 {AllWSPToggle}
-   Key Return A 2 3 {Go}
+   Key Return A 2 3 {Move}
+   Key Return C 2 3 {MoveGo}
    Key Down A 2 2 {Down}
    Key Up A 2 2 {Up}
 
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
    ChangeFont 3 $SmallFont
+   ChangeFont 10 $SmallFont
    ChangeFont 9 $SmallFont
+
+   Set $GoWithWindow = 0
 End
 
 Widget 1
@@ -123,8 +127,13 @@ Widget 2
       End
       3 :
       Begin
-         If (LastString) == {Go} Then
+         If (LastString) == {Move} Then
          Begin
+            SendSignal 5 1
+         End
+         If (LastString) == {MoveGo} Then
+         Begin
+            SendSignal 10 1
             SendSignal 5 1
          End
       End
@@ -133,7 +142,7 @@ End
 Widget 3
    Property
    Size 100 20
-   Position 112 186
+   Position 112 184
    Type CheckBox
    Value 0
    Flags NoReliefString
@@ -181,10 +190,30 @@ Widget 3
       End
 End
 
+Widget 10
+   Property
+   Size 100 20
+   Position 112 214
+   Type CheckBox
+   Value 0
+   Flags NoReliefString
+   Title { Go With the Window}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 10 1
+      End
+      1 :
+      Begin
+         Set $GoWithWindow = 1
+      End
+End
+
 Widget 5
    Property
    Size 80 20
-   Position 8 238
+   Position 8 260
    Type PushButton
    Flags NoReliefString
    Title {OK}
@@ -202,7 +231,14 @@ Widget 5
          End
          Else
          Begin
-            Do {f_OccupyDesk } $WinId { 0 } (Add $DeskNo -1)
+            If $GoWithWindow == 0 Then
+            Begin
+               Do {f_OccupyDesk } $WinId { 0 } (Add $DeskNo -1) { Nop }
+            End
+            Else
+            Begin
+               Do {f_OccupyDesk } $WinId { 0 } (Add $DeskNo -1) { GoToDesk }
+            End
          End
          Quit
       End
@@ -211,7 +247,7 @@ End
 Widget 6
    Property
    Size 80 20
-   Position 208 238
+   Position 208 260
    Type PushButton
    Title {Help}
    Flags NoReliefString
@@ -230,7 +266,7 @@ End
 Widget 8
    Property
    Size 80 20
-   Position 108 238
+   Position 108 260
    Type PushButton
    Title {Dismiss}
    Flags NoReliefString
@@ -245,7 +281,7 @@ End
 Widget 7
    Property
    Size 344 1
-   Position 2 224
+   Position 2 248
    Type Rectangle
 End
 
