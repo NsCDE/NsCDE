@@ -1,4 +1,4 @@
-WindowTitle { X11 Session or System Action }
+WindowTitle {   NsCDE: System Action   }
 WindowSize 460 180
 Colorset 22
 
@@ -10,15 +10,83 @@ Begin
 
    ChangeFont 6 $FontBoldMedium
 
-   Set $ReadLastVal = (GetOutput {egrep '^[1-7]$' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
-   If $ReadLastVal <> {} Then
+   # Modes:
+   # 1. Logout
+   # 2. FVWM restart
+   # 3. Failsafe X (xterm)
+   # 4. OS Shutdown
+   # 5. OS Reboot
+   # 6. OS Suspend
+   # 6. OS Hybrid Suspend
+   # 8. OS Hibernate
+
+   # Flow of options:
+   # If command line option number is passed, use that
+   # If wrong option number, popup error message and quit
+   # If no option number passed, search $FVWM_USERDIR/.SysActionDialog.lastval for last executed
+   # If no last executed found or valid, select option number 1 - logout
+   If (GetScriptArgument 1) <> {} Then
    Begin
-      ChangeValue 4 $ReadLastVal
+      Set $CheckScrArgCmd = {echo '} (GetScriptArgument 1) {' | egrep '^[1-8]$' 2>/dev/null}
+      Set $CheckScrArg = (GetOutput $CheckScrArgCmd 1 1)
+      If $CheckScrArg <> {} Then
+      Begin
+         ChangeValue 4 $CheckScrArg
+      End
+      Else
+      Begin
+         Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Wrong option number passed to System Action Dialog."}
+         Quit
+      End
    End
    Else
    Begin
-      ChangeValue 4 1
+      Set $ReadLastVal = (GetOutput {egrep '^[1-8]$' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
+      If $ReadLastVal <> {} Then
+      Begin
+         ChangeValue 4 $ReadLastVal
+      End
+      Else
+      Begin
+         ChangeValue 4 1
+      End
    End
+
+   Set $SuspendTxt = {|   OS Suspend/Sleep (not supported)}
+   Set $HybridSuspendTxt = {|   OS Hybrid Suspend (not supported)}
+   Set $HibernateTxt = {|   OS Hibernate (not supported)}
+
+   Set $SuspendSupport = (GetOutput {(pm-is-supported --suspend || false) ; echo $?} 1 1)
+   If $SuspendSupport == 0 Then
+   Begin
+      Set $SuspendTxt = {|   Operating System: Suspend/Sleep}
+      Set $SuspendNoErr = 1
+   End
+
+   Set $HybridSuspendSupport = (GetOutput {(pm-is-supported --suspend-hybrid || false) ; echo $?} 1 1)
+   If $HybridSuspendSupport == 0 Then
+   Begin
+      Set $HybridSuspendTxt = {|   Operating System: Hybrid Suspend}
+      Set $HybridSuspendNoErr = 1
+   End
+
+   Set $HibernateSupport = (GetOutput {(pm-is-supported --hibernate || false) ; echo $?} 1 1)
+   If $HibernateSupport == 0 Then
+   Begin
+      Set $HibernateTxt = {|   Operating System: Hibernate}
+      Set $HibernateNoErr = 1
+   End
+
+   Set $PopupTitle = {   X Window System: Logout}
+                     {|   X Window System: Window Manager Restart}
+                     {|   X Window System: Failsafe (xterm)}
+                     {|   Operating System: Shutdown}
+                     {|   Operating System: Reboot}
+                      $SuspendTxt
+                      $HybridSuspendTxt
+                      $HibernateTxt
+
+   ChangeTitle 4 $PopupTitle
 
    # Key bindings
    Key Escape A 7 1 {KeyDismiss}
@@ -83,7 +151,7 @@ Widget 4
    Type PopupMenu
    Value 0
    Flags NoReliefString
-   Title {   X Window System: Logout|   X Window System: Window Manager Restart   |   X Window System: Failsafe (xterm)|   Operating System: Shutdown|   Operating System: Reboot|   Operating System: Suspend/Sleep|   Operating System: Hibernate}
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
    Main
       Case message of
       SingleClic :
@@ -201,23 +269,55 @@ Property
       # OS Suspend / Sleep
       If (GetValue 4) == 6 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
-         Do {CursorStyle ROOT left_ptr}
-         Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
-         Do {Exec sudo pm-suspend}
-         Quit
+         If $SuspendNoErr == 1 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
+            Do {Exec sudo pm-suspend}
+            Quit
+         End
+         Else
+         Begin
+            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Suspend/Sleep appears not to be supported on this system."}
+         End
+      End
+
+      # OS Hybrid Suspend
+      If (GetValue 4) == 7 Then
+      Begin
+         If $HybridSuspendNoErr == 1 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System in hybrid mode" "..." 1500}
+            Do {Exec sudo pm-suspend-hybrid}
+            Quit
+         End
+         Else
+         Begin
+            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Hybrid Suspend appears not to be supported on this system."}
+         End
       End
 
       # OS Hibernate
-      If (GetValue 4) == 7 Then
+      If (GetValue 4) == 8 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
-         Do {CursorStyle ROOT left_ptr}
-         Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
-         Do {Exec sudo pm-hibernate}
-         Quit
+         If $HibernateNoErr == 1 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            Do {CursorStyle ROOT left_ptr}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
+            Do {Exec sudo pm-hibernate}
+            Quit
+         End
+         Else
+         Begin
+            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Hibernate appears not to be supported on this system."}
+         End
       End
    End
 End
