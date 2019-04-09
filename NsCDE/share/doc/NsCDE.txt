@@ -634,6 +634,10 @@ GUI Tools
    called NsCDE Startup about running NsCDE under X Session Manager for more
    information about this matter.
 
+    Key Bindings:
+
+     *  Ctrl+Q: Quits Style Manager.
+
    --------------------------------------------------------------------------
 
   Backdrop Style Manager
@@ -683,6 +687,16 @@ GUI Tools
        same way as for backdrops. Photos must be in PNG or XPM format to be
        loaded.
 
+    Key Bindings:
+
+     *  Ctrl+Q: Quits Backdrop Style Manager.
+
+     *  P: Applies preview of the currently selected backdrop (or photo) on
+       the root window.
+
+     *  Up/Down: Selects previous or next element on the backdrop (or photo)
+       list.
+
    --------------------------------------------------------------------------
 
   Beep Style Manager
@@ -694,6 +708,12 @@ GUI Tools
    dynamically applied with Apply button. Save button will save
    $FVWM_USERDIR/Xset.conf with other xset(1) options which are executed
    during NsCDE startup.
+
+    Key Bindings:
+
+     *  Escape: Quits Beep Style Manager.
+
+     *  Ctrl+Q: Quits Beep Style Manager.
 
    --------------------------------------------------------------------------
 
@@ -758,6 +778,15 @@ GUI Tools
    for GTK2 and GTK3, and will edit $HOME/.gtkrc-2.0 and
    $HOME/.config/gtk-3.0/settings.ini to put or change gtk-theme-name value.
 
+    Key Bindings:
+
+     *  Ctrl+Q: Quits Color Style Manager.
+
+     *  P: Like Preview was pressed. Previews currently selected color scheme
+       from the list.
+
+     *  Up/Down: Goes one item on the color schemes list up or down.
+
    --------------------------------------------------------------------------
 
   Exec Dialog
@@ -774,6 +803,24 @@ GUI Tools
     As an example, this dialog can be used if on the current page or desk
    terminal application is not present, and only some simple command is
    needed to be quickly executed.
+
+    Key Bindings:
+
+     *  Escape: Quits Exec dialog
+
+     *  Return: Performs an action like if Exec is pressed.
+
+     *  Ctrl+Return: Performs an action like if Exec is pressed, and Execute
+       in terminal checkbox is checked.
+
+     *  Shift+Return: Performs an action like if Exec is pressed, and Leave
+       this dialog open checkbox is checked.
+
+     *  Ctrl+Shift+Return: Performs an action like if Exec is pressed,
+       Execute in terminal and Leave this dialog open checkboxes are both
+       checked.
+
+     *  Up/Down: Brings back and forth command history in text dialog box
 
    --------------------------------------------------------------------------
 
@@ -887,6 +934,10 @@ GUI Tools
     Configuration of fonts can be totally reset and discarded by removing
    file $FVWM_USERDIR/NsCDE-Font-$DPI.conf and FVWM restarted.
 
+    Key Bindings:
+
+     *  Ctrl+Q: Quits Font Style Manager.
+
    --------------------------------------------------------------------------
 
   Keyboard Style Manager
@@ -912,14 +963,39 @@ GUI Tools
    $FVWM_USERDIR/Xset.conf file which is a generated xset command batch
    executed during startup.
 
+    Key Bindings:
+
+     *  Ctrl+Q: Quits Keyboard Style Manager.
+
+     *  Escape: Quits Keyboard Style Manager.
+
    --------------------------------------------------------------------------
 
   Occupy Workspace
 
     This tool dialog is called from the left titlebar button menu. Or from
    Alt+Space key combination from the window context. It is exact copy of the
-   same CDE dialog and it sends selected window to selected desktop number,
-   or it can make it sticky with All Workspaces checkbox pressed in.
+   same CDE dialog and it sends selected window to workspace selected from
+   the list, or it can make it sticky with All Workspaces checkbox pressed
+   in. One addition here is the checkbox Go With the Window; when checked,
+   makes NsCDE to change a current workspace and go where window was sent. OK
+   performs an action, Dismiss quits Occupy Workspace tool.
+
+    Key Bindings:
+
+     *  Escape: Quits Occupy Workspace without performing an action.
+
+     *  H: Displays this help text, like Help was pressed.
+
+     *  A: Checks All Workspaces checkbox.
+
+     *  Return: Performs move action like OK button was pressed, without
+       going to the selected workspace.
+
+     *  Ctrl+Return: Performs move action like OK button was pressed, and
+       changes active workspace to the same destination.
+
+     *  Up/Down: Selects workspace in the up or down direction on the list.
 
    --------------------------------------------------------------------------
 
@@ -968,6 +1044,12 @@ GUI Tools
    DoubleClickTime and will warp pointer to Save button for actions to be
    written in config files.
 
+    Key Bindings:
+
+     *  Escape: Quits Mouse Style Manager.
+
+     *  Ctrl+Q: Quits Mouse Style Manager.
+
    --------------------------------------------------------------------------
 
   Power Save Manager
@@ -988,6 +1070,12 @@ GUI Tools
    1200 seconds, suspend 1800 seconds, and off time 2400 seconds, apply this
    settings on runtime, and point mouse to Save button for changes to be
    written.
+
+    Key Bindings:
+
+     *  Escape: Quits Powersave Style Manager.
+
+     *  Ctrl+Q: Quits Powersave Style Manager.
 
    --------------------------------------------------------------------------
 
@@ -1046,6 +1134,12 @@ GUI Tools
    generate FVWM configuration output which must be redirected into
    $FVWM_USERDIR/NsCDE-Subpanels.conf.
 
+    Key Bindings:
+
+     *  Escape: Quits Subpanel Manager.
+
+     *  Ctrl+Q: Quits Subpanel Manager.
+
    --------------------------------------------------------------------------
 
   Subpanel Settings
@@ -1064,6 +1158,12 @@ GUI Tools
    called Subpanel Settings. It reloads configuration of the given subpanel
    after applying changes and exiting with OK.
 
+    Key Bindings:
+
+     *  Escape: Quits Subpanel Settings.
+
+     *  Ctrl+Q: Quits Subpanel Settings.
+
    --------------------------------------------------------------------------
 
   System Action Dialog
@@ -1072,9 +1172,22 @@ GUI Tools
    shutdown the system, or change X session. It has also options for S3
    suspend and hibernation of the system. Of course, reboot, shutdown,
    pm-suspend and pm-hibernate will work only if sudo entries are configured
-   properly. In $NSCDE_ROOT/share/doc/examples/sudo, one can find example
-   which can be put in /etc/sudoers.d with little changes. Confirm button
-   applies, Dismiss cancels and closes the dialog.
+   properly. While System Action Dialog is active, root cursor changes to
+   line-crossed cursor which is dismissed after the action is performed or
+   dialog action dismissed. In $NSCDE_ROOT/share/doc/examples/sudo, one can
+   find example which can be put in /etc/sudoers.d with little changes.
+   Confirm button applies, Dismiss cancels and closes the dialog.
+
+    Key Bindings:
+
+     *  Escape: Quits System Action Dialog without performing any action.
+
+     *  Ctrl+Q: Same as Escape
+
+     *  Ctrl+Return: Performs an action as if Confirm is pressed.
+
+     *  Up/Down: Changes between 7 possible options of System Action Dialog's
+       popup menu.
 
    --------------------------------------------------------------------------
 
@@ -1256,6 +1369,12 @@ GUI Tools
     OK button applies changes to $FVWM_USERDIR/NsCDE.conf. Dismiss button
    will close the window without making any changes.
 
+    Key Bindings:
+
+     *  Escape: Quits Window Style Manager.
+
+     *  Ctrl+Q: Quits Window Style Manager.
+
    --------------------------------------------------------------------------
 
   Workspaces and Pages Manager (WsPgMgr)
@@ -1292,6 +1411,12 @@ GUI Tools
    written immediately, but window manager is not restarted. Workspaces and
    Pages Manager is called from the Front Panel's small left button menu
    which is called when that button is clicked with the right pointer button.
+
+    Key Bindings:
+
+     *  Escape: Quits Workspaces and Pages Manager.
+
+     *  Ctrl+Q: Quits Workspaces and Pages Manager.
 
    --------------------------------------------------------------------------
 
@@ -1343,7 +1468,8 @@ Helper Dialogs
    in the middle of the screen with a bigger font and relief text and live
    between half of the second till 5 seconds. Depending with which text and
    duration time it was called by some function or other FvwmScript program.
-   If clicked, it will dissapear immediately.
+   If clicked or receives return or escape key, it will dissapear
+   immediately.
 
     Used by [40]Color Style Manager, SysActionDialog and a documetation view
    function f_DisplayURL.
@@ -1358,6 +1484,10 @@ Helper Dialogs
    Manager. It changes number of colors while browsing, previewing or
    choosing a color theme.
 
+    Key Bindings:
+
+     *  Escape: Quits Dialog.
+
    --------------------------------------------------------------------------
 
   PaletteDialog - FvwmScript
@@ -1370,6 +1500,10 @@ Helper Dialogs
    present in original CDE. Additionally, background variants from custom
    palettes can be used too as from the default user's palette in 8-color
    mode, which is also NsCDE feature not present in original CDE.
+
+    Key Bindings:
+
+     *  Escape: Quits Dialog.
 
    --------------------------------------------------------------------------
 
@@ -1784,6 +1918,9 @@ Configuration files explained
        sides, title bar and icon (ovoids root window context!) calls Occupy
        Space dialog for window moving between the desks.
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Key Meta+Space in the context of the window, frame corners, frame
        sides and a title bar pops up Window Options context menu
 
@@ -1802,33 +1939,75 @@ Configuration files explained
 
      *   Alt+F1 regenerates and refreshes the window
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F2 iconifies (deiconifies if in icon context)
 
-     *   Alt+F3 shares or rolls up the window
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
+     *   Alt+F3 "shades" or rolls up the window to titlebar only view
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Alt+F4 enters resize mode which can be finished with cursors keys
        and enter
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F5 enters move mode which can be finished with cursors keys and
        enter
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F6 raises or lowers the window
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Alt+F7 maximizes window 100% (whole screen + decorations)
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F8 maximizes window ~ 80% - avoids Front Panel
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Alt+F9 is empty
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F10 deletes a window (see fvwm(1))
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Meta+Alt+F10 closes a window
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Shift+Meta+Alt+F10 forcefully destroys a window
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Alt+F11 is empty
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Alt+F12 calls xrefresh
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Ctrl+Shift+Tab Will open WindowList in the middle of the screen for
        a current workspace (desk)
@@ -1846,21 +2025,39 @@ Configuration files explained
      *   Meta+Alt+Insert takes a screenshot of the root window with 200 ms
        delay
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Meta+F1 invokes default terminal app ($[infostore.terminal])
 
      *   Meta+F2 invokes Exec dialog
 
      *   Meta+F3 toggles visibility of the titlebar
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Meta+F4 toggles window's sticky state
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Meta+F6 saves geometry information for a current window in GeoDB.ini
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Meta+F7 centers the window in the middle of the screen
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Meta+F8 reads GeoDB.ini and if it finds an entry for the current
        resolution and $[w.class], it resizes and moves a window according to
        the specification in $FVWM_USERDIR/GeoDB.ini
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Meta+F9 in the context of the known terminal application windows
        scratches the window to some 75%x72% of the screen, which is also a
@@ -1869,21 +2066,67 @@ Configuration files explained
      *   Ctrl+Escape will raise Front Panel and reposition it to it's default
        place on the screen
 
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
+
      *   Shift+Escape will do the same as Ctrl+Escape, but Front Panel is
        after repositioning shaded to bottom border of the screen. Invoking
        this key sequence again will unshade the Front Panel. Middle mouse
        button on the borders of the frame has the same effect
+
+         Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
+       description on menus.
 
      *   Alt+Escape outside of the Front Panel focus will give Front Panel a
        focus and warp pointer in the middle of the Front Panel. If focus plus
        pointer is already on the Front Panel previous window will be selected
        for the focus and pointer warped in the center of that window.
 
+     *   Meta+Escape will call transient GlobalPager in any context. When
+       clicked, this Pager will close itself.
+
      *  In the context of the Front Panel, Alt + 1-10 will pop up subpanels 1
        to 10 and warp pointer to it
 
      *  In the context of the any subpanel, Alt + 1-10 will pop down this
        subpanel and warp pointer to Front Panel
+
+   --------------------------------------------------------------------------
+
+  Keymenu.actions
+
+    This file is not FVWM configuration file. It is written [56]Subpanel
+   Settings, or manually with editor, and read by the
+   $NSCDE_ROOT/libexec/keymenu command which will generate infostore
+   variables with descriptive keyboard shortcut names which are used in NsCDE
+   menus from NsCDE-Menus.conf and NsCDE-Functions.conf, and additionaly, use
+   the whole line after the keyword in the first column with "Silent Key"
+   prefix to dinamically generate this part of keybindings which are
+   separated from NsCDE-Keybindings.conf and processed specially because they
+   definition must automatically match keyboard binding description in
+   various menus.
+
+    The syntax of this file is simple: first column is the keyword which
+   becomes infostore variable (km_xrefresh as $[infostore.km_xrefresh]), and
+   the rest columns of every line is FVWM "Key" sintax which is paired with
+   "Silent Key" prefix during initialization with f_KeyMenu -a from
+   NsCDE-Main.conf.
+
+    Every line, or dynamic keybinding can be overriden here if (re)defined in
+   user's $FVWM_USERDIR/Keymeu.actions: whole file or just choosen
+   keybindings. The goal is to get their descriptions (after functions and
+   menus reload) automatically in place on menus. For example, "F3 A M"
+   configuration for FVWM "Key" will become Alt+F3 description right of the
+   (De)Shade item on titlebar left button popdown menu.
+
+    File Keymenu.actions is processed by $NSCDE_ROOT/libexec/keymenu script.
+   This script generates FVWM infostore variables used in menus, and executes
+   FVWM "Key" commands producing dynamic keybindings which are described in
+   menus.
+
+    For a list of keybindings that are "dynamic", that is, not defined in
+   NsCDE-Keybindings.conf, but in Keymenu.actions, see notices in section
+   about [57]NsCDE-Keybindings.conf.
 
    --------------------------------------------------------------------------
 
@@ -2089,11 +2332,12 @@ Configuration files explained
 
    --------------------------------------------------------------------------
 
-  NsCDE-Pager-GWM.conf
+  NsCDE-Pager-GlobalPager.conf
 
     Similar, but bigger FvwmPager(1), invoked as Global Pager from
-   right-click popup menu on Workspace Manager buttons, this pager is
-   transient and will disappear when used with a pointer click.
+   right-click popup menu on Workspace Manager buttons, or (by default) with
+   Meta+Escape keybinding this pager is transient and will disappear when
+   used with a pointer click.
 
    --------------------------------------------------------------------------
 
@@ -2138,7 +2382,7 @@ Configuration files explained
    Otherwise, a plain FVWM configuration can be done which can drastically
    differ from NsCDE, since FVWM has much more options and variants for a
    huge number of tastes. Style '*' options are partially overridden or
-   extended in NsCDE.conf which can be generated with [56]Window Style
+   extended in NsCDE.conf which can be generated with [58]Window Style
    Manager or simply copied from $NSCDE_ROOT/config to $FVWM_USERDIR and
    edited to suit.
 
@@ -2168,9 +2412,9 @@ Configuration files explained
   Subpanels.actions
 
     This file is not FVWM configuration file. It is written by the
-   [57]Subpanels Manager, [58]Subpanel Settings, or manually with editor, and
+   [59]Subpanels Manager, [60]Subpanel Settings, or manually with editor, and
    read by the $NSCDE_ROOT/libexec/generate_subpanels command which will
-   generate [59]NsCDE-Subpanels.conf file in user's $FVWM_USERDIR. The syntax
+   generate [61]NsCDE-Subpanels.conf file in user's $FVWM_USERDIR. The syntax
    of this file is simple. It is CSV-like file where values are delimited
    with a comma ",". Every line belongs to one of the ten subpanels. Comma
    and "'" characters cannot be part of the field values. This values are:
@@ -2210,16 +2454,16 @@ Configuration files explained
     This file is generated by the $NSCDE_ROOT/libexec/generate_subpanels. It
    is static in system directory, but changable and easly generated in the
    $FVWM_USERDIR It contains FvwmButtons(8) definitions of all 10 possible
-   subpanels which can be popped up from the [60]Front Panel. There are 3
-   ways to regenerate this file: [61]Subpanels Manager tool called from the
-   Install Icon, [62]Subpanel Settings tool called from the titlebar popdown
+   subpanels which can be popped up from the [62]Front Panel. There are 3
+   ways to regenerate this file: [63]Subpanels Manager tool called from the
+   Install Icon, [64]Subpanel Settings tool called from the titlebar popdown
    menu on every subpanel as Subpanel Settings or manually by calling
    $NSCDE_ROOT/libexec/generate_subpanels which will read user's or system
-   [63]Subpanels.actions for every subpanel and if it is defined in user's
+   [65]Subpanels.actions for every subpanel and if it is defined in user's
    one, take this one while generating NsCDE-Subpanels.conf. In system
    default, subpanels 2, 5 and 6 are disabled by default, but can be
    activated with a very quick double middle pointer click on the empty
-   launcher without arrow: a [64]Subpanel Settings application will appear on
+   launcher without arrow: a [66]Subpanel Settings application will appear on
    the screen which has a checkbox "This Subpanel is Enabled" which will be
    checked out by default, and can be checked in, and OK will enable subpanel
    with initial system defaults for name, width and application entries.
@@ -2265,7 +2509,7 @@ System and User NsCDE Tree Layout
 
      *   lib/progbits
 
-         Template X pixmap files used by [65]Color Style Manager for
+         Template X pixmap files used by [67]Color Style Manager for
        producing user's copy in the $FVWM_USERDIR/icons/NsCDE/ this pixmaps
        are invalid as pictures in their source form since they contain
        internal macros for replacement with real colors. System starting
@@ -2316,7 +2560,7 @@ System and User NsCDE Tree Layout
 
      *   share/fontsets
 
-         Default font sets used by the [66]Font Style Manager
+         Default font sets used by the [68]Font Style Manager
 
      *   share/icons/CDE
 
@@ -2329,8 +2573,8 @@ System and User NsCDE Tree Layout
 
      *   share/palettes
 
-         CDE palettes plus a bunch of new custom palettes. Used by [67]Color
-       Style Manager and [68]Backdrop Style Manager, as well as
+         CDE palettes plus a bunch of new custom palettes. Used by [69]Color
+       Style Manager and [70]Backdrop Style Manager, as well as
        libexec/themegen.py, libexec/backdropmgr, libexec/colormgr,
        libexec/nscde_palette_colorgen.py
 
@@ -2338,13 +2582,13 @@ System and User NsCDE Tree Layout
 
          A couple of nice free photos collected and resized for various
        screen resolutions. Can be used instead of backdrops (selectable from
-       [69]Backdrop Style Manager) or in $HOME/.xscreensaver for some
+       [71]Backdrop Style Manager) or in $HOME/.xscreensaver for some
        screensavers which are loading photos.
 
      *   share/templates/app-defaults
 
          X resources for a particular X applications (like XTerm) which are
-       processed by the [70]Color Style Manager for user to be put into
+       processed by the [72]Color Style Manager for user to be put into
        $FVWM_USERDIR/app-defaults (if enabled). Referenced by the usual
        XAPPLRESDIR environment variable.
 
@@ -2364,7 +2608,7 @@ System and User NsCDE Tree Layout
 
          Here is the patch for fvwm 2.6.7 and 2.6.8 which adds additional
        small features to fvwm, so we can achieve even more similarity between
-       NsCDE and CDE. See [71]the Section called Patches for FVWM for the
+       NsCDE and CDE. See [73]the Section called Patches for FVWM for the
        details.
 
      *   src/pclock-0.13.1
@@ -2387,27 +2631,27 @@ System and User NsCDE Tree Layout
 
      *   app-defaults/ directory: X resources referenced by the usual
        XAPPLRESDIR environment variable. Files inside are (will be) generated
-       by the [72]Color Style Manager
+       by the [74]Color Style Manager
 
      *   backdrops/ directory: If created, user can put custom backdrop
-       sources here, and they can than be selected by the [73]Backdrop Style
+       sources here, and they can than be selected by the [75]Backdrop Style
        Manager and processed with current or custom color scheme.
 
      *   photos/ directory: User's photos which can be used instead of
-       backdrops if selected in [74]Backdrop Style Manager or configured in
+       backdrops if selected in [76]Backdrop Style Manager or configured in
        NsCDE-Backdrops.conf manually.
 
      *   backer/ directory: Generated backdrops referenced by Colorsets 31-38
        for FvwmBacker
 
      *   fontsets/ directory: If created, user can put or generate with
-       [75]Font Style Manager own fontsets here.
+       [77]Font Style Manager own fontsets here.
 
      *   icons/ directory: Populated by dynamic menu action
        libexec/nscde-fvwm-menu-desktop. If directory does not exist, script
        will create it.
 
-     *   icons/NsCDE/ directory: NsCDE custom icons. Put here by [76]Color
+     *   icons/NsCDE/ directory: NsCDE custom icons. Put here by [78]Color
        Style Manager and the rest of the tools. Since icons from here are
        referenced with a relative path, whatever is missing here, will be
        loaded from system's $NSCDE_ROOT/share/icons/NsCDE automatically.
@@ -2416,7 +2660,7 @@ System and User NsCDE Tree Layout
        and put here, as well as fontmgr.local and other user's hooks.
 
      *   palettes/ directory: User can put custom palette files here, and
-       they can than be selected by the [77]Color Style Manager and processed
+       they can than be selected by the [79]Color Style Manager and processed
        for a preview or applied as new theme.
 
      *   templates/ directory: Here, local subdirectory of app-defaults with
@@ -2445,7 +2689,7 @@ System and User NsCDE Tree Layout
          XYZ is here placeholder/example for Style, Functions, Keybindings,
        Init, Menus etc ...
 
-     *   NsCDE.conf: managed by [78]Window Style Manager, Workspaces and
+     *   NsCDE.conf: managed by [80]Window Style Manager, Workspaces and
        Pages Manager, Pointer Style Manager and users own editor manually.
        See the rest of the documentation.
 
@@ -2536,7 +2780,7 @@ Installation Dependencies
      *  Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins
        (optional) There is a great chance this libraries and some usefull
        programs using them are already installed on user's system. If Gtk and
-       Qt integration is activated in [79]Color Style Manager, there is no
+       Qt integration is activated in [81]Color Style Manager, there is no
        point not to have it installed.
 
          Notice about Qt4 and Qt5: qt4-config (or qt-config) and qt5ct:
@@ -2646,15 +2890,15 @@ Initial Configuration
 
     Note that no file from the above list will be overwritten if it already
    exists in it's place. It will be skipped, but GTK and Qt theme integration
-   files can be still written with [80]Color Style Manager. After nscde_setup
-   script finishes setup, [81]Color Style Manager will be run and user asked
+   files can be still written with [82]Color Style Manager. After nscde_setup
+   script finishes setup, [83]Color Style Manager will be run and user asked
    to confirm default theme or change it. Do not avoid this step, since some
    program bits are not fully setup on bare defaults, (like a clock
    background) and must be generated in the ~/.NsCDE/icons/NsCDE directory.
 
-    After [82]Color Style Manager's OK button is pressed, theme will be
+    After [84]Color Style Manager's OK button is pressed, theme will be
    regenerated. Gtk and Qt themes will be regenerated only if their
-   checkboxes in [83]Color Style Manager are checked in. Setup script after
+   checkboxes in [85]Color Style Manager are checked in. Setup script after
    the finish will ask user to press RETURN to exit. This is for user's
    convenience to read output of the setup for informative and/or diagnostic
    reasons. It is advised after this setup to open $FVWM_USERDIR/NsCDE.conf
@@ -2726,7 +2970,7 @@ Integration with X resources and widgets
     Special private paths for X resources are used in order not to mess with
    user's maybe existing resources and files. If wanted, custom app-defaults
    files can be places in $FVWM_USERDIR/app-defaults or even better,
-   $FVWM_USERDIR/templates/app-defaults and reworked for [84]Color Style
+   $FVWM_USERDIR/templates/app-defaults and reworked for [86]Color Style
    Manager integration, because if find in that directory, and with .tmpl
    extension, it will be processed in the same way as system files from
    $NSCDE_ROOT/share/templates/app-defaults/ and put in
@@ -2734,7 +2978,7 @@ Integration with X resources and widgets
 
     Plain custom X resources can be put in $FVWM_USERDIR/Xdefaults.local.
    This file will not be overwritten by Style Managers. X resources
-   integration is turned on by default in [85]Color Style Manager.
+   integration is turned on by default in [87]Color Style Manager.
 
    --------------------------------------------------------------------------
 
@@ -2743,14 +2987,14 @@ Integration with X resources and widgets
     $NSCDE_ROOT/libexec/themegen.py with $NSCDE_ROOT/lib/python and with
    $NSCDE_ROOT/share/templates/integration/gtk2_gtk3_qt are parts of the
    optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
-   [86]Color Style Manager or manually with the
+   [88]Color Style Manager or manually with the
    $NSCDE_ROOT/libexec/themegen.py, with proper options, this will produce
    $HOME/.themes/NsCDE directory with either or both Gtk2 and Gtk3 themes.
    $HOME/.gtkrc-2.0 and $HOME/.config/gtk-3.0/settings.ini will be edited to
    point to this directory with gtk-theme-name option. Excessive button
    images on menus and buttons will be turned off of course.
 
-    If Qt4 and/or Qt5 integration is also selected in [87]Color Style
+    If Qt4 and/or Qt5 integration is also selected in [89]Color Style
    Manager, files $HOME/.config/Trolltech.conf and
    $HOME/.config/qt5ct/qt5ct.conf will be edited to use "GTK2" Qt theme
    engine. This means, there is no Qt4 and/or Qt5 integration without at
@@ -2763,7 +3007,7 @@ Integration with X resources and widgets
 
   Custom application integration
 
-    If $FVWM_USERDIR/libexec/colormgr.local exists, [88]Color Style Manager
+    If $FVWM_USERDIR/libexec/colormgr.local exists, [90]Color Style Manager
    will run it if it's checkbox is selected. This script or program will be
    run with a full path of CDE palette file followed by the number of colors
    selected in interface (4 or 8). This can be useful for regenerating
@@ -2809,7 +3053,7 @@ Additional recommended software
    editor like dconf-editor or or dconf gsettings must be used for
    non-interactive or CLI editing. See the example in
    $NSCDE_ROOT/share/doc/examples/colormgr.local.example on how to integrate
-   mate-terminal with a [89]Color Style Manager. Second (if not first) best
+   mate-terminal with a [91]Color Style Manager. Second (if not first) best
    choice is Urxvt, but since it does not have a menu nor a real tabs,
    tmux(1), screen(1) or possibly tabbed(1) can be used for the same
    functionality. Suggestions for more dtterm-like alternative are welcome.
@@ -2831,7 +3075,7 @@ Additional recommended software
 
     Another nice and useful app is Gkrellm for which NsCDE has a ready
    drop-in theme called (of course) NsCDE in share/doc/examples and it can be
-   put in user's ~/.gkrellm2/themes and integrated with [90]Color Style
+   put in user's ~/.gkrellm2/themes and integrated with [92]Color Style
    Manager with the $NSCDE_ROOT/share/doc/examples/colormgr.local.example
    which can be installed as $FVWM_USERDIR/libexec/colormgr.local.
 
@@ -2939,7 +3183,7 @@ Similarities and differences in usage and look between CDE and NsCDE
        mouse bindings and mouse bindings in combination with modifier keys.
        As for keybindings apply: use it or write your own.
 
-     *   [91]Color Style Manager has numerous new functions: Gtk and Qt
+     *   [93]Color Style Manager has numerous new functions: Gtk and Qt
        integration, X resources integration is optional, and it has even a
        possibility to run a custom script with required parameters of current
        palette and number of colors for external and marginal color scheme
@@ -2947,31 +3191,31 @@ Similarities and differences in usage and look between CDE and NsCDE
        missing. It should be possible to write it in the FvwmScript in some
        future version update.
 
-     *   [92]Font Style Manager is totally NsCDE oriented and doesn't work
+     *   [94]Font Style Manager is totally NsCDE oriented and doesn't work
        much as font management in CDE. NsCDE supports XFT fonts (disable
        antialiasing if you want extreme original look) and it combines 5
        groups of fonts in 3 sizes described in this documentation.
 
-     *   [93]Keyboard Style Manager implements all options supported by the
+     *   [95]Keyboard Style Manager implements all options supported by the
        xset(1) on PC. CDE original in default installation at least, seems to
        have only auto-repeat and click volume controls.
 
-     *   [94]Mouse Style Manager does not have configurable middle mouse
+     *   [96]Mouse Style Manager does not have configurable middle mouse
        (button 2) action since this is not applicable very much on today's
        GUI widgets.
 
-     *   [95]Beep Style Manager has a additional Beep button for testing
+     *   [97]Beep Style Manager has a additional Beep button for testing
        during setup.
 
      *   Screensaver Style Manager is in fact Xscreensaver setup. Perfect
        drop in replacement and much fancier than original.
 
-     *   [96]Window Style Manager manages much more of window, icon, pages
+     *   [98]Window Style Manager manages much more of window, icon, pages
        and animation behavior than original program in CDE, and even this is
        a small subset of options in FVWM. See it's documentation and fvwm(1)
        man page.
 
-     *   [97]Power Style Manager is actually very rare in Style Manager
+     *   [99]Power Style Manager is actually very rare in Style Manager
        across old CDE setups. It manages DPMS setting of the monitor with
        xset(1).
 
@@ -3088,7 +3332,7 @@ Ideas and Tasks for future improvements
        be more flexible with applications which have multiple windows with
        the same class name.
 
-     *   Palette color editor in [98]Color Style Manager is missing. It
+     *   Palette color editor in [100]Color Style Manager is missing. It
        should be possible to write it in the FvwmScript(1).
 
      *   Find or write the replacement for PyQt4/PyQt5 API in Gtk/Qt theme

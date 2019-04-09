@@ -700,6 +700,16 @@ only MATE, LXDE, KDE and GNOME session managers are recognized and their respect
 tools called. See <xref linkend="NsCDE-Startup"/> about running NsCDE under X Session Manager for more
 information about this matter.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-BackdropMgr">
@@ -757,6 +767,21 @@ more than CDE original:
 </para></listitem>
 </itemizedlist>
 
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Backdrop Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>P</keysym>: Applies preview of the currently selected backdrop (or photo) on the root window.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Selects previous or next element on the backdrop (or photo) list.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-BeepMgr">
@@ -769,6 +794,19 @@ present in the original tool, and also dynamically applied with <guibutton>Apply
 <guibutton>Save</guibutton> button will save <filename>$FVWM_USERDIR/Xset.conf</filename> with other
 xset(1) options which are executed during NsCDE startup.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Beep Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Beep Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-ColorMgr">
@@ -854,6 +892,22 @@ directory with the theme for GTK2 and GTK3, and will edit <filename>$HOME/.gtkrc
 <varname>gtk-theme-name</varname> value.
 </para>
 
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Color Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>P</keysym>: Like <guibutton>Preview</guibutton> was pressed. Previews currently selected
+color scheme from the list.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Goes one item on the color schemes list up or down.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-ExecDialog">
@@ -873,6 +927,35 @@ terminal application.
 As an example, this dialog can be used if on the current page or desk terminal application is
 not present, and only some simple command is needed to be quickly executed.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Exec dialog
+</para></listitem>
+<listitem><para>
+<keysym>Return</keysym>: Performs an action like if <guibutton>Exec</guibutton> is pressed.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Performs an action like if <guibutton>Exec</guibutton> is pressed,
+and <guilabel>Execute in terminal</guilabel> checkbox is checked.
+</para></listitem>
+<listitem><para>
+<keysym>Shift+Return</keysym>: Performs an action like if <guibutton>Exec</guibutton> is pressed,
+and <guilabel>Leave this dialog open</guilabel> checkbox is checked.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Shift+Return</keysym>: Performs an action like if <guibutton>Exec</guibutton> is pressed,
+<guilabel>Execute in terminal</guilabel> and <guilabel>Leave this dialog open</guilabel> checkboxes are
+both checked.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Brings back and forth command history in text dialog box
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-FontMgr">
@@ -1026,6 +1109,15 @@ Configuration of fonts can be totally reset and discarded by removing file
 <filename>$FVWM_USERDIR/NsCDE-Font-$DPI.conf</filename> and FVWM restarted.
 </para>
 
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Font Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-KeyboardMgr">
@@ -1061,6 +1153,19 @@ in GUI as they are in command line tool.
 button writes <filename>$FVWM_USERDIR/Xset.conf</filename> file which is a generated
 <command>xset</command> command batch executed during startup.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Keyboard Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Keyboard Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-OccupyWorkspace">
@@ -1068,8 +1173,36 @@ button writes <filename>$FVWM_USERDIR/Xset.conf</filename> file which is a gener
 <para>
 This tool dialog is called from the left titlebar button menu. Or from
 <keysym>Alt+Space</keysym> key combination from the window context. It is exact copy of the
-same CDE dialog and it sends selected window to selected desktop number, or it can
-make it sticky with <guilabel>All Workspaces</guilabel> checkbox pressed in.
+same CDE dialog and it sends selected window to workspace selected from the list, or it can
+make it sticky with <guibutton>All Workspaces</guibutton> checkbox pressed in. One addition here
+is the checkbox <guibutton>Go With the Window</guibutton>; when checked, makes NsCDE to change
+a current workspace and go where window was sent. <guibutton>OK</guibutton> performs an action,
+<guibutton>Dismiss</guibutton> quits Occupy Workspace tool.
+</para>
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Occupy Workspace without performing an action.
+</para></listitem>
+<listitem><para>
+<keysym>H</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
+</para></listitem>
+<listitem><para>
+<keysym>A</keysym>: Checks <guilabel>All Workspaces</guilabel> checkbox.
+</para></listitem>
+<listitem><para>
+<keysym>Return</keysym>: Performs move action like OK button was pressed, without going to the
+selected workspace.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Performs move action like OK button was pressed, and changes active
+workspace to the same destination.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Selects workspace in the up or down direction on the list.
+</para></listitem>
+</itemizedlist>
 </para>
 </sect2>
 
@@ -1136,6 +1269,19 @@ acceleration on 60, and threshold on 8, apply xset and xmodmap values, FVWM
 <emphasis>MenuStyle</emphasis> <emphasis>DoubleClickTime</emphasis> and will warp pointer
 to <guibutton>Save</guibutton> button for actions to be written in config files.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Mouse Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Mouse Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-PowerSaveMgr">
@@ -1161,6 +1307,19 @@ DPMS <emphasis>on</emphasis>, standby <emphasis>1200 seconds</emphasis>, suspend
 seconds</emphasis>, and off time <emphasis>2400 seconds</emphasis>, apply this settings on runtime,
 and point mouse to <guibutton>Save</guibutton> button for changes to be written.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Powersave Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Powersave Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-SubpanelMgr">
@@ -1227,6 +1386,19 @@ entries. If editing by hand, <command>$NSCDE_ROOT/libexec/generate_subpanels</co
 must be used to generate FVWM configuration output which must be redirected into
 <filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Subpanel Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Subpanel Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-SubpanelSettings">
@@ -1247,6 +1419,19 @@ popped with the left (and only) button on subpanel's titlebar. It is called
 <guilabel>Subpanel Settings</guilabel>. It reloads configuration of the given subpanel after
 applying changes and exiting with <guibutton>OK</guibutton>.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Subpanel Settings.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Subpanel Settings.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-SysActionDialog">
@@ -1257,13 +1442,34 @@ This is the login/logout form with the possibilities to reboot or shutdown the
 system, or change X session. It has also options for S3 suspend and
 hibernation of the system. Of course, <command>reboot</command>, <command>shutdown</command>,
 <command>pm-suspend</command> and <command>pm-hibernate</command> will work only if
-<command>sudo</command> entries are configured properly.
+<command>sudo</command> entries are configured properly. While System Action Dialog is active,
+root cursor changes to line-crossed cursor which is dismissed after the action is performed or
+dialog action dismissed.
 In <filename class="directory">$NSCDE_ROOT/share/doc/examples/sudo</filename>, one can find example
 which can be put in <filename class="directory">/etc/sudoers.d</filename> with little changes.
 <guibutton>Confirm</guibutton> button applies, <guibutton>Dismiss</guibutton> cancels and
 closes the dialog.
 
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits System Action Dialog without performing any action.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Same as <guibutton>Escape</guibutton>
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Performs an action as if <guibutton>Confirm</guibutton> is pressed.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Changes between 7 possible options of System Action Dialog's popup menu.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-SysInfo">
@@ -1496,6 +1702,19 @@ system defaults into options and they will be set in permanent configuration if
 <guibutton>OK</guibutton> button applies changes to <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
 <guibutton>Dismiss</guibutton> button will close the window without making any changes.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Window Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Window Style Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect3>
 
 </sect2>
@@ -1546,6 +1765,19 @@ Workspaces and Pages Manager is called from the Front Panel's small
 left button menu which is called when that button is clicked with the right
 pointer button.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Workspaces and Pages Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Workspaces and Pages Manager.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 </sect1>
@@ -1605,7 +1837,8 @@ This dialog serves as short information if some NsCDE action is started which
 is not immediately obvious in a 1-2 seconds. It will appear in the middle of the
 screen with a bigger font and relief text and live between half of the second till
 5 seconds. Depending with which text and duration time it was called by some function
-or other FvwmScript program. If clicked, it will dissapear immediately.
+or other FvwmScript program. If clicked or receives return or escape key, it will
+dissapear immediately.
 </para>
 <para>
 Used by <link linkend="NsCDE-ColorMgr">Color Style Manager</link>,
@@ -1625,6 +1858,16 @@ Helper dialog to select 4, 8 or default color scheme in
 It changes number of colors while browsing, previewing or
 choosing a color theme.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-PaletteDialog">
@@ -1641,6 +1884,16 @@ background variants from custom palettes can be used too as from
 the default user's palette in 8-color mode, which is also NsCDE
 feature not present in original CDE.
 </para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect2>
 
 </sect1>
@@ -2129,6 +2382,10 @@ config and extended a bit). Namely:
   Key <keysym>Alt+Space</keysym> in the context of the window, frame corners, frame
     sides, title bar and icon (ovoids root window context!) calls
     Occupy Space dialog for window moving between the desks.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
@@ -2159,60 +2416,116 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Alt+F1</keysym> regenerates and refreshes the window
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F2</keysym> iconifies (deiconifies if in icon context)
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+F3</keysym> shares or rolls up the window
+  <keysym>Alt+F3</keysym> "shades" or rolls up the window to titlebar only view
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F4</keysym> enters resize mode which can be finished with cursors keys
     and enter
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F5</keysym> enters move mode which can be finished with cursors keys
     and enter
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F6</keysym> raises or lowers the window
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F7</keysym> maximizes window 100% (whole screen + decorations)
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F8</keysym> maximizes window ~ 80% - avoids Front Panel
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F9</keysym> is empty
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F10</keysym> deletes a window (see fvwm(1))
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Meta+Alt+F10</keysym> closes a window
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Shift+Meta+Alt+F10</keysym> forcefully destroys a window
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F11</keysym> is empty
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+F12</keysym> calls xrefresh
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
@@ -2238,6 +2551,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Meta+Alt+Insert</keysym> takes a screenshot of the root window with 200 ms delay
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
@@ -2250,24 +2567,44 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Meta+F3</keysym> toggles visibility of the titlebar
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Meta+F4</keysym> toggles window's sticky state
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Meta+F6</keysym> saves geometry information for a current window in GeoDB.ini
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Meta+F7</keysym> centers the window in the middle of the screen
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Meta+F8</keysym> reads <filename>GeoDB.ini</filename> and if it finds an entry for the current
     resolution and <varname>$[w.class],</varname> it resizes and moves a window according to
     the specification in <varname>$FVWM_USERDIR/GeoDB.ini</varname> 
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
@@ -2279,6 +2616,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 <listitem><para>
   <keysym>Ctrl+Escape</keysym> will raise Front Panel and reposition it to it's default
     place on the screen
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
@@ -2286,12 +2627,21 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
     after repositioning shaded to bottom border of the screen. Invoking
     this key sequence again will unshade the Front Panel. Middle mouse
     button on the borders of the frame has the same effect
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
   <keysym>Alt+Escape</keysym> outside of the Front Panel focus will give Front Panel a focus and
   warp pointer in the middle of the Front Panel. If focus plus pointer is already on the  Front Panel
   previous window will be selected for the focus and pointer warped in the center of that window.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Escape</keysym> will call transient GlobalPager in any context. When clicked, this
+Pager will close itself.
 </para></listitem>
 
 <listitem><para>
@@ -2305,6 +2655,46 @@ and warp pointer to Front Panel
 </para></listitem>
 
 </itemizedlist>
+
+</sect2>
+
+<sect2 id="Keymenu_actions">
+<title>Keymenu.actions</title>
+<para>
+This file is not FVWM configuration file. It is written
+<link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
+manually with editor, and read by the <command>$NSCDE_ROOT/libexec/keymenu</command>
+command which will generate infostore variables with descriptive keyboard shortcut names which
+are used in NsCDE menus from <filename>NsCDE-Menus.conf</filename> and
+<filename>NsCDE-Functions.conf</filename>, and additionaly, use the whole line after the keyword
+in the first column with "Silent Key" prefix to dinamically generate this part of keybindings
+which are separated from <filename>NsCDE-Keybindings.conf</filename> and processed specially
+because they definition must automatically match keyboard binding description in various
+menus.
+</para>
+<para>
+The syntax of this file is simple: first column is the keyword which becomes infostore
+variable (km_xrefresh as <varname>$[infostore.km_xrefresh]</varname>), and the rest columns of
+every line is FVWM "Key" sintax which is paired with "Silent Key" prefix during initialization
+with <function>f_KeyMenu -a</function> from <filename>NsCDE-Main.conf</filename>.
+</para>
+<para>
+Every line, or dynamic keybinding can be overriden here if (re)defined in user's
+<filename>$FVWM_USERDIR/Keymeu.actions</filename>: whole file or just choosen keybindings.
+The goal is to get their descriptions (after functions and menus reload) automatically in place
+on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym>Alt+F3</keysym>
+description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
+</para>
+<para>
+File Keymenu.actions is processed by <command>$NSCDE_ROOT/libexec/keymenu</command> script.
+This script generates FVWM infostore variables used in menus, and executes FVWM "Key" commands
+producing dynamic keybindings which are described in menus.
+</para>
+<para>
+For a list of keybindings that are "dynamic", that is, not defined in
+<filename>NsCDE-Keybindings.conf</filename>, but in <filename>Keymenu.actions</filename>, see
+notices in section about <link linkend="NsCDE-Keybindings_conf">NsCDE-Keybindings.conf</link>.
+</para>
 
 </sect2>
 
@@ -2631,12 +3021,12 @@ This pager is transient and will disappear after being used with a pointer click
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Pager-GWM_conf">
-<title>NsCDE-Pager-GWM.conf</title>
+<sect2 id="NsCDE-Pager-GlobalPager_conf">
+<title>NsCDE-Pager-GlobalPager.conf</title>
 <para>
 Similar, but bigger FvwmPager(1), invoked as <emphasis>Global Pager</emphasis> from right-click
-popup menu on Workspace Manager buttons, this pager is transient and will
-disappear when used with a pointer click.
+popup menu on Workspace Manager buttons, or (by default) with <keysym>Meta+Escape</keysym> keybinding
+this pager is transient and will disappear when used with a pointer click.
 </para>
 </sect2>
 
