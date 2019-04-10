@@ -58,7 +58,7 @@ function enlist_kms
    SysLines=$(awk '{ print $1 }' < $NSCDE_ROOT/config/Keymenu.actions)
 
    IFS="$OIFS"
-   KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | sort -u)
+   KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | egrep "^km_" | sort -u)
 }
 
 function fill_lines
