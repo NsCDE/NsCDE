@@ -927,13 +927,11 @@ Property
           Set $Action = (Add (StrCopy (LastString) 1 2) -1)
           If $Action == 1 Then
              Begin
-                Do {CursorMove 0 -25}
-                Do {Schedule 80 f_ShowGlobalPager}
+                Do {f_MoveCursorAndExec 0 -15 f_ShowGlobalPager}
              End
           If $Action == 2 Then
              Begin
-                Do {CursorMove 0 -25}
-                Do {Schedule 80 Module FvwmPager -transient FrontPanelPager } $NextDesk { } $NextDesk
+                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient FrontPanelPager } $NextDesk { } $NextDesk
              End
           If $Action == 3 Then
              # $CurrDesk is 1-based; $NextDesk is 0-based
