@@ -187,7 +187,7 @@ Applets docks and panels are:
 <listitem><para>Front Panel (FvwmButtons)</para></listitem>
 <listitem><para>Subpanels (FvwmButtons)</para></listitem>
 <listitem><para>Workspace Manager (WSM) - FvwmScript</para></listitem>
-<listitem><para>Page Indicator - FvwmScript</para></listitem>
+<listitem><para>Page Manager (PGM) - FvwmScript</para></listitem>
 <listitem><para>MonthDayApplet - FvwmScript</para></listitem>
 <listitem><para>Clock - External C applet pclock</para></listitem>
 <listitem><para>CheckMailApplet - FvwmScript</para></listitem>
@@ -311,7 +311,7 @@ differences are:
 <itemizedlist>
 <listitem><para>Calls Workspace and Page Manager Manager</para></listitem>
 <listitem><para>Restart WorkSpace Manager</para></listitem>
-<listitem><para>Restart Page Indicator</para></listitem>
+<listitem><para>Restart Page Manager</para></listitem>
 <listitem><para>Restart Panel Clock (pclock)</para></listitem>
 <listitem><para>Restart Panel Mail Applet</para></listitem>
 <listitem><para>Restart Panel Date (MonthDayApplet)</para></listitem>
@@ -326,7 +326,7 @@ As FvwmButtons based dock, it swallows the following applets:
 <listitem><para>pclock (external standalone app with CDEish skin)</para></listitem>
 <listitem><para>MonthDayApplet (FvwmScript)</para></listitem>
 <listitem><para>CheckMailApplet (FvwmScript)</para></listitem>
-<listitem><para>PageIndicator (FvwmScript)</para></listitem>
+<listitem><para>PGM (FvwmScript)</para></listitem>
 <listitem><para>WSM / Workspace Manager (FvwmScript)</para></listitem>
 <listitem><para>FpLite (FvwmScript)</para></listitem>
 </itemizedlist>
@@ -401,7 +401,7 @@ As FvwmButtons based dock, it swallows the following applets:
 <listitem><para>
    In the center of the Front Panel there is a place without subpanel
    launchers and separated by vertical line. Inside this area, there are
-   4 small command icons: Left: Lock Screen (<command>xscreensaver -activate</command>), PageIndicator,
+   4 small command icons: Left: Lock Screen (<command>xscreensaver -activate</command>), Page Manager (PGM),
    Right are Front Panel Lite (system load indicator), and <guibutton>Exit</guibutton> button
    (SysActionDialog).
 </para>
@@ -532,10 +532,10 @@ configuration:
  If <filename>$FVWM_USERDIR/WSM.conf</filename> value <emphasis>WSPPG</emphasis> is 1,
   then in 2 or 4 desks/buttons
   mode a small current page indicator is show on the right side of the button.
-  In addition to PageIndicator southwest of the WSM. Disabled (0) by default.
+  In addition to Page Manager (PGM) southwest of the WSM. Disabled (0) by default.
   <filename>WSM.conf</filename> (system wide: <filename>$NSCDE_ROOT/config/WSM.conf</filename>) is
   a separate configuration
-  file read by WSM, PageIndicator, WsPgMgr and such. Not a FVWM configuration file.
+  file read by WSM, PGM, WsPgMgr and such. Not a FVWM configuration file.
 </para></listitem>
 <listitem><para>
  Number of Desks and Pages can be configured with Workspace and Page Manager
@@ -562,14 +562,14 @@ default and core configuration.
 
 </sect2>
 
-<sect2 id="NsCDE-PageIndicator">
-<title>Page Indicator</title>
+<sect2 id="NsCDE-PGM">
+<title>Page Manager</title>
 <para>
-Page Indicator is entirely new thing.
+Page Manager is entirely new thing.
 There is no concept of <emphasis>Pages</emphasis> in the original CDE,
 just desks (workspaces). This nice feature of pages is too useful to be disabled
 and sacrificed just to get even more CDE similarity, but really zealous user can configure NsCDE not
-to include pages, just desks. PageIndicator is a small FvwmScript applet
+to include pages, just desks. PGM is a small FvwmScript applet
 southwest from the WSM, represented by the silver-gray icon of the desk
 divided on <emphasis>pagesX</emphasis> x <emphasis>pagesY</emphasis>.
 Default is 2x2, that is, four pages per every
@@ -581,16 +581,17 @@ really great number of possible preferences. Pages can be configured in any
 <emphasis>XxY</emphasis> combination. For example 1x4, 2x3, 3x3, 2x1, 2x2 ...
 </para>
 <para>
-PageIndicator changes icon to represent position of the current page on
+PGM changes icon to represent position of the current page on
 current desk while user moves from page to page automatically with the help of
 the FvwmEvent(1) just like the WSM.
 </para>
 <para>
-When clicked, PageIndicator transforms in a closed popup menu with names of the
+When clicked, PGM transforms in a closed popup menu with names of the
 pages and special "..." option on the top which calls local visual FvwmPager.
 When option from the menu is selected, menu again transforms to the Icon. If
 called, but not clicked, menu automatically transforms back into Icon after 20
-seconds of inactivity.
+seconds of inactivity. Middle pointer button calls Workspace and Page Manager,
+while the right pointer button calls visual Local Pager.
 </para>
 </sect2>
 
@@ -1626,15 +1627,15 @@ page changes, Front Panel will be raised.
 </para></listitem>
 <listitem><para>
  <guilabel>Pager Preview On Page Change</guilabel>:  on page change, spawn a small
-transient FVWM pager on the center of the screen to indicate what is
-on the current desk - this is controlled by the infostore variable in
-the $FVWM_USERDIR/NsCDE.conf
+transient FVWM pager called <emphasis>LocalPager</emphasis> on the top center of the
+screen to indicate what is on the current desk - this is controlled by the infostore
+variable in the $FVWM_USERDIR/NsCDE.conf
 </para></listitem>
 <listitem><para>
  <guilabel>Disable Page Change On Screen Edge</guilabel>:  if selected, current page will
 not change when pointer is longer time on the screen edge. In this mode,
 active page must be changed by other means (keyboard shortcuts, WSM
-submenus, PageIndicator, left click on 1st titlebar button ...)
+submenus, PGM, left click on 1st titlebar button ...)
 </para></listitem>
 <listitem><para>
  <guilabel>Page Change On Screen Edge (1px)</guilabel>:  default internal detector of the
@@ -1754,7 +1755,7 @@ which is probably enough (too much) for 99% of the people.
 </para>
 <para>
 Number of vertical and horizontal pages can also be configured here.
-This change will affect PageIndicator, and menus which are displaying
+This change will affect Page Manager (PGM), and menus which are displaying
 pages. Page names are not configurable via GUI. User is encouraged to
 open <filename>$FVWM_USERDIR/WSM.conf</filename> and edit to suit.
 </para>
@@ -2129,7 +2130,7 @@ actions <option>new_desk</option>, <option>new_page</option>, <option>add_window
 and <option>focus_change</option> are observed and
 their respective functions from <filename>NsCDE-Functions.conf</filename> are triggered.
 This serves Workspace Manager,
-Page Indicator and window placement functions in an important way. If
+Page Manager (PGM) and window placement functions in an important way. If
 redefined or disabled, things will start to break. It can be extended by
 the user to suit the needs, but here also care must be taken, because
 complex functions, or calling slow and/or resource hungry commands from
@@ -2361,13 +2362,13 @@ config and extended a bit). Namely:
 
 <listitem><para>
   <keysym>Ctrl+Menu</keysym> moves Root Pager (if enabled) beneath the pointer or 
-    iconifies Root Pager if RootPager already has the pointer - toggle
+    iconifies Local Pager if LocalPager already has the pointer - toggle
     action
 </para></listitem>
 
 <listitem><para>
   <keysym>Ctrl+ISO_Level3_Shift</keysym> (right alt) moves Root Pager (if enabled) beneath
-    the pointer or iconifies Root Pager if RootPager already has the pointer
+    the pointer or iconifies Local Pager if LocalPager already has the pointer
     - a toggle action
 </para></listitem>
 
@@ -3013,10 +3014,10 @@ and even menus called or dinamically generated from FvwmScript(1).
 
 </sect2>
 
-<sect2 id="NsCDE-Pager-FrontPanel_conf">
-<title>NsCDE-Pager-FrontPanel.conf</title>
+<sect2 id="NsCDE-Pager-WspLocPager_conf">
+<title>NsCDE-Pager-WspLocPager.conf</title>
 <para>
-Configures FvwmPager(1) type which is called from the PageIndicator or as
+Configures FvwmPager(1) type which is called from the Page Manager (PGM) or as
 <guilabel>Local Pager</guilabel> from the right-click popup menu on Workspace Manager buttons.
 This pager is transient and will disappear after being used with a pointer click.
 </para>
@@ -3031,16 +3032,16 @@ this pager is transient and will disappear when used with a pointer click.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Pager-Root_conf">
-<title>NsCDE-Pager-Root.conf</title>
+<sect2 id="NsCDE-Pager-LocalPager_conf">
+<title>NsCDE-Pager-LocalPager.conf</title>
 <para>
 Infostore variable <varname>pageraisefp</varname> in <filename>NsCDE.conf</filename> is by default 0.
 If enabled, when active page changes, visual FvwmPager(1) will be shown in the center
 of the screen near the top of it.
 On <keysym>Ctrl+Compose</keysym> (<keysym>Ctrl+Menu</keysym>) and/or
 <keysym>Shift+ISO_Level3_Shift</keysym> (Right Alt), pager will move to the position of
-the pointer, it will eventually disappear from the screen after 1.5
-seconds, 5.5 seconds or 8.8 seconds if it looses the focus, or it can
+the pointer, it will eventually disappear from the screen after 1 second, 3 seconds,
+5 seconds, 8 seconds, or 10 seconds if it looses the focus, or it can
 be dismissed by pressing the same key combination once more while
 pointer is above pager.
 </para>
@@ -3062,7 +3063,7 @@ Non-FVWM config file. Here, names of the desks are provided and can be
 changed manually of with Workspace Manager. Names of the desk pages
 (for the menus) are defined here too, and manager manually only for now.
 Option <option>WSPPG</option> can have value 0 or 1. If 1, small dynamic icon similar to
-the PageIndicator will be shown right of the desk name on the Workspace
+the Page Manager (PGM) will be shown right of the desk name on the Workspace
 Manager active desk button, but only in 2 and 4 button configuration.
 Off by default, edit manually.
 </para>
@@ -4194,7 +4195,7 @@ with complete explanations:
 
 <listitem><para>
   Pages: not present in CDE in best of my knowledge. Only workspaces (desks) in
-  original. PageIndicator is a custom widget which is using place
+  original. Page Manager (PGM) is a custom widget which is using place
   left bottom of the Workspace Manager. It can change current page
   or invoke ("...") graphical pager - FvwmPager(1) for a current workspace (desk).
 </para></listitem>
