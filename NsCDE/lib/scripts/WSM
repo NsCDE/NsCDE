@@ -115,7 +115,7 @@ Begin
       End
    End
 
-   Do {SendToModule PageIndicator SendString 1 1 $[page.nx]$[page.ny]}
+   Do {SendToModule PGM SendString 1 1 $[page.nx]$[page.ny]}
    If $IconOnBtn == 1 Then
    Begin
       Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
@@ -563,7 +563,7 @@ Property
              Set $IconName = {NsCDE/Wsm_} $PagesXY {_} $CurrPage {.xpm}
              ChangeIcon 42 $IconName
           End
-          Do {SendToModule PageIndicator SendString 1 1 $[page.nx]$[page.ny]}
+          Do {SendToModule PGM SendString 1 1 $[page.nx]$[page.ny]}
 
           If $DeskNo < 4 Then
           Begin
@@ -931,7 +931,7 @@ Property
              End
           If $Action == 2 Then
              Begin
-                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient FrontPanelPager } $NextDesk { } $NextDesk
+                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient WspLocPager } $NextDesk { } $NextDesk
              End
           If $Action == 3 Then
              # $CurrDesk is 1-based; $NextDesk is 0-based
@@ -1000,6 +1000,6 @@ Widget 42
        Case message of
        SingleClic :
        Begin
-          Do {Module FvwmPager -transient FrontPanelPager * 3}
+          Do {f_MoveCursorAndExec 0 -8 Module FvwmPager -transient WspLocPager}
        End
 End

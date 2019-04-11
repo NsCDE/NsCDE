@@ -354,7 +354,7 @@ Colorset 0 fg {fgg[3]}, bg {selg[8]}
 # Inactive windows and default widget fg/bg/sh/hi, regular menu, window borders
 Colorset 1 fg {fgg[2]}, bg {bgg[2]}, hi {tsg[2]}, sh {bsg[2]}, fgsh {selg[2]}, Plain, NoShape
 
-# Active, focused windows, titlebar of FrontPanelPager, active window borders
+# Active, focused windows, titlebar of WspLocPager, active window borders
 Colorset 2 fg {fgg[1]}, bg {bgg[1]}, hi {tsg[1]}, sh {bsg[1]}, fgsh {selg[1]}, Plain, NoShape
 
 # Hilight menu (main menu selected), Subpanels of front panel selected, mousover baloons
