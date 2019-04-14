@@ -1,7 +1,6 @@
 /* XPM */
-static char * Swrl_pm[] = {
-"80 160 6 1",
-"    c None",
+static char * Fingerprint_pm[] = {
+"80 160 5 1",
 ".   s bottomShadowColor   m black   c #636363636363",
 "+   s background   m black   c #949494949494",
 "@   s selectColor   m black   c #737373737373",

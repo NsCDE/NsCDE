@@ -3,8 +3,8 @@ static char * cubes_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "36 60 3 1",
 /* colors */
-"    s topShadowColor   m white   c #bdbdbdbdbdbd",
-".   s background   m black   c #949494949494",
+".   s selectColor   m black   c #bdbdbdbdbdbd",
+"    s background   m black   c #949494949494",
 "X   s bottomShadowColor   m black   c #636363636363",
 /* pixels */
 "                 .                  ",

@@ -1,7 +1,6 @@
 /* XPM */
-static char * Pletter_pm[] = {
-"100 100 6 1",
-"    c None",
+static char * Celtic_pm[] = {
+"100 100 5 1",
 ".   s bottomShadowColor   m black   c #636363636363",
 "+   s background   m black   c #949494949494",
 "@   s selectColor   m black   c #737373737373",
