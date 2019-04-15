@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
 import os
 
 la1, la2, la3 = os.getloadavg()

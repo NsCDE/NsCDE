@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Blue_pm[] = {
 "638 481 4 1",
 "@      s bottomShadowColor     m black c #636363636363",

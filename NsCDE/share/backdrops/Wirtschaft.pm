@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Wirtschaft_pm[] = {
 "128 128 5 1",
 "       c black",

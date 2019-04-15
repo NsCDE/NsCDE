@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Plates_pm[] = {
 /* columns rows colors chars-per-pixel */
 "350 350 4 1 ",

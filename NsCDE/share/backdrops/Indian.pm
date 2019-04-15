@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Indian_pm[] = {
 "736 736 3 1",
 ".      s bottomShadowColor   m black   c #636363636363",

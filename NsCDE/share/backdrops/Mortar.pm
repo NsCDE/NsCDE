@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Mortar_pm[] = {
 "640 640 3 1",
 ".      s selectColor   m black c #737373737373",

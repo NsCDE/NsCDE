@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Crystal_pm[] = {
 "80 80 4 1",
 "#      s bottomShadowColor     m black c #636363636363",

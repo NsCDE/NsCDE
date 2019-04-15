@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Balkan1_xpm[] = {
 "100 100 3 1",
 ".   s bottomShadowColor   m black   c #636363636363",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * MoroccoLite_pm[] = {
 "400 400 3 1",
 "X      s bottomShadowColor     m black c #636363636363",

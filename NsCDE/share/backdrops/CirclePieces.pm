@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *CirclePieces_pm[] = {
 /* columns rows colors chars-per-pixel */
 "60 36 3 1",

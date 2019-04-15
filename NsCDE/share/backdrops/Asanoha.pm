@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Asanoha_pm[] = {
 "400 347 2 1",
 ".      s background   m black c #737373737373",

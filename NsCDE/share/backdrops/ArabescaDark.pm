@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * ArabescaDark_pm[] = {
 "500 500 3 1",
 "+      s background   m black c #737373737373",

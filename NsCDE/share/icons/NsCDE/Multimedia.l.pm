@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Multimedia_l_pm[] = {
 "48 48 17 1",
 " 	c None",

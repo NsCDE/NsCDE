@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Fphelp_t[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 136 2 ",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Basketry_pm[] = {
 "300 300 4 1",
 "#    s topShadowColor m white c #bdbdbdbdbdbd",

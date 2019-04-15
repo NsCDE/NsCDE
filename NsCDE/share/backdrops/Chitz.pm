@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Chitz_pm[] = {
 /* width height ncolors chars_per_pixel */
 "198 198 3 1",

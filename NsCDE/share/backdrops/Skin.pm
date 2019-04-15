@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Skin_pm[] = {
 "1920 236 4 1",
 "       s bottomShadowColor     m black c #636363636363",

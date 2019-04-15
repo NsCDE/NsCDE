@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Square_pm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 3 1",

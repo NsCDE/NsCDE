@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
 #####################################################################
 # NsCDE: nscde_palette_colorgen.py
 #
@@ -341,6 +347,12 @@ def genfvwmcolorset(palettefile,ncolors):
 # NsCDE - Not so Common Desktop Environment
 # Theme: {palettename[0]}, Colors: {ncolors}
 ##############################################
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
 
 UnsetEnv NSCDE_PALETTE
 SetEnv NSCDE_PALETTE {basename}

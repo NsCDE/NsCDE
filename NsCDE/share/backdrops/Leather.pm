@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Leather_pm[] = {
 "128 128 4 1 0 0",
 "+   s bottomShadowColor m black c #636363636363",

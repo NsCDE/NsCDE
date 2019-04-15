@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Fossil_pm[] = {
 "128 128 4 1",
 "    s bottomShadowColor   m black   c #636363636363",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *CircleWeave_pm[] = {
 "64 64 4 1",
 /* colors */

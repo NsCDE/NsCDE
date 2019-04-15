@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * OldStones_xpm[] = {
 "640 640 3 1",
 ".      s bottomShadowColor   m black c #737373737373",

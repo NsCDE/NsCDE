@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Romaion_pm[] = {
 "20 20 4 1",
 /* colors */

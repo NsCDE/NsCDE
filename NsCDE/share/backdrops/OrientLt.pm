@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * OrientLt_pm[] = {
 "34 34 3 1",
 "#      s background            m black c #949494949494",

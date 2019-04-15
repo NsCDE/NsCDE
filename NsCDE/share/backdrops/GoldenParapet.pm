@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * GoldenParapet_xpm[] = {
 "640 640 5 1",
 ".      s iconGray2     m black c gray20",

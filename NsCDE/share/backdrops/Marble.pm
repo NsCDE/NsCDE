@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Marble_pm[] = {
 "246 222 5 1",
 "    c None",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Space_pm[] = {
 "256 259 2 1",
 ".      s bottomShadowColor   m black c #737373737373",

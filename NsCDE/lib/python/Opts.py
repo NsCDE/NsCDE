@@ -1,5 +1,12 @@
 #!/usr/bin/python
 
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Based on (forked) CDEtheme for XFCE by Jos van Riswick
+# Licence: GPLv3
+#
+
 import os.path
 import yaml
 import subprocess

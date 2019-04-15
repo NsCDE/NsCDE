@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *twister_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "100 100 3 1",

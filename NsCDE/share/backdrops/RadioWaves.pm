@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * RadioWaves_pm[] = {
 "640 640 2 1",
 ".      s background   m black c #737373737373",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *xenon_pm[] = {
 /* width height ncolors chars_per_pixel */
 "22 22 4 1",

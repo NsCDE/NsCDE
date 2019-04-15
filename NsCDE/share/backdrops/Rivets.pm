@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Rivets_pm[] = {
 "64 64 5 1",
 "       c None",

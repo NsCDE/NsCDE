@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Nav_xpm[] = {
 "327 107 3 1",
 ".   s selectColor           m  white  c #737373737373",

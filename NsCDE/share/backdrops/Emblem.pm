@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Emblem_pm[] = {
 "607 510 3 1",
 "@      s bottomShadowColor   m black   c #636363636363",

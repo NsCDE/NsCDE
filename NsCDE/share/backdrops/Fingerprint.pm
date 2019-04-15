@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Fingerprint_pm[] = {
 "80 160 5 1",
 ".   s bottomShadowColor   m black   c #636363636363",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * GalvanizedSteel_pm[] = {
 "384 370 4 1",
 "#      s selectColor   m black c #737373737373",

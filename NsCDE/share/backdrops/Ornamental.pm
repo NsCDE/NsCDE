@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Ornamental_pm[] = {
 "450 450 4 1",
 ".      s bottomShadowColor   m black   c #636363636363",

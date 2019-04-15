@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * SteelBrick_pm[] = {
 "626 459 4 1",
 "+      s bottomShadowColor   m black   c #636363636363",

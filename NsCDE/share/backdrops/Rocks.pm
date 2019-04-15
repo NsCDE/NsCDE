@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Rocks_pm[] = {
 "250 250 5 1",
 ".	s black  m  black  c #000000000000",

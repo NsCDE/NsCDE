@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Cubismo_pm[] = {
 "300 300 3 1",
 "+    s selectColor m black c #bdbdbdbdbdbd",

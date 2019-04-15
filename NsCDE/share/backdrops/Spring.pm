@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Spring_pm[] = {
 "368 368 2 1",
 "+      s topShadowColor   m white   c #636363636363",

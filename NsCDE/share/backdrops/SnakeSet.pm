@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * SnakeSet_pm[] = {
 "599 597 3 1",
 ".      s bottomShadowColor   m black   c #636363636363",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * cubes_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "36 60 3 1",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Dissolve_pm[] = {
 "640 320 4 1",
 "#      s bottomShadowColor     m black c #636363636363",

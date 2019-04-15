@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Wood_pm[] = {
 "96 96 3 1",
 "    s bottomShadowColor   m black   c #636363636363",

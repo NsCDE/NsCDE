@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Floreale_pm[] = {
 "338 338 3 1",
 ".      s bottomShadowColor   m black   c #636363636363",

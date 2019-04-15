@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Stars_pm[] = {
 "567 567 4 1",
 "+    s topShadowColor m white c #bdbdbdbdbdbd",

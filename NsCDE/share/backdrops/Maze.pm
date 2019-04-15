@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Maze_pm[] = {
 "112 112 3 1",
 /* colors */

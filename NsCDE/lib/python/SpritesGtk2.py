@@ -1,3 +1,10 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Based on (forked) CDEtheme for XFCE by Jos van Riswick
+# Licence: GPLv3
+#
+
 spriteLWHXYgtk2=[
    ['spinButtonUpPressed', 11, 11, 6, 4],
    ['spinButtonUp', 11, 11, 24, 4],

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Rain_pm[] = {
 /* width height ncolors chars_per_pixel */
 "64 64 4 1",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * kapnos_pm[] = {
 "200 200 3 1",
 "@   s topShadowColor m white c #bdbdbdbdbdbd",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * FineDecor_xpm[] = {
 "151 150 4 1",
 "+      s background    m black c #949494949494",

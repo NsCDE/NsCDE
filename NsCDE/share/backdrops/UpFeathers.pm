@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * UpFeathers_pm[] = {
 "208 208 3 1",
 ".      s selectColor   m black c #737373737373",

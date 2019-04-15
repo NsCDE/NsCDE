@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * OldPaper_pm[] = {
 "132 121 5 1",
 "    c None",

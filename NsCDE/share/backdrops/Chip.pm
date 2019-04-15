@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Chip[] = {
 /* columns rows colors chars-per-pixel */
 "640 640 2 1 ",

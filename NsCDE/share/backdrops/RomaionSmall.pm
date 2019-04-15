@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Romaion_Small_pm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 3 1",

@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * Nautical_pm[] = {
 "640 640 3 1",
 "+      s selectColor    m black c #949494949494",

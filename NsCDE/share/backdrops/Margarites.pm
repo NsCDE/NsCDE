@@ -1,4 +1,5 @@
 /* XPM */
+/* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char *Margarites_pm[] = {
 /* columns rows colors chars-per-pixel */
 "380 380 2 1",
