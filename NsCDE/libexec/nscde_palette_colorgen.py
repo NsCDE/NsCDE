@@ -402,6 +402,8 @@ Colorset 27 Pixmap $[FVWM_USERDIR]/icons/NsCDE/PressedFPL.xpm
 Colorset 28 fg {fgg[5]}, bg {selg[5]}, hi {bsg[5]}, sh {tsg[5]}, fgsh {selg[5]}, Plain, NoShape
 # Last Pressed Button on Front Panel
 Colorset 29 Pixmap $[FVWM_USERDIR]/icons/NsCDE/LastPressedFPB.xpm
+# Last Pressed Small Button on Front Panel
+Colorset 30 Pixmap $[FVWM_USERDIR]/icons/NsCDE/LastPressedFPS.xpm
     """.format(**locals())
 
     if ncolors == 8:

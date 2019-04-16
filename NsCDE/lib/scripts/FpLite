@@ -64,11 +64,17 @@ Property
          Begin
             ChangeColorset 1 25
             Do {f_FpLiteClickAction}
-            Do {f_UnclickScript 1200 FpLite 1 1 21} 
+            Do {f_ClearFrontPanelPressed}
+            Do {Schedule 50 InfoStoreAdd fplastpressed FpLite}
+            Do {f_UnclickScript 250 FpLite 1 1 unclick} 
          End
          1 :
          Begin
-            If (LastString) == 21 Then
+            If (LastString) == {unclick} Then
+            Begin
+               ChangeColorset 1 30
+            End
+            If (LastString) == {unselect} Then
             Begin
                ChangeColorset 1 21
             End

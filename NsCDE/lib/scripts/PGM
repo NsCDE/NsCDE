@@ -162,6 +162,9 @@ Property
             Set $PopupMenuVisible = 1
             HideWidget 1
             Set $ClickedWhen = (GetTime)
+            Do {f_ClearFrontPanelPressed}
+            Do {Schedule 50 InfoStoreAdd fplastpressed FpPGM}
+            Do {f_UnclickScript 250 PGM 1 2 unclick}
          End
          1 :
          Begin
@@ -175,6 +178,27 @@ Property
             Begin
                Set $Title2 = $CurrPage
                ChangeTitle 2 $Title2
+            End
+         End
+         2 :
+         Begin
+            If (LastString) == {localpager} Then
+            Begin
+               Do {f_MoveCursorAndExec 0 -14 f_BringLocalPager}
+               Do {f_ClearFrontPanelPressed}
+               Do {Schedule 50 InfoStoreAdd fplastpressed FpPGM}
+               Do {f_UnclickScript 250 PGM 1 2 unclick}
+            End
+         End
+         3 :
+         Begin
+            If (LastString) == {unclick} Then
+            Begin
+               ChangeColorset 1 30
+            End
+            If (LastString) == {unselect} Then
+            Begin
+               ChangeColorset 1 21
             End
          End
 End
