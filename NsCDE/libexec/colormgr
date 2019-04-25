@@ -88,8 +88,17 @@ function ProgBits
        -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
    done
 
-   # For Subpanel titlebar FVWM UseDecor, Icon background
-   for xpm in SubpanelTitleActive.xpm SubpanelTitleInactive.xpm IconBg.xpm
+   # Icon background
+   for xpm in IconBgI.xpm IconBgA.xpm
+   do
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
+       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
+   done
+
+   # For Subpanel titlebar FVWM UseDecor
+   for xpm in SubpanelTitleActive.xpm SubpanelTitleInactive.xpm
    do
       ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \

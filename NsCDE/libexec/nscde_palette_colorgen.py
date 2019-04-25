@@ -390,23 +390,33 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
 
+# Icon background pixmap inactive
+Colorset 18 Pixmap NsCDE/IconBgI.xpm
+
+# Icon background pixmap active
+Colorset 19 Pixmap NsCDE/IconBgA.xpm
+
 # FrontPanel Press Indicator Large
 Colorset 24 Pixmap NsCDE/SelectedL.xpm
+
 # FrontPanel Press Indicator Small
 Colorset 25 Pixmap NsCDE/SelectedS.xpm
+
 # FrontPanel Menus Press Indicator
 Colorset 26 Pixmap NsCDE/SelectedXL.xpm
+
 # FrontPanel Subpanel Launcher Press Indicator
 Colorset 27 Pixmap NsCDE/PressedFPL.xpm
+
 # Pressed Button on Colorset 21 (Style Manager)
 Colorset 28 fg {fgg[5]}, bg {selg[5]}, hi {bsg[5]}, sh {tsg[5]}, fgsh {selg[5]}, Plain, NoShape
+
 # Last Pressed Button on Front Panel
 Colorset 29 Pixmap NsCDE/LastPressedFPB.xpm
+
 # Last Pressed Small Button on Front Panel
 Colorset 30 Pixmap NsCDE/LastPressedFPS.xpm
-# Icon background pixmap
-Colorset 39 Pixmap NsCDE/IconBg.xpm
-    """.format(**locals())
+""".format(**locals())
 
     if ncolors == 8:
         lines+="""
