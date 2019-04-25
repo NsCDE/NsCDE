@@ -147,13 +147,21 @@ function splitfontstr
 
 function genxresourcedefs
 {
+   echo '!'
+   echo '! This file is a part of the NsCDE - Not so Common Desktop Environment'
+   echo '! Author: Hegel3DReloaded'
+   echo '! Licence: GPLv3'
+   echo '!'
+
+   echo -ne "\nXft.dpi: 96\n\n"
+
    cat "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
    do
       if [ "x$fvar" != "x" ]; then
          cppfvar=$(echo "$fvar" | sed 's/\./_/g' | tr '[a-z]' '[A-Z]' | sed 's/ $//g')
          cppfname=$(echo "$xftstr" | cut -d":" -f2)
          cppfstyle=$(echo "$xftstr" | cut -d":" -f4)
-         cppfsize=$(echo "$xftstr" | cut -d":" -f5 | sed 's/size=\(.*\)/\1/g')
+         cppfsize=$(echo "$xftstr" | cut -d":" -f5 | sed 's/size=\(.*\)/\1/g; s/\([[:digit:]]\+\)\.\([[:digit:]]\+\)/\1/g')
          echo "#define ${cppfvar}_NAME" "$cppfname"
          echo "#define ${cppfvar}_STYLE" "$cppfstyle"
          echo "#define ${cppfvar}_SIZE" "$cppfsize"
