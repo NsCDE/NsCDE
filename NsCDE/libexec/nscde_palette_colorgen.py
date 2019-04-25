@@ -391,19 +391,21 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
 
 # FrontPanel Press Indicator Large
-Colorset 24 Pixmap $[FVWM_USERDIR]/icons/NsCDE/SelectedL.xpm
+Colorset 24 Pixmap NsCDE/SelectedL.xpm
 # FrontPanel Press Indicator Small
-Colorset 25 Pixmap $[FVWM_USERDIR]/icons/NsCDE/SelectedS.xpm
+Colorset 25 Pixmap NsCDE/SelectedS.xpm
 # FrontPanel Menus Press Indicator
-Colorset 26 Pixmap $[FVWM_USERDIR]/icons/NsCDE/SelectedXL.xpm
+Colorset 26 Pixmap NsCDE/SelectedXL.xpm
 # FrontPanel Subpanel Launcher Press Indicator
-Colorset 27 Pixmap $[FVWM_USERDIR]/icons/NsCDE/PressedFPL.xpm
+Colorset 27 Pixmap NsCDE/PressedFPL.xpm
 # Pressed Button on Colorset 21 (Style Manager)
 Colorset 28 fg {fgg[5]}, bg {selg[5]}, hi {bsg[5]}, sh {tsg[5]}, fgsh {selg[5]}, Plain, NoShape
 # Last Pressed Button on Front Panel
-Colorset 29 Pixmap $[FVWM_USERDIR]/icons/NsCDE/LastPressedFPB.xpm
+Colorset 29 Pixmap NsCDE/LastPressedFPB.xpm
 # Last Pressed Small Button on Front Panel
-Colorset 30 Pixmap $[FVWM_USERDIR]/icons/NsCDE/LastPressedFPS.xpm
+Colorset 30 Pixmap NsCDE/LastPressedFPS.xpm
+# Icon background pixmap
+Colorset 39 Pixmap NsCDE/IconBg.xpm
     """.format(**locals())
 
     if ncolors == 8:
