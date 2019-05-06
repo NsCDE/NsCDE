@@ -11,6 +11,7 @@ Colorset 21
 Init
 Begin
    Set $LetterStateUp = 0
+   Set $MailCnt = 0
 End
 
 Widget 1
@@ -30,7 +31,12 @@ Widget 1
             Set $LetterStateUp = 0
             HideWidget 2
          End
-         Do {Schedule 2000 f_CheckMail}
+
+         HideWidget 3
+         Set $MailCnt = 0
+
+         Do {Schedule 1000 f_CheckMail}
+
          ChangeColorset 1 24
          Do {f_ClearFrontPanelPressed}
          Do {Schedule 50 InfoStoreAdd fplastpressed Btn5}
@@ -52,6 +58,10 @@ Widget 1
          # Check if command was LetterUp
          If $CheckLetterUp == {LetterUp} Then
          Begin
+            Set $MailCnt = (Add $MailCnt 1)
+            ChangeTitle 3 $MailCnt
+            ShowWidget 3
+
             # Change Icon to raised letter if current state is
             # not raised icon already, change title of LetterUpArg2
             # and show widget 2 which contains account name
@@ -122,3 +132,21 @@ Widget 2
       Begin
       End
 End
+
+Widget 3
+   Property
+   Position 2 2
+   Size 0 0
+   Type ItemDraw
+   Flags NoReliefString Left Hidden
+   BackColor {#ffff00000000}
+   ForeColor {#ffffffffffff}
+   Title {000}
+   Font "xft:::pixelsize=9"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
