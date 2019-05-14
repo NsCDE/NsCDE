@@ -1,11 +1,11 @@
 /* XPM */
 /* This file is a part of the NsCDE - Not so Common Desktop Environment */
-static char *Chitz_pm[] = {
+static char *ChitzDk_pm[] = {
 /* width height ncolors chars_per_pixel */
 "198 198 3 1",
 /* colors */
-"a s topShadowColor   m white   c #bdbdbdbdbdbd",
-"b s background   m white   c #949494949494",
+"a s background   m white   c #bdbdbdbdbdbd",
+"b s selectColor   m black   c #949494949494",
 "c s bottomShadowColor   m black   c #636363636363",
 /* pixels */
 "abbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaaabbbcaaaaaa",
