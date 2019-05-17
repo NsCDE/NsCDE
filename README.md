@@ -3,7 +3,7 @@ Not so Common Desktop Environment (NsCDE)
 Notice: for a full documentation, see NsCDE/share/doc/*
 
 Notice: for a set of photos, also download
-https://github.com/NsCDE/NsCDE-photos/archive/photos-0.9.b82.tar.gz
+https://github.com/NsCDE/NsCDE-photos/archive/photos-0.9.b86.tar.gz
 
 See here for screenshots: https://imgur.com/gallery/nHkw35X
 
