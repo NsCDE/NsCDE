@@ -176,8 +176,6 @@ Components of the NsCDE
 
      * Workspace Manager (WSM) - FvwmScript
 
-     * Page Manager (PGM) - FvwmScript
-
      * MonthDayApplet - FvwmScript
 
      * Clock - External C applet pclock
@@ -313,8 +311,6 @@ Applets Docks and Panels
 
           * CheckMailApplet (FvwmScript)
 
-          * PGM (FvwmScript)
-
           * WSM / Workspace Manager (FvwmScript)
 
           * FpLite (FvwmScript)
@@ -365,8 +361,8 @@ Applets Docks and Panels
      *   In the center of the Front Panel there is a place without subpanel
        launchers and separated by vertical line. Inside this area, there are
        4 small command icons: Left: Lock Screen (xscreensaver -activate),
-       Page Manager (PGM), Right are Front Panel Lite (system load
-       indicator), and Exit button (SysActionDialog).
+       Page Manager Menu, Right are Front Panel Lite (system load indicator),
+       and Exit button (SysActionDialog).
 
          In the middle of this area there is WSM - Work Space Manager with
        well known four buttons for four virtual desks. By default, four desks
@@ -477,10 +473,10 @@ Applets Docks and Panels
 
      *   If $FVWM_USERDIR/WSM.conf value WSPPG is 1, then in 2 or 4
        desks/buttons mode a small current page indicator is show on the right
-       side of the button. In addition to Page Manager (PGM) southwest of the
+       side of the button. In addition to Page Manager Icon southwest of the
        WSM. Disabled (0) by default. WSM.conf (system wide:
        $NSCDE_ROOT/config/WSM.conf) is a separate configuration file read by
-       WSM, PGM, WsPgMgr and such. Not a FVWM configuration file.
+       WSM, WsPgMgr and such. Not a FVWM configuration file.
 
      *   Number of Desks and Pages can be configured with Workspace and Page
        Manager tool which is called with right pointer click on Front Panel's
@@ -505,7 +501,7 @@ Applets Docks and Panels
    original CDE, just desks (workspaces). This nice feature of pages is too
    useful to be disabled and sacrificed just to get even more CDE similarity,
    but really zealous user can configure NsCDE not to include pages, just
-   desks. PGM is a small FvwmScript applet southwest from the WSM,
+   desks. PGM is a dynamic FvwmButtons Icon southwest from the WSM,
    represented by the silver-gray icon of the desk divided on pagesX x
    pagesY. Default is 2x2, that is, four pages per every desk, which in
    default first run gives 4 x 4 = 16 screens for applications. Minimum for
@@ -516,17 +512,15 @@ Applets Docks and Panels
    Pages can be configured in any XxY combination. For example 1x4, 2x3, 3x3,
    2x1, 2x2 ...
 
-    PGM changes icon to represent position of the current page on current
-   desk while user moves from page to page automatically with the help of the
-   FvwmEvent(1) just like the WSM.
+    Page Manager icon changes with the page to represent position of the
+   current page on current desk while user moves from page to page
+   automatically with the help of the FvwmEvent(1) just like the Workspace
+   Manager (WSM).
 
-    When clicked, PGM transforms in a closed popup menu with names of the
-   pages and special "..." option on the top which calls local visual
-   FvwmPager. When option from the menu is selected, menu again transforms to
-   the Icon. If called, but not clicked, menu automatically transforms back
-   into Icon after 20 seconds of inactivity. Middle pointer button calls
-   Workspace and Page Manager, while the right pointer button calls visual
-   Local Pager.
+    When clicked, popups menu with names of the pages. When option from the
+   menu is selected, menu pops down and page is changed to the selected one.
+   Middle pointer button calls Workspace and Page Manager, while the right
+   pointer button calls visual Local Pager.
 
    --------------------------------------------------------------------------
 
@@ -1405,9 +1399,9 @@ GUI Tools
    which is probably enough (too much) for 99% of the people.
 
     Number of vertical and horizontal pages can also be configured here. This
-   change will affect Page Manager (PGM), and menus which are displaying
-   pages. Page names are not configurable via GUI. User is encouraged to open
-   $FVWM_USERDIR/WSM.conf and edit to suit.
+   change will affect Page Manager (PGM) icon on the Front Panel, and menus
+   which are displaying pages. Page names are not configurable via GUI. User
+   is encouraged to open $FVWM_USERDIR/WSM.conf and edit to suit.
 
     OK button saves configuration, restarts window manager and quits. Cancel
    button discards, except if new names of desks are set, because this is
@@ -2329,10 +2323,9 @@ Configuration files explained
 
   NsCDE-Pager-WspLocPager.conf
 
-    Configures FvwmPager(1) type which is called from the Page Manager (PGM)
-   or as Local Pager from the right-click popup menu on Workspace Manager
-   buttons. This pager is transient and will disappear after being used with
-   a pointer click.
+    Configures FvwmPager(1) type which is called as Local Pager from the
+   right-click popup menu on Workspace Manager buttons. This pager is
+   transient and will disappear after being used with a pointer click.
 
    --------------------------------------------------------------------------
 
@@ -3229,10 +3222,9 @@ Similarities and differences in usage and look between CDE and NsCDE
        appropriate settings tool for that desktop environment if it is found.
 
      *   Pages: not present in CDE in best of my knowledge. Only workspaces
-       (desks) in original. Page Manager (PGM) is a custom widget which is
-       using place left bottom of the Workspace Manager. It can change
-       current page or invoke ("...") graphical pager - FvwmPager(1) for a
-       current workspace (desk).
+       (desks) in original. Page Manager (PGM) is a custom FrontPanel icon
+       which is using place left bottom of the Workspace Manager. It popups
+       menu with the list of pages and can change current page.
 
      *   Custom keyboard and mouse actions on titlebars, buttons and root
        window.

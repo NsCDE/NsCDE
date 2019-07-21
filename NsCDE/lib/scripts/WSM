@@ -121,7 +121,7 @@ Begin
       End
    End
 
-   Do {SendToModule PGM SendString 1 1 $[page.nx]$[page.ny]}
+   Do {f_SendToPGM}
    If $IconOnBtn == 1 Then
    Begin
       Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
@@ -261,7 +261,14 @@ Property
              End
              Set $BtnPressed = 1
              ChangeColorset 1 41
-             Do {GotoDesk 0 0}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -293,7 +300,14 @@ Property
              End
              Set $BtnPressed = 2
              ChangeColorset 2 43
-             Do {GotoDesk 0 1}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -325,7 +339,14 @@ Property
              End
              Set $BtnPressed = 3
              ChangeColorset 3 45
-             Do {GotoDesk 0 2}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -357,7 +378,14 @@ Property
              End
              Set $BtnPressed = 4
              ChangeColorset 4 47
-             Do {GotoDesk 0 3}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -389,7 +417,14 @@ Property
              End
              Set $BtnPressed = 5
              ChangeColorset 5 41
-             Do {GotoDesk 0 4}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -421,7 +456,14 @@ Property
              End
              Set $BtnPressed = 6
              ChangeColorset 6 43
-             Do {GotoDesk 0 5}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -453,7 +495,14 @@ Property
              End
              Set $BtnPressed = 7
              ChangeColorset 7 45
-             Do {GotoDesk 0 6}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -485,7 +534,14 @@ Property
              End
              Set $BtnPressed = 8
              ChangeColorset 8 47
-             Do {GotoDesk 0 7}
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {GotoDesk 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
           End
           Else
           Begin
@@ -569,7 +625,7 @@ Property
              Set $IconName = {NsCDE/Wsm_} $PagesXY {_} $CurrPage {.xpm}
              ChangeIcon 42 $IconName
           End
-          Do {SendToModule PGM SendString 1 1 $[page.nx]$[page.ny]}
+          Do {f_SendToPGM}
 
           If $DeskNo < 4 Then
           Begin
