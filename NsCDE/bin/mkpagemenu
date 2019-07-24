@@ -1,0 +1,58 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Produce MoveToPage or GoToPage menu commands
+# dinamically, and with options.
+
+PagesX="$1"
+PagesY="$2"
+Icons="$3"
+FvwmPageCmd="$4"
+FvwmPageLeftTitle="$5"
+
+PAGEMATRIX="$(($PagesX * $PagesY))"
+
+if [ "x$FvwmPageLeftTitle" != "x" ]; then
+   MenuLeftTitle="$FvwmPageLeftTitle		"
+else
+   MenuLeftTitle=" "
+fi
+
+pg=0
+while [ ${pg} -lt ${PAGEMATRIX} ]
+do
+   pg=$((pg + 1));
+
+   if [ -r "$FVWM_USERDIR/WSM.conf" ]; then
+      pagenum_prepare=$(egrep "^PG:${pg}:.*:" "$FVWM_USERDIR/WSM.conf" | head -1)
+      if [ "x${pagenum_prepare}" == "x" ]; then
+         if [ -r "${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY}" ]; then
+            pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY} | head -1)
+         fi
+      fi
+   fi
+
+   pagenum=$(print -- "$pagenum_prepare" | cut -d: -f3)
+   pagenum_fvwm=$(print -- "$pagenum" | sed "s/\\(.\\)\\(.\\)/\\1 \\2/g")
+   pagename=$(print -- "$pagenum_prepare" | cut -d: -f4-)
+
+   if [ "x${pagename}" = "x" ]; then
+      pagename="$pg"
+   fi
+
+   if [ "$Icons" == "y" ]; then
+      if [ -r "$NSCDE_ROOT/share/icons/NsCDE/Wsm_${PagesX}x${PagesY}_${pagenum}.xpm" ]; then
+         echo "+ \"&${pg} ${MenuLeftTitle}${pagename}%NsCDE/Wsm_${PagesX}x${PagesY}_${pagenum}.xpm%\" $FvwmPageCmd $pagenum_fvwm"
+      else
+         echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" $FvwmPageCmd $pagenum_fvwm"
+      fi
+   else
+      echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" $FvwmPageCmd $pagenum_fvwm"
+   fi
+done
+
