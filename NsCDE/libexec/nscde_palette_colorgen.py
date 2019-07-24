@@ -375,6 +375,9 @@ Colorset 4 fg {fgg[2]}, bg {selg[2]}, hi {tsg[2]}, sh {bsg[2]}, fgsh {bsg[2]}, P
 # Grayed / disabled menu
 Colorset 5 fg grey40, bg {bgg[2]}
 
+# Menu prelight for colorset 22 (Page Manager)
+Colorset 6 fg {fgg[6]}, bg {selg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
+
 ############################
 # NsCDE additional Colorsets
 ############################
