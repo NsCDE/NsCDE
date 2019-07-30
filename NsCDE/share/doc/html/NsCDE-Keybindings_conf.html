@@ -195,7 +195,10 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     menu option in this windows called <span class="emphasis"><em>Wide Terminal</em></span>
 </p></li><li class="listitem"><p>
   <span class="keysym">Ctrl+Escape</span> will raise Front Panel and reposition it to it's default
-    place on the screen
+    place on the screen. If key combination is pressed for the second time, focus and
+    pointer focus will be transferred to the Front Panel, enabling <span class="keysym">Meta+[0-9]</span>
+    keys to function on subpanels and <span class="keysym">Ctrl+Return</span> on icons of the Front Panel
+    itself.
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
@@ -208,9 +211,8 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Escape</span> outside of the Front Panel focus will give Front Panel a focus and
-  warp pointer in the middle of the Front Panel. If focus plus pointer is already on the  Front Panel
-  previous window will be selected for the focus and pointer warped in the center of that window.
+  <span class="keysym">Meta+Escape</span> Will cycle trough focus-accepting windows on the current page of
+  the current desk, avoiding CirculateSkip windows and the FrontPanel.
 </p></li><li class="listitem"><p>
   <span class="keysym">Shift+Tab</span> will call transient GlobalPager in any context. When clicked, this
 Pager will close itself.

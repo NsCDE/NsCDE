@@ -2616,7 +2616,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Ctrl+Escape</keysym> will raise Front Panel and reposition it to it's default
-    place on the screen
+    place on the screen. If key combination is pressed for the second time, focus and
+    pointer focus will be transferred to the Front Panel, enabling <keysym>Meta+[0-9]</keysym>
+    keys to function on subpanels and <keysym>Ctrl+Return</keysym> on icons of the Front Panel
+    itself.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -2635,9 +2638,8 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Meta+Escape</keysym> outside of the Front Panel focus will give Front Panel a focus and
-  warp pointer in the middle of the Front Panel. If focus plus pointer is already on the  Front Panel
-  previous window will be selected for the focus and pointer warped in the center of that window.
+  <keysym>Meta+Escape</keysym> Will cycle trough focus-accepting windows on the current page of
+  the current desk, avoiding CirculateSkip windows and the FrontPanel.
 </para></listitem>
 
 <listitem><para>

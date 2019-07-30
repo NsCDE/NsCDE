@@ -2064,7 +2064,10 @@ Configuration files explained
        menu option in this windows called Wide Terminal
 
      *   Ctrl+Escape will raise Front Panel and reposition it to it's default
-       place on the screen
+       place on the screen. If key combination is pressed for the second
+       time, focus and pointer focus will be transferred to the Front Panel,
+       enabling Meta+[0-9] keys to function on subpanels and Ctrl+Return on
+       icons of the Front Panel itself.
 
          Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
        description on menus.
@@ -2077,10 +2080,9 @@ Configuration files explained
          Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for automatic
        description on menus.
 
-     *   Meta+Escape outside of the Front Panel focus will give Front Panel a
-       focus and warp pointer in the middle of the Front Panel. If focus plus
-       pointer is already on the Front Panel previous window will be selected
-       for the focus and pointer warped in the center of that window.
+     *   Meta+Escape Will cycle trough focus-accepting windows on the current
+       page of the current desk, avoiding CirculateSkip windows and the
+       FrontPanel.
 
      *   Shift+Tab will call transient GlobalPager in any context. When
        clicked, this Pager will close itself.
