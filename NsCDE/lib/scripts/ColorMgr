@@ -221,7 +221,7 @@ Widget 4
 
          If (GetValue 4) == 2 Then
          Begin
-            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
             Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
             Do {f_Readcfg Backdrops}
             Do {f_Readcfg Colorset}
@@ -692,7 +692,7 @@ Widget 30
             # Reload X resources immediately.
             If $PreviewMode == 0 Then
             Begin
-               Set $ReloadXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+               Set $ReloadXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
                Set $ReloadXresources = (GetOutput $ReloadXresourcesCmd 1 -1)
             End
          End
@@ -833,7 +833,7 @@ Widget 31
       Begin
          If $PreviewContaminated == 1 Then
          Begin
-            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb < $FVWM_USERDIR/Xdefaults}
+            Set $RestoreXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
             Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
             Do {f_Readcfg Backdrops}
             Do {f_Readcfg Colorset}
