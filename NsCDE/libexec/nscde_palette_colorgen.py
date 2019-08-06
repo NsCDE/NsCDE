@@ -497,11 +497,11 @@ def gencdebackdrop(palettefile,ncolors,infile,palettepart):
 
     buf_infile = open(infile, 'r')
     for line in buf_infile:
-        line = re.sub('s background(.*) m(.*) c (.*)', r's background \1 m \2 c ' + bgg[palettepart] + '",', line)
-        line = re.sub('s foreground(.*) m(.*) c (.*)', r's foreground \1 m \2 c ' + fgg[palettepart] + '",', line)
-        line = re.sub('s topShadowColor(.*) m(.*) c (.*)', r's topShadowColor \1 m \2 c ' + tsg[palettepart] + '",', line)
-        line = re.sub('s bottomShadowColor(.*) m(.*) c (.*)', r's bottomShadowColor \1 m \2 c ' + bsg[palettepart] + '",', line)
-        line = re.sub('s selectColor(.*) m(.*) c (.*)', r's selectColor \1 m \2 c ' + selg[palettepart] + '",', line)
+        line = re.sub('(s[\t ]+background[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bgg[palettepart] + '",', line)
+        line = re.sub('(s[\t]+foreground[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + fgg[palettepart] + '",', line)
+        line = re.sub('(s[\t ]+topShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + tsg[palettepart] + '",', line)
+        line = re.sub('(s[\t ]+bottomShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bsg[palettepart] + '",', line)
+        line = re.sub('(s[\t ]+selectColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + selg[palettepart] + '",', line)
         sys.stdout.write (line)
     buf_infile.close()
     sys.stdout.flush()
