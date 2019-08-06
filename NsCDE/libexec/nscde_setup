@@ -146,9 +146,9 @@ function setup_nscde
    # GeometryDB ini
    if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
       if (($VERBOSE == 1)); then
-         echo "Initializing default empty ${FVWM_USERDIR}/GeoDB.ini ..."
+         echo "Initializing default ${FVWM_USERDIR}/GeoDB.ini ..."
       fi
-      touch ${FVWM_USERDIR}/GeoDB.ini
+      cp ${NSCDE_ROOT}/share/templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/GeoDB.ini already exists."
