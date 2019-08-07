@@ -1,7 +1,7 @@
 /* XPM */
 /* $XConsortium: Leaves.pm /main/3 1995/07/18 17:19:03 drk $ */
 /*********************************************************************
-*  (c) Copyright 1993, 1994 Hewlett-Packard Company   
+*  (c) Copyright 1993, 1994 Hewlett-Packard Company	
 *  (c) Copyright 1993, 1994 International Business Machines Corp.
 *  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
 *  (c) Copyright 1993, 1994 Unix System Labs, Inc., a subsidiary of
@@ -12,7 +12,7 @@ static char * LeavesNew4_pm[] = {
 "104 128 4 1 0 0",
 /* colors */
 "     s bottomShadowColor m black c #636363636363",
-".   s iconColor1   m black   c black",
+".	s iconColor1	m black	c black",
 "X    s background    m black c #949494949494",
 "o    s selectColor m white c #737373737373",
 /* pixels */

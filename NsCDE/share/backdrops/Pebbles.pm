@@ -1,7 +1,7 @@
 /* XPM */
 /* $XConsortium: Pebbles.pm /main/3 1995/07/18 17:19:35 drk $ */
 /*********************************************************************
-*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company
+*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company	
 *  (c) Copyright 1993, 1994 International Business Machines Corp.
 *  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
 *  (c) Copyright 1993, 1994 Unix System Labs, Inc., a subsidiary of
@@ -22,7 +22,7 @@ static char * Pebbles [] = {
 "$    s iconGray3     m white c #adadadadadad",
 "%    s topShadowColor m white c #bdbdbdbdbdbd",
 "&    s iconGray1     m white c #dededededede",
-"*   s iconColor2   m white   c white",
+"*	s iconColor2	m white	c white",
 /* pixels */
 " .. XXX   oO+o@OO#++ #. +++.++O+$..XO#@$$$XO OO#Ooo X++  .O#. # #%++OO#% O#...##O$@ + .+ #.X$$X$$   ..XX.# OO#O++X+O .+  O X.O #..#X.  OOO.O###..#..#. O  OO#    .",
 "   O o+#.XXOooO #...O. +#++++.X## ##++X%+X$@O#+++ O + #O # @X X ++.XX##.+ #.###  O@X+Oo# O#..X. O .O#...$.@$ . O +..O#++.$ X$X#O###.O# .O.X #.###X#O.#OO#@$$$XO . ",

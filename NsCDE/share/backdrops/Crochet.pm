@@ -1,7 +1,7 @@
 /* XPM */
 /* $XConsortium: Crochet.pm /main/3 1995/07/18 17:18:13 drk $ */
 /*********************************************************************
-*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company   
+*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company	
 *  (c) Copyright 1993, 1994 International Business Machines Corp.
 *  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
 *  (c) Copyright 1993, 1994 Unix System Labs, Inc., a subsidiary of
@@ -17,7 +17,7 @@ static char * Crochet [] = {
 "o    s bottomShadowColor m black c #636363636363",
 "O    s iconGray4     m white c #949494949494",
 "+    s iconGray6     m black c #636363636363",
-"@    s iconColor1    m black   c black",
+"@	s iconColor1	m black	c black",
 "#    s iconGray2     m white c #bdbdbdbdbdbd",
 "$    s iconGray1     m white c #dededededede",
 "%    s iconGray8     m black c #212121212121",

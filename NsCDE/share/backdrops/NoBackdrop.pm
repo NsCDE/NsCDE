@@ -11,7 +11,7 @@ static char * noBackdrop [] = {
 /* width height ncolors cpp [x_hot y_hot] */
 "2 2 1 1 -1 -1",
 /* colors */
-"    s iconColor1   m black   c black",
+" 	s iconColor1	m black	c black",
 /* pixels */
 "  ",
 "  "};

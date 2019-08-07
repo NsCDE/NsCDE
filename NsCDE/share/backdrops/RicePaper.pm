@@ -1,7 +1,7 @@
 /* XPM */
 /* $XConsortium: RicePaper.pm /main/3 1995/07/18 17:19:50 drk $ */
 /*********************************************************************
-*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company   
+*  (c) Copyright 1992, 1993, 1994 Hewlett-Packard Company	
 *  (c) Copyright 1993, 1994 International Business Machines Corp.
 *  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
 *  (c) Copyright 1993, 1994 Unix System Labs, Inc., a subsidiary of
@@ -17,7 +17,7 @@ static char * Riceppr [] = {
 "o    s iconGray5     m black c #737373737373",
 "O    s background    m black c #949494949494",
 "+    s topShadowColor m white c #bdbdbdbdbdbd",
-"@   s iconColor2   m white   c white",
+"@	s iconColor2	m white	c white",
 "#    s selectColor m white c #737373737373",
 /* pixels */
 "  .    X.o  oO. .o..OOo  .. o ..O..O... X XO. Xo O.o .  .  . . XXO  .. . ..+.   .O     . . ..O.O .... XOO.. X . .X...O  O..oXX   .  .... . . ..  .   o  .OoXX X .O  ",
