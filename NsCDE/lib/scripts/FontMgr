@@ -15,7 +15,8 @@ Begin
    ChangeFont 26 $CheckBoxFont
    ChangeFont 27 $CheckBoxFont
 
-   Set $CurrentDPI = (GetOutput {echo $NSCDE_DPI} 1 -1)
+   Set $CurrentDPI = (GetOutput {xrdb -q | sed -n 's/^Xft.dpi:\([[:space:]]\+\)\?//gp'} 1 1)
+   Do {Echo FONTMGR_DEBUG: } $CurrentDPI
 
    If $CurrentDPI == {} Then
       Set $CurrentDPI = 96
