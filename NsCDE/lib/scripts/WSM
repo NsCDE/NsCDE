@@ -6,7 +6,7 @@
 
 WindowTitle {WSM}
 WindowSize 256 66
-Colorset 21
+Colorset 52
 
 Init
 Begin
@@ -149,6 +149,37 @@ Begin
    # For avoiding turned on button when past button was active and pressed again
    # Value: Desk Button Number. Start value is meaningless.
    Set $BtnPressed = 0
+
+   # Set background color (widget 30) to colorset 22 if $[infostore.wsmcolored] is 1
+   Do {Test (EnvMatch infostore.wsmcolored 1) SendToModule WSM SendString 30 1 wsmcolored}
+End
+
+# If $[infostore.wsmcolored] is set, this will be activated
+# so Workspace Manager will be colored with colorset 22 as
+# this is the case in some historical visual appereances
+# of CDE. String "wsmcolored" sets colorset to 22, while
+# string if received, reverts to colorset 21.
+Widget 30
+Property
+    Flags NoReliefString
+    Position 0 0
+    Size 256 66
+    Type ItemDraw
+    Title {}
+    Colorset 21
+    Main
+       Case message of
+       1 :
+       Begin
+          If (LastString) == {wsmcolored} Then
+          Begin
+             ChangeColorset 30 22
+          End
+          If (LastString) == {wsmclassic} Then
+          Begin
+             ChangeColorset 30 21
+          End
+       End
 End
 
 Widget 21
