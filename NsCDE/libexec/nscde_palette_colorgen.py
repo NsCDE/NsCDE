@@ -393,7 +393,13 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
 
-# Last Pressed Subpanel Launcher Button on Front Panel
+# Last Pressed Subpanel Launcher Button on the Front Panel
+# It is unknown why there must be a fg color here but
+# letters of the selected entry are green if this is not
+# the case.
+Colorset 16 Pixmap NsCDE/LastPressedXL.xpm, fg #ffffffffffff
+
+# Press inficator on subpanel launchers of the Front Panel
 Colorset 17 Pixmap NsCDE/LastPressedFPSubLnch.xpm
 
 # Icon background pixmap inactive
