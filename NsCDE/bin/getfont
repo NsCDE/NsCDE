@@ -16,8 +16,8 @@ if [ -z $FVWM_USERDIR ]; then
    exit 4
 fi
 
-if [ -z $NSCDE_DPI ]; then
-   NSCDE_DPI=96
+if [ -z $NSCDE_FONT_DPI ]; then
+   NSCDE_FONT_DPI=96
 fi
 
 function Defaults
@@ -40,9 +40,9 @@ function GetFont
    Defaults
 
    if [ "x$FnFile" == "x" ]; then
-      sysfncffile="${NSCDE_ROOT}/config/NsCDE-Font-${NSCDE_DPI}dpi.conf"
-      if [ -s "${FVWM_USERDIR}/NsCDE-Font-${NSCDE_DPI}dpi.conf" ]; then
-         fncnffile="${FVWM_USERDIR}/NsCDE-Font-${NSCDE_DPI}dpi.conf"
+      sysfncffile="${NSCDE_ROOT}/config/NsCDE-Font-${NSCDE_FONT_DPI}dpi.conf"
+      if [ -s "${FVWM_USERDIR}/NsCDE-Font-${NSCDE_FONT_DPI}dpi.conf" ]; then
+         fncnffile="${FVWM_USERDIR}/NsCDE-Font-${NSCDE_FONT_DPI}dpi.conf"
          avoiddoublegrep=0
       else
          fncnffile="$sysfncffile"
@@ -78,7 +78,7 @@ do
          FnFile="$OPTARG"
       ;;
       d)
-         NSCDE_DPI="$OPTARG"
+         NSCDE_FONT_DPI="$OPTARG"
       ;;
       m)
          FnSpacing="monospaced"
