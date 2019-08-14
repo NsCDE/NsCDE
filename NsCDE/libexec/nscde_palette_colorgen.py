@@ -393,6 +393,9 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
 
+# Last Pressed Subpanel Launcher Button on Front Panel
+Colorset 17 Pixmap NsCDE/LastPressedFPSubLnch.xpm
+
 # Icon background pixmap inactive
 Colorset 18 Pixmap NsCDE/IconBgI.xpm
 

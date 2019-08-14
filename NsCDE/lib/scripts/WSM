@@ -5,7 +5,7 @@
 #
 
 WindowTitle {WSM}
-WindowSize 256 66
+WindowSize 260 70
 Colorset 52
 
 Init
@@ -152,18 +152,103 @@ Begin
 
    # Set background color (widget 30) to colorset 22 if $[infostore.wsmcolored] is 1
    Do {Test (EnvMatch infostore.wsmcolored 1) SendToModule WSM SendString 30 1 wsmcolored}
+
+   # Used in routine 2: of Widget 30:
+   # Set selected border sizes and positions for all possible
+   # desk combinations which can be configured for WSM.
+   If $DeskNo < 4 Then
+   Begin
+      Set $SelectDeskSizeH = 256
+      Set $SelectDeskSizeV = 30
+
+      Set $SelectPos1H = 2
+      Set $SelectPos1V = 4
+      Set $SelectPos2H = 2
+      Set $SelectPos2V = 37
+   End
+
+   If $DeskNo == 4 Then
+   Begin
+      Set $SelectDeskSizeH = 128
+      Set $SelectDeskSizeV = 32
+
+      Set $SelectPos1H = 0
+      Set $SelectPos1V = 1
+      Set $SelectPos2H = 132
+      Set $SelectPos2V = 1
+      Set $SelectPos3H = 0
+      Set $SelectPos3V = 36
+      Set $SelectPos4H = 132
+      Set $SelectPos4V = 36
+   End
+
+   If $DeskNo == 6 Then
+   Begin
+      Set $SelectDeskSizeH = 86
+      Set $SelectDeskSizeV = 30
+
+      Set $SelectPos1H = 0
+      Set $SelectPos1V = 3
+      Set $SelectPos2H = 87
+      Set $SelectPos2V = 3
+      Set $SelectPos3H = 174
+      Set $SelectPos3V = 3
+      Set $SelectPos4H = 0
+      Set $SelectPos4V = 36
+      Set $SelectPos5H = 87
+      Set $SelectPos5V = 36
+      Set $SelectPos6H = 174
+      Set $SelectPos6V = 36
+   End
+
+   If $DeskNo == 8 Then
+   Begin
+      Set $SelectDeskSizeH = 64
+      Set $SelectDeskSizeV = 30
+
+      Set $SelectPos1H = 0
+      Set $SelectPos1V = 3
+      Set $SelectPos2H = 65
+      Set $SelectPos2V = 3
+      Set $SelectPos3H = 130
+      Set $SelectPos3V = 3
+      Set $SelectPos4H = 195
+      Set $SelectPos4V = 3
+      Set $SelectPos5H = 0
+      Set $SelectPos5V = 37
+      Set $SelectPos6H = 65
+      Set $SelectPos6V = 37
+      Set $SelectPos7H = 130
+      Set $SelectPos7V = 37
+      Set $SelectPos8H = 195
+      Set $SelectPos8V = 37
+   End
+
+   # Prepare selector widget for $DeskNo configuration.
+   ChangeSize 31 $SelectDeskSizeH $SelectDeskSizeV
 End
 
+# Worker widget 30
+# 1 :
 # If $[infostore.wsmcolored] is set, this will be activated
 # so Workspace Manager will be colored with colorset 22 as
 # this is the case in some historical visual appereances
 # of CDE. String "wsmcolored" sets colorset to 22, while
 # string if received, reverts to colorset 21.
+#
+# 2 :
+# Set hilighted desk button: change colorset of the external
+# button border represented by the 20+ ItemDraw shadow widgets
+# behind PushButtons. Remove "icon" (pixmap) part of the border
+# of hilighted button. Restore previous hilighted.
+#
+# 3 :
+# Called by PushButton 1-8 clicks to trigger select
 Widget 30
 Property
     Flags NoReliefString
     Position 0 0
-    Size 256 66
+    Size 260 70
     Type ItemDraw
     Title {}
     Colorset 21
@@ -180,12 +265,58 @@ Property
              ChangeColorset 30 21
           End
        End
+       2 :
+       Begin
+          If (LastString) == {unclick} Then
+          Begin
+             # Moving select frame (Widget 31 across buttons)
+             If $CurrDesk == 1 Then
+                ChangePosition 31 $SelectPos1H $SelectPos1V
+             If $CurrDesk == 2 Then
+                ChangePosition 31 $SelectPos2H $SelectPos2V
+             If $CurrDesk == 3 Then
+                ChangePosition 31 $SelectPos3H $SelectPos3V
+             If $CurrDesk == 4 Then
+                ChangePosition 31 $SelectPos4H $SelectPos4V
+             If $CurrDesk == 5 Then
+                ChangePosition 31 $SelectPos5H $SelectPos5V
+             If $CurrDesk == 6 Then
+                ChangePosition 31 $SelectPos6H $SelectPos6V
+             If $CurrDesk == 7 Then
+                ChangePosition 31 $SelectPos7H $SelectPos7V
+             If $CurrDesk == 8 Then
+                ChangePosition 31 $SelectPos8H $SelectPos8V
+
+             ShowWidget 31
+          End
+          If (LastString) == {unselect} Then
+          Begin
+             HideWidget 31
+          End
+       End
+       3 :
+       Begin
+          Do {f_ClearFrontPanelPressed}
+          Do {Schedule 10 InfoStoreAdd fplastpressed FpWSM}
+          Do {f_UnclickScript 50 WSM 30 2 unclick}
+       End
+End
+
+# Select frame around PushButton. Moved around and resized by routines in widget 30.
+Widget 31
+Property
+    Flags NoReliefString Hidden
+    Position 0 0
+    Size 127 30
+    Type ItemDraw
+    Title {}
+    Colorset 2
 End
 
 Widget 21
 Property
     Flags NoReliefString
-    Position 0 2
+    Position 1 2
     Size 126 29
     Type ItemDraw
     Title {}
@@ -196,7 +327,7 @@ End
 Widget 22
 Property
     Flags NoReliefString
-    Position 129 2
+    Position 133 2
     Size 126 29
     Type ItemDraw
     Title {}
@@ -207,7 +338,7 @@ End
 Widget 23
 Property
     Flags NoReliefString
-    Position 0 35
+    Position 1 37
     Size 126 29
     Type ItemDraw
     Title {}
@@ -218,7 +349,7 @@ End
 Widget 24
 Property
     Flags NoReliefString
-    Position 129 35
+    Position 133 37
     Size 126 29
     Type ItemDraw
     Title {}
@@ -229,7 +360,7 @@ End
 Widget 25
 Property
     Flags NoReliefString Hidden
-    Position 0 35
+    Position 1 38
     Size 64 29
     Type ItemDraw
     Title {}
@@ -240,7 +371,7 @@ End
 Widget 26
 Property
     Flags NoReliefString Hidden
-    Position 64 35
+    Position 66 38
     Size 61 29
     Type ItemDraw
     Title {}
@@ -251,7 +382,7 @@ End
 Widget 27
 Property
     Flags NoReliefString Hidden
-    Position 129 35
+    Position 131 38
     Size 62 29
     Type ItemDraw
     Title {}
@@ -262,7 +393,7 @@ End
 Widget 28
 Property
     Flags NoReliefString Hidden
-    Position 193 35
+    Position 196 38
     Size 62 29
     Type ItemDraw
     Title {}
@@ -273,7 +404,7 @@ End
 Widget 1
 Property
     Flags NoReliefString
-    Position 1 3
+    Position 2 3
     Size 124 26
     Type PushButton
     Title {|||||}
@@ -284,6 +415,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 1) == 1 Then
           Begin
              If $BtnPressed == 1 Then
@@ -312,7 +445,7 @@ End
 Widget 2
 Property
     Flags NoReliefString
-    Position 130 3
+    Position 134 3
     Size 124 26
     Type PushButton
     Title {|||||}
@@ -323,6 +456,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 2) == 1 Then
           Begin
              If $BtnPressed == 2 Then
@@ -351,7 +486,7 @@ End
 Widget 3
 Property
     Flags NoReliefString
-    Position 1 36
+    Position 2 38
     Size 124 26
     Type PushButton
     Title {|||||}
@@ -362,6 +497,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 3) == 1 Then
           Begin
              If $BtnPressed == 3 Then
@@ -390,7 +527,7 @@ End
 Widget 4
 Property
     Flags NoReliefString
-    Position 130 36
+    Position 134 38
     Size 124 26
     Type PushButton
     Title {|||||}
@@ -401,6 +538,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 4) == 1 Then
           Begin
              If $BtnPressed == 4 Then
@@ -429,7 +568,7 @@ End
 Widget 5
 Property
     Flags NoReliefString Hidden
-    Position 1 36
+    Position 2 39
     Size 60 26
     Type PushButton
     Title {|||||}
@@ -440,6 +579,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 5) == 1 Then
           Begin
              If $BtnPressed == 5 Then
@@ -468,7 +609,7 @@ End
 Widget 6
 Property
     Flags NoReliefString Hidden
-    Position 65 36
+    Position 67 39
     Size 60 26
     Type PushButton
     Title {|||||}
@@ -479,6 +620,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 6) == 1 Then
           Begin
              If $BtnPressed == 6 Then
@@ -507,7 +650,7 @@ End
 Widget 7
 Property
     Flags NoReliefString Hidden
-    Position 130 36
+    Position 132 39
     Size 60 26
     Type PushButton
     Title {|||||}
@@ -518,6 +661,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 7) == 1 Then
           Begin
              If $BtnPressed == 7 Then
@@ -546,7 +691,7 @@ End
 Widget 8
 Property
     Flags NoReliefString Hidden
-    Position 194 36
+    Position 197 39
     Size 60 26
     Type PushButton
     Title {|||||}
@@ -557,6 +702,8 @@ Property
        Case message of
        SingleClic :
        Begin
+          SendSignal 30 3
+
           If (GetValue 8) == 1 Then
           Begin
              If $BtnPressed == 8 Then
@@ -662,11 +809,11 @@ Property
           Begin
              If $CurrDesk == {1} Then
              Begin
-                ChangePosition 42 228 8
+                ChangePosition 42 229 10
              End
              If $CurrDesk == {2} Then
              Begin
-                ChangePosition 42 228 40
+                ChangePosition 42 229 43
              End
           End
           Else
@@ -675,19 +822,19 @@ Property
              Begin
                 If $CurrDesk == {1} Then
                 Begin
-                   ChangePosition 42 98 9
+                   ChangePosition 42 99 8
                 End
                 If $CurrDesk == {2} Then
                 Begin
-                   ChangePosition 42 228 9
+                   ChangePosition 42 231 8
                 End
                 If $CurrDesk == {3} Then
                 Begin
-                   ChangePosition 42 98 41
+                   ChangePosition 42 99 43
                 End
                 If $CurrDesk == {4} Then
                 Begin
-                   ChangePosition 42 228 41
+                   ChangePosition 42 231 43
                 End
              End
           End
@@ -697,7 +844,7 @@ End
 Widget 41
 Property
     Flags NoReliefString Hidden
-    Position 1 3
+    Position 2 3
     Size 124 0
     Type TextField
     Title {}
@@ -717,12 +864,14 @@ Property
 
              ChangeIcon 21 NsCDE/WSM2BackBtn1.xpm
              ChangeIcon 22 NsCDE/WSM2BackBtn2.xpm
-             ChangeSize 1 253 26
-             ChangeSize 21 255 28
-             ChangeSize 2 253 26
-             ChangeSize 22 255 28
-             ChangePosition 2 1 36
-             ChangePosition 22 0 35
+             ChangeSize 1 252 26
+             ChangeSize 21 254 28
+             ChangeSize 2 252 26
+             ChangeSize 22 254 28
+             ChangePosition 1 4 6
+             ChangePosition 2 4 39
+             ChangePosition 21 3 5
+             ChangePosition 22 3 38
           End
 
           If $DeskNo == 4 Then
@@ -737,16 +886,17 @@ Property
              ChangeSize 2 82 26
              ChangeSize 3 82 26
              ChangeSize 4 82 26
-             ChangePosition 2 87 3
-             ChangePosition 3 173 3
-             ChangePosition 4 1 36
+             ChangePosition 1 2 5
+             ChangePosition 2 89 5
+             ChangePosition 3 176 5
+             ChangePosition 4 2 38
 
              ShowWidget 5
              ShowWidget 6
              ChangeSize 5 82 26
              ChangeSize 6 82 26
-             ChangePosition 5 87 36
-             ChangePosition 6 173 36
+             ChangePosition 5 89 38
+             ChangePosition 6 176 38
 
              # Shadows 1-4 - Resize and move existing 
              # Show additional two
@@ -758,16 +908,18 @@ Property
              ChangeSize 22 84 28
              ChangeSize 23 84 28
              ChangeSize 24 84 28
-             ChangePosition 22 86 2
-             ChangePosition 23 172 2
-             ChangePosition 24 0 35
+             ChangePosition 21 1 4
+             ChangePosition 22 88 4
+             ChangePosition 23 175 4
+             ChangePosition 24 1 37
 
              ShowWidget 25
              ShowWidget 26
+
              ChangeSize 25 84 28
              ChangeSize 26 84 28
-             ChangePosition 25 86 35
-             ChangePosition 26 172 35
+             ChangePosition 25 88 37
+             ChangePosition 26 175 37
 
              # Hide icon page indicator, buttons are now too small for title and icon
              HideWidget 42
@@ -785,9 +937,10 @@ Property
              ChangeSize 6 60 26
              ChangeSize 7 60 26
              ChangeSize 8 60 26
-             ChangePosition 2 65 3
-             ChangePosition 3 130 3
-             ChangePosition 4 194 3
+             ChangePosition 1 2 5
+             ChangePosition 2 67 5
+             ChangePosition 3 132 5
+             ChangePosition 4 197 5
 
              ShowWidget 5
              ShowWidget 6
@@ -811,9 +964,10 @@ Property
              ChangeSize 26 62 28
              ChangeSize 27 62 28
              ChangeSize 28 62 28
-             ChangePosition 22 64 2
-             ChangePosition 23 129 2
-             ChangePosition 24 193 2
+             ChangePosition 21 1 4
+             ChangePosition 22 66 4
+             ChangePosition 23 131 4
+             ChangePosition 24 196 4
 
              ShowWidget 25
              ShowWidget 26
@@ -829,40 +983,42 @@ Property
        Begin
           If $DeskNo == 2 Then
           Begin
-             ChangeSize 41 253 26
+             ChangeSize 41 252 26
 
              If $CurrDesk == 1 Then
              Begin
-                ChangePosition 41 1 3
+                ChangePosition 41 4 6
                 ChangeColorset 1 20
              End
              If $CurrDesk == 2 Then
              Begin
-                ChangePosition 41 1 36
+                ChangePosition 41 4 39
                 ChangeColorset 2 20
              End
           End
 
           If $DeskNo == 4 Then
           Begin
+             ChangeSize 41 124 28
+
              If $CurrDesk == 1 Then
              Begin
-                ChangePosition 41 1 3
+                ChangePosition 41 2 3
                 ChangeColorset 1 20
              End
              If $CurrDesk == 2 Then
              Begin
-                ChangePosition 41 130 3
+                ChangePosition 41 134 3
                 ChangeColorset 2 20
              End
              If $CurrDesk == 3 Then
              Begin
-                ChangePosition 41 1 36
+                ChangePosition 41 2 38
                 ChangeColorset 3 20
              End
              If $CurrDesk == 4 Then
              Begin
-                ChangePosition 41 130 36
+                ChangePosition 41 134 38
                 ChangeColorset 4 20
              End
           End
@@ -873,32 +1029,32 @@ Property
 
              If $CurrDesk == 1 Then
              Begin
-                ChangePosition 41 1 3
+                ChangePosition 41 2 5
                 ChangeColorset 1 20
              End
              If $CurrDesk == 2 Then
              Begin
-                ChangePosition 41 87 3
+                ChangePosition 41 89 5
                 ChangeColorset 2 20
              End
              If $CurrDesk == 3 Then
              Begin
-                ChangePosition 41 173 3
+                ChangePosition 41 176 5
                 ChangeColorset 3 20
              End
              If $CurrDesk == 4 Then
              Begin
-                ChangePosition 41 1 36
+                ChangePosition 41 2 38
                 ChangeColorset 4 20
              End
              If $CurrDesk == 5 Then
              Begin
-                ChangePosition 41 87 36
+                ChangePosition 41 89 38
                 ChangeColorset 5 20
              End
              If $CurrDesk == 6 Then
              Begin
-                ChangePosition 41 173 36
+                ChangePosition 41 176 38
                 ChangeColorset 6 20
              End
           End
@@ -909,42 +1065,42 @@ Property
 
              If $CurrDesk == 1 Then
              Begin
-                ChangePosition 41 1 3
+                ChangePosition 41 2 5
                 ChangeColorset 1 20
              End
              If $CurrDesk == 2 Then
              Begin
-                ChangePosition 41 65 3
+                ChangePosition 41 67 5
                 ChangeColorset 2 20
              End
              If $CurrDesk == 3 Then
              Begin
-                ChangePosition 41 130 3
+                ChangePosition 41 132 5
                 ChangeColorset 3 20
              End
              If $CurrDesk == 4 Then
              Begin
-                ChangePosition 41 194 3
+                ChangePosition 41 197 5
                 ChangeColorset 4 20
              End
              If $CurrDesk == 5 Then
              Begin
-                ChangePosition 41 1 36
+                ChangePosition 41 2 39
                 ChangeColorset 5 20
              End
              If $CurrDesk == 6 Then
              Begin
-                ChangePosition 41 65 36
+                ChangePosition 41 67 39
                 ChangeColorset 6 20
              End
              If $CurrDesk == 7 Then
              Begin
-                ChangePosition 41 130 36
+                ChangePosition 41 132 39
                 ChangeColorset 7 20
              End
              If $CurrDesk == 8 Then
              Begin
-                ChangePosition 41 194 36
+                ChangePosition 41 197 39
                 ChangeColorset 8 20
              End
           End
