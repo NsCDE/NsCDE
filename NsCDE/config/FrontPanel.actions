@@ -15,9 +15,13 @@ Btn8,CDE/Fpapps.l.pm,M1,$[infostore.xeditor],$[infostore.xeditor]
 Btn9,NsCDE/Multimedia.l.pm,M1,FVWM,SendToModule FrontPanel PressButton NsCDE-Subpanel9
 Btn10,CDE/Fphelp.l.pm,M1,$[infostore.browser],FvwmCommand 'f_DisplayURL "NsCDE Documentation" $[NSCDE_ROOT]/share/doc/html/index.html'
 FpExit,CDE/Fpexit.s.pm,M1,FVWM,f_RunQuickScriptDialog SysActionDialog
+FpExit,,M2,FVWM,Nop
+FpExit,,M3,FVWM,Popup m_FrontPanelExitMenu
 FpLock,CDE/Fplock.s.pm,M1,FVWM,f_Xscreensaver -lock
-FpLock,,M2,FVWM,Test (x xscreensaver) Exec exec pkill -STOP -u $USER -xf xscreensaver
-FpLock,,M3,FVWM,Test (x xscreensaver) Exec exec pkill -CONT -u $USER -xf xscreensaver
+FpLock,,M2,FVWM,f_ToggleFvwmFunc xscreensaver-demo Close f_Xscreensaver -prefs
+FpLock,,M3,FVWM,Popup m_FrontPanelLockMenu
+FpLite,,M2,FVWM,Nop
+FpLite,,M3,FVWM,Popup m_FrontPanelLiteMenu
 FpPGM,NsCDE/Wsm.xpm,M1,true,true
 FpPGM,,M2,FVWM,f_ToggleFvwmModule FvwmScript WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]
-FpPGM,,M3,FVWM,f_MoveCursorAndExec 0 -14 f_BringLocalPager
+FpPGM,,M3,FVWM,Popup m_FrontPanelPGMMenu
