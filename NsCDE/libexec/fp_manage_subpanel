@@ -1,0 +1,90 @@
+#!/bin/ksh
+
+if [ -z $HOME ]; then
+   echo "Error: HOME is not set cannot continue."
+   exit 3
+fi
+
+if [ -z $NSCDE_ROOT ]; then
+   echo "Error: NSCDE_ROOT is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_ROOT" ]; then
+   echo "Error: NSCDE_ROOT does not exist. Cannot continue."
+   exit 5
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   echo "Error: FVWM_USERDIR is not set cannot continue."
+   exit 6
+fi
+
+function add_subpanel
+{
+   if [ "x$SubpanelNo" == "x" ]; then
+      echo "ERROR: Missing subpanel number."
+      exit 9
+   fi
+
+   if (($SubpLocalDefCheck == 3)); then
+      $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   if (($SubpLocalDefCheck == 0)); then
+      if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      else
+         echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
+         exit 8
+      fi
+   fi
+}
+
+function delete_subpanel
+{
+   if [ "x$SubpanelNo" == "x" ]; then
+      echo "ERROR: Missing subpanel number."
+      exit 9
+   fi
+
+   if (($SubpLocalDefCheck == 3)); then
+      $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   if (($SubpLocalDefCheck == 0)); then
+      if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      else
+         echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
+         exit 8
+      fi
+   fi
+
+}
+
+while getopts p:ad Option
+do
+   case $Option in
+      p)
+         SubpanelNo=$OPTARG
+         SubpLocalDefCheck=$(egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED),.*" "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null | wc -l)
+
+         if (($SubpLocalDefCheck != 0)) && (($SubpLocalDefCheck != 3)); then
+            echo "ERROR: invalid configuration for subpanel ${SubpanelNo} in $FVWM_USERDIR/Subpanels.actions."
+            exit 7
+         fi
+      ;;
+      a)
+         add_subpanel
+      ;;
+      d)
+         delete_subpanel
+      ;;
+   esac
+done
+

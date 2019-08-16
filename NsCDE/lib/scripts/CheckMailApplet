@@ -25,6 +25,10 @@ Widget 1
       Case message of
       SingleClic :
       Begin
+         SendSignal 1 1
+      End
+      1 :
+      Begin
          If $LetterStateUp == 1 Then
          Begin
             ChangeIcon 1 NsCDE/Mail.s.xpm
@@ -40,9 +44,9 @@ Widget 1
          ChangeColorset 1 24
          Do {f_ClearFrontPanelPressed}
          Do {Schedule 50 InfoStoreAdd fplastpressed Btn5}
-         Do {f_UnclickScript 250 CheckMailApplet 1 2 unclick}
+         Do {f_UnclickScript 250 CheckMailApplet 1 3 unclick}
       End
-      1 :
+      2 :
       Begin
          # Extract command and account name from string received
          # from SendToModule
@@ -102,7 +106,7 @@ Widget 1
             End
          End
       End
-      2 :
+      3 :
       # Focus hilight stuff on the front panel
       Begin
          If (LastString) == {unclick} Then

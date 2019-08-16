@@ -665,7 +665,7 @@ Widget 20
          Set $TransferRestOfTheActionsCmd = {egrep -v "^S} $SubpanelNo {," "} $UserSubpanelActionsFile {" > "} $SubpNewActionsPart {"}
          Set $TransferRestOfTheActions = (GetOutput $TransferRestOfTheActionsCmd 1 -1)
 
-         Set $WriteActionsFileCmd = {(egrep "^S} $SubpanelNo {,(NAME|WIDTH|ROWS|ENABLED),.*" "} $SubpanelActionsRead {"; cut -d"," -f 2- < "} 
+         Set $WriteActionsFileCmd = {(egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED),.*" "} $SubpanelActionsRead {"; cut -d"," -f 2- < "} 
                                      $SubpListTmpFile {") >> "} $SubpNewActionsPart {"}
          Set $WriteActionsFile = (GetOutput $WriteActionsFileCmd 1 -1)
 

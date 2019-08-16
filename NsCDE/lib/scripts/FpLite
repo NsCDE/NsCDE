@@ -62,13 +62,17 @@ Property
          Case message of
          SingleClic :
          Begin
+            SendSignal 1 1
+         End
+         1 :
+         Begin
             ChangeColorset 1 25
             Do {f_FpLiteClickAction}
             Do {f_ClearFrontPanelPressed}
             Do {Schedule 50 InfoStoreAdd fplastpressed FpLite}
-            Do {f_UnclickScript 250 FpLite 1 1 unclick} 
+            Do {f_UnclickScript 250 FpLite 1 2 unclick} 
          End
-         1 :
+         2 :
          Begin
             If (LastString) == {unclick} Then
             Begin

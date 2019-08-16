@@ -48,13 +48,17 @@ Widget 2
       Case message of
       SingleClic :
       Begin
+         SendSignal 2 1
+      End
+      1 :
+      Begin
          Do {f_Calendar}
          ChangeColorset 2 24
          Do {f_ClearFrontPanelPressed}
          Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
-         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+         Do {f_UnclickScript 250 MonthDayApplet 2 2 unclick}
       End
-      1 :
+      2 :
       Begin
          If (LastString) == {unclick} Then
          Begin
@@ -81,11 +85,7 @@ Widget 3
       Case message of
       SingleClic :
       Begin
-         Do {f_Calendar}
-         ChangeColorset 2 24
-         Do {f_ClearFrontPanelPressed}
-         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
-         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+         SendSignal 2 1
       End
 End
 
@@ -103,11 +103,7 @@ Widget 4
       Case message of
       SingleClic :
       Begin
-         Do {f_Calendar}
-         ChangeColorset 2 24
-         Do {f_ClearFrontPanelPressed}
-         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
-         Do {f_UnclickScript 250 MonthDayApplet 2 1 unclick}
+         SendSignal 2 1
       End
 End
 

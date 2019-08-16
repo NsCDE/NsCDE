@@ -337,7 +337,7 @@ Widget 14
          # Make sure Subpanels.actions exists in $FVWM_USERDIR
          Set $ExistanceOK = 0
 
-         Set $ExistanceEnsureCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ROWS|ENABLED),.*" "} $UserSubpanelActionsFile{" 2>/dev/null | wc -l}
+         Set $ExistanceEnsureCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED),.*" "} $UserSubpanelActionsFile{" 2>/dev/null | wc -l}
          Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
 
          If $ExistanceEnsure == 3 Then
