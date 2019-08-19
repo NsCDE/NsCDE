@@ -67,11 +67,20 @@ function delete_subpanel
 
 }
 
-while getopts p:ad Option
+function reset_this_button
+{
+   if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+      FvwmCommand "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
+   fi
+}
+
+while getopts p:adr Option
 do
    case $Option in
       p)
          SubpanelNo=$OPTARG
+         PanelNo=$SubpanelNo
          SubpLocalDefCheck=$(egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED),.*" "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null | wc -l)
 
          if (($SubpLocalDefCheck != 0)) && (($SubpLocalDefCheck != 3)); then
@@ -84,6 +93,9 @@ do
       ;;
       d)
          delete_subpanel
+      ;;
+      r)
+         reset_this_button
       ;;
    esac
 done

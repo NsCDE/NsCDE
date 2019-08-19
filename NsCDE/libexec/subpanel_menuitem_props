@@ -298,9 +298,57 @@ function copy_to_main_panel
                fi
             done
 
+            icon_ext="${icon##*.}"
             find_appropriate_icon "$icon"
-            fp_m1="Btn${subpid},$icon,M1,${cmd%% *},$cmd"
-            fp_m3="Btn${subpid},,M3,FVWM,f_FrontPanelPropsMenu 4 $title"
+
+            if (($ENOICON == 1)); then
+               echo "Trying heuristics with icon extension formats while searching for an icon ..."
+               export ENOICON=0
+               case "$icon_ext" in
+               'png')
+                  icon_new_ext=$(echo "$icon" | sed 's/\.png$/.xpm/g')
+                  find_appropriate_icon "$icon_new_ext"
+                  if (($ENOICON == 1)); then
+                     icon_new_ext=$(echo "$icon" | sed 's/\.png$/.svg/g')
+                     find_appropriate_icon "$icon_new_ext"
+                  fi
+               ;;
+               'xpm'|'pm')
+                  icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.png/g')
+                  find_appropriate_icon "$icon_new_ext"
+                  if (($ENOICON == 1)); then
+                     icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.svg/g')
+                     find_appropriate_icon "$icon_new_ext"
+                  fi
+               ;;
+               'svg')
+                  icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.png/g')
+                  find_appropriate_icon "$icon_new_ext"
+                  if (($ENOICON == 1)); then
+                     icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.xpm/g')
+                     find_appropriate_icon "$icon_new_ext"
+                  fi
+               ;;
+               esac
+            fi
+
+            case "x$type" in
+            'x')
+               fp_action_type="${cmd%% *}"
+            ;;
+            'xFVWM-F'|'xFVWM-M')
+               fp_action_type="FVWM"
+            ;;
+            'xNOCHK')
+               fp_action_type="true"
+            ;;
+            xCHECK:*)
+               fp_action_type="${type##*:}"
+            ;;
+            esac
+
+            fp_m1="Btn${subpid},$icon,M1,$fp_action_type,$cmd"
+            fp_m3="Btn${subpid},,M3,FVWM,f_FrontPanelPropsMenu ${subpid} $title"
             if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
                $NSCDE_ROOT/bin/ised -c "/^Btn${subpid},\(.*\)\?,M\(1\|3\)/d" -f $FVWM_USERDIR/FrontPanel.actions
             fi
@@ -312,24 +360,37 @@ function copy_to_main_panel
 
 function find_appropriate_icon
 {
+   # Defaults
+   ENOICON=0
+
+   icon_no_path=${1##*/}
+   icon_no_path_no_fvwm_prefix=${icon_no_path//32x32-}
+
    # First, try similar path with 48x48 instead of 32x32 or similar:
-   try_icon=$(echo "$1" | sed 's/\/[1-9]\+x[1-9]\+\//\/48x48\//g')
+   try_icon=$(echo "$1" | sed 's/\/[1-9]\+x[1-9]\+/\/48x48/g')
    if [ -r "$try_icon" ]; then
       icon="$try_icon"
-      break
+      return
    fi
 
+   try_icon=$(find "/usr/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
+   if [ -r "$try_icon" ]; then
+      icon="$try_icon"
+      return
+   fi
+
+   # See if the user has a local icon repository.
    if [ -d "$HOME/.local/share/icons" ]; then
-      try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${1##*/}" | head -1)
-      if [ $(echo "$try_try_icon" | egrep "48x48") != "" ]; then
+      try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${icon_no_path}" | head -1)
+      if [ "$(echo "$try_try_icon" | egrep '48x48')" != "" ]; then
          icon="$try_try_icon"
-         break
+         return
       fi
       m_to_l=$(echo "$1" | sed 's/\.m\.\(xpm\|pm\)/\.l\.\1/g')
       try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${m_to_l##*/}" | head -1)
       if [ -r "$try_try_icon" ]; then
          icon="$try_try_icon"
-         break
+         return
       fi
    fi
 
@@ -337,24 +398,44 @@ function find_appropriate_icon
    try_icon="${try_icon_p##*/}"
    if [ -r "$NSCDE_ROOT/share/icons/CDE/$try_icon" ]; then
       icon="$NSCDE_ROOT/share/icons/CDE/$try_icon"
-      break
+      return
    fi
    if [ -r "$NSCDE_ROOT/share/icons/NsCDE/$try_icon" ]; then
       icon="$NSCDE_ROOT/share/icons/NsCDE/$try_icon"
-      break
+      return
    fi
+
+   # Generate 48x48 icons if needed.
+   $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
+
    if [ -r "$FVWM_USERDIR/icons/NsCDE/$try_icon" ]; then
       icon="$FVWM_USERDIR/icons/NsCDE/$try_icon"
-      break
+      return
    fi
    if [ -r "$FVWM_USERDIR/icons/CDE/$try_icon" ]; then
       icon="$FVWM_USERDIR/icons/CDE/$try_icon"
-      break
+      return
    fi
    if [ -r "$FVWM_USERDIR/icons/$try_icon" ]; then
       icon="$FVWM_USERDIR/icons/$try_icon"
-      break
+      return
    fi
+
+   icon32_to_icon48_name=$(echo "$try_icon" | sed 's/[1-9]\+x[1-9]\+-/48x48-/g')
+   if [ -r "$FVWM_USERDIR/icons/$icon32_to_icon48_name" ]; then
+      icon="$FVWM_USERDIR/icons/$icon32_to_icon48_name"
+      return
+   fi
+
+   # If anything else fails ...
+   try_icon=$($NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 | egrep "ITEM:%.*%.*%${cmd%% *}" | head -1 | cut -d"%" -f3)
+   if [ "x$try_icon" != "x" ]; then
+      icon="$try_icon"
+      return
+   fi
+
+   # If we are here, nothing has been found. Indicate this.
+   export ENOICON=1
 }
 
 function delete_confirm
