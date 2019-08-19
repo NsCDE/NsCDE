@@ -282,7 +282,7 @@ function copy_to_main_panel
 {
          entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$FVWM_USERDIR/Subpanels.actions" | sed -n "${entryid}p")
          if [ "x$entry_to_copy" == "x" ]; then
-            entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$NCDE_ROOT/config/Subpanels.actions" | sed -n "${entryid}p")
+            entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$NSCDE_ROOT/config/Subpanels.actions" | sed -n "${entryid}p")
          fi
          if [ "x$entry_to_copy" == "x" ]; then
             echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): internal error. No entry in system Subpanels.actons file."
