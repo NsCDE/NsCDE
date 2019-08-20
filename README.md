@@ -1,5 +1,7 @@
 Not so Common Desktop Environment (NsCDE)
 
+![ScreenShot]("NsCDE.png")
+
 Notice: for a full documentation, see NsCDE/share/doc/*
 
 Notice: for a set of photos, also download
