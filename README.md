@@ -20,7 +20,8 @@ Introduction
    NsCDE is a retro but powerful (kind of) UNIX desktop environment
    which resembles CDE look and (partially feel) but with a more
    powerful and flexible beneath-the-surface framework, more suited
-   for a 21st century unix-like and Linux systems and user requirements.
+   for a 21st century unix-like and Linux systems and user requirements
+   then original CDE.
 
    NsCDE can be considered as something between heavyweight FVWM
    theme on steroids, but combined with a couple other free software
