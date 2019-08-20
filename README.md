@@ -1,4 +1,4 @@
-**Not so Common Desktop Environment (NsCDE)**
+# **Not so Common Desktop Environment (NsCDE)**
 
 ![ScreenShot](NsCDE.png)
 
@@ -15,9 +15,9 @@ See here for screenshots: https://imgur.com/gallery/nHkw35X
 Author will like to apologize for bad english in docs. A rand() function putting
 articles (the, a, an) will probably be more accurate.
 
-**Introduction**
+# **Introduction**
 
-  What is NsCDE?
+  ## What is **NsCDE**?
 
    **NsCDE** is a retro but powerful (kind of) UNIX desktop environment
    which resembles CDE look and (partially feel) but with a more
@@ -25,32 +25,32 @@ articles (the, a, an) will probably be more accurate.
    for a 21st century unix-like and Linux systems and user requirements
    then original CDE.
 
-   NsCDE can be considered as something between heavyweight FVWM
+   **NsCDE** can be considered as something between heavyweight FVWM
    theme on steroids, but combined with a couple other free software
    components and custom FVWM applications and heavy configurations,
-   NsCDE can be considered as lightweight hybrid desktop environment.
+   **NsCDE** can be considered as lightweight hybrid desktop environment.
 
-   In other words, NsCDE is a heavy FVWM (ab)user. It consists of a
+   In other words, **NsCDE** is a heavy FVWM (ab)user. It consists of a
    set of FVWM applications and configurations, enriched with Python
    and Shell background drivers, couple of the additional free software
    tools and applications.
 
-   Visually, NsCDE mimics CDE (well known old Common Desktop Environment
+   Visually, **NsCDE** mimics CDE (well known old Common Desktop Environment
    of many comercial UNIX systems of nineties. It supports CDE backdrops
    and palettes with FVWM colorsets and theme generator for Xt, Xaw,
    Motif, GTK2, GTK3, Qt4 and Qt5. Integrating all this bits and pieces,
    user gets retro visual experience across almost all X11 applications,
    but enriched with a bunch of powerful FVWM concepts and functions,
-   modern applications and font rendering, NsCDE acts as a link between
-   CDE look, but here similarities are ending, because NsCDE aims to
+   modern applications and font rendering, **NsCDE** acts as a link between
+   CDE look, but here similarities are ending, because **NsCDE** aims to
    provide modern functionality, fast and extensible environment, well
    suited for a modern day computing.
 
-   NsCDE can even be integrated into existing desktop environments as a
+   **NsCDE** can even be integrated into existing desktop environments as a
    FVWM window manager wrapper for session handling and additional DE
    functionality.
 
-   Nevertheless, NsCDE is designed for a UNIX oriented users, and
+   Nevertheless, **NsCDE** is designed for a UNIX oriented users, and
    generally tehnical persons, and not as something for general public
    use or for introducing beginners to a Linux or some other unix-like
    system.
@@ -66,9 +66,9 @@ articles (the, a, an) will probably be more accurate.
    look and feel which mainstream abadoned for some new fashion, and ... in a
    nutshell, giving to user the best of the both worlds.
 
-   Main driver behind NsCDE is the excellent FVWM window manager with it's
+   Main driver behind **NsCDE** is the excellent FVWM window manager with it's
    endless options for customization, GUI Script engine, Colorsets, and
-   modules. NsCDE is largely a wrapper around FVWM - something like a
+   modules. **NsCDE** is largely a wrapper around FVWM - something like a
    heavyweight theme, sort of.
 
    Other main components are GTK2, GTK3, Qt4 and Qt5 theme for unifying look
@@ -78,7 +78,7 @@ articles (the, a, an) will probably be more accurate.
 
    --------------------------------------------------------------------------
 
-  Why NsCDE?
+  ## Why **NsCDE**?
 
    Since the nineties, I have always liked this environment and it's somewhat
    crude socrealistic look in a contrast to "modern" Windows and GNOME
@@ -92,11 +92,11 @@ articles (the, a, an) will probably be more accurate.
    idea came to do it even better, and put on the web for everyone else who
    may like this idea of modern CDE.
 
-   NsCDE is intended for a people which doesn't like "modern" hypes,
+   **NsCDE** is intended for a people which doesn't like "modern" hypes,
    interfaces that try to mimic Mac and Windows and reimplementing their
    ideas for non-technical user's desktops, and reimplementing them poorly.
    Older and mature system administrators, programmers and generally people
-   from the Unix background are more likely to have attraction to NsCDE. It
+   from the Unix background are more likely to have attraction to **NsCDE**. It
    is probably not well suited for beginners.
 
    Of course, question arises: why not simply use original original CDE now
@@ -111,23 +111,23 @@ articles (the, a, an) will probably be more accurate.
    original CDE, but more flexible, modern and maintained "driver" behind it,
    which will allow for individual customizations as one find's them fit for
    it's own amusement and usage. As it will be seen later, there are some
-   intentional differences between CDE and NsCDE - a middle line between
+   intentional differences between CDE and **NsCDE** - a middle line between
    trying to stay as close as possible to look of the CDE, but with more
    flexibility and functionality on the second and third look.
 
    --------------------------------------------------------------------------
 
-Components of the NsCDE
+## Components of the **NsCDE**
 
-  Components overview
+  ### Components overview
 
-   NsCDE is a wrapper and a bunch of configurations, scripts and apps around
+   **NsCDE** is a wrapper and a bunch of configurations, scripts and apps around
    FVWM. FVWM is in my opinion a model of free choice for people who like to
    have things set up by their own wishes and who are aware what real freedom
    of choice is. A stunning contrast to policies forced on Linux users in the
    last decade from the mainstream desktop players.
 
-   NsCDE is by default rooted in /opt/NsCDE ($NSCDE_ROOT), but it can be
+   **NsCDE** is by default rooted in /opt/NsCDE ($NSCDE_ROOT), but it can be
    relocated with only one variable changed in main wrapper bin/nscde and
    NsCDE-Main.conf.
 
