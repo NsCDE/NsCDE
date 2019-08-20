@@ -17,14 +17,42 @@ Introduction
 
   What is NsCDE?
 
-   In a nutshell, NsCDE is the CDE clone. Tehnically, it can be considered a
-   heavy FVWM theme enriched with additional free software tools and
-   applications, combining all this components into something which can be
-   called lightweight hybrid desktop environment. It can even be integrated
-   into existing desktop environments as a window manager wrapper for session
-   handling and additional DE functionality.
+   NsCDE is a retro but powerful (kind of) UNIX desktop environment
+   which resebles CDE look and (partially feel) but with a more
+   powerful and flexible beneath-the-surface framework, more suited
+   for a 21st century unix-like and Linux systems and user requirements.
 
-   NsCDE's main goal is to revive look and feel of the Common Desktop
+   NsCDE can be considered as something between heavyweight FVWM
+   theme on steroids, but combined with a couple other free software
+   components and custom FVWM applications and heavy configurations,
+   NsCDE can be considered as lightweight hybrid desktop environment.
+
+   In other words, NsCDE is a heavy FVWM (ab)user. It consists of a
+   set of FVWM applications and configurations, enriched with Python
+   and Shell background drivers, couple of the additional free software
+   tools and applications.
+
+   Visually, NsCDE mimics CDE (well known old Common Desktop Environment
+   of many comercial UNIX systems of nineties. It supports CDE backdrops
+   and palettes with FVWM colorsets and theme generator for Xt, Xaw,
+   Motif, GTK2, GTK3, Qt4 and Qt5. Integrating all this bits and pieces,
+   user gets retro visual experience across almost all X11 applications,
+   but enriched with a bunch of powerful FVWM concepts and functions,
+   modern applications and font rendering, NsCDE acts as a link between
+   CDE look, but here similarities are ending, because NsCDE aims to
+   provide modern functionality, fast and extensible environment, well
+   suited for a modern day computing.
+
+   NsCDE can even be integrated into existing desktop environments as a
+   FVWM window manager wrapper for session handling and additional DE
+   functionality.
+
+   Nevertheless, NsCDE is designed for a UNIX oriented users, and
+   generally tehnical persons, and not as something for general public
+   use or for introducing beginners to a Linux or some other unix-like
+   system.
+
+   As said, NsCDE's main goal is to revive look and feel of the Common Desktop
    Environment found on many UNIX and unix-like systems during nineties and
    first decade of the 21 century, but with a slightly polished interface
    (XFT, unicode, dynamic changes, rich key and mouse bindings, desk pages,
@@ -49,7 +77,7 @@ Introduction
 
   Why NsCDE?
 
-   Since the 90-ties, I have always liked this environment and it's somewhat
+   Since the nineties, I have always liked this environment and it's somewhat
    crude socrealistic look in a contrast to "modern" Windows and GNOME
    approach which is going in the opposite taste from what I always liked to
    see on my screen. I have created this environment for my own usage 8-10
