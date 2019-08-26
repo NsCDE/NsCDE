@@ -393,6 +393,12 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
 
+# Light gaps on the Front Panel menu and iconify buttons (topShadowColor from cs #1)
+Colorset 14 fg {tsg[2]}, bg {tsg[2]}, hi {tsg[2]}, sh {tsg[2]}, fgsh {tsg[2]}, Plain, NoShape
+
+# Dark gaps on the Front Panel menu and iconify buttons (bottomShadowColor from cs #1)
+Colorset 15 fg {bsg[2]}, bg {bsg[2]}, hi {bsg[2]}, sh {bsg[2]}, fgsh {bsg[2]}, Plain, NoShape
+
 # Last Pressed Subpanel Launcher Button on the Front Panel
 # It is unknown why there must be a fg color here but
 # letters of the selected entry are green if this is not
@@ -458,9 +464,6 @@ Colorset 45 fg #ffffffffffff, bg {bgg[6]}, hi {bsg[6]}, sh {tsg[6]}, fgsh #33003
 Colorset 46 fg #ffffffffffff, bg {bgg[7]}, hi {tsg[7]}, sh {bsg[7]}, fgsh #330033003300, Plain, NoShape
 Colorset 47 fg #ffffffffffff, bg {bgg[7]}, hi {bsg[7]}, sh {tsg[7]}, fgsh #330033003300, Plain, NoShape
 
-# Exception from Colorset 1: BorderColorset of FrontPanel to be as close as possible to CDE FrontPanel
-Colorset 48 fg {fgg[2]}, bg {bgg[2]}, hi {tsg[2]}, sh {bgg[2]}, fgsh {selg[2]}, Plain, NoShape
-
 # Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
 Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape
         """.format(**locals())
@@ -480,9 +483,6 @@ Colorset 45 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #33003
 # Four, Eight ...
 Colorset 46 fg #ffffffffffff, bg {bgg[3]}, hi {tsg[3]}, sh {bsg[3]}, fgsh #330033003300, Plain, NoShape
 Colorset 47 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #330033003300, Plain, NoShape
-
-# Exception from Colorset 1: BorderColorset of FrontPanel to be as close as possible to CDE FrontPanel
-Colorset 48 fg {fgg[2]}, bg {bgg[2]}, hi {tsg[2]}, sh {bgg[2]}, fgsh {selg[2]}, Plain, NoShape
 
 # Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
 Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape

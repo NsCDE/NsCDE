@@ -57,6 +57,7 @@ function GenFullPalette
 function ProgBits
 {
    mkdir -p ${FVWM_USERDIR}/icons/NsCDE || exit 1
+   mkdir -p ${FVWM_USERDIR}/icons/CDE || exit 1
 
    for xpm in FpIconify.xpm FpMenu.xpm FpHandle.xpm
    do
@@ -113,6 +114,35 @@ function ProgBits
     -p ${PaletteNamePath} -n $Ncolors \
     -i ${NSCDE_ROOT}/lib/progbits/Fpclock.xpm -P 3 \
     -b > ${FVWM_USERDIR}/icons/NsCDE/Fpclock.xpm
+
+   # Front Panel Lock
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+    -p ${PaletteNamePath} -n $Ncolors \
+    -i ${NSCDE_ROOT}/lib/progbits/FpLock.xpm -P 5 \
+    -b > ${FVWM_USERDIR}/icons/NsCDE/FpLock.xpm
+
+   # Front Panel Lock Pressed
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+    -p ${PaletteNamePath} -n $Ncolors \
+    -i ${NSCDE_ROOT}/lib/progbits/FpLockP.xpm -P 5 \
+    -b > ${FVWM_USERDIR}/icons/NsCDE/FpLockP.xpm
+
+   # Front Panel Exit
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+    -p ${PaletteNamePath} -n $Ncolors \
+    -i ${NSCDE_ROOT}/lib/progbits/FpExit.xpm -P 5 \
+    -b > ${FVWM_USERDIR}/icons/NsCDE/FpExit.xpm
+
+   # Front Panel Stock CDE icons
+   for fpicon in Fphome.l.pm Fpterm.l.pm Fpprnt.l.pm \
+       Fpapps.l.pm Fphelp.l.pm FpCM.l.pm Fppenpd.l.pm \
+       Fpstyle.l.pm
+   do
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_ROOT}/share/icons/CDE/$fpicon -P 5 \
+       -b > ${FVWM_USERDIR}/icons/CDE/$fpicon
+   done
 
    # South East margin of WSM buttons implemented as icon of ItemDraw.
    # We cannot use rectangle in dynamic desk WSM
