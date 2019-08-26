@@ -811,7 +811,8 @@ Widget 30
                End
             End
 
-            Do {f_Xsettingsd restart}
+            Do {f_Xsettingsd stop}
+            Do {Schedule 250 f_Xsettingsd start}
          End
          Do {f_Readcfg Backdrops}
          Do {f_Readcfg Colorset}
