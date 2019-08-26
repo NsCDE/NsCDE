@@ -28,11 +28,10 @@ Begin
       Set $Ncolors = 8
    End
 
-   Set $CurrentPaletteCmd = {echo $NSCDE_PALETTE | sed 's/\.dp$//g'}
-   Set $CurrentPalette = (GetOutput $CurrentPaletteCmd 1 -1)
+   Set $CurrentPalette = (GetOutput {echo "$NSCDE_PALETTE"} 1 -1)
    If $CurrentPalette == {} Then
    Begin
-      Set $CurrentPalette = {Sun}
+      Set $CurrentPalette = {Broica}
    End
 
    Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)

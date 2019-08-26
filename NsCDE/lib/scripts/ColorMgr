@@ -59,7 +59,7 @@ Begin
    Set $PreviewContaminated = 0
 
    Set $Current = (GetOutput {echo $NSCDE_PALETTE} 1 -1)
-   Set $CurrentPaletteValueCmd = {$NSCDE_ROOT/libexec/colormgr -N } $Current
+   Set $CurrentPaletteValueCmd = {$NSCDE_ROOT/libexec/colormgr -N "} $Current {.dp"}
    Set $CurrentPaletteValue = (GetOutput $CurrentPaletteValueCmd 1 -1)
    If $CurrentPaletteValue <> {} Then
    Begin
@@ -810,6 +810,8 @@ Widget 30
                   Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
                End
             End
+
+            Do {f_Xsettingsd restart}
          End
          Do {f_Readcfg Backdrops}
          Do {f_Readcfg Colorset}

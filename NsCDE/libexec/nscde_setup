@@ -41,7 +41,7 @@ function setup_nscde
    fi
 
    if [ -z $NSCDE_PALETTE ]; then
-      NSCDE_PALETTE="Broica.dp"
+      NSCDE_PALETTE="Broica"
    fi
 
    if [ -z $NSCDE_PALETTE_NCOLORS ]; then
@@ -57,7 +57,7 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          echo "Generating NsCDE fvwm Colorset ..."
       fi
-      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/NsCDE-Colorset.conf"
    else
       if (($VERBOSE == 1)); then
@@ -72,7 +72,7 @@ function setup_nscde
 
    # Xdefaults includes
    if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
-      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
    else
       if (($VERBOSE == 1)); then
@@ -110,7 +110,7 @@ function setup_nscde
       for appres in $NSCDE_ROOT/share/templates/app-defaults/*.tmpl
       do
          appres="${appres%.tmpl}"
-         $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE \
+         $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
           -n $NSCDE_PALETTE_NCOLORS -i ${appres}.tmpl -c > $FVWM_USERDIR/app-defaults/${appres##*/}
       done
    else
@@ -210,7 +210,7 @@ function setup_nscde
          echo "Generating default theme for Gtk2/Gtk3 in $HOME/.themes/NsCDE ..."
       fi
       mkdir -p "$HOME/.themes"
-      $NSCDE_ROOT/libexec/themegen.py $NSCDE_ROOT/share/palettes/$NSCDE_PALETTE $NSCDE_PALETTE_NCOLORS True True
+      $NSCDE_ROOT/libexec/themegen.py $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp $NSCDE_PALETTE_NCOLORS True True
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.themes/NsCDE already exists."

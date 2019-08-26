@@ -355,7 +355,7 @@ def genfvwmcolorset(palettefile,ncolors):
 #
 
 UnsetEnv NSCDE_PALETTE
-SetEnv NSCDE_PALETTE {basename}
+SetEnv NSCDE_PALETTE {palettename[0]}
 
 UnsetEnv NSCDE_PALETTE_NCOLORS
 SetEnv NSCDE_PALETTE_NCOLORS {ncolors}
