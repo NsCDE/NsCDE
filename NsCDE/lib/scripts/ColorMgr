@@ -811,8 +811,18 @@ Widget 30
                End
             End
 
-            Do {f_Xsettingsd stop}
-            Do {Schedule 250 f_Xsettingsd start}
+            Set $CheckUseXsettingsd = (GetOutput {$NSCDE_ROOT/bin/get_fvwm_infostore nscde_use_xsettingsd} 1 1)
+            If $CheckUseXsettingsd == 1 Then
+            Begin
+               Do {f_Xsettingsd stop}
+               Set $CheckXstSetup = (GetOutput {egrep -q '^Net\/ThemeName[[:space:]]+"NsCDE"' $HOME/.xsettingsd; echo $?} 1 1)
+               If $CheckXstSetup <> 0 Then
+               Begin
+                  Set $RemoveXstStale = (GetOutput {$NSCDE_ROOT/bin/ised -c '/^Net\/ThemeName.*/d' -f $HOME/.xsettingsd} 1 -1)
+                  Set $SetXstEntry = (GetOutput {echo 'Net/ThemeName "NsCDE"' >> $HOME/.xsettingsd} 1 -1)
+	       End
+               Do {Schedule 250 f_Xsettingsd start}
+            End
          End
          Do {f_Readcfg Backdrops}
          Do {f_Readcfg Colorset}
