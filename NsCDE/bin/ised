@@ -15,8 +15,43 @@
 
 OIFS="$IFS"
 IFS=" "
+TO_STDOUT=0
 
-while getopts s:c:f:h Option
+case $NSCDE_OS in
+   'Linux')
+      SED="sed"
+   ;;
+   'FreeBSD'|'SunOS')
+      type -q gsed
+      if (($? == 0)); then
+         SED="gsed"
+      else
+         sed --version 2>&1 | sed -n 1p | grep -q GNU
+         if (($? == 0)); then
+            SED="sed"
+         else
+            echo "Error: ${0##*/}: Cannot find GNU sed."
+         exit 4
+         fi
+      fi
+   ;;
+   *)
+   sed --version 2>&1 | sed -n 1p | grep -q GNU
+   if (($? == 0)); then
+      SED="sed"
+   else
+      type -q gsed
+      if (($? == 0)); then
+         SED="gsed"
+      else
+         echo "Error: ${0##*/}: Cannot find GNU sed."
+         exit 4
+      fi
+   fi
+   ;;   
+esac
+
+while getopts s:c:f:oh Option
 do
    case $Option in
    s)
@@ -28,6 +63,9 @@ do
    f)
       IFILE="${OPTARG}"
    ;;
+   o)
+      TO_STDOUT=1
+   ;;
    h)
       echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
       exit 0
@@ -35,5 +73,9 @@ do
    esac
 done
 
-RESULT=$(cat "${IFILE}" | sed $SEDOPTS "$SEDCODE")
-echo "$RESULT" > "$IFILE"
+RESULT=$(cat "${IFILE}" | $SED $SEDOPTS "$SEDCODE")
+if (($TO_STDOUT == 0)); then
+   echo "$RESULT" > "$IFILE"
+else
+   echo "$RESULT"
+fi

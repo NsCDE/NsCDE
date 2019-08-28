@@ -35,6 +35,10 @@ do
             pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY} | head -1)
          fi
       fi
+   else
+      if [ -r "${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY}" ]; then
+         pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY} | head -1)
+      fi
    fi
 
    pagenum=$(print -- "$pagenum_prepare" | cut -d: -f3)

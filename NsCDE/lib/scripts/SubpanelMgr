@@ -18,7 +18,7 @@ Begin
    End
 
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
-   Set $AppListTmpFileCmd = {mktemp --suffix=.AppLst}
+   Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
    Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
@@ -41,7 +41,7 @@ Begin
    Set $SystemSubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
 
    # Fill the Subpanel app List on the right with all entries found there.
-   Set $SubpListTmpFileCmd = {mktemp --suffix=.SubpLst}
+   Set $SubpListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.SubpLst}
    Set $SubpListTmpFile = (GetOutput $SubpListTmpFileCmd 1 -1)
    Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
    Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
@@ -359,7 +359,7 @@ Widget 5
                Set $NewAppToSubpCmd = {echo '} $NewRowNo {,S} $SubpanelNo {,ENTRY,} (GetTitle 8) {,} $NewAppType {,} (GetTitle 12) {,} (GetTitle 10) {'}
                Set $NewAppToSubp = (GetOutput $NewAppToSubpCmd 1 -1)
 
-               Set $SubpListTmpNewFileCmd = {mktemp --suffix=.SubpNewLst}
+               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst}
                Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
 
                Set $CreateNewListCmd = {(sed -n '1,} $SubpListSelected {p' < "} $SubpListTmpFile {"; echo '} $NewAppToSubp
@@ -405,7 +405,7 @@ Widget 6
 
             If (GetValue 4) > 0 Then
             Begin
-               Set $SubpListTmpNewFileCmd = {mktemp --suffix=.SubpNewLst}
+               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst}
                Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
 
                Set $RemoveAppFromSubpCmd = {egrep -v "^} (GetValue 4) {,.*" "} $SubpListTmpFile {" > "} $SubpListTmpNewFile {"}
@@ -656,7 +656,7 @@ Widget 20
       End
       1 :
       Begin
-         Set $SubpNewActionsPartCmd = {mktemp --suffix=.SubpNewActP}
+         Set $SubpNewActionsPartCmd = {mktemp -t tmp.XXXXXXXX.SubpNewActP}
          Set $SubpNewActionsPart = (GetOutput $SubpNewActionsPartCmd 1 -1)
 
          Set $CreateUserActionsCfgCmd = {[ ! -r "} $UserSubpanelActionsFile {" ] && touch "} $UserSubpanelActionsFile {"}
