@@ -722,7 +722,7 @@ Widget 30
 
             If $GtkStr == {11} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { True True}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { gtk2 gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
@@ -746,7 +746,7 @@ Widget 30
 
             If $GtkStr == {10} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { True False}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { gtk2 False}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
@@ -758,7 +758,7 @@ Widget 30
 
             If $GtkStr == {01} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False True}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
