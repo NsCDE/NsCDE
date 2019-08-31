@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -15,18 +15,18 @@ import sys
 import os
 
 def execWithShell1(cmd):
-    print cmd
+    print (cmd)
     #cmd='echo hello'
-    print subprocess.check_output(cmd, shell=True)
+    print (subprocess.check_output(cmd, shell=True))
 
 #this also seems to introduce quite a delay
 def execWithShell(cmd):
     try:
         output=subprocess.check_output(cmd, shell=True)
     except subprocess.CalledProcessError as e:
-        print cmd
-        print '!!!!!!!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!!!!!!!!!'
-        print e.output
+        print (cmd)
+        print ('ERROR')
+        print (e.output)
         output=''
     return output
 def execWithShellThread(cmd):
@@ -34,21 +34,21 @@ def execWithShellThread(cmd):
             p=subprocess.Popen(cmd,shell=True) 
         except OSError as e: 
             #this doesnt seem to work
-            print cmd
-            print '!!!!!!!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!!!!!!!!!'
-            print e.output
+            print (cmd)
+            print ('ERROR')
+            print (e.output)
             p=''
         return p
 def checkFile(filename):
     if os.path.isfile(filename):
         return filename
     else:
-        print 'FILE NOT FOUND: '+filename
+        print ('FILE NOT FOUND: '+filename)
         sys.exit()
 def checkDir(filename):
     if os.path.isdir(filename):
         return filename
     else:
-        print 'DIRECTORY NOT FOUND: '+filename
+        print ('DIRECTORY NOT FOUND: '+filename)
         sys.exit()
 

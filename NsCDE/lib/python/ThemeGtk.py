@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -11,7 +11,12 @@ import re
 import os
 import sys
 import shutil
-from PyQt4 import QtCore, QtGui
+
+try:
+   from PyQt4 import QtCore, QtGui
+except ImportError:
+   from PyQt5 import QtCore, QtGui
+
 from SpritesGtk2 import spriteLWHXYgtk2
 import MotifColors
 import Globals
@@ -151,7 +156,7 @@ def replaceColorsInPixmap(pixmap,fromcolor,tocolor):
 def updateThemeImages(opts):
     gtk2resourcedir=os.path.join(Globals.userthemedir,'img2')
     gtk2resourcefile=os.path.join(gtk2resourcedir,'resource.indexed.png')
-    print gtk2resourcefile
+    print (gtk2resourcefile)
     motifcolors=Globals.colorshash
 
     colormap =[     
@@ -194,7 +199,7 @@ def updateThemeImages(opts):
         replaceColorsInPixmap(tmppixmap,fromcolor,tocolor)
 
     targetdir=os.path.join(gtk2resourcedir,'colorset6')
-    print targetdir
+    print (targetdir)
 
     for l in spriteLWHXYgtk2:
         label=l[0]
@@ -219,7 +224,7 @@ def updateThemeImages(opts):
         replaceColorsInPixmap(tmppixmap,fromcolor,tocolor)
 
     targetdir=os.path.join(gtk2resourcedir,'colorset4')
-    print targetdir
+    print (targetdir)
 
     for l in spriteLWHXYgtk2:
         label=l[0]

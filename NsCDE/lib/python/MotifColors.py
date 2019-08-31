@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -358,6 +358,6 @@ def colorize_bg(infile,outfile,palettefile,n,colorsetnr):
 
 if __name__ == '__main__':
 
-    print 'Debug me'
+    print ('Debug me')
 
 

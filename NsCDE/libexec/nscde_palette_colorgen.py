@@ -466,7 +466,7 @@ Colorset 47 fg #ffffffffffff, bg {bgg[7]}, hi {bsg[7]}, sh {tsg[7]}, fgsh #33003
 
 # Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
 Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape
-        """.format(**locals())
+""".format(**locals())
 
     elif ncolors == 4:
         lines+="""
@@ -486,7 +486,7 @@ Colorset 47 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #33003
 
 # Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
 Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape
-        """.format(**locals())
+""".format(**locals())
 
     lines+="""
 # Transparent handler (WSM, MonthDayApplet, CheckMailApplet ...)
@@ -497,7 +497,7 @@ Colorset 53 fg #000000000000, bg #000000000000, hi #000000000000, sh #0000000000
 
 # Colorset for test indicators
 Colorset 50 fg red, bg green, hi blue, sh yellow
-    """.format(**locals())
+""".format(**locals())
 
     print (lines)
 

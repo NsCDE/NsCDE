@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -6,10 +6,10 @@
 # Licence: GPLv3
 #
 
-import ConfigParser, getopt, os, sys, re
+import configparser, getopt, os, sys, re
 
 def usage():
-    print "confget [ -c <file> [ -s <section> ] -k <key> [ -h ]"
+    print ("confget [ -c <file> [ -s <section> ] -k <key> [ -h ]")
 
 def cmdoptions():
     section = ''
@@ -40,15 +40,15 @@ def cmdoptions():
 def main ():
     conffile, section, key = cmdoptions()
 
-    parser = ConfigParser.ConfigParser()
+    parser = configparser.ConfigParser()
     parser.optionxform = lambda option: option
     parser.read(conffile)
 
     try:
-        print parser.get(section, key)
-    except ConfigParser.NoSectionError:
+        print (parser.get(section, key))
+    except configparser.NoSectionError:
         sys.exit(2)
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         sys.exit(3)
 
 # Action ...

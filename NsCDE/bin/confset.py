@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -6,10 +6,10 @@
 # Licence: GPLv3
 #
 
-import ConfigParser, getopt, os, sys, re
+import configparser, getopt, os, sys, re
 
 def usage():
-    print "confset [ -c <file> -t [ properties|ini ] [ -s <section> ] -k <key> -v <value> | [ -h ]"
+    print ("confset [ -c <file> -t [ properties|ini ] [ -s <section> ] -k <key> -v <value> | [ -h ]")
 
 def cmdoptions():
     section = ''
@@ -55,23 +55,23 @@ def main ():
         typecf = 'ini'
 
     if typecf == 'ini':
-        parser = ConfigParser.ConfigParser()
+        parser = configparser.ConfigParser()
         parser.optionxform = lambda option: option
         parser.read(conffile)
 
         try:
             parser.set(section, key, value)
-        except ConfigParser.NoSectionError:
-            print "No section named " + section + " creating it."
+        except configparser.NoSectionError:
+            print ("No section named " + section + " creating it.")
             parser.add_section(section)
             parser.set(section, key, value)
 
-        with open(conffile, 'w+b') as cff:
+        with open(conffile, 'w') as cff:
             parser.write(cff)
 
     if typecf == 'properties':
         try:
-            with open(conffile, 'r+b') as cff:
+            with open(conffile, 'r') as cff:
                 props = dict(line.split('=', 1) for line in cff)
                 checkprops = props
                 checkprops = [x.strip() for x in checkprops]
@@ -88,7 +88,7 @@ def main ():
                             cff.write(dkey + '=' + val)
             cff.close()
         except:
-            print "Cannot open file", conffile, "trying to create it."
+            print ("Cannot open file", conffile, "trying to create it.")
             fh = open(conffile, 'w')
             fh.write(key + ' = ' + value + '\n')
             fh.close()

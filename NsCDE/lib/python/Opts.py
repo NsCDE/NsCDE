@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -37,7 +37,7 @@ class Opts():
     # load and replace current object namespace with loaded
     # note: this way because yaml.load/save looks nicer when works on dict instead of class
     def load(self,filename):
-        print 'Opts() LOADING '+filename
+        print ('Opts() LOADING '+filename)
         with open(filename, 'r') as stream:
             tmpdict = yaml.load(stream)
         # if file is empty(tmpdict=None), do nothing. Then in all classes default values for opts will be used
@@ -48,10 +48,10 @@ class Opts():
     # save namespace (or something)
     def save(self,filename):
         backup=filename+'.backup'
-        print 'Copying old config file to '+backup
+        print ('Copying old config file to '+backup)
         cmd='cp'+' '+filename+' '+backup
         output = subprocess.check_output(cmd, shell=True)
-        print 'Opts() SAVING CONFIG FILE '+filename
+        print ('Opts() SAVING CONFIG FILE '+filename)
         with open(filename, 'w') as outfile:
             yaml.dump(self.__dict__, outfile)
 
@@ -77,7 +77,7 @@ class Opts():
         return len(Globals.palettes)-1
 
 def main():
-    print 'RUNNING OPTS TEST'
+    print ('RUNNING OPTS TEST')
 
     # currentpalettefile: Broica.dp
     # ncolors: 8
@@ -86,12 +86,7 @@ def main():
     testopts=Opts()
     
     testopts.load('pycdeconfigtest')
-    print testopts.__dict__ #print everything
-    #print testopts.currentpalette
-    #testopts.save('pycdeconfigtest')
-    #print testopts.ix2PaletteFile(1)
-    #print testopts.lastPaletteIx()
-
+    print (testopts.__dict__) #print everything
 
 if __name__ == '__main__':
    main()
