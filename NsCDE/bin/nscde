@@ -60,6 +60,10 @@ if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
    ksh "${FVWM_USERDIR}/Xset.conf"
 fi
 
+if [ -x "$NSCDE_ROOT/lib/XOverrideFontCursor.so" ]; then
+   export LD_PRELOAD="$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+fi
+
 if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
    exec $FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS
 else
