@@ -11,7 +11,11 @@ import sys
 import shutil
 
 nscde_root = os.environ.get('NSCDE_ROOT')
-sys.path.append(nscde_root + "/lib/python")
+if not nscde_root:
+   sys.stderr.write("NSCDE_ROOT not set. Stop.\n")
+   sys.exit(1)
+else:
+   sys.path.append(nscde_root + "/lib/python")
 
 themegen="""
 For this script to work you need to install the Python 3
