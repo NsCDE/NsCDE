@@ -71,7 +71,7 @@ def main ():
 
     if typecf == 'properties':
         try:
-            with open(conffile, 'r') as cff:
+            with open(conffile, 'r+') as cff:
                 props = dict(line.split('=', 1) for line in cff)
                 checkprops = props
                 checkprops = [x.strip() for x in checkprops]
