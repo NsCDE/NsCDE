@@ -1173,7 +1173,7 @@ Property
           Set $Action = (Add (StrCopy (LastString) 1 2) -1)
           If $Action == 1 Then
              Begin
-                Do {f_MoveCursorAndExec 0 -15 f_ShowGlobalPager}
+                Do {f_ShowGlobalPager Move 50-50w -88p}
              End
           If $Action == 2 Then
              Begin
@@ -1181,7 +1181,7 @@ Property
              End
           If $Action == 3 Then
              # $CurrDesk is 1-based; $NextDesk is 0-based
-             Do {WindowList NoGeometry TitleForAllDesks NoCurrentDeskTitle NoNumInDeskTitle ShowPage Desk } $NextDesk
+             Do {WindowList mouse -0m -0m NoGeometry TitleForAllDesks NoCurrentDeskTitle NoNumInDeskTitle ShowPage Desk } $NextDesk
              If (Add $NextDesk 1) == $CurrDesk Then
              Begin
                 If $CurrDesk == 1 Then
