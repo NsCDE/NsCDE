@@ -1,5 +1,7 @@
 #!/bin/ksh
 
+noninteractive=0
+
 function check_dependencies
 {
    :
@@ -18,7 +20,17 @@ function install_nscde
    check_dependencies
 
    if [ "x$instpath" == "x" ]; then
-      instpath="/opt/NsCDE"
+      if (($noninteractive == 1)); then
+         instpath="/opt/NsCDE"
+      fi
+   else
+      echo "Installation firectory for NsCDE [/opt/NsCDE]: \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         instpath="/opt/NsCDE"
+      else
+         instpath="$ans"
+      fi
    fi
 
    uid=$(id -u)
@@ -67,11 +79,48 @@ function install_nscde
    fi
 
    if [ "x$photopath" != "x" ]; then
-      :
+      echo "Copying additional photo collection from $photopath as ${instpath}/share/photos"
+      if [ -d "$photopath" ]; then
+         cp -f "$photopath" ${instpath}/share/photos
+         retval=$?
+         if (($retval != 0)); then
+            echo "An error $retval occured while copying photo collection from $photopath"
+         else
+            echo "Done."
+         fi
+      else
+         echo "Error: Cannot read directory with additional photo colection: $photopath"
+      fi
    fi
 
    if [ "x$vuepath" != "x" ]; then
-      :
+      echo "Copying additional VUE palettes and backdrops from $vuepath"
+      if [ -d "${vuepath}" ]; then
+         cp -f "$vuepath"/share/palettes/* ${instpath}/share/palettes/
+         retval=$?
+         if (($retval != 0)); then
+            echo "An error $retval occured while copying VUE palettes collection from ${vuepath}/share/palettes"
+         else
+            echo "Done."
+         fi
+         cp -f "$vuepath"/share/backdrops/* ${instpath}/share/backdrops/
+         retval=$?
+         if (($retval != 0)); then
+            echo "An error $retval occured while copying VUE backdrops collection from ${vuepath}/share/backdrops"
+         else
+            echo "Done."
+         fi
+      else
+         echo "Error: Cannot read directory with additional VUE palettes and backdrops: $vuepath"
+      fi
+   else
+      if (($noninteractive == 1)); then
+         echo "Ommiting additional VUE palettes and backdrops installation (-V)."
+      else
+         echo "Where to look for VUE palettes and backdrops? [/tmp/VUE]\c"
+         read ans
+         
+      fi
    fi
 
    if (($fvwm_patched == 1)); then
@@ -84,6 +133,23 @@ function install_nscde
 
 function configure_installed
 {
+   if [ "$1" == "patched" ]; then
+      # Uncomment HAS_WINDOWNAME in NsCDE.conf
+      # Patch NsCDE-FrontPanel.conf for "indicator 12 in"
+      # Regenerate system NsCDE-Subpanels.conf with window name
+      :
+   fi
+
+   if [ "$1" == "workarounds" ]; then
+      # Try to compile XOverrideFontCursor.so
+      # Patch NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
+      :
+   fi
+
+   # Handle pclock
+   :
+
+   # Install xsession file nscde.desktop
    :
 }
 
@@ -102,7 +168,7 @@ function usage
    echo "Usage: ${0##*/} [-i|-u|-d] [-p] [-w] [-f] [-P] [-V] [-X]"
 }
 
-while getopts iucdp:wfP:V:X:h Option
+while getopts iucdp:wfP:V:X:nh Option
 do
    case $Option in
    i)
@@ -134,6 +200,9 @@ do
    ;;
    X)
       xsessionpath="$OPTARG"
+   ;;
+   n)
+      noninteractive=1
    ;;
    h)
       usage
