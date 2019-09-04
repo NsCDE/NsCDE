@@ -4,6 +4,7 @@ noninteractive=0
 
 function check_dependencies
 {
+   # Python 3, ImageMagick, xdotool, yaml, PyQt, ksh (obviously) etc etc ...
    :
 }
 
@@ -37,7 +38,7 @@ function install_nscde
    if (($uid > 0)); then
       sleep 2
       echo "Warning: running NsCDE installer as non-root user. This can only succeed if"
-      echo "have a write access to the ${instpath%/*}."
+      echo "UID $uid have a write access to the ${instpath%/*}."
    fi
 
    if [ -d "$instpath" ]; then
@@ -137,15 +138,40 @@ function configure_installed
 {
    if [ "$1" == "patched" ]; then
       # Uncomment HAS_WINDOWNAME in NsCDE.conf
+      echo "Enabling HAS_WINDOWNAME variable in ${instpath}/config/NsCDE.conf"
+      echo '# Since FVWM has been compiled with NsCDE patches, we are enabling' >> ${instpath}/config/NsCDE.conf
+      echo '# HAS_WINDOWNAME for this installation to avoid workarounds.' >> ${instpath}/config/NsCDE.conf
+      echo 'SetEnv HAS_WINDOWNAME 1' >> ${instpath}/config/NsCDE.conf
+
       # Patch NsCDE-FrontPanel.conf for "indicator 12 in"
+      echo "Setting patched indicator with shadow in in NsCDE-FrontPanel.conf"
+      ${instpath}/bin/ised -c 's/indicator 12,/indicator 12 in,' -f ${instpath}/config/NsCDE-FrontPanel.conf
+
       # Regenerate system NsCDE-Subpanels.conf with window name
-      :
+      echo "Regenerating system NsCDE-Subpanels.conf"
+      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/generate_subpanels > ${instpath}/config/NsCDE-Subpanels.conf
+
+      echo "Done."
    fi
 
    if [ "$1" == "workarounds" ]; then
+      echo "FVWM is marked as not patched for NsCDE. Enabling workarounds."
+
       # Try to compile XOverrideFontCursor.so
+      echo "Trying to compile XOverrideFontCursor.so and put it in ${instpath}/lib for LD_PRELOAD"
+      echo "You must have make tool, C compiler and libX11 development files (headers)"
+      echo "installed for this to suceed."
+      make -C ${instpath}NsCDE/src/XOverrideFontCursor
+      retval=$?
+      if (($retval > 0)); then
+         echo "Compilation of XOverrideFontCursor.so failed. Some of the FvwmScript widgets"
+         echo "will appear with XC_hand2 pointer cursor on mouse over. Fixable later ..."
+      else
+         echo "Done."
+      fi
+
       # Patch NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
-      :
+      echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
    fi
 
    # Handle pclock
