@@ -66,7 +66,7 @@ function install_nscde
 
    if [ -d "NsCDE" ]; then
       echo "Copying NsCDE distribution files into $instpath"
-      cp -rpf NsCDE/* ${instpath}/
+      cp -rpf NsCDE/* "${instpath}/"
       retval="$?"
       if (($retval == 0)); then
          echo "Done."
@@ -89,7 +89,12 @@ function install_nscde
             echo "Done."
          fi
       else
-         echo "Error: Cannot read directory with additional photo colection: $photopath"
+         echo "Error: Cannot read directory with additional photo collection: $photopath"
+      fi
+   else
+      if [ ! -d "${instpath}/share/photos" ]; then
+         echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
+         echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
       fi
    fi
 
@@ -114,12 +119,9 @@ function install_nscde
          echo "Error: Cannot read directory with additional VUE palettes and backdrops: $vuepath"
       fi
    else
-      if (($noninteractive == 1)); then
-         echo "Ommiting additional VUE palettes and backdrops installation (-V)."
-      else
-         echo "Where to look for VUE palettes and backdrops? [/tmp/VUE]\c"
-         read ans
-         
+      if [ ! -r "${instpath}/share/palettes/CoralReef.dp" ]; then
+         echo "Info: Additional collection of VUE palettes and backdrops not installed in ${instpath}/share/{palettes,backdrops}"
+         echo "See: https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz"
       fi
    fi
 
@@ -155,11 +157,13 @@ function configure_installed
 
 function upgrade_nscde
 {
+   # Backup photos and VUE if exists, unpack new, put photos and VUE back
    :
 }
 
 function deinstall_nscde
 {
+   # Question, or noninteractive, rm -rf ... careful.
    :
 }
 

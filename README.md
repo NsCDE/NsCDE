@@ -6,11 +6,11 @@ Notice: for a full documentation, see NsCDE/share/doc/*
 
 Notice: for a set of photos, also download
 
-https://github.com/NsCDE/NsCDE-photos/archive/Photos-1.0.tar.gz
+https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz
 
 Notice: for a set of old VUE palettes and backdrops, also download
 
-https://github.com/NsCDE/NsCDE-VUE/archive/VUE-1.0.tar.gz
+https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz
 
 See here for screenshots: https://imgur.com/gallery/nHkw35X
 
