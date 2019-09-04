@@ -1,0 +1,13 @@
+#!/bin/ksh
+
+[ -z $NSCDE_ROOT ] && exit 2
+MARCH=$(uname -p)
+
+if [ -x $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} ]; then
+   exec $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} "$@"
+else
+   pclock=$(whence -p pclock)
+   if [ "x$pclock" != "x" ]; then
+      exec $pclock -H black -S red --hour-hand-length=15 --minute-hand-length=20 --second-hand-length=22 "$@"
+   fi
+fi
