@@ -157,21 +157,44 @@ function configure_installed
    if [ "$1" == "workarounds" ]; then
       echo "FVWM is marked as not patched for NsCDE. Enabling workarounds."
 
-      # Try to compile XOverrideFontCursor.so
-      echo "Trying to compile XOverrideFontCursor.so and put it in ${instpath}/lib for LD_PRELOAD"
-      echo "You must have make tool, C compiler and libX11 development files (headers)"
-      echo "installed for this to suceed."
-      make -C ${instpath}NsCDE/src/XOverrideFontCursor
+      # Try to find suitable XOverrideFontCursor.so in our src dir.
+      OS_PLUS_MACHINE_ARCH=$(uname -sp | tr ' ' '_')
+      if [ -r "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" ]; then
+         echo "Copying XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH} as ${instpath}/lib/XOverrideFontCursor.so"
+         cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" "${instpath}/lib/XOverrideFontCursor.so"
+         chmod 0755 "${instpath}/lib/XOverrideFontCursor.so"
+         echo "Done"
+      else
+         # Try to compile XOverrideFontCursor.so
+         echo "Trying to compile XOverrideFontCursor.so and put it in ${instpath}/lib for LD_PRELOAD"
+         echo "You must have make tool, C compiler and libX11 development files (headers)"
+         echo "installed for this to suceed."
+         make -C src/XOverrideFontCursor
+         retval=$?
+         if (($retval > 0)); then
+            echo "Compilation of XOverrideFontCursor.so failed. Some of the FvwmScript widgets"
+            echo "will appear with XC_hand2 pointer cursor on mouse over. Fixable later ..."
+         else
+            echo "Copying XOverrideFontCursor.so as ${instpath}/lib/XOverrideFontCursor.so"
+            if [ -f "src/XOverrideFontCursor/XOverrideFontCursor.so" ]; then
+               cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so" "${instpath}/lib/XOverrideFontCursor.so"
+               chmod 0755 "${instpath}/lib/XOverrideFontCursor.so"
+               echo "Done."
+            else
+               echo "Error: Cannot copy or find XOverrideFontCursor.so in src/XOverrideFontCursor/"
+            fi
+         fi
+      fi
+
+      # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
+      echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
+      mv /opt/NsCDE-devel/NsCDE/share/doc/examples/NsCDE-FrontPanel.conf.no_sub_arrow_patch /opt/NsCDE-devel/NsCDE/config/NsCDE-FrontPanel.conf
       retval=$?
-      if (($retval > 0)); then
-         echo "Compilation of XOverrideFontCursor.so failed. Some of the FvwmScript widgets"
-         echo "will appear with XC_hand2 pointer cursor on mouse over. Fixable later ..."
+      if (($retval != 0)); then
+         echo "Error $retval occured."
       else
          echo "Done."
       fi
-
-      # Patch NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
-      echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
    fi
 
    # Handle pclock
