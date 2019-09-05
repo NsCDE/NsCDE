@@ -323,7 +323,74 @@ function upgrade_nscde
 function deinstall_nscde
 {
    # Question, or noninteractive, rm -rf ... careful.
-   :
+   if [ "x$instpath" == "x" ]; then
+      # Try default
+      if [ -d "/opt/NsCDE" ]; then
+         instpath="/opt/NsCDE"
+      else
+         echo "Default path /opt/NsCDE not found. You must specify where"
+         echo "the installation of NsCDE resides (-p <nscdepath> before -d)"
+         exit 10
+      fi
+   fi
+
+   echo "Removing $instpath"
+
+   sanity1=$(ls -1 "${instpath}/config/" | wc -l)
+   sanity2=$(ls -1d ${instpath}/{bin,config,lib,libexec,share} > /dev/null 2>&1; echo $?)
+   sanity3=$(${instpath}/bin/nscde -V | grep -q "NsCDE Version"; echo $?)
+
+   if (($sanity1 > 10)) && ((sanity2 + sanity3 == 0)); then
+      if (($noninteractive == 1)); then
+         rm -rf "$instpath"
+         retval=$?
+         if (($retval == 0)); then
+            echo "Done."
+         else
+            echo "Removal of $instpath retuned $retval exit status."
+         fi
+      else
+         echo -ne "Do you want to completely remove ${instpath}? [n] \c"
+         read ans
+         if [ "x$ans" == "xy" ]; then
+            rm -rf "$instpath"
+            retval=$?
+            if (($retval == 0)); then
+               echo "Done."
+            else
+               echo "Removal of $instpath retuned $retval exit status."
+            fi
+         else
+            echo "Removal of $instpath skipped."
+         fi
+      fi
+
+      for xdskfile in /usr/share/xsessions/nscde.desktop /usr/local/share/xsessions/nscde.desktop
+      do
+         if [ -r "$xdskfile" ]; then
+            echo "Removing X Display Manager file"
+            if (($noninteractive == 1)); then
+               rm -f $xdskfile
+               echo "Done."
+            else
+               echo -ne "Do you want to completely remove ${xdskfile}? [n] \c"
+               read ans
+               if [ "x$ans" == "xy" ]; then
+                  rm -f "$xdskfile"
+               else
+                  echo "Removal of $xdskfile skipped."
+               fi
+            fi
+         fi
+      done
+   else
+      echo "One or more sanity checks before deleting $instpath and xsessions file has failed."
+      echo "Check that NsCDE path given to the -p was really top directory of the NsCDE"
+      echo "installation. If things are half deleted and hence non-checkable by this script"
+      echo "you should manually deinstall NsCDE by deleting installation path and X session"
+      echo "file nscde.desktop from /usr/share/xsessions or /usr/local/share/xsessions."
+      exit 12
+   fi
 }
 
 function usage
