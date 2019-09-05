@@ -26,11 +26,15 @@ echo ""
 
 for subpn in {1..10}
 do
-   egrep -q "^S${subpn},NAME," "$FVWM_USERDIR/Subpanels.actions"
-   if (($? == 0)); then
-      spactfile="$FVWM_USERDIR/Subpanels.actions"
-   else
+   if [ "x$SYSMODE" == "x1" ]; then
       spactfile="$NSCDE_ROOT/config/Subpanels.actions"
+   else
+      egrep -q "^S${subpn},NAME," "$FVWM_USERDIR/Subpanels.actions"
+      if (($? == 0)); then
+         spactfile="$FVWM_USERDIR/Subpanels.actions"
+      else
+         spactfile="$NSCDE_ROOT/config/Subpanels.actions"
+      fi
    fi
 
    Name=$(egrep "S${subpn},NAME," $spactfile | cut -d"," -f3)

@@ -23,14 +23,14 @@ function install_nscde
    if [ "x$instpath" == "x" ]; then
       if (($noninteractive == 1)); then
          instpath="/opt/NsCDE"
-      fi
-   else
-      echo "Installation firectory for NsCDE [/opt/NsCDE]: \c"
-      read ans
-      if [ "x$ans" == "x" ]; then
-         instpath="/opt/NsCDE"
       else
-         instpath="$ans"
+         echo -ne "Installation firectory for NsCDE [/opt/NsCDE]: \c"
+         read ans
+         if [ "x$ans" == "x" ]; then
+            instpath="/opt/NsCDE"
+         else
+            instpath="$ans"
+         fi
       fi
    fi
 
@@ -49,7 +49,7 @@ function install_nscde
          if (($noninteractive == 1)); then
             exit 2
          else
-            echo -n "Do you want to continue with copying NsCDE installation into ${instpath}? (y|n)[n] \c"
+            echo -ne "Do you want to continue with copying NsCDE installation into ${instpath}? (y|n)[n] \c"
             read ans
             if [ "$ans" != "y" ]; then
                echo "Exiting installation."
@@ -93,7 +93,8 @@ function install_nscde
          echo "Error: Cannot read directory with additional photo collection: $photopath"
       fi
    else
-      if [ ! -d "${instpath}/share/photos" ]; then
+      photospopulated=$(ls -1 "${instpath}/share/photos" | wc -l)
+      if (($photospopulated < 1)); then
          echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
          echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
       fi
@@ -130,12 +131,13 @@ function install_nscde
       configure_installed patched
    else
       configure_installed workarounds
-   else
    fi
 }
 
 function configure_installed
 {
+   OS_PLUS_MACHINE_ARCH=$(uname -sm | tr ' ' '_')
+
    if [ "$1" == "patched" ]; then
       # Uncomment HAS_WINDOWNAME in NsCDE.conf
       echo "Enabling HAS_WINDOWNAME variable in ${instpath}/config/NsCDE.conf"
@@ -145,7 +147,7 @@ function configure_installed
 
       # Patch NsCDE-FrontPanel.conf for "indicator 12 in"
       echo "Setting patched indicator with shadow in in NsCDE-FrontPanel.conf"
-      ${instpath}/bin/ised -c 's/indicator 12,/indicator 12 in,' -f ${instpath}/config/NsCDE-FrontPanel.conf
+      ./NsCDE/bin/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
 
       # Regenerate system NsCDE-Subpanels.conf with window name
       echo "Regenerating system NsCDE-Subpanels.conf"
@@ -158,7 +160,6 @@ function configure_installed
       echo "FVWM is marked as not patched for NsCDE. Enabling workarounds."
 
       # Try to find suitable XOverrideFontCursor.so in our src dir.
-      OS_PLUS_MACHINE_ARCH=$(uname -sp | tr ' ' '_')
       if [ -r "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" ]; then
          echo "Copying XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH} as ${instpath}/lib/XOverrideFontCursor.so"
          cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" "${instpath}/lib/XOverrideFontCursor.so"
@@ -188,7 +189,8 @@ function configure_installed
 
       # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
       echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
-      mv /opt/NsCDE-devel/NsCDE/share/doc/examples/NsCDE-FrontPanel.conf.no_sub_arrow_patch /opt/NsCDE-devel/NsCDE/config/NsCDE-FrontPanel.conf
+      ./NsCDE/bin/ised -c 's/ indicator 12,//g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
+      ./NsCDE/bin/ised -c 's/\*FrontPanel: \(.*x.*\), Id NsCDE-Subpanel\(.*\), Frame 1, PressColorset 27, \\/\*FrontPanel: \1, Id NsCDE-Subpanel\2, Frame 1, PressColorset 27, \\\n  Icon NsCDE\/FPSubArrowUp.xpm, PressIcon NsCDE\/FPSubArrowDown.xpm, \\/g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
       retval=$?
       if (($retval != 0)); then
          echo "Error $retval occured."
@@ -198,10 +200,118 @@ function configure_installed
    fi
 
    # Handle pclock
-   :
+   if [ -f "src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}" ]; then
+      echo "Installing appropriate Front Panel Clock for this system and arch."
+      cp -f src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/bin/fpclock-${OS_PLUS_MACHINE_ARCH}"
+      retval=$?
+      if (($retval > 0)); then
+         echo "Error $retval occured while installing src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}"
+      else
+         echo "Done."
+      fi
+   else
+      echo "No suitable binary found for Front Panel Clock."
+      if (($noninteractive == 0)); then
+         echo "Do you want to try compiling Front Panel Clock from source?"
+         echo -ne "C compiler, X11, Xext, xcb and Xpm development are needed for this. [y] \c"
+         read ans
+         if [ "x$ans" != "x" ]; then
+            compile_pclock=1
+         else
+            compile_pclock=0
+         fi
+      else
+         echo "Trying to compile one from source. C compiler, X11, Xext, xcb and Xpm development are needed for this."
+         compile_pclock=1
+      fi
+      if (($compile_pclock == 1)); then
+         make -C src/pclock-0.13.1/src
+         retval=$?
+         if (($retval > 0)); then
+            echo "Error ocurred while trying to compile Front Panel Clock. Try to fix this manually."
+         else
+            echo "Installing newly compiled Front Panel Clock for this system and arch."
+            cp -f src/pclock-0.13.1/src/pclock "${instpath}/bin/fpclock-${OS_PLUS_MACHINE_ARCH}"
+            retval=$?
+            if (($retval > 0)); then
+               echo "Error $retval occured while installing src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}"
+            else
+               echo "Done."
+            fi
+         fi
+      else
+         echo "Front Panel Clock compilation skipped."
+         echo "If there is \"pclock\" binary in PATH, an attempt to use"
+         echo "it will be made (pkg install pclock on FreeBSD for example)."
+      fi
+   fi
 
    # Install xsession file nscde.desktop
-   :
+   if (($noninteractive == 0)); then
+      echo "Do you want to install \"nscde.desktop\" X Session Launcher for your"
+      echo -ne "graphical display manager to choose it during log in time? (y/n)[y] \c"
+      read ans
+      if [ "x$ans" == "x" ] || [ "x$ans" == "xy" ]; then
+         if [ -d "/usr/share/xsessions" ]; then
+            xsess_dir="/usr/share/xsessions"
+         elif [ -d "/usr/local/share/xsessions" ]; then
+            xsess_dir="/usr/local/share/xsessions"
+         else
+            xsess_dir=""
+         fi
+
+         echo -ne "Where is your xsessions directory? [${xsess_dir}] \c"
+         read xans
+         if [ "x$xans" == "x" ]; then
+            cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+            retval=$?
+            if (($retval > 0)); then
+               echo "Error occured while trying to copy"
+               echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+               echo "into ${xsess_dir}/"
+            else
+               echo "Done."
+            fi
+         else
+            cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xans}/"
+            retval=$?
+            if (($retval > 0)); then
+               echo "Error occured while trying to copy"
+               echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+               echo "into ${xans}/"
+            else
+               echo "Done."
+            fi
+         fi
+      else
+         echo "Skipping xsession nscde.desktop file installation."
+      fi
+   else
+      if [ -d "/usr/share/xsessions" ]; then
+         xsess_dir="/usr/share/xsessions"
+         xsession_inst=1
+      elif [ -d "/usr/local/share/xsessions" ]; then
+         xsess_dir="/usr/local/share/xsessions"
+         xsession_inst=1
+      else
+         echo "Error: Cannot locate xsessions directory in /usr/share and /usr/local/share"
+         echo "Enable NsCDE X Session startup manually in your X Display Manager configuration"
+         xsession_inst=0
+      fi
+
+      if (($xsession_inst > 0)); then
+         echo "Installing xsession file nscde.desktop into ${xsess_dir}."
+         cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+         retval=$?
+         if (($retval > 0)); then
+            echo "Error occured while trying to copy"
+            echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+            echo "into ${xsess_dir}/"
+         else
+            echo "Done."
+         fi
+      fi
+   fi
 }
 
 function upgrade_nscde
@@ -252,7 +362,7 @@ do
       vuepath="$OPTARG"
    ;;
    X)
-      xsessionpath="$OPTARG"
+      xsess_dir="$OPTARG"
    ;;
    n)
       noninteractive=1

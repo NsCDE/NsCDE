@@ -1,7 +1,7 @@
 #!/bin/ksh
 
 [ -z $NSCDE_ROOT ] && exit 2
-MARCH=$(uname -p)
+MARCH=$(uname -m)
 
 if [ -x $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} ]; then
    exec $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} "$@"
