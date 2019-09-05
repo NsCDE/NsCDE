@@ -34,24 +34,16 @@ Installation Dependencies
      *  python-yaml - needed for python part of the color theme management
        and for Gtk+Qt integration.
 
-     *  PyQt4 or possibly python-qt4, or python2-qt4. This is unfortunate
-       dependency which is further dependent on Qt libraries. NsCDE tries to
-       have as less as possible dependencies, specially indirect
-       (dependencies of dependent dependencies of dependencies ...). Gtk/Qt
-       integration is borrowed from CDEtheme Motif/CDE theme project and
-       adapted for use with FVWM (instead of heavy Xfce dependency) or
-       standalone engine. In part of the Theme.py code, some png pixmaps are
-       cut and colored with functions from this API. With present job and
-       lack of time, there was no time to do this without PyQt4 for the first
-       public release.
-
-         On CentOS, Fedora, Ubuntu and probably Debian, also on FreeBSD,
-       there should be no problem to install this with package manager, but
-       in tests on Arch Linux, PyQt4 was obsoleted and user will have a hard
-       time getting source from AUR and compiling huge bunch of Qt4
-       libraries. There is possibility to replace PyQt4 with PyQt5 imports in
-       code and it will work, no matter that it will segfault and core dump
-       on the exit.
+     *  PyQt4, PyQt5 or possibly python3-qt4, python-qt5 or python3-qt5 or ...
+       This is unfortunate dependency which is further dependent on Qt
+       libraries. NsCDE tries to have as less as possible dependencies,
+       specially indirect (dependencies of dependent dependencies of
+       dependencies ...). Gtk/Qt integration is borrowed from CDEtheme
+       Motif/CDE theme project and adapted for use with FVWM (instead of
+       heavy Xfce dependency) or standalone engine. In part of the Theme.py
+       code, some png pixmaps are cut and colored with functions from this
+       API. With present job and lack of time, there was no time to do this
+       without PyQt5 or PyQt4 for the first public release.
 
      *  Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins
        (optional) There is a great chance this libraries and some usefull
@@ -80,11 +72,14 @@ Installation Dependencies
 
      *  Stalonetray for "tray" facility (optional)
 
+     *  XSETTINGS xsettingsd daemon for theme and X settings dynamic
+        management (optional)
+
      *  xterm
 
      *  python3 (FVWM)
 
-     *  python34-pyxdg or python3-pyxdg or ... (FVWM)
+     *  python34-pyxdg or python3-pyxdg or python36-pyxdg or ... (FVWM)
 
      *  libstroke (FVWM)
 
@@ -97,36 +92,40 @@ Installation
     When FVWM and all/most above mentioned dependencies are met, NsCDE can be
    used. Present installation is very simple:
 
-     $ su - || sudo -i
+     $ su - (or sudo -i)
      # umask 0022
      # cd /tmp
      # wget https://github.com/NsCDE/NsCDE/archive/<version>.tar.gz
      # tar xpzf <version>.tar.gz
-     # cp -rp NsCDE-<version>/NsCDE /opt
+     # cd NsCDE-<version>
+     # ./Installer.ksh -w -i (or ./Installer.ksh -f -i)
 
      ... and optionally:
 
-     # cd /usr/local/bin || cd /usr/bin
+     # cd /usr/local/bin (or cd /usr/bin)
      ln -s /opt/NsCDE/bin/nscde
 
-    That's it. NsCDE is installed.
+    That's it. NsCDE is installed. You may need to resrart your X Display
+    Manager (such as lightdm, gdm, sddm ...) for NsCDE entry to appear as
+    login option.
 
    --------------------------------------------------------------------------
 
 NsCDE Startup
 
-    Session can be started from the $HOME/.xsession in last command line as
-   exec nscde, or exec /opt/NsCDE/bin/nscde or ssh-agent nscde or with
-   gpg-agent, lxsession or whatever.
+    If not invoked from X Display Manager, NsCDE X session can be started
+   from the $HOME/.xsession in last command line as "exec nscde", or as
+   "exec /opt/NsCDE/bin/nscde" (or "ssh-agent nscde" or with gpg-agent,
+   lxsession or whatever).
 
     If supported by the X Display Manager which is in use, an xsession file
-   /opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop can be
-   put in /usr/share/xsessions (or in whatever place your system and your X
-   Display Manager reads this files) and then selected from the manager's
-   menu or similar selector. See the rest of the X Session Manager
-   integration examples are in directory /opt/NsCDE/share/doc/examples/ for
-   MATE, KDE, LXDE and similar DE integrations and play with this if you
-   like.
+   /opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop when
+   put in /usr/share/xsessions by the installer or manually (or in whatever
+   place your system and your X Display Manager reads this files) and then
+   selected from the manager's menu or similar selector.
+   See the rest of the X Session Manager integration examples are in directory
+   /opt/NsCDE/share/doc/examples/ for MATE, KDE, LXDE and similar DE
+   integrations and play with this if you like.
 
    --------------------------------------------------------------------------
 
@@ -149,7 +148,7 @@ Initial Configuration
 
      * Default ~/.NsCDE/NsCDE.conf
 
-     * New empty ~/.NsCDE/GeoDB.ini
+     * New ~/.NsCDE/GeoDB.ini with some sane defaults
 
      * ~/.icons/default/index.theme (default X cursor scheme)
 
