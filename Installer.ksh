@@ -5,7 +5,59 @@ noninteractive=0
 function check_dependencies
 {
    # Python 3, ImageMagick, xdotool, yaml, PyQt, ksh (obviously) etc etc ...
-   :
+   whence -q python3
+   if (($? > 0)); then
+      echo "Cannot find python3 as a named command. This is needed for NsCDE"
+      echo "If you have python3 installed by some other name (for example \"python\""
+      echo "or \"python34\", \"python3.6\" ... you should make symlink on it"
+      echo "anywhere in your PATH."
+      echo ""
+      echo "For example (FreeBSD 12 example):"
+      echo "ln -s /usr/local/bin/python3.6 /usr/local/bin/pyhon3"
+      echo ""
+      echo "Python is referenced with \"#!/usr/bin/env python3\" in NsCDE Python"
+      echo "parts since plain \"python\" command might reffer to Python 2.X on"
+      echo "older systems, and minor revision in Python 3 differs across systems."
+      echo ""
+      exit 20
+   fi
+
+   for exe in xdotool convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3
+   do
+      whence -q $exe
+      retval=$?
+      if (($retval > 0)); then
+         echo ""
+         echo "Error: Command or program \"$exe\" as NsCDE dependency is missing"
+         echo "on this system."
+         echo ""
+         exit 20
+      fi
+   done
+
+   for oexe in xscreensaver stalonetray xsettingsd
+   do
+      whence -q $oexe
+      retval=$?
+      if (($retval > 0)); then
+         echo ""
+         echo "Warning: Optional command or program \"$oexe\" as NsCDE dependency"
+         echo "is missing on this system."
+         echo ""
+         sleep 3
+      fi
+   done
+
+   # XXX - handle PyQt4 PyQt5 dependency
+   for pymodule in yaml PyQt5 xdg
+   do
+      python3 -c "import $pymodule"
+      retval=$?
+      if (($retval > 0)); then
+         echo "Error: cannot find Python 3 module ${pymodule}. Import failed."
+         exit 20
+      fi
+   done
 }
 
 function install_nscde
@@ -114,6 +166,12 @@ function install_nscde
          echo "Done."
       else
          echo "Error $retval occured while copying NsCDE distribution files into $instpath"
+      fi
+      if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+         echo "Adapting NSCDE_ROOT path for custom installation."
+         ./NsCDE/bin/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${instpath%*/}@g" -f "${instpath}/bin/nscde"
+         ./NsCDE/bin/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${instpath%*/}@g" -f "${instpath}/config/NsCDE-Main.conf"
+         echo "Adaptation done."
       fi
    else
       echo "Directory $instpath does not exist after attempting to create it. Exiting."
@@ -295,12 +353,15 @@ function configure_installed
       echo -ne "graphical display manager to choose it during log in time? (y/n)[y] \c"
       read ans
       if [ "x$ans" == "x" ] || [ "x$ans" == "xy" ]; then
-         if [ -d "/usr/share/xsessions" ]; then
-            xsess_dir="/usr/share/xsessions"
-         elif [ -d "/usr/local/share/xsessions" ]; then
-            xsess_dir="/usr/local/share/xsessions"
-         else
-            xsess_dir=""
+         # Not set with -X
+         if [ -z $xsess_dir ]; then
+            if [ -d "/usr/share/xsessions" ]; then
+               xsess_dir="/usr/share/xsessions"
+            elif [ -d "/usr/local/share/xsessions" ]; then
+               xsess_dir="/usr/local/share/xsessions"
+            else
+               xsess_dir=""
+            fi
          fi
 
          echo -ne "Where is your xsessions directory? [${xsess_dir}] \c"
@@ -313,6 +374,17 @@ function configure_installed
                echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
                echo "into ${xsess_dir}/"
             else
+               if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+                  echo "Adapting Exec line in nscde.desktop ..."
+                  ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+                  "${xsess_dir}/nscde.desktop"
+                  retval=$?
+                  if (($retval > 0)); then
+                     echo "Error $retval occured while adapting nscde.desktop file."
+                  else
+                     echo "Adapting nscde.desktop done."
+                  fi
+               fi
                echo "Done."
             fi
          else
@@ -323,6 +395,17 @@ function configure_installed
                echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
                echo "into ${xans}/"
             else
+               if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+                  echo "Adapting Exec line in nscde.desktop ..."
+                  ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+                  "${xans}/nscde.desktop"
+                  retval=$?
+                  if (($retval > 0)); then
+                     echo "Error $retval occured while adapting nscde.desktop file."
+                  else
+                     echo "Adapting nscde.desktop done."
+                  fi
+               fi
                echo "Done."
             fi
          fi
@@ -330,16 +413,26 @@ function configure_installed
          echo "Skipping xsession nscde.desktop file installation."
       fi
    else
-      if [ -d "/usr/share/xsessions" ]; then
-         xsess_dir="/usr/share/xsessions"
-         xsession_inst=1
-      elif [ -d "/usr/local/share/xsessions" ]; then
-         xsess_dir="/usr/local/share/xsessions"
-         xsession_inst=1
+      # Not set with -X
+      if [ -z $xsess_dir ]; then
+         if [ -d "/usr/share/xsessions" ]; then
+            xsess_dir="/usr/share/xsessions"
+            xsession_inst=1
+         elif [ -d "/usr/local/share/xsessions" ]; then
+            xsess_dir="/usr/local/share/xsessions"
+            xsession_inst=1
+         else
+            echo "Error: Cannot locate xsessions directory in /usr/share and /usr/local/share"
+            echo "Enable NsCDE X Session startup manually in your X Display Manager configuration"
+            xsession_inst=0
+         fi
       else
-         echo "Error: Cannot locate xsessions directory in /usr/share and /usr/local/share"
-         echo "Enable NsCDE X Session startup manually in your X Display Manager configuration"
-         xsession_inst=0
+         if [ -d "$xsess_dir" ]; then
+            xsession_inst=1
+         else
+            echo "Error: X Display Session directory $xsess_dir provided with -X does not exist."
+            echo "Skipping nscde.desktop installation."
+         fi
       fi
 
       if (($xsession_inst > 0)); then
@@ -351,6 +444,17 @@ function configure_installed
             echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
             echo "into ${xsess_dir}/"
          else
+            if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+               echo "Adapting Exec line in nscde.desktop ..."
+               ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+               "${xsess_dir}/nscde.desktop"
+               retval=$?
+               if (($retval > 0)); then
+                  echo "Error $retval occured while adapting nscde.desktop file."
+               else
+                  echo "Adapting nscde.desktop done."
+               fi
+            fi
             echo "Done."
          fi
       fi
@@ -398,7 +502,16 @@ function upgrade_nscde
       fi
    done
    if (($phcnt > 0)); then
+      echo "Backing up photos not found in the new installation for later restore."
       cd "${instpath}/share/photos" && tar cpf /tmp/_nscde_photo_savelist.tar $photo_savelist
+      retval=$?
+      if (($retval > 0)); then
+         echo "Archive (tar) process for ${instpath}/share/photos to /tmp/_nscde_photo_savelist.tar"
+         echo "exited with status $retval"
+         exit 14
+      else
+         echo "Backing up custom photos: done."
+      fi
       cd ${get_back}
    fi
 
@@ -412,6 +525,14 @@ function upgrade_nscde
    done
    if (($palcnt > 0)); then
       cd "${instpath}/share/palettes" && tar cpf /tmp/_nscde_palette_savelist.tar $palette_savelist
+      retval=$?
+      if (($retval > 0)); then
+         echo "Archive (tar) process for ${instpath}/share/palettes to /tmp/_nscde_palette_savelist.tar"
+         echo "exited with status $retval"
+         exit 14
+      else
+         echo "Backing up custom palettes: done."
+      fi
       cd ${get_back}
    fi
 
@@ -425,6 +546,13 @@ function upgrade_nscde
    done
    if (($bdrcnt > 0)); then
       cd "${instpath}/share/backdrops" && tar cpf /tmp/_nscde_backdrop_savelist.tar $backdrop_savelist
+      if (($retval > 0)); then
+         echo "Archive (tar) process for ${instpath}/share/backdrops to /tmp/_nscde_backdrop_savelist.tar"
+         echo "exited with status $retval"
+         exit 14
+      else
+         echo "Backing up custom backdrops: done."
+      fi
       cd ${get_back}
    fi
 
