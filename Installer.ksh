@@ -192,7 +192,7 @@ function install_nscde
    if [ "x$photopath" != "x" ]; then
       echo "Copying additional photo collection from $photopath as ${instpath}/share/photos"
       if [ -d "$photopath" ]; then
-         cp -f "$photopath" ${instpath}/share/photos
+         cp -rf "$photopath" ${instpath}/share/photos
          retval=$?
          if (($retval != 0)); then
             echo "An error $retval occured while copying photo collection from $photopath"
@@ -211,8 +211,8 @@ function install_nscde
    fi
 
    if [ "x$vuepath" != "x" ]; then
-      echo "Copying additional VUE palettes and backdrops from $vuepath"
       if [ -d "${vuepath}" ]; then
+         echo "Copying additional VUE palettes from $vuepath"
          cp -f "$vuepath"/share/palettes/* ${instpath}/share/palettes/
          retval=$?
          if (($retval != 0)); then
@@ -220,6 +220,7 @@ function install_nscde
          else
             echo "Done."
          fi
+         echo "Copying additional VUE backdrops from $vuepath"
          cp -f "$vuepath"/share/backdrops/* ${instpath}/share/backdrops/
          retval=$?
          if (($retval != 0)); then
