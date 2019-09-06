@@ -192,7 +192,8 @@ function install_nscde
    if [ "x$photopath" != "x" ]; then
       echo "Copying additional photo collection from $photopath as ${instpath}/share/photos"
       if [ -d "$photopath" ]; then
-         cp -rf "$photopath" ${instpath}/share/photos
+         mkdir -p "${instpath}/share/photos"
+         cp -rf "$photopath"/* ${instpath}/share/photos/
          retval=$?
          if (($retval != 0)); then
             echo "An error $retval occured while copying photo collection from $photopath"
