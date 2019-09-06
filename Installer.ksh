@@ -1,6 +1,14 @@
 #!/bin/ksh
 
 noninteractive=0
+noexitatdepfail=0
+
+function dep_exit
+{
+   if (($noexitatdepfail == 0)); then
+      exit $1
+   fi
+}
 
 function check_dependencies
 {
@@ -19,7 +27,7 @@ function check_dependencies
       echo "parts since plain \"python\" command might reffer to Python 2.X on"
       echo "older systems, and minor revision in Python 3 differs across systems."
       echo ""
-      exit 20
+      dep_exit 20
    fi
 
    for exe in xdotool convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3
@@ -31,7 +39,7 @@ function check_dependencies
          echo "Error: Command or program \"$exe\" as NsCDE dependency is missing"
          echo "on this system."
          echo ""
-         exit 20
+         dep_exit 20
       fi
    done
 
@@ -49,13 +57,14 @@ function check_dependencies
    done
 
    # XXX - handle PyQt4 PyQt5 dependency
-   for pymodule in yaml PyQt5 xdg
+   for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
+       fnmatch getopt time platform psutil pwd socket
    do
       python3 -c "import $pymodule"
       retval=$?
       if (($retval > 0)); then
          echo "Error: cannot find Python 3 module ${pymodule}. Import failed."
-         exit 20
+         dep_exit 20
       fi
    done
 }
@@ -140,6 +149,8 @@ function install_nscde
          echo "Warning: $instpath already exists and appears to be populated with"
          echo "some data or previous installation."
          if (($noninteractive == 1)); then
+            echo ""
+            echo "Exiting with status 2."
             exit 2
          else
             echo -ne "Do you want to continue with copying NsCDE installation into ${instpath}? (y|n)[n] \c"
@@ -675,7 +686,7 @@ function usage
    echo "Usage: ${0##*/} [-i|-u|-d] [-p] [-w] [-f] [-P] [-V] [-X]"
 }
 
-while getopts iucdp:wfP:V:X:nh Option
+while getopts iucCdp:wfP:V:X:nh Option
 do
    case $Option in
    i)
@@ -688,6 +699,9 @@ do
    ;;
    c)
       check_dependencies
+   ;;
+   C)
+      noexitatdepfail=1
    ;;
    d)
       upgrade_mode=0
