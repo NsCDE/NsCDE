@@ -11,11 +11,52 @@ function check_dependencies
 function install_nscde
 {
    if [ -z $fvwm_patched ]; then
-      echo "You must provide either -w or -f. If your installation of FVWM has been"
-      echo "patched with \"FvwmButtons_sunkraise_windowname_unified.patch\" and with"
-      echo "\"FvwmScript_XC_left_ptr.patch\", specify \"-f\" to the installer. If not,"
-      echo "then specify \"-w\" for workarounds to be applied (see the docs)."
-      exit 1
+      if (($noninteractive == 1)); then
+         echo "You must provide either -w or -f. If your installation of FVWM has been"
+         echo "patched with \"FvwmButtons_sunkraise_windowname_unified.patch\" and with"
+         echo "\"FvwmScript_XC_left_ptr.patch\", specify \"-f\" to the installer. If not,"
+         echo "then specify \"-w\" for workarounds to be applied (see the docs)."
+         exit 1
+      else
+         # Early detection of FVWM before check_dependencies is needed
+         # for patch state detection of fvwm binary.
+         whence -q fvwm
+         if (($? > 0)); then
+            echo "Error: cannot find fvwm binary. Install FVWM before continuing."
+            exit 1
+         fi
+         # A nasty hack ...
+         strings $(whence fvwm) | grep -q -- -NsCDE
+         if (($? == 0)); then
+            def_instmode="f"
+            fvwm_patched=1
+         else
+            def_instmode="w"
+            fvwm_patched=0
+         fi
+
+         echo ""
+         echo "Please specify if this is installation for NsCDE patched version of the"
+         echo "FVWM, or not. Depending on this answer, workarounds or some special"
+         echo "configuration options will be enabled (or not) during this installation."
+         echo ""
+         echo "Type \"f\" for NsCDE installation with patched FVWM,"
+         echo "or \"w\" for NsCDE installation with plain/non-patched FVWM."
+         echo ""
+         echo -ne "Simply press return for guessed default [${def_instmode}]: \c"
+
+         read ans
+         if [ "x$ans" == "x" ]; then
+            true
+         elif [ "x$ans" == "xf" ]; then
+            fvwm_patched=1
+         elif [ "x$ans" == "xw" ]; then
+            fvwm_patched=0
+         else
+            echo "Error, answer not understood."
+            exit 1
+         fi
+      fi
    fi
 
    check_dependencies
@@ -122,8 +163,10 @@ function install_nscde
       fi
    else
       if [ ! -r "${instpath}/share/palettes/CoralReef.dp" ]; then
-         echo "Info: Additional collection of VUE palettes and backdrops not installed in ${instpath}/share/{palettes,backdrops}"
-         echo "See: https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz"
+         if (($upgrade_mode == 0)); then
+            echo "Info: Additional collection of VUE palettes and backdrops not installed in ${instpath}/share/{palettes,backdrops}"
+            echo "See: https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz"
+         fi
       fi
    fi
 
@@ -215,7 +258,7 @@ function configure_installed
          echo "Do you want to try compiling Front Panel Clock from source?"
          echo -ne "C compiler, X11, Xext, xcb and Xpm development are needed for this. [y] \c"
          read ans
-         if [ "x$ans" != "x" ]; then
+         if [ "x$ans" != "x" ] || [ "x$ans" == "xy" ]; then
             compile_pclock=1
          else
             compile_pclock=0
@@ -316,8 +359,96 @@ function configure_installed
 
 function upgrade_nscde
 {
+   # Prevent deinstall_nscde from running in noninteractive mode
+   # before patched/non-patched state is known to us.
+   if [ -z $fvwm_patched ]; then
+      if (($noninteractive == 1)); then
+         echo "You must provide either -w or -f. If your installation of FVWM has been"
+         echo "patched with \"FvwmButtons_sunkraise_windowname_unified.patch\" and with"
+         echo "\"FvwmScript_XC_left_ptr.patch\", specify \"-f\" to the installer. If not,"
+         echo "then specify \"-w\" for workarounds to be applied (see the docs)."
+         exit 1
+      fi
+   fi
+
+   if [ "x$instpath" == "x" ]; then
+      # Try default
+      if [ -d "/opt/NsCDE" ]; then
+         instpath="/opt/NsCDE"
+      else
+         echo "Default path /opt/NsCDE not found. You must specify where"
+         echo "the installation of NsCDE resides (-p <nscdepath> before -u)"
+         exit 10
+      fi
+   fi
+
    # Backup photos and VUE if exists, unpack new, put photos and VUE back
-   :
+   old_photos=$(ls "${instpath}/share/photos")
+   old_backdrops=$(ls "${instpath}/share/backdrops")
+   old_palettes=$(ls "${instpath}/share/palettes")
+
+   get_back=$(pwd)
+
+   phcnt=0
+   for ph in $old_photos
+   do
+      if [ ! -r "NsCDE/share/photos/$ph" ]; then
+         ((phcnt = phcnt + 1))
+         photo_savelist="$photo_savelist $ph"
+      fi
+   done
+   if (($phcnt > 0)); then
+      cd "${instpath}/share/photos" && tar cpf /tmp/_nscde_photo_savelist.tar $photo_savelist
+      cd ${get_back}
+   fi
+
+   palcnt=0
+   for pal in $old_palettes
+   do
+      if [ ! -r "NsCDE/share/palettes/$pal" ]; then
+         ((palcnt = palcnt + 1))
+         palette_savelist="$palette_savelist $pal"
+      fi
+   done
+   if (($palcnt > 0)); then
+      cd "${instpath}/share/palettes" && tar cpf /tmp/_nscde_palette_savelist.tar $palette_savelist
+      cd ${get_back}
+   fi
+
+   bdrcnt=0
+   for bdr in $old_backdrops
+   do
+      if [ ! -r "NsCDE/share/backdrops/$bdr" ]; then
+         ((bdrcnt = bdrcnt + 1))
+         backdrop_savelist="$backdrop_savelist $bdr"
+      fi
+   done
+   if (($bdrcnt > 0)); then
+      cd "${instpath}/share/backdrops" && tar cpf /tmp/_nscde_backdrop_savelist.tar $backdrop_savelist
+      cd ${get_back}
+   fi
+
+   deinstall_nscde
+
+   install_nscde
+
+   if (($phcnt > 0)); then
+      echo "Restoring additional photos back in ${instpath}/share/photos ..."
+      cd "${instpath}/share/photos" && tar xpf /tmp/_nscde_photo_savelist.tar && rm -f /tmp/_nscde_photo_savelist.tar
+      echo "Done."
+   fi
+
+   if (($palcnt > 0)); then
+      echo "Restoring additional palettes back in ${instpath}/share/palettes ..."
+      cd "${instpath}/share/palettes" && tar xpf /tmp/_nscde_palette_savelist.tar && rm -f /tmp/_nscde_palette_savelist.tar
+      echo "Done."
+   fi
+
+   if (($bdrcnt > 0)); then
+      echo "Restoring additional backdrops back in ${instpath}/share/backdrops ..."
+      cd "${instpath}/share/backdrops" && tar xpf /tmp/_nscde_backdrop_savelist.tar && rm -f /tmp/_nscde_backdrop_savelist.tar
+      echo "Done."
+   fi
 }
 
 function deinstall_nscde
@@ -350,8 +481,17 @@ function deinstall_nscde
             echo "Removal of $instpath retuned $retval exit status."
          fi
       else
-         echo -ne "Do you want to completely remove ${instpath}? [n] \c"
+         if (($upgrade_mode == 0)); then
+            echo -ne "Do you want to completely remove ${instpath}? [n] \c"
+            def_ans="n"
+         else
+            echo -ne "Do you want to completely remove ${instpath}? [y] \c"
+            def_ans="y"
+         fi
          read ans
+         if [ "x$ans" == "x" ]; then
+            ans="$def_ans"
+         fi
          if [ "x$ans" == "xy" ]; then
             rm -rf "$instpath"
             retval=$?
@@ -373,8 +513,17 @@ function deinstall_nscde
                rm -f $xdskfile
                echo "Done."
             else
-               echo -ne "Do you want to completely remove ${xdskfile}? [n] \c"
+               if (($upgrade_mode == 0)); then
+                  echo -ne "Do you want to completely remove ${xdskfile}? [n] \c"
+                  def_ans="n"
+               else
+                  echo -ne "Do you want to completely remove ${xdskfile}? [y] \c"
+                  def_ans="y"
+               fi
                read ans
+               if [ "x$ans" == "x" ]; then
+                  ans="$def_ans"
+               fi
                if [ "x$ans" == "xy" ]; then
                   rm -f "$xdskfile"
                else
@@ -402,15 +551,18 @@ while getopts iucdp:wfP:V:X:nh Option
 do
    case $Option in
    i)
+      upgrade_mode=0
       install_nscde
    ;;
    u)
+      upgrade_mode=1
       upgrade_nscde
    ;;
    c)
       check_dependencies
    ;;
    d)
+      upgrade_mode=0
       deinstall_nscde
    ;;
    p)
