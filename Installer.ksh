@@ -16,7 +16,7 @@ function check_dependencies
    whence -q python3
    if (($? > 0)); then
       echo "Cannot find python3 as a named command. This is needed for NsCDE"
-      echo "If you have python3 installed by some other name (for example \"python\""
+      echo "If you have python3 installed with some other name (for example \"python\""
       echo "or \"python34\", \"python3.6\" ... you should make symlink on it"
       echo "anywhere in your PATH."
       echo ""
@@ -30,7 +30,7 @@ function check_dependencies
       dep_exit 20
    fi
 
-   for exe in xdotool convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3
+   for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3
    do
       whence -q $exe
       retval=$?
@@ -42,6 +42,19 @@ function check_dependencies
          dep_exit 20
       fi
    done
+
+   # Dependency only if fvwm_patched=0
+   if (($fvwm_patched == 0)); then
+      whence -q xdotool
+      retval=$?
+      if (($retval > 0)); then
+         echo ""
+         echo "Error: Program \"xdotool\" as NsCDE dependency (on unpatched FVWM)"
+         echo "is missing on this system."
+         echo ""
+         dep_exit 20
+      fi
+   fi
 
    for oexe in xscreensaver stalonetray xsettingsd
    do
@@ -56,13 +69,24 @@ function check_dependencies
       fi
    done
 
-   # XXX - handle PyQt4 PyQt5 dependency
    for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
        fnmatch getopt time platform psutil pwd socket
    do
       python3 -c "import $pymodule"
       retval=$?
       if (($retval > 0)); then
+         if [ "$pymodule" == "PyQt5" ]; then
+            echo "Import of PyQt5 failed. Trying PyQt4 ..."
+            python3 -c "import PyQt4"
+            qtretval=$?
+            if (($qtretval > 0)); then
+               echo "Error: cannot find Python 3 module PyQt5 nor PyQt4. Import failed."
+               dep_exit 20
+            else
+               echo "Import of PyQt4 suceeded. Continuing."
+               continue
+            fi
+         fi
          echo "Error: cannot find Python 3 module ${pymodule}. Import failed."
          dep_exit 20
       fi
@@ -71,6 +95,22 @@ function check_dependencies
 
 function install_nscde
 {
+   if (($upgrade_mode == 0)); then
+      echo ""
+      echo "*************************************************************************"
+      echo "*                                                                       *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
+      echo "*                                                                       *"
+      echo "*  Installation procedure in progress ...                               *"
+      echo "*                                                                       *"
+      echo "*************************************************************************"
+      echo ""
+   fi
+
+   if ((noninteractive == 0)); then
+      sleep 2
+   fi
+
    if [ -z $fvwm_patched ]; then
       if (($noninteractive == 1)); then
          echo "You must provide either -w or -f. If your installation of FVWM has been"
@@ -187,6 +227,18 @@ function install_nscde
    else
       echo "Directory $instpath does not exist after attempting to create it. Exiting."
       exit 3
+   fi
+
+   OS=$(uname -s)
+   if [ "$OS" == "FreeBSD" ]; then
+      echo "Patching XDG menu paths for $OS"
+      ./NsCDE/bin/ised -c 's/\/etc\/xdg\/menus/\/usr\/local\/etc\/xdg\/menus/g' -f "${instpath}/libexec/nscde-fvwm-menu-desktop"
+      retval=$?
+      if (($retval != 0)); then
+         echo "An error $retval occured while changing XDG menu paths for $OS"
+      else
+         echo "Done."
+      fi
    fi
 
    if [ "x$photopath" != "x" ]; then
@@ -476,6 +528,22 @@ function configure_installed
 
 function upgrade_nscde
 {
+   if (($upgrade_mode == 1)); then
+      echo ""
+      echo "*************************************************************************"
+      echo "*                                                                       *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
+      echo "*                                                                       *"
+      echo "*  Upgrade/Reinstall procedure in progress ...                          *"
+      echo "*                                                                       *"
+      echo "*************************************************************************"
+      echo ""
+   fi
+
+   if ((noninteractive == 0)); then
+      sleep 2
+   fi
+
    # Prevent deinstall_nscde from running in noninteractive mode
    # before patched/non-patched state is known to us.
    if [ -z $fvwm_patched ]; then
@@ -594,6 +662,22 @@ function upgrade_nscde
 
 function deinstall_nscde
 {
+   if (($upgrade_mode == 0)); then
+      echo ""
+      echo "*************************************************************************"
+      echo "*                                                                       *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
+      echo "*                                                                       *"
+      echo "*  Deinstallation procedure in progress ...                             *"
+      echo "*                                                                       *"
+      echo "*************************************************************************"
+      echo ""
+   fi
+
+   if ((noninteractive == 0)); then
+      sleep 2
+   fi
+
    # Question, or noninteractive, rm -rf ... careful.
    if [ "x$instpath" == "x" ]; then
       # Try default
@@ -606,11 +690,15 @@ function deinstall_nscde
       fi
    fi
 
-   echo "Removing $instpath"
+   if (($upgrade_mode == 0)); then
+      echo "Removing $instpath"
+   else
+      echo "Removing from old $instpath"
+   fi
 
-   sanity1=$(ls -1 "${instpath}/config/" | wc -l)
+   sanity1=$(ls -1 "${instpath}/config/" 2>/dev/null | wc -l)
    sanity2=$(ls -1d ${instpath}/{bin,config,lib,libexec,share} > /dev/null 2>&1; echo $?)
-   sanity3=$(${instpath}/bin/nscde -V | grep -q "NsCDE Version"; echo $?)
+   sanity3=$(${instpath}/bin/nscde -V 2>/dev/null | grep -q "NsCDE Version"; echo $?)
 
    if (($sanity1 > 10)) && ((sanity2 + sanity3 == 0)); then
       if (($noninteractive == 1)); then
@@ -626,7 +714,7 @@ function deinstall_nscde
             echo -ne "Do you want to completely remove ${instpath}? [n] \c"
             def_ans="n"
          else
-            echo -ne "Do you want to completely remove ${instpath}? [y] \c"
+            echo -ne "Do you want to remove old ${instpath} (will preserve addons)? [y] \c"
             def_ans="y"
          fi
          read ans
@@ -658,7 +746,7 @@ function deinstall_nscde
                   echo -ne "Do you want to completely remove ${xdskfile}? [n] \c"
                   def_ans="n"
                else
-                  echo -ne "Do you want to completely remove ${xdskfile}? [y] \c"
+                  echo -ne "Do you want to remove old ${xdskfile}? [y] \c"
                   def_ans="y"
                fi
                read ans
@@ -674,7 +762,9 @@ function deinstall_nscde
          fi
       done
    else
-      echo "One or more sanity checks before deleting $instpath and xsessions file has failed."
+      echo ""
+      echo "Error: One or more sanity checks for deleting NsCDE installation has failed."
+      echo ""
       echo "Check that NsCDE path given to the -p was really top directory of the NsCDE"
       echo "installation. If things are half deleted and hence non-checkable by this script"
       echo "you should manually deinstall NsCDE by deleting installation path and X session"
@@ -685,7 +775,83 @@ function deinstall_nscde
 
 function usage
 {
-   echo "Usage: ${0##*/} [-i|-u|-d] [-p] [-w] [-f] [-P] [-V] [-X]"
+   echo "Usage: ./Installer.ksh [ -f | -w ] [ -h ] [ -n ] [ -C ] [ -p <path> ]"
+   echo "       [ -P <path> ] [ -V <path> ] [ -X <path> ] [ -i | -u | -d ]"
+   echo ""
+   echo ""
+   echo "* Installation and Upgrade/Reinstall Mode:"
+   echo ""
+   echo "First option should be \"-f\" or \"-w\" (exclusive):"
+   echo "   -f   if local FVWM installation is patched with NsCDE patches"
+   echo "   -w   if local FVWM installation is plain, non-patched. Workarounds will apply."
+   echo ""
+   echo "Additional options for installation are:"
+   echo "   -n   fully automatic, non-interactive mode"
+   echo "   -C   dependencies check failures will be non-fatal, except for Korn Shell obviously."
+   echo "   -p <path>   filesystem path where NsCDE should be installed. Defaults to /opt/NsCDE."
+   echo "   -P <path>   where to look for wallpapers for installing into <instpath>/share/photos."
+   echo "   -V <path>   where to look for VUE backdrops and palettes to add into NsCDE."
+   echo "   -X <path>   where to put nscde.desktop xsession. Defaults to /usr/share/xsessions."
+   echo ""
+   echo "Last option:"
+   echo "   -i tells installer to install NsCDE. This must be the last option."
+   echo "   -u tells installer to upgrade or reinstall NsCDE. This must be the"
+   echo "      last option, and it is exclusive with \"-i\" and/or \"-d\"."
+   echo ""
+   echo "Examples:"
+   echo "   - Install non-interactively for patched FVWM into default path /opt/NsCDE"
+   echo "     without looking for additional photos and VUE files."
+   echo "   ./Installer.ksh -f -n -i"
+   echo ""
+   echo "   - Install without VUE and photo addons for non-patched FVWM into default"
+   echo "     path /opt/NsCDE:"
+   echo "   ./Installer.ksh -w -i"
+   echo ""
+   echo "   - Install non-interectively with VUE and photo addons for non-patched FVWM"
+   echo "     into default path /opt/NsCDE:"
+   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo ""
+   echo "   - Install NsCDE in interactive mode with VUE addons for non-patched FVWM"
+   echo "     into path /usr/local/nscde:"
+   echo "   ./Installer.ksh -w -n -p /usr/local/nscde -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo ""
+   echo "   - Simply upgrade patched NsCDE (additional photos, backdrops and palettes"
+   echo "     will remain preserved):"
+   echo "   ./Installer.ksh -f -u"
+   echo ""
+   echo "   - Upgrade in default path, but for non-patched version:"
+   echo "   ./Installer.ksh -w -u"
+   echo ""
+   echo "   - Upgrade in path /sfw/X11/NsCDE, patched, noninteractive."
+   echo "   ./Installer.ksh -f -n -p /sfw/X11/NsCDE -u"
+   echo ""
+   echo ""
+   echo "* Deinstallation mode:"
+   echo ""
+   echo "Additional options for deinstallation are:"
+   echo "   -n   fully automatic, non-interactive mode"
+   echo "   -p <path>   filesystem path where NsCDE has been installed. Defaults to /opt/NsCDE."
+   echo ""
+   echo "Last option:"
+   echo "   -d tells installer to deinstall NsCDE. This must be the last option in this mode."
+   echo ""
+   echo "Examples:"
+   echo "   - Deinstall NsCDE interactively:"
+   echo "   ./Installer.ksh -d"
+   echo ""
+   echo "   - Deinstall NsCDE in non-interactive mode:"
+   echo "   ./Installer.ksh -n -d"
+   echo ""
+   echo "   - Deinstall NsCDE which has been installed in /usr/nscde:"
+   echo "   ./Installer.ksh -p /usr/nscde -d"
+   echo ""
+   echo "   - Deinstall in non-interactive mode NsCDE which has been installed in /usr/nscde:"
+   echo "   ./Installer.ksh -n -p /usr/nscde -d"
+   echo ""
+   echo "NOTICE: Except nscde.desktop file in /usr/share/xsessions or /usr/local/share/xsessions"
+   echo "NOTICE: this installer WILL NOT touch anything outside installation path, which is by"
+   echo "NOTICE: default \"/opt/NsCDE\", or any other path specified with \"-p\" option."
+   echo ""
 }
 
 while getopts iucCdp:wfP:V:X:nh Option
@@ -694,10 +860,12 @@ do
    i)
       upgrade_mode=0
       install_nscde
+      exit $?
    ;;
    u)
       upgrade_mode=1
       upgrade_nscde
+      exit $?
    ;;
    c)
       check_dependencies
@@ -708,6 +876,7 @@ do
    d)
       upgrade_mode=0
       deinstall_nscde
+      exit $?
    ;;
    p)
       instpath="$OPTARG"
@@ -735,4 +904,6 @@ do
    ;;
    esac
 done
+
+[ -z $1 ] && usage
 
