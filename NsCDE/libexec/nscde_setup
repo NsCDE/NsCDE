@@ -254,6 +254,124 @@ function setup_nscde
       fi
    fi
 
+   if (($INTERACTIVE == 1)); then
+      echo -ne "Do you want to enable NsCDE-specific visual pager preview on page/desk change? (y|n)[y] \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="y"
+      fi
+      if [ "x$ans" == "xy" ]; then
+         echo "Enabling: pageshowrootpager --> 1"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd pageshowrootpager 0/InfoStoreAdd pageshowrootpager 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+      elif [ "x$ans" == "xn" ]; then
+         echo "Not enabling: pageshowrootpager --> 0"
+      else
+         echo "Answer not understood."
+         echo "Not enabling: pageshowrootpager --> 0"
+      fi
+
+      echo -ne "Do you want to enable X Screen Saver? (y|n)[y] \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="y"
+      fi
+      if [ "x$ans" == "xy" ]; then
+         echo "Enabled by default: nscde_use_xscreensaver --> 1"
+      elif [ "x$ans" == "xn" ]; then
+         echo "Disabling: nscde_use_xscreensaver --> 0"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_xscreensaver 1/InfoStoreAdd nscde_use_xscreensaver 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
+      else
+         echo "Answer not understood."
+         echo "Enabled by default: nscde_use_xscreensaver --> 1"
+      fi
+
+      echo -ne "Do you want to enable Stalonetray Tray? (y|n)[y] \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="y"
+      fi
+      if [ "x$ans" == "xy" ]; then
+         echo "Enabled by default: nscde_use_stalonetray --> 1"
+      elif [ "x$ans" == "xn" ]; then
+         echo "Disabling: nscde_use_stalonetray --> 0"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_stalonetray 1/InfoStoreAdd nscde_use_stalonetray 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
+      else
+         echo "Answer not understood."
+         echo "Enabled by default: nscde_use_stalonetray --> 1"
+      fi
+
+      whence -q xsettingsd
+      if (($? == 0)); then
+         echo -ne "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd? (y|n)[y] \c"
+         read ans
+         if [ "x$ans" == "x" ]; then
+            ans="y"
+         fi
+         if [ "x$ans" == "xy" ]; then
+            echo "Enabling: nscde_use_xsettingsd --> 1"
+            $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_xsettingsd 0/InfoStoreAdd nscde_use_xsettingsd 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+         elif [ "x$ans" == "xn" ]; then
+            echo "Not enabling: nscde_use_xsettingsd --> 0"
+         else
+            echo "Answer not understood."
+            echo "Not enabling: nscde_use_xsettingsd --> 0"
+         fi
+      fi
+
+      echo -ne "Do you want to remember last page on workspace when changing back to it? (y|n)[y] \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="y"
+      fi
+      if [ "x$ans" == "xy" ]; then
+         echo "Enabling: desklastpage --> 1"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 0/InfoStoreAdd desklastpage 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+      elif [ "x$ans" == "xn" ]; then
+         echo "Not enabling: desklastpage --> 0"
+      else
+         echo "Answer not understood."
+         echo "Not enabling: desklastpage --> 0"
+      fi
+
+      for filemgr in pcmanfm krusader caja nemo thunar dolphin nautilus
+      do
+         whence -q $filemgr
+         if (($? == 0)); then
+            fmsugestion=$filemgr
+            break
+         fi
+      done
+
+      echo -ne "Your favorite X File Manager (command)? [${fmsugestion}] \c"
+      read ans
+      if [ "x$ans" != "x" ]; then
+         echo "Setting X File Manager: filemgr --> ${ans}"
+         $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+      else
+         echo "Skipping File Manager selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
+      fi
+
+      for xeditor in gvim emacs xemacs
+      do
+         whence -q $xeditor
+         if (($? == 0)); then
+            xedit_suggest="$xeditor"
+            break
+         fi
+      done
+
+      echo -ne "Your favorite X Editor (command)? [$xedit_suggest] \c"
+      read ans
+      if [ "x$ans" != "x" ]; then
+         echo "Setting X File Manager: xeditor --> ${ans}"
+         if [ "x$ans" != "gvim" ]; then
+            $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd xeditor gvim/InfoStoreAdd xeditor ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+         fi
+      else
+         echo "Skipping X Editor selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
+      fi
+   fi
+
    if (($VERBOSE == 1)); then
       sleep 1
       echo '... done!'
