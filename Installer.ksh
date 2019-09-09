@@ -175,7 +175,10 @@ function install_nscde
       fi
    fi
 
-   check_dependencies
+   # Upgrade checks dependencies on it's own.
+   if (($upgrade_mode == 1)); then
+      check_dependencies
+   fi
 
    if [ "x$instpath" == "x" ]; then
       if (($noninteractive == 1)); then
@@ -557,6 +560,8 @@ function upgrade_nscde
    if ((noninteractive == 0)); then
       sleep 2
    fi
+
+   check_dependencies
 
    # Prevent deinstall_nscde from running in noninteractive mode
    # before patched/non-patched state is known to us.
