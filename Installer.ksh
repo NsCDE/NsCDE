@@ -3,6 +3,8 @@
 noninteractive=0
 noexitatdepfail=0
 
+OS=$(uname -s)
+
 function dep_exit
 {
    if (($noexitatdepfail == 0)); then
@@ -42,6 +44,19 @@ function check_dependencies
          dep_exit 20
       fi
    done
+
+   # GNU sed on FreeBSD and Solaris."
+   if [ "$OS" == "FreeBSD" ] || [ "$OS" == "SunOS" ]]; then
+      whence -q gsed
+      retval=$?
+      if (($retval > 0)); then
+         echo ""
+         echo "Error: Command or program \"$gexe\" as NsCDE dependency is missing"
+         echo "on this system. On FreeBSD: \"pkg install gsed\"."
+         echo ""
+         dep_exit 20
+      fi
+   fi
 
    # Dependency only if fvwm_patched=0
    if (($fvwm_patched == 0)); then
@@ -229,7 +244,6 @@ function install_nscde
       exit 3
    fi
 
-   OS=$(uname -s)
    if [ "$OS" == "FreeBSD" ]; then
       echo "Patching XDG menu paths for $OS"
       ./NsCDE/bin/ised -c 's/\/etc\/xdg\/menus/\/usr\/local\/etc\/xdg\/menus/g' -f "${instpath}/libexec/nscde-fvwm-menu-desktop"
