@@ -46,7 +46,7 @@ function check_dependencies
    done
 
    # GNU sed on FreeBSD and Solaris."
-   if [ "$OS" == "FreeBSD" ] || [ "$OS" == "SunOS" ]]; then
+   if [ "$OS" == "FreeBSD" ] || [ "$OS" == "SunOS" ]; then
       whence -q gsed
       retval=$?
       if (($retval > 0)); then
