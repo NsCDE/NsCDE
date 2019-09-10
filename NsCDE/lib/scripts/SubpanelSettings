@@ -338,7 +338,7 @@ Widget 14
          Set $ExistanceOK = 0
 
          Set $ExistanceEnsureCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED),.*" "} $UserSubpanelActionsFile{" 2>/dev/null | wc -l}
-         Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
+         Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 1)
 
          If $ExistanceEnsure == 3 Then
          Begin
@@ -351,9 +351,9 @@ Widget 14
 
          If $ExistanceEnsure == 0 Then
          Begin
-            Set $WriteNewSubpanelConfCmd = {echo -ne "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
+            Set $WriteNewSubpanelConfCmd = {ksh -c 'echo -ne "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
              {\nS} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
-             {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n" >> "} $UserSubpanelActionsFile {"}
+             {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n" >> "} $UserSubpanelActionsFile {"'}
             Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)
             Set $AddTheRestFromSysCmd = {egrep ^S} $SubpanelNo {,ENTRY,.* "} $SystemSubpanelActionsRead {" >> "} $UserSubpanelActionsFile {"}
             Set $AddTheRestFromSys = (GetOutput $AddTheRestFromSysCmd 1 -1)

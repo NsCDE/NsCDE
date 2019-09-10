@@ -102,7 +102,7 @@ Widget 2
          If (LastString) == {Down} Then
          Begin
             Set $MaxElementsOut = {MaxDesk=$(echo '} (GetTitle 2) {' | tr "|" "\n" | wc -l); MaxDesk=$(($MaxDesk - 1)); echo $MaxDesk}
-            Set $MaxElements = (GetOutput $MaxElementsOut 1 -1)
+            Set $MaxElements = (GetOutput $MaxElementsOut 1 1)
             If (GetValue 2) <= $MaxElements Then
             Begin
                Set $NextValue = (Add (GetValue 2) 1)
@@ -318,7 +318,7 @@ Widget 9
             Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-22 | fold -w 38 -s}
             Set $WinName = (GetOutput $WinNameOut 1 -1)
             Set $WinNameLenOut = {echo "} $WinName {" | wc -c}
-            Set $WinNameLen = (GetOutput $WinNameLenOut 1 -1)
+            Set $WinNameLen = (GetOutput $WinNameLenOut 1 1)
             If $WinNameLen > 34 Then
             Begin
                Set $WinNameOut = {echo "} $WinName {" | fold -w 32 | sed "s/\(.\)\(.\)\(.\)$/...'/g"}

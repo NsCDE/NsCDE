@@ -201,7 +201,7 @@ Widget 2
 
             If $CheckEntry <> 0 Then
             Begin
-               Set $PrepareFileCmd = {echo -ne '#PowerSaveMgr,00000\n#end\n' >> "} $FILE {"}
+               Set $PrepareFileCmd = {(echo '#PowerSaveMgr,00000'; echo '#end') >> "} $FILE {"}
                Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
             End
 

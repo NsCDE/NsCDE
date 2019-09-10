@@ -1095,7 +1095,7 @@ Widget 32
          Begin
             If (LastString) <> {} Then
             Begin
-               Set $SaneNameCmd = {echo '} (LastString) {' | sed 's/://g; s/|//g; s/\$//' | tr -d '[:cntrl:]'; echo -ne "\n"}
+               Set $SaneNameCmd = {echo '} (LastString) {' | sed 's/://g; s/|//g; s/\$//' | tr -d '[:cntrl:]'; echo}
                Set $SaneName = (GetOutput $SaneNameCmd 1 -1)
                Set $Sanity = (GetOutput {mkdir -p "$FVWM_USERDIR/fontsets" 2>&1} 1 -1)
                If $Sanity == {} Then

@@ -231,7 +231,7 @@ Widget 11
 
           If $CheckEntry <> 0 Then
           Begin
-             Set $PrepareFileCmd = {echo -ne '#BeepMgr,00000\n#end\n' >> "} $FILE {"}
+             Set $PrepareFileCmd = {(echo '#BeepMgr,00000; echo '#end') >> "} $FILE {"}
              Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
           End
 

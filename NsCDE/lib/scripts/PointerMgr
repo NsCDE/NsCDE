@@ -105,15 +105,15 @@ Widget 2
          If $clickOne == 0 Then
          Begin
             Do {Exec cp /dev/null "} $tmpFile {"}
-            Set $counter = {while $(usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
+            Set $counter = {while $($NSCDE_ROOT/bin/nscde_usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
             Do {Exec } $counter
             Set $clickOne = 1
          End
          Else
          Begin
             If $clickOne == 1 Then
-            Set $countOut = {wc -l "} $tmpFile {" | cut -d" " -f 1}
-            Set $count = (GetOutput $countOut 1 -1)
+            Set $countOut = {wc -l "} $tmpFile {"}
+            Set $count = (GetOutput $countOut 1 1)
             If $count <= 2 Then
             Begin
                If $NotClicked == 1 Then
@@ -406,7 +406,7 @@ Widget 18
 
          If $CheckEntry <> 0 Then
          Begin
-            Set $PrepareFileCmd = {echo -ne '#PointerMgr,00000\n#end\n' >> "} $XSETFILE {"}
+            Set $PrepareFileCmd = {(echo '#PointerMgr,00000'; echo '#end') >> "} $XSETFILE {"}
             Set $PrepareFile = (GetOutput $PrepareFileCmd 1 -1)
          End
 
@@ -419,7 +419,7 @@ Widget 18
          Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
 
          # Sync X Resources
-         Set $WriteXresourcesCmd = {echo -ne "! Warning: This file is managed and will be overwritten by PointerMgr when it is used.\n*.multiClickTime: } (GetValue 11) {\n*multiClickTime: } (GetValue 11) {\n" > "} $XRDBFILE {"}
+         Set $WriteXresourcesCmd = {(echo "! Warning: This file is managed and will be overwritten by PointerMgr when it is used."; echo "*.multiClickTime: } (GetValue 11) {"; echo "*multiClickTime: } (GetValue 11) {") > "} $XRDBFILE {"}
          Set $WriteXresources = (GetOutput $WriteXresourcesCmd 1 -1)
 
          # KDE Integration - only if kdeglobals is found
