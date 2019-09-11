@@ -11,7 +11,7 @@
 
 PagesX="$1"
 PagesY="$2"
-Icons="$3"
+Fmt="$3"
 FvwmPageCmd="$4"
 FvwmPageLeftTitle="$5"
 
@@ -49,14 +49,28 @@ do
       pagename="$pg"
    fi
 
-   if [ "$Icons" == "y" ]; then
+   if [ "$Fmt" == "menu_icons" ]; then
       if [ -r "$NSCDE_ROOT/share/icons/NsCDE/Wsm_${PagesX}x${PagesY}_${pagenum}.xpm" ]; then
          echo "+ \"&${pg} ${MenuLeftTitle}${pagename}%NsCDE/Wsm_${PagesX}x${PagesY}_${pagenum}.xpm%\" $FvwmPageCmd $pagenum_fvwm"
       else
          echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" $FvwmPageCmd $pagenum_fvwm"
       fi
-   else
+   elif [ "$Fmt" == "menu_noicons" ]; then
       echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" $FvwmPageCmd $pagenum_fvwm"
+   elif [ "$Fmt" == "pgnum" ]; then
+      echo "${pg}"
+   elif [ "$Fmt" == "pgid" ]; then
+      echo "${pagenum_fvwm}"
+   elif [ "$Fmt" == "pgnum_pgid" ]; then
+      echo "${pg} ${pagenum_fvwm}"
+   elif [ "$Fmt" == "pgname" ]; then
+      echo "${pagename}"
+   elif [ "$Fmt" == "pgnum_pgname" ]; then
+      echo "${pg} ${pagename}"
+   elif [ "$Fmt" == "pgid_pgname" ]; then
+      echo "${pagenum_fvwm} ${pagename}"
+   elif [ "$Fmt" == "pgnum_pgid_pgname" ]; then
+      echo "${pg} ${pagenum_fvwm} ${pagename}"
    fi
 done
 

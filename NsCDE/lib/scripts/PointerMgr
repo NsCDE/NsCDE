@@ -11,8 +11,8 @@ Colorset 22
 Init
 Begin
    Set $userid = (GetOutput {id -un} 1 -1)
-   Set $hostid = (GetOutput {hostid} 1 -1)
-   Set $tmpFile = {/tmp/._FvwmScript-PointerMgr.tmp.} $userid {.} $hostid
+   Set $hostname = (GetOutput {hostname -s} 1 -1)
+   Set $tmpFile = {/tmp/._FvwmScript-PointerMgr.tmp.} $userid {.} $hostname
    Set $clickOne = 0
 
    Set $xsetfile = (GetOutput {echo $FVWM_USERDIR/Xset.conf} -1 1)

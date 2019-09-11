@@ -4,7 +4,7 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Occupy Workspace}
+WindowTitle {Occupy Page}
 WindowSize 296 296
 Colorset 22
 
@@ -12,17 +12,20 @@ Init
 Begin
    If $WinName == {} Then
    Begin
-      ChangeTitle 9 {Select Workspace, pick a Window.}
+      ChangeTitle 9 {Select Page, pick a Window.}
    End
    Else
    Begin
       ChangeTitle 9 $WinName
    End
 
+   Set $PageMatrixX = (GetScriptArgument 1)
+   Set $PageMatrixY = (GetScriptArgument 2)
+
    # WarpPointer 2
    Key Escape A 2 1 {Quit}
    Key H A 6 1 {DisplayHelp}
-   Key A A 3 1 {AllWSPToggle}
+   Key A A 3 1 {AllPgToggle}
    Key Return A 2 3 {Move}
    Key Return C 2 3 {MoveGo}
    Key Down A 2 2 {Down}
@@ -32,6 +35,9 @@ Begin
    ChangeFont 3 $SmallFont
    ChangeFont 10 $SmallFont
    ChangeFont 9 $SmallFont
+
+   Set $PgIdX = 0
+   Set $PgIdY = 0
 
    Set $GoWithWindow = 0
 End
@@ -48,16 +54,18 @@ Widget 1
       Case message of
       1 :
       Begin
-         ChangeValue 2 (Add (LastString) 1)
-         If $DeskNo == {} Then
+         Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '} (LastString) {'}
+         Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
+         ChangeValue 2 $CurrentPageNum
+         If $PageAddr == {} Then
          Begin
-            Set $DeskNo = (Add (LastString) 1)
+            Set $PageAddr = (LastString)
          End
       End
       2 :
       Begin
-         Set $WorkSpaces = (LastString)
-         ChangeTitle 2 $WorkSpaces
+         Set $Pages = (LastString)
+         ChangeTitle 2 $Pages
       End
 End
 
@@ -67,7 +75,7 @@ Widget 4
    Position 4 38
    Type ItemDraw
    Flags NoReliefString
-   Title {Workspaces:      }
+   Title {Pages:      }
    Colorset 22
 End
 
@@ -83,10 +91,14 @@ Widget 2
       Case message of
       SingleClic :
       Begin
-         Set $DeskNo = (GetValue 2)
+         Set $PageNum = (GetValue 2)
+         Set $PageAddrCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^} $PageNum { '}
+         Set $PageId = (GetOutput $PageAddrCmd 1 -1)
+         Set $PgIdX = (StrCopy $PageId 3 3)
+         Set $PgIdY = (StrCopy $PageId 5 5)
          If $WinName == {} Then
          Begin
-            Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
+            Do {Pick () SendToModule OccupyPage SendString 9 1 $[w.id] $[w.name]}
          End
       End
       1 :
@@ -101,18 +113,23 @@ Widget 2
       Begin
          If (LastString) == {Down} Then
          Begin
-            Set $MaxElementsOut = {MaxDesk=$(echo '} (GetTitle 2) {' | tr "|" "\n" | wc -l); MaxDesk=$(($MaxDesk - 1)); echo $MaxDesk}
+            Set $MaxElementsOut = {MaxPage=$(echo '} (GetTitle 2) {' | tr "|" "\n" | wc -l); MaxPage=$(($MaxPage - 1)); echo $MaxPage}
             Set $MaxElements = (GetOutput $MaxElementsOut 1 1)
             If (GetValue 2) <= $MaxElements Then
             Begin
                Set $NextValue = (Add (GetValue 2) 1)
                ChangeValue 2 $NextValue
-               Set $DeskNo = $NextValue
+               Set $PageAddrCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^} $NextValue { '}
+               Set $PageId = (GetOutput $PageAddrCmd 1 -1)
+               Set $PgIdX = (StrCopy $PageId 3 3)
+               Set $PgIdY = (StrCopy $PageId 5 5)
+               Set $NextPgId = $PgIdX { } $PgIdY
+               Set $PageAddr = $NextPgId
             End
             Else
             Begin
                ChangeValue 2 1
-               Set $DeskNo = 1
+               Set $PageAddr = 1
             End
          End
          If (LastString) == {Up} Then
@@ -121,13 +138,23 @@ Widget 2
                If $PrevValue >= 1 Then
                Begin
                   ChangeValue 2 $PrevValue
-                  Set $DeskNo = $PrevValue
+                  Set $PageAddrCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^} $PrevValue { '}
+                  Set $PageId = (GetOutput $PageAddrCmd 1 -1)
+                  Set $PgIdX = (StrCopy $PageId 3 3)
+                  Set $PgIdY = (StrCopy $PageId 5 5)
+                  Set $PrevPgId = $PgIdX { } $PgIdY
+                  Set $PageAddr = $PrevPgId
                End
                Else
                Begin
                   Set $MaxElementsFromOne = (Add $MaxElements 1)
                   ChangeValue 2 $MaxElementsFromOne
-                  Set $DeskNo = $MaxElementsFromOne
+                  Set $PageAddrCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^} $MaxElementsFromOne { '}
+                  Set $PageId = (GetOutput $PageAddrCmd 1 -1)
+                  Set $PgIdX = (StrCopy $PageId 3 3)
+                  Set $PgIdY = (StrCopy $PageId 5 5)
+                  Set $MaxPlusOnePgId = $PgIdX { } $PgIdY
+                  Set $PageAddr = $MaxPlusOnePgId
                End
          End
       End
@@ -152,7 +179,7 @@ Widget 3
    Type CheckBox
    Value 0
    Flags NoReliefString
-   Title { All Workspaces}
+   Title { All Pages}
    Main
       Case message of
       SingleClic :
@@ -162,7 +189,7 @@ Widget 3
       1 :
       Begin
          # Keyboard "A" handling
-         If (LastString) == {AllWSPToggle} Then
+         If (LastString) == {AllPgToggle} Then
          Begin
             If (GetValue 3) == 0 Then
             Begin
@@ -179,19 +206,19 @@ Widget 3
          Begin
             If $WinName == {} Then
             Begin
-               Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
+               Do {Pick () SendToModule OccupyPage SendString 9 1 $[w.id] $[w.name]}
             End
 
-            Set $OldDeskNo = $DeskNo
-            Set $DeskNo = 999
-            ChangeTitle 2 { All Workspaces}
+            Set $OldPageAddr = $PageAddr
+            Set $PageAddr = 999
+            ChangeTitle 2 { All Pages}
             ChangeValue 2 1
          End
          If (GetValue 3) == 0 Then
          Begin
-            ChangeTitle 2 $WorkSpaces
-            ChangeValue 2 $OldDeskNo
-            Set $DeskNo = $OldDeskNo
+            ChangeTitle 2 $Pages
+            ChangeValue 2 $OldPageAddr
+            Set $PageAddr = $OldPageAddr
          End
       End
 End
@@ -231,19 +258,19 @@ Widget 5
       End
       1 :
       Begin
-         If $DeskNo == 999 Then
+         If $PageAddr == 999 Then
          Begin
-            Do {WindowId } $WinId { StickAcrossDesks}
+            Do {WindowId } $WinId { StickAcrossPages}
          End
          Else
          Begin
             If $GoWithWindow == 0 Then
             Begin
-               Do {f_Occupy } $WinId { MoveToDesk 0 } (Add $DeskNo -1) { Nop }
+               Do {f_Occupy } $WinId { MoveToPage } $PgIdX { } $PgIdY { Nop }
             End
             Else
             Begin
-               Do {f_Occupy } $WinId { MoveToDesk 0 } (Add $DeskNo -1) { GoToDesk }
+               Do {f_Occupy } $WinId { MoveToPage } $PgIdX { } $PgIdY { GoToPage }
             End
          End
          Quit
@@ -265,7 +292,7 @@ Widget 6
       End
       1 :
       Begin
-         Do {f_DisplayURL "Occupy Workspace" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyWorkspace.html}
+         Do {f_DisplayURL "Occupy Page" $[NSCDE_ROOT]/share/doc/html/NsCDE-OccupyPage.html}
       End
 End
 

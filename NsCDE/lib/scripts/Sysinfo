@@ -55,7 +55,7 @@ Begin
    Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
 
    Set $ipaddr = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 4 -1)
-   Set $hostid = {  } (GetOutput {hostid} 1 -1)
+   Set $hostid = {  } (GetOutput {ksh -c '[ "$(whence hostid)" != "" ] && hostid || sysctl -nh kern.hostid'} 1 -1)
    Set $domainname = {  } (GetOutput {domainname} 1 -1)
    Set $inetdomain = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 5 -1)
 
