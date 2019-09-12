@@ -540,6 +540,19 @@ function configure_installed
             echo "Done."
          fi
       fi
+
+      if (($upgrade_mode == 0)); then
+         echo ""
+         echo "For a reboot/poweroff, suspend and hibernate functionality of the"
+         echo "System Action Dialog, you should have \"sudo\" installed and configured"
+         echo "for user to launch ${instpath}/libexec/nscde-acpi script."
+         echo ""
+         echo "See ${instpath}/share/doc/examples/sudo/006_PowerManager for the"
+         echo "example which needs to be edited for existing user(s) and put"
+         echo "into /etc/sudoers.d/ on modern systems with a newer sudo package"
+         echo "Option requiretty should also be set to false. See sudo(8)."
+         echo ""
+      fi
    fi
 }
 
