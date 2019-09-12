@@ -8,11 +8,14 @@
 
 Runas_Alias     TOOR = root
 
-Cmnd_Alias	POWERMGR = /usr/sbin/pm-suspend, /usr/sbin/pm-hibernate, \
-                           /usr/sbin/pm-suspend-hybrid, /sbin/init 6, /sbin/init 0
+Cmnd_Alias NSCDE_ACPI = /opt/NsCDE/libexec/nscde-acpi suspend, \
+                         /opt/NsCDE/libexec/nscde-acpi hibernate, \
+                         /opt/NsCDE/libexec/nscde-acpi hybrid-suspend, \
+                         /opt/NsCDE/libexec/nscde-acpi poweroff, \
+                         /opt/NsCDE/libexec/nscde-acpi reboot
 
-user1	ALL  = (TOOR)	NOPASSWD: POWERMGR
-user2	ALL  = (TOOR)	NOPASSWD: POWERMGR
-user3	ALL  = (TOOR)	NOPASSWD: POWERMGR
-userN	ALL  = (TOOR)	NOPASSWD: POWERMGR
+user1	ALL  = (TOOR)	NOPASSWD: NSCDE_ACPI
+user2	ALL  = (TOOR)	NOPASSWD: NSCDE_ACPI
+user3	ALL  = (TOOR)	NOPASSWD: NSCDE_ACPI
+userN	ALL  = (TOOR)	NOPASSWD: NSCDE_ACPI
 

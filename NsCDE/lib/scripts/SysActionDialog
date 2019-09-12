@@ -62,21 +62,21 @@ Begin
    Set $HybridSuspendTxt = {|   OS Hybrid Suspend (not supported)}
    Set $HibernateTxt = {|   OS Hibernate (not supported)}
 
-   Set $SuspendSupport = (GetOutput {(pm-is-supported --suspend || false) ; echo $?} 1 1)
+   Set $SuspendSupport = (GetOutput {(true --suspend || false) ; echo $?} 1 1)
    If $SuspendSupport == 0 Then
    Begin
       Set $SuspendTxt = {|   Operating System: Suspend/Sleep}
       Set $SuspendNoErr = 1
    End
 
-   Set $HybridSuspendSupport = (GetOutput {(pm-is-supported --suspend-hybrid || false) ; echo $?} 1 1)
+   Set $HybridSuspendSupport = (GetOutput {(true --suspend-hybrid || false) ; echo $?} 1 1)
    If $HybridSuspendSupport == 0 Then
    Begin
       Set $HybridSuspendTxt = {|   Operating System: Hybrid Suspend}
       Set $HybridSuspendNoErr = 1
    End
 
-   Set $HibernateSupport = (GetOutput {(pm-is-supported --hibernate || false) ; echo $?} 1 1)
+   Set $HibernateSupport = (GetOutput {(true --hibernate || false) ; echo $?} 1 1)
    If $HibernateSupport == 0 Then
    Begin
       Set $HibernateTxt = {|   Operating System: Hibernate}
@@ -259,7 +259,7 @@ Property
       Begin
          Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
          Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
-         Do {f_QuitAndShutdown 0}
+         Do {f_QuitAndShutdown poweroff}
          Quit
       End
 
@@ -268,7 +268,7 @@ Property
       Begin
          Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
          Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
-         Do {f_QuitAndShutdown 6}
+         Do {f_QuitAndShutdown reboot}
          Quit
       End
 
@@ -281,7 +281,7 @@ Property
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
-            Do {Exec sudo pm-suspend}
+            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi suspend}
             Quit
          End
          Else
@@ -299,7 +299,7 @@ Property
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System in hybrid mode" "..." 1500}
-            Do {Exec sudo pm-suspend-hybrid}
+            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend}
             Quit
          End
          Else
@@ -317,7 +317,7 @@ Property
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
-            Do {Exec sudo pm-hibernate}
+            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi hibernate}
             Quit
          End
          Else

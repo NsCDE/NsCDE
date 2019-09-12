@@ -1,0 +1,128 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+PATH="/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin:$PATH"
+Action=$1
+
+# Check for pm-utils
+pmcnt=0
+for cmd in pm-suspend pm-hibernate pm-suspend-hybrid
+do
+   whence -q $cmd
+   if (($? == 0)); then
+      (( pmcnt = pmcnt + 1 ))
+   fi
+done
+
+# Check for systemd
+whence -q systemctl
+systemctlretval=$?
+
+# Check for FreeBSD (acpiconf)
+OS=$(uname -s)
+
+if (($pmcnt == 3)); then
+   Opmode="pm"
+elif  (($systemctlretval == 0)); then
+   Opmode="systemd"
+elif [ "$OS" == "FreeBSD" ]; then
+   whence -q acpiconf
+   if (($? == 0)); then
+      Opmode="acpiconf"
+   fi
+else
+   Opmode=$2
+   if [ "x$Opmode" == "x" ]; then
+      echo "Error: Unknown ACPI operation mode."
+      exit 4
+   fi
+fi
+
+function s3_suspend
+{
+   if [ "$Opmode" == "pm" ]; then
+      pm-suspend
+   elif [ "$Opmode" == "systemd" ]; then
+      systemctl suspend
+   elif [ "$Opmode" == "acpiconf" ]; then
+      acpiconf -s 3
+   fi
+}
+
+function hibernate
+{
+   if [ "$Opmode" == "pm" ]; then
+      pm-hibernate
+   elif [ "$Opmode" == "systemd" ]; then
+      systemctl hibernate
+   elif [ "$Opmode" == "acpiconf" ]; then
+      acpiconf -s 4
+   fi
+}
+
+function hybrid_suspend
+{
+   if [ "$Opmode" == "pm" ]; then
+      pm-suspend-hybrid
+   elif [ "$Opmode" == "systemd" ]; then
+      systemctl hybrid-sleep
+   elif [ "$Opmode" == "acpiconf" ]; then
+      echo "Not available on $OS" >&2
+   fi
+}
+
+function f_poweroff
+{
+   if [ "$OS" == "Linux" ]; then
+      shutdown -h now
+   elif [ "$OS" == "FreeBSD" ]; then
+      shutdown -p now
+   fi
+}
+
+function f_reboot
+{
+   if [ "$OS" == "Linux" ]; then
+      shutdown -r now
+   elif [ "$OS" == "FreeBSD" ]; then
+      shutdown -r now
+   fi
+}
+
+function usage
+{
+   echo "Usage: ${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
+   exit 0
+}
+
+if [[ -z $Action || -z $Opmode ]]; then
+   usage
+   exit 1
+fi
+
+case $Action in
+   'suspend')
+      s3_suspend
+   ;;
+   'hibernate')
+      hibernate
+   ;;
+   'hybrid-suspend')
+      hybrid_suspend
+   ;;
+   'poweroff')
+      f_poweroff
+   ;;
+   'reboot')
+      f_reboot
+   ;;
+   'help')
+      usage
+   ;;
+esac
+
