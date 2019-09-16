@@ -347,11 +347,14 @@ function setup_nscde
       if [ "x$ans" != "x" ]; then
          echo "Setting X File Manager: filemgr --> ${ans}"
          $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+      elif [ "x${fmsugestion}" != "x" ]; then
+         echo "Setting Proposed X File Manager: filemgr --> ${fmsugestion}"
+         $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${fmsugestion}/g" -f "$FVWM_USERDIR/NsCDE.conf"
       else
          echo "Skipping File Manager selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
       fi
 
-      for xeditor in gvim emacs xemacs
+      for xeditor in gvim emacs xemacs nedit
       do
          whence -q $xeditor
          if (($? == 0)); then
@@ -360,12 +363,17 @@ function setup_nscde
          fi
       done
 
-      echo -ne "Your favorite X Editor (command)? [$xedit_suggest] \c"
+      echo -ne "Your favorite X Text Editor (command)? [$xedit_suggest] \c"
       read ans
       if [ "x$ans" != "x" ]; then
-         echo "Setting X File Manager: xeditor --> ${ans}"
+         echo "Setting X Text Editor: xeditor --> ${ans}"
          if [ "x$ans" != "gvim" ]; then
             $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd xeditor gvim/InfoStoreAdd xeditor ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+         fi
+      elif [ "x${xedit_suggest}" != "x" ]; then
+         echo "Setting Proposed X Text Editor: xeditor --> ${xedit_suggest}"
+         if [ "x$ans" != "gvim" ]; then
+            $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd xeditor ${xedit_suggest}/g" -f "$FVWM_USERDIR/NsCDE.conf"
          fi
       else
          echo "Skipping X Editor selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
@@ -376,7 +384,7 @@ function setup_nscde
       sleep 1
       echo '... done!'
       echo ""
-      echo "Please select palette (default: Broica), integrations you want and confirm with OK"
+      echo "Please select color palette (default: Broica), integrations you want and confirm with OK"
       sleep 2
       echo ""
       FvwmCommand 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
