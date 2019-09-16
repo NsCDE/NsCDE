@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "0.9.b99">
-<!ENTITY date "Aug 2019">
+<!ENTITY appversion "1.0.rc10">
+<!ENTITY date "Sep 2019">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -206,6 +206,7 @@ GUI tools are:
 <listitem><para>Font Style Manager (FontMgr) - FvwmScript + Korn Shell</para></listitem>
 <listitem><para>Keyboard Style Manager (KeyboardMgr) - FvwmScript</para></listitem>
 <listitem><para>Occupy Workspace (OccupyWorkspace) - FvwmScript</para></listitem>
+<listitem><para>Occupy Page (OccupyPage) - FvwmScript</para></listitem>
 <listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
 <listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
 <listitem><para>Subpanel Manager (SubpanelMgr) - FvwmScript</para></listitem>
@@ -279,15 +280,29 @@ differences are:
 </para></listitem>
 
 <listitem><para>
-   On every icon, for all 3 main mouse buttons different action can be
-     assigned. This is used for example 8th icon where mouse button 1
-     calls editor, while mouse button 3 is calling file manager (if defined)
+   On every icon, for the first two mouse buttons different action can be
+     assigned. This is used for example 7th icon where mouse button 1
+     calls Style Manager, while mouse button 2 is calling Backdrop Style Manager
+     directly as a quick shortcut.
+</para></listitem>
+
+<listitem><para>
+   Mouse button 3 on any of the 10 Front Panel icons brigs contextual pop-up menu
+   titled by the main action from mouse button 1. Action on this menu are: a) call
+   main application as if icon has been clicked with the 1st mouse button, b) "reset
+   this button" which will remove user's customizations from the
+   <filename>$FVWM_USERDIR/FrontPanel.actions</filename> and load default from the
+   <filename>$NSCDE_ROOT/config/FrontPanel.actions</filename>., c) "Reset Subpanel" will
+   reset upper subpanel to it's default value (remove definition of the numbered
+   subpanel from the <filename>$FVWM_USERDIR/Subpanels.actions</filename>),
+   d) "Delete Subpanel" will disable subpanel for above this icon (without resetting
+   user's configuration), and e) Help will call this documentation.
 </para></listitem>
 
 <listitem><para>
    In addition to iconification, Front Panel can be shaded to the bottom
      edge of the screen with <keysym>Shift-Esc</keysym> action, and put
-     in a place with the same shortcut again.
+     back in it's place with the same key binding when it is called again.
 </para></listitem>
 
 <listitem><para>
@@ -367,9 +382,10 @@ As FvwmButtons based dock, it swallows the following applets:
 
 <listitem><para>
    Front Panel Subpanels 2, 5 and 6 are empty, but they can be activated with
-   middle pointer click on an empty place. Dialog will ask user if he wants it
-   enabled. This is specially useful for subpanel 5 which will show
-   Thunderbird if activated and if Thunderbird is installed.
+   middle pointer click on an empty place, or with a contextual menu on the icon below it on the Front Panel,
+   and selecting a menu item "Add Subpanel". In a former case, dialog will ask user if he wants subpanel to be
+   enabled, while in later case, subpanel will be enabled immediately. This is specially useful for subpanel 5
+   which will show Thunderbird if activated and if Thunderbird is installed.
 <itemizedlist>
 <listitem><para>
    Subpanel 1: Applications
@@ -404,11 +420,29 @@ As FvwmButtons based dock, it swallows the following applets:
    (SysActionDialog).
 </para>
 <para>
+Lock Screen icon (upper left) has a contextual menu invoked by the 3rd mouse button click, which allows
+user to suspend and resume background activity of the xscreensaver(1) in addition to the locking
+mechanism. Help menu entry is also present. Mouse button 2 brings Xscreensaver preferences dialog as if
+it was called from the Style Manager.
+</para>
+<para>
+Page Manager Menu icon has a contextual menu invoked by the 3rd mouse button click. In addition to
+returning back to main menu, it can call visual local FVWM pager LocalPager. Help menu entry is
+present too. Mouse button 2 brings Workspaces and Pages Manager configuration.
+</para>
+<para>
+Front Panel Lite (upper right) has a small contextual menu which calls main action and help.
+</para>
+<para>
+Exit button (lower right) has a small contextual menu which calls main action and help.
+</para>
+<para>
    In the middle of this area there is WSM - Work Space Manager with well
    known four buttons for four virtual desks. By default, four desks are
    shown and configured, but this can be changed
    (see <xref linkend="NsCDE-Workspace-Manager"/>).
-</para></listitem>
+</para>
+</listitem>
 
 </itemizedlist>
 
@@ -430,6 +464,9 @@ used apps.
 There is one main difference between CDE and NsCDE subpanels: <emphasis>Install Icon</emphasis>
 action calls special NsCDE tool for actions defining. There is no drag and
 drop from the app manager (which also doesn't exist).
+</para>
+<para>
+On every subpanel, last selected entry will remain hilighted next time subpanel is popped up again.
 </para>
 <para>
 Each Subpanel's application item or entry has additional third mouse pointer button action which
@@ -504,8 +541,8 @@ configuration:
 </para>
 <itemizedlist>
 <listitem><para>
- There is a limited number for possible of desks. There can be no odd number of
-  desks, and combinations are: 2, 4, 6 and 8. Default is of course 4.
+ There is a limited number for possible of workspaces. There can be no odd number of
+  workspaces, and combinations are: 2, 4, 6 and 8. Default is of course 4.
 </para></listitem>
 <listitem><para>
  Buttons are not fixed in width size as in CDE. They are not extending a
@@ -536,7 +573,7 @@ configuration:
   file read by WSM, WsPgMgr and such. Not a FVWM configuration file.
 </para></listitem>
 <listitem><para>
- Number of Desks and Pages can be configured with Workspace and Page Manager
+ Number of Workspaces and Pages can be configured with Workspace and Page Manager
   tool which is called with right pointer click on Front Panel's left button
   and selected from the menu.
 </para></listitem>
@@ -549,12 +586,15 @@ shortcut, mouse move, or <command>FvwmCommand(1)</command>.
 
 <para>
 In 4 color palette mode, all WSM buttons are of the same color, while in 8 colors
-mode, there are four color variations from the given palette.
+mode, there are four color variations from the given palette. In the 8 colors mode,
+InfoStore option wsmcolored in the <filename>$FVWM_USERDIR/NsCDE.conf</filename> can be
+set to 1 to get background of the WSM colored as button 3, which was the case on some
+versions of the CDE. By default, this value is 0.
 </para>
 
 <para>
-Desks in NsCDE are named and numbered from 1, while in FVWM, they start from
-0. This fact required additional effort while coding FvwmScripts and making
+Workspaces in NsCDE are named and numbered from 1, while in FVWM (where they are called desks),
+they start from 0. This fact required additional effort while coding FvwmScripts and making
 default and core configuration.
 </para>
 
@@ -890,6 +930,13 @@ directory with the theme for GTK2 and GTK3, and will edit <filename>$HOME/.gtkrc
 </para>
 
 <para>
+If <varname>nscde_use_xsettingsd</varname> is set to 1 in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
+after applying new color theme, user's X Settings in <filename>$HOME/.xsettingsd</filename> will be adjusted
+and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
+This option can be enabled by editing NsCDE.conf or during initial setup.
+</para>
+
+<para>
 Key Bindings:
 <itemizedlist>
 <listitem><para>
@@ -1169,12 +1216,13 @@ Key Bindings:
 <title>Occupy Workspace</title>
 <para>
 This tool dialog is called from the left titlebar button menu. Or from
-<keysym>Alt+Space</keysym> key combination from the window context. It is exact copy of the
+<keysym>Meta+Space</keysym> key combination from the window context. It is exact copy of the
 same CDE dialog and it sends selected window to workspace selected from the list, or it can
-make it sticky with <guibutton>All Workspaces</guibutton> checkbox pressed in. One addition here
-is the checkbox <guibutton>Go With the Window</guibutton>; when checked, makes NsCDE to change
-a current workspace and go where window was sent. <guibutton>OK</guibutton> performs an action,
-<guibutton>Dismiss</guibutton> quits Occupy Workspace tool.
+make it sticky across workspaces with <guibutton>All Workspaces</guibutton> checkbox pressed in.
+One addition here is the checkbox <guibutton>Go With the Window</guibutton>; when checked,
+makes NsCDE to change a current workspace and go where window was sent.
+<guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits
+Occupy Workspace tool without action taken.
 </para>
 <para>
 Key Bindings:
@@ -1198,6 +1246,45 @@ workspace to the same destination.
 </para></listitem>
 <listitem><para>
 <keysym>Up/Down</keysym>: Selects workspace in the up or down direction on the list.
+</para></listitem>
+</itemizedlist>
+</para>
+</sect2>
+
+<sect2 id="NsCDE-OccupyPage">
+<title>Occupy Page</title>
+<para>
+This tool dialog is called from the left titlebar button menu. Or from
+<keysym>Alt+Space</keysym> key combination from the window context. It is exact copy of the
+same CDE dialog and it sends selected window to named page selected from the list, or it can
+make it sticky across pages of the current workspace with <guibutton>All Pages</guibutton>
+checkbox pressed in. One addition here is the checkbox <guibutton>Go With the Window</guibutton>;
+when checked, makes NsCDE to change a current page and go where window was sent.
+<guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits
+Occupy Page tool.
+</para>
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Occupy Page without performing an action.
+</para></listitem>
+<listitem><para>
+<keysym>H</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
+</para></listitem>
+<listitem><para>
+<keysym>A</keysym>: Checks <guilabel>All Pagess</guilabel> checkbox.
+</para></listitem>
+<listitem><para>
+<keysym>Return</keysym>: Performs move action like OK button was pressed, without going to the
+selected page.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Performs move action like OK button was pressed, and changes active
+page to the same destination.
+</para></listitem>
+<listitem><para>
+<keysym>Up/Down</keysym>: Selects page in the up or down direction on the list.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1438,11 +1525,14 @@ Key Bindings:
 This is the login/logout form with the possibilities to reboot or shutdown the
 system, or change X session. It has also options for suspend/sleep (S3), hybrid suspend,
 and hibernation of the system. Of course, <command>reboot</command>, <command>shutdown</command>,
-<command>pm-suspend</command>, <command>pm-hybrid-suspend</command> and
-<command>pm-hibernate</command> will work only if
-<command>sudo</command> entries are configured properly. While System Action Dialog is active,
+<command>suspend</command>, <command>hybrid suspend</command> and
+<command>hibernate</command> will work only if
+<command>sudo(8)</command> entries are configured properly. While System Action Dialog is active,
 root cursor changes to line-crossed cursor which is dismissed after the action is performed or
-dialog action dismissed.
+dialog action dismissed. Not all of this actions are possible on all systems, but with the
+<filename>$NSCDE_ROOT/libexec/nscde-acpi</filename> wrapper, Linux with pm-utils, Linux without
+pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this moment.
+
 In <filename class="directory">$NSCDE_ROOT/share/doc/examples/sudo</filename>, one can find example
 which can be put in <filename class="directory">/etc/sudoers.d</filename> with little changes.
 <guibutton>Confirm</guibutton> button applies, <guibutton>Dismiss</guibutton> cancels and
@@ -1740,7 +1830,7 @@ On the top of the window is graphical representation of the Workspace
 Manager. Every button when clicked becomes editable and it's name can
 be changed (pres <keysym>return</keysym> on the text field after writing new name).
 This change will be written immediately WITHOUT pressing <guibutton>OK</guibutton> button.
-Name of the desk will be changed across all NsCDE and FVWM (WSM, Occupy
+Name of the workspace will be changed across all NsCDE and FVWM (WSM, Occupy
 Workspace, menus etc) after window manager restart is triggered with <guibutton>OK</guibutton>
 button. In NsCDE, there are 4 options for desks: 2, 4, 6 and 8 desks.
 FVWM itself supports infinite number, but in NsCDE care must be taken
@@ -2378,9 +2468,9 @@ config and extended a bit). Namely:
 </para></listitem>
 
 <listitem><para>
-  Key <keysym>Alt+Space</keysym> in the context of the window, frame corners, frame
+  Key <keysym>Meta+Space</keysym> in the context of the window, frame corners, frame
     sides, title bar and icon (ovoids root window context!) calls
-    Occupy Space dialog for window moving between the desks.
+    Occupy Workspace dialog for window moving between the desks.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -2388,13 +2478,18 @@ config and extended a bit). Namely:
 </para></listitem>
 
 <listitem><para>
-  Key <keysym>Meta+Space</keysym> in the context of the window, frame corners, frame
-    sides and a title bar pops up Window Options context menu
+  Key <keysym>Alt+Space</keysym> in the context of the window, frame corners, frame
+    sides, title bar and icon (ovoids root window context!) calls
+    Occupy Page dialog for window moving between the desks.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
 </para></listitem>
 
 <listitem><para>
-  Key <keysym>Meta+Space</keysym> in the context of the icon, pops up Icon Options
-    context menu
+  Key <keysym>Ctrl+Meta+Space</keysym> in the context of the window, frame corners, frame
+    sides and a title bar pops up Window Options context menu
 </para></listitem>
 
 <listitem><para>
@@ -2661,6 +2756,51 @@ and warp pointer to Front Panel
 In the context of the Front Panel and any subpanel, <keysym>Meta+Return</keysym> will activate button
 under the pointer and execute FvwmButton action defined in configuration of that button.
 </para></listitem>
+
+<listitem><para>
+  <keysym>XF86PowerOff</keysym> on Sun keyboards (most upper right) calls System Action Dialog with system suspend (S3) option selected.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Ctrl+XF86PowerOff</keysym> on Sun keyboards (most upper right) calls System Action Dialog with system shutdown option selected.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Alt+XF86PowerOff</keysym> on Sun keyboards (most upper right) calls System Action Dialog with system reboot option selected.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+XF86PowerOff</keysym> on Sun keyboards (most upper right) calls System Action Dialog with X Session logout option selected.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Help</keysym> key on Sun keyboards if pressed twice in a second will call PDF viewer (if any) with complete (this) NsCDE documentation.
+</para></listitem>
+
+<listitem><para>
+  Sun <keysym>Front</keysym> key on Sun keyboards acts as a <keysym>Alt+F6</keysym> - Raise or Lower the window.
+</para></listitem>
+
+<listitem><para>
+  Sun <keysym>Find</keysym> key on Sun keyboards calls f_Find NsCDE FVWM function which has to be user defined to be usefull.
+</para></listitem>
+
+<listitem><para>
+  Sun <keysym>Props</keysym> key on Sun keyboards will call Style Manager window.
+</para></listitem>
+
+<listitem><para>
+  Sun <keysym>Open</keysym> key on Sun keyboards will call Exec dialog.
+</para></listitem>
+
+<listitem><para>
+  <keysym>XF86AudioLowerVolume</keysym> and <keysym>XF86AudioRaiseVolume</keysym> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <filename>$NSCDE_ROOT/config/NsCDE-Keybindings.conf</filename> for f_Mixer options and interaction.
+</para></listitem>
+
+<listitem><para>
+  <keysym>XF86AudioMute</keysym> key on Sun keyboards will mute the sound. Function f_Mixer expects PulseAudio system. See previous item for possible alternatives.
+</para></listitem>
+
 </itemizedlist>
 
 </sect2>
@@ -2831,8 +2971,16 @@ and even menus called or dinamically generated from FvwmScript(1).
 </para></listitem>
 
 <listitem><para>
+<guimenuitem>m_RootMenu</guimenuitem>: Small root menu with options to call
+Invoked with a click on the root window. It has menu items for invoking
+workspace-local window list, global window list, local pager, global pager, Window Options
+menu, and to refresh all windows on the screen.
+</para></listitem>
+
+<listitem><para>
   <guimenuitem>m_WindowOpsRootWin</guimenuitem>: Standalone root window version of the Window
-    Operations menu. Invoked with a click on the root window.
+    Operations menu intended for a general and tricky circumstances. It is invoked from the
+    m_RootMenu, and keybindings <keysym>Ctrl+Meta+Space</keysym> and <keysym>Meta+Menu</keysym>.
 </para></listitem>
 
 <listitem><para>
@@ -3640,7 +3788,8 @@ and for Gtk+Qt integration.
 </para></listitem>
 
 <listitem><para>
-<emphasis>PyQt4</emphasis> or possibly python-qt4, or python2-qt4. This is unfortunate dependency
+<emphasis>PyQt4</emphasis> or <emphasis>PyQt5</emphasis> (or possibly python-qt4, python-qt5 ...)
+  This is unfortunate dependency
   which is further dependent on Qt libraries. NsCDE tries to have as
   less as possible dependencies, specially indirect (dependencies of
   dependent dependencies of dependencies ...). Gtk/Qt integration is
@@ -3648,7 +3797,7 @@ and for Gtk+Qt integration.
   with FVWM (instead of heavy Xfce dependency) or standalone engine.
   In part of the <filename>Theme.py</filename> code, some png pixmaps are cut and colored
   with functions from this API. With present job and lack of time,
-  there was no time to do this without PyQt4 for the first public release.
+  there was no time to do this without PyQt4 or PyQt5 for the first public release.
 </para>
 <para>
   On CentOS, Fedora, Ubuntu and probably Debian, also on FreeBSD,
@@ -3708,7 +3857,7 @@ any part of the NsCDE. (optional)
 </para></listitem>
 
 <listitem><para>
-<emphasis>python34-pyxdg</emphasis> or <command>python3-pyxdg</command> or ... (FVWM)
+<emphasis>python36-pyxdg</emphasis> or <command>python3-pyxdg</command> or ... (FVWM)
 </para></listitem>
 
 <listitem><para>
@@ -3804,7 +3953,14 @@ the terminal which will run automatically and will set up the following:
 <listitem><para> <filename>~/.themes/NsCDE</filename> </para></listitem>
 <listitem><para> <filename>~/.config/Trolltech.conf</filename> </para></listitem>
 <listitem><para> <filename>~/.config/qt5ct/qt5ct.conf</filename> </para></listitem>
-<listitem><para> <filename>~/.stalonetrayrc</filename> </para></listitem>
+<listitem><para> <filename>~/.stalonetrayrc if it does not exist yet</filename> </para></listitem>
+<listitem><para> <filename>Visual Pager NsCDE addon Option</filename> </para></listitem>
+<listitem><para> <filename>Disable or enable XscreenSaver</filename> </para></listitem>
+<listitem><para> <filename>Disable or enable use of the XSETTINGS xsettingsd daemon</filename> </para></listitem>
+<listitem><para> <filename>Enable NsCDE to remember last used page on workspace if selected</filename> </para></listitem>
+<listitem><para> <filename>Configure favorite X file manager, if desired</filename> </para></listitem>
+<listitem><para> <filename>Configure favorite X text editor, if desired</filename> </para></listitem>
+
 </itemizedlist>
 
 <para>
@@ -4067,7 +4223,7 @@ What is similar or the same:
 <listitem><para>Most of the icons reused</para></listitem>
 <listitem><para>Backdrops</para></listitem>
 <listitem><para>Style Manager launcher and most of the Style Managers</para></listitem>
-<listitem><para>Occupy Workspace dialog</para></listitem>
+<listitem><para>Occupy Workspace/Page dialog</para></listitem>
 <listitem><para>Workstation Info window (as found in Solaris CDE)</para></listitem>
 <listitem><para>FpLite (not with the same function)</para></listitem>
 <listitem><para>Front Panel clock, calendar and check mail</para></listitem>
@@ -4263,6 +4419,14 @@ This patches will add:
 In order to have patched fvwm, apply this patch or patches against FVWM
 2.6.7 or 2.6.8 source and (re)compile FVWM. You can even make your own RPM
 DEB, Arch, BSD, SunOS or similar package from that and install it.
+</para>
+<para>
+If NsCDE is going to be installed on system with non-patched FVWM, Installer.ksh
+option "-w" should be used. This will ensure Front Panel pixmaps instead of built in
+triangles on subpanel launcher buttons, and XOverrideFontCursor dynamic preloading
+library piece which will handle XC_left_ptr for some FvwmScript(1) widgets instead
+of strange default of the XC_hand2. Subpanel window names will be set by the xdotool(1)
+xdowrapper script.
 </para>
 </sect1>
 
