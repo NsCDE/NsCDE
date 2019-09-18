@@ -183,7 +183,7 @@ function setup_nscde
          echo "Writing $HOME/.gtkrc-2.0 ..."
       fi
       echo -ne 'gtk-key-theme-name = "Emacs"\ngtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
-      echo -ne 'gtk-button-images = 0\ngtk-menu-images = 0\n' >> "$HOME/.gtkrc-2.0"
+      echo -ne 'gtk-button-images = 0\ngtk-menu-images = 0\ngtk-cursor-blink = 0\n' >> "$HOME/.gtkrc-2.0"
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.gtkrc-2.0 already exists."
@@ -198,6 +198,7 @@ function setup_nscde
       mkdir -p "$HOME/.config/gtk-3.0"
       echo -ne "[Settings]\ngtk-theme-name = NsCDE\ngtk-cursor-theme-name = dmz-aa\ngtk-button-images = 0\n" > "$HOME/.config/gtk-3.0/settings.ini"
       echo -ne "gtk-menu-images = 0\ngtk-application-prefer-dark-theme = 1\ngtk-font-name = DejaVu Serif Book 10\n" >> "$HOME/.config/gtk-3.0/settings.ini"
+      echo -ne "gtk-cursor-blink = 0\n" >> "$HOME/.config/gtk-3.0/settings.ini"
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.config/gtk-3.0/settings.ini already exists."
