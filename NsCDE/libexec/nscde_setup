@@ -384,20 +384,27 @@ function setup_nscde
       sleep 1
       echo '... done!'
       echo ""
-      echo "Please select color palette (default: Broica), integrations you want and confirm with OK"
+      echo "Please select a color palette (default: Broica) and GUI widgets integrations"
+      echo "that you want to apply and confirm with OK in Color Style Manager"
       sleep 2
       echo ""
       FvwmCommand 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
-      echo "Logout and login again for full changes to take effect."
+      echo "Logout and login again for the full changes to take effect."
       echo ""
       echo "You can set \$[infostore.terminal] variable to your favorite"
       echo "terminal program in \$HOME/.NsCDE/NsCDE.conf or leave autodiscovery."
       echo ""
+      echo "Hint: See $NSCDE_ROOT/share/doc/examples for Gkrellm, X session and"
+      echo "other integration options you may want to apply."
+      sleep 1
+      echo ""
    fi
 
    if (($INTERACTIVE == 1)); then
-      echo "Press RETURN to exit."
+      echo "Press RETURN to exit setup and use Color Style Manager now."
       read RET
+      FvwmCommand 'EdgeThickness 1'
+      FvwmCommand 'All ("ColorMgr", CirculateHit) AnimatedMove 50-50w 50-50w'
       exit 0
    fi
 }
