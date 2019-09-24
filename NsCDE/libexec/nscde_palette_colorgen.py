@@ -403,10 +403,10 @@ Colorset 15 fg {bsg[2]}, bg {bsg[2]}, hi {bsg[2]}, sh {bsg[2]}, fgsh {bsg[2]}, P
 # It is unknown why there must be a fg color here but
 # letters of the selected entry are green if this is not
 # the case.
-Colorset 16 Pixmap NsCDE/LastPressedXL.xpm, fg #ffffffffffff
+Colorset 16 Pixmap NsCDE/LastPressedXL.xpm, fg #ffffffffffff, fgsh #330033003300
 
 # Press inficator on subpanel launchers of the Front Panel
-Colorset 17 Pixmap NsCDE/LastPressedFPSubLnch.xpm
+Colorset 17 Pixmap NsCDE/LastPressedFPSubLnch.xpm, hi {tsg[2]}, sh {bsg[2]}, fgsh {selg[2]}
 
 # Icon background pixmap inactive
 Colorset 18 Pixmap NsCDE/IconBgI.xpm
@@ -436,7 +436,7 @@ Colorset 25 Pixmap NsCDE/SelectedS.xpm
 Colorset 26 Pixmap NsCDE/SelectedXL.xpm
 
 # FrontPanel Subpanel Launcher Press Indicator
-Colorset 27 Pixmap NsCDE/PressedFPL.xpm
+Colorset 27 Pixmap NsCDE/PressedFPL.xpm, hi {tsg[2]}, sh {bsg[2]}, fgsh {selg[2]}
 
 # Pressed Button on Colorset 21 (Style Manager)
 Colorset 28 fg {fgg[5]}, bg {selg[5]}, hi {bsg[5]}, sh {tsg[5]}, fgsh {selg[5]}, Plain, NoShape
