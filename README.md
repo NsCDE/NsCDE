@@ -13,6 +13,7 @@ Notice: for a set of old VUE palettes and backdrops, also download
 https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz
 
 See here for screenshots: https://imgur.com/gallery/nHkw35X
+... and here: https://imgur.com/gallery/RroGvLH
 
 Author will like to apologize for bad english in docs. A rand() function putting
 articles (the, a, an) will probably be more accurate.
