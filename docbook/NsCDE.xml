@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.0.rc10">
-<!ENTITY date "Sep 2019">
+<!ENTITY appversion "1.0.rc12">
+<!ENTITY date "Oct 2019">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -557,6 +557,11 @@ configuration:
   configuration. Names are saved in <filename>$FVWM_USERDIR/WSM.conf</filename>
 </para></listitem>
 <listitem><para>
+If Sun type keyboard is in use, <keysym>Help</keysym> key above
+WSM will bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the
+same function.
+</para></listitem>
+<listitem><para>
  Addition: right mouse button on desk button brings contextual menu. From
   this menu, global (all desks and their pages), or local (pages of the one
   desk) FvwmPager - visual pager can be called. Below this menu options, there
@@ -639,6 +644,11 @@ calls empty, do-nothing (by default) function <function>f_Calendar</function>. T
 overridden in <filename>$FVWM_USERDIR/NsCDE-Functions.local</filename> to call a program which user
 wishes.
 </para>
+<para>
+If Sun type keyboard is in use, <keysym>Help</keysym> key above
+Month Day Applet will bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the
+same function.
+</para>
 </sect2>
 
 <sect2 id="NsCDE-Pclock">
@@ -675,6 +685,11 @@ click, and it will present Thunderbird entry if thunderbird is installed. User
 can use <emphasis>Install Icon</emphasis> action to change or add entries on this menu. For
 example, to call <command>urxvt -e</command> mutt or something like that.
 </para>
+<para>
+Key <keysym>F1</keysym> will bring this help text in browser.
+If Sun type keyboard is in use, <keysym>Help</keysym> key above
+Check Mail Applet has the same function as F1 on PC.
+</para>
 </sect2>
 
 <sect2 id="NsCDE-FpLite">
@@ -684,7 +699,10 @@ Load Indicator on the top right side of the center of the Front Panel contains
 a small applet called FpLite. In original CDE it was used to indicate desktop
 activity, but since on today's processors this tasks are short and almost
 immediate (specially with a good window manager such as FVWM), I find it
-better suited to show system load. It has 10 micro-bars. When there is no
+better suited to show system load.
+</para>
+<para>
+It has 10 micro-bars. When there is no
 load, all are yellow. Load grows from left to right. First 5 green bars, then
 3 blue, 2 magenta, an after that it starts from the beginning with red bars.
 FpLite summarizes load of all CPUs on the system in a way that 1-minute load
@@ -697,10 +715,17 @@ one red bar etc ... on the system with four CPU cores load of 3 will be
 magenta on the two rightmost bars, and load of 4 or more will be red. Load of
 more than (numcpu * 10) will not be shown specially, but user gets an idea
 what is going on if FpLite is all red.
+</para>
+<para>
 If clicked, it will call a function <function>f_FpLiteClickAction</function> which is by default
 set to safe defaults (<emphasis>[default terminal app]</emphasis> <command>-e top</command>).
 FpLite FvwmScript app uses little portable python script <emphasis>getla1.py</emphasis> from the
 <filename class="directory">$NSCDE_ROOT/libexec</filename> to obtain 1-minute load data.
+</para>
+<para>
+Key <keysym>F1</keysym> will bring this help text in browser.
+If Sun type keyboard is in use, <keysym>Help</keysym> key above
+FpLite has the same function as F1 on PC.
 </para>
 </sect2>
 
@@ -744,6 +769,50 @@ Key Bindings:
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Style Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+
+<listitem><para>
+<keysym>C</keysym>: Opens Color Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>F</keysym>: Opens Font Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>B</keysym>: Opens Backdrop Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>K</keysym>: Opens Keyboard Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>M</keysym>: Opens Mouse Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>E</keysym>: Opens Beep Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>S</keysym>: Opens Screen Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>W</keysym>: Opens Window Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>P</keysym>: Opens Power Style Manager
+</para></listitem>
+
+<listitem><para>
+<keysym>T</keysym>: Opens Session Style Manager
+</para></listitem>
+
 </itemizedlist>
 </para>
 
@@ -811,6 +880,9 @@ Key Bindings:
 <keysym>Ctrl+Q</keysym>: Quits Backdrop Style Manager.
 </para></listitem>
 <listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+<listitem><para>
 <keysym>P</keysym>: Applies preview of the currently selected backdrop (or photo) on the root window.
 </para></listitem>
 <listitem><para>
@@ -840,6 +912,9 @@ Key Bindings:
 </para></listitem>
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Beep Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -949,6 +1024,9 @@ color scheme from the list.
 <listitem><para>
 <keysym>Up/Down</keysym>: Goes one item on the color schemes list up or down.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -996,6 +1074,9 @@ both checked.
 </para></listitem>
 <listitem><para>
 <keysym>Up/Down</keysym>: Brings back and forth command history in text dialog box
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1159,6 +1240,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Font Style Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1207,6 +1291,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Escape</keysym>: Quits Keyboard Style Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1247,6 +1334,9 @@ workspace to the same destination.
 <listitem><para>
 <keysym>Up/Down</keysym>: Selects workspace in the up or down direction on the list.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 </sect2>
@@ -1285,6 +1375,9 @@ page to the same destination.
 </para></listitem>
 <listitem><para>
 <keysym>Up/Down</keysym>: Selects page in the up or down direction on the list.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1363,6 +1456,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Mouse Style Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1400,6 +1496,9 @@ Key Bindings:
 </para></listitem>
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Powersave Style Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1480,6 +1579,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Subpanel Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1512,6 +1614,9 @@ Key Bindings:
 </para></listitem>
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Subpanel Settings.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1555,6 +1660,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Up/Down</keysym>: Changes between 7 possible options of System Action Dialog's popup menu.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1575,7 +1683,8 @@ when system was last booted. This dialog can be found on the <emphasis>System</e
 or fourth Subpanel of the Front Panel in default configuration, under
 the entry <emphasis>Workstation Info</emphasis>.
 In the context of it's window, keys <keysym>Escape</keysym>, <keysym>Return</keysym> and
-<keysym>Q</keysym> will close a window.
+<keysym>Q</keysym> will close a window, while Sun <keysym>Help</keysym> and
+<keysym>F1</keysym> displays this documentation.
 
 </para>
 </sect2>
@@ -1800,6 +1909,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Window Style Manager.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1862,6 +1974,9 @@ Key Bindings:
 </para></listitem>
 <listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Workspaces and Pages Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1953,6 +2068,9 @@ Key Bindings:
 <listitem><para>
 <keysym>Escape</keysym>: Quits Dialog.
 </para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
 </itemizedlist>
 </para>
 
@@ -1978,6 +2096,9 @@ Key Bindings:
 <itemizedlist>
 <listitem><para>
 <keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
 </para></listitem>
 </itemizedlist>
 </para>
@@ -2758,6 +2879,11 @@ under the pointer and execute FvwmButton action defined in configuration of that
 </para></listitem>
 
 <listitem><para>
+In the context of the Front Panel and any Subpanel, Sun <keysym>Help</keysym> key will display
+Front Panel or Subpanels documentation.
+</para></listitem>
+
+<listitem><para>
   <keysym>XF86PowerOff</keysym> on Sun keyboards (most upper right) calls System Action Dialog with system suspend (S3) option selected.
 </para></listitem>
 
@@ -2786,7 +2912,11 @@ under the pointer and execute FvwmButton action defined in configuration of that
 </para></listitem>
 
 <listitem><para>
-  Sun <keysym>Props</keysym> key on Sun keyboards will call Style Manager window.
+  Sun <keysym>Props</keysym> key on Sun keyboards will call Style Manager window when pointer is on the root window.
+</para></listitem>
+
+<listitem><para>
+  Sun <keysym>Meta+Props</keysym> key on Sun keyboards will call Style Manager window.
 </para></listitem>
 
 <listitem><para>

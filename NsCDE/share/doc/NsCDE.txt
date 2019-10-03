@@ -503,6 +503,9 @@ Applets Docks and Panels
        the rest of the configuration. Names are saved in
        $FVWM_USERDIR/WSM.conf
 
+     *  If Sun type keyboard is in use, Help key above WSM will bring this
+       help text in browser. On PC keyboard, F1 has the same function.
+
      *   Addition: right mouse button on desk button brings contextual menu.
        From this menu, global (all desks and their pages), or local (pages of
        the one desk) FvwmPager - visual pager can be called. Below this menu
@@ -573,6 +576,9 @@ Applets Docks and Panels
    can be overridden in $FVWM_USERDIR/NsCDE-Functions.local to call a program
    which user wishes.
 
+    If Sun type keyboard is in use, Help key above Month Day Applet will
+   bring this help text in browser. On PC keyboard, F1 has the same function.
+
    --------------------------------------------------------------------------
 
   Front Panel Clock - pclock
@@ -606,6 +612,9 @@ Applets Docks and Panels
    action to change or add entries on this menu. For example, to call urxvt
    -e mutt or something like that.
 
+    Key F1 will bring this help text in browser. If Sun type keyboard is in
+   use, Help key above Check Mail Applet has the same function as F1 on PC.
+
    --------------------------------------------------------------------------
 
   FpLite
@@ -614,24 +623,29 @@ Applets Docks and Panels
    contains a small applet called FpLite. In original CDE it was used to
    indicate desktop activity, but since on today's processors this tasks are
    short and almost immediate (specially with a good window manager such as
-   FVWM), I find it better suited to show system load. It has 10 micro-bars.
-   When there is no load, all are yellow. Load grows from left to right.
-   First 5 green bars, then 3 blue, 2 magenta, an after that it starts from
-   the beginning with red bars. FpLite summarizes load of all CPUs on the
-   system in a way that 1-minute load is divided with number of CPU cores,
-   and then counted as such while displaying load with color micro-bars.
-   Everything under 1 (internally 100) is yellow, green, blue and magenta,
-   and after that it counts 10 red micro-bars. For example: on the system
-   with 2 CPU cores, 1-minute load of 0.6 will be presented with 3 bars (0.6
-   / num-cores), load of 2.2 will be presented with one red bar etc ... on
-   the system with four CPU cores load of 3 will be magenta on the two
+   FVWM), I find it better suited to show system load.
+
+    It has 10 micro-bars. When there is no load, all are yellow. Load grows
+   from left to right. First 5 green bars, then 3 blue, 2 magenta, an after
+   that it starts from the beginning with red bars. FpLite summarizes load of
+   all CPUs on the system in a way that 1-minute load is divided with number
+   of CPU cores, and then counted as such while displaying load with color
+   micro-bars. Everything under 1 (internally 100) is yellow, green, blue and
+   magenta, and after that it counts 10 red micro-bars. For example: on the
+   system with 2 CPU cores, 1-minute load of 0.6 will be presented with 3
+   bars (0.6 / num-cores), load of 2.2 will be presented with one red bar etc
+   ... on the system with four CPU cores load of 3 will be magenta on the two
    rightmost bars, and load of 4 or more will be red. Load of more than
    (numcpu * 10) will not be shown specially, but user gets an idea what is
-   going on if FpLite is all red. If clicked, it will call a function
-   f_FpLiteClickAction which is by default set to safe defaults ([default
-   terminal app] -e top). FpLite FvwmScript app uses little portable python
-   script getla1.py from the $NSCDE_ROOT/libexec to obtain 1-minute load
-   data.
+   going on if FpLite is all red.
+
+    If clicked, it will call a function f_FpLiteClickAction which is by
+   default set to safe defaults ([default terminal app] -e top). FpLite
+   FvwmScript app uses little portable python script getla1.py from the
+   $NSCDE_ROOT/libexec to obtain 1-minute load data.
+
+    Key F1 will bring this help text in browser. If Sun type keyboard is in
+   use, Help key above FpLite has the same function as F1 on PC.
 
    --------------------------------------------------------------------------
 
@@ -675,6 +689,28 @@ GUI Tools
     Key Bindings:
 
      *  Ctrl+Q: Quits Style Manager.
+
+     *  Sun Help and F1: Displays this help text.
+
+     *  C: Opens Color Style Manager
+
+     *  F: Opens Font Style Manager
+
+     *  B: Opens Backdrop Style Manager
+
+     *  K: Opens Keyboard Style Manager
+
+     *  M: Opens Mouse Style Manager
+
+     *  E: Opens Beep Style Manager
+
+     *  S: Opens Screen Style Manager
+
+     *  W: Opens Window Style Manager
+
+     *  P: Opens Power Style Manager
+
+     *  T: Opens Session Style Manager
 
    --------------------------------------------------------------------------
 
@@ -729,6 +765,8 @@ GUI Tools
 
      *  Ctrl+Q: Quits Backdrop Style Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
      *  P: Applies preview of the currently selected backdrop (or photo) on
        the root window.
 
@@ -752,6 +790,8 @@ GUI Tools
      *  Escape: Quits Beep Style Manager.
 
      *  Ctrl+Q: Quits Beep Style Manager.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -831,6 +871,8 @@ GUI Tools
 
      *  Up/Down: Goes one item on the color schemes list up or down.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Exec Dialog
@@ -865,6 +907,8 @@ GUI Tools
        checked.
 
      *  Up/Down: Brings back and forth command history in text dialog box
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -982,6 +1026,8 @@ GUI Tools
 
      *  Ctrl+Q: Quits Font Style Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Keyboard Style Manager
@@ -1013,6 +1059,8 @@ GUI Tools
 
      *  Escape: Quits Keyboard Style Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Occupy Workspace
@@ -1042,6 +1090,8 @@ GUI Tools
 
      *  Up/Down: Selects workspace in the up or down direction on the list.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Occupy Page
@@ -1070,6 +1120,8 @@ GUI Tools
        changes active page to the same destination.
 
      *  Up/Down: Selects page in the up or down direction on the list.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -1124,6 +1176,8 @@ GUI Tools
 
      *  Ctrl+Q: Quits Mouse Style Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Power Save Manager
@@ -1150,6 +1204,8 @@ GUI Tools
      *  Escape: Quits Powersave Style Manager.
 
      *  Ctrl+Q: Quits Powersave Style Manager.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -1214,6 +1270,8 @@ GUI Tools
 
      *  Ctrl+Q: Quits Subpanel Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Subpanel Settings
@@ -1237,6 +1295,8 @@ GUI Tools
      *  Escape: Quits Subpanel Settings.
 
      *  Ctrl+Q: Quits Subpanel Settings.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -1267,6 +1327,8 @@ GUI Tools
      *  Up/Down: Changes between 7 possible options of System Action Dialog's
        popup menu.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Sysinfo
@@ -1281,7 +1343,7 @@ GUI Tools
    last booted. This dialog can be found on the System or fourth Subpanel of
    the Front Panel in default configuration, under the entry Workstation
    Info. In the context of it's window, keys Escape, Return and Q will close
-   a window.
+   a window, while Sun Help and F1 displays this documentation.
 
    --------------------------------------------------------------------------
 
@@ -1453,6 +1515,8 @@ GUI Tools
 
      *  Ctrl+Q: Quits Window Style Manager.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   Workspaces and Pages Manager (WsPgMgr)
@@ -1495,6 +1559,8 @@ GUI Tools
      *  Escape: Quits Workspaces and Pages Manager.
 
      *  Ctrl+Q: Quits Workspaces and Pages Manager.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -1566,6 +1632,8 @@ Helper Dialogs
 
      *  Escape: Quits Dialog.
 
+     *  Sun Help and F1: Displays this help text.
+
    --------------------------------------------------------------------------
 
   PaletteDialog - FvwmScript
@@ -1582,6 +1650,8 @@ Helper Dialogs
     Key Bindings:
 
      *  Escape: Quits Dialog.
+
+     *  Sun Help and F1: Displays this help text.
 
    --------------------------------------------------------------------------
 
@@ -2182,6 +2252,9 @@ Configuration files explained
        activate button under the pointer and execute FvwmButton action
        defined in configuration of that button.
 
+     *  In the context of the Front Panel and any Subpanel, Sun Help key will
+       display Front Panel or Subpanels documentation.
+
      *   XF86PowerOff on Sun keyboards (most upper right) calls System Action
        Dialog with system suspend (S3) option selected.
 
@@ -2203,7 +2276,10 @@ Configuration files explained
      *   Sun Find key on Sun keyboards calls f_Find NsCDE FVWM function which
        has to be user defined to be usefull.
 
-     *   Sun Props key on Sun keyboards will call Style Manager window.
+     *   Sun Props key on Sun keyboards will call Style Manager window when
+       pointer is on the root window.
+
+     *   Sun Meta+Props key on Sun keyboards will call Style Manager window.
 
      *   Sun Open key on Sun keyboards will call Exec dialog.
 
