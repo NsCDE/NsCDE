@@ -75,6 +75,8 @@ Begin
    # Key bindings
    Key Q C 15 1 {KeyClose}
    Key Escape A 15 1 {KeyClose}
+   Key F1 A 16 1 {KeyHelp}
+   Key Help A 16 1 {KeyHelp}
 
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
@@ -433,6 +435,10 @@ Widget 16
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 16 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Subpanel Settings" $[NSCDE_ROOT]/share/doc/html/NsCDE-SubpanelSettings.html}
       End

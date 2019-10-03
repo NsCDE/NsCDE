@@ -12,6 +12,20 @@ Colorset 22
 Init
 Begin
    Key Q C 1 1 {Quit}
+   Key F1 A 1 1 {Help}
+   Key H A 1 1 {Help}
+   Key Help A 1 1 {Help}
+   Key C A 1 1 {Color}
+   Key F A 1 1 {Font}
+   Key B A 1 1 {Backdrop}
+   Key K A 1 1 {Kbd}
+   Key M A 1 1 {Mouse}
+   Key E A 1 1 {Beep}
+   Key S A 1 1 {Scrn}
+   Key W A 1 1 {Window}
+   Key P A 1 1 {Pwr}
+   Key T A 1 1 {Start}
+
    ChangeTitle 27 {Color}
    ChangeTitle 28 {Font}
    ChangeTitle 29 {Backdrop}
@@ -83,7 +97,30 @@ Widget 1 # Handler
       End
       1 :
       Begin
-         Quit
+         If (LastString) == {Quit} Then
+            Quit
+         If (LastString) == {Help} Then
+            SendSignal 4 1
+         If (LastString) == {Color} Then
+            SendSignal 7 1
+         If (LastString) == {Font} Then
+            SendSignal 8 1
+         If (LastString) == {Backdrop} Then
+            SendSignal 9 1
+         If (LastString) == {Kbd} Then
+            SendSignal 10 1
+         If (LastString) == {Mouse} Then
+            SendSignal 11 1
+         If (LastString) == {Beep} Then
+            SendSignal 12 1
+         If (LastString) == {Scrn} Then
+            SendSignal 13 1
+         If (LastString) == {Window} Then
+            SendSignal 14 1
+         If (LastString) == {Pwr} Then
+            SendSignal 15 1
+         If (LastString) == {Start} Then
+            SendSignal 16 1
       End
 End
 
@@ -139,8 +176,12 @@ Widget 4
       Begin
          If (GetValue 4) == 1 Then
          Begin
-            Do {f_DisplayURL "Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-GUI-Tools.html}
+            SendSignal 4 1
          End
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-GUI-Tools.html}
       End
 End
 

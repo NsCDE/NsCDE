@@ -18,6 +18,9 @@ Begin
    ChangeTitle  3 $month
    Set $day = (GetOutput {exec date +%e} 1 1)
    ChangeTitle 4 $day
+
+   Key F1 A 2 3 {KeyHelp}
+   Key Help A 2 3 {KeyHelp}
 End
 
 PeriodicTasks
@@ -68,6 +71,10 @@ Widget 2
          Begin
             ChangeColorset 2 21
          End
+      End
+      3 :
+      Begin
+         Do {f_DisplayURL "MonthDayApplet" $[NSCDE_ROOT]/share/doc/html/NsCDE-MonthDayApplet.html}
       End
 End
 

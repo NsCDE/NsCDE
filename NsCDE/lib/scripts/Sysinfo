@@ -14,6 +14,8 @@ Begin
    Key Escape A 36 1 {Quit}
    Key Return A 36 1 {Quit}
    Key Q A 36 1 {Quit}
+   Key F1 A 36 2 {KeyHelp}
+   Key Help A 36 2 {KeyHelp}
 
    Set $WidgetFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
    ChangeFont 36 $WidgetFont
@@ -551,6 +553,10 @@ Widget 36
        1 :
        Begin
           Quit
+       End
+       2 :
+       Begin
+         Do {f_DisplayURL "Sysinfo" $[NSCDE_ROOT]/share/doc/html/NsCDE-SysInfo.html}
        End
 End
 

@@ -126,6 +126,8 @@ Begin
    # Key bindings
    Key Escape A 22 1 {KeyClose}
    Key Q C 22 1 {KeyClose}
+   Key F1 A 23 1 {KeyHelp}
+   Key Help A 23 1 {KeyHelp}
 
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
@@ -890,6 +892,10 @@ Widget 23
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 23 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Workspace and Pages Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-WsPgMgr.html}
       End

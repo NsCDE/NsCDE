@@ -71,6 +71,8 @@ Begin
 
    # Key bindings
    Key Q C 33 1 {KeyClose}
+   Key F1 A 34 1 {KeyHelp}
+   Key Help A 34 1 {KeyHelp}
 End
 
 # In PeriodicTasks be careful not to mess messages from two different dialogs.
@@ -1164,6 +1166,10 @@ Widget 34
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 34 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Font Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-FontMgr.html}
       End

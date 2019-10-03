@@ -100,6 +100,8 @@ Begin
    Key Return C 6 1 {KeyConfirm}
    Key Down A 4 1 {KeyDown}
    Key Up A 4 1 {KeyUp}
+   Key F1 A 8 1 {KeyHelp}
+   Key Help A 8 1 {KeyHelp}
 
    Do {CursorStyle ROOT CursorExit.xpm}
 End
@@ -358,7 +360,11 @@ Property
    Main
    Case message of
    SingleClic :
-      Begin
-         Do {f_DisplayURL "System Action Dialog" $[NSCDE_ROOT]/share/doc/html/NsCDE-SysActionDialog.html}
-      End
+   Begin
+      SendSignal 8 1
+   End
+   1 :
+   Begin
+      Do {f_DisplayURL "System Action Dialog" $[NSCDE_ROOT]/share/doc/html/NsCDE-SysActionDialog.html}
+   End
 End

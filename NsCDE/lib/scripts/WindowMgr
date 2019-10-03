@@ -43,6 +43,8 @@ Begin
    # Key bindings
    Key Escape A 123 1 {KeyClose}
    Key Q C 123 1 {KeyClose}
+   Key F1 A 124 1 {KeyHelp}
+   Key Help A 124 1 {KeyHelp}
 End
 
 Widget 1
@@ -2331,6 +2333,10 @@ Widget 124
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 124 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Window Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-WindowMgr.html}
       End

@@ -15,6 +15,8 @@ Begin
 
    # Keybindings
    Key Escape A 6 1 {KeyClose}
+   Key F1 A 7 1 {KeyHelp}
+   Key Help A 7 1 {KeyHelp}
 End
 
 Widget 1
@@ -123,6 +125,10 @@ Property
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 7 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Backdrop Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-PaletteDialog.html}
       End

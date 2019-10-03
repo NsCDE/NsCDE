@@ -142,6 +142,8 @@ Begin
    # Shortcut keys for renaming desks
    Key Space C 41 2 {EnterRename}
    Key Return C 41 3 {ReturnFromRename}
+   Key F1 A 41 5 {KeyHelp}
+   Key Help A 41 5 {KeyHelp}
 
    # Button number and position setup according to DeskNo
    SendSignal 41 1
@@ -1231,6 +1233,11 @@ Property
              Do {ChangeMenuStyle CommonAppMenu m_WsmGoToPage}
              Do {Menu m_WsmGoToPage}
           End
+       End
+
+       5 :
+       Begin
+          Do {f_DisplayURL "Workspace Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-Workspace-Manager.html}
        End
 End
 

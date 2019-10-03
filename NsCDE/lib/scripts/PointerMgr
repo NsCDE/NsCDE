@@ -78,6 +78,8 @@ Begin
    # Key bindings
    Key Escape A 20 1 {KeyClose}
    Key Q C 20 1 {KeyClose}
+   Key F1 A 19 1 {KeyHelp}
+   Key Help A 19 1 {KeyHelp}
 End
 
 Widget 1
@@ -472,6 +474,10 @@ Widget 19
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 19 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Mouse Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-PointerMgr.html}
       End

@@ -57,6 +57,8 @@ Begin
    Key P A 11 1 {KeyPreview}
    Key Down A 5 3 {KeyDown}
    Key Up A 5 3 {KeyUp}
+   Key F1 A 19 1 {KeyHelp}
+   Key Help A 19 1 {KeyHelp}
 
    # Set different font for some elements
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
@@ -686,6 +688,10 @@ Widget 19
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 19 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Backdrop Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-BackdropMgr.html}
       End

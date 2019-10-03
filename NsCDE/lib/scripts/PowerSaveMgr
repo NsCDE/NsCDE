@@ -59,6 +59,8 @@ Begin
    # Key bindings
    Key Escape A 3 1 {KeyClose}
    Key Q C 3 1 {KeyClose}
+   Key F1 A 13 1 {KeyHelp}
+   Key Help A 13 1 {KeyHelp}
 End
  
 Widget 1
@@ -454,6 +456,10 @@ Widget 13
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 13 1
+      End
+      1 :
       Begin
          Do {f_DisplayURL "Power Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-PowerSaveMgr.html}
       End

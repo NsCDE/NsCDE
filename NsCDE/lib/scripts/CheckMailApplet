@@ -12,6 +12,9 @@ Init
 Begin
    Set $LetterStateUp = 0
    Set $MailCnt = 0
+
+   Key F1 A 2 1 {KeyHelp}
+   Key Help A 2 1 {KeyHelp}
 End
 
 Widget 1
@@ -134,6 +137,10 @@ Widget 2
       Case message of
       SingleClic :
       Begin
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "Check Mail Applet" $[NSCDE_ROOT]/share/doc/html/NsCDE-CheckMailApplet.html}
       End
 End
 
