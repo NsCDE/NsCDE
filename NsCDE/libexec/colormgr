@@ -245,11 +245,11 @@ function ProgBits
    if (($? == 0)); then
       for icopx in *.xpm
       do
-         mkdir -p ${HOME}/.icons/test
+         mkdir -p ${HOME}/.icons/NsCDE
          icofile=$(echo "$icopx" | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g')
          icodir=$(echo $icopx | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g')
-         mkdir -p ${HOME}/.icons/test/$icodir
-         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p /opt/NsCDE/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/test/${icofile}
+         mkdir -p ${HOME}/.icons/NsCDE/$icodir
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p /opt/NsCDE/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
       done
    fi
    cd -
