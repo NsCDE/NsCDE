@@ -240,6 +240,19 @@ function ProgBits
     -p ${PaletteNamePath} -n $Ncolors \
     -i ${NSCDE_ROOT}/share/templates/BGdefault -P 3 \
     -b > ${FVWM_USERDIR}/.BGdefault
+
+   cd ${NSCDE_ROOT}/lib/progbits/icon-theme/actions
+   if (($? == 0)); then
+      for icopx in *.xpm
+      do
+         mkdir -p ${HOME}/.icons/test
+         icofile=$(echo "$icopx" | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g')
+         icodir=$(echo $icopx | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g')
+         mkdir -p ${HOME}/.icons/test/$icodir
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p /opt/NsCDE/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/test/${icofile}
+      done
+   fi
+   cd -
 }
 
 # Regenerate X resources database file
