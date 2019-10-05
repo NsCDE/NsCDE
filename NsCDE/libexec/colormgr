@@ -249,7 +249,7 @@ function ProgBits
          icofile=$(echo "$icopx" | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g')
          icodir=$(echo $icopx | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g')
          mkdir -p ${HOME}/.icons/NsCDE/$icodir
-         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p /opt/NsCDE/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p ${NSCDE_ROOT}/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
       done
    fi
    cd -
