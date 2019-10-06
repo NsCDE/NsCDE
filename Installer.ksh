@@ -429,6 +429,84 @@ function configure_installed
       fi
    fi
 
+   # Install symlink for freedesktop standard theme (GTK, QT ...)
+   if (($noninteractive == 0)); then
+      # Set default icon theme link path
+      if [ "$icons_dirlink" == "" ]; then
+         icons_dirlink="/usr/local/share/icons/NsCDE"
+      fi
+      echo "Do you want to create symbolic link for freedesktop standard icons which"
+      echo "will be used in GTK, QT and possibly other GUI toolkit based programs"
+      echo "in the local path of system icon search path?"
+      echo "It is not advisable to skip this step, because icon theme will not be"
+      echo "available for use. Defaults to ${icons_dirlink}."
+      echo "Type y/n, or filesystem path where you want symlink to be created."
+      echo -ne "or just press enter for a default symlink creation: \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="y"
+      fi
+      case $ans in
+      'Y'|'y')
+         mkdir -p "${icons_dirlink%/*}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: making directory ${icons_dirlink%/*} failed with exit status $retval"
+            exit 15
+         fi
+
+         ln -sf "${instpath}/share/icons/freedesktop/theme" "${icons_dirlink}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "to ${icons_dirlink} failed with exit status $retval"
+            exit 15
+         fi
+      ;;
+      'N'|'n')
+         echo "Skipping icon theme symlink creation in $icons_dirlink"
+      ;;
+      *)
+         mkdir -p "${ans%/*}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: making directory ${ans%/*} failed with exit status $retval"
+            exit 15
+         fi
+         ln -sf "${instpath}/share/icons/freedesktop/theme" "${ans}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "to ${ans} failed with exit status $retval"
+            exit 15
+         fi
+      ;;
+      esac
+   else
+      # Set default icon theme link path
+      if [ "$icons_dirlink" == "" ]; then
+         icons_dirlink="/usr/local/share/icons/NsCDE"
+      fi
+
+      # Set magic no-install pseudopath and if not found, continue
+      if [ "$icons_dirlink" != "nowhere" ]; then
+         mkdir -p "${icons_dirlink%/*}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: making directory ${icons_dirlink%/*} failed with exit status $retval"
+            exit 15
+         fi
+
+         ln -sf "${instpath}/share/icons/freedesktop/theme" "${icons_dirlink}"
+         retval=$?
+         if (($retval != 0)); then
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "to ${icons_dirlink} failed with exit status $retval"
+            exit 15
+         fi
+      fi
+   fi
+
    # Install xsession file nscde.desktop
    if (($noninteractive == 0)); then
       echo "Do you want to install \"nscde.desktop\" X Session Launcher for your"
@@ -793,6 +871,17 @@ function deinstall_nscde
             fi
          fi
       done
+
+      # Set default icon theme link path
+      if [ "$icons_dirlink" == "" ]; then
+         icons_dirlink="/usr/local/share/icons/NsCDE"
+      fi
+
+      # Remove icon theme symlink if found on default or given path
+      if [ -L "$icons_dirlink" ]; then
+         rm -f "$icons_dirlink"
+      fi
+
    else
       echo ""
       echo "Error: One or more sanity checks for deleting NsCDE installation has failed."
@@ -808,7 +897,7 @@ function deinstall_nscde
 function usage
 {
    echo "Usage: ./Installer.ksh [ -f | -w ] [ -h ] [ -n ] [ -C ] [ -p <path> ]"
-   echo "       [ -P <path> ] [ -V <path> ] [ -X <path> ] [ -i | -u | -d ]"
+   echo "       [ -P <path> ] [ -V <path> ] [ -X <path> ] [ -I <path> ] [ -i | -u | -d ]"
    echo ""
    echo ""
    echo "* Installation and Upgrade/Reinstall Mode:"
@@ -824,6 +913,8 @@ function usage
    echo "   -P <path>   where to look for wallpapers for installing into <instpath>/share/photos."
    echo "   -V <path>   where to look for VUE backdrops and palettes to add into NsCDE."
    echo "   -X <path>   where to put nscde.desktop xsession. Defaults to /usr/share/xsessions."
+   echo "   -I <path>   where to put freedesktop icons directory symlink. Defaults to"
+   echo "               /usr/local/share/icons. Special path \"nowhere\" means omit symlink creation."
    echo ""
    echo "Last option:"
    echo "   -i tells installer to install NsCDE. This must be the last option."
@@ -886,7 +977,7 @@ function usage
    echo ""
 }
 
-while getopts iucCdp:wfP:V:X:nh Option
+while getopts iucCdp:wfP:V:X:I:nh Option
 do
    case $Option in
    i)
@@ -927,6 +1018,9 @@ do
    ;;
    X)
       xsess_dir="$OPTARG"
+   ;;
+   I)
+      icons_dirlink="$OPTARG"
    ;;
    n)
       noninteractive=1
