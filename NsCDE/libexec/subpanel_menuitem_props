@@ -360,17 +360,39 @@ function copy_to_main_panel
 
 function find_appropriate_icon
 {
+set -x
    # Defaults
    ENOICON=0
 
    icon_no_path=${1##*/}
    icon_no_path_no_fvwm_prefix=${icon_no_path//32x32-}
+   m_to_l=$(echo "$1" | sed 's/\.m\.\(xpm\|pm\)/\.l\.\1/g')
 
    # First, try similar path with 48x48 instead of 32x32 or similar:
    try_icon=$(echo "$1" | sed 's/\/[1-9]\+x[1-9]\+/\/48x48/g')
    if [ -r "$try_icon" ]; then
       icon="$try_icon"
       return
+   else
+      if [ -r "$HOME/.icons/$try_icon" ]; then
+         icon="$try_icon"
+         return
+      fi
+
+      if [ -r "$HOME/.local/share/icons/$try_icon" ]; then
+         icon="$try_icon"
+         return
+      fi
+
+      if [ -r "/usr/local/share/icons/$try_icon" ]; then
+         icon="$try_icon"
+         return
+      fi
+
+      if [ -r "/usr/share/icons/$try_icon" ]; then
+         icon="$try_icon"
+         return
+      fi
    fi
 
    # See if the user has a local icon repository.
@@ -380,11 +402,19 @@ function find_appropriate_icon
          icon="$try_try_icon"
          return
       fi
-      m_to_l=$(echo "$1" | sed 's/\.m\.\(xpm\|pm\)/\.l\.\1/g')
-      try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${m_to_l##*/}" | head -1)
-      if [ -r "$try_try_icon" ]; then
-         icon="$try_try_icon"
-         return
+
+      echo "$1" | egrep -q "\.(x)?pm$"
+      if (($? == 0)); then
+         try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${m_to_l##*/}" | head -1)
+         if [ -r "$try_try_icon" ]; then
+            icon="$try_try_icon"
+            return
+         fi
+         try_try_icon=$(find "$HOME/.icons" -type f -name "${m_to_l##*/}" | head -1)
+         if [ -r "$try_try_icon" ]; then
+            icon="$try_try_icon"
+            return
+         fi
       fi
    fi
 
@@ -412,19 +442,35 @@ function find_appropriate_icon
    fi
 
    # Generate 48x48 icons if needed.
-   $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
+   if [ "x$try_icon" != "x" ]; then
+      $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
+      if [ -r "$FVWM_USERDIR/icons/NsCDE/$try_icon" ]; then
+         icon="$FVWM_USERDIR/icons/NsCDE/$try_icon"
+         return
+      fi
+      if [ -r "$FVWM_USERDIR/icons/CDE/$try_icon" ]; then
+         icon="$FVWM_USERDIR/icons/CDE/$try_icon"
+         return
+      fi
+      if [ -r "$FVWM_USERDIR/icons/$try_icon" ]; then
+         icon="$FVWM_USERDIR/icons/$try_icon"
+         return
+      fi
+   fi
 
-   if [ -r "$FVWM_USERDIR/icons/NsCDE/$try_icon" ]; then
-      icon="$FVWM_USERDIR/icons/NsCDE/$try_icon"
-      return
-   fi
-   if [ -r "$FVWM_USERDIR/icons/CDE/$try_icon" ]; then
-      icon="$FVWM_USERDIR/icons/CDE/$try_icon"
-      return
-   fi
-   if [ -r "$FVWM_USERDIR/icons/$try_icon" ]; then
-      icon="$FVWM_USERDIR/icons/$try_icon"
-      return
+   if [ "x$m_to_l" != "x" ]; then
+      if [ -r "$FVWM_USERDIR/icons/NsCDE/${m_to_l}" ]; then
+         icon="$FVWM_USERDIR/icons/NsCDE/${m_to_l}"
+         return
+      fi
+      if [ -r "$FVWM_USERDIR/icons/CDE/${m_to_l}" ]; then
+         icon="$FVWM_USERDIR/icons/CDE/${m_to_l}"
+         return
+      fi
+      if [ -r "$FVWM_USERDIR/icons/${m_to_l}" ]; then
+         icon="$FVWM_USERDIR/icons/${m_to_l}"
+         return
+      fi
    fi
 
    icon32_to_icon48_name=$(echo "$try_icon" | sed 's/[1-9]\+x[1-9]\+-/48x48-/g')
@@ -442,6 +488,7 @@ function find_appropriate_icon
 
    # If we are here, nothing has been found. Indicate this.
    export ENOICON=1
+set +x
 }
 
 function delete_confirm
