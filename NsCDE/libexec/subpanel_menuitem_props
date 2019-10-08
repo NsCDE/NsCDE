@@ -373,12 +373,6 @@ function find_appropriate_icon
       return
    fi
 
-   try_icon=$(find "/usr/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
-   if [ -r "$try_icon" ]; then
-      icon="$try_icon"
-      return
-   fi
-
    # See if the user has a local icon repository.
    if [ -d "$HOME/.local/share/icons" ]; then
       try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${icon_no_path}" | head -1)
@@ -402,6 +396,18 @@ function find_appropriate_icon
    fi
    if [ -r "$NSCDE_ROOT/share/icons/NsCDE/$try_icon" ]; then
       icon="$NSCDE_ROOT/share/icons/NsCDE/$try_icon"
+      return
+   fi
+
+   try_icon=$(find "/usr/local/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
+   if [ -r "$try_icon" ]; then
+      icon="$try_icon"
+      return
+   fi
+
+   try_icon=$(find "/usr/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
+   if [ -r "$try_icon" ]; then
+      icon="$try_icon"
       return
    fi
 
