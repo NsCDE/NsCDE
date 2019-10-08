@@ -246,10 +246,10 @@ function ProgBits
       for icopx in *.xpm
       do
          mkdir -p ${HOME}/.icons/NsCDE
-         icofile=$(echo "$icopx" | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g')
-         icodir=$(echo $icopx | sed 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g')
+         icofile=$(echo "$icopx" | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g' -o -f -)
+         icodir=$(echo $icopx | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g' -o -f -)
          mkdir -p ${HOME}/.icons/NsCDE/$icodir
-         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n 8 -p ${NSCDE_ROOT}/share/palettes/BroicaLtVUE.dp -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n $Ncolors -p ${PaletteNamePath} -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
       done
    fi
    cd -
