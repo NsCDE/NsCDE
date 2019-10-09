@@ -455,10 +455,10 @@ function configure_installed
             exit 15
          fi
 
-         ln -sf "${instpath}/share/icons/freedesktop/theme" "${icons_dirlink}"
+         ln -sf "${instpath}/share/icons/freedesktop/theme/NsCDE" "${icons_dirlink}"
          retval=$?
          if (($retval != 0)); then
-            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme/NsCDE"
             echo "to ${icons_dirlink} failed with exit status $retval"
             exit 15
          fi
@@ -473,10 +473,10 @@ function configure_installed
             echo "Error: making directory ${ans%/*} failed with exit status $retval"
             exit 15
          fi
-         ln -sf "${instpath}/share/icons/freedesktop/theme" "${ans}"
+         ln -sf "${instpath}/share/icons/freedesktop/theme/NsCDE" "${ans}"
          retval=$?
          if (($retval != 0)); then
-            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme/NsCDE"
             echo "to ${ans} failed with exit status $retval"
             exit 15
          fi
@@ -497,10 +497,10 @@ function configure_installed
             exit 15
          fi
 
-         ln -sf "${instpath}/share/icons/freedesktop/theme" "${icons_dirlink}"
+         ln -sf "${instpath}/share/icons/freedesktop/theme/NsCDE" "${icons_dirlink}"
          retval=$?
          if (($retval != 0)); then
-            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme"
+            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme/NsCDE"
             echo "to ${icons_dirlink} failed with exit status $retval"
             exit 15
          fi

@@ -363,130 +363,162 @@ function find_appropriate_icon
    # Defaults
    ENOICON=0
 
-   icon_no_path=${1##*/}
-   icon_no_path_no_fvwm_prefix=${icon_no_path//32x32-}
-   m_to_l=$(echo "$1" | sed 's/\.m\.\(xpm\|pm\)/\.l\.\1/g')
+   case "$1" in
+   *.m.pm|*.s.pm|*.t.pm)
+      icon_search_paths="${FVWM_USERDIR}/icons/CDE:${FVWM_USERDIR}/icons:${NSCDE_ROOT}/share/icons/CDE"
+      pathtype="CDE"
+   ;;
+   *.m.xpm|*.s.xpm|*.t.xpm)
+      icon_search_paths="${FVWM_USERDIR}/icons/NsCDE:${FVWM_USERDIR}/icons:${NSCDE_ROOT}/share/icons/NsCDE"
+      pathtype="NsCDE"
+   ;;
+   32x32-*.xpm|*/32x32-*.xpm|32x32-*.png|*/32x32-*.png|24x24-*.xpm|*/24x24-*.xpm|24x24-*.png|*/24x24-*.png)
+      icon_search_paths="${FVWM_USERDIR}/icons"
+      pathtype="FVWM"
+   ;;
+   *.png|*.svg|*.xpm)
+      icon_search_paths="${FVWM_USERDIR}/icons:${HOME}/.icons:${HOME}/.local/share/icons:/usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/local/share/pixmaps"
+      pathtype="FD-MISC"
+   ;;
+   *)
+      # If we are here, nothing has been found. Indicate this.
+      export ENOICON=1
+   ;;
+   esac
 
-   # First, try similar path with 48x48 instead of 32x32 or similar:
-   try_icon=$(echo "$1" | sed 's/\/[1-9]\+x[1-9]\+/\/48x48/g')
-   if [ -r "$try_icon" ]; then
-      icon="$try_icon"
-      return
-   else
-      if [ -r "$HOME/.icons/$try_icon" ]; then
-         icon="$try_icon"
-         return
-      fi
-
-      if [ -r "$HOME/.local/share/icons/$try_icon" ]; then
-         icon="$try_icon"
-         return
-      fi
-
-      if [ -r "/usr/local/share/icons/$try_icon" ]; then
-         icon="$try_icon"
-         return
-      fi
-
-      if [ -r "/usr/share/icons/$try_icon" ]; then
-         icon="$try_icon"
-         return
-      fi
-   fi
-
-   # See if the user has a local icon repository.
-   if [ -d "$HOME/.local/share/icons" ]; then
-      try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${icon_no_path}" | head -1)
-      if [ "$(echo "$try_try_icon" | egrep '48x48')" != "" ]; then
-         icon="$try_try_icon"
-         return
-      fi
-
-      echo "$1" | egrep -q "\.(x)?pm$"
-      if (($? == 0)); then
-         try_try_icon=$(find "$HOME/.local/share/icons" -type f -name "${m_to_l##*/}" | head -1)
-         if [ -r "$try_try_icon" ]; then
-            icon="$try_try_icon"
-            return
-         fi
-         try_try_icon=$(find "$HOME/.icons" -type f -name "${m_to_l##*/}" | head -1)
-         if [ -r "$try_try_icon" ]; then
-            icon="$try_try_icon"
-            return
+   path_iconame=${1}
+   iconame=${path_iconame##*/}
+   found=1
+   IFS=":"; for icon_search_path in $icon_search_paths
+   do
+      if [ "$pathtype" == "CDE" ]; then
+         try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(m\|t\|s\)\.pm$/\.l\.pm/g' -o -f -)
+         try_medium_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(t\|s\)\.pm$/\.m\.pm/g' -o -f -)
+      elif [ "$pathtype" == "NsCDE" ]; then
+         try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(m\|t\|s\)\.xpm$/\.l\.xpm/g' -o -f -)
+         try_medium_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(t\|s\)\.xpm$/\.m\.xpm/g' -o -f -)
+      elif [ "$pathtype" == "FVWM" ]; then
+         $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
+         try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/^\(32x32\|24x24\)-/48x48-/g' -o -f -)
+      elif [ "$pathtype" == "FD-MISC" ]; then
+         try_icon="${iconame}"
+         echo "$path_iconame" | egrep -q '.*\/(32x32|24x24|22x22)\/.*\/.*'
+         if (($? == 0)); then
+            full_try_icon="${path_iconame}"
+            big_full_try_icon=$(echo "${path_iconame}" | $NSCDE_ROOT/bin/ised -c 's/\(.*\)\/\(32x32\|24x24\|22x22\)\/\(.*\)/48x48/g' -o -f -)
          fi
       fi
-   fi
 
-   try_icon_p=$(echo "$1" | sed 's/\.m\.\(xpm\|pm\)/\.l\.\1/g')
-   try_icon="${try_icon_p##*/}"
-   if [ -r "$NSCDE_ROOT/share/icons/CDE/$try_icon" ]; then
-      icon="$NSCDE_ROOT/share/icons/CDE/$try_icon"
-      return
-   fi
-   if [ -r "$NSCDE_ROOT/share/icons/NsCDE/$try_icon" ]; then
-      icon="$NSCDE_ROOT/share/icons/NsCDE/$try_icon"
-      return
-   fi
-
-   try_icon=$(find "/usr/local/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
-   if [ -r "$try_icon" ]; then
-      icon="$try_icon"
-      return
-   fi
-
-   try_icon=$(find "/usr/share/icons" -type f -name "${icon_no_path_no_fvwm_prefix}" | grep '48x48' | head -1)
-   if [ -r "$try_icon" ]; then
-      icon="$try_icon"
-      return
-   fi
-
-   # Generate 48x48 icons if needed.
-   if [ "x$try_icon" != "x" ]; then
-      $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
-      if [ -r "$FVWM_USERDIR/icons/NsCDE/$try_icon" ]; then
-         icon="$FVWM_USERDIR/icons/NsCDE/$try_icon"
-         return
+      if [ -r "${icon_search_path}/NsCDE/48x48" ]; then
+         find ${icon_search_path}/NsCDE/48x48 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
       fi
-      if [ -r "$FVWM_USERDIR/icons/CDE/$try_icon" ]; then
-         icon="$FVWM_USERDIR/icons/CDE/$try_icon"
-         return
-      fi
-      if [ -r "$FVWM_USERDIR/icons/$try_icon" ]; then
-         icon="$FVWM_USERDIR/icons/$try_icon"
-         return
-      fi
-   fi
 
-   if [ "x$m_to_l" != "x" ]; then
-      if [ -r "$FVWM_USERDIR/icons/NsCDE/${m_to_l}" ]; then
-         icon="$FVWM_USERDIR/icons/NsCDE/${m_to_l}"
-         return
+      if [ -r "${icon_search_path}/hicolor/48x48" ]; then
+         find ${icon_search_path}/hicolor/48x48 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
       fi
-      if [ -r "$FVWM_USERDIR/icons/CDE/${m_to_l}" ]; then
-         icon="$FVWM_USERDIR/icons/CDE/${m_to_l}"
-         return
-      fi
-      if [ -r "$FVWM_USERDIR/icons/${m_to_l}" ]; then
-         icon="$FVWM_USERDIR/icons/${m_to_l}"
-         return
-      fi
-   fi
 
-   icon32_to_icon48_name=$(echo "$try_icon" | sed 's/[1-9]\+x[1-9]\+-/48x48-/g')
-   if [ -r "$FVWM_USERDIR/icons/$icon32_to_icon48_name" ]; then
-      icon="$FVWM_USERDIR/icons/$icon32_to_icon48_name"
+      if [ -r "${icon_search_path}/mate/48x48" ]; then
+         find ${icon_search_path}/mate/48x48 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
+      fi
+
+      if [ "x$big_full_try_icon" != "x" ]; then
+         if [ -r "${icon_search_path}/$big_full_try_icon" ]; then
+            icon=$(echo "${icon_search_path}/$big_full_try_icon" | head -1)
+            return
+         else
+            found=0
+         fi
+      fi
+
+      if [ "x$full_try_icon" != "x" ]; then
+         if [ -r "${icon_search_path}/$full_try_icon" ]; then
+            icon=$(echo "${icon_search_path}/$full_try_icon" | head -1)
+            return
+         else
+            found=0
+         fi
+      else
+         if [ -r "${icon_search_path}/$try_icon" ]; then
+            icon=$(echo "${icon_search_path}/$try_icon" | head -1)
+            return
+         else
+            if [ -r "${icon_search_path}/$try_medium_icon" ]; then
+               icon=$(echo "${icon_search_path}/$try_medium_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         fi
+      fi
+
+      if [ -r "${icon_search_path}/NsCDE/32x32" ]; then
+         find ${icon_search_path}/NsCDE/32x32 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
+      fi
+
+      if [ -r "${icon_search_path}/hicolor/32x32" ]; then
+         find ${icon_search_path}/hicolor/32x32 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
+      fi
+
+      if [ -r "${icon_search_path}/mate/32x32" ]; then
+         find ${icon_search_path}/mate/32x32 -type d -print | while read sub_dir
+         do
+            if [ -r ${sub_dir}/$try_icon ]; then
+               icon=$(echo "${sub_dir}/$try_icon" | head -1)
+               return
+            else
+               found=0
+            fi
+         done
+      fi
+   done
+
+   # Total fallback
+   if (($found == 0)); then
+      icon="${NSCDE_ROOT}/share/icons/NsCDE/Noicon.xpm"
       return
+      # If we are here, nothing has been found. Indicate this.
+      export ENOICON=1
    fi
-
-   # If anything else fails ...
-   try_icon=$($NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 | egrep "ITEM:%.*%.*%${cmd%% *}" | head -1 | cut -d"%" -f3)
-   if [ "x$try_icon" != "x" ]; then
-      icon="$try_icon"
-      return
-   fi
-
-   # If we are here, nothing has been found. Indicate this.
-   export ENOICON=1
 }
 
 function delete_confirm
