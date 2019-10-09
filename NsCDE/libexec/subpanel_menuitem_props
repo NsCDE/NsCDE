@@ -422,29 +422,20 @@ function find_appropriate_icon
          done
       fi
 
-      if [ -r "${icon_search_path}/hicolor/48x48" ]; then
-         find ${icon_search_path}/hicolor/48x48 -type d -print | while read sub_dir
-         do
-            if [ -r ${sub_dir}/$try_icon ]; then
-               icon=$(echo "${sub_dir}/$try_icon" | head -1)
-               return
-            else
-               found=0
-            fi
-         done
-      fi
-
-      if [ -r "${icon_search_path}/mate/48x48" ]; then
-         find ${icon_search_path}/mate/48x48 -type d -print | while read sub_dir
-         do
-            if [ -r ${sub_dir}/$try_icon ]; then
-               icon=$(echo "${sub_dir}/$try_icon" | head -1)
-               return
-            else
-               found=0
-            fi
-         done
-      fi
+      for othertheme in hicolor locolor mate gnome oxygen breeze Adwaita
+      do
+         if [ -d "${icon_search_path}/${othertheme}/48x48" ]; then
+            find ${icon_search_path}/${othertheme}/48x48 -type d -print | while read sub_dir
+            do
+               if [ -r ${sub_dir}/$try_icon ]; then
+                  icon=$(echo "${sub_dir}/$try_icon" | head -1)
+                  return
+               else
+                  found=0
+               fi
+            done
+         fi
+      done
 
       if [ "x$big_full_try_icon" != "x" ]; then
          if [ -r "${icon_search_path}/$big_full_try_icon" ]; then
@@ -488,29 +479,20 @@ function find_appropriate_icon
          done
       fi
 
-      if [ -r "${icon_search_path}/hicolor/32x32" ]; then
-         find ${icon_search_path}/hicolor/32x32 -type d -print | while read sub_dir
-         do
-            if [ -r ${sub_dir}/$try_icon ]; then
-               icon=$(echo "${sub_dir}/$try_icon" | head -1)
-               return
-            else
-               found=0
-            fi
-         done
-      fi
-
-      if [ -r "${icon_search_path}/mate/32x32" ]; then
-         find ${icon_search_path}/mate/32x32 -type d -print | while read sub_dir
-         do
-            if [ -r ${sub_dir}/$try_icon ]; then
-               icon=$(echo "${sub_dir}/$try_icon" | head -1)
-               return
-            else
-               found=0
-            fi
-         done
-      fi
+      for othertheme in hicolor locolor mate gnome oxygen breeze Adwaita
+      do
+         if [ -r "${icon_search_path}/${othertheme}/32x32" ]; then
+            find ${icon_search_path}/${othertheme}/32x32 -type d -print | while read sub_dir
+            do
+               if [ -r ${sub_dir}/$try_icon ]; then
+                  icon=$(echo "${sub_dir}/$try_icon" | head -1)
+                  return
+               else
+                  found=0
+               fi
+            done
+         fi
+      done
    done
 
    # Total fallback
