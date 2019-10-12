@@ -298,8 +298,18 @@ function copy_to_main_panel
                fi
             done
 
+            try_as_fd_misc=0
+            icon_orig="$icon"
             icon_ext="${icon##*.}"
             find_appropriate_icon "$icon"
+
+            if (($try_as_fd_misc == 1)); then
+               find_appropriate_icon "${icon_orig#*-}"
+            fi
+
+            if (($try_as_fd_misc == 2)); then
+               find_appropriate_icon "${icon_orig}"
+            fi
 
             if (($ENOICON == 1)); then
                echo "Trying heuristics with icon extension formats while searching for an icon ..."
@@ -360,6 +370,7 @@ function copy_to_main_panel
 
 function find_appropriate_icon
 {
+set -x
    # Defaults
    ENOICON=0
 
@@ -398,9 +409,19 @@ function find_appropriate_icon
          try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(m\|t\|s\)\.xpm$/\.l\.xpm/g' -o -f -)
          try_medium_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/\.\(t\|s\)\.xpm$/\.m\.xpm/g' -o -f -)
       elif [ "$pathtype" == "FVWM" ]; then
-         $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
          try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/^\(32x32\|24x24\)-/48x48-/g' -o -f -)
-         try_medium_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/^24x24-/48x48-/g' -o -f -)
+         # Try to generate 48x48 icon
+         if [ ! -r "$FVWM_USERDIR/icons/${try_icon}" ]; then
+            $NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --plain-list --enable-mini-icons --size 48 > /dev/null 2>&1
+         fi
+         # Fallback
+         if [ ! -r "$FVWM_USERDIR/icons/${try_icon}" ]; then
+            if (($try_as_fd_misc > 1)); then
+               try_medium_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/^24x24-/48x48-/g' -o -f -)
+            else
+               try_as_fd_misc=$(($try_as_fd_misc + 1))
+            fi
+         fi
       elif [ "$pathtype" == "FD-MISC" ]; then
          try_icon="${iconame}"
          echo "$path_iconame" | egrep -q '.*\/(32x32|24x24|22x22)\/.*\/.*'
@@ -410,7 +431,7 @@ function find_appropriate_icon
          fi
       fi
 
-      if [ -r "${icon_search_path}/NsCDE/48x48" ]; then
+      if [ -d "${icon_search_path}/NsCDE/48x48" ]; then
          find ${icon_search_path}/NsCDE/48x48 -type d -print | while read sub_dir
          do
             if [ -r ${sub_dir}/$try_icon ]; then
@@ -458,7 +479,7 @@ function find_appropriate_icon
             icon=$(echo "${icon_search_path}/$try_icon" | head -1)
             return
          else
-            if [ -r "${icon_search_path}/$try_medium_icon" ]; then
+            if [ -r "${icon_search_path}/$try_medium_icon" -a -f "${icon_search_path}/$try_medium_icon" ]; then
                icon=$(echo "${icon_search_path}/$try_medium_icon" | head -1)
                return
             else
@@ -467,7 +488,7 @@ function find_appropriate_icon
          fi
       fi
 
-      if [ -r "${icon_search_path}/NsCDE/32x32" ]; then
+      if [ -d "${icon_search_path}/NsCDE/32x32" ]; then
          find ${icon_search_path}/NsCDE/32x32 -type d -print | while read sub_dir
          do
             if [ -r ${sub_dir}/$try_icon ]; then
@@ -481,7 +502,7 @@ function find_appropriate_icon
 
       for othertheme in hicolor locolor mate gnome oxygen breeze Adwaita
       do
-         if [ -r "${icon_search_path}/${othertheme}/32x32" ]; then
+         if [ -d "${icon_search_path}/${othertheme}/32x32" ]; then
             find ${icon_search_path}/${othertheme}/32x32 -type d -print | while read sub_dir
             do
                if [ -r ${sub_dir}/$try_icon ]; then
@@ -495,13 +516,13 @@ function find_appropriate_icon
       done
    done
 
-   # Total fallback
-   if (($found == 0)); then
+   if (($found == 0)) || [ ! -r "$icon" -a ! -f "$icon" ]; then
       icon="${NSCDE_ROOT}/share/icons/NsCDE/Noicon.xpm"
       return
       # If we are here, nothing has been found. Indicate this.
       export ENOICON=1
    fi
+set -x
 }
 
 function delete_confirm
