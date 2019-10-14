@@ -84,6 +84,18 @@ function check_dependencies
       fi
    done
 
+   if [ ! -f "/usr/share/icons/hicolor/index.theme" ]; then
+      if [ ! -f "/usr/local/share/icons/hicolor/index.theme" ]; then
+         echo ""
+         echo "Warning: Optional dependency hicolor theme index not found in"
+         echo "path /usr/share/icons and/or /usr/local/share/icons."
+         echo "Expect missing icons in Workspace Menu and Subpanel Manager,"
+         echo "or install hicolor icon theme package for your system."
+         echo ""
+         sleep 2
+      fi
+   fi
+
    for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
        fnmatch getopt time platform psutil pwd socket
    do

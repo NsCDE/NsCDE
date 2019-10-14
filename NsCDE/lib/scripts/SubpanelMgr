@@ -20,7 +20,7 @@ Begin
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
-   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
+   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
    Set $FmtAppListCmd = {cut -d"%" -f 3 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
