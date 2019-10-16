@@ -71,9 +71,9 @@ Property
          Begin
             ChangeColorset 1 25
             Do {f_FpLiteClickAction}
-            Do {f_ClearFrontPanelPressed}
+            Do {Test (!EnvMatch infostore.fplastpressed FpLite) f_ClearFrontPanelPressed}
             Do {Schedule 50 InfoStoreAdd fplastpressed FpLite}
-            Do {f_UnclickScript 250 FpLite 1 2 unclick} 
+            Do {f_UnclickScript 450 FpLite 1 2 unclick} 
          End
          2 :
          Begin

@@ -57,9 +57,9 @@ Widget 2
       Begin
          Do {f_Calendar}
          ChangeColorset 2 24
-         Do {f_ClearFrontPanelPressed}
+         Do {Test (!EnvMatch infostore.fplastpressed Btn2) f_ClearFrontPanelPressed}
          Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
-         Do {f_UnclickScript 250 MonthDayApplet 2 2 unclick}
+         Do {f_UnclickScript 450 MonthDayApplet 2 2 unclick}
       End
       2 :
       Begin

@@ -45,9 +45,9 @@ Widget 1
          Do {Schedule 1000 f_CheckMail}
 
          ChangeColorset 1 24
-         Do {f_ClearFrontPanelPressed}
+         Do {Test (!EnvMatch infostore.fplastpressed Btn5) f_ClearFrontPanelPressed}
          Do {Schedule 50 InfoStoreAdd fplastpressed Btn5}
-         Do {f_UnclickScript 250 CheckMailApplet 1 3 unclick}
+         Do {f_UnclickScript 450 CheckMailApplet 1 3 unclick}
       End
       2 :
       Begin
