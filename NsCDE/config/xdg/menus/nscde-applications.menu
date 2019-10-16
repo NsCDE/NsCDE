@@ -1,0 +1,260 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+
+<!--
+   This file is a part of the NsCDE - Not so Common Desktop Environment
+   Author: Hegel3DReloaded
+   Licence: GPLv3
+-->
+
+<Menu>
+  <Name>Applications</Name>
+  <Directory>nscde-menu-applications.directory</Directory>
+
+  <!-- Scan legacy dirs first, as later items take priority -->
+  <KDELegacyDirs/>
+  <LegacyDir>/etc/X11/applnk</LegacyDir>
+  <LegacyDir>/usr/share/mate/apps</LegacyDir>
+
+  <!-- Read standard .directory and .desktop file locations -->
+  <DefaultAppDirs/>
+  <DefaultDirectoryDirs/>
+
+  <!-- Add stock tarball installs to menus -->
+  <AppDir>/usr/local/share/applications</AppDir>
+
+  <!-- Read in overrides and child menus from applications-merged/ -->
+  <DefaultMergeDirs/>
+  <MergeDir>applications-merged</MergeDir>
+
+    <!-- Utilities submenu -->
+    <Menu>
+      <Name>Utilities</Name>
+      <Directory>nscde-utilities.directory</Directory>
+      <Include>
+        <And>
+          <Category>Utility</Category>
+            <!-- Accessibility spec must have either the Utility or Settings
+            category, and we display an accessibility submenu already for
+            the ones that do not have Settings, so don't display accessibility
+            applications here -->
+          <Not><Category>Accessibility</Category></Not>
+          <Not><Category>System</Category></Not>
+        </And>
+        <Category>Security</Category>
+      </Include>
+    </Menu>
+    <!-- End Utilities submenu -->
+
+  <!-- Administration submenu -->
+  <Menu>
+    <Name>Administration</Name>
+    <Directory>nscde-sysconf.directory</Directory>
+
+    <!-- Scan legacy dirs first, as later items take priority -->
+    <LegacyDir>/usr/share/gnome/apps</LegacyDir>
+    <LegacyDir>/etc/X11/applnk</LegacyDir>
+
+    <!-- Read standard .directory and .desktop file locations -->
+    <DefaultAppDirs/>
+    <DefaultDirectoryDirs/>
+
+    <!-- Read in overrides and child menus from applications.d -->
+    <DefaultMergeDirs/>
+
+    <!-- No 1-element subdirectories, please -->
+    <DefaultLayout inline="true" inline_limit="1">
+      <Merge type="all"/>
+    </DefaultLayout>
+
+    <!-- toplevel menu items -->
+    <Include>
+      <And>
+        <Category>Settings</Category>
+        <Category>System</Category>
+        <Not><Category>Screensaver</Category></Not>
+      </And>
+        <Category>Hardware</Category>
+        <Category>HardwareSettings</Category>
+    </Include>
+  </Menu>
+  <!-- End Administration submenu -->
+
+  <!-- Accessibility submenu -->
+  <Menu>
+    <Name>Universal Access</Name>
+    <Directory>nscde-utility-accessibility.directory</Directory>
+    <Include>
+      <And>
+        <Category>Accessibility</Category>
+        <Not><Category>Settings</Category></Not>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End Accessibility submenu -->
+
+  <!-- Development submenu -->
+  <Menu>
+    <Name>Development</Name>
+    <Directory>nscde-development.directory</Directory>
+    <Include>
+      <And>
+        <Category>Development</Category>
+      </And>
+      <Filename>gvim.desktop</Filename>
+      <Filename>emacs.desktop</Filename>
+    </Include>
+  </Menu>
+  <!-- End Development submenu -->
+
+  <!-- Science submenu -->
+  <Menu>
+    <Name>Science</Name>
+    <Directory>nscde-science.directory</Directory>
+    <Include>
+      <!-- Include /any/ Science app which is not an Education app -->
+      <And>
+         <Or>
+            <Category>Astronomy</Category>
+            <Category>Biology</Category>
+            <Category>Chemistry</Category>
+            <Category>Geology</Category>
+            <Category>MedicalSoftware</Category>
+            <Category>Physics</Category>
+            <Category>Math</Category>
+            <Category>Science</Category>
+         </Or>
+         <Not><Category>Education</Category></Not>
+       </And>
+     </Include>
+  </Menu>
+  <!-- End Science submenu -->
+
+  <!-- Education submenu -->
+  <Menu>
+    <Name>Education</Name>
+    <Directory>nscde-education.directory</Directory>
+    <Include>
+      <And>
+        <Category>Education</Category>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End Education submenu -->
+
+  <!-- Games -->
+  <Menu>
+    <Name>Games</Name>
+    <Directory>nscde-games.directory</Directory>
+    <Include>
+        <Category>Game</Category>
+        <Category>BoardGame</Category>
+    </Include>
+  </Menu>
+  <!-- End Games -->
+
+  <!-- Graphics -->
+  <Menu>
+    <Name>Graphics</Name>
+    <Directory>nscde-graphics.directory</Directory>
+    <Include>
+        <Category>Graphics</Category>
+        <Category>Photography</Category>
+        <Category>VectorGraphics</Category>
+        <Category>2DGraphics</Category>
+        <Category>RasterGraphics</Category>
+    </Include>
+  </Menu>
+  <!-- End Graphics submenu -->
+
+  <!-- Internet -->
+  <Menu>
+    <Name>Internet</Name>
+    <Directory>nscde-internet.directory</Directory>
+    <Include>
+      <And>
+        <Category>Network</Category>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End Internet submenu -->
+
+  <!-- Multimedia -->
+  <Menu>
+    <Name>Multimedia</Name>
+    <Directory>nscde-multimedia.directory</Directory>
+    <Include>
+        <Category>AudioVideo</Category>
+        <Category>Audio</Category>
+        <Category>Video</Category>
+        <Category>AudioVideoEditing</Category>
+        <Category>TV</Category>
+        <Category>X-AudioVideoTools</Category>
+    </Include>
+  </Menu>
+  <!-- End Multimedia submenu -->
+
+  <!-- Office -->
+  <Menu>
+    <Name>Office</Name>
+    <Directory>nscde-office.directory</Directory>
+    <Include>
+      <And>
+        <Category>Office</Category>
+      </And>
+      <And>
+        <Category>ProjectManagement</Category>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End Office -->
+
+  <!-- System -->
+  <Menu>
+    <Name>System</Name>
+    <Directory>nscde-system.directory</Directory>
+    <Include>
+      <And>
+        <Category>System</Category>
+        <Not><Category>Settings</Category></Not>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End System submenu -->
+
+  <!-- Settings submenu -->
+  <Menu>
+    <Name>Settings</Name>
+    <Directory>nscde-settings.directory</Directory>
+    <Include>
+      <And>
+        <Category>Settings</Category>
+        <Not><Category>System</Category></Not>
+        <Not><Category>X-Red-Hat-ServerConfig</Category></Not>
+      </And>
+      <Category>DesktopSettings</Category>
+    </Include>
+  </Menu>
+  <!-- End Setting submenu -->
+
+  <!-- Other -->
+  <Menu>
+    <Name>Other</Name>
+    <Directory>nscde-other.directory</Directory>
+    <OnlyUnallocated/>
+    <Include>
+      <And>
+        <!-- <Not><Category>Core</Category></Not> -->
+        <!-- <Not><Category>Settings</Category></Not> -->
+        <Not><Category>Documentation</Category></Not>
+        <Not><Category>Screensaver</Category></Not>
+      </And>
+    </Include>
+  </Menu>
+  <!-- End Other -->
+
+  <MergeFile>applications-merged/multimedia-categories.menu</MergeFile>
+  <MergeFile>applications-merged/games-categories.menu</MergeFile>
+  <MergeFile>applications-merged/wine.menu</MergeFile>
+</Menu>
+<!-- End Applications -->
