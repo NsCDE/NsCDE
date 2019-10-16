@@ -15,6 +15,8 @@
   <KDELegacyDirs/>
   <LegacyDir>/etc/X11/applnk</LegacyDir>
   <LegacyDir>/usr/share/mate/apps</LegacyDir>
+  <LegacyDir>/usr/share/gnome/apps</LegacyDir>
+  <LegacyDir>/etc/X11/applnk</LegacyDir>
 
   <!-- Read standard .directory and .desktop file locations -->
   <DefaultAppDirs/>
@@ -38,10 +40,15 @@
             category, and we display an accessibility submenu already for
             the ones that do not have Settings, so don't display accessibility
             applications here -->
-          <Not><Category>Accessibility</Category></Not>
+          <Or>
+            <Not><Category>Accessibility</Category></Not>
+            <Not><Category>System</Category></Not>
+          </Or>
+        </And>
+        <And>
+          <Category>Security</Category>
           <Not><Category>System</Category></Not>
         </And>
-        <Category>Security</Category>
       </Include>
     </Menu>
     <!-- End Utilities submenu -->
@@ -51,21 +58,8 @@
     <Name>Administration</Name>
     <Directory>nscde-sysconf.directory</Directory>
 
-    <!-- Scan legacy dirs first, as later items take priority -->
-    <LegacyDir>/usr/share/gnome/apps</LegacyDir>
-    <LegacyDir>/etc/X11/applnk</LegacyDir>
-
-    <!-- Read standard .directory and .desktop file locations -->
-    <DefaultAppDirs/>
-    <DefaultDirectoryDirs/>
-
     <!-- Read in overrides and child menus from applications.d -->
     <DefaultMergeDirs/>
-
-    <!-- No 1-element subdirectories, please -->
-    <DefaultLayout inline="true" inline_limit="1">
-      <Merge type="all"/>
-    </DefaultLayout>
 
     <!-- toplevel menu items -->
     <Include>
@@ -175,6 +169,15 @@
       <And>
         <Category>Network</Category>
       </And>
+      <And>
+        <Category>Email</Category>
+      </And>
+      <And>
+        <Category>Chat</Category>
+      </And>
+      <And>
+        <Category>InstantMessaging</Category>
+      </And>
     </Include>
   </Menu>
   <!-- End Internet submenu -->
@@ -218,6 +221,10 @@
         <Category>System</Category>
         <Not><Category>Settings</Category></Not>
       </And>
+      <And>
+        <Category>Emulator</Category>
+        <Not><Category>Settings</Category></Not>
+      </And>
     </Include>
   </Menu>
   <!-- End System submenu -->
@@ -231,9 +238,106 @@
         <Category>Settings</Category>
         <Not><Category>System</Category></Not>
         <Not><Category>X-Red-Hat-ServerConfig</Category></Not>
+        <Not><Category>DesktopSettings</Category></Not>
+
+        <And>
+          <Not><Category>KDE</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
+
+        <And>
+          <Not><Category>Qt</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
+
+        <And>
+          <Not><Category>GNOME</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
+
+        <And>
+          <Not><Category>GTK</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
+
+        <And>
+          <Not><Category>Motif</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
+
+        <And>
+          <Not><Category>Java</Category></Not>
+            <Or>
+              <Not><Category>Settings</Category></Not>
+              <Not><Category>DesktopSettings</Category></Not>
+            </Or>
+        </And>
       </And>
-      <Category>DesktopSettings</Category>
     </Include>
+
+    <!-- Desktop Settings submenu -->
+    <Menu>
+      <Name>Desktop Settings</Name>
+      <Directory>nscde-desktop-settings.directory</Directory>
+      <Include>
+        <Category>DesktopSettings</Category>
+        <And>
+          <Category>Settings</Category>
+          <Category>DesktopSettings</Category>
+        </And>
+        <And>
+          <Or>
+            <Category>Settings</Category>
+            <Category>DesktopSettings</Category>
+          </Or>
+          <Category>GTK</Category>
+        </And>
+        <And>
+          <Or>
+            <Category>Settings</Category>
+            <Category>DesktopSettings</Category>
+          </Or>
+          <Category>GNOME</Category>
+        </And>
+        <And>
+          <Or>
+            <Category>Settings</Category>
+            <Category>DesktopSettings</Category>
+          </Or>
+          <Category>Qt</Category>
+        </And>
+        <And>
+          <Or>
+            <Category>Settings</Category>
+            <Category>DesktopSettings</Category>
+          </Or>
+          <Category>KDE</Category>
+        </And>
+        <And>
+          <Or>
+            <Category>Settings</Category>
+            <Category>DesktopSettings</Category>
+          </Or>
+          <Category>KDE</Category>
+        </And>
+      </Include>
+    </Menu>
+    <!-- Desktop Settings submenu end -->
   </Menu>
   <!-- End Setting submenu -->
 
