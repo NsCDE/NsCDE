@@ -20,7 +20,7 @@ Begin
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
-   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
+   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
    Set $FmtAppListCmd = {cut -d"%" -f 3 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
@@ -332,7 +332,10 @@ Widget 5
                Set $Perform = 1
             End
 
-            Set $CheckCharsIconCmd = {echo "} (GetTitle 12) {" | egrep "(,|')"}
+            Set $StrippedAppIdxIconPathCmd = {$NSCDE_ROOT/libexec/strip_icon_path '} $GetAppIdxIcon {'}
+            Set $StrippedAppIdxIconPath = (GetOutput $StrippedAppIdxIconPathCmd 1 -1)
+
+            Set $CheckCharsIconCmd = {echo "} $StrippedAppIdxIconPath {" | egrep "(,|')"}
             Set $CheckCharsIcon = (GetOutput $CheckCharsIconCmd 1 -1)
             If $CheckCharsIcon <> {} Then
             Begin
@@ -358,7 +361,8 @@ Widget 5
 
             If $Perform == 1 Then
             Begin
-               Set $NewAppToSubpCmd = {echo '} $NewRowNo {,S} $SubpanelNo {,ENTRY,} (GetTitle 8) {,} $NewAppType {,} (GetTitle 12) {,} (GetTitle 10) {'}
+               Set $NewAppToSubpCmd = {echo '} $NewRowNo {,S} $SubpanelNo {,ENTRY,} (GetTitle 8) {,} $NewAppType {,}
+                                   $StrippedAppIdxIconPath {,} (GetTitle 10) {'}
                Set $NewAppToSubp = (GetOutput $NewAppToSubpCmd 1 -1)
 
                Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst}
