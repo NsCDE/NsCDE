@@ -388,6 +388,9 @@ function copy_to_main_panel
                /usr/local/share/icons/*)
                   icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^\/usr\/local\/share\/icons\///g" -o -f -)
                ;;
+               $NSCDE_ROOT/share/fallback/icons/*)
+                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sNSCDE_ROOT\/fallback\/share\/icons\///g" -o -f -)
+               ;;
             esac
 
             fp_m1="Btn${subpid},$icon,M1,$fp_action_type,$cmd"
@@ -421,7 +424,7 @@ function find_appropriate_icon
       pathtype="FVWM"
    ;;
    *.png|*.svg|*.xpm)
-      icon_search_paths="${FVWM_USERDIR}/icons:${HOME}/.icons:${HOME}/.local/share/icons:/usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/local/share/pixmaps"
+      icon_search_paths="${FVWM_USERDIR}/icons:${HOME}/.icons:${HOME}/.local/share/icons:/usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/local/share/pixmaps:${NSCDE_ROOT}/share/fallback/icons"
       pathtype="FD-MISC"
    ;;
    *)
