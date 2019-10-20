@@ -119,6 +119,15 @@ function setup_nscde
       fi
    fi
 
+   # Xsettingsd daemon configuration
+   if [ ! -e "${FVWM_USERDIR}/Xsettingsd.conf" ]; then
+      cp "${NSCDE_ROOT}/share/templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/Xsettingsd.conf already exists."
+      fi
+   fi
+
    # Bare background before backer setup
    if [ ! -e "${FVWM_USERDIR}/.BGdefault" ]; then
       if (($VERBOSE == 1)); then

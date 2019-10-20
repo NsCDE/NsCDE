@@ -41,6 +41,9 @@ Begin
    # GTK3 Integration
    Set $GTK3FILE = (GetOutput {echo $HOME/.config/gtk-3.0/settings.ini} -1 1)
 
+   # XSETTINGS Daemon Integration
+   Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
+
    Set $pos=0
    Set $finish=1
    While $finish == {1} Do
@@ -443,6 +446,14 @@ Widget 18
          Begin
             Set $WriteGtk2SettingsCmd = {$NSCDE_ROOT/bin/confset.py -t properties -c "} $GTK2FILE {" -k gtk-double-click-time -v } (GetValue 11)
             Set $WriteGtk2Settings = (GetOutput $WriteGtk2SettingsCmd 1 -1)
+         End
+
+         # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
+         If $XSETTINGSFILE <> {} Then
+         Begin
+            Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Net\/DoubleClickTime[[:space:]]\+\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $XSETTINGSFILE {"}
+            Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+            Do {Schedule 500 f_Xsettingsd start}
          End
 
          If (GetValue 8) == 1 Then
