@@ -56,82 +56,72 @@ function GenFullPalette
 # In Apply mode, generate colors in pixmaps which are program elements (-P)
 function ProgBits
 {
+   # Notice about WSM* pixmaps:
+   # South East margin of WSM buttons implemented as icon of ItemDraw.
+   # We cannot use rectangle in dynamic desk WSM
+
    mkdir -p ${FVWM_USERDIR}/icons/NsCDE || exit 1
    mkdir -p ${FVWM_USERDIR}/icons/CDE || exit 1
 
-   for xpm in FpIconify.xpm FpMenu.xpm FpHandle.xpm FPSubArrowUp.xpm FPSubArrowDown.xpm 
-   do
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-       -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/lib/progbits/${xpm} -P 2 \
-       -b > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
-   done
-
+   # Type b, subtype 2
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/FpInstIcon.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/FpInstIcon.xpm
-
-   for xpm in SelectedXL.xpm SelectedL.xpm SelectedS.xpm PressedFPL.xpm \
-              LastPressedFPB.xpm LastPressedFPS.xpm LastPressedFPSubLnch.xpm \
-              LastPressedXL.xpm
-   do
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
-       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
-   done
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_b2 \
+       -P 2 -b
 
-   # Arrows for SubpanelMgr and possibly other FvwmScript programs
-   for xpm in ArrowLeftP.xpm ArrowLeft.xpm ArrowRightP.xpm ArrowRight.xpm
-   do
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+   # Type b, subtype 3
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
-       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
-   done
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_b3 \
+       -P 3 -b
 
-   # Icon background
-   for xpm in IconBgI.xpm IconBgA.xpm IconBgLI.xpm IconBgLA.xpm IconBgXLI.xpm IconBgXLA.xpm
-   do
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+   # Type b, subtype 5
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
-       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
-   done
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_b5 \
+       -P 5 -b
 
-   # For Subpanel titlebar FVWM UseDecor
-   for xpm in SubpanelTitleActive.xpm SubpanelTitleInactive.xpm
-   do
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+   # Type b, subtype 6
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/lib/progbits/${xpm} \
-       -c  > ${FVWM_USERDIR}/icons/NsCDE/${xpm}
-   done
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_b6 \
+       -P 6 -b
 
-   # Front Panel Clock
+   # Type b, subtype 7
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/Fpclock.xpm -P 3 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/Fpclock.xpm
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_b7 \
+       -P 7 -b
 
-   # Front Panel Lock
+   # Type c
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/FpLock.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/FpLock.xpm
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_ROOT}/lib/progbits/type_c \
+       -c
 
-   # Front Panel Lock Pressed
+   # Freedesktop icon type (type c)
+   mkdir -p "${HOME}/.icons/NsCDE/tmp"
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/FpLockP.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/FpLockP.xpm
-
-   # Front Panel Exit
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/FpExit.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/FpExit.xpm
+    -n $Ncolors -p ${PaletteNamePath} \
+    -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
+    -i ${NSCDE_ROOT}/lib/progbits/icon-theme/actions \
+    -c
+   if (($? == 0)); then
+      for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
+      do
+         xpmf="${xpmf##*/}"
+         desthint="${xpmf%%-*}"
+         namehint="${xpmf#*-}"
+         mv "${HOME}/.icons/NsCDE/tmp/${xpmf}" "${HOME}/.icons/NsCDE/${desthint}/actions/${namehint}"
+      done
+      rmdir "${HOME}/.icons/NsCDE/tmp"
+   fi
 
    # Front Panel Stock CDE icons
    for fpicon in Fphome.l.pm Fpterm.l.pm Fpprnt.l.pm \
@@ -144,115 +134,11 @@ function ProgBits
        -b > ${FVWM_USERDIR}/icons/CDE/$fpicon
    done
 
-   # South East margin of WSM buttons implemented as icon of ItemDraw.
-   # We cannot use rectangle in dynamic desk WSM
-
-   # 2 Desks scenario
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM2BackBtn1.xpm -P 3 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM2BackBtn1.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM2BackBtn2.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM2BackBtn2.xpm
-
-   # 4 Desks scenario
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM4BackBtn1.xpm -P 3 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM4BackBtn1.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM4BackBtn2.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM4BackBtn2.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM4BackBtn3.xpm -P 6 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM4BackBtn3.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM4BackBtn4.xpm -P 7 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM4BackBtn4.xpm
-
-   # 6 Desks scenario
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM6BackBtn1.xpm -P 3 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM6BackBtn1.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM6BackBtn2.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM6BackBtn2.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM6BackBtn3.xpm -P 6 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM6BackBtn3.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM6BackBtn4.xpm -P 7 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM6BackBtn4.xpm
-
-   # 8 Desks scenario
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM8BackBtn1.xpm -P 3 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM8BackBtn1.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM8BackBtn2.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM8BackBtn2.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM8BackBtn3.xpm -P 6 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM8BackBtn3.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/WSM8BackBtn4.xpm -P 7 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/WSM8BackBtn4.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/FpMask.xpm -P 5 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/FpMask.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/Mouse-Setup.xpm -P 6 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/Mouse-Setup.xpm
-
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-    -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/lib/progbits/Mouse-Setup-Clicked.xpm -P 6 \
-    -b > ${FVWM_USERDIR}/icons/NsCDE/Mouse-Setup-Clicked.xpm
-
+   # Default fallback background
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
     -p ${PaletteNamePath} -n $Ncolors \
     -i ${NSCDE_ROOT}/share/templates/BGdefault -P 3 \
     -b > ${FVWM_USERDIR}/.BGdefault
-
-   cd ${NSCDE_ROOT}/lib/progbits/icon-theme/actions
-   if (($? == 0)); then
-      for icopx in *.xpm
-      do
-         mkdir -p ${HOME}/.icons/NsCDE
-         icofile=$(echo "$icopx" | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions\/\3/g' -o -f -)
-         icodir=$(echo $icopx | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+x[[:digit:]]\+\)\(-\)\(.*\)/\1\/actions/g' -o -f -)
-         mkdir -p ${HOME}/.icons/NsCDE/$icodir
-         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py -n $Ncolors -p ${PaletteNamePath} -i $icopx -c > ${HOME}/.icons/NsCDE/${icofile}
-      done
-   fi
-   cd -
 }
 
 # Regenerate X resources database file
@@ -279,23 +165,26 @@ function Xresources
       fi
 
       mkdir -p ${FVWM_USERDIR}/app-defaults
-      for tmpl in ${NSCDE_ROOT}/share/templates/app-defaults/*.tmpl
+
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o "${FVWM_USERDIR}/app-defaults" -g tmpl \
+       -i ${NSCDE_ROOT}/share/templates/app-defaults \
+       -c
+      for tmpl in ${FVWM_USERDIR}/app-defaults/*.tmpl
       do
-         basetmpl="${tmpl##*/}"
-         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-          -p ${PaletteNamePath} -n $Ncolors \
-          -i $tmpl \
-          -c > "${FVWM_USERDIR}/app-defaults/${basetmpl%%.tmpl*}"
+         mv "$tmpl" $(echo "$tmpl" | sed 's/\.tmpl//g')
       done
 
       if [ -d "${FVWM_USERDIR}/templates/app-defaults" ]; then
-         for tmpl in ${FVWM_USERDIR}/templates/app-defaults/*.tmpl
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o "${FVWM_USERDIR}/app-defaults" -g tmpl \
+          -i "${FVWM_USERDIR}/templates/app-defaults" \
+          -c
+         for tmpl in ${FVWM_USERDIR}/app-defaults/*.tmpl
          do
-            basetmpl="${tmpl##*/}"
-            ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-             -p ${PaletteNamePath} -n $Ncolors \
-             -i $tmpl \
-             -c > "${FVWM_USERDIR}/app-defaults/${basetmpl%%.tmpl*}"
+            mv "$tmpl" $(echo "$tmpl" | sed 's/\.tmpl//g')
          done
       fi
    else

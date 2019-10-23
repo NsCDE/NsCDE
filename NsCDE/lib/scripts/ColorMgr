@@ -679,7 +679,7 @@ Widget 30
       Begin
          If $PreviewMode == 0 Then
          Begin
-            Do {Module FvwmScript WaitNotice "Working ..." "Please wait for changes to be applied" "and NsCDE restarted." 8000}
+            Do {Module FvwmScript WaitNotice "Working ..." "Please wait for changes to be applied" "and NsCDE restarted." 4000}
          End
          Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)

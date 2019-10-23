@@ -501,7 +501,7 @@ Colorset 50 fg red, bg green, hi blue, sh yellow
 
     print (lines)
 
-def gencdebackdrop(palettefile,ncolors,infile,palettepart):
+def gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart):
     palette=readPalette(palettefile)
     global use_4_colors
     if ncolors == 4: 
@@ -516,19 +516,42 @@ def gencdebackdrop(palettefile,ncolors,infile,palettepart):
     selg=sel
     basename=os.path.basename(palettefile)
 
-    buf_infile = open(infile, 'r')
-    for line in buf_infile:
-        line = re.sub('(s[\t ]+background[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bgg[palettepart] + '",', line)
-        line = re.sub('(s[\t]+foreground[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + fgg[palettepart] + '",', line)
-        line = re.sub('(s[\t ]+topShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + tsg[palettepart] + '",', line)
-        line = re.sub('(s[\t ]+bottomShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bsg[palettepart] + '",', line)
-        line = re.sub('(s[\t ]+selectColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + selg[palettepart] + '",', line)
-        sys.stdout.write (line)
-    buf_infile.close()
-    sys.stdout.flush()
+    # Single file mode
+    try:
+        buf_infile = open(infile, 'r')
+        for line in buf_infile:
+            line = re.sub('(s[\t ]+background[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bgg[palettepart] + '",', line)
+            line = re.sub('(s[\t]+foreground[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + fgg[palettepart] + '",', line)
+            line = re.sub('(s[\t ]+topShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + tsg[palettepart] + '",', line)
+            line = re.sub('(s[\t ]+bottomShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bsg[palettepart] + '",', line)
+            line = re.sub('(s[\t ]+selectColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + selg[palettepart] + '",', line)
+            sys.stdout.write (line)
+        buf_infile.close()
+        sys.stdout.flush()
 
-def gencdecolors(palettefile,n,infile,shorten_colorhex):
-    palette=readPalette(palettefile)
+    # Bulk mode
+    except IsADirectoryError:
+        import glob
+
+        for pixmapfile in glob.glob(os.path.join(infile, '*.' + fext)):
+            buf_infile = open(pixmapfile, 'r')
+            lines = []
+            dest_pixmapfile = os.path.join(outdir, os.path.basename(pixmapfile))
+            for line in buf_infile:
+                line = re.sub('(s[\t ]+background[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bgg[palettepart] + '",', line)
+                line = re.sub('(s[\t]+foreground[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + fgg[palettepart] + '",', line)
+                line = re.sub('(s[\t ]+topShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + tsg[palettepart] + '",', line)
+                line = re.sub('(s[\t ]+bottomShadowColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + bsg[palettepart] + '",', line)
+                line = re.sub('(s[\t ]+selectColor[\t ]+m[\t ]+(black|white)[\t ]+c[\t ]+)(.*)', r'\1' + selg[palettepart] + '",', line)
+                lines.append(line)
+
+            with open(dest_pixmapfile, 'w') as genpixmap:
+                genpixmap.writelines("%s" % line for line in lines)
+                genpixmap.close()
+
+
+def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
+    palette = readPalette(palettefile)
     global use_4_colors
     if n==4: 
         use_4_colors=True
@@ -569,13 +592,32 @@ def gencdecolors(palettefile,n,infile,shorten_colorhex):
                         'NSCDE_SEL_COLOR_6':selg[6], 'NSCDE_SEL_COLOR_6':selg[6],
                         'NSCDE_SEL_COLOR_7':selg[7], 'NSCDE_SEL_COLOR_8':selg[8]}
 
-    buf_infile = open(infile, 'r')
-    for line in buf_infile:
-        for colorkey in replacement_dict:
-            line = line.replace(colorkey, replacement_dict[colorkey])
-        sys.stdout.write (line)
-    buf_infile.close()
-    sys.stdout.flush()
+    # Single file mode
+    try:
+        buf_infile = open(infile, 'r')
+        for line in buf_infile:
+            for colorkey in replacement_dict:
+                line = line.replace(colorkey, replacement_dict[colorkey])
+            sys.stdout.write (line)
+        buf_infile.close()
+        sys.stdout.flush()
+
+    # Bulk mode
+    except IsADirectoryError:
+        import glob
+
+        for pixmapfile in glob.glob(os.path.join(infile, '*.' + fext)):
+            buf_infile = open(pixmapfile, 'r')
+            lines = []
+            dest_pixmapfile = os.path.join(outdir, os.path.basename(pixmapfile))
+            for line in buf_infile:
+                for colorkey in replacement_dict:
+                    line = line.replace(colorkey, replacement_dict[colorkey])
+                lines.append(line)
+            with open(dest_pixmapfile, 'w') as genpixmap:
+                genpixmap.writelines("%s" % line for line in lines)
+                genpixmap.close()
+
 
 def usage():
     print ("Used to generate colorsets for fvwm, Xresources, backdrops and element pixmaps")
@@ -583,7 +625,10 @@ def usage():
 def main():
     shorten_colorhex = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "cfbp:i:n:sP:lh", ["palette=", "infile", "fvwm-colorsets", "backdrop", "colorgen", "ncolors=", "shortencolorhex", "palettepart=", "list-colors"])
+        opts, args = getopt.getopt(sys.argv[1:], "cfbp:i:n:sP:o:g:lh",
+                     ["palette=", "infile", "fvwm-colorsets", "backdrop", "colorgen", \
+                      "ncolors=", "shortencolorhex", "palettepart=", "outdir=", \
+                      "fext=", "list-colors"])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -594,13 +639,27 @@ def main():
         if o in ("-f", "--fvwm-colorsets"):
             genfvwmcolorset(palettefile,ncolors)
         elif o in ("-b", "--backdrop"):
-            gencdebackdrop(palettefile,ncolors,infile,palettepart)
+            try:
+                gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart)
+            except NameError:
+                outdir = "/dev/null"
+                fext = "null"
+                gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart)
         elif o in ("-c", "--colorgen"):
-            gencdecolors(palettefile,ncolors,infile,shorten_colorhex)
+            try:
+               gencdecolors(palettefile,ncolors,infile,outdir,fext,shorten_colorhex)
+            except NameError:
+                outdir = "/dev/null"
+                fext = "null"
+                gencdecolors(palettefile,ncolors,infile,outdir,fext,shorten_colorhex)
         elif o in ("-p", "--palette"):
             palettefile = a
         elif o in ("-i", "--infile"):
             infile = a
+        elif o in ("-o", "--outdir"):
+            outdir = a
+        elif o in ("-g", "--fext"):
+            fext = a
         elif o in ("-n", "--ncolors"):
             ncolors = int(a)
         elif o in ("-s", "--shortencolorhex"):
