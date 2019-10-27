@@ -106,7 +106,10 @@ function ProgBits
        -c
 
    # Freedesktop icon type (type c)
-   mkdir -p "${HOME}/.icons/NsCDE/tmp"
+   mkdir -p ""${HOME}"/.icons/NsCDE/tmp"
+
+   # actions
+   mkdir -p "${HOME}"/.icons/NsCDE/{48x48,32x32,24x24,22x22,16x16}/actions
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
     -n $Ncolors -p ${PaletteNamePath} \
     -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
@@ -120,8 +123,26 @@ function ProgBits
          namehint="${xpmf#*-}"
          mv "${HOME}/.icons/NsCDE/tmp/${xpmf}" "${HOME}/.icons/NsCDE/${desthint}/actions/${namehint}"
       done
-      rmdir "${HOME}/.icons/NsCDE/tmp"
    fi
+
+   # status
+   mkdir -p "${HOME}"/.icons/NsCDE/{48x48,32x32,24x24,22x22,16x16}/status
+   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+    -n $Ncolors -p ${PaletteNamePath} \
+    -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
+    -i ${NSCDE_ROOT}/lib/progbits/icon-theme/status \
+    -c
+   if (($? == 0)); then
+      for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
+      do
+         xpmf="${xpmf##*/}"
+         desthint="${xpmf%%-*}"
+         namehint="${xpmf#*-}"
+         mv "${HOME}/.icons/NsCDE/tmp/${xpmf}" "${HOME}/.icons/NsCDE/${desthint}/status/${namehint}"
+      done
+   fi
+
+   rmdir "${HOME}/.icons/NsCDE/tmp"
 
    # Front Panel Stock CDE icons
    for fpicon in Fphome.l.pm Fpterm.l.pm Fpprnt.l.pm \
