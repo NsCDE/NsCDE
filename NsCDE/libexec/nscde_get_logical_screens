@@ -19,6 +19,8 @@ function defaultcf
    echo "InfoStoreAdd lscrn.cnt 1"
    echo "InfoStoreAdd lscrn.0.width $[vp.width]"
    echo "InfoStoreAdd lscrn.0.height $[vp.height]"
+   echo "InfoStoreAdd lscrn.0.pos.x 0"
+   echo "InfoStoreAdd lscrn.0.pos.y 0"
 }
 
 # Without xrandr(1) we cannot continue.
@@ -73,12 +75,16 @@ fi
 
 # Main monitor geometry enumeration
 menudata=""
+rootmenudata=""
 echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
 do
    scnum="${scnum%%:*}"
    scwidth=${geo%%/*}
    scheight_0=${geo##*x}
    scheight=${scheight_0%%/*}
+   scpos_xy=${geo#*+}
+   scpos_x=${scpos_xy%+*}
+   scpos_y=${scpos_xy#*+}
 
    echo "$scwidth" | egrep -q '^[[:digit:]]+$'
    retval_w=$?
@@ -91,8 +97,11 @@ do
    if (($retval == 0)); then
       echo "InfoStoreAdd lscrn.${scnum}.width $scwidth"
       echo "InfoStoreAdd lscrn.${scnum}.height $scheight"
+      echo "InfoStoreAdd lscrn.${scnum}.pos.x $scpos_x"
+      echo "InfoStoreAdd lscrn.${scnum}.pos.y $scpos_y"
       echo "InfoStoreAdd lscrn.${scnum}.name $mname"
-      menudata=$(echo -ne "$menudata\n + \"Logical Screen &$scnum ($[infostore.lscrn.${scnum}.name])\" MoveToScreen $scnum")
+      menudata=$(echo -ne "$menudata\n+ \"Logical Screen &$scnum ($[infostore.lscrn.${scnum}.name])\" MoveToScreen $scnum")
+      rootmenudata=$(echo -ne "$rootmenudata\nTest (Start) AddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($mname) ...\"           MoveToScreen ${scnum}")
    else
       echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
       defaultcf
@@ -104,6 +113,12 @@ done
 echo ""
 echo "DestroyMenu m_MoveToScreen"
 echo "AddToMenu m_MoveToScreen"
-echo "+ \"Move all windows to this screen\"		All MoveToScreen"
 echo "$menudata" | egrep -v '^$'
+
+echo ""
+echo "DestroyMenu m_SlsMoveAll"
+echo "AddToMenu m_SlsMoveAll"
+echo "+ \"&Move All Windows To This Screen\"            All MoveToScreen"
+echo "+ \"\" Nop"
+echo "$rootmenudata" | egrep -v '^$'
 
