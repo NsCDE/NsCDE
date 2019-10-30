@@ -1,0 +1,109 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Script: nscde_get_logical_screens
+# Purpose: on multiple monitor setup, get their size using xrandr
+# and export this as FVWM infostore variables for use in FVWM
+# On a cloned display, this will simply return one global size
+
+IFS=" "
+
+function defaultcf
+{
+   echo "InfoStoreAdd lscrn.sls 0"
+   echo "InfoStoreAdd lscrn.cnt 1"
+   echo "InfoStoreAdd lscrn.0.width $[vp.width]"
+   echo "InfoStoreAdd lscrn.0.height $[vp.height]"
+}
+
+# Without xrandr(1) we cannot continue.
+type -qp xrandr
+if (($? != 0)); then
+   echo "${0##*/}: xrandr command is not available in PATH. Setting default one monitor setup." >&2
+   defaultcf
+   exit 0
+fi
+
+xdata=$(xrandr | egrep '^Screen [[:digit:]]:')
+mdata=$(xrandr --listmonitors)
+
+# Handling more than one logical screen is currently out of scope
+# for this Xinerama/SLS support.
+screencnt=$(echo "$xdata" | wc -l)
+if (($screencnt > 1)); then
+   echo "${0##*/}: More than one local screen handling is not yet tested and hence not supported." >&2
+   defaultcf
+   exit 0
+fi
+
+# Inspect if there some SLS configuration present
+scpos_sum=0
+echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
+do
+   # Is this a Cloned Display or a Single Logical Screen?
+   scpos=$((${geo#*+}))
+   scpos_sum=$(($scpos_sum + $scpos))
+done
+
+# If this is not a cloned display, set lscrn.sls to 1
+# otherwise to 0, give the rest of default configuration
+# and exit.
+if (($scpos_sum > 0)); then
+   echo "InfoStoreAdd lscrn.sls 1"
+else
+   defaultcf
+   exit 0
+fi
+
+# Monitor count
+moncnt=$(echo "$mdata" | grep Monitors: | cut -d' ' -f 2)
+echo "$moncnt" | egrep -q '^[[:digit:]]+$'
+if (($? == 0)); then
+   echo "InfoStoreAdd lscrn.cnt $moncnt"
+else
+   echo "${0##*/}: Error in handling monitor count: \"$moncnt\""
+   defaultcf
+   exit 0
+fi
+
+# Main monitor geometry enumeration
+menudata=""
+echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
+do
+   scnum="${scnum%%:*}"
+   scwidth=${geo%%/*}
+   scheight_0=${geo##*x}
+   scheight=${scheight_0%%/*}
+
+   echo "$scwidth" | egrep -q '^[[:digit:]]+$'
+   retval_w=$?
+
+   echo "$scheight" | egrep -q '^[[:digit:]]+$'
+   retval_h=$?
+
+   retval=$(($retval_w + $retval_h))
+
+   if (($retval == 0)); then
+      echo "InfoStoreAdd lscrn.${scnum}.width $scwidth"
+      echo "InfoStoreAdd lscrn.${scnum}.height $scheight"
+      echo "InfoStoreAdd lscrn.${scnum}.name $mname"
+      menudata=$(echo -ne "$menudata\n + \"Logical Screen &$scnum ($[infostore.lscrn.${scnum}.name])\" MoveToScreen $scnum")
+   else
+      echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
+      defaultcf
+      break
+   fi
+done
+
+# Generate menu
+echo ""
+echo "DestroyMenu m_MoveToScreen"
+echo "AddToMenu m_MoveToScreen"
+echo "+ \"Move all windows to this screen\"		All MoveToScreen"
+echo "$menudata" | egrep -v '^$'
+
