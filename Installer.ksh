@@ -71,7 +71,7 @@ function check_dependencies
       fi
    fi
 
-   for oexe in xscreensaver stalonetray xsettingsd
+   for oexe in xscreensaver stalonetray xsettingsd xrandr
    do
       whence -q $oexe
       retval=$?
@@ -286,7 +286,7 @@ function install_nscde
       fi
    else
       photospopulated=$(ls -1 "${instpath}/share/photos" | wc -l)
-      if (($photospopulated < 1)); then
+      if (($photospopulated < 1)) && (($phcnt == 0)); then
          echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
          echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
       fi
