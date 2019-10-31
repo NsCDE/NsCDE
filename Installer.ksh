@@ -188,7 +188,7 @@ function install_nscde
    fi
 
    # Upgrade checks dependencies on it's own.
-   if (($upgrade_mode == 1)); then
+   if (($upgrade_mode != 1)); then
       check_dependencies
    fi
 
@@ -286,7 +286,7 @@ function install_nscde
       fi
    else
       photospopulated=$(ls -1 "${instpath}/share/photos" | wc -l)
-      if (($photospopulated < 1)) && (($phcnt == 0)); then
+      if (($photospopulated < 1)) && [ -z $phcnt ]; then
          echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
          echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
       fi
