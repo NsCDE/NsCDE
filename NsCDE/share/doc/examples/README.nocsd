@@ -1,0 +1,86 @@
+Working around "CSD"
+
+This README describes how to configure GNOME applications which are crippled with
+so called "Client Side Decorations" or CSD and are insisting to send request to
+window manager to be started without title bars, corners and borders. Such
+applications are similar to unmanaged windows started on a bare X server without
+window manager: they cannot be moved and resized in a easy way. Moreover, they
+look poor any ugly. In their war against title bars, and generally against users,
+GNOME didn't provided option which can be set to disable this rogue behaviour.
+
+If there is really a need to use some of this applications, solution exists here
+luckily - from the author of the excellent file manager PCManFM:
+
+See https://github.com/PCMan/gtk3-nocsd
+
+From gtk3-nocsd web page:
+---------------------------------------------------------------------------------------
+gtk3-nocsd is a small module used to disable the client side decoration of Gtk+ 3.
+
+Introduction: Since Gtk+ 3.10, its developers added a so-called header bar or custom
+title bar. With this and the client-side decoration, the original title bar and
+window border provided by the window manager are disabled by Gtk+. This makes all
+Gtk+ 3 programs look alike. Even worse, this may break some window manager or compositors.
+
+Unfortunately, the Gtk+ developers decided to be against the existing standards and
+provide "no option" to turn it off.
+
+Luckily, with gtk3-nocsd, we still have a way to (partially) turn it off. Window manager
+(title bar and window border) can be re-enabled.
+---------------------------------------------------------------------------------------
+
+With this preload hack library, GTK3 can be tricked to provide "legacy", that is
+to bring applications in (more or less) sane mode.
+
+Some additional hacks:
+
+1. Save this as $HOME/.config/gtk-3.0/gtk.css
+-------------------------------------------------
+headerbar {
+   border-radius: 0;
+}
+
+headerbar .title {
+   color: transparent;
+   font-size: 0pt;
+}
+-------------------------------------------------
+This should ensure that size of this (in)famous CSD header bar is a bit thinner and
+that title (which belongs to the title bar) is not duplicated below into "headerbar"
+which looks somewhat as menubar, but without most of it's functionality.
+
+
+2. If you cannot use gtk3-nocsd for whatever reason, FVWM can provide at least
+partial solution: it can ignore application request for special managing and put
+title bar (with borders and corners) on such applications anyway. Here is the
+example for most if not all GNOME applications on the default Fedora 31 workstation
+installation. This can be pasted into $FVWM_USERDIR/NsCDE-Style.local. Notice:
+there is no need for this step if gtk3-nocsd is installed and if it works.
+---------------------------------------------------------
+Style Gnome-calendar !MwmDecor
+Style Gnome-contacts !MwmDecor
+Style Evince !MwmDecor
+Style Org.gnome.Photos !MwmDecor
+Style Eog !MwmDecor
+Style Simple-scan !MwmDecor
+Style Totem !MwmDecor
+Style Gcm-viewer !MwmDecor
+Style File-roller !MwmDecor
+Style Baobab !MwmDecor
+Style Gnome-system-monitor !MwmDecor
+Style Gnome-logs !MwmDecor
+Style Gnome-abrt !MwmDecor
+Style Gnome-software !MwmDecor
+Style Gnome-boxes !MwmDecor
+Style Gnome-calculator !MwmDecor
+Style Org.gnome.Characters !MwmDecor
+Style Gnome-clocks !MwmDecor
+Style Gnome-disks !MwmDecor
+Style Org.gnome.Nautilus !MwmDecor
+Style Gnome-font-viewer !MwmDecor
+Style Org.gnome.Maps !MwmDecor
+Style Org.gnome.gedit !MwmDecor
+Style Gnome-screenshot !MwmDecor
+Style Org.gnome.Weather !MwmDecor
+Style Gnome-shell-extension-prefs !MwmDecor
+---------------------------------------------------------
