@@ -7,20 +7,26 @@
 #
 
 # Main starting wrapper
-
 # Basic sanity check.
 if [ -z $HOME ]; then
    echo "Error: HOME not set." >&2
    exit 2
 fi
 
+# some configurable things
+typeset nscde_log_filename="nscde-init.log"
+typeset run_init_scripts=1
 export NSCDE_VERSION="1.0rc13"
+
+
 if [ "$1" == "-V" ]; then
    echo "NsCDE Version $NSCDE_VERSION"
    exit 0
 else
    export FVWM_OPTS="$@"
 fi
+
+
 
 DpiInfo=$(LC_ALL=C xdpyinfo | egrep 'resolution:.*dots per inch' | awk '{ print $2 }')
 export DPI="${DpiInfo##*x}"
@@ -64,7 +70,7 @@ if ! [ -d ${NSCDE_LOG_DIR} ] || ! [ -w ${NSCDE_LOG_DIR} ]; then
     export NSCDE_LOG_DIR="/var/tmp"
 fi
 
-export NSCDE_INIT_LOG="${NSCDE_LOG_DIR}/nscde-init.log"
+export NSCDE_INIT_LOG="${NSCDE_LOG_DIR}/${nscde_log_filename}"
 
 log()
 {   
@@ -80,6 +86,15 @@ log()
    printf "${str}" >> "${NSCDE_INIT_LOG}"
 }
 
+# check if we want to ignore init scripts
+if [ "$1" == "-i" ]; then
+   run_init_scripts=0
+   # if our first arg is to ignore init scripts, shift so the remainder can go
+   # to FVWM
+   shift 1
+   FVWM_OPTS="$@"
+fi
+
 log "\n====== Starting NsCDE on $(date +%Y-%m-%d) at $(date +%T) ======"
 
 FVWM_BIN=$(whence -p fvwm)
@@ -89,6 +104,7 @@ if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
    cd $HOME
    xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
 fi
+
 export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
 
 if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
@@ -108,26 +124,31 @@ fi
 log -n "Init directory '${FVWM_USERDIR}/init.d' found: "
 if [ -r ${FVWM_USERDIR}/init.d/ ] ; then
    log "YES"
-   for init_file in ${FVWM_USERDIR}/init.d/*; do
-      if [ -x "$init_file" ]; then
-         log "=== Script '${init_file}' ==="
-         "$init_file" @>> "${NSCDE_INIT_LOG}"
-      fi
-   done
+   if [ ${run_init_scripts} == 1 ]; then
+      for init_file in ${FVWM_USERDIR}/init.d/*; do
+         if [ -x "$init_file" ]; then
+            log "=== Script '${init_file}' ==="
+            "$init_file" @>> "${NSCDE_INIT_LOG}"
+         fi
+      done
+   else
+      log "Ignoring init scripts ('-i' passed to nscde launch script)"
+   fi
 else
    log "NO"
 fi
 
 log -n "Starting FVWM with command: "
+
 typeset fvwm_command=""
+
 if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
    fvwm_command="$FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS"
 else
    fvwm_command="$FVWM_BIN -f ${NSCDE_ROOT}/config/NsCDE-Main.conf $FVWM_OPTS"
 fi
+
 log "$fvwm_command"
 exec $fvwm_command
 
-
 exit 0
-
