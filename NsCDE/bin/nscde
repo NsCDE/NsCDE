@@ -42,33 +42,92 @@ fi
 export FVWM_USERDIR="${HOME}/.NsCDE"
 export NSCDE_ROOT=/opt/NsCDE
 export FVWM_DATADIR="${NSCDE_ROOT}/config"
+export NSCDE_LOG_DIR="${FVWM_USERDIR}/log"
 
 echo "$PATH" | egrep -q "/opt\/NsCDE\/bin"
 if (($? != 0)); then
    export PATH="${PATH}:${NSCDE_ROOT}"
 fi
 
+
+### set up log dir
+
+# if we have a user dir, create log dir if required
+if [ -d ${FVWM_USERDIR} ] && [ -w ${FVWM_USERDIR} ]; then
+    if ! [ -d ${NSCDE_LOG_DIR} ]; then
+       mkdir "${NSCDE_LOG_DIR}"
+    fi
+fi
+
+# if no log dir, fall back to /var/tmp
+if ! [ -d ${NSCDE_LOG_DIR} ] || ! [ -w ${NSCDE_LOG_DIR} ]; then
+    export NSCDE_LOG_DIR="/var/tmp"
+fi
+
+export NSCDE_INIT_LOG="${NSCDE_LOG_DIR}/nscde-init.log"
+
+log()
+{   
+   str="${1}\n"
+   if [ ${#} == 2 ]; then
+      if [ "${1}" == "-n" ]; then
+   	str="${2}"
+      else
+        str="${1}${2}\n"
+      fi
+   fi
+   
+   printf "${str}" >> "${NSCDE_INIT_LOG}"
+}
+
+log "\n====== Starting NsCDE on $(date +%Y-%m-%d) at $(date +%T) ======"
+
 FVWM_BIN=$(whence -p fvwm)
 
 if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
+   log "Applying Xdefaults from '${FVWM_USERDIR}/Xdefaults'"
    cd $HOME
    xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
 fi
 export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
 
 if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
+   log "Applying Xset.conf from ${FVWM_USERDIR}"
    ksh "${FVWM_USERDIR}/Xset.conf"
 fi
 
+log -n "Font cursor override: "
 if [ -x "$NSCDE_ROOT/lib/XOverrideFontCursor.so" ]; then
+   log "ENABLED"
    export LD_PRELOAD="$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+else
+   log "DISABLED"
 fi
 
-if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
-   exec $FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS
+# if a user init directory exists, execute the scripts in it 
+log -n "Init directory '${FVWM_USERDIR}/init.d' found: "
+if [ -r ${FVWM_USERDIR}/init.d/ ] ; then
+   log "YES"
+   for init_file in ${FVWM_USERDIR}/init.d/*; do
+      if [ -x "$init_file" ]; then
+         log "=== Script '${init_file}' ==="
+         "$init_file" @>> "${NSCDE_INIT_LOG}"
+      fi
+   done
 else
-   exec $FVWM_BIN -f ${NSCDE_ROOT}/config/NsCDE-Main.conf $FVWM_OPTS
+   log "NO"
 fi
+
+log -n "Starting FVWM with command: "
+typeset fvwm_command=""
+if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
+   fvwm_command="$FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS"
+else
+   fvwm_command="$FVWM_BIN -f ${NSCDE_ROOT}/config/NsCDE-Main.conf $FVWM_OPTS"
+fi
+log "$fvwm_command"
+exec $fvwm_command
+
 
 exit 0
 
