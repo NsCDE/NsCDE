@@ -10,6 +10,10 @@ valsep="$1"
 varname="$2"
 varnewval="$3"
 
+if [ "$valsep" == "__space__" ]; then
+   valsep=" "
+fi
+
 eval varcontent='$'$varname
 
 for argv in "$valsep" "$varname" "$varnewval"

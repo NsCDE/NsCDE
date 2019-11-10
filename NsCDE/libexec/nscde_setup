@@ -152,6 +152,18 @@ function setup_nscde
       fi
    fi
 
+   # Initial NsCDE-Init.conf for user session customizations
+   if [ ! -e "${FVWM_USERDIR}/NsCDE-Init.conf" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Initializing default ${FVWM_USERDIR}/NsCDE-Init.conf ..."
+      fi
+      cp ${NSCDE_ROOT}/config/NsCDE-Init.conf ${FVWM_USERDIR}/NsCDE-Init.conf
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/NsCDE-Init.conf already exists."
+      fi
+   fi
+
    # GeometryDB ini
    if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
       if (($VERBOSE == 1)); then
