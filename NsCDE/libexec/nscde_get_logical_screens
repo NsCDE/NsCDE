@@ -101,7 +101,7 @@ do
       echo "InfoStoreAdd lscrn.${scnum}.pos.y $scpos_y"
       echo "InfoStoreAdd lscrn.${scnum}.name $mname"
       menudata=$(echo -ne "$menudata\n+ \"Logical Screen &$scnum ($[infostore.lscrn.${scnum}.name])\" MoveToScreen $scnum")
-      rootmenudata=$(echo -ne "$rootmenudata\nTest (Start) AddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($mname) ...\"           MoveToScreen ${scnum}")
+      rootmenudata=$(echo -ne "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($mname) ...\"           MoveToScreen ${scnum}")
    else
       echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
       defaultcf
