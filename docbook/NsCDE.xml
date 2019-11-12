@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY appversion "1.0.rc14">
-<!ENTITY date "Oct 2019">
+<!ENTITY date "Nov 2019">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -2750,7 +2750,8 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Shift+BackSpace</keysym> If pressed twice in a time frame of two seconds will call LocalPager in any context.
-  When this Pager will disappear soon as it looses a pointer focus.
+  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again while pager is still
+  visible.
 </para></listitem>
 
 <listitem><para>
@@ -2859,8 +2860,12 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Shift+Tab</keysym> will call transient GlobalPager in any context. When clicked, this
-Pager will close itself.
+  <keysym>Shift+Tab</keysym>Calls visual GlobalPager which shows matrix of pages and workspaces.
+This keybinding works in any context, but it must be called twice to avoid accidental invocation
+when Global Pager is visible, calling it second time will add title bar and make it as permanent
+tool until closed or clicked on border with middle mouse button or closed with a third invocation
+of this keybinding. In normal semi-transient mode, this pager disappears shortly after losing
+mouse focus to free space on the screen.
 </para></listitem>
 
 <listitem><para>
@@ -3249,7 +3254,9 @@ menu, and to refresh all windows on the screen.
 </para></listitem>
 
 <listitem><para>
-  Left click on the root window calls <guimenuitem>Window Options</guimenuitem> menu
+  Left double click on the root window calls <guimenuitem>Root Menu</guimenuitem> whith
+  handy shortcuts for calling visual pagers and window lists. Submenu "Window Operations"
+  will show Window Options actions.
 </para></listitem>
 
 <listitem><para>

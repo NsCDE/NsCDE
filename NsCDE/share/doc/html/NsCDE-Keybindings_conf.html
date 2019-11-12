@@ -149,7 +149,8 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
  if pressed twice, local WindowList will be replaced with global WindowList
 </p></li><li class="listitem"><p>
   <span class="keysym">Shift+BackSpace</span> If pressed twice in a time frame of two seconds will call LocalPager in any context.
-  When this Pager will disappear soon as it looses a pointer focus.
+  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again while pager is still
+  visible.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+Tab</span> is cycling trough pages of the active desk from up to down
   and then right up to down
@@ -218,8 +219,12 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
   <span class="keysym">Meta+Escape</span> Will cycle trough focus-accepting windows on the current page of
   the current desk, avoiding CirculateSkip windows and the FrontPanel.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Tab</span> will call transient GlobalPager in any context. When clicked, this
-Pager will close itself.
+  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager which shows matrix of pages and workspaces.
+This keybinding works in any context, but it must be called twice to avoid accidental invocation
+when Global Pager is visible, calling it second time will add title bar and make it as permanent
+tool until closed or clicked on border with middle mouse button or closed with a third invocation
+of this keybinding. In normal semi-transient mode, this pager disappears shortly after losing
+mouse focus to free space on the screen.
 </p></li><li class="listitem"><p>
 In the context of the Front Panel, <span class="keysym">Meta+ 1-10</span> will pop up subpanels 1 to 10
 and warp pointer to it
