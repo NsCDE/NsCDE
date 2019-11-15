@@ -199,6 +199,7 @@ Widget 6
          Do {Exec xset m 60/20 8}
          Do {Exec xmodmap -e "pointer = 1 2 3"}
          Do {MenuStyle * DoubleClickTime 450}
+         Do {ClickTime 450}
          WarpPointer 18
          ChangeColorset 18 21
       End
@@ -383,6 +384,7 @@ Widget 17
          Do {Exec xset m } (GetValue 13) {/20 } (GetValue 15)
 
          Do {MenuStyle * DoubleClickTime } (GetValue 11)
+         Do {ClickTime } (GetValue 11)
          Do {Exec kill $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
          Do {Exec kill -9 $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
 
@@ -420,6 +422,7 @@ Widget 18
 
          # Menu Double Click Time in FVWM
          Do {MenuStyle * DoubleClickTime } (GetValue 11)
+         Do {ClickTime } (GetValue 11)
          Set $WriteNsCDECmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
          Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
 
