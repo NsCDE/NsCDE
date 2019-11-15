@@ -13,7 +13,7 @@ if [ -z $HOME ]; then
    echo "Error: HOME not set." >&2
    exit 2
 else
-   export NSCDE_VERSION="1.0rc14"
+   export NSCDE_VERSION="1.0rc15"
 fi
 
 # Either print version and exit, or construct main options for and output
@@ -92,6 +92,11 @@ if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
    ksh "${FVWM_USERDIR}/Xset.conf"
 else
    echo "Notice: ${FVWM_USERDIR}/Xset.conf does not exist"
+fi
+
+# Early user customizations if needed can be set here.
+if [ -x "${FVWM_USERDIR}/libexec/pre_start.sh" ]; then
+   . "${FVWM_USERDIR}/libexec/pre_start.sh"
 fi
 
 # Check if there is a XOverrideFontCursor.so for LD_PRELOAD and if LD_PRELOAD is already in

@@ -350,9 +350,11 @@ function setup_nscde
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 0/InfoStoreAdd desklastpage 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
       elif [ "x$ans" == "xn" ]; then
          echo "Not enabling: desklastpage --> 0"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 1/InfoStoreAdd desklastpage 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       else
          echo "Answer not understood."
          echo "Not enabling: desklastpage --> 0"
+         $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 1/InfoStoreAdd desklastpage 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       fi
 
       for filemgr in pcmanfm krusader caja nemo thunar dolphin nautilus

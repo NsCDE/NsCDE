@@ -282,8 +282,9 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1500}
-            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi suspend}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1250}
+            Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi suspend || $NSCDE_ROOT/libexec/nscde-acpi suspend}
             Quit
          End
          Else
@@ -300,8 +301,9 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System in hybrid mode" "..." 1500}
-            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System in hybrid mode" "..." 1250}
+            Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend || $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend}
             Quit
          End
          Else
@@ -318,8 +320,9 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1500}
-            Do {Exec sudo $NSCDE_ROOT/libexec/nscde-acpi hibernate}
+            Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1250}
+            Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi hibernate || $NSCDE_ROOT/libexec/nscde-acpi hibernate}
             Quit
          End
          Else
