@@ -70,6 +70,15 @@ Begin
 
    Set $dclickTimeOut = {egrep '^([[:space:]]+)?InfoStoreAdd[[:space:]]+menudclicktm' "} $NSCDEFILE {"}
    Set $dclickTime = (GetOutput $dclickTimeOut 1 3)
+   If $dclickTime == {} Then
+   Begin
+      Set $dclickTime = 450
+      Set $AppendToNsCDEConfFile = 1
+   End
+   Else
+   Begin
+      Set $AppendToNsCDEConfFile = 0
+   End
 
    ChangeValue 11 $dclickTime
    ChangeValue 13 (Div (Mult (StrCopy $tmp 1 $pos2) 20) (StrCopy $tmp (Add $pos2 2) 256))
@@ -423,8 +432,16 @@ Widget 18
          # Menu Double Click Time in FVWM
          Do {MenuStyle * DoubleClickTime } (GetValue 11)
          Do {ClickTime } (GetValue 11)
-         Set $WriteNsCDECmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
-         Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
+         If $AppendToNsCDEConfFile == 0 Then
+         Begin
+            Set $WriteNsCDECmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
+            Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
+         End
+         If $AppendToNsCDEConfFile == 1 Then
+         Begin
+            Set $WriteNsCDECmd = {echo -ne "\n# Managed usually by PointerMgr\nInfoStoreAdd menudclicktm } (GetValue 11) {\n" >> "} $NSCDEFILE {"}
+            Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
+         End
 
          # Sync X Resources
          Set $WriteXresourcesCmd = {(echo "! Warning: This file is managed and will be overwritten by PointerMgr when it is used."; echo "*.multiClickTime: } (GetValue 11) {"; echo "*multiClickTime: } (GetValue 11) {") > "} $XRDBFILE {"}
@@ -454,7 +471,16 @@ Widget 18
          # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
          If $XSETTINGSFILE <> {} Then
          Begin
-            Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Net\/DoubleClickTime[[:space:]]\+\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $XSETTINGSFILE {"}
+            Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Net\/DoubleClickTime[[:space:]]+[[:digit:]]+' "} $XSETTINGSFILE {"; echo $?}
+            Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
+            If $XsettingsParamExistance == 0 Then
+            Begin
+               Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Net\/DoubleClickTime[[:space:]]\+\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $XSETTINGSFILE {"}
+            End
+            Else
+            Begin
+               Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Mouse Style Manager\nNet/DoubleClickTime } (GetValue 11) {\n" >> "} $XSETTINGSFILE {"}
+            End
             Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
             Do {Schedule 500 f_Xsettingsd start}
          End
