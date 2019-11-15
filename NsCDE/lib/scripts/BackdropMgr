@@ -84,10 +84,11 @@ End
 
 Widget 1
    Property
-   Size 4 0
-   Position 16 4
+   Size 8 0
+   Position 16 2
    Type ItemDraw
    Flags NoReliefString Left
+   Colorset 52
    Title { Backdrops }
    Main
       Case message of
@@ -162,6 +163,30 @@ Widget 5
          Set $BackdropPreview = (GetOutput $BackdropPreviewCmd 2 -1)
          Do {Colorset 60 TiledPixmap } $BackdropPreview
          ChangeColorset 4 60
+
+         # Calculate chars in the current backdrop name
+         Set $StrLen = 1
+         Set $iter = 0
+         While $iter <> 1 Do
+         Begin
+            Set $NameStr = (StrCopy $BackdropName $StrLen $StrLen)
+            If $NameStr <> {} Then
+            Begin
+               Set $iter = 0
+               Set $StrLen = (Add $StrLen 1)
+            End
+            Else
+            Begin
+               Set $iter = 1
+               Set $StrLen = (Mult (Add $StrLen -1) 8)
+            End
+         End
+
+         # Set backdrop name in the upper title
+         Set $StrSpace = (Add $StrLen 90)
+         Set $NameInTitle = { Backdrops: } $BackdropName
+         ChangeSize 1 $StrSpace 22
+         ChangeTitle 1 $NameInTitle
       End
       2 :
       Begin
@@ -173,6 +198,30 @@ Widget 5
          Set $PhotoPreviewCmd = {$NSCDE_ROOT/libexec/backdropmgr -t -e -D } $ColorVariant { -s "} $PhotoName {"}
          Set $PhotoPreview = (GetOutput $PhotoPreviewCmd 1 -1)
          ChangeIcon 4 $PhotoPreview
+
+         # Calculate chars in the current picture name
+         Set $StrLen = 1
+         Set $iter = 0
+         While $iter <> 1 Do
+         Begin
+            Set $NameStr = (StrCopy $PhotoName $StrLen $StrLen)
+            If $NameStr <> {} Then
+            Begin
+               Set $iter = 0
+               Set $StrLen = (Add $StrLen 1)
+            End
+            Else
+            Begin
+               Set $iter = 1
+               Set $StrLen = (Mult (Add $StrLen -1) 8)
+            End
+         End
+
+         # Set picture name in the upper title
+         Set $StrSpace = (Add $StrLen 82)
+         Set $NameInTitle = { Pictures: } $PhotoName
+         ChangeSize 1 $StrSpace 22
+         ChangeTitle 1 $NameInTitle
       End
       3 :
       Begin
@@ -253,7 +302,8 @@ Widget 7
       Begin
          If (GetValue 7) == 1 Then
          Begin
-            ChangeTitle 1 {  Pictures }
+            ChangeTitle 1 { Pictures }
+            ChangeSize 1 80 22
             Set $Photos = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
             ChangeTitle 5 $Photos
             ChangeTitle 6 { Use this picture for all workspaces}
@@ -266,6 +316,7 @@ Widget 7
          Else
          Begin
             ChangeTitle 1 { Backdrops }
+            ChangeSize 1 90 22
             Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
             ChangeTitle 5 $Backdrops
             ChangeTitle 6 { Use this backdrop for all workspaces}
