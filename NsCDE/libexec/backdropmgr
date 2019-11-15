@@ -107,10 +107,11 @@ function GenerateBackdropPreview
 
       grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
       if (($? == 0)); then
-         TEMP=$(mktemp)
-         sed "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" < ${FVWM_USERDIR}/NsCDE-Backdrops.conf > $TEMP
-         cat $TEMP > ${FVWM_USERDIR}/NsCDE-Backdrops.conf
-         rm -f $TEMP
+         OldBackdrop=$(egrep "Colorset 3${Desk} TiledPixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
+         $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+         if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ]; then
+            rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
+         fi
       else
          echo "Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]/backer/Desk${Desk}-${1}.pm" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
       fi
@@ -135,12 +136,13 @@ function GeneratePhotoPreview
    if (($PreviewMode == 0)); then
       grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
       if (($? == 0)); then
-         TEMP=$(mktemp)
          if [ -s "$PhotoNamePath" ]; then
+            OldBackdrop=$(egrep "Colorset 3${Desk} TiledPixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
             sededpath=$(echo "$PhotoNamePath" | sed 's/\//\\\//g')
-            sed "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap $sededpath/g" < ${FVWM_USERDIR}/NsCDE-Backdrops.conf > $TEMP
-            cat $TEMP > ${FVWM_USERDIR}/NsCDE-Backdrops.conf
-            rm -f $TEMP
+            $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+            if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ]; then
+               rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
+            fi
          else
             echo "Error getting image path for $1."
          fi
