@@ -1049,6 +1049,25 @@ Widget 31
             Begin
                Do {FvwmForm ErrMsgForm2 TITLE="Font Style Manager" TEXT1="Error editing $HOME/.config/gtk-3.0/settings.ini:" TEXT2=" } $Gtk3Font {"}
             End
+
+            # XSETTINGS Daemon Integration
+            Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
+
+            # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
+            If $XSETTINGSFILE <> {} Then
+            Begin
+               Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Gtk\/FontName[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+               Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
+               If $XsettingsParamExistance == 0 Then
+               Begin
+                  Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
+               End
+               Else
+               Begin
+                  Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
+               End
+               Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+            End
          End
 
          If (GetValue 27) == 1 Then

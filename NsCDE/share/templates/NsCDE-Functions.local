@@ -1,0 +1,94 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+#
+# This is NsCDE-Functions.local example
+#
+
+# Examples of local user definitions and redefinitions of some
+# NsCDE/FVWM functions. Uncomment what is needed, edit and
+# customize to suit.
+
+# Called from Calendar Applet right of the clock on the
+# Front Panel. Default action is "Nop" (No Operation)
+# DestroyFunc f_Calendar
+# AddToFunc f_Calendar
+# + I Echo Calendar
+# + I Next (Thunderbird, Mail) WarpToWindow 30 50
+
+# Called from E-Mail Applet on the Front Panel
+# Default action is "Nop" (No Operation)
+# Front Panel Check Mail
+# DestroyFunc f_CheckMail
+# AddToFunc f_CheckMail
+# + I Exec exec $[FVWM_USERDIR]/libexec/checkmail.sh
+
+# Fplite applet on Front Panel, right top of WSM
+# Can be overriden by user if user has some fancy
+# app for processes and system resources.
+# DestroyFunc f_FpLiteClickAction
+# AddToFunc f_FpLiteClickAction
+# + I Test (x progname) Exec exec progname -progoption
+
+# Called from FvwmEvent MainLoop. Here, user can set
+# own hooks to be done when current desk changes.
+# DestroyFunc f_UserChangeDesk
+# AddToFunc f_UserChangeDesk
+# + I All (CurrentPage, FrontPanel) Focus
+
+# Called from FvwmEvent MainLoop. Here, user can set
+# own hooks to be done when current page changes.
+# DestroyFunc f_UserChangePage
+# AddToFunc f_UserChangePage
+# + I Nop
+
+# Hook of the f_SysAddWindowEvent called from
+# FvwmEvent on add_window event. Called when new
+# window appears. This example focuses every new
+# window but avoids FrontPanel and Subpanels
+# because of strange interaction
+# DestroyFunc f_AddWindowEvent
+# AddToFunc f_AddWindowEvent
+# + I Current (NsCDE-Subpanel-*) Break 1
+# + I Current (FrontPanel) Break 1
+# + I Echo $0
+# + I WindowId $0 Focus
+
+# Hook of the f_SysConfigureWindowEvent called from
+# FvwmEvent on configure_window event. See
+# FvwmEvent(1) and f_SysConfigureWindowEvent in
+# NsCDE config/NsCDE-Functions.conf
+# DestroyFunc f_ConfigureWindowEvent
+# AddToFunc f_ConfigureWindowEvent
+# + I Nop
+
+# Hook of the f_SysDestroyWindowEvent called from
+# FvwmEvent on destroy_window event. See
+# FvwmEvent(1) and f_SysDestroyWindowEvent in
+# DestroyFunc f_DestroyWindowEvent
+# AddToFunc f_DestroyWindowEvent
+# + I Nop
+
+# Hook of the RestartFunction called when
+# FVWM is restarted.
+# DestroyFunc f_UserRestartFunction
+# AddToFunc f_UserRestartFunction
+# + I None (BuggyApp) Exec exec buggyapp
+
+# Function: f_UserEnterWindow
+# Called from f_EnterWindow on mouse hover (FvwmEvent)
+# Parameters: $0 - Window ID from FvwmEvent(1)
+# DestroyFunc f_UserEnterWindow
+# AddToFunc f_UserEnterWindow
+# + I Nop
+
+# Function: f_UserLeaveWindow
+# Called from f_LeaveWindow on mouse hover (FvwmEvent)
+# Parameters: $0 - Window ID from FvwmEvent(1)
+# DestroyFunc f_UserLeaveWindow
+# AddToFunc f_UserLeaveWindow
+# + I Nop
+

@@ -1878,11 +1878,11 @@ Widget 122
             Begin
                If $check_w15 == {} Then
                Begin
-                  Set $StartTransParentCmd = {echo 'Style * OpaqueMoveSize 0' >> "} $ConfigurationFile {"}
+                  Set $ShowContentsDuringMoveCmd = {echo 'Style * OpaqueMoveSize 0' >> "} $ConfigurationFile {"}
                End
                Else
                Begin
-                  Set $StartTransParentCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\10/g' -f "} $ConfigurationFile {"}
+                  Set $ShowContentsDuringMoveCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\10/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $ShowContentsDuringMoveDo = (GetOutput $ShowContentsDuringMoveCmd 1 -1)
