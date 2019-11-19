@@ -203,7 +203,8 @@ function setup_nscde
       echo -ne '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.icons/default/index.theme already exists."
+         echo "${HOME}/.icons/default/index.theme already exists. Setting default cursor theme."
+         $NSCDE_ROOT/bin/confset.py -t ini -c settingz.ini -s "Icon Theme" -k Inherits -v dmz-aa
       fi
    fi
 
@@ -219,7 +220,14 @@ function setup_nscde
       echo -ne 'gtk-icon-theme-name = "NsCDE"\ngtk-button-images = 0\ngtk-menu-images = 0\ngtk-cursor-blink = 0\n' >> "$HOME/.gtkrc-2.0"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.gtkrc-2.0 already exists."
+         echo "${HOME}/.gtkrc-2.0 already exists. Setting NsCDE theme options."
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-key-theme-name -v '"Emacs"'
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v '"NsCDE"'
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v '"DejaVu Serif Book 10"'
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v '"NsCDE"'
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-button-images -v 0
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-menu-images -v 0
+         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-cursor-blink -v 0
       fi
    fi
 
@@ -234,7 +242,15 @@ function setup_nscde
       echo -ne "gtk-icon-theme-name = NsCDE\ngtk-cursor-blink = 0\n" >> "$HOME/.config/gtk-3.0/settings.ini"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.config/gtk-3.0/settings.ini already exists."
+         echo "${HOME}/.config/gtk-3.0/settings.ini already exists. Setting NsCDE theme options."
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-cursor-theme-name -v dmz-aa
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-button-images -v 0
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-menu-images -v 0
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "DejaVu Serif Book 10"
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-cursor-blink -v 0
       fi
    fi
 
@@ -260,7 +276,8 @@ function setup_nscde
       echo -ne '[Qt]\nstyle=GTK+\n' > "$HOME/.config/Trolltech.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.config/Trolltech.conf already exists."
+         echo "${HOME}/.config/Trolltech.conf already exists. Setting NsCDE style."
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v GTK+
       fi
    fi
 
@@ -272,7 +289,10 @@ function setup_nscde
       echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\n' > "$HOME/.config/qt5ct/qt5ct.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.config/qt5ct/qt5ct.conf already exists."
+         echo "${HOME}/.config/qt5ct/qt5ct.conf already exists. Setting NsCDE style."
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
       fi
    fi
 
