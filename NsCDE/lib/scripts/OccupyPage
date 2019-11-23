@@ -33,7 +33,11 @@ Begin
    Key Down A 2 2 {Down}
    Key Up A 2 2 {Up}
 
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 1 $LabelFont
+   ChangeFont 4 $LabelFont
+
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 3 $SmallFont
    ChangeFont 10 $SmallFont
    ChangeFont 9 $SmallFont
@@ -51,6 +55,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString
    Title {Window: }
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -78,6 +83,7 @@ Widget 4
    Type ItemDraw
    Flags NoReliefString
    Title {Pages:      }
+   Font "xft:::pixelsize=15"
    Colorset 22
 End
 
@@ -182,6 +188,7 @@ Widget 3
    Value 0
    Flags NoReliefString
    Title { All Pages}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -233,6 +240,7 @@ Widget 10
    Value 0
    Flags NoReliefString
    Title { Go With the Window}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -328,6 +336,7 @@ Widget 9
    Flags NoReliefString
    Flags Left
    Title {}
+   Font "xft:::pixelsize=14"
    Colorset 22
    Main
       Case message of

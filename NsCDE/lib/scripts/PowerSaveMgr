@@ -10,6 +10,11 @@ Colorset 22
 
 Init
 Begin
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 4 $DefFont
+   ChangeFont 7 $DefFont
+   ChangeFont 9 $DefFont
+
    Set $genfile = (GetOutput {sh -c "echo $FVWM_USERDIR/Xset.conf"} -1 1)
    Set $FILE = $genfile
    Set $Wrong = 0
@@ -305,6 +310,7 @@ Widget 4
    Flags NoReliefString
    Type HScrollBar
    Value 0
+   Font "xft:::pixelsize=15"
    MinValue 0
    MaxValue 65535
    Main
@@ -367,6 +373,7 @@ Widget 7
    Flags NoReliefString
    Type HScrollBar
    Value 0
+   Font "xft:::pixelsize=15"
    MinValue 0
    MaxValue 65535
    Main
@@ -397,6 +404,7 @@ Widget 9
    Flags NoReliefString
    Type HScrollBar
    Value 0
+   Font "xft:::pixelsize=15"
    MinValue 0
    MaxValue 65535
    Main

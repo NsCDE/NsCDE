@@ -72,6 +72,18 @@ Begin
 
    Set $ResetDone = 0
 
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 1 $DefaultFont
+   ChangeFont 2 $DefaultFont
+   ChangeFont 4 $DefaultFont
+   ChangeFont 5 $DefaultFont
+   ChangeFont 10 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 6 $DefaultFont
+   ChangeFont 9 $DefaultFont
+   ChangeFont 12 $DefaultFont
+   ChangeFont 8 $DefaultFont
+
    # Key bindings
    Key Q C 15 1 {KeyClose}
    Key Escape A 15 1 {KeyClose}
@@ -110,6 +122,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString Left
    Title {Subpanel Settings: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -124,6 +137,7 @@ Widget 2
    Flags NoReliefString
    Type PushButton
    Title {Reset}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -170,6 +184,7 @@ Widget 4
    Type ItemDraw
    Flags NoReliefString Left
    Title {Subpanel Name: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -183,6 +198,7 @@ Widget 5
    Size 256 20
    Type TextField
    Flags NoReliefString Left
+   Font "xft:::pixelsize=15"
    Title {}
    Colorset 20
    Main
@@ -200,6 +216,7 @@ Widget 6
    Flags NoReliefString
    Type PushButton
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -233,6 +250,7 @@ Widget 8
    Type TextField
    Flags NoReliefString Left
    Title {}
+   Font "xft:::pixelsize=15"
    Colorset 20
    Main
       Case message of
@@ -248,6 +266,7 @@ Widget 9
    Flags NoReliefString
    Type PushButton
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -280,6 +299,7 @@ Widget 11
    Size 48 20
    Type CheckBox
    Flags NoReliefString Left
+   Font "xft:::pixelsize=16"
    Title {}
    Main
       Case message of
@@ -295,6 +315,7 @@ Widget 12
    Flags NoReliefString
    Type PushButton
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

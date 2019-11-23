@@ -10,7 +10,19 @@ Colorset 22
 
 Init
 Begin
-   Set $CheckBoxFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $NarrowFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
+   ChangeFont 10 $DefFont
+   ChangeFont 11 $DefFont
+   ChangeFont 13 $DefFont
+   ChangeFont 14 $DefFont
+   ChangeFont 15 $DefFont
+   ChangeFont 16 $DefFont
+   ChangeFont 17 $DefFont
+   ChangeFont 18 $DefFont
+   ChangeFont 28 $NarrowFont
+
+   Set $CheckBoxFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 25 $CheckBoxFont
    ChangeFont 26 $CheckBoxFont
    ChangeFont 27 $CheckBoxFont
@@ -419,8 +431,8 @@ End
 
 Widget 7
    Property
-   Position 608 62
-   Flags NoReliefString NoFocus
+   Position 506 62
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title { Font Style}
    Main
@@ -466,6 +478,7 @@ Widget 10
    Flags NoReliefString NoFocus
    Type ItemDraw
    Title {Set Fonts for DPI: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -543,9 +556,10 @@ End
 Widget 13
    Property
    Position 234 260
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Preview Set for Size:}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -559,6 +573,7 @@ Widget 14
    Size 160 10
    Flags NoReliefString
    Type PopupMenu
+   Font "xft:::pixelsize=15"
    Title {xxxxxxxxxxxxxx}
    Main
       Case message of
@@ -716,9 +731,10 @@ End
 Widget 15
    Property
    Position 402 260
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Font Group: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -733,6 +749,7 @@ Widget 16
    Flags NoReliefString
    Value 1
    Type PopupMenu
+   Font "xft:::pixelsize=15"
    Title {Normal|Bold|Italic|Monospaced|Monospaced Bold}
    Main
       Case message of
@@ -744,9 +761,10 @@ End
 Widget 17
    Property
    Position 580 260
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Font Size: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -762,6 +780,7 @@ Widget 18
    Value 8
    Type PopupMenu
    Title {xxxxxxxxxx}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -875,6 +894,7 @@ Widget 25
    Size 100 20
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Title { Run User Script}
    Main
@@ -892,6 +912,7 @@ Widget 26
    Type CheckBox
    Value 0
    Title { Refresh GTK2/GTK3}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -907,6 +928,7 @@ Widget 27
    Type CheckBox
    Value 0
    Title { Refresh X Resources}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -917,10 +939,11 @@ End
 Widget 28
    Property
    Position 522 596
-   Size 174 20
+   Size 172 20
    Flags NoReliefString
    Type PushButton
    Title {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
+   Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :

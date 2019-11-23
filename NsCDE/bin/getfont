@@ -68,10 +68,27 @@ function GetFont
 
    Catch2="${Catch/InfoStoreAdd font./}"
    Catch3="${Catch2#*\"}"
-   echo "${Catch3/\"/}"
+
+
+   if [ "x$FnMaxSize" == "x" ]; then
+      echo "${Catch3/\"/}"
+   else
+      export LC_ALL=C
+      GetSize=$(echo "${Catch3/\"/}" | sed "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g")
+      echo $GetSize | egrep -q '^([[:digit:]]+)(\.[[:digit:]]+)?$'
+      if (($? == 0)); then
+         if (($GetSize > $FnMaxSize)); then
+            echo "${Catch3/\"/}" | sed "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(.*\)\?/\1\2${FnMaxSize}\4/g"
+         else
+            echo "${Catch3/\"/}"
+         fi
+      else
+         echo "${Catch3/\"/}"
+      fi
+   fi
 }
 
-while getopts f:vmt:s:h Option
+while getopts f:vmt:s:S:Z:h Option
 do
    case $Option in
       f)
@@ -92,8 +109,16 @@ do
       s)
          FnSize="$OPTARG"
       ;;
+      S)
+         FnMaxSize="$OPTARG"
+      ;;
+      Z)
+         if [ "$NSCDE_FIX_SCRIPT_FONTSIZE" != "0" ]; then
+            FnMaxSize="$OPTARG"
+         fi
+      ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -h ]"
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S -Z maxsize ] [ -h ]"
          exit 0
       ;;
    esac

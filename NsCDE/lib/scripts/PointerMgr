@@ -7,6 +7,7 @@
 WindowTitle {Style Manager - Mouse}
 WindowSize 444 388
 Colorset 22
+Font xft::size=11
 
 Init
 Begin
@@ -83,6 +84,25 @@ Begin
    ChangeValue 11 $dclickTime
    ChangeValue 13 (Div (Mult (StrCopy $tmp 1 $pos2) 20) (StrCopy $tmp (Add $pos2 2) 256))
    ChangeValue 15 (GetOutput {xset -q} $pos 4)
+
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $DefFontBtn = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+
+   ChangeFont 3 $DefFont
+   ChangeFont 6 $DefFontBtn
+   ChangeFont 7 $DefFont
+   ChangeFont 8 $DefFont
+   ChangeFont 9 $DefFont
+   ChangeFont 10 $DefFont
+   ChangeFont 11 $DefFont
+   ChangeFont 12 $DefFont
+   ChangeFont 13 $DefFont
+   ChangeFont 14 $DefFont
+   ChangeFont 15 $DefFont
+   ChangeFont 17 $DefFontBtn
+   ChangeFont 18 $DefFontBtn
+   ChangeFont 19 $DefFontBtn
+   ChangeFont 20 $DefFontBtn
 
    # Initial state
    Set $NotClicked = 1
@@ -167,8 +187,8 @@ Widget 3
    Size 0 0
    Position 12 112
    Type ItemDraw
-   Flags NoReliefString NoFocus Right
-   Title {Test Double-Click}
+   Flags NoReliefString NoFocus Left
+   Title {Test Double-Click }
 End
 
 Widget 4

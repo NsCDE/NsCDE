@@ -58,6 +58,9 @@ Begin
    Set $NewAppType = {}
    Set $Perform = 1
 
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 14 $DefaultFont
+
    # Key bindings
    Key Q C 22 1 {KeyClose}
    Key Escape A 22 1 {KeyClose}
@@ -553,10 +556,11 @@ End
 Widget 14
    Property
    Size 128 26
-   Position 450 306
+   Position 446 306
    Type PopupMenu
-   Flags NoReliefString
+   Flags NoReliefString Left
    Title {Exec Command|Fvwm Module|Fvwm Function|Other|Check For ...}
+   Font "xft:::pixelsize=14"
    Colorset 22
    Main
       Case message of

@@ -60,8 +60,12 @@ Begin
    Key F1 A 19 1 {KeyHelp}
    Key Help A 19 1 {KeyHelp}
 
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 1 $DefFont
+   ChangeFont 10 $DefFont
+
    # Set different font for some elements
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 6 $SmallFont
    ChangeFont 7 $SmallFont
    ChangeFont 8 $SmallFont
@@ -90,6 +94,7 @@ Widget 1
    Flags NoReliefString Left
    Colorset 52
    Title { Backdrops }
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -274,8 +279,9 @@ End
 Widget 6
    Property
    Size 180 26
-   Position 16 306
+   Position 10 306
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Left
    Value 0
    Title { Use this backdrop for all workspaces}
@@ -292,6 +298,7 @@ Widget 7
    Size 180 26
    Position 290 306
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Left
    Value 0
    Title { Use a photo or picture }

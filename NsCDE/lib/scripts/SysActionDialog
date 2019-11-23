@@ -12,9 +12,13 @@ Init
 Begin
    WarpPointer 6
 
-   Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
-
+   Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium -Z 14} 1 -1)
    ChangeFont 6 $FontBoldMedium
+
+   Set $FontNormalMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   ChangeFont 2 $FontNormalMedium
+   ChangeFont 3 $FontNormalMedium
+   ChangeFont 4 $FontNormalMedium
 
    # Modes:
    # 1. Logout
@@ -124,11 +128,12 @@ End
 
 Widget 2
   Property
-  Size 120 0
+  Size 160 0
   Position 56 18
   Type ItemDraw
-  Flags NoReliefString
+  Flags NoReliefString Left
   Title {User Confirmation:}
+   Font "xft:::pixelsize=15"
   Colorset 22
   Main
      Case message of
@@ -139,11 +144,12 @@ End
 
 Widget 3
    Property
-   Size 320 0
+   Size 380 0
    Position 56 36
    Type ItemDraw
-   Flags NoReliefString
+   Flags NoReliefString Left
    Title {X Window System or Operating System Action}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -160,6 +166,7 @@ Widget 4
    Value 0
    Flags NoReliefString
    Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

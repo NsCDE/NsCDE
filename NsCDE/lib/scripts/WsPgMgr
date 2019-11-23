@@ -119,7 +119,18 @@ Begin
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
 
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
+   ChangeFont 9 $DefFont
+   ChangeFont 16 $DefFont
+   ChangeFont 17 $DefFont
+   ChangeFont 18 $DefFont
+
+   Set $HscFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
+   ChangeFont 11 $HscFont
+   ChangeFont 13 $HscFont
+   ChangeFont 15 $HscFont
+
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 12 $SmallFont
    ChangeFont 14 $SmallFont
 
@@ -155,9 +166,10 @@ End
 Widget 9
    Property
    Position 10 8
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Manage Number of Workspaces and Pages}
+   Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :

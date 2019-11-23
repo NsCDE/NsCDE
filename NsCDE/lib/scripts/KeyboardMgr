@@ -21,7 +21,12 @@ Begin
    ChangeValue 5 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 4)
    ChangeValue 7 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 7)
 
-   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 4 $DefFont
+   ChangeFont 6 $DefFont
+   ChangeFont 8 $DefFont
+
+   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
    ChangeFont 5 $HScrollBarFont
    ChangeFont 7 $HScrollBarFont
    ChangeFont 9 $HScrollBarFont
@@ -104,6 +109,7 @@ Widget 4
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    Title {   Start Delay }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -117,6 +123,7 @@ Widget 5
    Position 120 100
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=14"
    MinValue 0
    MaxValue 10000
    Main
@@ -132,6 +139,7 @@ Widget 6
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    Title {Repeat Delay }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -145,6 +153,7 @@ Widget 7
    Position 120 160
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=14"
    MinValue 0
    MaxValue 255
    Value 0
@@ -161,6 +170,7 @@ Widget 8
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    Title {Click Volume }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -174,6 +184,7 @@ Widget 9
    Position 120 224
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=14"
    MinValue 0
    MaxValue 100
    Value 0

@@ -14,7 +14,26 @@ Begin
    # Select Window Behavior Tab for a start
    SendSignal 4 1
 
-   Set $SectionNameFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
+   ChangeFont 4 $DefFont
+
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 7 $LabelFont
+   ChangeFont 13 $LabelFont
+   ChangeFont 14 $LabelFont
+   ChangeFont 17 $LabelFont
+   ChangeFont 19 $LabelFont
+   ChangeFont 23 $LabelFont
+   ChangeFont 24 $LabelFont
+   ChangeFont 25 $LabelFont
+   ChangeFont 26 $LabelFont
+   ChangeFont 31 $LabelFont
+   ChangeFont 32 $LabelFont
+   ChangeFont 33 $LabelFont
+   ChangeFont 34 $LabelFont
+   ChangeFont 35 $LabelFont
+
+   Set $SectionNameFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium -Z 10.5} 1 -1)
    ChangeFont 3 $SectionNameFont
 
    Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
@@ -497,6 +516,7 @@ Widget 4
    Type PopupMenu
    Flags NoReliefString
    Value 1
+   Font "xft:::pixelsize=15"
    Title { Window Behavior| Window Icons| Page Edges| Animation}
    Main
       Case message of
@@ -765,6 +785,7 @@ Widget 7
    Position 22 150
    Flags NoReliefString
    Type RadioButton
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -878,6 +899,7 @@ Widget 13
    Position 20 354
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -894,6 +916,7 @@ Widget 14
    Position 20 394
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -938,8 +961,9 @@ Widget 17
    Size 0 0
    Position 14 500
    Type ItemDraw
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Title { Time After Which Active Window Is Raised}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -978,8 +1002,9 @@ Widget 19
    Size 0 0
    Position 14 598
    Type ItemDraw
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Title { Manual Window Movement Threshold}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1082,6 +1107,7 @@ Widget 23
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1105,6 +1131,7 @@ Widget 24
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1128,6 +1155,7 @@ Widget 25
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1151,6 +1179,7 @@ Widget 26
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1246,6 +1275,7 @@ Widget 31
    Flags NoReliefString
    Type CheckBox
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1262,6 +1292,7 @@ Widget 32
    Flags NoReliefString
    Type CheckBox
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1278,6 +1309,7 @@ Widget 33
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1297,6 +1329,7 @@ Widget 34
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1316,6 +1349,7 @@ Widget 35
    Flags NoReliefString
    Type RadioButton
    Value 0
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
