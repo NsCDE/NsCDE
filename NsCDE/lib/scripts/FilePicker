@@ -38,7 +38,19 @@ Init
   ChangeTitle 5 $PWD
   ChangeTitle 9 {}
 
-  Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s small} 1 -1)
+  Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+  ChangeFont 4 $DefFont
+  ChangeFont 5 $DefFont
+  ChangeFont 8 $DefFont
+
+  Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+  ChangeFont 6 $BtnFont
+  ChangeFont 11 $BtnFont
+
+  Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+  ChangeFont 7 $ListFont
+
+  Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s small -Z 10.5} 1 -1)
   ChangeFont 12 $FontBoldMedium
 
   Set $W13Visible = 0
@@ -133,9 +145,10 @@ Widget 6
 Property
  Position 20 348
  Flags NoReliefString
- Size 50 18
+ Size 54 18
  Title {Up}
  Type PushButton
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :
@@ -160,9 +173,10 @@ Widget 11
 Property
  Position 92 348
  Flags NoReliefString
- Size 50 18
+ Size 74 18
  Title {Home}
  Type PushButton
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :
@@ -185,9 +199,10 @@ End
 Widget 12
 Property
  Position 20 386
- Flags NoReliefString
+ Flags NoReliefString Left
  Type CheckBox
- Title { Show hidden files}
+ Title { Show hidden files }
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :
@@ -271,9 +286,10 @@ End
 Widget 8
 Property
  Position 18 414
- Flags NoReliefString NoFocus
+ Flags NoReliefString NoFocus Left
  Type ItemDraw
  LocaleTitle {Selected file:}
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :

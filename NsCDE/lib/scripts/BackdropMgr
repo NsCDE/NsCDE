@@ -62,7 +62,19 @@ Begin
 
    Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 1 $DefFont
-   ChangeFont 10 $DefFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   ChangeFont 11 $BtnFont
+   ChangeFont 12 $BtnFont
+   ChangeFont 13 $BtnFont
+   ChangeFont 16 $BtnFont
+   ChangeFont 17 $BtnFont
+   ChangeFont 18 $BtnFont
+   ChangeFont 19 $BtnFont
+
+   Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 5 $ListFont
+   ChangeFont 10 $ListFont
 
    # Set different font for some elements
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
@@ -358,6 +370,7 @@ Widget 9
    Flags NoReliefString
    Value 0
    Title { Default for this Desk | Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -393,12 +406,13 @@ End
 
 Widget 10
    Property
-   Size 174 22
+   Size 192 22
    Position 22 412
    Type PushButton
    Flags NoReliefString
    Value 0
-   Title { Load Custom Palette ...}
+   Title { Load Custom Palette ... }
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -429,6 +443,7 @@ Widget 11
    Type PushButton
    Flags NoReliefString
    Title { Preview |  Preview |  Revert  }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -479,6 +494,7 @@ Widget 12
    Type PushButton
    Flags NoReliefString
    Title { Add ... }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -528,6 +544,7 @@ Widget 13
    Type PushButton
    Flags NoReliefString
    Title { Delete ... }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -606,6 +623,7 @@ Widget 16
    Type PushButton
    Flags NoReliefString
    Title {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -634,6 +652,7 @@ Widget 17
    Type PushButton
    Flags NoReliefString
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -720,6 +739,7 @@ Widget 18
    Type PushButton
    Flags NoReliefString
    Title {Close}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -743,6 +763,7 @@ Widget 19
    Type PushButton
    Flags NoReliefString
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

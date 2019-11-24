@@ -27,6 +27,22 @@ Begin
    ChangeFont 26 $CheckBoxFont
    ChangeFont 27 $CheckBoxFont
 
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 3 $LabelFont
+   ChangeFont 5 $LabelFont
+   ChangeFont 7 $LabelFont
+
+   Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 4 $ListFont
+   ChangeFont 6 $ListFont
+   ChangeFont 8 $ListFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 31 $BtnFont
+   ChangeFont 32 $BtnFont
+   ChangeFont 33 $BtnFont
+   ChangeFont 34 $BtnFont
+
    Set $CurrentDPI = (GetOutput {xrdb -q | sed -n 's/^Xft.dpi:\([\t ]\+\)\?//gp'} 1 1)
 
    If $CurrentDPI == {} Then
@@ -182,6 +198,7 @@ Widget 3
    Flags NoReliefString NoFocus
    Type ItemDraw
    Title { Font Sets}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -494,6 +511,7 @@ Widget 11
    Value 2
    Type PopupMenu
    Title { 75x75 DPI | 96x96 DPI | 120x120 DPI | 144x144 DPI | Custom DPI ... }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1026,6 +1044,7 @@ Widget 31
    Flags NoReliefString
    Type PushButton
    Title {Save ...}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1121,11 +1140,12 @@ End
 
 Widget 32
    Property
-   Position 202 648
-   Size 120 20
+   Position 186 648
+   Size 170 20
    Flags NoReliefString
    Type PushButton
    Title {Save Font Set ...}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1181,11 +1201,12 @@ End
 
 Widget 33
    Property
-   Position 390 648
+   Position 410 648
    Size 120 20
    Flags NoReliefString
    Type PushButton
    Title {  Close  }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1205,6 +1226,7 @@ Widget 34
    Flags NoReliefString
    Type PushButton
    Title {  Help  }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

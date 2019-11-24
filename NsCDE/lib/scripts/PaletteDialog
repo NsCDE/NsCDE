@@ -13,6 +13,11 @@ Begin
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   ChangeFont 5 $BtnFont
+   ChangeFont 6 $BtnFont
+   ChangeFont 7 $BtnFont
+
    # Keybindings
    Key Escape A 6 1 {KeyClose}
    Key F1 A 7 1 {KeyHelp}
@@ -87,6 +92,7 @@ Property
    Type PushButton
    Flags NoReliefString
    Title { OK }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -98,11 +104,12 @@ End
 
 Widget 6
 Property
-   Size 60 20
-   Position 110 258
+   Size 80 20
+   Position 100 258
    Type PushButton
    Flags NoReliefString
    Title {Cancel}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -122,6 +129,7 @@ Property
    Type PushButton
    Flags NoReliefString
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

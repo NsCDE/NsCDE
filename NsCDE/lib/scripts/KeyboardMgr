@@ -21,12 +21,19 @@ Begin
    ChangeValue 5 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 4)
    ChangeValue 7 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 7)
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 4 $DefFont
    ChangeFont 6 $DefFont
    ChangeFont 8 $DefFont
+   ChangeFont 14 $DefFont
 
-   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   ChangeFont 11 $BtnFont
+   ChangeFont 12 $BtnFont
+   ChangeFont 13 $BtnFont
+   ChangeFont 14 $BtnFont
+
+   Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11.5} 1 -1)
    ChangeFont 5 $HScrollBarFont
    ChangeFont 7 $HScrollBarFont
    ChangeFont 9 $HScrollBarFont
@@ -82,6 +89,7 @@ Widget 3
    Flags NoReliefString
    Type CheckBox
    Title { Auto Repeat}
+   Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :
@@ -214,6 +222,7 @@ Widget 11
    Flags NoReliefString
    Type PushButton
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -234,6 +243,7 @@ Widget 12
    Flags NoReliefString
    Type PushButton
    Title {Save}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -272,6 +282,7 @@ Widget 13
    Flags NoReliefString
    Type PushButton
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -291,6 +302,7 @@ Widget 14
    Flags NoReliefString
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

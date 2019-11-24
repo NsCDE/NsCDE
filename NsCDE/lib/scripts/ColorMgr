@@ -76,6 +76,24 @@ Begin
    Key Help A 32 1 {KeyHelp}
 
    # Set different font for some elements
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
+   ChangeFont 1 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 18 $DefaultFont
+   ChangeFont 19 $DefaultFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   ChangeFont 29 $BtnFont
+   ChangeFont 30 $BtnFont
+   ChangeFont 31 $BtnFont
+   ChangeFont 32 $BtnFont
+   ChangeFont 4 $BtnFont
+   ChangeFont 5 $BtnFont
+   ChangeFont 6 $BtnFont
+
+   Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 3 $ListFont
+
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 21 $SmallFont
    ChangeFont 22 $SmallFont
@@ -84,7 +102,6 @@ Begin
    ChangeFont 25 $SmallFont
    ChangeFont 26 $SmallFont
    ChangeFont 27 $SmallFont
-   ChangeFont 32 $SmallFont
 
    Set $GtkStr = {00}
    Set $Gtk2Str = 0
@@ -112,6 +129,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString Left
    Title { Palettes }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -202,6 +220,7 @@ Widget 4
    Type PushButton
    Flags NoReliefString
    Title { Preview |  Preview |  Revert  }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -239,6 +258,7 @@ Widget 5
    Type PushButton
    Flags NoReliefString
    Title { Add ... }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -270,6 +290,7 @@ Widget 6
    Type PushButton
    Flags NoReliefString
    Title { Delete ... }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -306,6 +327,7 @@ Widget 7
    Type ItemDraw
    Flags NoReliefString
    Title {  Palette Name  }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -453,6 +475,7 @@ Widget 18
    Type PushButton
    Flags NoReliefString
    Title {Number Of Colors ...}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -494,6 +517,7 @@ Widget 19
    Type ItemDraw
    Flags NoReliefString Left
    Title { Integration Options }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -641,6 +665,7 @@ Widget 29
    Type PushButton
    Flags NoReliefString
    Title {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -665,6 +690,7 @@ Widget 30
    Type PushButton
    Flags NoReliefString
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -837,6 +863,7 @@ Widget 31
    Type PushButton
    Flags NoReliefString
    Title {Close}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -864,6 +891,7 @@ Widget 32
    Type PushButton
    Flags NoReliefString
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

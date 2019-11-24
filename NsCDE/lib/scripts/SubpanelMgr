@@ -60,6 +60,24 @@ Begin
 
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 14 $DefaultFont
+   ChangeFont 18 $DefaultFont
+   ChangeFont 15 $DefaultFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 20 $BtnFont
+   ChangeFont 21 $BtnFont
+   ChangeFont 22 $BtnFont
+   ChangeFont 23 $BtnFont
+
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 1 $LabelFont
+   ChangeFont 2 $LabelFont
+   ChangeFont 3 $LabelFont
+   ChangeFont 4 $LabelFont
+   ChangeFont 7 $LabelFont
+   ChangeFont 13 $LabelFont
+   ChangeFont 9 $LabelFont
+   ChangeFont 11 $LabelFont
 
    # Key bindings
    Key Q C 22 1 {KeyClose}
@@ -586,6 +604,7 @@ Widget 15
    Type ItemDraw
    Flags NoReliefString Left Hidden
    Title {Check for this cmd:}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -636,6 +655,7 @@ Widget 18
    Value 0
    Colorset 22
    Title { Do not check for command existance}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -657,6 +677,7 @@ Widget 20
    Type PushButton
    Flags NoReliefString
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -701,6 +722,7 @@ Widget 21
    Type PushButton
    Flags NoReliefString
    Title {Save}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -718,6 +740,7 @@ Widget 22
    Type PushButton
    Flags NoReliefString
    Title {Cancel}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -738,6 +761,7 @@ Widget 23
    Type PushButton
    Flags NoReliefString
    Title {Help}
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of

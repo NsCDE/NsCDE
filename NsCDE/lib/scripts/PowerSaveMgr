@@ -14,6 +14,19 @@ Begin
    ChangeFont 4 $DefFont
    ChangeFont 7 $DefFont
    ChangeFont 9 $DefFont
+   ChangeFont 6 $DefFont
+
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 5 $LabelFont
+   ChangeFont 8 $LabelFont
+   ChangeFont 10 $LabelFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14.5} 1 -1)
+   ChangeFont 1 $BtnFont
+   ChangeFont 2 $BtnFont
+   ChangeFont 3 $BtnFont
+   ChangeFont 13 $BtnFont
+   ChangeFont 14 $BtnFont
 
    Set $genfile = (GetOutput {sh -c "echo $FVWM_USERDIR/Xset.conf"} -1 1)
    Set $FILE = $genfile
@@ -75,6 +88,7 @@ Widget 1
    Flags NoReliefString
    Type PushButton
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -155,6 +169,7 @@ Widget 2
    Flags NoReliefString
    Type PushButton
    Title {Save}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -291,6 +306,7 @@ Widget 3
    Flags NoReliefString
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -327,6 +343,7 @@ Widget 5
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title { Standby time after (seconds): }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -340,6 +357,7 @@ Widget 6
    Flags NoReliefString
    Type CheckBox
    Title { DPMS Enabled/Disabled}
+   Font "xft:::pixelsize=15"
    Value 1
    Main
       Case message of
@@ -387,9 +405,10 @@ End
 Widget 8
    Property
    Position 14 268
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title { Off time after (seconds): }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -418,9 +437,10 @@ End
 Widget 10
    Property
    Position 14 182
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title { Suspend time after (seconds): }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -461,6 +481,7 @@ Widget 13
    Flags NoReliefString
    Type PushButton
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -480,6 +501,7 @@ Widget 14
    Flags NoReliefString
    Type PushButton
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

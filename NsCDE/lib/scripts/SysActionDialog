@@ -20,6 +20,11 @@ Begin
    ChangeFont 3 $FontNormalMedium
    ChangeFont 4 $FontNormalMedium
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 7 $BtnFont
+   ChangeFont 7 $BtnFont
+   ChangeFont 8 $BtnFont
+
    # Modes:
    # 1. Logout
    # 2. FVWM restart
@@ -133,7 +138,7 @@ Widget 2
   Type ItemDraw
   Flags NoReliefString Left
   Title {User Confirmation:}
-   Font "xft:::pixelsize=15"
+  Font "xft:::pixelsize=15"
   Colorset 22
   Main
      Case message of
@@ -220,11 +225,12 @@ End
 
 Widget 6
 Property
-   Size 80 20
+   Size 100 20
    Position 20 140
    Type PushButton
    Flags NoReliefString
    Title { Confirm }
+   Font "xft:::pixelsize=15"
    Main
    Case message of
    SingleClic :
@@ -342,10 +348,11 @@ End
 
 Widget 7
 Property
-   Size 80 20
-   Position 190 140
+   Size 100 20
+   Position 180 140
    Type PushButton
    Title { Dismiss }
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
       Case message of
@@ -362,10 +369,11 @@ End
 
 Widget 8
 Property
-   Size 80 20
-   Position 360 140
+   Size 100 20
+   Position 340 140
    Type PushButton
    Title { Help }
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
    Case message of

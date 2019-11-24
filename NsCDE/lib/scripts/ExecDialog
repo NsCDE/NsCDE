@@ -17,6 +17,10 @@ Begin
    ChangeFont 2 $FontNormalSmall
    ChangeFont 3 $FontNormalSmall
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 5 $BtnFont
+   ChangeFont 6 $BtnFont
+
    Set $FontNormalMono = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s medium -Z 12} 1 -1)
    ChangeFont 4 $FontNormalMono
 
@@ -168,6 +172,7 @@ Widget 2
    Size 300 20
    Position 20 86
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Flags NoReliefString
    Title { Execute in terminal}
@@ -178,6 +183,7 @@ Widget 3
    Size 300 20
    Position 190 86
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Flags NoReliefString
    Title { Leave this dialog open}
@@ -190,6 +196,7 @@ Widget 4
    Type TextField
    Flags NoReliefString
    Title {}
+   Font "xft:::pixelsize=15"
    Colorset 20
    Main
       Case message of
@@ -212,6 +219,7 @@ Widget 5
    Type PushButton
    Flags NoReliefString
    Title { Exec }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -226,6 +234,7 @@ Widget 6
    Position 262 134
    Type PushButton
    Title { Dismiss }
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
       Case message of

@@ -62,6 +62,10 @@ Begin
            ChangeTitle 5 $CancelStr
         End
 
+        Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+        ChangeFont 4 $BtnFont
+        ChangeFont 5 $BtnFont
+
 	WarpPointer 2
 	Key Escape A 5 1 {Quit}
 	Key Return A 4 1 {Go}
@@ -116,6 +120,7 @@ Widget 4
    Position 16 94
    Type PushButton
    Title {OK}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
       Case message of
@@ -136,6 +141,7 @@ Widget 5
    Position 288 94
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
       Case message of

@@ -88,7 +88,7 @@ function GetFont
    fi
 }
 
-while getopts f:vmt:s:S:Z:h Option
+while getopts f:vmt:s:Z:h Option
 do
    case $Option in
       f)
@@ -109,16 +109,13 @@ do
       s)
          FnSize="$OPTARG"
       ;;
-      S)
-         FnMaxSize="$OPTARG"
-      ;;
       Z)
          if [ "$NSCDE_FIX_SCRIPT_FONTSIZE" != "0" ]; then
             FnMaxSize="$OPTARG"
          fi
       ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S -Z maxsize ] [ -h ]"
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -Z maxsize ] [ -h ]"
          exit 0
       ;;
    esac

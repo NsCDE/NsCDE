@@ -125,6 +125,11 @@ Begin
    ChangeFont 17 $DefFont
    ChangeFont 18 $DefFont
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 21 $BtnFont
+   ChangeFont 22 $BtnFont
+   ChangeFont 23 $BtnFont
+
    Set $HscFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 11 $HscFont
    ChangeFont 13 $HscFont
@@ -703,6 +708,7 @@ Widget 21
    Flags NoReliefString
    Type PushButton
    Title {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -878,6 +884,7 @@ Widget 22
    Flags NoReliefString
    Type PushButton
    Title {Cancel}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -901,6 +908,7 @@ Widget 23
    Flags NoReliefString
    Type PushButton
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

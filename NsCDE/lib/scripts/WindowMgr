@@ -18,20 +18,60 @@ Begin
    ChangeFont 4 $DefFont
 
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 5 $LabelFont
    ChangeFont 7 $LabelFont
+   ChangeFont 8 $LabelFont
+   ChangeFont 9 $LabelFont
+   ChangeFont 11 $LabelFont
+   ChangeFont 12 $LabelFont
    ChangeFont 13 $LabelFont
    ChangeFont 14 $LabelFont
+   ChangeFont 15 $LabelFont
    ChangeFont 17 $LabelFont
    ChangeFont 19 $LabelFont
+   ChangeFont 21 $LabelFont
+   ChangeFont 22 $LabelFont
    ChangeFont 23 $LabelFont
    ChangeFont 24 $LabelFont
    ChangeFont 25 $LabelFont
    ChangeFont 26 $LabelFont
+   ChangeFont 27 $LabelFont
+   ChangeFont 29 $LabelFont
    ChangeFont 31 $LabelFont
    ChangeFont 32 $LabelFont
    ChangeFont 33 $LabelFont
    ChangeFont 34 $LabelFont
    ChangeFont 35 $LabelFont
+   ChangeFont 36 $LabelFont
+   ChangeFont 38 $LabelFont
+   ChangeFont 40 $LabelFont
+
+   ChangeFont 42 $LabelFont
+   ChangeFont 43 $LabelFont
+   ChangeFont 45 $LabelFont
+   ChangeFont 47 $LabelFont
+   ChangeFont 49 $LabelFont
+   ChangeFont 51 $LabelFont
+
+   Set $HscFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
+   ChangeFont 18 $HscFont
+   ChangeFont 20 $HscFont
+   ChangeFont 28 $HscFont
+   ChangeFont 30 $HscFont
+   ChangeFont 37 $HscFont
+   ChangeFont 39 $HscFont
+   ChangeFont 41 $HscFont
+   ChangeFont 44 $HscFont
+   ChangeFont 46 $HscFont
+   ChangeFont 48 $HscFont
+   ChangeFont 50 $HscFont
+   ChangeFont 52 $HscFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 2 $BtnFont
+   ChangeFont 122 $BtnFont
+   ChangeFont 123 $BtnFont
+   ChangeFont 124 $BtnFont
 
    Set $SectionNameFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium -Z 10.5} 1 -1)
    ChangeFont 3 $SectionNameFont
@@ -89,6 +129,7 @@ Widget 2
    Type PushButton
    Flags NoReliefString
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -499,8 +540,8 @@ Widget 3
    Size 200 12
    Position 8 74
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title {Configuration Section }
+   Flags NoReliefString NoFocus Left
+   Title {Configuration Section: }
    Colorset 45
    Main
       Case message of
@@ -757,6 +798,7 @@ Widget 5
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Window Behavior }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -805,6 +847,7 @@ Widget 8
    Position 22 186
    Flags NoReliefString
    Type RadioButton
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -824,6 +867,7 @@ Widget 9
    Position 22 222
    Flags NoReliefString
    Type RadioButton
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -856,6 +900,7 @@ Widget 11
    Position 20 274
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -883,6 +928,7 @@ Widget 12
    Position 20 314
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -933,6 +979,7 @@ Widget 15
    Position 20 436
    Flags NoReliefString
    Type CheckBox
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -976,6 +1023,7 @@ Widget 18
    Size 348 20
    Position 18 526
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 10
@@ -1017,6 +1065,7 @@ Widget 20
    Size 348 20
    Position 18 618
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 0
@@ -1038,6 +1087,7 @@ Widget 21
    Position 22 158
    Flags NoReliefString
    Type RadioButton
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -1065,6 +1115,7 @@ End
 Widget 22
    Property
    Title {Place On Workspace}
+   Font "xft:::pixelsize=15"
    Position 22 206
    Flags NoReliefString
    Type RadioButton
@@ -1201,7 +1252,7 @@ Widget 27
    Size 0 0
    Position 14 496
    Type ItemDraw
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Title { Default Icon Size}
    Main
       Case message of
@@ -1215,6 +1266,7 @@ Widget 28
    Size 348 20
    Position 18 522
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 16
@@ -1236,7 +1288,7 @@ Widget 29
    Size 0 0
    Position 14 594
    Type ItemDraw
-   Flags NoReliefString NoFocus
+   Flags NoReliefString NoFocus Left
    Title { Maximum Icon Size}
    Main
       Case message of
@@ -1250,6 +1302,7 @@ Widget 30
    Size 348 20
    Position 18 614
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 18
@@ -1369,6 +1422,7 @@ Widget 36
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Page Edge Resistance}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1381,6 +1435,7 @@ Widget 37
    Size 348 20
    Position 18 428
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 0
@@ -1401,6 +1456,7 @@ Widget 38
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Edge Window Move Resistance}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1413,6 +1469,7 @@ Widget 39
    Size 348 20
    Position 18 526
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 0
@@ -1433,6 +1490,7 @@ Widget 40
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Edge Window Move Delay}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1445,6 +1503,7 @@ Widget 41
    Size 348 20
    Position 18 618
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 1
@@ -1463,6 +1522,7 @@ End
 Widget 42
    Property
    Title { Animate Window Iconification}
+   Font "xft:::pixelsize=15"
    Position 20 156
    Flags NoReliefString
    Type CheckBox
@@ -1518,6 +1578,7 @@ End
 Widget 43
    Property
    Title { Animation Effect: }
+   Font "xft:::pixelsize=15"
    Position 16 238
    Flags NoReliefString NoFocus
    Type ItemDraw
@@ -1532,6 +1593,7 @@ End
 Widget 44
    Property
    Title {   Frame |   Lines |   Flip |   Turn |   Zoom3D |   Twist |   Random }
+   Font "xft:::pixelsize=15"
    Position 200 232
    Flags NoReliefString NoFocus
    Type PopupMenu
@@ -1555,6 +1617,7 @@ Widget 45
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Animation Frame Delay}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1567,6 +1630,7 @@ Widget 46
    Size 348 20
    Position 18 310
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 0
@@ -1590,6 +1654,7 @@ Widget 47
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Animation Revolution Twist}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1602,6 +1667,7 @@ Widget 48
    Size 348 20
    Position 18 414
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 1
    MinValue 1
@@ -1625,6 +1691,7 @@ Widget 49
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Outline Width}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1637,6 +1704,7 @@ Widget 50
    Size 348 20
    Position 18 512
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 0
    MinValue 1
@@ -1660,6 +1728,7 @@ Widget 51
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title { Animation Iterations}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -1672,6 +1741,7 @@ Widget 52
    Size 348 20
    Position 18 616
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Value 1
    MinValue 1
@@ -1710,6 +1780,7 @@ Widget 122
    Type PushButton
    Flags NoReliefString
    Title {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -2345,6 +2416,7 @@ Widget 123
    Type PushButton
    Flags NoReliefString
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -2364,6 +2436,7 @@ Widget 124
    Type PushButton
    Flags NoReliefString
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

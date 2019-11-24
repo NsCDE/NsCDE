@@ -20,6 +20,12 @@ Begin
       ChangeTitle 1 $TaskText
    End
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 1 $BtnFont
+   ChangeFont 2 $BtnFont
+   ChangeFont 4 $BtnFont
+   ChangeFont 5 $BtnFont
+
    WarpPointer 2
    Key Escape A 5 1 {Quit}
    Key Return A 4 1 {Go}
@@ -56,6 +62,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    Title {Enter Required Parameter: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -70,6 +77,7 @@ Widget 2
    Type TextField
    Flags NoReliefString
    Title {}
+   Font "xft:::pixelsize=15"
    Colorset 20
    Main
       Case message of
@@ -99,6 +107,7 @@ Widget 4
    Position 16 80
    Type PushButton
    Title {OK}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
       Case message of
@@ -119,6 +128,7 @@ Widget 5
    Position 188 80
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
       Case message of

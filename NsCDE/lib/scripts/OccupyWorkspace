@@ -30,8 +30,14 @@ Begin
    Key Down A 2 2 {Down}
    Key Up A 2 2 {Up}
 
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 5 $BtnFont
+   ChangeFont 6 $BtnFont
+   ChangeFont 8 $BtnFont
+
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 1 $LabelFont
+   ChangeFont 2 $LabelFont
    ChangeFont 4 $LabelFont
 
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
@@ -233,6 +239,7 @@ Widget 5
    Type PushButton
    Flags NoReliefString
    Title {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -266,6 +273,7 @@ Widget 6
    Position 208 260
    Type PushButton
    Title {Help}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
       Case message of
@@ -285,6 +293,7 @@ Widget 8
    Position 108 260
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
       Case message of

@@ -11,7 +11,7 @@
 ###
 
 WindowTitle {Style Manager - Beep}
-WindowSize 384 310
+WindowSize 384 312
 Colorset 22
 
 Init
@@ -47,12 +47,20 @@ Begin
 
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    Set $HScrollBarFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+
    ChangeFont 3 $LabelFont
    ChangeFont 5 $LabelFont
    ChangeFont 7 $LabelFont
    ChangeFont 4 $HScrollBarFont
    ChangeFont 6 $HScrollBarFont
    ChangeFont 8 $HScrollBarFont
+   ChangeFont 2 $BtnFont
+   ChangeFont 10 $BtnFont
+   ChangeFont 11 $BtnFont
+   ChangeFont 12 $BtnFont
+   ChangeFont 13 $BtnFont
+   ChangeFont 14 $BtnFont
 
    # Key bindings
    Key Escape A 14 1 {KeyClose}
@@ -82,6 +90,7 @@ Widget 2
    Flags NoReliefString
    Type PushButton
    Title {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -185,7 +194,7 @@ End
 Widget 9
    Property
    Size 380 0
-   Position 2 258
+   Position 2 262
    Flags NoReliefString NoFocus
    Type Rectangle
    Main
@@ -198,10 +207,11 @@ End
 Widget 10
    Property
    Size 72 0
-   Position 10 270
+   Position 10 272
    Flags NoReliefString
    Type PushButton
    Title {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -216,10 +226,11 @@ End
 Widget 11
    Property
    Size 72 0
-   Position 104 270
+   Position 104 272
    Flags NoReliefString
    Type PushButton
    Title {Save}
+   Font "xft:::pixelsize=15"
    Main
    Case message of
       SingleClic :
@@ -249,6 +260,7 @@ Widget 12
    Flags NoReliefString
    Type PushButton
    Title {Beep}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -265,10 +277,11 @@ End
 Widget 13
    Property
    Size 72 0
-   Position 300 270
+   Position 300 272
    Flags NoReliefString
    Type PushButton
    Title {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -284,10 +297,11 @@ End
 Widget 14
    Property
    Size 72 0
-   Position 200 270
+   Position 200 272
    Flags NoReliefString
    Type PushButton
    Title {Dismiss}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
