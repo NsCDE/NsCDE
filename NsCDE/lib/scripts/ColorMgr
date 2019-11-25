@@ -570,7 +570,7 @@ Widget 23
    Position 138 384
    Type CheckBox
    Flags NoReliefString Left
-   Value 0
+   Value 1
    Title { GTK2 Theme}
    Font "xft:::pixelsize=14"
    Main
@@ -591,7 +591,7 @@ Widget 24
    Position 138 418
    Type CheckBox
    Flags NoReliefString Left
-   Value 0
+   Value 1
    Title { GTK3 Theme}
    Font "xft:::pixelsize=14"
    Main
@@ -607,14 +607,17 @@ Widget 25
    Position 262 384
    Type CheckBox
    Flags NoReliefString Left
-   Value 0
+   Value 1
    Title { Use Qt 4 Gtk Engine}
    Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :
       Begin
-         ChangeValue 23 1
+         If (GetValue 25) == 1 Then
+         Begin
+            ChangeValue 23 1
+         End
       End
 End
 
@@ -624,14 +627,17 @@ Widget 26
    Position 262 418
    Type CheckBox
    Flags NoReliefString Left
-   Value 0
+   Value 1
    Title { Use Qt 5 Gtk Engine}
    Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :
       Begin
-         ChangeValue 23 1
+         If (GetValue 26) == 1 Then
+         Begin
+            ChangeValue 23 1
+         End
       End
 End
 
@@ -641,7 +647,7 @@ Widget 27
    Position 16 452
    Type CheckBox
    Flags NoReliefString Left
-   Value 0
+   Value 1
    Font "xft:::pixelsize=14"
    Title { Run $FVWM_USERDIR/libexec/colormgr.local (if exists)}
    Main

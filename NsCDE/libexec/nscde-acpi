@@ -48,7 +48,7 @@ function s3_suspend
    if [ "$Opmode" == "pm" ]; then
       pm-suspend
    elif [ "$Opmode" == "systemd" ]; then
-      systemctl suspend
+      systemctl suspend -i
    elif [ "$Opmode" == "acpiconf" ]; then
       acpiconf -s 3
    fi
@@ -59,7 +59,7 @@ function hibernate
    if [ "$Opmode" == "pm" ]; then
       pm-hibernate
    elif [ "$Opmode" == "systemd" ]; then
-      systemctl hibernate
+      systemctl hibernate -i
    elif [ "$Opmode" == "acpiconf" ]; then
       acpiconf -s 4
    fi
@@ -70,7 +70,7 @@ function hybrid_suspend
    if [ "$Opmode" == "pm" ]; then
       pm-suspend-hybrid
    elif [ "$Opmode" == "systemd" ]; then
-      systemctl hybrid-sleep
+      systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
       echo "Not available on $OS" >&2
    fi
@@ -79,7 +79,11 @@ function hybrid_suspend
 function f_poweroff
 {
    if [ "$OS" == "Linux" ]; then
-      shutdown -h now
+      if  (($systemctlretval == 0)); then
+         systemctl poweroff -i
+      else
+         shutdown -h now
+      fi
    elif [ "$OS" == "FreeBSD" ]; then
       shutdown -p now
    fi
@@ -88,7 +92,11 @@ function f_poweroff
 function f_reboot
 {
    if [ "$OS" == "Linux" ]; then
-      shutdown -r now
+      if  (($systemctlretval == 0)); then
+         systemctl reboot -i
+      else
+         shutdown -r now
+      fi
    elif [ "$OS" == "FreeBSD" ]; then
       shutdown -r now
    fi

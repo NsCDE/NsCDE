@@ -74,11 +74,11 @@ function GetFont
       echo "${Catch3/\"/}"
    else
       export LC_ALL=C
-      GetSize=$(echo "${Catch3/\"/}" | sed "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g")
+      GetSize=$(echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
       echo $GetSize | egrep -q '^([[:digit:]]+)(\.[[:digit:]]+)?$'
       if (($? == 0)); then
          if (($GetSize > $FnMaxSize)); then
-            echo "${Catch3/\"/}" | sed "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(.*\)\?/\1\2${FnMaxSize}\4/g"
+            echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(.*\)\?/\1\2${FnMaxSize}\4/g" -o -f -
          else
             echo "${Catch3/\"/}"
          fi
