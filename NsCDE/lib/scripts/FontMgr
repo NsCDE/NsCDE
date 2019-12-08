@@ -101,6 +101,9 @@ Begin
    Key Q C 33 1 {KeyClose}
    Key F1 A 34 1 {KeyHelp}
    Key Help A 34 1 {KeyHelp}
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 End
 
 # In PeriodicTasks be careful not to mess messages from two different dialogs.
@@ -553,6 +556,12 @@ Widget 11
          Begin
             HideWidget 12
          End
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 11 (GetValue 11)
+         End
       End
 End
 
@@ -604,6 +613,12 @@ Widget 14
 
             # Update
             SendSignal 14 1
+         End
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 14 (GetValue 14)
          End
       End
       1 :
@@ -773,6 +788,11 @@ Widget 16
       Case message of
       SingleClic :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 16 (GetValue 16)
+         End
       End
 End
 
@@ -804,7 +824,15 @@ Widget 18
       SingleClic :
       Begin
          If $FontSetInUse == 0 Then
+         Begin
             SendSignal 6 1
+         End
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 18 (GetValue 18)
+         End
       End
 End
 

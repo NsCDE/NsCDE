@@ -85,6 +85,9 @@ Begin
    Key F1 A 23 1 {KeyHelp}
    Key Help A 23 1 {KeyHelp}
 
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
+
    # Nasty workaround because ForeColor of the TextField
    # widget is not applied and global value is used anyway.
    # How it works: if wanted Colorset is applied with
@@ -593,6 +596,12 @@ Widget 14
          Begin
             HideWidget 15
             HideWidget 16
+         End
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 14 (GetValue 14)
          End
       End
 End

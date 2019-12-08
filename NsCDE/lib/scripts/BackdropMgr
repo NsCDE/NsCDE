@@ -82,6 +82,9 @@ Begin
    ChangeFont 7 $SmallFont
    ChangeFont 8 $SmallFont
    ChangeFont 9 $SmallFont
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 End
 
 PeriodicTasks
@@ -401,6 +404,12 @@ Widget 9
             Set $ColorVariant = 4
             SendSignal 5 1
          End
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 9 (GetValue 9)
+         End
       End
 End
 
@@ -464,7 +473,7 @@ Widget 11
             Begin
                If $BackdropPreview <> {} Then
                Begin
-                  Do {Exec exec fvwm-root } $BackdropPreview
+                  Do {Exec exec fvwm-root -r } $BackdropPreview
                   Set $PreviewContaminated = 1
                End
             End
@@ -474,7 +483,7 @@ Widget 11
                Begin
                   Set $PhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f "} $PhotoName {"}
                   Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
-                  Do {Exec exec fvwm-root } $PhotoPath
+                  Do {Exec exec fvwm-root -r } $PhotoPath
                   Set $PreviewContaminated = 1
                End
             End

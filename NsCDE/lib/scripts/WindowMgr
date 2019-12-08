@@ -104,6 +104,9 @@ Begin
    Key Q C 123 1 {KeyClose}
    Key F1 A 124 1 {KeyHelp}
    Key Help A 124 1 {KeyHelp}
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 End
 
 Widget 1
@@ -566,7 +569,13 @@ Widget 4
          ChangePosition 16 12 482
          ChangePosition 10 12 260
          SendSignal 4 1
-         Do {All ("Window Style Manager") RefreshWindow}
+         Do {Schedule 200 All ("WindowMgr") RefreshWindow}
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 4 (GetValue 4)
+         End
       End
       1 :
       Begin
@@ -1607,6 +1616,12 @@ Widget 44
          # Just trigger yourself with calling widget 42
          ChangeValue 42 0
          ChangeValue 42 1
+
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 44 (GetValue 44)
+         End
       End
 End
 

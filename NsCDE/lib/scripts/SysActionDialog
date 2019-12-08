@@ -113,6 +113,9 @@ Begin
    Key Help A 8 1 {KeyHelp}
 
    Do {CursorStyle ROOT cursors/CursorExit.xpm}
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 End
 
 Widget 1
@@ -176,6 +179,11 @@ Widget 4
       Case message of
       SingleClic :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 4 (GetValue 4)
+         End
       End
       1 :
       Begin
