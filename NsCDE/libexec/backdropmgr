@@ -109,7 +109,7 @@ function GenerateBackdropPreview
       if (($? == 0)); then
          OldBackdrop=$(egrep "Colorset 3${Desk} TiledPixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
          $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
-         if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" && "${OldBackdrop##*/}" != "Desk${Desk}-${1}.pm" ]; then
+         if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [ "${OldBackdrop##*/}" != "Desk${Desk}-${1}.pm" ]; then
             rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
          fi
       else
