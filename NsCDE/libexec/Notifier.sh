@@ -28,13 +28,13 @@ do
       ;;
       s)
          sh_TextString="$OPTARG"
-         sh_WrappedText=$(echo "$sh_TextString" | fold -w 84 -s)
+         sh_WrappedText=$(echo "$sh_TextString" | fold -w 86 -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
       ;;
       f)
          sh_TextFile="$OPTARG"
          sh_TextString=$(<"$sh_TextFile")
-         sh_WrappedText=$(echo "$sh_TextString" | fold -w 84 -s)
+         sh_WrappedText=$(echo "$sh_TextString" | fold -w 86 -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
       ;;
       h)
@@ -46,10 +46,31 @@ done
 HeightAppend=$(( $sh_WrappedTextLines * 24 ))
 ScriptHeight=$(( 104 + $HeightAppend ))
 
+if (($sh_WrappedTextLines == 1)); then
+   textcharsnum=$(echo "$sh_WrappedText" | wc -c)
+   if (($textcharsnum < 48)); then
+      ScriptWidth=480
+      RectangleWidth=472
+      ButtonPos=180
+   elif (($textcharsnum < 72)); then
+      ScriptWidth=620
+      RectangleWidth=612
+      ButtonPos=246
+   else
+      ScriptWidth=754
+      RectangleWidth=746
+      ButtonPos=314
+   fi
+else
+   ScriptWidth=754
+   RectangleWidth=746
+   ButtonPos=314
+fi
+
 cat <<EOF
 
 WindowTitle {${sh_WindowTitle:=Notice}}
-WindowSize 760 $ScriptHeight
+WindowSize $ScriptWidth $ScriptHeight
 Colorset 22
 
 Init
@@ -121,7 +142,7 @@ done
 cat <<EOF
 Widget 2
    Property
-   Size 752 0
+   Size $RectangleWidth 0
    Position 4 $(( $linecnt + 40 ))
    Type Rectangle
    Flags NoReliefString NoFocus
@@ -135,7 +156,7 @@ End
 Widget 3
    Property
    Size 120 0
-   Position 320 $(( $linecnt + 58 ))
+   Position $ButtonPos $(( $linecnt + 58 ))
    Type PushButton
    Title {${sh_ButtonTitle:=Dismiss}}
    Font "xft:::pixelsize=15"
