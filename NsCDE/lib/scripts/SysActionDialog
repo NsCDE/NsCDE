@@ -50,7 +50,7 @@ Begin
       End
       Else
       Begin
-         Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Wrong option number passed to System Action Dialog."}
+         Do {f_Notifier "System Action" "Dismiss" "NsCDE/Error.xpm" "Wrong option number passed to System Action Dialog. Exiting."}
          Quit
       End
    End
@@ -310,7 +310,7 @@ Property
          End
          Else
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Suspend/Sleep appears not to be supported on this system."}
+            Do {f_Notifier "System Action" "Dismiss" "NsCDE/Warning.xpm" "Suspend/Sleep appears not to be supported on this system."}
          End
       End
 
@@ -329,7 +329,7 @@ Property
          End
          Else
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Hybrid Suspend appears not to be supported on this system."}
+            Do {f_Notifier "System Action" "Dismiss" "NsCDE/Warning.xpm" "Hybrid Suspend appears not to be supported on this system."}
          End
       End
 
@@ -348,7 +348,7 @@ Property
          End
          Else
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="System Action" TEXT="Hibernate appears not to be supported on this system."}
+            Do {f_Notifier "System Action" "Dismiss" "NsCDE/Warning.xpm" "Hibernate appears not to be supported on this system."}
          End
       End
    End

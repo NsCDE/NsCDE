@@ -19,8 +19,8 @@ Begin
    If $DeskNo == {} Then
    Begin
       Do {None ("Workspaces and Pages Manager Warning")}
-          { FvwmForm ErrMsgForm TITLE="Workspaces and Pages Manager Warning"}
-          { TEXT="Warning: DeskNo and/or PageNo are not set. Using 4 as default."}
+          { f_Notifier "Workspaces and Pages Manager Warning" "Dismiss" "NsCDE/Warning.xpm"}
+          { "Warning: Number of Workspaces and/or number of pages are not set. Using 4 as default."}
 
       Set $DeskNo = 4
       Set $PageMatrixX = 2
@@ -746,7 +746,7 @@ Widget 21
                Set $CopyConfig = (GetOutput $CopyConfigcmd 1 -1)
                If $CopyConfig <> {} Then
                Begin
-                  Do {FvwmForm ErrMsgForm2 TITLE="Copy Error" TEXT1="Error creating $[FVWM_USERDIR]/NsCDE.conf:" TEXT2="} $CopyConfig {"}
+                  Do {f_Notifier "Copy Error" "Dismiss" "NsCDE/Error.xpm" "Error creating $[FVWM_USERDIR]/NsCDE.conf: \\\"} $CopyConfig {\\\""}
                   Quit
                End
                Else
@@ -817,7 +817,7 @@ Widget 21
 
         If $DStringToCheck == 2 Then
         Begin
-           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $DStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $DStringToCheck { occured while checking config file } $ExpandFile {"}
            Quit
         End
 
@@ -841,7 +841,7 @@ Widget 21
 
         If $PVStringToCheck == 2 Then
         Begin
-           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $PVStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $PVStringToCheck { occured while checking config file } $ExpandFile {"}
            Quit
         End
 
@@ -864,7 +864,7 @@ Widget 21
         End
         If $PHStringToCheck == 2 Then
         Begin
-           Do {FvwmForm ErrMsgForm TITLE="Config Set Error" TEXT="Error } $PHStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $PHStringToCheck { occured while checking config file } $ExpandFile {"}
            Quit
         End
 

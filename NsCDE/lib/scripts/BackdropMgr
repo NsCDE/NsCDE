@@ -525,7 +525,7 @@ Widget 12
             End
             Else
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Backdrop Style Manager" TEXT="Selected file is not a valid Backdrop."}
+               Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file is not a valid X Pixmap for Backdrop."}
             End
          End
          Else
@@ -540,7 +540,7 @@ Widget 12
             End
             Else
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Backdrop Style Manager" TEXT="Selected file is not a valid PNG Photo."}
+               Do {f_Notifier "Dismiss" "NsCDE/Error.xpm" "Backdrop Style Manager" "Selected file is not a valid PNG file for photo background."}
             End
          End
       End
@@ -564,7 +564,7 @@ Widget 13
             Set $DelBckNumToName = (GetOutput $DelBckNumToNameCmd 1 -1)
             Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -G } $DelBckNumToName
             Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
-            Do {FvwmForm BackdropMgrForm QUESTION="Delete Backdrop } $DelBckNumToName {" PATHNAME="} $CheckDelPath {"}
+            Do {f_RunQuickScriptDialog ActionForm "Delete Backdrop } $DelBckNumToName {" "Yes" "No" "Delete Backdrop" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
          Else
          Begin
@@ -572,7 +572,7 @@ Widget 13
             Set $DelPhotoNumToName = (GetOutput $DelPhotoNumToNameCmd 1 -1)
             Set $CheckDelPhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f } $DelPhotoNumToName
             Set $CheckDelPhotoPath = (GetOutput $CheckDelPhotoPathCmd 1 -1)
-            Do {FvwmForm BackdropMgrForm QUESTION="Delete Picture } $DelPhotoNumToName {" PATHNAME="} $CheckDelPhotoPath {"}
+            Do {f_RunQuickScriptDialog ActionForm "Delete Picture } $DelPhotoNumToName {" "Yes" "No" "Delete Picture" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
       End
       1 :
@@ -585,7 +585,7 @@ Widget 13
                Set $RmBackdrop = (GetOutput $RmBackdropCmd 1 -1)
                If $RmBackdrop <> {} Then
                Begin
-                  Do {FvwmForm ErrMsgForm TITLE="Backdrop Style Manager" TEXT="} $RmBackdrop {"}
+                  Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "} $RmBackdrop {"}
                End
                Else
                Begin
@@ -599,7 +599,7 @@ Widget 13
                Set $RmPhoto = (GetOutput $RmPhotoCmd 1 -1)
                If $RmPhoto <> {} Then
                Begin
-                  Do {FvwmForm ErrMsgForm TITLE="Backdrop Style Manager" TEXT="} $RmPhoto {"}
+                  Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "} $RmPhoto {"}
                End
                Else
                Begin

@@ -391,17 +391,15 @@ Widget 14
 
          If $ExistanceOK == 0 Then
          Begin
-            Do {FvwmForm ErrMsgForm2 TITLE="Subpanel Settings" TEXT1="Subpanel } $SubpanelNo
-             { has errors in declaration." TEXT2="Edit } $UserSubpanelActionsFile
-             { to fix it and then rerun this tool."}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Subpanel } $SubpanelNo
+             { has errors in declaration. Edit } $UserSubpanelActionsFile { to fix it and then rerun this tool."}
          End
 
          Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
 
          If $GenerateFvwmButtonsCfg <> {} Then
          Begin
-            Do {FvwmForm ErrMsgForm2 TITLE="Subpanel Settings" TEXT1="Unexpected output from generate_subpanels command:"}
-               { TEXT2="} $GenerateFvwmButtonsCfg {"}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg {\\\""}
          End
 
          # Case where disabled subpanel has been enabled

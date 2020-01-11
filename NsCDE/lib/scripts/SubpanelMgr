@@ -348,7 +348,7 @@ Widget 5
             Set $CheckCharsTitle = (GetOutput $CheckCharsTitleCmd 1 -1)
             If $CheckCharsTitle <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application name cannot contain , or ' chars."}
+               Do {f_Notifier "Subpanel Manager" "Dismiss" "NsCDE/Warning.xpm" "Application name cannot contain , or ' chars."}
                Set $Perform = 0
             End
             Else
@@ -363,7 +363,7 @@ Widget 5
             Set $CheckCharsIcon = (GetOutput $CheckCharsIconCmd 1 -1)
             If $CheckCharsIcon <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application icon name cannot contain , or ' chars."}
+               Do {f_Notifier "Subpanel Manager" "Dismiss" "NsCDE/Warning.xpm" "Application icon name cannot contain , or ' chars."}
                Set $Perform = 0
             End
             Else
@@ -375,7 +375,7 @@ Widget 5
             Set $CheckCharsCmd = (GetOutput $CheckCharsCmdCmd 1 -1)
             If $CheckCharsCmd <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Subpanel Manager" TEXT="Application command line cannot contain , or ' chars."}
+               Do {f_Notifier "Subpanel Manager" "Dismiss" "NsCDE/Warning.xpm" "Application command line cannot contain , or ' chars."}
                Set $Perform = 0
             End
             Else

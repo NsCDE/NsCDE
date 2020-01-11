@@ -21,7 +21,7 @@ Begin
    Set $Ncolors = (GetScriptArgument 2)
    If $Ncolors == {} Then
    Begin
-      Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="No colors number scheme defined. Setting default to 8."}
+      Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "Default number of colors is not defined. Setting default number of colors to 8."}
       Set $Ncolors = 8
    End
 
@@ -278,7 +278,7 @@ Widget 5
          End
          Else
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="Selected file is not a valid Palette."}
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file \\\"} (LastString) {\\\" is not a valid NsCDE Palette file."}
          End
       End
 End
@@ -299,7 +299,7 @@ Widget 6
          Set $DelPalNumToName = (GetOutput $DelPalNumToNameCmd 1 -1)
          Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $DelPalNumToName
          Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
-         Do {FvwmForm ColorMgrForm QUESTION="Delete Palette } $DelPalNumToName {" PATHNAME="} $CheckDelPath {"}
+         Do {f_RunQuickScriptDialog ActionForm "Delete Palette } $DelPalNumToName {" "Yes" "No" "Delete Palette" "SendToModule ColorMgr SendString 6 1 confirmed"}
       End
       1 :
       Begin
@@ -309,7 +309,7 @@ Widget 6
             Set $RmPalette = (GetOutput $RmPaletteCmd 1 -1)
             If $RmPalette <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Color Style Manager" TEXT="} $RmPalette {"}
+               Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "} $RmPalette {"}
             End
             Else
             Begin

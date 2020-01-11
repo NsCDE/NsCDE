@@ -667,36 +667,36 @@ Widget 16
             If $CheckDesk == {MATE} Then
             Begin
                Do {Test (x mate-session-properties) Exec exec mate-session-properties}
-               Do {Test (!x mate-session-properties) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No mate-session-properties found."}
+               Do {Test (!x mate-session-properties) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found."}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {LXDE} Then
             Begin
                Do {Test (x lxsession-edit) Exec exec lxsession-edit}
-               Do {Test (!x lxsession-edit) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No lxsession-edit found."}
+               Do {Test (!x lxsession-edit) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxsession-edit found."}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {GNOME} Then
             Begin
                Do {Test (x gnome-tweaks) Exec exec gnome-tweaks}
-               Do {Test (!x gnome-tweaks) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No gnome-tweaks found."}
+               Do {Test (!x gnome-tweaks) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No gnome-tweaks found."}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {KDE} Then
             Begin
                Do {Test (x kcmshell5) Exec exec kcmshell5 kcmsmserver autostart kcmkded}
-               Do {Test (!x kcmshell5) FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="No kcmshell5 found."}
+               Do {Test (!x kcmshell5) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No kcmshell5 found."}
                Set $CheckDeskRc = {Listed}
             End
 
             If $CheckDeskRc == {NotListed} Then
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="Session Manager from desktop } $CheckDesk { not (yet) supported."}
+               Do {f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "Session Manager from desktop } $CheckDesk { not (yet) supported."}
             End
          End
          Else
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Style Manager" TEXT="NsCDE appears not to be running under the X Session Manager."}
+            Do {f_Notifier "Style Manager" "Dismiss" "NsCDE/Info.xpm" "NsCDE appears not to be running under the X Session Manager."}
          End
       End
 End

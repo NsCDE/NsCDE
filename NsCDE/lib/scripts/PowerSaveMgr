@@ -49,8 +49,8 @@ Begin
    If $pos == {50} Then
    Begin
       Do {None ("Power Style Manager Error")}
-          { FvwmForm ErrMsgForm TITLE="Power Style Manager Error"}
-          { TEXT="Error: Incompatible xset(1) tool or no DPMS functionality detected."}
+          { f_Notifier "Power Style Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+          {"Error: Incompatible xset(1) tool detected or there is no DPMS functionality on this display." ".e1"}
       Quit
    End
 
@@ -95,7 +95,7 @@ Widget 1
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Standby time cannot be bigger than Suspend time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." ".e2"}
             Set $Wrong = 1
          End
          Else
@@ -105,7 +105,7 @@ Widget 1
 
          If (GetValue 4) > (GetValue 7) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Standby time cannot be bigger than Off time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." ".e3"}
             Set $Wrong = 1
          End
          Else
@@ -115,7 +115,7 @@ Widget 1
 
          If (GetValue 9) > (GetValue 7) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Suspend time cannot be bigger than Off time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." ".e4"}
             Set $Wrong = 1
          End
          Else
@@ -125,7 +125,7 @@ Widget 1
 
          If (GetValue 9) < (GetValue 4) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Suspend time cannot be smaller than Standby time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be smaller than Standby time." ".e5"}
             Set $Wrong = 1
          End
          Else
@@ -176,7 +176,7 @@ Widget 2
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Standby time cannot be bigger than Suspend time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." ".e6"}
             Set $Wrong = 1
          End
          Else
@@ -186,7 +186,7 @@ Widget 2
 
          If (GetValue 4) > (GetValue 7) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Standby time cannot be bigger than Off time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." ".e7"}
             Set $Wrong = 1
          End
          Else
@@ -196,7 +196,7 @@ Widget 2
 
          If (GetValue 9) > (GetValue 7) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Suspend time cannot be bigger than Off time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." ".e8"}
             Set $Wrong = 1
          End
          Else
@@ -206,7 +206,7 @@ Widget 2
 
          If (GetValue 9) < (GetValue 4) Then
          Begin
-            Do {FvwmForm ErrMsgForm TITLE="Powersave Style Manager" TEXT="Suspend time cannot be smaller than Standby time."}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Standby time." ".e9"}
             Set $Wrong = 1
          End
          Else

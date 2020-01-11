@@ -1005,18 +1005,18 @@ Widget 28
                Set $FontsetFileRemove = (GetOutput $FontsetFileRemoveCmd 1 -1)
                If $FontsetFileRemove <> {} Then
                Begin
-                  Do {FvwmForm ErrMsgForm2 TITLE="Font Style Manager" TEXT1="Error removing } $FontsetFile {:" TEXT2="} $FontsetFileRemove {"}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error removing } $FontsetFile {: } $FontsetFileRemove {"}
                End
                Else
                Begin
-                  Do {FvwmForm ErrMsgForm TITLE="Font Style Manager" TEXT="Fontset file } $FontsetFile { removed"}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "Fontset file } $FontsetFile { removed from inventory."}
                   Set $FontsetMenu = (GetOutput {sleep 1; $NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
                   ChangeTitle 4 $FontsetMenu
                End
             End
             Else
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Font Style Manager" TEXT="No fontset file selected."}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "No fontset file was selected prior to removal action."}
             End
 
             # Set Widget 28 back in place after this actions, namely after removing fontset files or errors
@@ -1111,13 +1111,13 @@ Widget 31
             Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
             If $Gtk2Font <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm2 TITLE="Font Style Manager" TEXT1="Error editing $HOME/.gtkrc-2.0:" TEXT2=" } $Gtk2Font {"}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error editing $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
             End
             Set $Gtk3FontCmd={$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
             Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
             If $Gtk3Font <> {} Then
             Begin
-               Do {FvwmForm ErrMsgForm2 TITLE="Font Style Manager" TEXT1="Error editing $HOME/.config/gtk-3.0/settings.ini:" TEXT2=" } $Gtk3Font {"}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error editing $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
             End
 
             # XSETTINGS Daemon Integration
@@ -1216,12 +1216,12 @@ Widget 32
                End
                Else
                Begin
-                  Do {FvwmForm ErrMsgForm2 TITLE="Font Style Manager" TEXT1="Error creating $FVWM_USERDIR/fontsets:" TEXT2=" } $Sanity {"}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error creating $FVWM_USERDIR/fontsets: } $Sanity {"}
                End
             End
             Else
             Begin
-               Do {FvwmForm ErrMsgForm TITLE="Font Style Manager" TEXT="Fontset name must be set!"}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Fontset name must be defined before saving it!"}
             End
          End
       End
