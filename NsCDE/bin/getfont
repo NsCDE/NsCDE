@@ -6,6 +6,9 @@
 # Licence: GPLv3
 #
 
+# Initialize default values for some variables
+PrintFnSize=0
+
 if [ -z $NSCDE_ROOT ]; then
    echo "No \$NSCDE_ROOT set. Exiting."
    exit 3
@@ -68,27 +71,42 @@ function GetFont
 
    Catch2="${Catch/InfoStoreAdd font./}"
    Catch3="${Catch2#*\"}"
-
+   GetSize=$(echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
 
    if [ "x$FnMaxSize" == "x" ]; then
-      echo "${Catch3/\"/}"
+      if (($PrintFnSize == 0)); then
+         echo "${Catch3/\"/}"
+      else
+         echo $GetSize
+      fi
    else
       export LC_ALL=C
-      GetSize=$(echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
       echo $GetSize | egrep -q '^([[:digit:]]+)(\.[[:digit:]]+)?$'
       if (($? == 0)); then
          if (($GetSize > $FnMaxSize)); then
-            echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(.*\)\?/\1\2${FnMaxSize}\4/g" -o -f -
+            if (($PrintFnSize == 0)); then
+               echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(.*\)\?/\1\2${FnMaxSize}\4/g" -o -f -
+            else
+               echo $FnMaxSize
+            fi
          else
-            echo "${Catch3/\"/}"
+            if (($PrintFnSize == 0)); then
+               echo "${Catch3/\"/}"
+            else
+               echo $GetSize
+            fi
          fi
       else
-         echo "${Catch3/\"/}"
+         if (($PrintFnSize == 0)); then
+            echo "${Catch3/\"/}"
+         else
+            echo $GetSize
+         fi
       fi
    fi
 }
 
-while getopts f:vmt:s:Z:h Option
+while getopts f:vmt:s:SZ:h Option
 do
    case $Option in
       f)
@@ -109,13 +127,16 @@ do
       s)
          FnSize="$OPTARG"
       ;;
+      S)
+         PrintFnSize=1
+      ;;
       Z)
          if [ "$NSCDE_FIX_SCRIPT_FONTSIZE" != "0" ]; then
             FnMaxSize="$OPTARG"
          fi
       ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -Z maxsize ] [ -h ]"
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -h ]"
          exit 0
       ;;
    esac
