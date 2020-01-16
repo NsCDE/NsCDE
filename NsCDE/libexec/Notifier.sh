@@ -73,7 +73,7 @@ if (($sh_WrappedTextLines == 1)); then
       ScriptWidth=480
       RectangleWidth=472
       ButtonPos=180
-   elif (($textcharsnum < 72)) && (($FontSize <= 14)); then
+   elif (($textcharsnum < 72)) && (($FontSize <= 12)); then
       ScriptWidth=620
       RectangleWidth=612
       ButtonPos=246
