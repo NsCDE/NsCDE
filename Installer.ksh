@@ -196,7 +196,7 @@ function install_nscde
       if (($noninteractive == 1)); then
          instpath="/opt/NsCDE"
       else
-         echo -ne "Installation firectory for NsCDE [/opt/NsCDE]: \c"
+         echo -ne "Installation directory for NsCDE [/opt/NsCDE]: \c"
          read ans
          if [ "x$ans" == "x" ]; then
             instpath="/opt/NsCDE"
