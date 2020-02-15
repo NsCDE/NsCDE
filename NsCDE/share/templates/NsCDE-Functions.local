@@ -16,8 +16,8 @@
 # Front Panel. Default action is "Nop" (No Operation)
 # DestroyFunc f_Calendar
 # AddToFunc f_Calendar
-# + I Echo Calendar
-# + I Next (Thunderbird, Mail) WarpToWindow 30 50
+# + I All (Thunderbird, !Iconic) FakeKeypress depth 2 modifiers 8 modifiers 6 press c wait 200 modifiers -8 modifiers -6 release c
+# + I All (Thunderbird, !Iconic) Schedule 150 WarpToWindow 50 50
 
 # Called from E-Mail Applet on the Front Panel
 # Default action is "Nop" (No Operation)
@@ -25,6 +25,8 @@
 # DestroyFunc f_CheckMail
 # AddToFunc f_CheckMail
 # + I Exec exec $[FVWM_USERDIR]/libexec/checkmail.sh
+# + I All (Thunderbird, !Iconic) FakeKeypress depth 2 modifiers 1 press 1 wait 200 modifiers -1 release 1
+# + I All (Thunderbird, !Iconic) Schedule 150 WarpToWindow 50 50
 
 # Fplite applet on Front Panel, right top of WSM
 # Can be overriden by user if user has some fancy
