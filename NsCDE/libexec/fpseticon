@@ -18,6 +18,12 @@ else
 fi
 
 if [ "$Button" == "pre" ]; then
+   for btn in {1..10}
+   do
+      echo "InfoStoreRemove FP.Btn${btn}.type"
+      echo "InfoStoreRemove FP.Btn${btn}.content"
+   done
+
    egrep "^Btn.*,__APPLET__,M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
    do
          if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
@@ -49,7 +55,7 @@ else
             egrep -q "^${Button},__APPLET__,.*,.*,.*" $SysActionFile
             if (($? != 0)); then
                echo "InfoStoreAdd FP.${Button}.type applet"
-               echo "InfoStoreAdd FP.${Button}.content ${check}"
+               echo "InfoStoreAdd FP.${Button}.content ${check//\|/,}"
             fi
          fi
       done
