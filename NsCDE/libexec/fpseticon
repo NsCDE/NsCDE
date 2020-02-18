@@ -17,14 +17,44 @@ else
    UserActionFile="/dev/null"
 fi
 
-ActionLine=$(egrep "^${Button},.*,.*,.*,.*" $UserActionFile $SysActionFile | head -1)
-if [ "x${ActionLine}" != "x" ]; then
-   echo $ActionLine | while IFS="," read button icon mousebutton check cmd
+if [ "$Button" == "pre" ]; then
+   egrep "^Btn.*,__APPLET__,M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
    do
-      if [ "$mousebutton" == "M1" ] && [ "$icon" != "" ]; then
-         echo "SendToModule FrontPanel ChangeButton $Button Icon $icon"
-      fi
+         if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
+            echo "InfoStoreAdd FP.${button}.type applet"
+            echo "InfoStoreAdd FP.${button}.content ${check}"
+         fi
+   done
+   egrep -i "^Btn.*,*.(x?pm|png),M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
+   do
+         if [ "$mousebutton" == "M1" ] && [ "${icon}" != "__APPLET__" ]; then
+            echo "InfoStoreAdd FP.${button}.type icon"
+            echo "InfoStoreAdd FP.${button}.content \"Icon ${icon}\""
+         fi
    done
 else
-   echo "Nop"
+   ActionLine=$(egrep "^${Button},.*,.*,.*,.*" $UserActionFile $SysActionFile | head -1)
+   if [ "x${ActionLine}" != "x" ]; then
+      echo $ActionLine | while IFS="," read button icon mousebutton check cmd
+      do
+         if [ "$mousebutton" == "M1" ] && [ "$icon" != "__APPLET__" ]; then
+            if [ "$icon" == "" ]; then
+               icon="NsCDE/None.xpm"
+            fi
+            if [ "$When" != "pre" ]; then
+               echo "SendToModule FrontPanel ChangeButton $Button Icon $icon"
+            fi
+         fi
+         if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
+            egrep -q "^${Button},__APPLET__,.*,.*,.*" $SysActionFile
+            if (($? != 0)); then
+               echo "InfoStoreAdd FP.${Button}.type applet"
+               echo "InfoStoreAdd FP.${Button}.content ${check}"
+            fi
+         fi
+      done
+   else
+      echo "Nop"
+   fi
 fi
+

@@ -275,129 +275,167 @@ function manage_entry
 
 function copy_to_main_panel
 {
-         entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$FVWM_USERDIR/Subpanels.actions" | sed -n "${entryid}p")
-         if [ "x$entry_to_copy" == "x" ]; then
-            entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$NSCDE_ROOT/config/Subpanels.actions" | sed -n "${entryid}p")
+   echo "$BUTTONTYPE" | cut -d"." -f 3 | egrep -q '(icon|applet)'
+   if (($? != 0)); then
+      BUTTONTYPE="default"
+   fi
+
+   if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      if (($? == 0)); then
+         RestartFP=1
+      else
+         RestartFP=0
+      fi
+
+      if [ "$BUTTONTYPE" == "default" ]; then
+         if [ -r "$NSCDE_ROOT/config/FrontPanel.actions" ]; then
+            egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$NSCDE_ROOT/config/FrontPanel.actions"
+            if (($? == 0)); then
+               RestartFP=1
+            else
+               RestartFP=0
+            fi
+         else
+            RestartFP=0
          fi
-         if [ "x$entry_to_copy" == "x" ]; then
-            echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): internal error. No entry in system Subpanels.actons file."
+      else
+         if [ "$BUTTONTYPE" == "applet" ]; then
+            RestartFP=1
+         else
+            RestartFP=0
+         fi
+      fi
+   fi
+
+   entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$FVWM_USERDIR/Subpanels.actions" | sed -n "${entryid}p")
+   if [ "x$entry_to_copy" == "x" ]; then
+      entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$NSCDE_ROOT/config/Subpanels.actions" | sed -n "${entryid}p")
+   fi
+   if [ "x$entry_to_copy" == "x" ]; then
+      echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): internal error. No entry in system Subpanels.actons file."
+      exit 10
+   fi
+   echo "$entry_to_copy" | tail -1 | while IFS="," read smark emark title type icon cmd
+   do
+      for content in "$title" "$icon" "$cmd"
+      do
+         if [ "x$content" == "x" ]; then
+            echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): empty title, icon or command definition."
             exit 10
          fi
-         echo "$entry_to_copy" | tail -1 | while IFS="," read smark emark title type icon cmd
-         do
-            for content in "$title" "$icon" "$cmd"
-            do
-               if [ "x$content" == "x" ]; then
-                  echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): empty title, icon or command definition."
-                  exit 10
-               fi
-            done
+      done
 
-            # Main variables for find_appropriate_icon function
-            try_as_fd_misc=0
-            icon_orig="$icon"
-            icon_ext="${icon##*.}"
+      # Main variables for find_appropriate_icon function
+      try_as_fd_misc=0
+      icon_orig="$icon"
+      icon_ext="${icon##*.}"
 
-            # Main funting routine for appropriate  icon
-            find_appropriate_icon "$icon"
+      # Main funting routine for appropriate  icon
+      find_appropriate_icon "$icon"
 
-            # Try local 32x32-* icon without fvwm generated prefix in freedesktop paths.
-            # In the 48x48 subdirectories.
-            if (($try_as_fd_misc == 1)); then
-               find_appropriate_icon "${icon_orig#*-}"
-            fi
+      # Try local 32x32-* icon without fvwm generated prefix in freedesktop paths.
+      # In the 48x48 subdirectories.
+      if (($try_as_fd_misc == 1)); then
+         find_appropriate_icon "${icon_orig#*-}"
+      fi
 
-            # Try local 32x32-* icon without fvwm generated prefix in freedesktop paths.
-            # But this time in 32x32 size subdirectories.
-            if (($try_as_fd_misc == 2)); then
-               find_appropriate_icon "${icon_orig}"
-            fi
+      # Try local 32x32-* icon without fvwm generated prefix in freedesktop paths.
+      # But this time in 32x32 size subdirectories.
+      if (($try_as_fd_misc == 2)); then
+         find_appropriate_icon "${icon_orig}"
+      fi
 
-            # Try find_appropriate_icon with different extensions.
+      # Try find_appropriate_icon with different extensions.
+      if (($ENOICON == 1)); then
+         echo "Trying heuristics with icon extension formats while searching for an icon ..."
+         export ENOICON=0
+         case "$icon_ext" in
+         'png')
+            icon_new_ext=$(echo "$icon" | sed 's/\.png$/.xpm/g')
+            find_appropriate_icon "$icon_new_ext"
             if (($ENOICON == 1)); then
-               echo "Trying heuristics with icon extension formats while searching for an icon ..."
-               export ENOICON=0
-               case "$icon_ext" in
-               'png')
-                  icon_new_ext=$(echo "$icon" | sed 's/\.png$/.xpm/g')
-                  find_appropriate_icon "$icon_new_ext"
-                  if (($ENOICON == 1)); then
-                     icon_new_ext=$(echo "$icon" | sed 's/\.png$/.svg/g')
-                     find_appropriate_icon "$icon_new_ext"
-                  fi
-               ;;
-               'xpm'|'pm')
-                  icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.png/g')
-                  find_appropriate_icon "$icon_new_ext"
-                  if (($ENOICON == 1)); then
-                     icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.svg/g')
-                     find_appropriate_icon "$icon_new_ext"
-                  fi
-               ;;
-               'svg')
-                  icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.png/g')
-                  find_appropriate_icon "$icon_new_ext"
-                  if (($ENOICON == 1)); then
-                     icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.xpm/g')
-                     find_appropriate_icon "$icon_new_ext"
-                  fi
-               ;;
-               esac
+               icon_new_ext=$(echo "$icon" | sed 's/\.png$/.svg/g')
+               find_appropriate_icon "$icon_new_ext"
             fi
-
-            case "x$type" in
-            'x')
-               fp_action_type="${cmd%% *}"
-            ;;
-            'xFVWM-F'|'xFVWM-M')
-               fp_action_type="FVWM"
-            ;;
-            'xNOCHK')
-               fp_action_type="true"
-            ;;
-            xCHECK:*)
-               fp_action_type="${type##*:}"
-            ;;
-            esac
-
-            # Strip absolute path from FVWM_USERDIR, NSCDE_ROOT, HOME, /usr/share/icons, /usr/local/share/icons ...
-            sFVWM_USERDIR=$(echo "$FVWM_USERDIR" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
-            sHOME=$(echo "$HOME" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
-            sNSCDE_ROOT=$(echo "$NSCDE_ROOT" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
-            case $icon in
-               $FVWM_USERDIR/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sFVWM_USERDIR\/icons\///g" -o -f -)
-               ;;
-               $NSCDE_ROOT/share/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sNSCDE_ROOT\/share\/icons\///g" -o -f -)
-               ;;
-               $HOME/.icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sHOME\/\.\/icons\///g" -o -f -)
-               ;;
-               $HOME/.local/share/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sHOME\/\.local\/share\/icons\///g" -o -f -)
-               ;;
-               /usr/share/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^\/usr\/share\/icons\///g" -o -f -)
-               ;;
-               /usr/local/share/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^\/usr\/local\/share\/icons\///g" -o -f -)
-               ;;
-               $NSCDE_ROOT/share/fallback/icons/*)
-                  icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sNSCDE_ROOT\/fallback\/share\/icons\///g" -o -f -)
-               ;;
-            esac
-
-            fp_m1="Btn${subpid},$icon,M1,$fp_action_type,$cmd"
-            fp_m3="Btn${subpid},,M3,FVWM,f_FrontPanelPropsMenu ${subpid} $title"
-            if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
-               $NSCDE_ROOT/bin/ised -c "/^Btn${subpid},\(.*\)\?,M\(1\|3\)/d" -f $FVWM_USERDIR/FrontPanel.actions
+         ;;
+         'xpm'|'pm')
+            icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.png/g')
+            find_appropriate_icon "$icon_new_ext"
+            if (($ENOICON == 1)); then
+               icon_new_ext=$(echo "$icon" | sed 's/\.xpm$/.svg/g')
+               find_appropriate_icon "$icon_new_ext"
             fi
+         ;;
+         'svg')
+            icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.png/g')
+            find_appropriate_icon "$icon_new_ext"
+            if (($ENOICON == 1)); then
+               icon_new_ext=$(echo "$icon" | sed 's/\.svg$/.xpm/g')
+               find_appropriate_icon "$icon_new_ext"
+            fi
+         ;;
+         esac
+      fi
 
-            echo "$fp_m1" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
-            echo "$fp_m3" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
-            FvwmCommand "SendToModule FrontPanel ChangeButton Btn${subpid} Icon \"$icon\""
-         done
+      case "x$type" in
+      'x')
+         fp_action_type="${cmd%% *}"
+      ;;
+      'xFVWM-F'|'xFVWM-M')
+         fp_action_type="FVWM"
+      ;;
+      'xNOCHK')
+         fp_action_type="true"
+      ;;
+      xCHECK:*)
+         fp_action_type="${type##*:}"
+      ;;
+      esac
+
+      # Strip absolute path from FVWM_USERDIR, NSCDE_ROOT, HOME, /usr/share/icons, /usr/local/share/icons ...
+      sFVWM_USERDIR=$(echo "$FVWM_USERDIR" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+      sHOME=$(echo "$HOME" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+      sNSCDE_ROOT=$(echo "$NSCDE_ROOT" | $NSCDE_ROOT/bin/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+      case $icon in
+         $FVWM_USERDIR/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sFVWM_USERDIR\/icons\///g" -o -f -)
+         ;;
+         $NSCDE_ROOT/share/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sNSCDE_ROOT\/share\/icons\///g" -o -f -)
+         ;;
+         $HOME/.icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sHOME\/\.\/icons\///g" -o -f -)
+         ;;
+         $HOME/.local/share/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sHOME\/\.local\/share\/icons\///g" -o -f -)
+         ;;
+         /usr/share/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^\/usr\/share\/icons\///g" -o -f -)
+         ;;
+         /usr/local/share/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^\/usr\/local\/share\/icons\///g" -o -f -)
+         ;;
+         $NSCDE_ROOT/share/fallback/icons/*)
+            icon=$(echo "$icon" | $NSCDE_ROOT/bin/ised -c "s/^$sNSCDE_ROOT\/fallback\/share\/icons\///g" -o -f -)
+         ;;
+      esac
+
+      fp_m1="Btn${subpid},$icon,M1,$fp_action_type,$cmd"
+      fp_m3="Btn${subpid},,M3,FVWM,f_FrontPanelPropsMenu ${subpid} $title"
+      if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+         $NSCDE_ROOT/bin/ised -c "/^Btn${subpid},\(.*\)\?,M\(1\|3\)/d" -f $FVWM_USERDIR/FrontPanel.actions
+      fi
+
+      echo "$fp_m1" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
+      echo "$fp_m3" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
+      FvwmCommand "SendToModule FrontPanel ChangeButton Btn${subpid} Icon \"$icon\""
+
+      # If changing from applet to icon, restart Front Panel for settings to be visible
+      if (($RestartFP == 1)); then
+         FvwmCommand "f_RestartFrontPanel"
+      fi
+   done
 }
 
 function find_appropriate_icon
@@ -568,7 +606,7 @@ function exec_entry
    FvwmCommand "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
 }
 
-while getopts p:s:a:t:edc Option
+while getopts p:s:a:t:edc: Option
 do
    case $Option in
       p)
@@ -593,6 +631,7 @@ do
          delete_confirm
       ;;
       c)
+         BUTTONTYPE="$OPTARG"
          copy_to_main_panel
       ;;
    esac

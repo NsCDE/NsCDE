@@ -5,7 +5,7 @@
 #
 
 WindowTitle {FPMonthDayApplet}
-WindowSize 59 57
+WindowSize 56 56
 Colorset 21
 
 Init
@@ -42,7 +42,7 @@ End
 Widget 2
    Property
    Position 0 0
-   Size 59 57
+   Size 56 56
    Type ItemDraw
    Flags NoReliefString Left
    Icon CDE/FpCM.l.pm
@@ -57,17 +57,11 @@ Widget 2
       Begin
          Do {f_Calendar}
          ChangeColorset 2 24
-         Do {Test (!EnvMatch infostore.fplastpressed Btn2) f_ClearFrontPanelPressed}
-         Do {Schedule 50 InfoStoreAdd fplastpressed Btn2}
          Do {f_UnclickScript 450 MonthDayApplet 2 2 unclick}
       End
       2 :
       Begin
          If (LastString) == {unclick} Then
-         Begin
-            ChangeColorset 2 29
-         End
-         If (LastString) == {unselect} Then
          Begin
             ChangeColorset 2 21
          End

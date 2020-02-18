@@ -69,13 +69,59 @@ function delete_subpanel
 
 function reset_this_button
 {
+   echo "$BUTTONTYPE" | cut -d"." -f 3 | egrep -q '(icon|applet)'
+   if (($? != 0)); then
+      BUTTONTYPE="default"
+   fi
+
    if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
-      $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
-      FvwmCommand "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
+      egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      if (($? == 0)); then
+         RestartFP=1
+      else
+         RestartFP=0
+      fi
+
+      if [ "$BUTTONTYPE" == "icon" ]; then
+         if [ -r "$NSCDE_ROOT/config/FrontPanel.actions" ]; then
+            egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$NSCDE_ROOT/config/FrontPanel.actions"
+            if (($? == 0)); then
+               RestartFP=1
+            else
+               RestartFP=0
+            fi
+         else
+            RestartFP=0
+         fi
+      else
+         if [ "$BUTTONTYPE" == "applet" ]; then
+            RestartFP=1
+         else
+            RestartFP=0
+         fi
+      fi
+
+      egrep -q "^Btn${PanelNo},.*" "$FVWM_USERDIR/FrontPanel.actions"
+      FPA_RETVAL=$?
+      if ((FPA_RETVAL == 0)); then
+         $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+                     \"Button nr. $PanelNo has been restored to it's default configured function.\""
+      else
+         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+                     \"Button $PanelNo is already set at it's default configured function.\""
+      fi
+
+      if (($RestartFP == 0)); then
+         FvwmCommand "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
+      else
+         FvwmCommand "InfoStoreRemove FP.Btn${PanelNo}.type"
+         FvwmCommand "f_RestartFrontPanel"
+      fi
    fi
 }
 
-while getopts p:adr Option
+while getopts p:adr: Option
 do
    case $Option in
       p)
@@ -95,6 +141,7 @@ do
          delete_subpanel
       ;;
       r)
+         BUTTONTYPE="$OPTARG"
          reset_this_button
       ;;
    esac

@@ -110,7 +110,6 @@ done
 
 cat <<EOF
 
-	WarpPointer 3
 	Key Return A 3 1 {Dismiss}
 End
 

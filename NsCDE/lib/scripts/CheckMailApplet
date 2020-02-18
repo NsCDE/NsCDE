@@ -5,7 +5,7 @@
 #
 
 WindowTitle {FPCheckMailApplet}
-WindowSize 59 57
+WindowSize 56 56
 Colorset 21
 
 Init
@@ -20,7 +20,7 @@ End
 Widget 1
    Property
    Position 0 0
-   Size 59 57
+   Size 56 56
    Type ItemDraw
    Flags NoReliefString
    Icon NsCDE/Mail.s.xpm
@@ -45,8 +45,6 @@ Widget 1
          Do {f_CheckMail}
 
          ChangeColorset 1 24
-         Do {Test (!EnvMatch infostore.fplastpressed Btn5) f_ClearFrontPanelPressed}
-         Do {Schedule 50 InfoStoreAdd fplastpressed Btn5}
          Do {f_UnclickScript 450 CheckMailApplet 1 3 unclick}
       End
       2 :
@@ -113,10 +111,6 @@ Widget 1
       # Focus hilight stuff on the front panel
       Begin
          If (LastString) == {unclick} Then
-         Begin
-            ChangeColorset 1 29
-         End
-         If (LastString) == {unselect} Then
          Begin
             ChangeColorset 1 21
          End
