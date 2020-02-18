@@ -22,7 +22,7 @@ if [ "$Button" == "pre" ]; then
    do
          if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
             echo "InfoStoreAdd FP.${button}.type applet"
-            echo "InfoStoreAdd FP.${button}.content ${check}"
+            echo "InfoStoreAdd FP.${button}.content ${check//\|/,}"
          fi
    done
    egrep -i "^Btn.*,*.(x?pm|png),M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
