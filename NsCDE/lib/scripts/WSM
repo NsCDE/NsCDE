@@ -83,7 +83,7 @@ Begin
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
 
       # Button Menu
-      Set $NameDeskStr = { } $NameDesk {|} $NameDesk {:|Global Pager|Local Pager|Windows ...|Go to Page ...}
+      Set $NameDeskStr = { } $NameDesk {|Workspace } $NameDesk {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
 
       ChangeFont $btnname $MainFontRegular
       ChangeTitle $btnname $NameDeskStr
@@ -406,7 +406,7 @@ Property
     Position 2 3
     Size 124 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -447,7 +447,7 @@ Property
     Position 134 3
     Size 124 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -488,7 +488,7 @@ Property
     Position 2 38
     Size 124 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -529,7 +529,7 @@ Property
     Position 134 38
     Size 124 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -570,7 +570,7 @@ Property
     Position 2 39
     Size 60 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -611,7 +611,7 @@ Property
     Position 67 39
     Size 60 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -652,7 +652,7 @@ Property
     Position 132 39
     Size 60 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -693,7 +693,7 @@ Property
     Position 197 39
     Size 60 26
     Type PushButton
-    Title {|||||}
+    Title {||||||}
     Flags Left
     Colorset 1
     Font "xft:::pixelsize=14"
@@ -980,6 +980,12 @@ Property
 
        2 : 
        Begin
+          # Return $DeskToRename to initial signal, see "41 4 :" ...
+          If $DeskToRename <> {} Then
+          Begin
+             Set $CurrDesk = $DeskToRename
+          End
+
           If $DeskNo == 2 Then
           Begin
              ChangeSize 41 252 26
@@ -1117,56 +1123,106 @@ Property
              Begin
                 Do {Exec exec sed 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' < } $ConfFile { > $FVWM_USERDIR/WSM.conf}
                 Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
-                Set $ShiftNewLabel = { } $NewButtonLabel
+                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
                 ChangeTitle $CurrDesk $ShiftNewLabel
 
-                If $CurrDesk == 1 Then
-                   ChangeColorset $CurrDesk 41
-                If $CurrDesk == 2 Then
-                   ChangeColorset $CurrDesk 43
-                If $CurrDesk == 3 Then
-                   ChangeColorset $CurrDesk 45
-                If $CurrDesk == 4 Then
-                   ChangeColorset $CurrDesk 47
-                If $CurrDesk == 5 Then
-                   ChangeColorset $CurrDesk 41
-                If $CurrDesk == 6 Then
-                   ChangeColorset $CurrDesk 43
-                If $CurrDesk == 7 Then
-                   ChangeColorset $CurrDesk 45
-                If $CurrDesk == 8 Then
-                   ChangeColorset $CurrDesk 47
+                If $DeskToRename == {} Then
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 47
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 7 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 8 Then
+                      ChangeColorset $CurrDesk 47
+                End
+                Else
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 46
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 7 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 8 Then
+                      ChangeColorset $CurrDesk 46
+
+                   Do {GotoDesk}
+                End
 
                 ChangeTitle 41 {}
              End
              Else
              Begin
                 Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f } $ConfFile
-                Set $ShiftNewLabel = { } $NewButtonLabel
+                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
                 ChangeTitle $CurrDesk $ShiftNewLabel
 
-                If $CurrDesk == 1 Then
-                   ChangeColorset $CurrDesk 41
-                If $CurrDesk == 2 Then
-                   ChangeColorset $CurrDesk 43
-                If $CurrDesk == 3 Then
-                   ChangeColorset $CurrDesk 45
-                If $CurrDesk == 4 Then
-                   ChangeColorset $CurrDesk 47
-                If $CurrDesk == 5 Then
-                   ChangeColorset $CurrDesk 41
-                If $CurrDesk == 6 Then
-                   ChangeColorset $CurrDesk 43
-                If $CurrDesk == 7 Then
-                   ChangeColorset $CurrDesk 45
-                If $CurrDesk == 8 Then
-                   ChangeColorset $CurrDesk 47
+                If $DeskToRename == {} Then
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 47
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 7 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 8 Then
+                      ChangeColorset $CurrDesk 47
+                End
+                Else
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 46
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 7 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 8 Then
+                      ChangeColorset $CurrDesk 46
+
+                   # Update buttons press state as if pressed.
+                   Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                End
 
                 ChangeTitle 41 {}
              End
           End
 
           HideWidget 41
+          Set $DeskToRename = {}
        End
 
        4 :
@@ -1175,13 +1231,24 @@ Property
           Set $Action = (Add (StrCopy (LastString) 1 2) -1)
           If $Action == 1 Then
              Begin
-                Do {f_ShowGlobalPager Move screen c 50-50w -88p}
+                # $DeskToRename is somehow $NextDesk + 1, but not for GotoDesk
+                Set $DeskToRename = (Add $NextDesk 1)
+                Do {Next (FrontPanel, CirculateHit) Focus}
+                # Do {GotoDesk 0 } $NextDesk
+                WarpPointer $DeskToRename
+                # WarpPointer correction
+                Do {Schedule 100 CursorMove 0p -20p}
+                SendSignal 41 2
              End
           If $Action == 2 Then
              Begin
-                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient WspLocPager } $NextDesk { } $NextDesk
+                Do {f_ToggleFvwmModule FvwmScript WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]}
              End
           If $Action == 3 Then
+             Begin
+                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient WspLocPager } $NextDesk { } $NextDesk
+             End
+          If $Action == 4 Then
              # $CurrDesk is 1-based; $NextDesk is 0-based
              Do {WindowList mouse -0m -0m NoGeometry TitleForAllDesks NoCurrentDeskTitle NoNumInDeskTitle ShowPage Desk } $NextDesk
              If (Add $NextDesk 1) == $CurrDesk Then
@@ -1205,7 +1272,7 @@ Property
 
                 ChangeValue (Add $NextDesk 1) 1
              End
-          If $Action == 4 Then
+          If $Action == 5 Then
           Begin
              Do {DestroyMenu m_WsmGoToPage}
              Do {AddToMenu m_WsmGoToPage}
