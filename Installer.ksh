@@ -285,7 +285,11 @@ function install_nscde
          echo "Error: Cannot read directory with additional photo collection: $photopath"
       fi
    else
-      photospopulated=$(ls -1 "${instpath}/share/photos" | wc -l)
+      if [ ! -d "${instpath}/share/photos" ]; then
+         photospopulated=0
+      else
+         photospopulated=$(ls -1 "${instpath}/share/photos" 2>&1 | wc -l)
+      fi
       if (($photospopulated < 1)) && [ -z $phcnt ]; then
          echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
          echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
@@ -765,18 +769,21 @@ function upgrade_nscde
 
    if (($phcnt > 0)); then
       echo "Restoring additional photos back in ${instpath}/share/photos ..."
+      mkdir -p "${instpath}/share/photos"
       cd "${instpath}/share/photos" && tar xpf /tmp/_nscde_photo_savelist.tar && rm -f /tmp/_nscde_photo_savelist.tar
       echo "Done."
    fi
 
    if (($palcnt > 0)); then
       echo "Restoring additional palettes back in ${instpath}/share/palettes ..."
+      mkdir -p "${instpath}/share/palettes"
       cd "${instpath}/share/palettes" && tar xpf /tmp/_nscde_palette_savelist.tar && rm -f /tmp/_nscde_palette_savelist.tar
       echo "Done."
    fi
 
    if (($bdrcnt > 0)); then
       echo "Restoring additional backdrops back in ${instpath}/share/backdrops ..."
+      mkdir -p "${instpath}/share/backdrops"
       cd "${instpath}/share/backdrops" && tar xpf /tmp/_nscde_backdrop_savelist.tar && rm -f /tmp/_nscde_backdrop_savelist.tar
       echo "Done."
    fi
