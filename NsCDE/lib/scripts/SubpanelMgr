@@ -20,7 +20,7 @@ Begin
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
-   Set $AppListToFileCmd = {fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | \egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - > "} $AppListTmpFile {"}
+   Set $AppListToFileCmd = {fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | \egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | tr -d "'" > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
    Set $FmtAppListCmd = {cut -d"%" -f 2 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
@@ -371,7 +371,8 @@ Widget 5
                Set $Perform = 1
             End
 
-            Set $CheckCharsCmdCmd = {echo "} (GetTitle 10) {" | egrep "(,|')"}
+            # Important to quote command name with ' and not " because of $ and the rest ...
+            Set $CheckCharsCmdCmd = {echo '} (GetTitle 10) {' | egrep "(,|')"}
             Set $CheckCharsCmd = (GetOutput $CheckCharsCmdCmd 1 -1)
             If $CheckCharsCmd <> {} Then
             Begin
