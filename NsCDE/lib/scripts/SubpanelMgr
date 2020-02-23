@@ -188,17 +188,41 @@ Widget 3
          Set $GetAppIdxName = (GetOutput $GetAppIdxNameCmd 1 -1)
          Set $GetAppIdxIcon = (GetOutput $GetAppIdxIconCmd 1 -1)
          Set $GetAppIdxCmd = (GetOutput $GetAppIdxCmdCmd 1 -1)
+         Set $GetAppIdxCmdType = (GetOutput $GetAppIdxCmdCmd 1 1)
          ChangeTitle 8 $GetAppIdxName
          ChangeTitle 10 $GetAppIdxCmd
          ChangeTitle 12 $GetAppIdxIcon
          ChangeIcon 17 $GetAppIdxIcon
+
+         Set $Fix14 = 1
+
+         If $GetAppIdxCmdType == {f_ToggleFvwmModule} Then
+         Begin
+            ChangeValue 14 3
+            Set $Fix14 = 0
+         End
+
+         If $GetAppIdxCmdType == {f_ToggleFvwmFunc} Then
+         Begin
+            ChangeValue 14 3
+            Set $Fix14 = 0
+         End
+
+         If $GetAppIdxCmdType == {Module} Then
+         Begin
+            ChangeValue 14 2
+            Set $Fix14 = 0
+         End
 
          # Take Widget 4 value and hide it while selecting from this list
          # use it later as entry point below
          Set $SubpListSelected = (GetValue 4)
 
          # Fix this if it was changed by Widget 4 List click
-         ChangeValue 14 1
+         If $Fix14 <> 0 Then
+         Begin
+            ChangeValue 14 1
+         End
          ChangeValue 18 0
          ShowWidget 18
 

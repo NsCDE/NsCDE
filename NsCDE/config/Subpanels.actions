@@ -46,17 +46,14 @@ S4,WIDTH,180
 S4,ENABLED,1
 S4,ENTRY,Workstation Info,FVWM-F,CDE/SDtsysinfo.m.pm,f_ToggleFvwmModule FvwmScript Sysinfo
 S4,ENTRY,Exec,FVWM-F,CDE/Dtexec.m.pm,f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
-S4,ENTRY,Xterm,,NsCDE/32x32/apps/utilities-terminal.png,xterm
-S4,ENTRY,Konsole,,NsCDE/32x32/apps/utilities-terminal.png,konsole
+S4,ENTRY,Terminal,,CDE/Fpterm.m.pm,$[infostore.terminal]
+S4,ENTRY,Text Editor,,CDE/Fppenpd.m.pm,$[infostore.xeditor]
 S4,ENTRY,Virt Manager,hicolor/32x32/apps/virt-manager.png,virt-manager
-S4,ENTRY,GNOME Terminal,,NsCDE/32x32/apps/utilities-terminal.png,gnome-terminal
-S4,ENTRY,MATE Terminal,,NsCDE/32x32/apps/utilities-terminal.png,mate-terminal
+S4,ENTRY,Xterm,,NsCDE/32x32/apps/xterm-color.png,xterm
 S4,ENTRY,Urxvt,,NsCDE/32x32/apps/utilities-terminal.png,urxvt
-S4,ENTRY,Zenmap (root),,hicolor/32x32/apps/zenmap.png,zenmap-root
-S4,ENTRY,Zenmap (root),,hicolor/32x32/apps/zenmap.png,/usr/share/zenmap/su-to-zenmap.sh
-S4,ENTRY,Zenmap,,hicolor/32x32/apps/zenmap.png,zenmap
 S4,ENTRY,Gkrellm,,hicolor/32x32/apps/gkrellm.png,gkrellm
 S4,ENTRY,SELinux Troubleshoot,hicolor/32x32/apps/setroubleshoot_icon.png,/usr/bin/sealert -b
+S4,ENTRY,Task Manager,,NsCDE/32x32/apps/utilities-system-monitor.png,$[infostore.terminal] -e top
 
 S5,NAME,E Mail
 S5,WIDTH,140
@@ -72,14 +69,13 @@ S6,ENABLED,0
 S6,ENTRY,Print Settings,,NsCDE/32x32/devices/printer.png,system-config-printer
 
 S7,NAME,Desktop Settings
-S7,WIDTH,148
+S7,WIDTH,196
 S7,ENABLED,1
 S7,ENTRY,Style Manager,FVWM-F,NsCDE/Fpstyle.m.xpm,f_ToggleFvwmModule FvwmScript StyleMgr
+S7,ENTRY,Workspaces and Pages,FVWM-F,NsCDE/32x32/apps/system-workspaces-pages-manager.png,f_ToggleFvwmModule FvwmScript WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]
 S7,ENTRY,Qt4 Config,,hicolor/32x32/apps/qt4-logo.png,qtconfig-qt4
 S7,ENTRY,Qt5 Settings,,NsCDE/32x32/apps/preferences-desktop-theme.png,qt5ct
-S7,ENTRY,Gnome Tweaks,,hicolor/32x32/apps/org.gnome.tweaks.png,gnome-tweaks
 S7,ENTRY,Dconf Editor,,hicolor/32x32/apps/ca.desrt.dconf-editor.png,dconf-editor
-S7,ENTRY,Screensaver,,NsCDE/Xscreensaver.m.xpm,xscreensaver-demo
 S7,ENTRY,NsCDE Log,FVWM-F,CDE/SDtErrors.m.pm,f_ToggleExecWindow WatchWinMgrErrors UrgencyFunc xterm -title \\\\\\"Watch Errors\\\\\\" -name WatchWinMgrErrors -e tail -300f ~/.xsession-errors
 
 S8,NAME,Tools
@@ -94,8 +90,8 @@ S8,ENTRY,Vi IMproved,,hicolor/32x32/apps/gvim.png,gvim -f
 S8,ENTRY,Emacs,,hicolor/32x32/apps/emacs.png,emacs
 S8,ENTRY,XEmacs,,hicolor/32x32/apps/xemacs.png,xemacs
 S8,Entry,PCManFM,,NsCDE/32x32/apps/system-file-manager.png,pcmanfm --no-desktop
+S8,ENTRY,Wireshark,,hicolor/32x32/apps/wireshark.png,wireshark
 S8,ENTRY,Krusader,,hicolor/32x32/apps/krusader_user.png,krusader
-S4,ENTRY,Wireshark,,hicolor/32x32/apps/wireshark.png,wireshark
 
 S9,NAME,Graphics and Multimedia
 S9,WIDTH,206
