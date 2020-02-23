@@ -20,9 +20,9 @@ Begin
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
-   Set $AppListToFileCmd = {$NSCDE_ROOT/libexec/nscde-fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde --plain-list | sort -u | grep -n '' | sed 's/:/%/' > "} $AppListTmpFile {"}
+   Set $AppListToFileCmd = {fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | \egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
-   Set $FmtAppListCmd = {cut -d"%" -f 3 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+   Set $FmtAppListCmd = {cut -d"%" -f 2 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
    ChangeTitle 3 $FmtAppList
 
@@ -182,9 +182,9 @@ Widget 3
          HideWidget 16
 
          Set $SelectedIndex = (GetValue 3)
-         Set $GetAppIdxNameCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 3}
-         Set $GetAppIdxIconCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 4}
-         Set $GetAppIdxCmdCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 5}
+         Set $GetAppIdxNameCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 2}
+         Set $GetAppIdxIconCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 3}
+         Set $GetAppIdxCmdCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 4}
          Set $GetAppIdxName = (GetOutput $GetAppIdxNameCmd 1 -1)
          Set $GetAppIdxIcon = (GetOutput $GetAppIdxIconCmd 1 -1)
          Set $GetAppIdxCmd = (GetOutput $GetAppIdxCmdCmd 1 -1)
