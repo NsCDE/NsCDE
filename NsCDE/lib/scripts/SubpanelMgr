@@ -20,7 +20,10 @@ Begin
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
-   Set $AppListToFileCmd = {fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | \egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | tr -d "'" > "} $AppListTmpFile {"}
+   Set $AppListToFileCmd = {fvwm-menu-desktop --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | }
+                           { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | }
+                           { $NSCDE_ROOT/bin/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | }
+                           { $NSCDE_ROOT/bin/ised -c "s/'/\\\\\\\\\\\\\\\\\\\\\\\"/g" -o -f - > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
    Set $FmtAppListCmd = {cut -d"%" -f 2 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
@@ -203,6 +206,12 @@ Widget 3
          End
 
          If $GetAppIdxCmdType == {f_ToggleFvwmFunc} Then
+         Begin
+            ChangeValue 14 3
+            Set $Fix14 = 0
+         End
+
+         If $GetAppIdxCmdType == {f_ToggleExecWindow} Then
          Begin
             ChangeValue 14 3
             Set $Fix14 = 0
