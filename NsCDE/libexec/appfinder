@@ -1,0 +1,33 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+if [ "x$1" == "x" ]; then
+   echo "NOARG"
+   exit 1
+else
+   CatName="$1"
+fi
+
+if [ ! -r "$NSCDE_ROOT/share/fallback/app-catalog/$CatName" ]; then
+   echo "NOCATALOG"
+   exit 2
+fi
+
+found=0
+cat "$NSCDE_ROOT/share/fallback/app-catalog/$CatName" | while read appname
+do
+   if $(whence -q ${appname%% *}); then
+      echo "$appname"
+      found=1
+      break
+   fi
+done
+
+if (($found == 0)); then
+   echo "NOAPP"
+fi
