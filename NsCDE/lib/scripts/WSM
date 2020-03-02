@@ -87,6 +87,10 @@ Begin
 
       ChangeFont $btnname $MainFontRegular
       ChangeTitle $btnname $NameDeskStr
+
+      # Refresh runtime
+      Do {DesktopName } (Add $btnname -1) { } $NameDesk
+
       If $btnname == 1 Then
          ChangeColorset $btnname 40
       If $btnname == 2 Then
