@@ -481,7 +481,7 @@ function find_appropriate_icon
          try_icon=$(echo "${iconame}" | $NSCDE_ROOT/bin/ised -c 's/^\(32x32\|24x24\)-/48x48-/g' -o -f -)
          # Try to generate 48x48 icon
          if [ ! -r "$FVWM_USERDIR/icons/${try_icon}" ]; then
-            fvwm-menu-desktop --enable-mini-icons --theme NsCDE --size 48 > /dev/null 2>&1
+            fvwm-menu-desktop --mini-icon-dir "$FVWM_USERDIR/icons" --enable-mini-icons --theme NsCDE --size 48 > /dev/null 2>&1
          fi
          # Fallback
          if [ ! -r "$FVWM_USERDIR/icons/${try_icon}" ]; then
