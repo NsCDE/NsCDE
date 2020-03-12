@@ -33,7 +33,7 @@ echo "+ I InfoStoreAdd menuitem.clres \$1,\$2"
 echo "+ I AddToMenu \"$menuname\" \"\" Nop"
 
 if (($file_err == 0)); then
-   egrep -v "^#" "${menufilelist}" | sort -u | while IFS="," read cls res itemname action
+   cat ${menufilelist} | egrep -v "^#" | sort -u | while IFS="," read cls res itemname action
    do
       echo "+ I Test (EnvMatch infostore.menuitem.clres \"${cls},${res}\") AddToMenu \"$menuname\" \"$itemname\" $action"
    done
