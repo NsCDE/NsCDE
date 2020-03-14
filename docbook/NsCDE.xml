@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.0.rc17">
-<!ENTITY date "Feb 2020">
+<!ENTITY appversion "1.0.rc18">
+<!ENTITY date "Mar 2020">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -60,7 +60,7 @@ additional DE functionality.
 NsCDE's main goal is to revive look and feel of the Common Desktop
 Environment found on many UNIX and unix-like systems during nineties and first
 decade of the 21 century, but with a slightly polished interface (XFT,
-unicode, dynamic changes, rich key and mouse bindings, desk pages,
+unicode, dynamic changes, rich key and mouse bindings, workspace pages,
 rich menus etc) and a goal to produce comfortable "retro" environment
 which is not just a eye candy toy, but a real working environment for
 users who contrary to mainstream trends really like CDE, thus making semi-optimal
@@ -550,11 +550,12 @@ configuration:
   combination, and narrow in 6 and 8 button combination.
 </para></listitem>
 <listitem><para>
- As in CDE, desk names can be renamed. There is a keyboard combination in
+ As in CDE, workspace names can be renamed. There is a keyboard combination in
   FvwmScript WSM which enters rename mode: Ctrl+Space on the current active
   desk, while pointer is inside WSM. <keysym>Ctrl+Enter</keysym> saves new name. Names are
   synchronized with FVWM desktop names and used in the rest of the
-  configuration. Names are saved in <filename>$FVWM_USERDIR/WSM.conf</filename>
+  configuration. Names are saved in <filename>$FVWM_USERDIR/WSM.conf</filename>, and EWMH
+  desktop names are applied immediately in a runtime.
 </para></listitem>
 <listitem><para>
 If Sun type keyboard is in use, <keysym>Help</keysym> key above
@@ -562,11 +563,15 @@ WSM will bring this help text in browser. On PC keyboard, <keysym>F1</keysym> ha
 same function.
 </para></listitem>
 <listitem><para>
- Addition: right mouse button on desk button brings contextual menu. From
-  this menu, global (all desks and their pages), or local (pages of the one
-  desk) FvwmPager - visual pager can be called. Below this menu options, there
-  is an option to bring up Window List, and small submenu for changing the active page
-  on the current desk.
+ Addition: right mouse button on workspace button brings contextual menu. From
+  this menu, the following items can be selected: default acion (activate workspace),
+  <guimenuitem>Rename</guimenuitem> to rename the workspace, <guimenuitem>Manage</guimenuitem>
+  to call Workspace and Page Manager, <guimenuitem>Local Pager</guimenuitem> (visual FvwmPager)
+  (for a workspace, not necessarily the current one), then the option
+  <guimenuitem>Windows ...</guimenuitem> to bring up Window List,
+  with windows on that workspace, and last, a small submenu
+  <guimenuitem>Go to Page ...</guimenuitem> for changing the active page on the that
+  workspace, which will of course change active workspace to that where page was selected.
 </para></listitem>
 <listitem><para>
  If <filename>$FVWM_USERDIR/WSM.conf</filename> value <emphasis>WSPPG</emphasis> is 1,
@@ -625,7 +630,7 @@ really great number of possible preferences. Pages can be configured in any
 </para>
 <para>
 Page Manager icon changes with the page to represent position of the current page on
-current desk while user moves from page to page automatically with the help of
+current workspace while user moves from page to page automatically with the help of
 the FvwmEvent(1) just like the Workspace Manager (WSM).
 </para>
 <para>
@@ -838,7 +843,7 @@ same base color in 4-color mode. Generated backdrop in the
 <filename class="directory">$FVWM_USERDIR/backer</filename> are named
 <filename>DeskN-&lt;name-of-the-backdrop&gt;.pm</filename> where <emphasis>N</emphasis> is
 the workspace (desk) number from 1-8. In such a way it is possible to have the same
-backdrop pattern on more than one desk in 8-colors mode.
+backdrop pattern on more than one workspace in 8-colors mode.
 </para>
 <para>
 There is an option to use the same backdrop for all desks too.
@@ -853,7 +858,7 @@ more than CDE original:
 <itemizedlist>
 <listitem><para>
  In 8-color mode, user can select another color variant instead of default
-  for the current desk from the popup menu. There are four variants.
+  for the current workspace from the popup menu. There are four variants.
 </para></listitem>
 <listitem><para>
  Custom palette can be loaded instead of default one, and backdrops can be
@@ -941,7 +946,7 @@ shell helper and color calculation and generator routines. Visually it tries
 to be as much as possible similar to the original CDE, but since it has some
 new features, there are some new buttons and commands introduced.
 Tool has a list of the palettes (system + user), preview button which can
-temporary apply some palette on the current desk backdrop and FVWM based
+temporary apply some palette on the current workspace backdrop and FVWM based
 applications (FrontPanel, other scripts ...)
 </para>
 <para>
@@ -1046,8 +1051,8 @@ closes dialog, <keysym>enter</keysym> executes, <keysym>Ctrl+Enter</keysym> exec
 terminal application.
 </para>
 <para>
-As an example, this dialog can be used if on the current page or desk terminal application is
-not present, and only some simple command is needed to be quickly executed.
+As an example, this dialog can be used if on the current page or workspace terminal
+application is not present, and only some simple command is needed to be quickly executed.
 </para>
 
 <para>
@@ -1517,8 +1522,8 @@ as application manager.
 </para>
 <para>
 Subpanel Manager has a list of all applications which are providing system menu
-with it's presence (patched version of fvwm-menu-desktop is used in the
-background), and the list of applications provided in the current Subpanel from
+with it's presence (fvwm-menu-desktop is used in the background for generating
+application list), and the list of applications provided in the current Subpanel from
 which tool is called by "Install Icon".
 This lists are displayed on the top of the window side by side: system menu
 applications on the left, and current Subpanel items on the right list.
@@ -1823,8 +1828,9 @@ page changes, Front Panel will be raised.
 <listitem><para>
  <guilabel>Pager Preview On Page Change</guilabel>:  on page change, spawn a small
 transient FVWM pager called <emphasis>LocalPager</emphasis> on the top center of the
-screen to indicate what is on the current desk - this is controlled by the infostore
-variable in the $FVWM_USERDIR/NsCDE.conf
+screen to indicate what is on the current page in the workspace - this is controlled
+by the FVWM infostore variable <varname>pageshowrootpager</varname> in the
+<filename>$FVWM_USERDIR/NsCDE.conf</filename>
 </para></listitem>
 <listitem><para>
  <guilabel>Disable Page Change On Screen Edge</guilabel>:  if selected, current page will
@@ -2120,9 +2126,9 @@ pictures consisting usualy from 2-5 <emphasis>base</emphasis> colors: <emphasis>
 <emphasis>topShadowColor</emphasis>, and <emphasis>bottomShadowColor</emphasis>.
 This colors are taken from the current (or custom) palette and applied to the symbolic
 definition of colors in XPM templates. Backdrop is then generated, tiled and
-applied to the root window. Every desk can have it's own backdrop texture. In
+applied to the root window. Every workspace can have it's own backdrop texture. In
 4 colors mode of the palette theme, they are all colored in the same pattern,
-while in 8 colors mode, every desk from 1-4 has it's own color variant from
+while in 8 colors mode, every workspace from 1-4 has it's own color variant from
 the current palette. If there are more that four desks defined, fifth is
 repeated color of the first, sixth of the second and so on.
 </para>
@@ -2203,7 +2209,7 @@ This is default list of system-wide configurations:
 <title>FrontPanel.actions</title>
 <para>
 This is not a FVWM file. Lines in this file are default actions
-and icons for Front Panel. This file is parsed from the <command>fpexec</command>
+and icons for Front Panel. This file is parsed by the <command>fpexec</command>
 and <command>fpseticon</command> shell scripts. All or individual entries from this
 file can be overridden by creating <filename>$FVWM_USERDIR/FrontPanel.actions</filename>
 file. This is a CSV-like file (comma is a field separator), and it defines main 10
@@ -2221,11 +2227,91 @@ File format is:
 </itemizedlist>
 </para>
 <para>
+If Icon Path field is <varname>__APPLET__</varname> for mouse button 1, then in the check/nocheck
+field an applet program may be defined for FvwmButtons based Front Panel to be swallowed instead
+of an icon. In this field, direct FvwmButtons(1) syntax must be manually written with this exceptions:
+</para>
+<itemizedlist>
+<listitem><para>Comma (,) must be replaced with a pipe (|)</para></listitem>
+<listitem><para>Double quotes (") must be escaped by the two backslashed (\\)</para></listitem>
+</itemizedlist>
+<para>
+If the swallowed applet has it's own action on mouse buttons clicks, then declaration of the
+applet must be prefixed with a <varname>ActionIgnoresClientWindow</varname>. In this case,
+last filed with the actions can be "Nop" because Front Panel will not accept this clicks
+(it may accept them if possible transparent area around applet exists and is clicked). If
+the applet is not clickable, a standard FVWM Action or command can be put in the last field
+to make a click on the applet usefull.
+</para>
+<para>
+Here is the example of the custom swallowed applet. This one was initially created for the
+Window Maker window manager:
+
+<programlisting>
+<![CDATA[
+   Btn10,__APPLET__,M1,
+   "ActionIgnoresClientWindow| Swallow (Respawn) \\"WmstickynotesApplet\\" 
+   \\"Exec exec wmstickynotes\\"",Nop
+
+   Btn10,,M2,FVWM,Nop
+
+   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
+]]>
+</programlisting>
+</para>
+
+<para>
+Here is the example of the custom swallowed applet which does not accept mouse clicks:
+
+<programlisting>
+<![CDATA[
+   Btn10,__APPLET__,M1,
+   "Swallow (Respawn) \\"MyFavoriteApplet\\" 
+   \\"Exec exec mfa -s\\"",Exec exec vlc
+
+   Btn10,,M2,FVWM,Nop
+
+   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 VLC
+]]>
+</programlisting>
+
+</para>
+
+<para>
+Notice that button definition for mouse M1 (first line) is split in 3 lines in this examples,
+but in the <filename>FrontPanel.actions</filename> must be written as one line.
+</para>
+
+<para>
 After editing this file (system-wide or user's) nothing needs to be
 reloaded because file is read from the <function>f_FrontPanelAction</function> function
 on every click on every icon on the Front Panel.
 There is no GUI tool for managing this file yet.
 </para>
+</sect2>
+
+<sect2 id="AppMenus_conf">
+<title>AppMenus.conf</title>
+<para>
+This file defines which custom menu entries will be appended on the Window Options menu when
+this menu is called by titlebar button 1. This is for example used by all known terminal
+applications to implement <guimenuitem>Wide Terminal</guimenuitem> menu entry. By default,
+<command>Watch Errors</command> and <command>Fvwm Diagnostic Console</command> have appended
+appropriate entries for conveniently call each other. Also, some of the known File Managers
+has this entry for opening new window of the same type. Entries in this file are the following
+comma separated values (syntax):
+<itemizedlist>
+<listitem><para>X11 Window Class</para></listitem>
+<listitem><para>X11 Window Resource</para></listitem>
+<listitem><para>Menu item title (and optionally keyboard shortcut after two TAB's)</para></listitem>
+<listitem><para>FVWM Exec or function command, module or action to be executed</para></listitem>
+</itemizedlist>
+</para>
+<para>
+This file exists as the <filename>$NSCDE_ROOT/config/AppMenus.conf</filename>, but it can be
+extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename> file.
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-Animate_conf">
@@ -2237,21 +2323,6 @@ reconfigured by the user in private <filename>$FVWM_USERDIR/NsCDE-Animate.conf</
 (or <filename>.local</filename>) with editor or with Window Style Manager. None effect is choosen
 as default for increased CDE similarity, because CDE doesn't have iconification
 animation effects.
-</para>
-</sect2>
-
-<sect2 id="NsCDE-Auto_conf">
-<title>NsCDE-Auto.conf</title>
-<para>
-Configuration of the <emphasis>FvwmAuto</emphasis> module and provided is a private set of
-FVWM functions from which only <function>f_AutoHide</function> (and parent functions) are
-used currently. FvwmAuto is started by NsCDE by default i <option>-menter</option>
-mode from <filename>NsCDE-Main.conf</filename>. Currently used to autoraise and autohide
-Front Panel, no matter which focus style is selected by default. In
-that way, Front Panel is not in the way of applications, yet on mousover
-action it is raised and lowered when it is not in focus and not use. FvwmAuto
-can be used to autoshade or autoiconify Front Panel and much more. See
-FvwmAuto(1).
 </para>
 </sect2>
 
@@ -2453,7 +2524,7 @@ be read by the main configuration immediately after processing
   window.
 </para></listitem>
 <listitem><para>
-  <function>f_UserChangeDesk</function>: called when current active desk changes
+  <function>f_UserChangeDesk</function>: called when current active workspace changes
 </para></listitem>
 <listitem><para>
   <function>f_UserChangePage</function>: called when current active page changes
@@ -2466,8 +2537,8 @@ resource) name, second is the binary to check in <varname>$PATH</varname>>, and 
 of the command line is what to execute with all arguments included.
 If window with name from arg1 is already present on <varname>$DISPLAY</varname>, it will
 not be executed, but pointer will be simply pointed to that window.
-If window was iconified, or function called from another desk or page,
-window will be deiconified, and desk and/or current page changed to one where
+If window was iconified, or function called from another workspace or page,
+window will be deiconified, and workspace and/or current page changed to one where
 existing window is residing.
 </para>
 <para>
@@ -2572,18 +2643,18 @@ config and extended a bit). Namely:
 
 <listitem><para>
   <keysym>Ctrl+Menu</keysym> moves Root Pager (if enabled) beneath the pointer or 
-    iconifies Local Pager if LocalPager already has the pointer - toggle
+    hides Local Pager if LocalPager already has the pointer - toggle
     action
 </para></listitem>
 
 <listitem><para>
-  <keysym>Ctrl+ISO_Level3_Shift</keysym> (right alt) moves Root Pager (if enabled) beneath
-    the pointer or iconifies Local Pager if LocalPager already has the pointer
+  <keysym>Shift+ISO_Level3_Shift</keysym> (right alt) moves Root Pager (if enabled) beneath
+    the pointer or hides Local Pager if LocalPager already has the pointer
     - a toggle action
 </para></listitem>
 
 <listitem><para>
-  <keysym>Shift+Menu</keysym> pops up Go to Page menu on FrontPanel from any context.
+  <keysym>Shift+Menu</keysym> if pressed twice, pops up Go to Page menu on FrontPanel from any context.
 </para></listitem>
 
 <listitem><para>
@@ -2746,19 +2817,19 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+Escape</keysym> Will open WindowList in the middle of the screen for the current workspace (desk)
- if pressed twice, local WindowList will be replaced with global WindowList
+  <keysym>Alt+Escape</keysym> Will open WindowList in the middle of the screen for the
+ current workspace (desk) if pressed twice, local WindowList will be replaced with
+ global WindowList
 </para></listitem>
 
 <listitem><para>
   <keysym>Shift+BackSpace</keysym> If pressed twice in a time frame of two seconds will call LocalPager in any context.
-  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again while pager is still
-  visible.
+  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again once, while pager is still visible.
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+Tab</keysym> is cycling trough pages of the active desk from up to down
-  and then right up to down
+  <keysym>Alt+Tab</keysym> is cycling trough pages of the active page of the current workspace
+  from up to down and then right up to down
 </para></listitem>
 
 <listitem><para>
@@ -2767,6 +2838,11 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Meta+Alt+L</keysym> activates screensaver, that is, locks the screen
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Alt+F</keysym> in the context of a window, frame, or corner, puts a current window
+  into a real fullscreen mode. Calling this keybinding again, restores a window.
 </para></listitem>
 
 <listitem><para>
@@ -3094,14 +3170,14 @@ and even menus called or dinamically generated from FvwmScript(1).
 </para></listitem>
 
 <listitem><para>
-  <guimenuitem>m_WindowOps</guimenuitem>: main menu of <emphasis>Window Operations</emphasis>
+  <guimenuitem>m_WindowOpsStandard</guimenuitem>: main menu of <emphasis>Window Operations</emphasis>
     invoked with a mouse
     click on left titlebar button. It has extended (<guimenuitem>More ...</guimenuitem>) and
     reduced (<guimenuitem>Less ...</guimenuitem>) version.
 </para></listitem>
 
 <listitem><para>
-  <guimenuitem>m_WindowOpsMore</guimenuitem>: changes <guimenuitem>m_WindowOps</guimenuitem>
+  <guimenuitem>m_WindowOpsExtended</guimenuitem>: changes <guimenuitem>m_WindowOpsStandard</guimenuitem>
     from default reduced, to extended view (<guimenuitem>More ...</guimenuitem> option on
     Window Operation menu)
 </para></listitem>
@@ -3117,12 +3193,6 @@ menu, and to refresh all windows on the screen.
   <guimenuitem>m_WindowOpsRootWin</guimenuitem>: Standalone root window version of the Window
     Operations menu intended for a general and tricky circumstances. It is invoked from the
     m_RootMenu, and keybindings <keysym>Ctrl+Meta+Space</keysym> and <keysym>Meta+Menu</keysym>.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_WindowOpsXterm</guimenuitem>: extensions for the
-  <emphasis>Window Operations</emphasis> menu
-    activated on (recognized) terminal application windows.
 </para></listitem>
 
 </itemizedlist>
@@ -3270,9 +3340,8 @@ menu, and to refresh all windows on the screen.
 </para></listitem>
 
 <listitem><para>
-  Pointer actions 4 and 5 (mouse wheel) will scroll between current
-    up and down desk pages by 2% if pointer is in the context of the
-    root window
+  Pointer actions 4 and 5 (mouse wheel) will scroll between current up and down pages
+  of the current workspace by 2% if pointer is in the context of the root window
 </para></listitem>
 
 <listitem><para>
@@ -3341,11 +3410,11 @@ this file, so nothing really should be changed here.
 <title>WSM.conf</title>
 <para>
 Non-FVWM config file. Here, names of the desks are provided and can be
-changed manually of with Workspace Manager. Names of the desk pages
+changed manually of with Workspace Manager. Names of the workspace pages
 (for the menus) are defined here too, and manager manually only for now.
 Option <option>WSPPG</option> can have value 0 or 1. If 1, small dynamic icon similar to
-the Page Manager (PGM) will be shown right of the desk name on the Workspace
-Manager active desk button, but only in 2 and 4 button configuration.
+the Page Manager (PGM) will be shown right of the workspace name on the Workspace
+Manager active workspace button, but only in 2 and 4 button configuration.
 Off by default, edit manually.
 </para>
 </sect2>
@@ -4164,6 +4233,37 @@ aspects of the interface. NsCDE is now ready for usage.
 
 </sect1>
 
+<sect1 id="NsCDE-Logging">
+<title>Diagnostic: X11, FVWM and NsCDE Log</title>
+
+<para>
+Most of the X11 Display Managers, such as XDM, sddm, gdm etc, are redirecting diagnostic
+output (standard error, stderr, file descriptor 2) into a file or some logging facility.
+This file is usually <filename>$HOME/.xsession-errors</filename>. When "NsCDE Log" item
+is launched from default subpanel 7 (Desktop Settings), it will execute <command>xterm -e $[infostore.xlogcmd]</command>. If not redefined in <filename>$FVWM_USERDIR/NsCDE.conf</filename>,
+contents of the variable FVWM infostore variable <varname>$[infostore.xlogcmd]</varname> will be
+<emphasis>"tail -300f ~/.xsession-errors"</emphasis>.
+</para>
+<para>
+If your X Display Manager is using
+different path or file name, this can be redefined as it is mentioned above. Beware that some
+X Display Managers (namely lightdm) are sending diagnostic output into
+<filename>/dev/null</filename>. In this case, no variable redefinition can get this
+output visible to the user.
+</para>
+<para>
+Reading X, FVWM and NsCDE log output can be informative and helping while solving possible
+unexpected or unexplainable problems with desktop setup.
+</para>
+<para>
+Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window under
+FVWM 2.X has a custom menu entry <guimenuitem>Fvwm Diagnostic Console</guimenuitem> which
+starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
+<guimenuitem>Watch Errors</guimenuitem> which calls NsCDE Log (Watch errors).
+When both windows are on the screen, this menu entries will simply transfer focus to each other.
+</para>
+</sect1>
+
 <sect1 id="NsCDE-Integrations">
 <title>Integration with X resources and widgets</title>
 
@@ -4439,7 +4539,7 @@ with complete explanations:
   FvwmScript applet. If 6 or 8 desks are configured, buttons will shrink
   and will be narrower. For that reason, in 6 and 8 desks mode it is not
   possible to have page indicator (<filename>WSM.conf</filename>: WSPPG) on the right side
-  of the desk buttons,
+  of the workspace buttons,
   but this doesn't exist in CDE anyway, since CDE doesn't have concept
   of pages (in my best knowledge). This means that Front Panel has always a
   fixed width which is ok for a distinctive look and for screens with

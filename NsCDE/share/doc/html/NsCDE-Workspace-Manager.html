@@ -11,21 +11,26 @@ configuration:
   width of the Front Panel, rather they are more wide in 2-buttons
   combination, and narrow in 6 and 8 button combination.
 </p></li><li class="listitem"><p>
- As in CDE, desk names can be renamed. There is a keyboard combination in
+ As in CDE, workspace names can be renamed. There is a keyboard combination in
   FvwmScript WSM which enters rename mode: Ctrl+Space on the current active
   desk, while pointer is inside WSM. <span class="keysym">Ctrl+Enter</span> saves new name. Names are
   synchronized with FVWM desktop names and used in the rest of the
-  configuration. Names are saved in <code class="filename">$FVWM_USERDIR/WSM.conf</code>
+  configuration. Names are saved in <code class="filename">$FVWM_USERDIR/WSM.conf</code>, and EWMH
+  desktop names are applied immediately in a runtime.
 </p></li><li class="listitem"><p>
 If Sun type keyboard is in use, <span class="keysym">Help</span> key above
 WSM will bring this help text in browser. On PC keyboard, <span class="keysym">F1</span> has the
 same function.
 </p></li><li class="listitem"><p>
- Addition: right mouse button on desk button brings contextual menu. From
-  this menu, global (all desks and their pages), or local (pages of the one
-  desk) FvwmPager - visual pager can be called. Below this menu options, there
-  is an option to bring up Window List, and small submenu for changing the active page
-  on the current desk.
+ Addition: right mouse button on workspace button brings contextual menu. From
+  this menu, the following items can be selected: default acion (activate workspace),
+  <span class="guimenuitem">Rename</span> to rename the workspace, <span class="guimenuitem">Manage</span>
+  to call Workspace and Page Manager, <span class="guimenuitem">Local Pager</span> (visual FvwmPager)
+  (for a workspace, not necessarily the current one), then the option
+  <span class="guimenuitem">Windows ...</span> to bring up Window List,
+  with windows on that workspace, and last, a small submenu
+  <span class="guimenuitem">Go to Page ...</span> for changing the active page on the that
+  workspace, which will of course change active workspace to that where page was selected.
 </p></li><li class="listitem"><p>
  If <code class="filename">$FVWM_USERDIR/WSM.conf</code> value <span class="emphasis"><em>WSPPG</em></span> is 1,
   then in 2 or 4 desks/buttons
