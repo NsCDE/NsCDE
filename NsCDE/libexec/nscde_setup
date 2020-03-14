@@ -297,14 +297,28 @@ function setup_nscde
    fi
 
    # Stalonetray - if it doesn't have configuration yet ready.
-   if [ ! -e "${HOME}/.stalonetrayrc" ]; then
+   if [ ! -e "${FVWM_USERDIR}/Stalonetray.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Setting default ${HOME}/.stalonetrayrc ..."
+         echo "Setting default ${FVWM_USERDIR}/Stalonetray.conf ..."
       fi
-      cp ${NSCDE_ROOT}/share/templates/dot_stalonetrayrc ${HOME}/.stalonetrayrc
+      cp ${NSCDE_ROOT}/share/templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.stalonetrayrc already exists."
+         echo "${FVWM_USERDIR}/Stalonetray.conf already exists."
+      fi
+   fi
+
+   # Color Manager local hooks
+   if [ ! -e "${FVWM_USERDIR}/libexec/colormgr.local" ]; then
+      if (($VERBOSE == 1)); then
+         echo "Setting default ${FVWM_USERDIR}/libexec/colormgr.local ..."
+      fi
+      mkdir -p "${FVWM_USERDIR}/libexec"
+      cp ${NSCDE_ROOT}/share/templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
+      chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/libexec/colormgr.local already exists."
       fi
    fi
 

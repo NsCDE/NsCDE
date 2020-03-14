@@ -1013,7 +1013,9 @@ directory with the theme for GTK2 and GTK3, and will edit <filename>$HOME/.gtkrc
 If <varname>nscde_use_xsettingsd</varname> is set to 1 in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
 after applying new color theme, user's X Settings in <filename>$HOME/.xsettingsd</filename> will be adjusted
 and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
-This option can be enabled by editing NsCDE.conf or during initial setup.
+This option can be enabled by editing NsCDE.conf or during initial setup. NsCDE starts <command>xsettingsd</command>
+daemon with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be present if it was not
+installed by the initial setup procedure.
 </para>
 
 <para>
@@ -3739,10 +3741,13 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para>
 <para>
   share/templates also contains <filename>Xdefaults</filename> and some include files
-    for it, as well as configuration for <command>stalonetray</command> if it is detected
+    for it, as well as configuration for <command>stalonetray</command> which is installed
     on initial setup, and <filename>BGdefault</filename>, which is a monochrome pixmap
     loaded as bare default early on start, before FvwmBacker(1) sets up
-    backdrops on each user's desk.
+    backdrops on each user's workspace. From there, on initial setup, default
+    <filename>Xsettingsd.conf</filename>, <filename>Stalonetray.conf</filename>,
+    <filename>colormgr.local</filename> and some other files are installed into
+    user's <filename class="directory">$FVWM_USERDIR</filename>.
 </para></listitem>
 
 <listitem><para>
@@ -4140,8 +4145,8 @@ that is <varname>$FVWM_USERDIR</varname> is created, and only icons subdirectory
 is created as <command>fvwm-menu-desktop</command> is run. User will be presented with a default
 system setup and with default color theme <emphasis>Broica</emphasis> in 8 colors, and
 <function>f_FindApp</function> function will try hard to find some usable terminal
-application and run it with setup. If Gkrellm, pnmixer and/or stalonetray programs are installed,
-on the system and found, they will be run too.
+application and run it with setup. If Gkrellm, pnmixer programs are installed,
+on the system and found, they will be run too. Stalonetray will be run if enabled by the user.
 </para>
 <para>
 Initial setup is a simple script (<command>$NSCDE_ROOT/libexec/nscde_setup</command>) from
@@ -4160,7 +4165,7 @@ the terminal which will run automatically and will set up the following:
 <listitem><para> <filename>~/.themes/NsCDE</filename> </para></listitem>
 <listitem><para> <filename>~/.config/Trolltech.conf</filename> </para></listitem>
 <listitem><para> <filename>~/.config/qt5ct/qt5ct.conf</filename> </para></listitem>
-<listitem><para> <filename>~/.stalonetrayrc if it does not exist yet</filename> </para></listitem>
+<listitem><para> <filename>~/NsCDE/Stalonetray.conf if it does not exist yet</filename> </para></listitem>
 <listitem><para> <filename>Visual Pager NsCDE addon Option</filename> </para></listitem>
 <listitem><para> <filename>Disable or enable XscreenSaver</filename> </para></listitem>
 <listitem><para> <filename>Disable or enable use of the XSETTINGS xsettingsd daemon</filename> </para></listitem>
@@ -4367,8 +4372,8 @@ then be provided to him in occations where programs of that type must be called.
 Apart from this, since <emphasis>system</emphasis> tray concept has been introduced on X11 and is
 here to stay, user will need some standalone tray application. For this
 purpose, a logical and really great <command>stalonetray</command> (Stand Alone Tray) is more than
-adequate. If NsCDE example configuration for stalonetray is used, it
-will have grid 3x3 and it's place will be in the bottom right corner of
+adequate. When NsCDE configuration for stalonetray <filename>$FVWM_USERDIR/Stalonetray.conf</filename>
+is used, it will have this defaults: grid 3x3 and it's place will be in the bottom right corner of
 the screen. Stalonetray is not integrated into Front Panel because it's
 size cannot be known in all times: is it one button size, two, ten? It is growing and
 shrinking depending on number of widgets or tray icons, and apart from

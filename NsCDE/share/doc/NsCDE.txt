@@ -870,7 +870,9 @@ GUI Tools
    applying new color theme, user's X Settings in $HOME/.xsettingsd will be
    adjusted and xsettingsd(1) daemon restarted for settings in GTK and Qt
    applications to be applied immediately. This option can be enabled by
-   editing NsCDE.conf or during initial setup.
+   editing NsCDE.conf or during initial setup. NsCDE starts xsettingsd daemon
+   with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be
+   present if it was not installed by the initial setup procedure.
 
     Key Bindings:
 
@@ -2880,10 +2882,12 @@ System and User NsCDE Tree Layout
        selected palette and color depth.
 
          share/templates also contains Xdefaults and some include files for
-       it, as well as configuration for stalonetray if it is detected on
+       it, as well as configuration for stalonetray which is installed on
        initial setup, and BGdefault, which is a monochrome pixmap loaded as
        bare default early on start, before FvwmBacker(1) sets up backdrops on
-       each user's desk.
+       each user's workspace. From there, on initial setup, default
+       Xsettingsd.conf, Stalonetray.conf, colormgr.local and some other files
+       are installed into user's $FVWM_USERDIR.
 
      *   src
 
@@ -3141,8 +3145,8 @@ Initial Configuration
    run. User will be presented with a default system setup and with default
    color theme Broica in 8 colors, and f_FindApp function will try hard to
    find some usable terminal application and run it with setup. If Gkrellm,
-   pnmixer and/or stalonetray programs are installed, on the system and
-   found, they will be run too.
+   pnmixer programs are installed, on the system and found, they will be run
+   too. Stalonetray will be run if enabled by the user.
 
     Initial setup is a simple script ($NSCDE_ROOT/libexec/nscde_setup) from
    the terminal which will run automatically and will set up the following:
@@ -3167,7 +3171,7 @@ Initial Configuration
 
      * ~/.config/qt5ct/qt5ct.conf
 
-     * ~/.stalonetrayrc if it does not exist yet
+     * ~/NsCDE/Stalonetray.conf if it does not exist yet
 
      * Visual Pager NsCDE addon Option
 
@@ -3357,14 +3361,15 @@ Additional recommended software
     Apart from this, since system tray concept has been introduced on X11 and
    is here to stay, user will need some standalone tray application. For this
    purpose, a logical and really great stalonetray (Stand Alone Tray) is more
-   than adequate. If NsCDE example configuration for stalonetray is used, it
-   will have grid 3x3 and it's place will be in the bottom right corner of
-   the screen. Stalonetray is not integrated into Front Panel because it's
-   size cannot be known in all times: is it one button size, two, ten? It is
-   growing and shrinking depending on number of widgets or tray icons, and
-   apart from that, this can significantly alter the precious CDE look of the
-   Front Panel. A window with traditional mwm/dtwm borders and without title
-   in corner of the screen is default in NsCDE. Ideas are welcome.
+   than adequate. When NsCDE configuration for stalonetray
+   $FVWM_USERDIR/Stalonetray.conf is used, it will have this defaults: grid
+   3x3 and it's place will be in the bottom right corner of the screen.
+   Stalonetray is not integrated into Front Panel because it's size cannot be
+   known in all times: is it one button size, two, ten? It is growing and
+   shrinking depending on number of widgets or tray icons, and apart from
+   that, this can significantly alter the precious CDE look of the Front
+   Panel. A window with traditional mwm/dtwm borders and without title in
+   corner of the screen is default in NsCDE. Ideas are welcome.
 
     X Terminal program? Urxvt, xterm, mate-terminal, terminus ... user's
    choice as always. As a slight recommendation, mate-terminal from MATE DE
