@@ -44,6 +44,15 @@ if [ -d "$NSCDE_ROOT/share/templates/Gkrellm" ] && $(whence -q gkrellm); then
    done
 
    cp -f gkrellmrc ${HOME}/.gkrellm2/themes/NsCDE/
+
+   if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
+      echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
+      echo "0" >> "${HOME}/.gkrellm2/theme_config"
+      echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
+      echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
+      echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
+      echo "100" >> "${HOME}/.gkrellm2/theme_config"
+   fi
 fi
 
 # mate-terminal
