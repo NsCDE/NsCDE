@@ -72,7 +72,7 @@ articles (the, a, an) will probably be more accurate.
    a look and feel which mainstream abadoned for some new fashion, and ... in a
    nutshell, giving to user the best of the both worlds.
 
-   t he excellent FVWM window manager is the main driver behind **NsCDE** with its
+   the excellent FVWM window manager is the main driver behind **NsCDE** with its
    endless options for customization, GUI Script engine, Colorsets, and
    modules. **NsCDE** is largely a wrapper around FVWM -- sort of like a
    heavyweight theme.
@@ -92,7 +92,7 @@ articles (the, a, an) will probably be more accurate.
    see on my screen. I have created this environment for my own usage 8-10
    years ago and it was a patchwork, chaotic and not well suited for sharing
    with someone. While it looked ok on the surface, behind it was years of
-   ad hoc hacks and senseless configuration and scripts, dysfunctional menus
+   ad hoc hacks and senseless configurations and scripts, dysfunctional menus
    etc. Couple of months in a row I had the time and chance to rewrite this as
    a more consistent environment, first for myself, and during this process,
    idea came to do it even better, and put it on the web for everyone else who
