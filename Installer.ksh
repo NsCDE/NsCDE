@@ -23,10 +23,10 @@ function check_dependencies
       echo "anywhere in your PATH."
       echo ""
       echo "For example (FreeBSD 12 example):"
-      echo "ln -s /usr/local/bin/python3.6 /usr/local/bin/pyhon3"
+      echo "ln -s /usr/local/bin/python3.6 /usr/local/bin/python3"
       echo ""
       echo "Python is referenced with \"#!/usr/bin/env python3\" in NsCDE Python"
-      echo "parts since plain \"python\" command might reffer to Python 2.X on"
+      echo "parts since plain \"python\" command might refer to Python 2.X on"
       echo "older systems, and minor revision in Python 3 differs across systems."
       echo ""
       dep_exit 20
