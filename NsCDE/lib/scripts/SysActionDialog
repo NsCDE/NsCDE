@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {   NsCDE: System Action   }
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-SysActionDialog}
+WindowLocaleTitle {   NsCDE: System Action   }
 WindowSize 460 180
 Colorset 22
 
@@ -101,7 +102,7 @@ Begin
                       $HybridSuspendTxt
                       $HibernateTxt
 
-   ChangeTitle 4 $PopupTitle
+   ChangeLocaleTitle 4 $PopupTitle
 
    # Key bindings
    Key Escape A 7 1 {KeyDismiss}
@@ -140,7 +141,7 @@ Widget 2
   Position 56 18
   Type ItemDraw
   Flags NoReliefString Left
-  Title {User Confirmation:}
+  LocaleTitle {User Confirmation:}
   Font "xft:::pixelsize=15"
   Colorset 22
   Main
@@ -156,7 +157,7 @@ Widget 3
    Position 56 36
    Type ItemDraw
    Flags NoReliefString Left
-   Title {X Window System or Operating System Action}
+   LocaleTitle {X Window System or Operating System Action}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -237,7 +238,7 @@ Property
    Position 20 140
    Type PushButton
    Flags NoReliefString
-   Title { Confirm }
+   LocaleTitle {Confirm}
    Font "xft:::pixelsize=15"
    Main
    Case message of
@@ -253,7 +254,7 @@ Property
          Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
          Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
          Do {CursorStyle ROOT left_ptr}
-         Do {Module FvwmScript WaitNotice "NsCDE" "Logging out" "..." 2000}
+         Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Logging out]" "..." 2000}
          Do {f_QuitAndExit}
          Quit
       End
@@ -303,7 +304,7 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System" "..." 1250}
+            Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
             Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi suspend || $NSCDE_ROOT/libexec/nscde-acpi suspend}
             Quit
@@ -322,7 +323,7 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Suspending System in hybrid mode" "..." 1250}
+            Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System in hybrid mode]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
             Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend || $NSCDE_ROOT/libexec/nscde-acpi hybrid-suspend}
             Quit
@@ -341,7 +342,7 @@ Property
             Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
             Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
             Do {CursorStyle ROOT left_ptr}
-            Do {Module FvwmScript WaitNotice "NsCDE" "Hibernating System" "..." 1250}
+            Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Hibernating System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
             Do {Schedule 1500 Exec sudo -n $NSCDE_ROOT/libexec/nscde-acpi hibernate || $NSCDE_ROOT/libexec/nscde-acpi hibernate}
             Quit
@@ -359,7 +360,7 @@ Property
    Size 100 20
    Position 180 140
    Type PushButton
-   Title { Dismiss }
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
@@ -380,7 +381,7 @@ Property
    Size 100 20
    Position 340 140
    Type PushButton
-   Title { Help }
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main

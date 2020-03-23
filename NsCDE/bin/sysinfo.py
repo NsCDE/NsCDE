@@ -49,7 +49,7 @@ try:
    print (swapmem_pct)
 
    # Virtual Memory in Use
-   print (str(swapmem_pct) + "% " + "(" + str(swapmem_pct) + "/" + str(swapmem_mb) + ") " + str(swapmem_avail) + "MB Available")
+   print (str(swapmem_pct) + "% " + "(" + str(swapmem_pct) + "/" + str(swapmem_mb) + ") " + str(swapmem_avail) + "MB")
 
 except ImportError:
    physmem_mb = "(Not available)"

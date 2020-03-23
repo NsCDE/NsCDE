@@ -7,6 +7,8 @@
 #
 
 VERBOSE=0
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde_setup"
 
 if [ -z $HOME ]; then
    echo "Error: HOME is not set cannot continue."
@@ -208,6 +210,22 @@ function setup_nscde
       fi
    fi
 
+   # Local localization
+   whence -q gettext
+   if (($? == 0)) && [ ! -r "$FVWM_USERDIR/WSM.conf" ]; then
+      if [ "x$LANGUAGE" != "x" ] && [ "$LANUGAGE" != "en" ] && [ "$LANGUAGE" != "C" ] && [ "$LANGUAGE" != "POSIX" ]; then
+         if (($VERBOSE == 1)); then
+            echo "Setting up localized workspace names."
+         fi
+         wspcnt=1
+         for wsp in One Two Three Four Five Six Seven Eight
+         do
+            gettext -s "$wsp" | awk "{ print \"WSP:${wspcnt}:\" \$0 }" >> "$FVWM_USERDIR/WSM.conf"
+            ((wspcnt = wspcnt + 1))
+         done
+      fi
+   fi
+
    # Make sure $HOME/.gtkrc-2.0 and $HOME/.config/gtk-3.0/settings.ini exists,
    # if not, set it up with defaults and generate theme with starting or environment palette.
 
@@ -296,18 +314,6 @@ function setup_nscde
       fi
    fi
 
-   # Stalonetray - if it doesn't have configuration yet ready.
-   if [ ! -e "${FVWM_USERDIR}/Stalonetray.conf" ]; then
-      if (($VERBOSE == 1)); then
-         echo "Setting default ${FVWM_USERDIR}/Stalonetray.conf ..."
-      fi
-      cp ${NSCDE_ROOT}/share/templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
-   else
-      if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Stalonetray.conf already exists."
-      fi
-   fi
-
    # Color Manager local hooks
    if [ ! -e "${FVWM_USERDIR}/libexec/colormgr.local" ]; then
       if (($VERBOSE == 1)); then
@@ -351,6 +357,18 @@ function setup_nscde
       else
          echo "Answer not understood."
          echo "Enabled by default: nscde_use_xscreensaver --> 1"
+      fi
+
+      # Stalonetray - if it doesn't have configuration yet ready.
+      if [ ! -e "${FVWM_USERDIR}/Stalonetray.conf" ]; then
+         if (($VERBOSE == 1)); then
+            echo "Setting default ${FVWM_USERDIR}/Stalonetray.conf ..."
+         fi
+         cp ${NSCDE_ROOT}/share/templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
+      else
+         if (($VERBOSE == 1)); then
+            echo "${FVWM_USERDIR}/Stalonetray.conf already in place."
+         fi
       fi
 
       echo -ne "Do you want to enable Stalonetray Tray? (y|n)[y] \c"

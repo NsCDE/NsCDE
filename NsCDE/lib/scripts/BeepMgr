@@ -10,6 +10,7 @@
 #
 ###
 
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-BeepMgr}
 WindowTitle {Style Manager - Beep}
 WindowSize 384 312
 Colorset 22
@@ -33,7 +34,7 @@ Begin
 
    If $pos == {50} Then
    Begin
-      Do {f_Notifier "Beep Style Manager" "Dismiss" "NsCDE/Error.xpm" "Uncompatible xset(1) command detected. Exiting."}
+      Do {f_Notifier "Beep Style Manager" "Dismiss" "NsCDE/Error.xpm" "Incompatible xset(1) command detected. Exiting."}
       Quit
    End
 
@@ -89,7 +90,7 @@ Widget 2
    Position 290 14
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -105,10 +106,11 @@ End
 
 Widget 3
    Property
-   Position 48 70
+   Position 12 70
+   Size 102 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {Volume }
+   LocaleTitle {Volume}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -135,10 +137,11 @@ End
 
 Widget 5
    Property
-   Position 36 138
+   Position 12 138
+   Size 102 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {Pitch(Hz) }
+   LocaleTitle {Pitch(Hz)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -164,10 +167,11 @@ End
 
 Widget 7
    Property
-   Position 6 202
+   Position 12 202
+   Size 102 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {Duration(ms) }
+   LocaleTitle {Duration(ms)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -210,7 +214,7 @@ Widget 10
    Position 10 272
    Flags NoReliefString
    Type PushButton
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -229,7 +233,7 @@ Widget 11
    Position 104 272
    Flags NoReliefString
    Type PushButton
-   Title {Save}
+   LocaleTitle {Save}
    Font "xft:::pixelsize=15"
    Main
    Case message of
@@ -259,7 +263,7 @@ Widget 12
    Position 72 14
    Flags NoReliefString
    Type PushButton
-   Title {Beep}
+   LocaleTitle {Beep}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -280,7 +284,7 @@ Widget 13
    Position 300 272
    Flags NoReliefString
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -300,7 +304,7 @@ Widget 14
    Position 200 272
    Flags NoReliefString
    Type PushButton
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Main
       Case message of

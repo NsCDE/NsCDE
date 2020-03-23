@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Powersave}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-PowerSaveMgr}
+WindowLocaleTitle {Style Manager - Powersave}
 WindowSize 386 420
 Colorset 22
 
@@ -50,7 +51,7 @@ Begin
    Begin
       Do {None ("Power Style Manager Error")}
           { f_Notifier "Power Style Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-          {"Error: Incompatible xset(1) tool detected or there is no DPMS functionality on this display." ".e1"}
+          {"Error: Incompatible xset(1) tool detected or there is no DPMS functionality on this display." "e1"}
       Quit
    End
 
@@ -79,6 +80,13 @@ Begin
    Key Q C 3 1 {KeyClose}
    Key F1 A 13 1 {KeyHelp}
    Key Help A 13 1 {KeyHelp}
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 6 (GetTitle 6)
+   # ChangeLocaleTitle 5 (GetTitle 5)
+   # ChangeLocaleTitle 8 (GetTitle 8)
+   # ChangeLocaleTitle 10 (GetTitle 10)
 End
  
 Widget 1
@@ -87,7 +95,7 @@ Widget 1
    Position 10 378
    Flags NoReliefString
    Type PushButton
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -95,7 +103,7 @@ Widget 1
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." ".e2"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." "e2"}
             Set $Wrong = 1
          End
          Else
@@ -105,7 +113,7 @@ Widget 1
 
          If (GetValue 4) > (GetValue 7) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." ".e3"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." "e3"}
             Set $Wrong = 1
          End
          Else
@@ -115,7 +123,7 @@ Widget 1
 
          If (GetValue 9) > (GetValue 7) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." ".e4"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." "e4"}
             Set $Wrong = 1
          End
          Else
@@ -125,7 +133,7 @@ Widget 1
 
          If (GetValue 9) < (GetValue 4) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be smaller than Standby time." ".e5"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be smaller than Standby time." "e5"}
             Set $Wrong = 1
          End
          Else
@@ -168,7 +176,7 @@ Widget 2
    Position 108 378
    Flags NoReliefString
    Type PushButton
-   Title {Save}
+   LocaleTitle {Save}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -176,7 +184,7 @@ Widget 2
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." ".e6"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Suspend time." "e6"}
             Set $Wrong = 1
          End
          Else
@@ -186,7 +194,7 @@ Widget 2
 
          If (GetValue 4) > (GetValue 7) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." ".e7"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Standby time cannot be bigger than Off time." "e7"}
             Set $Wrong = 1
          End
          Else
@@ -196,7 +204,7 @@ Widget 2
 
          If (GetValue 9) > (GetValue 7) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." ".e8"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Off time." "e8"}
             Set $Wrong = 1
          End
          Else
@@ -206,7 +214,7 @@ Widget 2
 
          If (GetValue 9) < (GetValue 4) Then
          Begin
-            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Standby time." ".e9"}
+            Do {f_Notifier "Powersave Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Suspend time cannot be bigger than Standby time." "e9"}
             Set $Wrong = 1
          End
          Else
@@ -305,7 +313,7 @@ Widget 3
    Position 204 378
    Flags NoReliefString
    Type PushButton
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -337,12 +345,14 @@ Widget 4
       End
 End
 
+# Title spaces because of locale string space keeping
 Widget 5
    Property
-   Position 14 94
+   Position 18 94
+   Size 280 0
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title { Standby time after (seconds): }
+   LocaleTitle {Standby time after (seconds):}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -351,12 +361,13 @@ Widget 5
       End
 End
 
+# Title spaces because of locale string space keeping
 Widget 6
    Property
    Position 18 62
    Flags NoReliefString
    Type CheckBox
-   Title { DPMS Enabled/Disabled}
+   Title { DPMS Enabled/Disabled                }
    Font "xft:::pixelsize=15"
    Value 1
    Main
@@ -402,12 +413,14 @@ Widget 7
       End
 End
 
+# Title spaces because of locale string space keeping
 Widget 8
    Property
-   Position 14 268
+   Position 18 268
+   Size 280 0
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title { Off time after (seconds): }
+   Title {Off time after (seconds):}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -434,12 +447,14 @@ Widget 9
       End
 End
 
+# Title spaces because of locale string space keeping
 Widget 10
    Property
-   Position 14 182
+   Position 18 182
+   Size 280 0
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title { Suspend time after (seconds): }
+   Title {Suspend time after (seconds):}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -480,7 +495,7 @@ Widget 13
    Position 300 378
    Flags NoReliefString
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -500,7 +515,7 @@ Widget 14
    Position 292 12
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of

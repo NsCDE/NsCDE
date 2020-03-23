@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Subpanels Manager}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Subpanel:$NSCDE_ROOT/share/locale;NsCDE-Subpanels}
+WindowLocaleTitle {Subpanels Manager}
 WindowSize 606 572
 Colorset 22
 
@@ -52,9 +53,9 @@ Begin
    Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
    ChangeTitle 4 $FmtSubpList
 
-   Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3}
+   Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3 | $NSCDE_ROOT/bin/ised -c 's/^\$\[gt\.\(.*\)\]/\1/g' -o -f -}
    Set $SubpanelName = (GetOutput $SubpanelNameCmd 1 -1)
-   Set $NewWinTitle = {Subpanels Manager: Subpanel } $SubpanelNo { (} $SubpanelName {)}
+   Set $NewWinTitle = (Gettext {Subpanels Manager: Subpanel}) { } $SubpanelNo { (} (Gettext $SubpanelName) {)}
    ChangeWindowTitle $NewWinTitle
 
    # Defaults
@@ -87,6 +88,10 @@ Begin
    Key Escape A 22 1 {KeyClose}
    Key F1 A 23 1 {KeyHelp}
    Key Help A 23 1 {KeyHelp}
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 18 (GetTitle 18)
 
    # X compositor bug workaround
    Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
@@ -137,7 +142,7 @@ Widget 1
    Position 312 10
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Existing Items in Subpanel:}
+   LocaleTitle {Existing Items in Subpanel:}
    Colorset 22
    Main
       Case message of
@@ -152,7 +157,7 @@ Widget 2
    Position 12 10
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Available Applications:}
+   LocaleTitle {Available Applications:}
    Colorset 22
    Main
       Case message of
@@ -509,7 +514,7 @@ Widget 7
    Position 12 284
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Name:}
+   LocaleTitle {Name:}
    Colorset 22
    Main
       Case message of
@@ -539,7 +544,7 @@ Widget 9
    Position 12 346
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Command:}
+   LocaleTitle {Command:}
    Colorset 22
    Main
       Case message of
@@ -569,7 +574,7 @@ Widget 11
    Position 12 412
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Icon File:}
+   LocaleTitle {Icon File:}
    Colorset 22
    Main
       Case message of
@@ -599,7 +604,7 @@ Widget 13
    Position 542 280
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Type:}
+   LocaleTitle {Type:}
    Colorset 22
    Main
       Case message of
@@ -614,7 +619,7 @@ Widget 14
    Position 446 306
    Type PopupMenu
    Flags NoReliefString Left
-   Title {Exec Command|Fvwm Module|Fvwm Function|Other|Check For ...}
+   LocaleTitle {Exec Command|Fvwm Module|Fvwm Function|Other|Check For ...}
    Font "xft:::pixelsize=14"
    Colorset 22
    Main
@@ -719,7 +724,7 @@ Widget 20
    Position 12 532
    Type PushButton
    Flags NoReliefString
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -764,7 +769,7 @@ Widget 21
    Position 168 532
    Type PushButton
    Flags NoReliefString
-   Title {Save}
+   LocaleTitle {Save}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -782,7 +787,7 @@ Widget 22
    Position 322 532
    Type PushButton
    Flags NoReliefString
-   Title {Cancel}
+   LocaleTitle {Cancel}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -803,7 +808,7 @@ Widget 23
    Position 476 532
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main

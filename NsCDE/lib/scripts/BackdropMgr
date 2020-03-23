@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Backdrop}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-BackdropMgr}
+WindowLocaleTitle {Style Manager - Backdrop}
 WindowSize 480 512
 Colorset 22
 
@@ -85,6 +86,13 @@ Begin
 
    # X compositor bug workaround
    Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 6 (GetTitle 6)
+   ChangeLocaleTitle 7 (GetTitle 7)
+   ChangeLocaleTitle 9 (GetTitle 9)
+   ChangeLocaleTitle 11 (GetTitle 11)
 End
 
 PeriodicTasks
@@ -203,8 +211,8 @@ Widget 5
          End
 
          # Set backdrop name in the upper title
-         Set $StrSpace = (Add $StrLen 96)
-         Set $NameInTitle = { Backdrops: } $BackdropName
+         Set $StrSpace = (Add $StrLen 92)
+         Set $NameInTitle = { } (Gettext {Backdrop:}) { } $BackdropName
          ChangeSize 1 $StrSpace 22
          ChangeTitle 1 $NameInTitle
       End
@@ -316,7 +324,7 @@ Widget 7
    Font "xft:::pixelsize=15"
    Flags NoReliefString Left
    Value 0
-   Title { Use a photo or picture }
+   Title { Use a photo or picture}
    Colorset 22
    Main
       Case message of
@@ -357,7 +365,7 @@ Widget 8
    Position 22 344
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Background Variant: }
+   LocaleTitle {Background Variant: }
    Main
       Case message of
       SingleClic :
@@ -420,7 +428,7 @@ Widget 10
    Type PushButton
    Flags NoReliefString
    Value 0
-   Title { Load Custom Palette ... }
+   LocaleTitle { Load Custom Palette ... }
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -451,7 +459,7 @@ Widget 11
    Position 340 342
    Type PushButton
    Flags NoReliefString
-   Title { Preview |  Preview |  Revert  }
+   Title { Preview | Preview | Revert }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -502,7 +510,7 @@ Widget 12
    Position 340 376
    Type PushButton
    Flags NoReliefString
-   Title { Add ... }
+   LocaleTitle { Add ... }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -552,7 +560,7 @@ Widget 13
    Position 340 412
    Type PushButton
    Flags NoReliefString
-   Title { Delete ... }
+   LocaleTitle { Delete ... }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -564,7 +572,7 @@ Widget 13
             Set $DelBckNumToName = (GetOutput $DelBckNumToNameCmd 1 -1)
             Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -G } $DelBckNumToName
             Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
-            Do {f_RunQuickScriptDialog ActionForm "Delete Backdrop } $DelBckNumToName {" "Yes" "No" "Delete Backdrop" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Backdrop] } $DelBckNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Backdrop]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
          Else
          Begin
@@ -572,7 +580,7 @@ Widget 13
             Set $DelPhotoNumToName = (GetOutput $DelPhotoNumToNameCmd 1 -1)
             Set $CheckDelPhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f } $DelPhotoNumToName
             Set $CheckDelPhotoPath = (GetOutput $CheckDelPhotoPathCmd 1 -1)
-            Do {f_RunQuickScriptDialog ActionForm "Delete Picture } $DelPhotoNumToName {" "Yes" "No" "Delete Picture" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Picture] } $DelPhotoNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Picture]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
       End
       1 :
@@ -631,7 +639,7 @@ Widget 16
    Position 16 472
    Type PushButton
    Flags NoReliefString
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -660,7 +668,7 @@ Widget 17
    Position 140 472
    Type PushButton
    Flags NoReliefString
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -747,7 +755,7 @@ Widget 18
    Position 260 472
    Type PushButton
    Flags NoReliefString
-   Title {Close}
+   LocaleTitle {Close}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -771,7 +779,7 @@ Widget 19
    Position 384 472
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

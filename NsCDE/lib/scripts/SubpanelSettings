@@ -4,6 +4,7 @@
 # Licence: GPLv3
 #
 
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Subpanel}
 WindowTitle {Subpanel Settings}
 WindowSize 370 270
 Colorset 22
@@ -41,7 +42,7 @@ Begin
    Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 3 -1)
 
    # Fill discovered values into widgets and titles
-   Set $WindowTitlePrint = {Subpanel } $SubpanelDisplayName { Settings}
+   Set $WindowTitlePrint = (Gettext {Subpanel}) { } $SubpanelDisplayName { } (Gettext {Settings})
    ChangeWindowTitle $WindowTitlePrint
    ChangeTitle 1 $WindowTitlePrint
    ChangeTitle 5 $SubpanelDisplayName
@@ -138,10 +139,10 @@ End
 Widget 2
    Property
    Size 20 0
-   Position 302 6
+   Position 290 6
    Flags NoReliefString
    Type PushButton
-   Title {Reset}
+   LocaleTitle {Reset}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -188,7 +189,7 @@ Widget 4
    Size 30 20
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Subpanel Name: }
+   LocaleTitle {Subpanel Name:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -220,7 +221,7 @@ Widget 6
    Position 284 78
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -240,7 +241,7 @@ Widget 7
    Size 30 20
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Subpanel Title List Width: }
+   LocaleTitle {Subpanel Title List Width: }
    Main
       Case message of
       SingleClic :
@@ -270,7 +271,7 @@ Widget 9
    Position 284 118
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -290,7 +291,7 @@ Widget 10
    Size 30 20
    Type ItemDraw
    Flags NoReliefString Left
-   Title {This Subpanel is Enabled: }
+   LocaleTitle {This Subpanel is Enabled: }
    Main
       Case message of
       SingleClic :
@@ -319,7 +320,7 @@ Widget 12
    Position 284 158
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -338,11 +339,11 @@ End
 
 Widget 14
    Property
-   Size 60 0
+   Size 68 0
    Position 10 232
    Flags NoReliefString
    Type PushButton
-   Title { OK }
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -391,8 +392,8 @@ Widget 14
 
          If $ExistanceOK == 0 Then
          Begin
-            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Subpanel } $SubpanelNo
-             { has errors in declaration. Edit } $UserSubpanelActionsFile { to fix it and then rerun this tool."}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "$[gt.Subpanel] } $SubpanelNo
+             { $[gt.has errors in declaration. Edit] } $UserSubpanelActionsFile { $[gt.to fix it and then rerun this tool.]"}
          End
 
          Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
@@ -433,11 +434,11 @@ End
 
 Widget 15
    Property
-   Size 60 0
+   Size 68 0
    Position 152 232
    Flags NoReliefString
    Type PushButton
-   Title {Close}
+   LocaleTitle {Close}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -453,11 +454,11 @@ End
 
 Widget 16
    Property
-   Size 60 0
-   Position 300 232
+   Size 68 0
+   Position 292 232
    Flags NoReliefString
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

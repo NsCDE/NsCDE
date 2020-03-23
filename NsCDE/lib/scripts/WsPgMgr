@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Workspaces and Pages Manager}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WsPgMgr}
+WindowLocaleTitle {Workspaces and Pages Manager}
 WindowSize 348 448
 Colorset 22
 
@@ -20,7 +21,7 @@ Begin
    Begin
       Do {None ("Workspaces and Pages Manager Warning")}
           { f_Notifier "Workspaces and Pages Manager Warning" "Dismiss" "NsCDE/Warning.xpm"}
-          { "Warning: Number of Workspaces and/or number of pages are not set. Using 4 as default."}
+          { "Warning: Number of Workspaces and/or number of Pages are not set. Using 4 as default."}
 
       Set $DeskNo = 4
       Set $PageMatrixX = 2
@@ -93,15 +94,15 @@ Begin
    End
 
    # Desk info
-   Set $SetTitleDsk = {Number of Workspaces:  } $DeskNo
-   ChangeTitle 16 $SetTitleDsk
+   Set $SetTitleDsk = (Gettext {Number of Workspaces:}) {  } $DeskNo
+   ChangeLocaleTitle 16 $SetTitleDsk
 
    # Pages info
-   Set $SetTitlePgDsk = {Pages per Workspace:  } $PageNo
+   Set $SetTitlePgDsk = (Gettext {Pages per Workspace:}) {  } $PageNo
    ChangeTitle 17 $SetTitlePgDsk
 
    # Total desks * pages info
-   Set $SetTitlePgTotal = {Total Pages:  } $PagesTotal
+   Set $SetTitlePgTotal = (Gettext {Total Pages:}) {  } $PagesTotal
    ChangeTitle 18 $SetTitlePgTotal
 
    # For statistics in widgets 15, 16, 17, fill the value used later
@@ -173,7 +174,7 @@ Widget 9
    Position 10 8
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title {Manage Number of Workspaces and Pages}
+   LocaleTitle {Manage Number of Workspaces and Pages}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -425,13 +426,45 @@ Widget 11
       SingleClic :
       Begin
          If (GetValue 11) == 1 Then
+         Begin
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+            ChangeFont 1 $ButtonDisplayFont
+            ChangeFont 2 $ButtonDisplayFont
             ChangeValue 11 2
+         End
          If (GetValue 11) == 3 Then
+         Begin
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+            ChangeFont 1 $ButtonDisplayFont
+            ChangeFont 2 $ButtonDisplayFont
+            ChangeFont 3 $ButtonDisplayFont
+            ChangeFont 4 $ButtonDisplayFont
             ChangeValue 11 4
+         End
          If (GetValue 11) == 5 Then
+         Begin
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+            ChangeFont 1 $ButtonDisplayFont
+            ChangeFont 2 $ButtonDisplayFont
+            ChangeFont 3 $ButtonDisplayFont
+            ChangeFont 4 $ButtonDisplayFont
+            ChangeFont 5 $ButtonDisplayFont
+            ChangeFont 6 $ButtonDisplayFont
             ChangeValue 11 6
+         End
          If (GetValue 11) == 7 Then
+         Begin
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+            ChangeFont 1 $ButtonDisplayFont
+            ChangeFont 2 $ButtonDisplayFont
+            ChangeFont 3 $ButtonDisplayFont
+            ChangeFont 4 $ButtonDisplayFont
+            ChangeFont 5 $ButtonDisplayFont
+            ChangeFont 6 $ButtonDisplayFont
+            ChangeFont 7 $ButtonDisplayFont
+            ChangeFont 8 $ButtonDisplayFont
             ChangeValue 11 8
+         End
 
          Set $TmpDesks = (GetValue 11)
          Set $SetTitleDsk = {Nr. of Desks:  } $TmpDesks
@@ -558,7 +591,7 @@ Widget 12
    Position 10 226
    Flags NoReliefString NoFocus
    Type ItemDraw
-   Title {Nr. of Vertical Pages}
+   LocaleTitle {Nr. of Vertical Pages}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -598,7 +631,7 @@ Widget 14
    Position 182 226
    Flags NoReliefString NoFocus
    Type ItemDraw
-   Title {Nr. of Horizontal Pages}
+   LocaleTitle {Nr. of Horizontal Pages}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -636,7 +669,7 @@ End
 Widget 16
    Property
    Position 12 318
-   Size 200 20
+   Size 320 20
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Nr. of Desks: }
@@ -650,7 +683,7 @@ End
 Widget 17
    Property
    Position 12 338
-   Size 200 20
+   Size 320 20
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Pages per Desk: }
@@ -664,7 +697,7 @@ End
 Widget 18
    Property
    Position 12 358
-   Size 200 20
+   Size 320 20
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Total Pages: }
@@ -707,7 +740,7 @@ Widget 21
    Size 80 20
    Flags NoReliefString
    Type PushButton
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -746,7 +779,7 @@ Widget 21
                Set $CopyConfig = (GetOutput $CopyConfigcmd 1 -1)
                If $CopyConfig <> {} Then
                Begin
-                  Do {f_Notifier "Copy Error" "Dismiss" "NsCDE/Error.xpm" "Error creating $[FVWM_USERDIR]/NsCDE.conf: \\\"} $CopyConfig {\\\""}
+                  Do {f_Notifier "Copy Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error creating] $[FVWM_USERDIR]/NsCDE.conf: \\\"} $CopyConfig {\\\""}
                   Quit
                End
                Else
@@ -817,7 +850,7 @@ Widget 21
 
         If $DStringToCheck == 2 Then
         Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $DStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
            Quit
         End
 
@@ -841,7 +874,7 @@ Widget 21
 
         If $PVStringToCheck == 2 Then
         Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $PVStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PVStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
            Quit
         End
 
@@ -864,7 +897,7 @@ Widget 21
         End
         If $PHStringToCheck == 2 Then
         Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "Error } $PHStringToCheck { occured while checking config file } $ExpandFile {"}
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PHStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
            Quit
         End
 
@@ -883,7 +916,7 @@ Widget 22
    Size 80 20
    Flags NoReliefString
    Type PushButton
-   Title {Cancel}
+   LocaleTitle {Cancel}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -907,7 +940,7 @@ Widget 23
    Size 80 20
    Flags NoReliefString
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

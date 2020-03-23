@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-StyleMgr}
+WindowLocaleTitle {Style Manager}
 WindowSize 720 110
 WindowPosition 30 30
 Colorset 22
@@ -26,16 +27,16 @@ Begin
    Key P A 1 1 {Pwr}
    Key T A 1 1 {Start}
 
-   ChangeTitle 27 {Color}
-   ChangeTitle 28 {Font}
-   ChangeTitle 29 {Backdrop}
-   ChangeTitle 30 {Keyboard}
-   ChangeTitle 31 {Mouse}
-   ChangeTitle 32 {Beep}
-   ChangeTitle 33 {Screen}
-   ChangeTitle 34 {Window}
-   ChangeTitle 35 {Power}
-   ChangeTitle 36 {Startup}
+   ChangeTitle 27 (Gettext {Color})
+   ChangeTitle 28 (Gettext {Font})
+   ChangeTitle 29 (Gettext {Backdrop})
+   ChangeTitle 30 (Gettext {Keyboard})
+   ChangeTitle 31 (Gettext {Mouse})
+   ChangeTitle 32 (Gettext {Beep})
+   ChangeTitle 33 (Gettext {Screen})
+   ChangeTitle 34 (Gettext {Window})
+   ChangeTitle 35 (Gettext {Power})
+   ChangeTitle 36 (Gettext {Startup})
 
    Set $IconFnClean = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11.5} 1 -1)
    Set $IconFn = {Shadow=2 0 SE:} $IconFnClean {:antialias=0}
@@ -131,7 +132,7 @@ Widget 2
    Flags NoReliefString Left
    Value 0
    Font "xft:::pixelsize=14"
-   Title {File|Exit     Ctrl+Q}
+   LocaleTitle {File|Exit     Ctrl+Q}
    Main
       Case message of
       SingleClic :
@@ -150,7 +151,7 @@ Widget 3 # Handler
    Font "xft:::pixelsize=14"
    Flags NoReliefString Left Hidden
    Value 0
-   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   LocaleTitle {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
    Main
       Case message of
       SingleClic :
@@ -168,7 +169,7 @@ Widget 4
    Position 0 0
    Flags NoReliefString Right
    Value 0
-   Title {Help|Style Manager Help}
+   LocaleTitle {Help|Style Manager Help}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -667,36 +668,36 @@ Widget 16
             If $CheckDesk == {MATE} Then
             Begin
                Do {Test (x mate-session-properties) Exec exec mate-session-properties}
-               Do {Test (!x mate-session-properties) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found."}
+               Do {Test (!x mate-session-properties) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found." "NoCmd"}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {LXDE} Then
             Begin
                Do {Test (x lxsession-edit) Exec exec lxsession-edit}
-               Do {Test (!x lxsession-edit) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxsession-edit found."}
+               Do {Test (!x lxsession-edit) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxsession-edit found." "NoCmd"}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {GNOME} Then
             Begin
                Do {Test (x gnome-tweaks) Exec exec gnome-tweaks}
-               Do {Test (!x gnome-tweaks) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No gnome-tweaks found."}
+               Do {Test (!x gnome-tweaks) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No gnome-tweaks found." "NoCmd"}
                Set $CheckDeskRc = {Listed}
             End
             If $CheckDesk == {KDE} Then
             Begin
                Do {Test (x kcmshell5) Exec exec kcmshell5 kcmsmserver autostart kcmkded}
-               Do {Test (!x kcmshell5) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No kcmshell5 found."}
+               Do {Test (!x kcmshell5) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No kcmshell5 found." "NoCmd"}
                Set $CheckDeskRc = {Listed}
             End
 
             If $CheckDeskRc == {NotListed} Then
             Begin
-               Do {f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "Session Manager from desktop } $CheckDesk { not (yet) supported."}
+               Do {None (NsCDE-Notifier.NotSupp) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "Session Manager from desktop } $CheckDesk { not (yet) supported." "NotSupp"}
             End
          End
          Else
          Begin
-            Do {f_Notifier "Style Manager" "Dismiss" "NsCDE/Info.xpm" "NsCDE appears not to be running under the X Session Manager."}
+            Do {None (NsCDE-Notifier.NoSess) f_Notifier "Style Manager" "Dismiss" "NsCDE/Info.xpm" "NsCDE appears not to be running under the X Session Manager." "NoSess"}
          End
       End
 End

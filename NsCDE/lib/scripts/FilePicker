@@ -4,7 +4,7 @@
 # Licence: GPLv3
 #
 
-UseGettext
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-FilePicker}
 WindowLocaleTitle {File Picker}
 WindowSize 420 540 # Taille
 Colorset 22
@@ -54,7 +54,11 @@ Init
   ChangeFont 12 $FontBoldMedium
 
   Set $W13Visible = 0
- End
+
+  # Locale stuff: Hack to keep leading or ending space(s)
+  # which will be trimmed by LocaleTitle Widget directive.
+  ChangeLocaleTitle 12 (GetTitle 12)
+End
 
 Widget 1
 Property
@@ -146,7 +150,7 @@ Property
  Position 20 348
  Flags NoReliefString
  Size 54 18
- Title {Up}
+ LocaleTitle {Up}
  Type PushButton
  Font "xft:::pixelsize=15"
 Main
@@ -174,7 +178,7 @@ Property
  Position 92 348
  Flags NoReliefString
  Size 74 18
- Title {Home}
+ LocaleTitle {Home}
  Type PushButton
  Font "xft:::pixelsize=15"
 Main
@@ -201,7 +205,7 @@ Property
  Position 20 386
  Flags NoReliefString Left
  Type CheckBox
- Title { Show hidden files }
+ Title { Show hidden files        }
  Font "xft:::pixelsize=15"
 Main
  Case message of

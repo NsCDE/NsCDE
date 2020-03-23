@@ -46,7 +46,7 @@ do
    Enabled=$(egrep "S${subpn},ENABLED," $spactfile | cut -d"," -f3)
 
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Name \"$Name\""
-   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Width $Width"
+   echo "InfoStoreAdd $[gt.NsCDE-Subpanel${subpn}-Width $Width]"
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Rows $Rows"
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Enabled $Enabled"
    echo "InfoStoreAdd subpanel_NsCDE-Subpanel${subpn}_last_sel_id inst_ico_s${subpn}"
@@ -70,7 +70,7 @@ do
    echo ""
 
    echo "*NsCDE-Subpanel${subpn}: (Size \$[infostore.NsCDE-Subpanel${subpn}-Width] 32, Frame 1, \\"
-   echo " Id inst_ico_s${subpn}, PressColorset 26, Title(side, left) \"Install Icon\" Icon NsCDE/FpInstIcon.xpm, \\"
+   echo " Id inst_ico_s${subpn}, PressColorset 26, Title(side, left) \"$[gt.Install Icon]\" Icon NsCDE/FpInstIcon.xpm, \\"
    echo " Action \"Module FvwmScript SubpanelMgr ${subpn}\")"
    echo ""
 

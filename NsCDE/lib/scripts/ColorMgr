@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Color}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ColorMgr}
+WindowLocaleTitle {Style Manager - Color}
 WindowSize 448 546
 Colorset 22
 
@@ -106,6 +107,19 @@ Begin
    Set $GtkStr = {00}
    Set $Gtk2Str = 0
    Set $Gtk3Str = 0
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 1 (GetTitle 1)
+   ChangeLocaleTitle 4 (GetTitle 4)
+   ChangeLocaleTitle 19 (GetTitle 19)
+   ChangeLocaleTitle 21 (GetTitle 21)
+   ChangeLocaleTitle 22 (GetTitle 22)
+   ChangeLocaleTitle 23 (GetTitle 23)
+   ChangeLocaleTitle 24 (GetTitle 24)
+   ChangeLocaleTitle 25 (GetTitle 25)
+   ChangeLocaleTitle 26 (GetTitle 26)
+   ChangeLocaleTitle 27 (GetTitle 27)
 End
 
 PeriodicTasks
@@ -219,7 +233,7 @@ Widget 4
    Position 296 44
    Type PushButton
    Flags NoReliefString
-   Title { Preview |  Preview |  Revert  }
+   Title { Preview | Preview | Revert }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -257,7 +271,7 @@ Widget 5
    Position 296 100
    Type PushButton
    Flags NoReliefString
-   Title { Add ... }
+   LocaleTitle { Add ... }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -278,7 +292,7 @@ Widget 5
          End
          Else
          Begin
-            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file \\\"} (LastString) {\\\" is not a valid NsCDE Palette file."}
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Selected file] \\\"} (LastString) {\\\" $[gt.is not a valid CDE/NsCDE Palette file.]"}
          End
       End
 End
@@ -289,7 +303,7 @@ Widget 6
    Position 296 154
    Type PushButton
    Flags NoReliefString
-   Title { Delete ... }
+   LocaleTitle { Delete ... }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -299,7 +313,7 @@ Widget 6
          Set $DelPalNumToName = (GetOutput $DelPalNumToNameCmd 1 -1)
          Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $DelPalNumToName
          Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
-         Do {f_RunQuickScriptDialog ActionForm "Delete Palette } $DelPalNumToName {" "Yes" "No" "Delete Palette" "SendToModule ColorMgr SendString 6 1 confirmed"}
+         Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Palette] } $DelPalNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Palette]" "SendToModule ColorMgr SendString 6 1 confirmed"}
       End
       1 :
       Begin
@@ -474,7 +488,7 @@ Widget 18
    Position 12 326
    Type PushButton
    Flags NoReliefString
-   Title {Number Of Colors ...}
+   LocaleTitle {Number Of Colors ...}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -608,7 +622,7 @@ Widget 25
    Type CheckBox
    Flags NoReliefString Left
    Value 1
-   Title { Use Qt 4 Gtk Engine}
+   Title { Use Qt4 GTK Style}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -628,7 +642,7 @@ Widget 26
    Type CheckBox
    Flags NoReliefString Left
    Value 1
-   Title { Use Qt 5 Gtk Engine}
+   Title { Use Qt5 GTK Style}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -670,7 +684,7 @@ Widget 29
    Position 16 506
    Type PushButton
    Flags NoReliefString
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -695,7 +709,7 @@ Widget 30
    Position 128 506
    Type PushButton
    Flags NoReliefString
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -711,7 +725,7 @@ Widget 30
       Begin
          If $PreviewMode == 0 Then
          Begin
-            Do {Module FvwmScript WaitNotice "Working ..." "Please wait for changes to be applied" "and NsCDE restarted." 5000}
+            Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}
          End
          Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
@@ -868,7 +882,7 @@ Widget 31
    Position 240 506
    Type PushButton
    Flags NoReliefString
-   Title {Close}
+   LocaleTitle {Close}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -896,7 +910,7 @@ Widget 32
    Position 352 506
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

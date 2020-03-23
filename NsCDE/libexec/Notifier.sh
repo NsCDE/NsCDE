@@ -39,16 +39,28 @@ while getopts t:b:i:s:f:h Option
 do
    case $Option in
       t)
-         sh_WindowTitle="$OPTARG"
+         if $(whence -q gettext); then
+            sh_WindowTitle=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
+         else
+            sh_WindowTitle="$OPTARG"
+         fi
       ;;
       b)
-         sh_ButtonTitle="$OPTARG"
+         if $(whence -q gettext); then
+            sh_ButtonTitle=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
+         else
+            sh_ButtonTitle="$OPTARG"
+         fi
       ;;
       i)
          sh_IconFile="$OPTARG"
       ;;
       s)
-         sh_TextString="$OPTARG"
+         if $(whence -q gettext); then
+            sh_TextString=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
+         else
+            sh_TextString="$OPTARG"
+         fi
          sh_WrappedText=$(echo "$sh_TextString" | fold -w $FoldFactor -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
       ;;

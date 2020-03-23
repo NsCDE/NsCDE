@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle { Number Of Colors To Use }
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ColorMgr}
+WindowLocaleTitle { Number Of Colors To Use }
 WindowSize 280 294
 Colorset 22
 
@@ -18,7 +19,7 @@ Begin
 
    ChangeValue 5 1
 
-   Set $DefaultTitle = {Default (} $Ncolors {)}
+   Set $DefaultTitle = (Gettext {Default}) { (} $Ncolors {)}
    ChangeTitle 5 $DefaultTitle
 
    # Keybindings
@@ -59,7 +60,7 @@ Property
    Position 22 80
    Type RadioButton
    Flags NoReliefString
-   Title {Use 4 Colors Scheme}
+   LocaleTitle {Use 4 Colors Scheme}
    Main
       Case message of
       SingleClic :
@@ -75,7 +76,7 @@ Property
    Position 22 130
    Type RadioButton
    Flags NoReliefString
-   Title {Use 8 Colors Scheme}
+   LocaleTitle {Use 8 Colors Scheme}
    Main
       Case message of
       SingleClic :
@@ -124,7 +125,7 @@ Property
    Position 16 254
    Type PushButton
    Flags NoReliefString
-   Title { OK }
+   LocaleTitle {OK}
    Main
       Case message of
       SingleClic :
@@ -140,7 +141,7 @@ Property
    Position 110 254
    Type PushButton
    Flags NoReliefString
-   Title {Cancel}
+   LocaleTitle {Cancel}
    Main
       Case message of
       SingleClic :
@@ -159,7 +160,7 @@ Property
    Position 204 254
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Main
       Case message of
       SingleClic :

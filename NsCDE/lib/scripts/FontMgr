@@ -4,12 +4,21 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Font}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-FontMgr}
+WindowLocaleTitle {Style Manager - Font}
 WindowSize 710 688
 Colorset 22
 
 Init
 Begin
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 11 (GetTitle 11)
+   ChangeLocaleTitle 16 (GetTitle 16)
+   ChangeLocaleTitle 25 (GetTitle 25)
+   ChangeLocaleTitle 26 (GetTitle 26)
+   ChangeLocaleTitle 27 (GetTitle 27)
+
    Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
    Set $NarrowFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
    ChangeFont 10 $DefFont
@@ -68,7 +77,7 @@ Begin
    ChangeValue 18 9
 
    Set $PreviewList = { Small| Medium| Large     }
-   ChangeTitle 14 $PreviewList
+   ChangeLocaleTitle 14 $PreviewList
    ChangeValue 14 2
 
    # Defaults
@@ -148,7 +157,7 @@ Widget 2
    Size 120 30
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Main
       Case message of
       SingleClic :
@@ -197,10 +206,10 @@ End
 
 Widget 3
    Property
-   Position 20 62
+   Position 22 62
    Flags NoReliefString NoFocus
    Type ItemDraw
-   Title { Font Sets}
+   LocaleTitle {Font Sets}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -305,10 +314,10 @@ End
 
 Widget 5
    Property
-   Position 234 62
+   Position 238 62
    Flags NoReliefString NoFocus
    Type ItemDraw
-   Title { Fonts}
+   LocaleTitle {Fonts}
    Main
       Case message of
       SingleClic :
@@ -451,10 +460,10 @@ End
 
 Widget 7
    Property
-   Position 506 62
+   Position 516 62
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title { Font Style}
+   LocaleTitle {Font Style}
    Main
       Case message of
       SingleClic :
@@ -497,7 +506,7 @@ Widget 10
    Position 12 260
    Flags NoReliefString NoFocus
    Type ItemDraw
-   Title {Set Fonts for DPI: }
+   LocaleTitle {Set Fonts for DPI:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -513,7 +522,7 @@ Widget 11
    Flags NoReliefString Left
    Value 2
    Type PopupMenu
-   Title { 75x75 DPI | 96x96 DPI | 120x120 DPI | 144x144 DPI | Custom DPI ... }
+   Title { 75x75 DPI | 96x96 DPI | 120x120 DPI | 144x144 DPI | Custom DPI ...}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -585,7 +594,7 @@ Widget 13
    Position 234 260
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title {Preview Set for Size:}
+   LocaleTitle {Preview Set for Size:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -766,7 +775,7 @@ Widget 15
    Position 402 260
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title {Font Group: }
+   LocaleTitle {Font Group:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -778,7 +787,6 @@ End
 Widget 16
    Property
    Position 402 284
-   Size 160 10
    Flags NoReliefString
    Value 1
    Type PopupMenu
@@ -801,7 +809,7 @@ Widget 17
    Position 580 260
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   Title {Font Size: }
+   LocaleTitle {Font Size:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -813,11 +821,10 @@ End
 Widget 18
    Property
    Position 580 284
-   Size 160 10
    Flags NoReliefString
    Value 8
    Type PopupMenu
-   Title {xxxxxxxxxx}
+   Title {xxxxxxxxx}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -988,7 +995,7 @@ Widget 28
    Size 172 20
    Flags NoReliefString
    Type PushButton
-   Title {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
+   LocaleTitle {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -1005,25 +1012,25 @@ Widget 28
                Set $FontsetFileRemove = (GetOutput $FontsetFileRemoveCmd 1 -1)
                If $FontsetFileRemove <> {} Then
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error removing } $FontsetFile {: } $FontsetFileRemove {"}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] } $FontsetFile {: } $FontsetFileRemove {"}
                End
                Else
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "Fontset file } $FontsetFile { removed from inventory."}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] } $FontsetFile { $[gt.removed from inventory.]"}
                   Set $FontsetMenu = (GetOutput {sleep 1; $NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
                   ChangeTitle 4 $FontsetMenu
                End
             End
             Else
             Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "No fontset file was selected prior to removal action."}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.No fontset file was selected prior to removal action.]"}
             End
 
             # Set Widget 28 back in place after this actions, namely after removing fontset files or errors
             # if trying to remove system fontsets, move fontlist list to first value
             ChangeValue 28 2
             ChangeValue 4 1
-            ChangeTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
+            ChangeLocaleTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
             Set $FontSetInUse = 0
             ChangeColorset 4 22
             ChangeColorset 6 20
@@ -1036,7 +1043,7 @@ Widget 28
                ChangeColorset 4 20
                ChangeColorset 6 5
                ChangeColorset 8 5
-               ChangeTitle 28 {Select Fonts Manually|Use Selected Font Set|Remove Fontset}
+               ChangeLocaleTitle 28 {Select Fonts Manually|Use Selected Font Set|Remove Fontset}
                Set $FontSetInUse = 1
                SendSignal 4 1
             End
@@ -1045,7 +1052,7 @@ Widget 28
                ChangeColorset 4 22
                ChangeColorset 6 20
                ChangeColorset 8 20
-               ChangeTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
+               ChangeLocaleTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
                Set $FontSetInUse = 0
             End
          End
@@ -1071,7 +1078,7 @@ Widget 31
    Size 120 20
    Flags NoReliefString
    Type PushButton
-   Title {Save ...}
+   LocaleTitle {Save ...}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1111,13 +1118,13 @@ Widget 31
             Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
             If $Gtk2Font <> {} Then
             Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error editing $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
             End
             Set $Gtk3FontCmd={$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
             Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
             If $Gtk3Font <> {} Then
             Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error editing $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
             End
 
             # XSETTINGS Daemon Integration
@@ -1147,7 +1154,7 @@ Widget 31
             Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
          End
 
-         Set $QUITARG = {ChoiceForm "Do you want to restart NsCDE with new font properties now?" Yes No "User Action Required"}
+         Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
          Set $QUITFORM = (LaunchScript $QUITARG)
       End
 
@@ -1172,13 +1179,13 @@ Widget 32
    Size 170 20
    Flags NoReliefString
    Type PushButton
-   Title {Save Font Set ...}
+   LocaleTitle {Save Font Set ...}
    Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
       Begin
-         Set $ARG = {InputForm "Enter Fontset Name:" }
+         Set $ARG = {InputForm "$[gt.Enter Fontset Name:]" }
          Set $INPUTFORM = (LaunchScript $ARG )
       End
       1 :
@@ -1216,12 +1223,12 @@ Widget 32
                End
                Else
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error creating $FVWM_USERDIR/fontsets: } $Sanity {"}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error creating] $FVWM_USERDIR/fontsets: } $Sanity {"}
                End
             End
             Else
             Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "Fontset name must be defined before saving it!"}
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.Fontset name must be defined before saving it!]"}
             End
          End
       End
@@ -1233,7 +1240,7 @@ Widget 33
    Size 120 20
    Flags NoReliefString
    Type PushButton
-   Title {  Close  }
+   LocaleTitle {Close}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1253,7 +1260,7 @@ Widget 34
    Size 120 20
    Flags NoReliefString
    Type PushButton
-   Title {  Help  }
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

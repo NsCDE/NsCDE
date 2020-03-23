@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Window}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WindowMgr}
+WindowLocaleTitle {Style Manager - Window}
 WindowSize 386 756
 WindowPosition 340 320
 Colorset 22
@@ -107,6 +108,19 @@ Begin
 
    # X compositor bug workaround
    Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 4 (GetTitle 4)
+   ChangeLocaleTitle 11 (GetTitle 11)
+   ChangeLocaleTitle 12 (GetTitle 12)
+   ChangeLocaleTitle 13 (GetTitle 13)
+   ChangeLocaleTitle 14 (GetTitle 14)
+   ChangeLocaleTitle 15 (GetTitle 15)
+   ChangeLocaleTitle 31 (GetTitle 31)
+   ChangeLocaleTitle 32 (GetTitle 32)
+   ChangeLocaleTitle 42 (GetTitle 42)
+   ChangeLocaleTitle 44 (GetTitle 44)
 End
 
 Widget 1
@@ -131,7 +145,7 @@ Widget 2
    Position 296 12
    Type PushButton
    Flags NoReliefString
-   Title {Default}
+   LocaleTitle {Default}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -544,7 +558,7 @@ Widget 3
    Position 8 74
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title {Configuration Section: }
+   LocaleTitle {Configuration Section: }
    Colorset 45
    Main
       Case message of
@@ -593,7 +607,7 @@ Widget 4
             ShowWidget 18
             ShowWidget 19
             ShowWidget 20
-            ChangeTitle 5 {Window Behavior}
+            ChangeLocaleTitle 5 {Window Behavior}
 
             HideWidget 21
             HideWidget 22
@@ -683,7 +697,7 @@ Widget 4
             ShowWidget 28
             ShowWidget 29
             ShowWidget 30
-            ChangeTitle 5 {Window Icons}
+            ChangeLocaleTitle 5 {Window Icons}
          End
 
          If (GetValue 4) == 3 Then
@@ -727,7 +741,7 @@ Widget 4
             ShowWidget 39
             ShowWidget 40
             ShowWidget 41
-            ChangeTitle 5 {Desk Page Edges}
+            ChangeLocaleTitle 5 {Desk Page Edges}
 
             HideWidget 42
             HideWidget 43
@@ -795,7 +809,7 @@ Widget 4
             ChangePosition 16 12 1000
             ChangePosition 10 12 204
             Do {All ("Window Style Manager") RefreshWindow}
-            ChangeTitle 5 {Window Animation}
+            ChangeLocaleTitle 5 {Window Animation}
          End
       End
 End
@@ -832,7 +846,7 @@ End
 
 Widget 7
    Property
-   Title {Only Pointer Inside Window Makes Focus}
+   LocaleTitle {Only Pointer Inside Window Makes Focus}
    Position 22 150
    Flags NoReliefString
    Type RadioButton
@@ -852,7 +866,7 @@ End
 
 Widget 8
    Property
-   Title {Point In Window To Make Active}
+   LocaleTitle {Point In Window To Make Active}
    Position 22 186
    Flags NoReliefString
    Type RadioButton
@@ -872,7 +886,7 @@ End
 
 Widget 9
    Property
-   Title {Click In Window To Make Active}
+   LocaleTitle {Click In Window To Make Active}
    Position 22 222
    Flags NoReliefString
    Type RadioButton
@@ -984,7 +998,7 @@ End
 
 Widget 15
    Property
-   Title { Show Contents During Move}
+   Title { Show Contents During Move            }
    Position 20 436
    Flags NoReliefString
    Type CheckBox
@@ -1015,10 +1029,10 @@ End
 Widget 17
    Property
    Size 0 0
-   Position 14 500
+   Position 18 500
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title { Time After Which Active Window Is Raised}
+   LocaleTitle {Time After Which Active Window Is Raised}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1057,10 +1071,10 @@ End
 Widget 19
    Property
    Size 0 0
-   Position 14 598
+   Position 18 598
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title { Manual Window Movement Threshold}
+   LocaleTitle {Manual Window Movement Threshold}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1092,7 +1106,7 @@ End
 
 Widget 21
    Property
-   Title {Use Icon Box}
+   LocaleTitle {Use Icon Box}
    Position 22 158
    Flags NoReliefString
    Type RadioButton
@@ -1123,7 +1137,7 @@ End
 
 Widget 22
    Property
-   Title {Place On Workspace}
+   LocaleTitle {Place On Workspace}
    Font "xft:::pixelsize=15"
    Position 22 206
    Flags NoReliefString
@@ -1162,7 +1176,7 @@ End
 
 Widget 23
    Property
-   Title {Place Icons Left From Bottom To Top}
+   LocaleTitle {Place Icons Left From Bottom To Top}
    Position 22 288
    Flags NoReliefString
    Type RadioButton
@@ -1186,7 +1200,7 @@ End
 
 Widget 24
    Property
-   Title {Place Icons Left From Top To Bottom}
+   LocaleTitle {Place Icons Left From Top To Bottom}
    Position 22 338
    Flags NoReliefString
    Type RadioButton
@@ -1210,7 +1224,7 @@ End
 
 Widget 25
    Property
-   Title {Place Icons Right From Bottom To Top}
+   LocaleTitle {Place Icons Right From Bottom To Top}
    Position 22 388
    Flags NoReliefString
    Type RadioButton
@@ -1234,7 +1248,7 @@ End
 
 Widget 26
    Property
-   Title {Place Icons Right From Top To Bottom}
+   LocaleTitle {Place Icons Right From Top To Bottom}
    Position 22 438
    Flags NoReliefString
    Type RadioButton
@@ -1259,10 +1273,10 @@ End
 Widget 27
    Property
    Size 0 0
-   Position 14 496
+   Position 18 496
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title { Default Icon Size}
+   LocaleTitle {Default Icon Size}
    Main
       Case message of
       SingleClic :
@@ -1295,10 +1309,10 @@ End
 Widget 29
    Property
    Size 0 0
-   Position 14 594
+   Position 18 594
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title { Maximum Icon Size}
+   LocaleTitle {Maximum Icon Size}
    Main
       Case message of
       SingleClic :
@@ -1366,7 +1380,7 @@ End
 
 Widget 33
    Property
-   Title {Disable Page Change On Screen Edge}
+   LocaleTitle {Disable Page Change On Screen Edge}
    Position 20 278
    Flags NoReliefString
    Type RadioButton
@@ -1386,7 +1400,7 @@ End
 
 Widget 34
    Property
-   Title {Page Change On Screen Edge (1px)}
+   LocaleTitle {Page Change On Screen Edge (1px)}
    Position 20 318
    Flags NoReliefString
    Type RadioButton
@@ -1406,7 +1420,7 @@ End
 
 Widget 35
    Property
-   Title {Page Change On Screen Edge (2px)}
+   LocaleTitle {Page Change On Screen Edge (2px)}
    Position 20 358
    Flags NoReliefString
    Type RadioButton
@@ -1427,10 +1441,10 @@ End
 Widget 36
    Property
    Size 0 0
-   Position 14 408
+   Position 18 408
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Page Edge Resistance}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Page Edge Resistance}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1461,10 +1475,10 @@ End
 Widget 38
    Property
    Size 0 0
-   Position 14 500
+   Position 18 500
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Edge Window Move Resistance}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Edge Window Move Resistance}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1495,10 +1509,10 @@ End
 Widget 40
    Property
    Size 0 0
-   Position 14 598
+   Position 18 598
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Edge Window Move Delay}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Edge Window Move Delay}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1586,9 +1600,9 @@ End
 
 Widget 43
    Property
-   Title { Animation Effect: }
+   LocaleTitle {Animation Effect:}
    Font "xft:::pixelsize=15"
-   Position 16 238
+   Position 18 238
    Flags NoReliefString NoFocus
    Type ItemDraw
    Value 1
@@ -1628,10 +1642,10 @@ End
 Widget 45
    Property
    Size 0 0
-   Position 14 290
+   Position 18 290
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Animation Frame Delay}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Animation Frame Delay}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1665,10 +1679,10 @@ End
 Widget 47
    Property
    Size 0 0
-   Position 14 388
+   Position 18 388
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Animation Revolution Twist}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Animation Revolution Twist}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1702,10 +1716,10 @@ End
 Widget 49
    Property
    Size 0 0
-   Position 14 492
+   Position 18 492
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Outline Width}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Outline Width}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1739,10 +1753,10 @@ End
 Widget 51
    Property
    Size 0 0
-   Position 14 588
+   Position 18 588
    Type ItemDraw
-   Flags NoReliefString NoFocus
-   Title { Animation Iterations}
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Animation Iterations}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1794,7 +1808,7 @@ Widget 122
    Position 12 714
    Type PushButton
    Flags NoReliefString
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1812,7 +1826,7 @@ Widget 122
          SendSignal 122 1
 
          # Ask for configuration reload
-         Do {f_RunQuickScriptDialog ActionForm "Restart NsCDE After This Changes?" Yes No "Restart NsCDE" Restart Nop}
+         Do {f_RunQuickScriptDialog ActionForm "$[gt.Restart NsCDE After This Changes?]" $[gt.Yes] $[gt.No] "$[gt.Restart NsCDE]" Restart Nop}
 
          # Finished
          Quit
@@ -2430,7 +2444,7 @@ Widget 123
    Position 142 714
    Type PushButton
    Flags NoReliefString
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -2450,7 +2464,7 @@ Widget 124
    Position 272 714
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of

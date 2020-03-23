@@ -4,6 +4,7 @@
 # Licence: GPLv3
 #
 
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WSM}
 WindowTitle {WSM}
 WindowSize 260 70
 Colorset 52
@@ -83,7 +84,7 @@ Begin
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
 
       # Button Menu
-      Set $NameDeskStr = { } $NameDesk {|Workspace } $NameDesk {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
+      Set $NameDeskStr = { } $NameDesk {|} (Gettext {Workspace}) { } $NameDesk {:} (Gettext {|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...})
 
       ChangeFont $btnname $MainFontRegular
       ChangeTitle $btnname $NameDeskStr

@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Workstation Information}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Sysinfo}
+WindowLocaleTitle {Workstation Information}
 WindowSize 486 352
 Font "xft::Regular:pixelsize=12"
 Colorset 22
@@ -64,7 +65,7 @@ Begin
    Set $mem = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 6 -1) { Megabytes}
    Set $swap = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 7 -1) { Megabytes}
    Set $swappct = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 8 -1)
-   Set $swapinfo = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 9 -1)
+   Set $swapinfo = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 9 -1) { } (Gettext {Available})
 
    Set $sysname = (GetOutput {uname -s} 1 -1)
    Set $osname = (GetOutput {uname -o} 1 -1)
@@ -102,12 +103,11 @@ End
 
 Widget 1
    Property
-   Size 100 0
-   Position 86 15
+   Size 150 0
+   Position 10 15
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {User Name: }
+   Flags NoReliefString Right
+   LocaleTitle {User Name:}
    Main
       Case message of
       SingleClic :
@@ -120,8 +120,7 @@ Widget 21
    Size 100 0
    Position 159 15
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<username>}
    Main
       Case message of
@@ -132,12 +131,11 @@ End
 
 Widget 2
    Property
-   Size 100 0
-   Position 41 32
+   Size 150 0
+   Position 10 32
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Workstation Name: }
+   Flags NoReliefString Right
+   LocaleTitle {Workstation Name:}
    Main
       Case message of
       SingleClic :
@@ -150,8 +148,7 @@ Widget 22
    Size 100 0
    Position 159 32
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<hostname>}
    Main
       Case message of
@@ -162,12 +159,11 @@ End
 
 Widget 3
    Property
-   Size 100 0
-   Position 122 48
+   Size 150 0
+   Position 10 48
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Type: }
+   Flags NoReliefString Right
+   LocaleTitle {Type:}
    Main
       Case message of
       SingleClic :
@@ -180,8 +176,7 @@ Widget 23
    Size 100 0
    Position 159 48
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<machtype>}
    Main
       Case message of
@@ -192,12 +187,11 @@ End
 
 Widget 4
    Property
-   Size 100 0
-   Position 22 77
+   Size 150 0
+   Position 10 77
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Internet (IP) Address: }
+   Flags NoReliefString Right
+   LocaleTitle {Internet (IP) Address:}
    Main
       Case message of
       SingleClic :
@@ -210,8 +204,7 @@ Widget 24
    Size 100 0
    Position 159 77
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<ipaddr>}
    Main
       Case message of
@@ -222,12 +215,11 @@ End
 
 Widget 5
    Property
-   Size 100 0
-   Position 108 94
+   Size 150 0
+   Position 10 94
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Host ID: }
+   Flags NoReliefString Right
+   LocaleTitle {Host ID:}
    Main
       Case message of
       SingleClic :
@@ -240,8 +232,7 @@ Widget 25
    Size 100 0
    Position 159 94
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<hostid>}
    Main
       Case message of
@@ -252,12 +243,11 @@ End
 
 Widget 6
    Property
-   Size 100 0
-   Position 50 110
+   Size 150 0
+   Position 10 110
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Network Domain: }
+   Flags NoReliefString Right
+   LocaleTitle {Network Domain:}
    Main
       Case message of
       SingleClic :
@@ -270,8 +260,7 @@ Widget 26
    Size 100 0
    Position 159 110
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<domainname>}
    Main
       Case message of
@@ -282,12 +271,11 @@ End
 
 Widget 7
    Property
-   Size 100 0
-   Position 52 128
+   Size 150 0
+   Position 10 128
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Internet Domain: }
+   Flags NoReliefString Right
+   LocaleTitle {Internet Domain:}
    Main
       Case message of
       SingleClic :
@@ -300,8 +288,7 @@ Widget 27
    Size 200 0
    Position 159 128
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<domain>}
    Main
       Case message of
@@ -312,12 +299,11 @@ End
 
 Widget 8
    Property
-   Size 100 0
+   Size 154 0
    Position 6 162
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Physical Memory (RAM): }
+   Flags NoReliefString Right
+   LocaleTitle {Physical Memory (RAM):}
    Main
       Case message of
       SingleClic :
@@ -330,8 +316,7 @@ Widget 28
    Size 200 0
    Position 159 162
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<mem>}
    Main
       Case message of
@@ -342,12 +327,11 @@ End
 
 Widget 9
    Property
-   Size 100 0
+   Size 150 0
    Position 10 179
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Virtual Memory (Swap): }
+   Flags NoReliefString Right
+   LocaleTitle {Virtual Memory (Swap):}
    Main
       Case message of
       SingleClic :
@@ -360,8 +344,7 @@ Widget 29
    Size 200 0
    Position 159 179
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<swap>}
    Main
       Case message of
@@ -372,12 +355,11 @@ End
 
 Widget 10
    Property
-   Size 100 0
-   Position 14 196
+   Size 150 0
+   Position 10 196
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Virtual Memory in Use: }
+   Flags NoReliefString Right
+   LocaleTitle {Virtual Memory in Use:}
    Main
       Case message of
       SingleClic :
@@ -390,8 +372,7 @@ Widget 30
    Size 256 0
    Position 264 196
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<swapused>}
    Main
       Case message of
@@ -419,12 +400,11 @@ End
 
 Widget 11
    Property
-   Size 100 0
-   Position 42 220
+   Size 150 0
+   Position 10 220
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Operating System: }
+   Flags NoReliefString Right
+   LocaleTitle {Operating System:}
    Main
       Case message of
       SingleClic :
@@ -437,8 +417,7 @@ Widget 31
    Size 324 0
    Position 159 220
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<sysstring>}
    Main
       Case message of
@@ -449,12 +428,11 @@ End
 
 Widget 12
    Property
-   Size 100 0
-   Position 46 238
+   Size 150 0
+   Position 10 238
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {Window Manager: }
+   Flags NoReliefString Right
+   LocaleTitle {Window Manager:}
    Main
       Case message of
       SingleClic :
@@ -467,8 +445,7 @@ Widget 32
    Size 314 0
    Position 159 238
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<winmgr>}
    Main
       Case message of
@@ -479,12 +456,11 @@ End
 
 Widget 13
    Property
-   Size 100 0
-   Position 58 256
+   Size 150 0
+   Position 10 256
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {NsCDE Version: }
+   Flags NoReliefString Right
+   LocaleTitle {NsCDE Version:}
    Main
       Case message of
       SingleClic :
@@ -497,8 +473,7 @@ Widget 33
    Size 256 0
    Position 159 256
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<nscdever>}
    Main
       Case message of
@@ -509,12 +484,11 @@ End
 
 Widget 14
    Property
-   Size 100 0
-   Position 34 284
+   Size 150 0
+   Position 10 284
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
-   Title {System Last Booted: }
+   Flags NoReliefString Right
+   LocaleTitle {System Last Booted:}
    Main
       Case message of
       SingleClic :
@@ -527,8 +501,7 @@ Widget 34
    Size 256 0
    Position 159 284
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {<lastboot>}
    Main
       Case message of
@@ -542,7 +515,7 @@ Widget 36
     Size 72 0
     Position 204 312
     Type PushButton
-    Title {Dismiss}
+    LocaleTitle {Dismiss}
     Flags NoReliefString
     Main
        Case message of
@@ -565,8 +538,7 @@ Widget 19
    Size 48 48
    Position 300 8
    Type ItemDraw
-   Flags NoReliefString
-   Flags Left
+   Flags NoReliefString Left
    Title {}
    Icon CDE/SDtsysinfo.m.pm
    Main

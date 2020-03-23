@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Style Manager - Keyboard}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-KeyboardMgr}
+WindowLocaleTitle {Style Manager - Keyboard}
 WindowSize 460 350
 Colorset 22
 
@@ -22,6 +23,7 @@ Begin
    ChangeValue 7 (GetOutput  {xset -q | egrep 'auto repeat delay:' } 0 7)
 
    Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   ChangeFont 3 $DefFont
    ChangeFont 4 $DefFont
    ChangeFont 6 $DefFont
    ChangeFont 8 $DefFont
@@ -43,6 +45,10 @@ Begin
    Key Q C 14 1 {KeyClose}
    Key F1 A 13 1 {KeyHelp}
    Key Help A 13 1 {KeyHelp}
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 3 (GetTitle 3)
 End
 
 Widget 1
@@ -65,7 +71,7 @@ Property
    Position 352 8
    Flags NoReliefString
    Type PushButton
-   Title {Default}
+   LocaleTitle {Default}
    Main
       Case message of
       SingleClic :
@@ -88,7 +94,7 @@ Widget 3
    Position 10 68
    Flags NoReliefString
    Type CheckBox
-   Title { Auto Repeat}
+   Title { Auto Repeat                                }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -114,9 +120,10 @@ End
 Widget 4
    Property
    Position 8 120
+   Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {   Start Delay }
+   LocaleTitle {Start Delay}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -144,9 +151,10 @@ End
 Widget 6
    Property
    Position 8 180
+   Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {Repeat Delay }
+   LocaleTitle {Repeat Delay}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -175,9 +183,10 @@ End
 Widget 8
    Property
    Position 8 242
+   Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
-   Title {Click Volume }
+   LocaleTitle {Click Volume}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -221,7 +230,7 @@ Widget 11
    Position 10 310
    Flags NoReliefString
    Type PushButton
-   Title {Apply}
+   LocaleTitle {Apply}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -242,7 +251,7 @@ Widget 12
    Position 123 310
    Flags NoReliefString
    Type PushButton
-   Title {Save}
+   LocaleTitle {Save}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -281,7 +290,7 @@ Widget 13
    Position 235 310
    Flags NoReliefString
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -301,7 +310,7 @@ Widget 14
    Position 348 310
    Flags NoReliefString
    Type PushButton
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Main
       Case message of

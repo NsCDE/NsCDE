@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Occupy Workspace}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Occupy}
+WindowLocaleTitle {Occupy Workspace}
 WindowSize 296 296
 Colorset 22
 
@@ -12,7 +13,7 @@ Init
 Begin
    If $WinName == {} Then
    Begin
-      ChangeTitle 9 {Select Workspace, pick a Window.}
+      ChangeLocaleTitle 9 {Select Workspace, pick a Window.}
    End
    Else
    Begin
@@ -46,6 +47,11 @@ Begin
    ChangeFont 9 $SmallFont
 
    Set $GoWithWindow = 0
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 3 (GetTitle 3)
+   ChangeLocaleTitle 10 (GetTitle 10)
 End
 
 Widget 1
@@ -53,8 +59,8 @@ Widget 1
    Size 4 20
    Position 4 10
    Type ItemDraw
-   Flags NoReliefString
-   Title {Window: }
+   Flags NoReliefString NoFocus Right
+   LocaleTitle {Window:}
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -76,11 +82,11 @@ End
 
 Widget 4
    Property
-   Size 4 20
+   Size 100 0
    Position 4 38
    Type ItemDraw
-   Flags NoReliefString
-   Title {Workspaces:      }
+   Flags NoReliefString Right
+   LocaleTitle {Workspaces:}
    Font "xft:::pixelsize=15"
    Colorset 22
 End
@@ -218,7 +224,7 @@ Widget 10
    Type CheckBox
    Value 0
    Flags NoReliefString
-   Title { Go With the Window}
+   Title { Go with the Window}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -238,7 +244,7 @@ Widget 5
    Position 8 260
    Type PushButton
    Flags NoReliefString
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -272,7 +278,7 @@ Widget 6
    Size 80 20
    Position 208 260
    Type PushButton
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main
@@ -292,7 +298,7 @@ Widget 8
    Size 80 20
    Position 108 260
    Type PushButton
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Flags NoReliefString
    Main

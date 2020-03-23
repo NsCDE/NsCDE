@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle { Choose a Palette }
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-BackdropMgr}
+WindowLocaleTitle { Choose a Palette }
 WindowSize 280 300
 Colorset 22
 
@@ -22,6 +23,8 @@ Begin
    Key Escape A 6 1 {KeyClose}
    Key F1 A 7 1 {KeyHelp}
    Key Help A 7 1 {KeyHelp}
+
+   ChangeLocaleTitle 2 { Default }
 End
 
 Widget 1
@@ -44,7 +47,7 @@ Property
    Position 164 20
    Type RadioButton
    Flags NoReliefString
-   Title { Default }
+   LocaleTitle { Default }
    Main
       Case message of
       SingleClic :
@@ -53,7 +56,6 @@ Property
          Set $Palette = {DEFAULT}
       End
 End
-
 
 Widget 3
    Property
@@ -91,7 +93,7 @@ Property
    Position 16 258
    Type PushButton
    Flags NoReliefString
-   Title { OK }
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -108,7 +110,7 @@ Property
    Position 100 258
    Type PushButton
    Flags NoReliefString
-   Title {Cancel}
+   LocaleTitle {Cancel}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -128,7 +130,7 @@ Property
    Position 204 258
    Type PushButton
    Flags NoReliefString
-   Title {Help}
+   LocaleTitle {Help}
    Font "xft:::pixelsize=15"
    Main
       Case message of
