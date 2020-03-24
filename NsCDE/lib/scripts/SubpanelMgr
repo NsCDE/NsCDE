@@ -51,7 +51,14 @@ Begin
    Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
    Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
-   ChangeTitle 4 $FmtSubpList
+
+   # Added for Localization of existing default entries.
+   Set $LocalizedListTmpFile = (GetOutput {mktemp -t tmp.XXXXXXXX.SubpLocLst} 1 -1)
+   Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
+   Set $FmtLocalizedSubpListCmd = {$NSCDE_ROOT/bin/nscde_usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+   Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
+
+   ChangeTitle 4 $FmtLocalizedSubpList
 
    Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3 | $NSCDE_ROOT/bin/ised -c 's/^\$\[gt\.\(.*\)\]/\1/g' -o -f -}
    Set $SubpanelName = (GetOutput $SubpanelNameCmd 1 -1)
@@ -133,7 +140,7 @@ End
 
 QuitFunc
 Begin
-   Do {Exec exec rm -f "} $AppListTmpFile {" "} $SubpListTmpFile {" "} $SubpListTmpNewFile {" "} $SubpNewActionsPart {"}
+   Do {Exec exec rm -f "} $AppListTmpFile {" "} $SubpListTmpFile {" "} $SubpListTmpNewFile {" "} $SubpNewActionsPart {" "} $LocalizedListTmpFile {"}
 End
 
 Widget 1
@@ -441,7 +448,12 @@ Widget 5
                Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
                Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
 
-               ChangeTitle 4 $FmtSubpList
+               # Added for Localization of existing default entries.
+               Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpListCmd = {$NSCDE_ROOT/bin/nscde_usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
+
+               ChangeTitle 4 $FmtLocalizedSubpList
                Do {Exec exec rm -f "} $SubpListTmpNewFile {"}
             End
          End
@@ -493,7 +505,13 @@ Widget 6
 
                Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
                Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
-               ChangeTitle 4 $FmtSubpList
+
+               # Added for Localization of existing default entries.
+               Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpListCmd = {$NSCDE_ROOT/bin/nscde_usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
+
+               ChangeTitle 4 $FmtLocalizedSubpList
 
                Do {Exec exec rm -f "} $SubpListTmpNewFile {"}
             End
