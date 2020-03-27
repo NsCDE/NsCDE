@@ -4,7 +4,7 @@
 # Licence: GPLv3
 #
 
-UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Subpanel}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Subpanel:$NSCDE_ROOT/share/locale;NsCDE-Subpanels}
 WindowTitle {Subpanel Settings}
 WindowSize 370 270
 Colorset 22
@@ -39,13 +39,15 @@ Begin
    Set $SubpanelDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SubpanelActionsRead {" | sort | cut -d"," -f3}
    Set $SubpanelEnabled = (GetOutput $SubpanelDataCmd 1 -1)
    Set $SubpanelDisplayName = (GetOutput $SubpanelDataCmd 2 -1)
+   Set $SubpanelDisplayLocalizedNameCmd = {echo '} $SubpanelDisplayName {' | $NSCDE_ROOT/bin/ised -c 's/^\(\$\[gt\.\)\(.*\)\(\]\)/\2/g' -o -f -}
+   Set $SubpanelDisplayLocalizedName = (GetOutput $SubpanelDisplayLocalizedNameCmd 1 -1)
    Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 3 -1)
 
    # Fill discovered values into widgets and titles
-   Set $WindowTitlePrint = (Gettext {Subpanel}) { } $SubpanelDisplayName { } (Gettext {Settings})
+   Set $WindowTitlePrint = (Gettext {Subpanel}) { } (Gettext $SubpanelDisplayLocalizedName) {: } (Gettext {Settings})
    ChangeWindowTitle $WindowTitlePrint
    ChangeTitle 1 $WindowTitlePrint
-   ChangeTitle 5 $SubpanelDisplayName
+   ChangeTitle 5 (Gettext $SubpanelDisplayLocalizedName)
    ChangeTitle 8 $SubpanelWidth
    ChangeValue 11 $SubpanelEnabled
 
