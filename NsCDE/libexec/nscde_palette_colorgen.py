@@ -501,6 +501,37 @@ Colorset 50 fg red, bg green, hi blue, sh yellow
 
     print (lines)
 
+def gencolormgrpreview(palettefile,ncolors):
+    palette=readPalette(palettefile)
+    global use_4_colors
+    if ncolors == 4:
+        use_4_colors=True
+    else:
+        use_4_colors=False
+    initcolors(palette)
+    bgg=bg
+    tsg=ts
+    bsg=bs
+    fgg=fg
+    selg=sel
+    basename=os.path.basename(palettefile)
+    palettename=basename.split(".dp")
+    lines="""
+Colorset 61 fg {fgg[1]}, bg {bgg[1]}, hi {tsg[1]}, sh {bsg[1]}, fgsh {selg[1]}, Plain, NoShape
+Colorset 62 fg {fgg[2]}, bg {bgg[2]}, hi {tsg[2]}, sh {bsg[2]}, fgsh {selg[2]}, Plain, NoShape
+Colorset 63 fg {fgg[3]}, bg {bgg[3]}, hi {tsg[3]}, sh {bsg[3]}, fgsh {selg[3]}, Plain, NoShape
+Colorset 64 fg {fgg[4]}, bg {bgg[4]}, hi {tsg[4]}, sh {bsg[4]}, fgsh {selg[4]}, Plain, NoShape
+""".format(**locals())
+    if ncolors == 8:
+        lines+="""
+Colorset 65 fg {fgg[5]}, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[5]}, Plain, NoShape
+Colorset 66 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {selg[6]}, Plain, NoShape
+Colorset 67 fg {fgg[7]}, bg {bgg[7]}, hi {tsg[7]}, sh {bsg[7]}, fgsh {selg[7]}, Plain, NoShape
+Colorset 68 fg {fgg[8]}, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh {selg[8]}, Plain, NoShape
+""".format(**locals())
+
+    print (lines)
+
 def gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart):
     palette=readPalette(palettefile)
     global use_4_colors
@@ -625,9 +656,9 @@ def usage():
 def main():
     shorten_colorhex = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "cfbp:i:n:sP:o:g:lh",
-                     ["palette=", "infile", "fvwm-colorsets", "backdrop", "colorgen", \
-                      "ncolors=", "shortencolorhex", "palettepart=", "outdir=", \
+        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:sP:o:g:lh",
+                     ["palette=", "infile", "fvwm-colorsets", "colormgr", "backdrop", \
+                      "colorgen", "ncolors=", "shortencolorhex", "palettepart=", "outdir=", \
                       "fext=", "list-colors"])
     except getopt.GetoptError as err:
         print(err)
@@ -638,6 +669,8 @@ def main():
     for o, a in opts:
         if o in ("-f", "--fvwm-colorsets"):
             genfvwmcolorset(palettefile,ncolors)
+        elif o in ("-C", "--colormgr"):
+            gencolormgrpreview(palettefile,ncolors)
         elif o in ("-b", "--backdrop"):
             try:
                 gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart)

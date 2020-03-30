@@ -175,21 +175,47 @@ Widget 3
       1 :
       Begin
          Set $PalNumToNameCmd =  {$NSCDE_ROOT/libexec/colormgr -n } (GetValue 3)
-         Set $PalNumToName = (GetOutput $PalNumToNameCmd 1 -1)
+         Set $PalNumToName = { } (GetOutput $PalNumToNameCmd 1 -1)
+
+         # Calculate chars in the current palette name
+         # All this for decor purpose
+         Set $StrLen = 1
+         Set $iter = 0
+         While $iter <> 1 Do
+         Begin
+            Set $NameStr = (StrCopy $PalNumToName $StrLen $StrLen)
+            If $NameStr <> {} Then
+            Begin
+               Set $iter = 0
+               Set $StrLen = (Add $StrLen 1)
+            End
+            Else
+            Begin
+               Set $iter = 1
+               Set $StrLen = (Mult (Add $StrLen -1) 8)
+            End
+         End
+
+         # Set palette name and size at the upper left corner of rectangle
+         Set $StrSpace = (Add $StrLen 14)
+         ChangeSize 7 $StrSpace 22
          ChangeTitle 7 $PalNumToName
 
+         # Figure out Palette Path
          Set $PalletePathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $PalNumToName
          Set $PalletePath = (GetOutput $PalletePathCmd 1 -1)
 
-         Set $PaletteColorsCatCmd = {cat } $PalletePath
-         ChangeBackColor 9 (GetOutput $PaletteColorsCatCmd 1 1)
-         ChangeBackColor 10 (GetOutput $PaletteColorsCatCmd 5 1)
-         ChangeBackColor 11 (GetOutput $PaletteColorsCatCmd 2 1)
-         ChangeBackColor 12 (GetOutput $PaletteColorsCatCmd 6 1)
-         ChangeBackColor 13 (GetOutput $PaletteColorsCatCmd 3 1)
-         ChangeBackColor 14 (GetOutput $PaletteColorsCatCmd 7 1)
-         ChangeBackColor 15 (GetOutput $PaletteColorsCatCmd 4 1)
-         ChangeBackColor 16 (GetOutput $PaletteColorsCatCmd 8 1)
+         # Colorsets 61 - 68 are for Color Style Manager preview only
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -n } $Ncolors { -p } $PalletePath { -C}
+
+         ChangeColorset 9 61
+         ChangeColorset 10 65
+         ChangeColorset 11 62
+         ChangeColorset 12 66
+         ChangeColorset 13 63
+         ChangeColorset 14 67
+         ChangeColorset 15 64
+         ChangeColorset 16 68
 
          Set $FullColorCmd = {$NSCDE_ROOT/libexec/colormgr -c } $Ncolors { -f } $PalletePath
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
@@ -336,11 +362,11 @@ End
 
 Widget 7
    Property
-   Size 22 0
-   Position 16 206
+   Size 10 0
+   Position 16 205
    Type ItemDraw
-   Flags NoReliefString
-   Title {  Palette Name  }
+   Flags NoReliefString Left
+   Title {Palette Name}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -356,17 +382,51 @@ Widget 8
    Type Rectangle
 End
 
+Widget 33
+   Property
+   Size 72 40
+   Position 18 226
+   Type ItemDraw
+   Flags NoReliefString Hidden
+   Title {}
+   Icon NsCDE/Bframe.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
 Widget 9
    Property
    Size 64 32
    Position 22 230
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 9) == {} Then
+         Begin
+            ChangeTitle 9 {Abc}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 18 226
+         End
+         Else
+         Begin
+            ChangeTitle 9 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -374,13 +434,32 @@ Widget 10
    Property
    Size 64 32
    Position 22 274
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 10) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {Abc}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 18 270
+         End
+         Else
+         Begin
+            ChangeTitle 10 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -388,13 +467,32 @@ Widget 11
    Property
    Size 64 32
    Position 100 230
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 11) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {Abc}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 96 226
+         End
+         Else
+         Begin
+            ChangeTitle 11 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -402,13 +500,32 @@ Widget 12
    Property
    Size 64 32
    Position 100 274
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 12) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {Abc}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 96 270
+         End
+         Else
+         Begin
+            ChangeTitle 12 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -416,13 +533,32 @@ Widget 13
    Property
    Size 64 32
    Position 178 230
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 13) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {Abc}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 174 226
+         End
+         Else
+         Begin
+            ChangeTitle 13 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -430,13 +566,32 @@ Widget 14
    Property
    Size 64 32
    Position 178 274
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 14) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {Abc}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 174 270
+         End
+         Else
+         Begin
+            ChangeTitle 14 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -444,13 +599,32 @@ Widget 15
    Property
    Size 64 32
    Position 256 230
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 15) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {Abc}
+            ChangeTitle 16 {}
+            ShowWidget 33
+            ChangePosition 33 252 226
+         End
+         Else
+         Begin
+            ChangeTitle 15 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -458,13 +632,32 @@ Widget 16
    Property
    Size 64 32
    Position 256 274
-   Type ItemDraw
+   Type PushButton
    Title {}
+   Flags NoReliefString
    BackColor {#ffffffffffff}
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetTitle 16) == {} Then
+         Begin
+            ChangeTitle 9 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {}
+            ChangeTitle 16 {Abc}
+            ShowWidget 33
+            ChangePosition 33 252 270
+         End
+         Else
+         Begin
+            ChangeTitle 16 {}
+            HideWidget 33
+         End
       End
 End
 
@@ -512,6 +705,9 @@ Widget 18
          End
          If $Ncolors == 8 Then
          Begin
+            # Refresh last 4 colors if we change from 4 to 8 colors
+            SendSignal 3 1
+
             ShowWidget 10
             ShowWidget 12
             ShowWidget 14
@@ -923,4 +1119,5 @@ Widget 32
          Do {f_DisplayURL "Color Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-ColorMgr.html}
       End
 End
+
 
