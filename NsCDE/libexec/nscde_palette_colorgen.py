@@ -267,11 +267,16 @@ def equal_colors_ab(a,b):
     bs[a]=bs[b]
     ts[a]=ts[b]
     sel[a]=sel[b]
-    
 
-def initcolors(palette):
-    for a in range(1,9):
-        color16=encode16bpp(palette[a-1])
+def initcolors(palette,endrange):
+    try: endrange
+    except NameError: endrange = 9
+
+    for a in range(1,endrange):
+        if endrange is 9:
+            color16=encode16bpp(palette[a-1])
+        else:
+            color16=encode16bpp(palette)
         bg_color=bbpToRGB(color16)
         backgroundbrightness=Brightness(bg_color)
         if backgroundbrightness< XmCOLOR_DARK_THRESHOLD:
@@ -313,7 +318,7 @@ def readMotifColors2(n,filename):
         use_4_colors=True
     else: 
         use_4_colors=False
-    initcolors(palette)
+    initcolors(palette,9)
     # round_colors_6()
     colors={}
     for a in range(1,9):
@@ -323,6 +328,28 @@ def readMotifColors2(n,filename):
         colors['bs_color_'+str(a)]=bs[a]
         colors['sel_color_'+str(a)]=sel[a]
     return colors
+
+def readOneMotifColor(n,colorarg,pmode):
+    global use_4_colors
+    if n==4: 
+        use_4_colors=True
+    else: 
+        use_4_colors=False
+    initcolors(colorarg,2)
+    # round_colors_6()
+    colors={}
+    if pmode is "plain":
+        for a in range(1,2):
+            colors['bg_color']=bg[a]
+            colors['fg_color']=fg[a]
+            colors['ts_color']=ts[a]
+            colors['bs_color']=bs[a]
+            colors['sel_color']=sel[a]
+        return colors
+    if pmode is "fvwm":
+        print ("Colorset 69 fg", fg[1]+str(","), "bg", bg[1]+str(","), "hi",
+                ts[1]+str(","), "sh", bs[1]+str(","), "fgsh", sel[1]+str(","), "Plain, NoShape")
+
 
 #######################
 # End program functions
@@ -334,7 +361,7 @@ def genfvwmcolorset(palettefile,ncolors):
         use_4_colors=True
     else: 
         use_4_colors=False
-    initcolors(palette)
+    initcolors(palette,9)
     bgg=bg
     tsg=ts
     bsg=bs
@@ -508,7 +535,7 @@ def gencolormgrpreview(palettefile,ncolors):
         use_4_colors=True
     else:
         use_4_colors=False
-    initcolors(palette)
+    initcolors(palette,9)
     bgg=bg
     tsg=ts
     bsg=bs
@@ -539,7 +566,7 @@ def gencdebackdrop(palettefile,ncolors,infile,outdir,fext,palettepart):
         use_4_colors=True
     else: 
         use_4_colors=False
-    initcolors(palette)
+    initcolors(palette,9)
     bgg=bg
     tsg=ts
     bsg=bs
@@ -588,7 +615,7 @@ def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
         use_4_colors=True
     else: 
         use_4_colors=False
-    initcolors(palette)
+    initcolors(palette,9)
     if shorten_colorhex is 1:
         round_colors_6()
     bgg=bg
@@ -656,10 +683,10 @@ def usage():
 def main():
     shorten_colorhex = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:sP:o:g:lh",
+        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:sP:o:g:t:T:lh",
                      ["palette=", "infile", "fvwm-colorsets", "colormgr", "backdrop", \
                       "colorgen", "ncolors=", "shortencolorhex", "palettepart=", "outdir=", \
-                      "fext=", "list-colors"])
+                      "fext=", "test=", "fvwmtest=", "list-colors"])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -693,6 +720,22 @@ def main():
             outdir = a
         elif o in ("-g", "--fext"):
             fext = a
+        elif o in ("-T", "--fvwmtest"):
+            try: ncolors
+            except NameError: ncolors = 8
+
+            colorarg = a
+            pmode = "fvwm"
+            readOneMotifColor(ncolors,colorarg,pmode)
+        elif o in ("-t", "--test"):
+            try: ncolors
+            except NameError: ncolors = 8
+
+            pmode = "plain"
+            colorarg = a
+            motifcolor=readOneMotifColor(ncolors,colorarg,pmode)
+            for key in motifcolor:
+                print (key, motifcolor[key])
         elif o in ("-n", "--ncolors"):
             ncolors = int(a)
         elif o in ("-s", "--shortencolorhex"):
