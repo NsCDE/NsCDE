@@ -60,10 +60,10 @@ Begin
    ChangeValue 11 $G
    ChangeValue 13 $B
    Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
-   Set $HSVTEST = (GetOutput $HSVCmd 1 -1)
-   Set $H = (GetOutput $HSVCmd 1 1)
-   Set $S = (GetOutput $HSVCmd 1 2)
-   Set $V = (GetOutput $HSVCmd 1 3)
+   Set $HSV = (GetOutput $HSVCmd 1 -1)
+   Set $H = (StrCopy $HSV 1 3)
+   Set $S = (StrCopy $HSV 5 7)
+   Set $V = (StrCopy $HSV 9 11)
    ChangeValue 19 $H
    ChangeValue 15 $S
    ChangeValue 17 $V
@@ -138,6 +138,23 @@ Widget 5
       Case message of
       SingleClic :
       Begin
+         Set $GrabCmd = {$NSCDE_ROOT/bin/nscde_colorpicker -od | sed 's/,/\//g'}
+         Set $GrabHEX = (GetOutput $GrabCmd 1 1)
+         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
+         Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
+         Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
+         Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
+         ChangeValue 9 $R
+         ChangeValue 11 $G
+         ChangeValue 13 $B
+         Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
+         Set $HSV = (GetOutput $HSVCmd 1 -1)
+         Set $H = (StrCopy $HSV 1 3)
+         Set $S = (StrCopy $HSV 5 7)
+         Set $V = (StrCopy $HSV 9 11)
+         ChangeValue 19 $H
+         ChangeValue 15 $S
+         ChangeValue 17 $V
       End
 End
 
