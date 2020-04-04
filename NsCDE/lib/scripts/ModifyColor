@@ -192,10 +192,11 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         Set $R_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
-         Set $H = (GetOutput $R_forHSVCmd 1 1)
-         Set $S = (GetOutput $R_forHSVCmd 1 2)
-         Set $V = (GetOutput $R_forHSVCmd 1 3)
+         Set $R_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $R_forHSV = (GetOutput $R_forHSVCmd 1 -1)
+         Set $H = (StrCopy $R_forHSV 1 3)
+         Set $S = (StrCopy $R_forHSV 5 7)
+         Set $V = (StrCopy $R_forHSV 9 11)
          ChangeValue 19 $H
          ChangeValue 15 $S
          ChangeValue 17 $V
@@ -233,10 +234,11 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         Set $G_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
-         Set $H = (GetOutput $G_forHSVCmd 1 1)
-         Set $S = (GetOutput $G_forHSVCmd 1 2)
-         Set $V = (GetOutput $G_forHSVCmd 1 3)
+         Set $G_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $G_forHSV = (GetOutput $G_forHSVCmd 1 -1)
+         Set $H = (StrCopy $G_forHSV 1 3)
+         Set $S = (StrCopy $G_forHSV 5 7)
+         Set $V = (StrCopy $G_forHSV 9 11)
          ChangeValue 19 $H
          ChangeValue 15 $S
          ChangeValue 17 $V
@@ -274,10 +276,11 @@ Widget 13
       Case message of
       SingleClic :
       Begin
-         Set $B_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
-         Set $H = (GetOutput $B_forHSVCmd 1 1)
-         Set $S = (GetOutput $B_forHSVCmd 1 2)
-         Set $V = (GetOutput $B_forHSVCmd 1 3)
+         Set $B_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $B_forHSV = (GetOutput $B_forHSVCmd 1 -1)
+         Set $H = (StrCopy $B_forHSV 1 3)
+         Set $S = (StrCopy $B_forHSV 5 7)
+         Set $V = (StrCopy $B_forHSV 9 11)
          ChangeValue 19 $H
          ChangeValue 15 $S
          ChangeValue 17 $V
@@ -317,9 +320,10 @@ Widget 15
       SingleClic :
       Begin
          Set $S_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
-         Set $R = (GetOutput $S_forRGBCmd 1 1)
-         Set $G = (GetOutput $S_forRGBCmd 1 2)
-         Set $B = (GetOutput $S_forRGBCmd 1 3)
+         Set $S_forRGB = (GetOutput $S_forRGBCmd 1 -1)
+         Set $R = (StrCopy $S_forRGB 1 3)
+         Set $G = (StrCopy $S_forRGB 5 7)
+         Set $B = (StrCopy $S_forRGB 9 11)
          ChangeValue 9 $R
          ChangeValue 11 $G
          ChangeValue 13 $B
@@ -359,9 +363,10 @@ Widget 17
       SingleClic :
       Begin
          Set $V_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
-         Set $R = (GetOutput $V_forRGBCmd 1 1)
-         Set $G = (GetOutput $V_forRGBCmd 1 2)
-         Set $B = (GetOutput $V_forRGBCmd 1 3)
+         Set $V_forRGB = (GetOutput $V_forRGBCmd 1 -1)
+         Set $R = (StrCopy $V_forRGB 1 3)
+         Set $G = (StrCopy $V_forRGB 5 7)
+         Set $B = (StrCopy $V_forRGB 9 11)
          ChangeValue 9 $R
          ChangeValue 11 $G
          ChangeValue 13 $B
@@ -400,9 +405,10 @@ Widget 19
       SingleClic :
       Begin
          Set $H_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
-         Set $R = (GetOutput $H_forRGBCmd 1 1)
-         Set $G = (GetOutput $H_forRGBCmd 1 2)
-         Set $B = (GetOutput $H_forRGBCmd 1 3)
+         Set $H_forRGB = (GetOutput $H_forRGBCmd 1 -1)
+         Set $R = (StrCopy $H_forRGB 1 3)
+         Set $G = (StrCopy $H_forRGB 5 7)
+         Set $B = (StrCopy $H_forRGB 9 11)
          ChangeValue 9 $R
          ChangeValue 11 $G
          ChangeValue 13 $B

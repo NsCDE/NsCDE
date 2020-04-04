@@ -16,7 +16,7 @@ def hsv2rgb(hsv1, hsv2, hsv3):
    hsv3 = float(hsv3)
    r, g, b = colorsys.hsv_to_rgb(hsv1/360, hsv2/255, hsv3/255)
    # r, g, b = colorsys.hsv_to_rgb(hsv1/360, hsv2/100, hsv3/100)
-   print (int(round(r*255)), int(round(g*255)), int(round(b*255)))
+   print ('%03d %03d %03d' % (int(round(r*255)), int(round(g*255)), int(round(b*255))))
 
 def rgb2hsv(rgb1, rgb2, rgb3):
    rgb1 = int(rgb1)
@@ -24,7 +24,7 @@ def rgb2hsv(rgb1, rgb2, rgb3):
    rgb3 = int(rgb3)
    h, s, v = colorsys.rgb_to_hsv(rgb1/255, rgb2/255, rgb3/255)
    # print (int(round(h*360)), int(round(s*100)), int(round(v*100)))
-   print (int(round(h*360)), int(round(s*256)), int(round(v*255)))
+   print ('%03d %03d %03d' % (int(round(h*360)), int(round(s*256)), int(round(v*255))))
 
 def rgb2hex(rgb1, rgb2, rgb3, x11_16_bit):
    rgb1 = int(rgb1)
