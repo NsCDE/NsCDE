@@ -1,0 +1,18 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+[ -z $NSCDE_ROOT ] && exit 2
+MARCH=$(uname -m)
+
+if [ -x $NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} ]; then
+   exec $NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} "$@"
+else
+   echo "$NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} not found on this system." >&2
+   exit 1
+fi
+
