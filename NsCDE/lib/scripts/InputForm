@@ -21,6 +21,12 @@ Begin
       ChangeTitle 1 $TaskText
    End
 
+   Set $DefaultText = (GetScriptArgument 2)
+   If $DefaultText <> {} Then
+   Begin
+      ChangeTitle 2 $DefaultText
+   End
+
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
    ChangeFont 1 $BtnFont
    ChangeFont 2 $BtnFont
