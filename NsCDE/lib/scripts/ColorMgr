@@ -137,14 +137,11 @@ Begin
       Set $INPUTMSG = (ReceivFromScript $INPUTFORM)
       If $INPUTMSG <> {No message} Then
       Begin
-        If $INPUTMSG <> {Go} Then
+        If $INPUTMSG == {Cancel} Then
         Begin
-           Do {SendToModule ColorMgr SendString 34 2 } $INPUTMSG
+           Set $INPUTMSG = {Current}
         End
-        If $INPUTMSG <> {Cancel} Then
-        Begin
-           Do {Schedule 250 SendToModule ColorMgr SendString 34 2 } $INPUTMSG
-        End
+        Do {Schedule 250 SendToModule ColorMgr SendString 34 3 } $INPUTMSG
       End
    End
 End
@@ -769,7 +766,7 @@ Widget 34
             Set $FillPaletteCmd = {echo '#} $Rpart $Gpart $Bpart {' >> $FVWM_USERDIR/tmp/__colors.tmp}
             Set $FillPalette = (GetOutput $FillPaletteCmd 1 -1)
          End
-         Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' $FVWM_USERDIR/tmp/__colors.tmp ; sed -n '2p;4p;6p;8p' $FVWM_USERDIR/tmp/__colors.tmp) > $FVWM_USERDIR/palettes/Current.dp}
+         Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' "$FVWM_USERDIR/tmp/__colors.tmp" ; sed -n '2p;4p;6p;8p' "$FVWM_USERDIR/tmp/__colors.tmp") > "$FVWM_USERDIR/palettes/Current.dp"}
          Set $RightReorder = (GetOutput $RightReorderCmd 1 -1)
 
          # Refresh palettes list, select Current.dp
@@ -781,7 +778,40 @@ Widget 34
       End
       2 :
       Begin
-         Do {Echo IIIIIII: } $INPUTMSG
+         # Rename Custom Palette?
+         If $CurrentModifiedPalette <> {} Then
+         Begin
+            Set $INPUTMSG = {InputForm "$[gt.Name Current Palette?]"}
+            Set $INPUTFORM = (LaunchScript $INPUTMSG)
+         End
+      End
+      3 :
+      Begin
+         If $INPUTMSG <> {Current} Then
+         Begin
+            Set $RenamePaletteCmd = {mv -f "$FVWM_USERDIR/palettes/Current.dp" "$FVWM_USERDIR/palettes/} $INPUTMSG {.dp" 2>&1}
+            Set $RenamePalette = (GetOutput $RenamePaletteCmd 1 -1)
+            If $RenamePalette <> {} Then
+            Begin
+               Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" }
+                  {"Error renaming \\\"$FVWM_USERDIR/palettes/Current.dp\\\" }
+                  {into \\\"$FVWM_USERDIR/palettes/} $INPUTMSG {.dp\\\": } $RenamePalette {"}
+           End
+         End
+
+         # Refresh palettes list, select new name
+         Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+         ChangeTitle 3 $Palettes
+         Set $CurrentModifiedPaletteCmd = {$NSCDE_ROOT/libexec/colormgr -N "} $INPUTMSG {.dp"}
+         Set $CurrentModifiedPalette = (GetOutput $CurrentModifiedPaletteCmd 1 1)
+         ChangeValue 3 $CurrentModifiedPalette
+         SendSignal 3 1
+
+         # Normally performed by OK and Apply actions, but here is exception
+         # If this is modified new palette.
+         SendSignal 30 1
+         Do {Schedule 360 Restart}
+         Quit
       End
 End
 
@@ -1001,11 +1031,18 @@ Widget 29
             # Remove preview mode if present.
             Set $PreviewMode = 0
             Set $PreviewParam = {}
-            SendSignal 30 1
+            If $CurrentModifiedPalette <> {} Then
+            Begin
+               # SendSignal 30 1, Restart and Quit will be performed by 34 2
+               SendSignal 34 2
+            End
+            Else
+            Begin
+               SendSignal 30 1
+               Do {Schedule 360 Restart}
+               Quit
+            End
          End
-         Do {Exec exec pkill -U $(id -un) -xf '\/opt\/NsCDE\/bin\/pclock.*'}
-         Do {Schedule 360 Restart}
-         Quit
       End
 End
 
@@ -1024,17 +1061,19 @@ Widget 30
          # Remove preview mode if present.
          Set $PreviewMode = 0
          Set $PreviewParam = {}
-         SendSignal 30 1
+         If $CurrentModifiedPalette <> {} Then
+         Begin
+            # SendSignal 30 1 will be performed by 34 2
+            SendSignal 34 2
+         End
+         Else
+         Begin
+            SendSignal 30 1
+         End
          Set $Performed = 1
       End
       1 :
       Begin
-         If $CurrentModifiedPalette <> {} Then
-         Begin
-            Set $INPUTMSG = {InputForm "$[gt.Enter Palette Name:]"}
-            Set $INPUTFORM = (LaunchScript $INPUTMSG)
-         End
-
          If $PreviewMode == 0 Then
          Begin
             Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}
