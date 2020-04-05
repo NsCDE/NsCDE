@@ -59,6 +59,8 @@ Begin
    Set $PreviewParam = {}
    Set $PreviewContaminated = 0
 
+   Set $SelectedColorset = 0
+
    Set $Current = (GetOutput {echo $NSCDE_PALETTE} 1 -1)
    Set $CurrentPaletteValueCmd = {$NSCDE_ROOT/libexec/colormgr -N "} $Current {.dp"}
    Set $CurrentPaletteValue = (GetOutput $CurrentPaletteValueCmd 1 -1)
@@ -124,16 +126,35 @@ End
 
 PeriodicTasks
 Begin
-   Set $MSG=(ReceivFromScript $BROWSER)
+   Set $MSG = (ReceivFromScript $BROWSER)
    If $MSG <> {No message} Then
    Begin
      Do {SendToModule ColorMgr SendString 5 1 } $MSG
+   End
+
+   If $CurrentModifiedPalette <> {} Then
+   Begin
+      Set $INPUTMSG = (ReceivFromScript $INPUTFORM)
+      If $INPUTMSG <> {No message} Then
+      Begin
+        If $INPUTMSG <> {Go} Then
+        Begin
+           Do {SendToModule ColorMgr SendString 34 2 } $INPUTMSG
+        End
+        If $INPUTMSG <> {Cancel} Then
+        Begin
+           Do {Schedule 250 SendToModule ColorMgr SendString 34 2 } $INPUTMSG
+        End
+      End
    End
 End
 
 QuitFunc
 Begin
-   Do {Exec exec rm -f } $FullColor { $FVWM_USERDIR/tmp/NsCDE-Colorset-Preview.conf $FVWM_USERDIR/tmp/*-Preview $FVWM_USERDIR/tmp/backer-*.pm}
+   # Cleanup on exit
+   Do {Exec exec rm -f '} $FullColor {' "$FVWM_USERDIR/tmp/NsCDE-Colorset-Preview.conf" }
+      {"$FVWM_USERDIR/tmp/*-Preview" "$FVWM_USERDIR/tmp/backer-*.pm" }
+      {"$FVWM_USERDIR/tmp/__colors.tmp"}
 End
 
 Widget 1
@@ -421,11 +442,15 @@ Widget 9
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 18 226
+            Set $SelectedColorset = 61
+            Set $WidgetOfColorset = 9
          End
          Else
          Begin
             ChangeTitle 9 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -454,11 +479,15 @@ Widget 10
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 18 270
+            Set $SelectedColorset = 65
+            Set $WidgetOfColorset = 10
          End
          Else
          Begin
             ChangeTitle 10 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -487,11 +516,15 @@ Widget 11
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 96 226
+            Set $SelectedColorset = 62
+            Set $WidgetOfColorset = 11
          End
          Else
          Begin
             ChangeTitle 11 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -520,11 +553,15 @@ Widget 12
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 96 270
+            Set $SelectedColorset = 66
+            Set $WidgetOfColorset = 12
          End
          Else
          Begin
             ChangeTitle 12 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -553,11 +590,15 @@ Widget 13
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 174 226
+            Set $SelectedColorset = 63
+            Set $WidgetOfColorset = 13
          End
          Else
          Begin
             ChangeTitle 13 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -586,11 +627,15 @@ Widget 14
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 174 270
+            Set $SelectedColorset = 67
+            Set $WidgetOfColorset = 14
          End
          Else
          Begin
             ChangeTitle 14 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -619,11 +664,15 @@ Widget 15
             ChangeTitle 16 {}
             ShowWidget 33
             ChangePosition 33 252 226
+            Set $SelectedColorset = 64
+            Set $WidgetOfColorset = 15
          End
          Else
          Begin
             ChangeTitle 15 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
@@ -652,26 +701,87 @@ Widget 16
             ChangeTitle 16 {Abc}
             ShowWidget 33
             ChangePosition 33 252 270
+            Set $SelectedColorset = 68
+            Set $WidgetOfColorset = 16
          End
          Else
          Begin
             ChangeTitle 16 {}
             HideWidget 33
+            Set $SelectedColorset = 0
+            Set $WidgetOfColorset = 0
          End
       End
 End
 
 Widget 17
    Property
-   Size 86 76
-   Position 338 230
+   Size 86 32
+   Position 338 272
    Type ItemDraw
+   Flags NoReliefString
    Title {}
    Icon NsCDE/None.xpm
    Main
       Case message of
       SingleClic :
       Begin
+      End
+End
+
+Widget 34
+   Property
+   Size 88 32
+   Position 338 230
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Modify}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $SelectedColorset <> 0 Then
+         Begin
+            Do {Module FvwmScript ModifyColor } $SelectedColorset { } (GetBack $WidgetOfColorset)
+         End
+         Else
+         Begin
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Info.xpm" "Select one of the base colors of the current palette which you want to modify."}
+         End
+      End
+      # Called from ModifyColor Module to change color
+      1 :
+      Begin
+         # Cleanup is done in QuitFunc, but do it here anyway, not to append into existing tmp file
+         Set $Cleanup = (GetOutput {rm -f "$FVWM_USERDIR/tmp/__colors.tmp" 2>&1} 1 -1)
+         If $Cleanup <> {} Then
+         Begin
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error removing \\\"$FVWM_USERDIR/tmp/__colors.tmp\\\": } $Cleanup {"}
+         End
+
+         # Compose new palette and call id Current.dp:
+         For $w = 9 To 16 Do
+         Begin
+            Set $CS = (GetBack $w)
+            Set $Rpart = (StrCopy $CS 1 2) (StrCopy $CS 1 2)
+            Set $Gpart = (StrCopy $CS 3 4) (StrCopy $CS 3 4)
+            Set $Bpart = (StrCopy $CS 5 6) (StrCopy $CS 5 6)
+            Set $FillPaletteCmd = {echo '#} $Rpart $Gpart $Bpart {' >> $FVWM_USERDIR/tmp/__colors.tmp}
+            Set $FillPalette = (GetOutput $FillPaletteCmd 1 -1)
+         End
+         Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' $FVWM_USERDIR/tmp/__colors.tmp ; sed -n '2p;4p;6p;8p' $FVWM_USERDIR/tmp/__colors.tmp) > $FVWM_USERDIR/palettes/Current.dp}
+         Set $RightReorder = (GetOutput $RightReorderCmd 1 -1)
+
+         # Refresh palettes list, select Current.dp
+         Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+         ChangeTitle 3 $Palettes
+         Set $CurrentModifiedPalette = (GetOutput {$NSCDE_ROOT/libexec/colormgr -N "Current.dp"} 1 1)
+         ChangeValue 3 $CurrentModifiedPalette
+         SendSignal 3 1
+      End
+      2 :
+      Begin
+         Do {Echo IIIIIII: } $INPUTMSG
       End
 End
 
@@ -919,6 +1029,12 @@ Widget 30
       End
       1 :
       Begin
+         If $CurrentModifiedPalette <> {} Then
+         Begin
+            Set $INPUTMSG = {InputForm "$[gt.Enter Palette Name:]"}
+            Set $INPUTFORM = (LaunchScript $INPUTMSG)
+         End
+
          If $PreviewMode == 0 Then
          Begin
             Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}

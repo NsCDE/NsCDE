@@ -446,15 +446,19 @@ Widget 21
    Size 132 20
    Position 16 524
    Type PushButton
-   LocaleTitle {Ok}
+   LocaleTitle {OK}
    Flags NoReliefString
    Colorset 22
    Main
       Case message of
       SingleClic :
       Begin
-         Do {Echo } $BuildHexForTest
-         # Quit
+         If $BuildHexForTest <> {} Then
+         Begin
+            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
+            Do {SendToModule ColorMgr SendString 34 1 } $ColorsetFromPalette
+         End
+         Quit
       End
 End
 

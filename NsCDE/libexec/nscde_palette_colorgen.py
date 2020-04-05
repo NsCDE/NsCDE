@@ -329,7 +329,7 @@ def readMotifColors2(n,filename):
         colors['sel_color_'+str(a)]=sel[a]
     return colors
 
-def readOneMotifColor(n,colorarg,pmode):
+def readOneMotifColor(n,colorarg,pmode,colorset_number):
     global use_4_colors
     if n==4: 
         use_4_colors=True
@@ -347,7 +347,7 @@ def readOneMotifColor(n,colorarg,pmode):
             colors['sel_color']=sel[a]
         return colors
     if pmode is "fvwm":
-        print ("Colorset 69 fg", fg[1]+str(","), "bg", bg[1]+str(","), "hi",
+        print ("Colorset", colorset_number, "fg", fg[1]+str(","), "bg", bg[1]+str(","), "hi",
                 ts[1]+str(","), "sh", bs[1]+str(","), "fgsh", sel[1]+str(","), "Plain, NoShape")
 
 
@@ -682,10 +682,11 @@ def usage():
 
 def main():
     shorten_colorhex = 0
+    colorset_number = 69
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:sP:o:g:t:T:lh",
+        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:S:sP:o:g:t:T:lh",
                      ["palette=", "infile", "fvwm-colorsets", "colormgr", "backdrop", \
-                      "colorgen", "ncolors=", "shortencolorhex", "palettepart=", "outdir=", \
+                      "colorgen", "ncolors=", "csnum=", "shortencolorhex", "palettepart=", "outdir=", \
                       "fext=", "test=", "fvwmtest=", "list-colors"])
     except getopt.GetoptError as err:
         print(err)
@@ -726,7 +727,7 @@ def main():
 
             colorarg = a
             pmode = "fvwm"
-            readOneMotifColor(ncolors,colorarg,pmode)
+            readOneMotifColor(ncolors,colorarg,pmode,colorset_number)
         elif o in ("-t", "--test"):
             try: ncolors
             except NameError: ncolors = 8
@@ -738,6 +739,8 @@ def main():
                 print (key, motifcolor[key])
         elif o in ("-n", "--ncolors"):
             ncolors = int(a)
+        elif o in ("-S", "--csnum"):
+            colorset_number = a
         elif o in ("-s", "--shortencolorhex"):
             shorten_colorhex = 1
         elif o in ("-P", "--palettepart"):
