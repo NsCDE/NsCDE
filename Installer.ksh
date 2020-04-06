@@ -445,6 +445,52 @@ function configure_installed
       fi
    fi
 
+   # Handle colorpicker
+   if [ -f "src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}" ]; then
+      echo "Installing appropriate color picker for this system and arch."
+      cp -f src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/bin/colorpicker-${OS_PLUS_MACHINE_ARCH}"
+      retval=$?
+      if (($retval > 0)); then
+         echo "Error $retval occured while installing src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}"
+      else
+         echo "Done."
+      fi
+   else
+      echo "No suitable binary found for color picker."
+      if (($noninteractive == 0)); then
+         echo "Do you want to try compiling color picker from source?"
+         echo -ne "C compiler, X11, and xcb development are needed for this. [y] \c"
+         read ans
+         if [ "x$ans" != "x" ] || [ "x$ans" == "xy" ]; then
+            compile_colorpicker=1
+         else
+            compile_colorpicker=0
+         fi
+      else
+         echo "Trying to compile one from source. C compiler, X11, and xcb development are needed for this."
+         compile_colorpicker=1
+      fi
+      if (($compile_colorpicker == 1)); then
+         make -C src/colorpicker
+         retval=$?
+         if (($retval > 0)); then
+            echo "Error ocurred while trying to compile colorpicker. Try to fix this manually."
+         else
+            echo "Installing newly compiled colorpicker for this system and arch."
+            cp -f src/colorpicker/colorpicker "${instpath}/bin/colorpicker-${OS_PLUS_MACHINE_ARCH}"
+            retval=$?
+            if (($retval > 0)); then
+               echo "Error $retval occured while installing src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}"
+            else
+               echo "Done."
+            fi
+         fi
+      else
+         echo "Color picker compilation skipped."
+         echo "Not essential, needed only for ColorMgr grab color function."
+      fi
+   fi
+
    # Install symlink for freedesktop standard theme (GTK, QT ...)
    if (($noninteractive == 0)); then
       # Set default icon theme link path
