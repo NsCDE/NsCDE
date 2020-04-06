@@ -70,6 +70,8 @@ Begin
       SendSignal 3 1
    End
 
+   Set $CustomExistedBefore = (GetOutput {ls "$FVWM_USERDIR/palettes/Custom.dp" > /dev/null 2>&1; echo $?} 1 1)
+
    # Keybindings
    Key Q C 31 1 {KeyClose}
    Key P A 4 1 {KeyPreview}
@@ -137,11 +139,21 @@ Begin
       Set $INPUTMSG = (ReceivFromScript $INPUTFORM)
       If $INPUTMSG <> {No message} Then
       Begin
-        If $INPUTMSG == {Cancel} Then
+        If $INPUTMSG <> {Cancel} Then
         Begin
-           Set $INPUTMSG = {Current}
+           Do {Schedule 250 SendToModule ColorMgr SendString 34 3 } $INPUTMSG
         End
-        Do {Schedule 250 SendToModule ColorMgr SendString 34 3 } $INPUTMSG
+        Else
+        Begin
+           # On Palette change, clear color modifications of the past palette
+           Set $CurrentModifiedPalette = {}
+           If $CustomExistedBefore <> 0 Then
+           Begin
+              Do {Exec exec rm -f "$FVWM_USERDIR/palettes/Custom.dp"}
+           End
+           ChangeValue 3 $PreModPaletteValue
+           SendSignal 3 1
+        End
       End
    End
 End
@@ -753,10 +765,14 @@ Widget 34
          Set $Cleanup = (GetOutput {rm -f "$FVWM_USERDIR/tmp/__colors.tmp" 2>&1} 1 -1)
          If $Cleanup <> {} Then
          Begin
-            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error removing \\\"$FVWM_USERDIR/tmp/__colors.tmp\\\": } $Cleanup {"}
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] \\\"$FVWM_USERDIR/tmp/__colors.tmp\\\": } $Cleanup {"}
          End
 
-         # Compose new palette and call id Current.dp:
+         # Save old value of the list in case of cancel from input form
+         Set $PreModPaletteValue = (GetValue 3)
+         Set $CustomExistedBefore = (GetOutput {ls "$FVWM_USERDIR/palettes/Custom.dp" > /dev/null 2>&1; echo $?} 1 1)
+
+         # Compose new palette and call id Custom.dp:
          For $w = 9 To 16 Do
          Begin
             Set $CS = (GetBack $w)
@@ -766,13 +782,13 @@ Widget 34
             Set $FillPaletteCmd = {echo '#} $Rpart $Gpart $Bpart {' >> $FVWM_USERDIR/tmp/__colors.tmp}
             Set $FillPalette = (GetOutput $FillPaletteCmd 1 -1)
          End
-         Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' "$FVWM_USERDIR/tmp/__colors.tmp" ; sed -n '2p;4p;6p;8p' "$FVWM_USERDIR/tmp/__colors.tmp") > "$FVWM_USERDIR/palettes/Current.dp"}
+         Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' "$FVWM_USERDIR/tmp/__colors.tmp" ; sed -n '2p;4p;6p;8p' "$FVWM_USERDIR/tmp/__colors.tmp") > "$FVWM_USERDIR/palettes/Custom.dp"}
          Set $RightReorder = (GetOutput $RightReorderCmd 1 -1)
 
-         # Refresh palettes list, select Current.dp
+         # Refresh palettes list, select Custom.dp
          Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
          ChangeTitle 3 $Palettes
-         Set $CurrentModifiedPalette = (GetOutput {$NSCDE_ROOT/libexec/colormgr -N "Current.dp"} 1 1)
+         Set $CurrentModifiedPalette = (GetOutput {$NSCDE_ROOT/libexec/colormgr -N "Custom.dp"} 1 1)
          ChangeValue 3 $CurrentModifiedPalette
          SendSignal 3 1
       End
@@ -781,22 +797,34 @@ Widget 34
          # Rename Custom Palette?
          If $CurrentModifiedPalette <> {} Then
          Begin
-            Set $INPUTMSG = {InputForm "$[gt.Name Current Palette?]" "Current"}
+            Set $INPUTMSG = {InputForm "$[gt.New Palette Name?]" "Custom"}
             Set $INPUTFORM = (LaunchScript $INPUTMSG)
          End
       End
       3 :
       Begin
-         If $INPUTMSG <> {Current} Then
+         If $INPUTMSG <> {Custom} Then
          Begin
-            Set $RenamePaletteCmd = {mv -f "$FVWM_USERDIR/palettes/Current.dp" "$FVWM_USERDIR/palettes/} $INPUTMSG {.dp" 2>&1}
-            Set $RenamePalette = (GetOutput $RenamePaletteCmd 1 -1)
-            If $RenamePalette <> {} Then
+            # Basic input sanity check
+            Set $INPUTMSGCmd = {echo '} $INPUTMSG {' | $NSCDE_ROOT/bin/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
+            Set $INPUTMSG = (GetOutput $INPUTMSGCmd 1 1)
+            If $INPUTMSG == {} Then
             Begin
-               Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" }
-                  {"Error renaming \\\"$FVWM_USERDIR/palettes/Current.dp\\\" }
-                  {into \\\"$FVWM_USERDIR/palettes/} $INPUTMSG {.dp\\\": } $RenamePalette {"}
-           End
+               Set $INPUTMSG = {Custom}
+            End
+
+            # Rename from Custom only if new value is not already Custom
+            If $INPUTMSG <> {Custom} Then
+            Begin
+               Set $RenamePaletteCmd = {mv -f "$FVWM_USERDIR/palettes/Custom.dp" "$FVWM_USERDIR/palettes/} $INPUTMSG {.dp" 2>&1}
+               Set $RenamePalette = (GetOutput $RenamePaletteCmd 1 -1)
+               If $RenamePalette <> {} Then
+               Begin
+                  Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" }
+                     {"$[gt.Error renaming] \\\"$FVWM_USERDIR/palettes/Custom.dp\\\" }
+                     {$[gt.into] \\\"$FVWM_USERDIR/palettes/} $INPUTMSG {.dp\\\": } $RenamePalette {"}
+               End
+            End
          End
 
          # Refresh palettes list, select new name
@@ -810,8 +838,11 @@ Widget 34
          # Normally performed by OK and Apply actions, but here is exception
          # If this is modified new palette.
          SendSignal 30 1
-         Do {Schedule 360 Restart}
-         Quit
+         If $RestartQuit <> 0 Then
+         Begin
+            Do {Schedule 360 Restart}
+            Quit
+         End
       End
 End
 
@@ -1034,14 +1065,21 @@ Widget 29
             If $CurrentModifiedPalette <> {} Then
             Begin
                # SendSignal 30 1, Restart and Quit will be performed by 34 2
+               Set $RestartQuit = 1
                SendSignal 34 2
             End
             Else
             Begin
+               Set $RestartQuit = 1
                SendSignal 30 1
                Do {Schedule 360 Restart}
                Quit
             End
+         End
+         Else
+         Begin
+            Do {Schedule 360 Restart}
+            Quit
          End
       End
 End
@@ -1064,10 +1102,12 @@ Widget 30
          If $CurrentModifiedPalette <> {} Then
          Begin
             # SendSignal 30 1 will be performed by 34 2
+            Set $RestartQuit = 0
             SendSignal 34 2
          End
          Else
          Begin
+            Set $RestartQuit = 0
             SendSignal 30 1
          End
          Set $Performed = 1
@@ -1076,7 +1116,14 @@ Widget 30
       Begin
          If $PreviewMode == 0 Then
          Begin
-            Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}
+            If $RestartQuit <> 0 Then
+            Begin
+               Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}
+            End
+            Else
+            Begin
+               Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied.]" "..." 5000}
+            End
          End
          Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
@@ -1243,6 +1290,11 @@ Widget 31
       End
       1 :
       Begin
+         If $CustomExistedBefore <> 0 Then
+         Begin
+            Do {Exec exec rm -f "$FVWM_USERDIR/palettes/Custom.dp"}
+         End
+
          If $PreviewContaminated == 1 Then
          Begin
             Set $RestoreXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
