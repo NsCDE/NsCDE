@@ -28,25 +28,25 @@ Begin
 
    If $Ncolors == 4 Then
    Begin
-      HideWidget 10
-      HideWidget 12
-      HideWidget 14
-      HideWidget 16
-      ChangeSize 9 64 72
-      ChangeSize 11 64 72
-      ChangeSize 13 64 72
-      ChangeSize 15 64 72
+      HideWidget 11
+      HideWidget 13
+      HideWidget 15
+      HideWidget 17
+      ChangeSize 10 64 72
+      ChangeSize 12 64 72
+      ChangeSize 14 64 72
+      ChangeSize 16 64 72
    End
    If $Ncolors == 8 Then
    Begin
-      ShowWidget 10
-      ShowWidget 12
-      ShowWidget 14
-      ShowWidget 16
-      ChangeSize 9 64 32
-      ChangeSize 11 64 32
-      ChangeSize 13 64 32
-      ChangeSize 15 64 32
+      ShowWidget 11
+      ShowWidget 13
+      ShowWidget 15
+      ShowWidget 17
+      ChangeSize 10 64 32
+      ChangeSize 12 64 32
+      ChangeSize 14 64 32
+      ChangeSize 16 64 32
    End
 
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
@@ -73,25 +73,25 @@ Begin
    Set $CustomExistedBefore = (GetOutput {ls "$FVWM_USERDIR/palettes/Custom.dp" > /dev/null 2>&1; echo $?} 1 1)
 
    # Keybindings
-   Key Q C 31 1 {KeyClose}
+   Key Q C 33 1 {KeyClose}
    Key P A 4 1 {KeyPreview}
    Key Down A 3 2 {KeyDown}
    Key Up A 3 2 {KeyUp}
-   Key F1 A 32 1 {KeyHelp}
-   Key Help A 32 1 {KeyHelp}
+   Key F1 A 34 1 {KeyHelp}
+   Key Help A 34 1 {KeyHelp}
 
    # Set different font for some elements
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 1 $DefaultFont
    ChangeFont 7 $DefaultFont
-   ChangeFont 18 $DefaultFont
-   ChangeFont 19 $DefaultFont
+   ChangeFont 20 $DefaultFont
+   ChangeFont 21 $DefaultFont
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
-   ChangeFont 29 $BtnFont
-   ChangeFont 30 $BtnFont
    ChangeFont 31 $BtnFont
    ChangeFont 32 $BtnFont
+   ChangeFont 33 $BtnFont
+   ChangeFont 34 $BtnFont
    ChangeFont 4 $BtnFont
    ChangeFont 5 $BtnFont
    ChangeFont 6 $BtnFont
@@ -100,13 +100,13 @@ Begin
    ChangeFont 3 $ListFont
 
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
-   ChangeFont 21 $SmallFont
-   ChangeFont 22 $SmallFont
    ChangeFont 23 $SmallFont
    ChangeFont 24 $SmallFont
    ChangeFont 25 $SmallFont
    ChangeFont 26 $SmallFont
    ChangeFont 27 $SmallFont
+   ChangeFont 28 $SmallFont
+   ChangeFont 29 $SmallFont
 
    Set $GtkStr = {00}
    Set $Gtk2Str = 0
@@ -116,14 +116,14 @@ Begin
    # which will be trimmed by LocaleTitle Widget directive.
    ChangeLocaleTitle 1 (GetTitle 1)
    ChangeLocaleTitle 4 (GetTitle 4)
-   ChangeLocaleTitle 19 (GetTitle 19)
    ChangeLocaleTitle 21 (GetTitle 21)
-   ChangeLocaleTitle 22 (GetTitle 22)
    ChangeLocaleTitle 23 (GetTitle 23)
    ChangeLocaleTitle 24 (GetTitle 24)
    ChangeLocaleTitle 25 (GetTitle 25)
    ChangeLocaleTitle 26 (GetTitle 26)
    ChangeLocaleTitle 27 (GetTitle 27)
+   ChangeLocaleTitle 28 (GetTitle 28)
+   ChangeLocaleTitle 29 (GetTitle 29)
 End
 
 PeriodicTasks
@@ -141,7 +141,7 @@ Begin
       Begin
         If $INPUTMSG <> {Cancel} Then
         Begin
-           Do {Schedule 250 SendToModule ColorMgr SendString 34 3 } $INPUTMSG
+           Do {Schedule 250 SendToModule ColorMgr SendString 19 3 } $INPUTMSG
         End
         Else
         Begin
@@ -238,18 +238,18 @@ Widget 3
          # Colorsets 61 - 68 are for Color Style Manager preview only
          Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -n } $Ncolors { -p } $PalletePath { -C}
 
-         ChangeColorset 9 61
-         ChangeColorset 10 65
-         ChangeColorset 11 62
-         ChangeColorset 12 66
-         ChangeColorset 13 63
-         ChangeColorset 14 67
-         ChangeColorset 15 64
-         ChangeColorset 16 68
+         ChangeColorset 10 61
+         ChangeColorset 11 65
+         ChangeColorset 12 62
+         ChangeColorset 13 66
+         ChangeColorset 14 63
+         ChangeColorset 15 67
+         ChangeColorset 16 64
+         ChangeColorset 17 68
 
          Set $FullColorCmd = {$NSCDE_ROOT/libexec/colormgr -c } $Ncolors { -f } $PalletePath
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
-         ChangeIcon 17 $FullColor
+         ChangeIcon 18 $FullColor
       End
       2 :
       Begin
@@ -302,7 +302,7 @@ Widget 4
          Set $PreviewContaminated = 1
          Set $PreviewMode = 1
          Set $PreviewParam = {-t}
-         SendSignal 30 1
+         SendSignal 32 1
          If $PerformBackdropSync <> {} Then
          Begin
             Do {Exec exec fvwm-root -r } $PerformBackdropSync
@@ -412,7 +412,7 @@ Widget 8
    Type Rectangle
 End
 
-Widget 33
+Widget 9
    Property
    Size 72 40
    Position 18 226
@@ -427,7 +427,7 @@ Widget 33
       End
 End
 
-Widget 9
+Widget 10
    Property
    Size 64 32
    Position 22 230
@@ -439,32 +439,32 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 9) == {} Then
+         If (GetTitle 10) == {} Then
          Begin
-            ChangeTitle 9 {Abc}
-            ChangeTitle 10 {}
+            ChangeTitle 10 {Abc}
             ChangeTitle 11 {}
             ChangeTitle 12 {}
             ChangeTitle 13 {}
             ChangeTitle 14 {}
             ChangeTitle 15 {}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 18 226
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 18 226
             Set $SelectedColorset = 61
-            Set $WidgetOfColorset = 9
+            Set $WidgetOfColorset = 10
          End
          Else
          Begin
-            ChangeTitle 9 {}
-            HideWidget 33
+            ChangeTitle 10 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 10
+Widget 11
    Property
    Size 64 32
    Position 22 274
@@ -476,32 +476,32 @@ Widget 10
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 10) == {} Then
+         If (GetTitle 11) == {} Then
          Begin
-            ChangeTitle 9 {}
-            ChangeTitle 10 {Abc}
-            ChangeTitle 11 {}
+            ChangeTitle 10 {}
+            ChangeTitle 11 {Abc}
             ChangeTitle 12 {}
             ChangeTitle 13 {}
             ChangeTitle 14 {}
             ChangeTitle 15 {}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 18 270
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 18 270
             Set $SelectedColorset = 65
-            Set $WidgetOfColorset = 10
+            Set $WidgetOfColorset = 11
          End
          Else
          Begin
-            ChangeTitle 10 {}
-            HideWidget 33
+            ChangeTitle 11 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 11
+Widget 12
    Property
    Size 64 32
    Position 100 230
@@ -513,32 +513,32 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 11) == {} Then
+         If (GetTitle 12) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
-            ChangeTitle 11 {Abc}
-            ChangeTitle 12 {}
+            ChangeTitle 11 {}
+            ChangeTitle 12 {Abc}
             ChangeTitle 13 {}
             ChangeTitle 14 {}
             ChangeTitle 15 {}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 96 226
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 96 226
             Set $SelectedColorset = 62
-            Set $WidgetOfColorset = 11
+            Set $WidgetOfColorset = 12
          End
          Else
          Begin
-            ChangeTitle 11 {}
-            HideWidget 33
+            ChangeTitle 12 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 12
+Widget 13
    Property
    Size 64 32
    Position 100 274
@@ -550,32 +550,32 @@ Widget 12
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 12) == {} Then
+         If (GetTitle 13) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
             ChangeTitle 11 {}
-            ChangeTitle 12 {Abc}
-            ChangeTitle 13 {}
+            ChangeTitle 12 {}
+            ChangeTitle 13 {Abc}
             ChangeTitle 14 {}
             ChangeTitle 15 {}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 96 270
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 96 270
             Set $SelectedColorset = 66
-            Set $WidgetOfColorset = 12
+            Set $WidgetOfColorset = 13
          End
          Else
          Begin
-            ChangeTitle 12 {}
-            HideWidget 33
+            ChangeTitle 13 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 13
+Widget 14
    Property
    Size 64 32
    Position 178 230
@@ -587,32 +587,32 @@ Widget 13
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 13) == {} Then
+         If (GetTitle 14) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
             ChangeTitle 11 {}
             ChangeTitle 12 {}
-            ChangeTitle 13 {Abc}
-            ChangeTitle 14 {}
+            ChangeTitle 13 {}
+            ChangeTitle 14 {Abc}
             ChangeTitle 15 {}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 174 226
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 174 226
             Set $SelectedColorset = 63
-            Set $WidgetOfColorset = 13
+            Set $WidgetOfColorset = 14
          End
          Else
          Begin
-            ChangeTitle 13 {}
-            HideWidget 33
+            ChangeTitle 14 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 14
+Widget 15
    Property
    Size 64 32
    Position 178 274
@@ -624,32 +624,32 @@ Widget 14
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 14) == {} Then
+         If (GetTitle 15) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
             ChangeTitle 11 {}
             ChangeTitle 12 {}
             ChangeTitle 13 {}
-            ChangeTitle 14 {Abc}
-            ChangeTitle 15 {}
+            ChangeTitle 14 {}
+            ChangeTitle 15 {Abc}
             ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 174 270
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 174 270
             Set $SelectedColorset = 67
-            Set $WidgetOfColorset = 14
+            Set $WidgetOfColorset = 15
          End
          Else
          Begin
-            ChangeTitle 14 {}
-            HideWidget 33
+            ChangeTitle 15 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 15
+Widget 16
    Property
    Size 64 32
    Position 256 230
@@ -661,32 +661,32 @@ Widget 15
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 15) == {} Then
+         If (GetTitle 16) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
             ChangeTitle 11 {}
             ChangeTitle 12 {}
             ChangeTitle 13 {}
             ChangeTitle 14 {}
-            ChangeTitle 15 {Abc}
-            ChangeTitle 16 {}
-            ShowWidget 33
-            ChangePosition 33 252 226
+            ChangeTitle 15 {}
+            ChangeTitle 16 {Abc}
+            ChangeTitle 17 {}
+            ShowWidget 9
+            ChangePosition 9 252 226
             Set $SelectedColorset = 64
-            Set $WidgetOfColorset = 15
+            Set $WidgetOfColorset = 16
          End
          Else
          Begin
-            ChangeTitle 15 {}
-            HideWidget 33
+            ChangeTitle 16 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 16
+Widget 17
    Property
    Size 64 32
    Position 256 274
@@ -698,32 +698,32 @@ Widget 16
       Case message of
       SingleClic :
       Begin
-         If (GetTitle 16) == {} Then
+         If (GetTitle 17) == {} Then
          Begin
-            ChangeTitle 9 {}
             ChangeTitle 10 {}
             ChangeTitle 11 {}
             ChangeTitle 12 {}
             ChangeTitle 13 {}
             ChangeTitle 14 {}
             ChangeTitle 15 {}
-            ChangeTitle 16 {Abc}
-            ShowWidget 33
-            ChangePosition 33 252 270
+            ChangeTitle 16 {}
+            ChangeTitle 17 {Abc}
+            ShowWidget 9
+            ChangePosition 9 252 270
             Set $SelectedColorset = 68
-            Set $WidgetOfColorset = 16
+            Set $WidgetOfColorset = 17
          End
          Else
          Begin
-            ChangeTitle 16 {}
-            HideWidget 33
+            ChangeTitle 17 {}
+            HideWidget 9
             Set $SelectedColorset = 0
             Set $WidgetOfColorset = 0
          End
       End
 End
 
-Widget 17
+Widget 18
    Property
    Size 84 32
    Position 339 274
@@ -739,7 +739,7 @@ Widget 17
       End
 End
 
-Widget 34
+Widget 19
    Property
    Size 88 32
    Position 338 230
@@ -774,7 +774,7 @@ Widget 34
          Set $CustomExistedBefore = (GetOutput {ls "$FVWM_USERDIR/palettes/Custom.dp" > /dev/null 2>&1; echo $?} 1 1)
 
          # Compose new palette and call id Custom.dp:
-         For $w = 9 To 16 Do
+         For $w = 10 To 17 Do
          Begin
             Set $CS = (GetBack $w)
             Set $Rpart = (StrCopy $CS 1 2) (StrCopy $CS 1 2)
@@ -838,7 +838,7 @@ Widget 34
 
          # Normally performed by OK and Apply actions, but here is exception
          # If this is modified new palette.
-         SendSignal 30 1
+         SendSignal 32 1
          If $RestartQuit <> 0 Then
          Begin
             Do {Schedule 360 Restart}
@@ -847,7 +847,7 @@ Widget 34
       End
 End
 
-Widget 18
+Widget 20
    Property
    Size 422 20
    Position 12 326
@@ -866,33 +866,33 @@ Widget 18
          Set $Ncolors = (LastString)
          If $Ncolors == 4 Then
          Begin
-            HideWidget 10
-            HideWidget 12
-            HideWidget 14
-            HideWidget 16
-            ChangeSize 9 64 72
-            ChangeSize 11 64 72
-            ChangeSize 13 64 72
-            ChangeSize 15 64 72
+            HideWidget 11
+            HideWidget 13
+            HideWidget 15
+            HideWidget 17
+            ChangeSize 10 64 72
+            ChangeSize 12 64 72
+            ChangeSize 14 64 72
+            ChangeSize 16 64 72
          End
          If $Ncolors == 8 Then
          Begin
             # Refresh last 4 colors if we change from 4 to 8 colors
             SendSignal 3 1
 
-            ShowWidget 10
-            ShowWidget 12
-            ShowWidget 14
-            ShowWidget 16
-            ChangeSize 9 64 32
-            ChangeSize 11 64 32
-            ChangeSize 13 64 32
-            ChangeSize 15 64 32
+            ShowWidget 11
+            ShowWidget 13
+            ShowWidget 15
+            ShowWidget 17
+            ChangeSize 10 64 32
+            ChangeSize 12 64 32
+            ChangeSize 14 64 32
+            ChangeSize 16 64 32
          End
       End
 End
 
-Widget 19
+Widget 21
    Property
    Size 80 0
    Position 20 360
@@ -907,14 +907,14 @@ Widget 19
       End
 End
 
-Widget 20
+Widget 22
    Property
    Size 432 116
    Position 8 370
    Type Rectangle
 End
 
-Widget 21
+Widget 23
    Property
    Size 60 24
    Position 16 384
@@ -930,7 +930,7 @@ Widget 21
       End
 End
 
-Widget 22
+Widget 24
    Property
    Size 60 24
    Position 16 418
@@ -946,7 +946,7 @@ Widget 22
       End
 End
 
-Widget 23
+Widget 25
    Property
    Size 60 24
    Position 138 384
@@ -959,15 +959,15 @@ Widget 23
       Case message of
       SingleClic :
       Begin
-         If (GetValue 23) == 0 Then
+         If (GetValue 25) == 0 Then
          Begin
-            ChangeValue 25 0
-            ChangeValue 26 0
+            ChangeValue 27 0
+            ChangeValue 28 0
          End
       End
 End
 
-Widget 24
+Widget 26
    Property
    Size 60 24
    Position 138 418
@@ -983,7 +983,7 @@ Widget 24
       End
 End
 
-Widget 25
+Widget 27
    Property
    Size 60 24
    Position 262 384
@@ -996,14 +996,14 @@ Widget 25
       Case message of
       SingleClic :
       Begin
-         If (GetValue 25) == 1 Then
+         If (GetValue 27) == 1 Then
          Begin
-            ChangeValue 23 1
+            ChangeValue 25 1
          End
       End
 End
 
-Widget 26
+Widget 28
    Property
    Size 60 24
    Position 262 418
@@ -1016,14 +1016,14 @@ Widget 26
       Case message of
       SingleClic :
       Begin
-         If (GetValue 26) == 1 Then
+         If (GetValue 28) == 1 Then
          Begin
-            ChangeValue 23 1
+            ChangeValue 25 1
          End
       End
 End
 
-Widget 27
+Widget 29
    Property
    Size 60 24
    Position 16 452
@@ -1039,14 +1039,14 @@ Widget 27
       End
 End
 
-Widget 28
+Widget 30
    Property
    Size 442 1
    Position 3 494
    Type Rectangle
 End
 
-Widget 29
+Widget 31
    Property
    Size 80 26
    Position 16 506
@@ -1065,14 +1065,14 @@ Widget 29
             Set $PreviewParam = {}
             If $CurrentModifiedPalette <> {} Then
             Begin
-               # SendSignal 30 1, Restart and Quit will be performed by 34 2
+               # SendSignal 32 1, Restart and Quit will be performed by 34 2
                Set $RestartQuit = 1
-               SendSignal 34 2
+               SendSignal 19 2
             End
             Else
             Begin
                Set $RestartQuit = 1
-               SendSignal 30 1
+               SendSignal 32 1
                Do {Schedule 360 Restart}
                Quit
             End
@@ -1085,7 +1085,7 @@ Widget 29
       End
 End
 
-Widget 30
+Widget 32
    Property
    Size 80 26
    Position 128 506
@@ -1102,14 +1102,14 @@ Widget 30
          Set $PreviewParam = {}
          If $CurrentModifiedPalette <> {} Then
          Begin
-            # SendSignal 30 1 will be performed by 34 2
+            # SendSignal 32 1 will be performed by 34 2
             Set $RestartQuit = 0
-            SendSignal 34 2
+            SendSignal 19 2
          End
          Else
          Begin
             Set $RestartQuit = 0
-            SendSignal 30 1
+            SendSignal 32 1
          End
          Set $Performed = 1
       End
@@ -1131,7 +1131,7 @@ Widget 30
          Set $PerformProgBitsChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -P}
          Set $PerformProgBitsChange = (GetOutput $PerformProgBitsChangeCmd 1 -1)
 
-         If (GetValue 22) == 1 Then
+         If (GetValue 24) == 1 Then
          Begin
             Set $PerformXresourceChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -X}
             Set $PerformXresourceChange = (GetOutput $PerformXresourceChangeCmd 2 -1)
@@ -1144,7 +1144,7 @@ Widget 30
             End
          End
 
-         If (GetValue 21) == 1 Then
+         If (GetValue 23) == 1 Then
          Begin
             Set $PerformBackdropSyncCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -b}
             # 1st and 2nd lines are pallete path/name and backdrop template, the rest is sorted in desk num order from 3-10 (8)
@@ -1155,12 +1155,12 @@ Widget 30
          # A big if around GTK/QT integration to avoid if we are in preview mode
          If $PreviewMode == 0 Then
          Begin
-            If (GetValue 23) == 1 Then
+            If (GetValue 25) == 1 Then
             Begin
                Set $Gtk2Str = 1
             End
 
-            If (GetValue 24) == 1 Then
+            If (GetValue 26) == 1 Then
             Begin
                Set $Gtk3Str = 1
             End
@@ -1227,7 +1227,7 @@ Widget 30
                Set $PerformGtk2 = (GetOutput $PerformGtk2Cmd 1 -1)
             End
 
-            If (GetValue 25) == 1 Then
+            If (GetValue 27) == 1 Then
             Begin
                Set $CheckDotConfigExist = (GetOutput {ls -1d "$HOME/.config" > /dev/null 2>&1; echo $?} 1 -1)
                If $CheckDotConfigExist <> 0 Then
@@ -1237,7 +1237,7 @@ Widget 30
                Set $DoTroll = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'} 1 -1)
             End
 
-            If (GetValue 26) == 1 Then
+            If (GetValue 28) == 1 Then
             Begin
                Set $CheckDotConfigExist = (GetOutput {ls -1d "$HOME/.config/qt5ct" > /dev/null 2>&1; echo $?} 1 -1)
                If $CheckDotConfigExist <> 0 Then
@@ -1248,7 +1248,7 @@ Widget 30
                Set $DoQt5Ct2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
             End
 
-            If (GetValue 27) == 1 Then
+            If (GetValue 29) == 1 Then
             Begin
                Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/colormgr.local" > /dev/null 2>&1; echo $?} 1 -1)
                If $CheckUserCustomScriptExist == 0 Then
@@ -1275,7 +1275,7 @@ Widget 30
       End
 End
 
-Widget 31
+Widget 33
    Property
    Size 80 26
    Position 240 506
@@ -1287,7 +1287,7 @@ Widget 31
       Case message of
       SingleClic :
       Begin
-         SendSignal 31 1
+         SendSignal 33 1
       End
       1 :
       Begin
@@ -1308,7 +1308,7 @@ Widget 31
       End
 End
 
-Widget 32
+Widget 34
    Property
    Size 80 26
    Position 352 506
@@ -1320,7 +1320,7 @@ Widget 32
       Case message of
       SingleClic :
       Begin
-         SendSignal 32 1
+         SendSignal 34 1
       End
       1 :
       Begin
