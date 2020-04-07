@@ -70,6 +70,7 @@ Begin
 
    # Keybindings
    Key Escape A 22 1 {KeyClose}
+   Key G A 5 1 {KeyGrab}
    Key F1 A 23 1 {KeyHelp}
    Key Help A 23 1 {KeyHelp}
 End
@@ -138,24 +139,36 @@ Widget 5
       Case message of
       SingleClic :
       Begin
-         Set $GrabCmd = {$NSCDE_ROOT/bin/nscde_colorpicker -od | sed 's/,/\//g'}
-         Set $GrabHEX = (GetOutput $GrabCmd 1 1)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
-         Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
-         Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
-         Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
-         ChangeValue 9 $R
-         ChangeValue 11 $G
-         ChangeValue 13 $B
-         Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
-         Set $HSV = (GetOutput $HSVCmd 1 -1)
-         Set $H = (StrCopy $HSV 1 3)
-         Set $S = (StrCopy $HSV 5 7)
-         Set $V = (StrCopy $HSV 9 11)
-         ChangeValue 19 $H
-         ChangeValue 15 $S
-         ChangeValue 17 $V
-         Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
+         SendSignal 5 1
+      End
+      1 :
+      Begin
+         Set $GrabCmd = {$NSCDE_ROOT/bin/nscde_colorpicker -od}
+         Set $GrabHEX = (GetOutput $GrabCmd 1 -1)
+         Set $CheckGrabHex = (StrCopy $GrabHEX 1 1)
+         If $CheckGrabHex == {#} Then
+         Begin
+            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
+            Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
+            Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
+            Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
+            ChangeValue 9 $R
+            ChangeValue 11 $G
+            ChangeValue 13 $B
+            Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
+            Set $HSV = (GetOutput $HSVCmd 1 -1)
+            Set $H = (StrCopy $HSV 1 3)
+            Set $S = (StrCopy $HSV 5 7)
+            Set $V = (StrCopy $HSV 9 11)
+            ChangeValue 19 $H
+            ChangeValue 15 $S
+            ChangeValue 17 $V
+            Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
+         End
+         Else
+         Begin
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error occured while calling Color Selector:] \\\"} $GrabHEX {\\\"}
+         End
       End
 End
 

@@ -8,11 +8,14 @@
 
 [ -z $NSCDE_ROOT ] && exit 2
 MARCH=$(uname -m)
+BIN="$NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH}"
 
-if [ -x $NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} ]; then
-   exec $NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} "$@"
+Existance=$(type "$BIN" 2>&1)
+
+if [ -x "$BIN" ]; then
+   exec "$BIN" "$@"
 else
-   echo "$NSCDE_ROOT/bin/colorpicker-${NSCDE_OS}_${MARCH} not found on this system." >&2
+   echo "$Existance"
    exit 1
 fi
 
