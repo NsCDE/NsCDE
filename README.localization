@@ -1,0 +1,133 @@
+Notices about localization
+==========================
+
+Introduction
+------------
+
+NsCDE supports localization by custom LocalePath for fvwm and UseGettext
+directives in the FvwmScript scripts.
+
+All part of visible text provided by NsCDE has localization ability with
+the restriction of the Workspace names, which are localized according to
+locale present during user's first setup. That is: "One", "Two", "Three"
+and "Four" are translated by catching text with gettext(1). Later this
+workspaces can be renamed by user as needed.
+
+LANGUAGE and/or LC_MESSAGES must be set for localization to work correctly.
+
+First translated language from original English is Croatian. Other
+translations are welcome.
+
+Both .po and .mo localization files are provided in the installation path
+$NSCDE_ROOT/share/locale/<lang>/LC_MESSAGES
+
+There are some pitfalls and things which must be observed when translating
+to the new languages. Existing .po files in "hr" can serve as a template for
+new translations since just msgstr lines must be replaced and msgid's are
+already there.
+
+
+Warnings
+--------
+
+This are the things for which translator must be careful:
+
+- FvwmScript based programs and dialogs are unflexible. This means text must
+  somehow fit in dozen of the spaces english size of the phrases and sentences.
+  This is not always the case, but visual testing should be made to see if new
+  text breaks widget sizes or maybe exceeds in visually ugly way on some side.
+  This means alternative wording in new language must be considered, or even at
+  some places abbrevations deployed for things to stay smooth.
+
+- Some smaller child FvwmScript dialogs are using parent ".po" files. For
+  example, NColorsDialog and ModifyColor are using NsCDE-ColorMgr.po, while
+  PaletteDialog is using BackdropMgr from the parent etc etc ...
+
+
+Notifier
+--------
+
+- Notifier dialogs are flexible. Size of the text doesn't matter here. Only
+  thing that can go wrong is that on the 7-10 places, there are split
+  sentences which if translated literally, can break the logic of the sentence
+  in a new language. Search "f_Notifier" FVWM function call in config, libexec
+  and lib/scripts directories (NsCDE-Functions.conf specially) and try to
+  reproduce them from command line with FvwmCommand or FvwmConsole. For example,
+  you can wrote ~/Test.conf with the content 
+
+f_Notifier "FpLite Function Error" "Dismiss" "NsCDE/Error.xpm" \
+ "$[gt.Error: Func:f_FpLiteClickAction: Cannot find top(1), prstat(1m) or topas(5) in PATH] $[PATH]."
+
+  ... and then call it with FvwmCommand 'Read $[HOME]/Test.conf'. You should see
+  the dialog in english, and after it is localized, in other language. By picking
+  this messages from the code and main system configuration, you can test it in
+  the relatively easy way. Notifier translations are in the main "NsCDE.po".
+
+  Warning: when recompiling "NsCDE.po" into "NsCDE.mo", NsCDE should be
+  restarted immediately, or you rish the crash with the segfault. Looks like
+  Compiled locale file are treated like dlopened libraries by FVWM.
+
+  Other ".po" files can be msgfmt'ed without restarting NsCDE (FVWM).
+
+- All Notifier translations are in NsCDE.po, either from this used by the FVWM
+  functions or by the FvwmScript programs and dialogs.
+
+
+Other Dialogs
+-------------
+
+- InputForm is also reading "NsCDE.mo" - used in FontMgr and ColorMgr for now.
+
+
+Menus
+-----
+- FVWM menus are also flexible, but following should be observed:
+  - acceleration key is choosen by prefixing accelerator key with a "&" sign.
+    For example "R&aise" means if menu is opened and "a" typed, Raise will
+    be executed. This "a" after "&" is underlined. In many cases, different words
+    from english may not have that letter, or other options on the same menu
+    can have it, even multiple times. It is on translator to introduce new
+    acceleration keys here. Sign "&" is written in "NsCDE.po" file with the
+    words in msgid and msgstr lines. See existing example, and consult fvwm(1)
+    for more about FVWM menus.
+
+- While menus are flexible, they can become excessingly fat if some translation
+  considerably differs from english in length. As with FvwmScript, combine
+  different wording and if nothing fits, try to use abbrevations.
+
+
+Initial Setup
+-------------
+
+Initial user setup script is using "nscde_setup.po".
+
+
+Misc
+----
+
+- Probably you will run into double definitions, specially for some short string
+  translations. If you see error from msgfmt, handle it. This is specially the
+  true for the main NsCDE.po
+
+- Test every translation. Do not assume it is ok until you don't see it.
+
+- Many of the original messages are using over-capitalization of terms as in
+  original CDE. In first (croatian) translation this is mimicked. It is up to
+  the translator to decide if this questionable style is going to be followed
+  or not, but if you decide not to follow, remember that some terms are names
+  and must be capitalized anyway.
+
+- Calendar applet does not have translation. LC_CTYPE (or overlapping LC_ALL)
+  from the user's environment will set abbrevated month name automatically.
+
+- Good place for LANGUAGE and/or LC_MESSAGES are ~/.bash_profile (or equivalent
+  in other shells) or $FVWM_USERDIR/NsCDE.conf in the form of FVWM "SetEnv"
+  directives for setting environment variables.
+
+- Translations should be complete, or at least 90% complete. There is no point
+  to have half translated localizations.
+
+
+
+
+

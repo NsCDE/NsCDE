@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.0.rc18">
-<!ENTITY date "Mar 2020">
+<!ENTITY appversion "1.0.rc20">
+<!ENTITY date "Apr 2020">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -953,6 +953,26 @@ applications (FrontPanel, other scripts ...)
 As in Backdrop Style Manager there are <guibutton>Add</guibutton> and <guibutton>Delete</guibutton>
 button actions. System palettes cannot be deleted, while local can be added to
 <filename class="directory">$FVWM_USERDIR/palettes</filename> and applied immediately.
+</para>
+<para>
+Button <guibutton>Modify</guibutton> will popup color editor if user selects one of the
+8 (or 4) base colors. When selected, this color frames will get "Abc" written in them
+with automatic foreground choice for that RGB/HSV combination. Frames can be unseleced
+by simply clicking on them again. When one base color is selected <guibutton>Modify</guibutton>
+will present editor with controls for Red, Green and Blue values, as well as Hue, Saturation
+and Value. On the top left corner are preview squares with names "Old" and "New". When changing
+color with RGB and/or HSV controls, this "New" square button will change it's colorset. Color can
+also be picked with <guibutton>Grab Color</guibutton> button if a small binary "colorpicker" is
+functional and properly installed in <filename class="directory">$NSCDE_ROOT/bin</filename>.
+If action is not <guibutton>Cancel</guibutton> but <guibutton>OK</guibutton>, selected color will
+be modified and new palette with generic name "Custom" created immediately. When finishing theme
+selection in Color Style Manager with modified colors, Color Style Manager will ask for a name
+of the new palette. The suggested default is "Custom" but on the subsequent modification, this is
+the palette which will be modified and past modifications will be effectively lost. For that
+reason, it is probably a good idea to save modified palette as new palette with some other name.
+In that way, it can be temporary changed for some other and turned back again later. This
+color modification dialog actually serves as palette creator (based on previous palettes) and
+editor.
 </para>
 <para>
 There are 8 spaces with colors from the currently selected palette (4 spaces
