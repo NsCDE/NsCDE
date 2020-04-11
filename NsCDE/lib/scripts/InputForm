@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE}
 WindowLocaleTitle {User Input Required}
-WindowSize 300 120
+WindowSize 320 122
 Colorset 22
 
 Init
@@ -25,6 +25,7 @@ Begin
    If $DefaultText <> {} Then
    Begin
       ChangeTitle 2 $DefaultText
+      ChangeValue 2 228
    End
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
@@ -65,7 +66,7 @@ End
 Widget 1
    Property
    Size 0 0
-   Position 72 4
+   Position 92 4
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    Title {Enter Required Parameter: }
@@ -79,13 +80,12 @@ End
 
 Widget 2
    Property
-   Size 210 20
+   Size 228 20
    Position 74 28
    Type TextField
    Flags NoReliefString
    Title {}
    Font "xft:::pixelsize=15"
-   Colorset 20
    Main
       Case message of
       SingleClic :
@@ -95,8 +95,8 @@ End
 
 Widget 3
    Property
-   Size 32 32
-   Position 16 20
+   Size 36 32
+   Position 12 24
    Type ItemDraw
    Flags NoReliefString NoFocus
    Title {}
@@ -111,7 +111,7 @@ End
 Widget 4
    Property
    Size 96 0
-   Position 16 80
+   Position 16 82
    Type PushButton
    LocaleTitle {OK}
    Font "xft:::pixelsize=15"
@@ -132,7 +132,7 @@ End
 Widget 5
    Property
    Size 96 0
-   Position 188 80
+   Position 208 82
    Type PushButton
    LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
@@ -152,8 +152,8 @@ End
 
 Widget 6
    Property
-   Size 292 0
-   Position 4 64
+   Size 312 0
+   Position 4 68
    Type Rectangle
    Flags NoReliefString NoFocus
    Main
@@ -180,6 +180,7 @@ Widget 10
          If (LastString) == {workaround} Then
          Begin
             ChangeColorset 10 20
+            ChangeColorset 2 20
          End
       End
 End
