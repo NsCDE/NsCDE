@@ -63,9 +63,24 @@ function getfontsetname
    fi
 }
 
+function getfontsetnum
+{
+   findfontsets
+   FontsetNum=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -n '' | egrep "^[[:digit:]]+:${FontsetFindName}$" | cut -d":" -f1)
+   echo $FontsetNum
+}
+
 function getfontnumber
 {
-   echo "$FNUMS" | egrep "^[1-9]{1,}:${SelectedFont}$" | cut -d":" -f1
+   echo "$FNUMS" | egrep "^[0-9]{1,}:(.*,)?${SelectedFont}" | cut -d":" -f1 | while read fontnum
+   do
+      # Handle fonts with aliases separated by a comma
+      FontNum=$fontnum
+      fnname=$(getfontname $fontnum)
+      if [ "${fnname}" == "${SelectedFont}" ]; then
+         echo ${fontnum}
+      fi
+   done
 }
 
 function getfontname
@@ -140,9 +155,18 @@ function splitfontstr
    getfontnumber
 
    # Get style and style number and print it
+   # If style is specified wrongly in the fontset, select first on the list
    StylesFmt="list"
-   getfontstyles | grep -n '' | egrep "^[1-9]{1,}:${RevFontStyle}$" | cut -d":" -f1
+   StylesOut=$(IFS=" " getfontstyles | grep -n '' | egrep "^[1-9]{1,}:${RevFontStyle}$" | cut -d":" -f1)
+   if [ "x$StylesOut" != "x" ]; then
+      echo $StylesOut
+   else
+      echo 1
+   fi
    echo $RevFontSize
+
+   echo $RevFontName
+   echo $RevFontStyle
 }
 
 function genxresourcedefs
@@ -175,7 +199,7 @@ function preparefontforgtk
    echo "$XftStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g'
 }
 
-while getopts pPF:g:G:n:N:s:r:X:T:h Option
+while getopts pPF:f:g:G:n:N:s:r:X:T:h Option
 do
    case $Option in
       p)
@@ -187,6 +211,10 @@ do
       F)
          FontsetNum="$OPTARG"
          getfontsetname
+      ;;
+      f)
+         FontsetFindName="$OPTARG"
+         getfontsetnum
       ;;
       g)
          export SelectedFont="$OPTARG"

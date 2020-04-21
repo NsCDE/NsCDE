@@ -91,6 +91,9 @@ Widget 2
       SingleClic :
       Begin
       End
+      1 :
+      Begin
+      End
 End
 
 Widget 3
@@ -121,11 +124,15 @@ Widget 4
       SingleClic :
       Begin
          SendSignal 4 1
-         Quit
       End
    1 :
    Begin
       SendToScript (GetScriptFather) (GetTitle 2)
+      SendSignal 4 2
+   End
+   1 :
+   Begin
+      Quit
    End
 End
 
@@ -142,11 +149,15 @@ Widget 5
       SingleClic :
       Begin
          SendSignal 5 1
-         Quit
       End
    1 :
    Begin
       SendToScript (GetScriptFather) {Cancel}
+      SendSignal 5 2
+   End
+   2 :
+   Begin
+      Quit
    End
 End
 

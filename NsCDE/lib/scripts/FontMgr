@@ -6,84 +6,52 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-FontMgr}
 WindowLocaleTitle {Style Manager - Font}
-WindowSize 710 688
+WindowSize 528 692
 Colorset 22
 
 Init
 Begin
-   # Locale stuff: Hack to keep leading or ending space(s)
-   # which will be trimmed by LocaleTitle Widget directive.
-   ChangeLocaleTitle 11 (GetTitle 11)
-   ChangeLocaleTitle 16 (GetTitle 16)
-   ChangeLocaleTitle 25 (GetTitle 25)
-   ChangeLocaleTitle 26 (GetTitle 26)
-   ChangeLocaleTitle 27 (GetTitle 27)
-
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
-   Set $NarrowFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
-   ChangeFont 10 $DefFont
-   ChangeFont 11 $DefFont
-   ChangeFont 13 $DefFont
-   ChangeFont 14 $DefFont
-   ChangeFont 15 $DefFont
-   ChangeFont 16 $DefFont
-   ChangeFont 17 $DefFont
-   ChangeFont 18 $DefFont
-   ChangeFont 28 $NarrowFont
-
-   Set $CheckBoxFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
-   ChangeFont 25 $CheckBoxFont
-   ChangeFont 26 $CheckBoxFont
-   ChangeFont 27 $CheckBoxFont
+   Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   ChangeFont 2 $SmallLabelFont
+   ChangeFont 22 $SmallLabelFont
+   ChangeFont 23 $SmallLabelFont
+   ChangeFont 24 $SmallLabelFont
 
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
    ChangeFont 3 $LabelFont
+   ChangeFont 4 $LabelFont
    ChangeFont 5 $LabelFont
+   ChangeFont 6 $LabelFont
    ChangeFont 7 $LabelFont
+   ChangeFont 9 $LabelFont
+   ChangeFont 10 $LabelFont
+   ChangeFont 11 $LabelFont
+   ChangeFont 12 $LabelFont
+   ChangeFont 13 $LabelFont
+   ChangeFont 14 $LabelFont
+   ChangeFont 26 $LabelFont
+   ChangeFont 27 $LabelFont
+   ChangeFont 28 $LabelFont
 
-   Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
-   ChangeFont 4 $ListFont
-   ChangeFont 6 $ListFont
-   ChangeFont 8 $ListFont
-
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
-   ChangeFont 31 $BtnFont
-   ChangeFont 32 $BtnFont
-   ChangeFont 33 $BtnFont
-   ChangeFont 34 $BtnFont
-
-   Set $CurrentDPI = (GetOutput {xrdb -q | sed -n 's/^Xft.dpi:\([\t ]\+\)\?//gp'} 1 1)
-
-   If $CurrentDPI == {} Then
-      Set $CurrentDPI = 96
-
-   If $CurrentDPI == 75 Then
-      ChangeValue 11 1
-   If $CurrentDPI == 96 Then
-      ChangeValue 11 2
-   If $CurrentDPI == 120 Then
-      ChangeValue 11 3
-   If $CurrentDPI == 144 Then
-      ChangeValue 11 4
-
-   Set $DefaultFontset = {$NSCDE_ROOT/share/fontsets/Default_} $CurrentDPI {dpi.fontset}
-   Set $SaveFontFile = {$FVWM_USERDIR/NsCDE-Font-} $CurrentDPI {dpi.conf}
+   Set $FontExampleText = (Gettext {Quick Brown Fox Jumps Over a Lazy Dog ...})
+   ChangeLocaleTitle 15 $FontExampleText
+   ChangeLocaleTitle 16 $FontExampleText
+   ChangeLocaleTitle 17 $FontExampleText
+   ChangeLocaleTitle 18 $FontExampleText
+   ChangeLocaleTitle 19 $FontExampleText
 
    Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
-   ChangeTitle 6 $FontList
+   ChangeTitle 5 $FontList
 
-   Set $SizeList = { 3| 4| 5| 6| 7| 8| 9| 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22}
-   ChangeTitle 18 $SizeList
-   ChangeValue 18 9
+   Set $SizeGroupMenu = { Small| Medium| Large}
+   ChangeLocaleTitle 10 $SizeGroupMenu
+   ChangeValue 10 2
 
-   Set $PreviewList = { Small| Medium| Large     }
-   ChangeLocaleTitle 14 $PreviewList
-   ChangeValue 14 2
+   Set $FontSizes = {4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26}
+   ChangeLocaleTitle 14 $FontSizes
+   ChangeValue 14 8
 
-   # Defaults
-   Set $FontSetInUse = 0
-
-   # Set initial values
+   # Default Fonts: set initial values
    Set $FontNormalSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
    Set $FontBoldSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s small} 1 -1)
    Set $FontItalicSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t italic -s small} 1 -1)
@@ -101,40 +69,75 @@ Begin
    Set $FontItalicLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t italic -s large} 1 -1)
    Set $FontMonoLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s large} 1 -1)
    Set $FontMonoBoldLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t bold -s large} 1 -1)
-   SendSignal 14 1
 
-   Set $FontsetMenu = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
-   ChangeTitle 4 $FontsetMenu
+   ChangeFont 15 $FontNormalMediumStr
+   ChangeFont 16 $FontBoldMediumStr
+   ChangeFont 17 $FontItalicMediumStr
+   ChangeFont 18 $FontMonoMediumStr
+   ChangeFont 19 $FontMonoBoldMediumStr
+   ChangeFont 20 $FontNormalMediumStr
+
+   # Select Default font, it's style, and size
+   Set $FontNormalMediumStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontNormalMediumStr {'}
+   Set $FontNormalMediumStrNameNum = (GetOutput $FontNormalMediumStrCmd 1 -1)
+   Set $FontNormalMediumStrStyleNum = (GetOutput $FontNormalMediumStrCmd 2 -1)
+   Set $FontNormalMediumStrSizeNum = (Add (GetOutput $FontNormalMediumStrCmd 3 1) -3)
+   Set $FontNormalMediumStrName = (GetOutput $FontNormalMediumStrCmd 4 -1)
+
+   Set $FontNormalMediumStrMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontNormalMediumStrName {'}
+   Set $FontNormalMediumStrMenu = (GetOutput $FontNormalMediumStrMenuCmd 1 -1)
+
+   ChangeValue 5 $FontNormalMediumStrNameNum
+   ChangeTitle 7 $FontNormalMediumStrMenu
+   ChangeValue 7 $FontNormalMediumStrStyleNum
+   ChangeValue 14 $FontNormalMediumStrSizeNum
 
    # Key bindings
-   Key Q C 33 1 {KeyClose}
-   Key F1 A 34 1 {KeyHelp}
-   Key Help A 34 1 {KeyHelp}
+   Key Q C 27 1 {KeyClose}
+   Key F1 A 28 1 {KeyHelp}
+   Key Help A 28 1 {KeyHelp}
 
-   # X compositor bug workaround
-   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
+   # Initial defaults
+   Set $OperationMode = 1
+   Set $ActivePreviewField = 15
+   Do {Schedule 1000 SendToModule FontMgr SendString 101 2 initial}
+
+   # Defaults for Font Size Popup
+   Set $FontConstruct = $FontNormalMediumStr
+
+   # Defaults for fontset
+   Set $DefaultFontset = {DejaVuSerif}
+   Set $DefaultFontsetPath = {$NSCDE_ROOT/share/fontsets/} $DefaultFontset {.fontset}
+   Set $FontsetPath = $DefaultFontsetPath
+
+   # Manage race condition between messages for InputForm and ChoiceForm
+   # Default will be the messages listening for InputForm
+   Set $QuitStarted = 0
 End
 
 # In PeriodicTasks be careful not to mess messages from two different dialogs.
 PeriodicTasks
 Begin
-   Set $MSG=(ReceivFromScript $INPUTFORM)
-   If $MSG <> {No message} Then
+   If $QuitStarted == 0 Then
    Begin
-     If $MSG <> {Go} Then
-     Begin
-        Do {SendToModule FontMgr SendString 32 1 } $MSG
-     End
-     If $MSG <> {Cancel} Then
-     Begin
-        Do {Schedule 250 SendToModule FontMgr SendString 31 1 } $MSG
-     End
+      Set $MSG = (ReceivFromScript $INPUTFORM)
+      Do {Echo >>> >>> >>> INPUT-FORM MESSAGE: } $MSG
+      If $MSG <> {No message} Then
+      Begin
+        If $MSG <> {Go} Then
+        Begin
+           Do {Schedule 250 SendToModule FontMgr SendString 26 1 } $MSG
+        End
+      End
    End
-
-   Set $QUITMSG=(ReceivFromScript $QUITFORM)
-   If $QUITMSG <> {No message} Then
+   Else
    Begin
-     Do {SendToModule FontMgr SendString 31 1 } $QUITMSG
+      Set $QUITMSG = (ReceivFromScript $QUITFORM)
+      Do {Echo >>> >>> >>> QUIT-FORM MESSAGE: } $QUITMSG
+      If $QUITMSG <> {No message} Then
+      Begin
+         Do {SendToModule FontMgr SendString 26 4 } $QUITMSG
+      End
    End
 End
 
@@ -153,63 +156,158 @@ End
 
 Widget 2
    Property
-   Position 578 10
-   Size 120 30
+   Position 108 14
+   Size 100 20
    Flags NoReliefString
-   Type PushButton
-   LocaleTitle {Default}
+   Type CheckBox
+   Font "xft:::pixelsize=14"
+   Value 0
+   Title { Use Predefined Font Set}
    Main
       Case message of
       SingleClic :
       Begin
-         # Set default values
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t normal -s small}
-         Set $FontNormalSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t bold -s small}
-         Set $FontBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t italic -s small}
-         Set $FontItalicSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t normal -s small}
-         Set $FontMonoSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t bold -s small}
-         Set $FontMonoBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
-
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t normal -s medium}
-         Set $FontNormalMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t bold -s medium}
-         Set $FontBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t italic -s medium}
-         Set $FontItalicMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t normal -s medium}
-         Set $FontMonoMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t bold -s medium}
-         Set $FontMonoBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
-
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t normal -s large}
-         Set $FontNormalLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t bold -s large}
-         Set $FontBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -v -t italic -s large}
-         Set $FontItalicLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t normal -s large}
-         Set $FontMonoLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontset {" -m -t bold -s large}
-         Set $FontMonoBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
-
-         SendSignal 14 1
-
-         # Unselect font and style
-         ChangeValue 6 0
-         ChangeValue 8 0
+         SendSignal 2 1
+      End
+      1 :
+      Begin
+         If (GetValue 2) == 1 Then
+         Begin
+            Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
+            ChangeTitle 5 $FontsetList
+            ChangeLocaleTitle 3 {Default|Default|Delete Fontset}
+            ChangeColorset 7 5
+            ChangeTitle 7 {}
+            ChangeLocaleTitle 4 {Font Sets}
+            HideWidget 13
+            HideWidget 14
+            Set $OperationMode = 2
+            Set $SelectDefaultFontsetCmd = {$NSCDE_ROOT/libexec/fontmgr -f "} $DefaultFontset {"}
+            Set $SelectDefaultFontset = (GetOutput $SelectDefaultFontsetCmd 1 -1)
+            ChangeValue 5 $SelectDefaultFontset
+            SendSignal 5 2
+         End
+         Else
+         Begin
+            Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
+            ChangeTitle 5 $FontList
+            ChangeLocaleTitle 3 {Default|Default|Cancel}
+            ChangeColorset 7 20
+            ChangeLocaleTitle 4 {Fonts}
+            ShowWidget 13
+            ShowWidget 14
+            Set $OperationMode = 1
+            SendSignal 101 3
+         End
       End
 End
 
+
 Widget 3
    Property
+   Position 396 10
+   Size 120 30
+   Flags NoReliefString
+   Type PushButton
+   LocaleTitle {Default|Default|Cancel}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $OperationMode == 1 Then
+         Begin
+            If (GetValue 3) <> 2 Then
+            Begin
+               SendSignal 3 1
+            End
+         End
+         If $OperationMode == 2 Then
+         Begin
+            If (GetValue 3) == 1 Then
+            Begin
+               SendSignal 3 1
+            End
+            If (GetValue 3) == 2 Then
+            Begin
+               Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Fontset] \"} $FontsetName {\"" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Fontset]" "SendToModule FontMgr SendString 3 2 confirmed"}
+               SendSignal 3 2
+            End
+         End
+      End
+      1 :
+      Begin
+         # Set default values
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s small}
+         Set $FontNormalSmallStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s small}
+         Set $FontBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s small}
+         Set $FontItalicSmallStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s small}
+         Set $FontMonoSmallStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s small}
+         Set $FontMonoBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
+
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s medium}
+         Set $FontNormalMediumStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s medium}
+         Set $FontBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s medium}
+         Set $FontItalicMediumStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s medium}
+         Set $FontMonoMediumStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s medium}
+         Set $FontMonoBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
+
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s large}
+         Set $FontNormalLargeStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s large}
+         Set $FontBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s large}
+         Set $FontItalicLargeStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s large}
+         Set $FontMonoLargeStr = (GetOutput $FontGetCmd 1 -1)
+         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s large}
+         Set $FontMonoBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
+
+         Set $SelectDefaultFontsetCmd = {$NSCDE_ROOT/libexec/fontmgr -f "} $DefaultFontset {"}
+         Set $SelectDefaultFontset = (GetOutput $SelectDefaultFontsetCmd 1 -1)
+
+         ChangeValue 5 $SelectDefaultFontset
+         Set $FontsetName = $DefaultFontset
+         SendSignal 10 1
+      End
+      2 :
+      Begin
+         # XXX select default after deletion
+         If (LastString) == {confirmed} Then
+         Begin
+            Set $DeleteFontsetCmd = {rm -f '} $FontsetPath {' 2>&1}
+            Set $DeleteFontset = (GetOutput $DeleteFontsetCmd 1 -1)
+
+            If $DeleteFontset == {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
+               Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
+               ChangeTitle 5 $FontsetList
+               SendSignal 3 1
+               SendSignal 10 1
+            End
+            Else
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] \\\"} $FontsetName {\\\": } $DeleteFontset {"}
+            End
+         End
+      End
+End
+
+Widget 4
+   Property
    Position 22 62
-   Flags NoReliefString NoFocus
+   Size 200 20
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
-   LocaleTitle {Font Sets}
+   LocaleTitle {Fonts}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -218,117 +316,10 @@ Widget 3
       End
 End
 
-Widget 4
-   Property
-   Position 20 84
-   Size 200 160
-   Flags NoReliefString
-   Type List
-   Value 0
-   Title {}
-   Colorset 22
-   Main
-      Case message of
-      SingleClic :
-      Begin
-         If $FontSetInUse == 1 Then
-            SendSignal 4 1
-      End
-      1 :
-      Begin
-         If (GetValue 4) == 0 Then
-            ChangeValue 4 1
-
-         Set $FontsetFileCmd = {$NSCDE_ROOT/libexec/fontmgr -F } (GetValue 4)
-         Set $FontsetFile = (GetOutput $FontsetFileCmd 1 -1)
-         Set $FontsetPath = (GetOutput $FontsetFileCmd 2 -1)
-         Set $ApplyFontset = $FontsetPath $FontsetFile {.fontset}
-
-         # Set all valiables to font definitions from a style.
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t normal -s small}
-         Set $FontNormalSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t bold -s small}
-         Set $FontBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t italic -s small}
-         Set $FontItalicSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t normal -s small}
-         Set $FontMonoSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t bold -s small}
-         Set $FontMonoBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
-
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t normal -s medium}
-         Set $FontNormalMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t bold -s medium}
-         Set $FontBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t italic -s medium}
-         Set $FontItalicMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t normal -s medium}
-         Set $FontMonoMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t bold -s medium}
-         Set $FontMonoBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
-
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t normal -s large}
-         Set $FontNormalLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t bold -s large}
-         Set $FontBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -v -t italic -s large}
-         Set $FontItalicLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t normal -s large}
-         Set $FontMonoLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $ApplyFontset {" -m -t bold -s large}
-         Set $FontMonoBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
-
-         # Apply fontset fonts to preview TextField Widgets depeding on Preview Set which is current
-         If (GetValue 14) == 1 Then
-         Begin
-            ChangeFont 20 $FontNormalSmallStr
-            ChangeFont 21 $FontBoldSmallStr
-            ChangeFont 22 $FontItalicSmallStr
-            ChangeFont 23 $FontMonoSmallStr
-            ChangeFont 24 $FontMonoBoldSmallStr
-         End
-
-         If (GetValue 14) == 2 Then
-         Begin
-            ChangeFont 20 $FontNormalMediumStr
-            ChangeFont 21 $FontBoldMediumStr
-            ChangeFont 22 $FontItalicMediumStr
-            ChangeFont 23 $FontMonoMediumStr
-            ChangeFont 24 $FontMonoBoldMediumStr
-         End
-
-         If (GetValue 14) == 3 Then
-         Begin
-            ChangeFont 20 $FontNormalLargeStr
-            ChangeFont 21 $FontBoldLargeStr
-            ChangeFont 22 $FontItalicLargeStr
-            ChangeFont 23 $FontMonoLargeStr
-            ChangeFont 24 $FontMonoBoldLargeStr
-         End
-
-         # Unselect font and style
-         ChangeValue 6 0
-         ChangeValue 8 0
-      End
-End
-
 Widget 5
    Property
-   Position 238 62
-   Flags NoReliefString NoFocus
-   Type ItemDraw
-   LocaleTitle {Fonts}
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-Widget 6
-   Property
-   Position 232 84
-   Size 264 160
+   Position 20 84
+   Size 292 168
    Flags NoReliefString
    Type List
    Colorset 20
@@ -336,131 +327,172 @@ Widget 6
       Case message of
       SingleClic :
       Begin
-         If $FontSetInUse == 0 Then
-            SendSignal 6 1
+         If $OperationMode == 1 Then
+         Begin
+            SendSignal 5 1
+         End
+         If $OperationMode == 2 Then
+         Begin
+            SendSignal 5 2
+         End
       End
       1 :
       Begin
-         Set $ForFontStylesCmd = {$NSCDE_ROOT/libexec/fontmgr -N } (GetValue 6)
-         Set $ForFontStyles = (GetOutput $ForFontStylesCmd 1 -1)
-         Set $FontStylesCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $ForFontStyles {'}
+         Set $ListFontNameCmd = {$NSCDE_ROOT/libexec/fontmgr -N } (GetValue 5)
+         Set $ListFontName = (GetOutput $ListFontNameCmd 1 -1)
+         Set $FontStylesCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $ListFontName {'}
          Set $FontStyles = (GetOutput $FontStylesCmd 1 -1)
-         ChangeTitle 8 $FontStyles
+         ChangeTitle 7 $FontStyles
 
-         Set $FontSizeFromMenu = (Add (GetValue 18) 2)
-
-         If (GetValue 8) == 0 Then
+         If (GetValue 7) == 0 Then
          Begin
-            Set $MaxValCmd = {$NSCDE_ROOT/libexec/fontmgr -G total -g '} $ForFontStyles {'}
-            Set $MaxVal = (GetOutput $MaxValCmd 1 -1)
-            ChangeValue 8 $MaxVal
+            Set $SizeValCmd = {$NSCDE_ROOT/libexec/fontmgr -G total -g '} $ListFontName {'}
+            Set $SizeVal = (GetOutput $SizeValCmd 1 -1)
+            ChangeValue 7 $SizeVal
+         End
+         Else
+         Begin
+            Set $SizeVal = (GetValue 7)
          End
 
-         Set $FontStyleForFontCmd = {$NSCDE_ROOT/libexec/fontmgr -s } (GetValue 8) { -g '} $ForFontStyles {'}
-         Set $FontStyleForFont = (GetOutput $FontStyleForFontCmd 1 -1)
+         Set $FontStyleListCmd = {$NSCDE_ROOT/libexec/fontmgr -s } $SizeVal { -g '} $ListFontName {'}
+         Set $FontStyleList = (GetOutput $FontStyleListCmd 1 -1)
 
-         Set $FontStr = {xft:} $ForFontStyles {:Medium:} $FontStyleForFont {:size=} $FontSizeFromMenu
+         Set $FontConstruct = {xft:} $ListFontName {:Medium:} $FontStyleList {:size=} (Add (GetValue 14) 3)
+         ChangeFont $ActivePreviewField $FontConstruct
+         ChangeFont 20 $FontConstruct
 
-         If (GetValue 16) == 1 Then # Regular
+         If (GetValue 10) == 1 Then
          Begin
-            If (GetValue 14) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $FontNormalSmallStr = $FontStr
-               ChangeFont 20 $FontNormalSmallStr
+               Set $FontNormalSmallStr = $FontConstruct
             End
-            If (GetValue 14) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $FontNormalMediumStr = $FontStr
-               ChangeFont 20 $FontNormalMediumStr
+               Set $FontBoldSmallStr = $FontConstruct
             End
-            If (GetValue 14) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $FontNormalLargeStr = $FontStr
-               ChangeFont 20 $FontNormalLargeStr
+               Set $FontItalicSmallStr = $FontConstruct
             End
-         End
-
-         If (GetValue 16) == 2 Then # Bold
-         Begin
-            If (GetValue 14) == 1 Then
+            If $ActivePreviewField == 18 Then
             Begin
-               Set $FontBoldSmallStr = $FontStr
-               ChangeFont 21 $FontBoldSmallStr
+               Set $FontMonoSmallStr = $FontConstruct
             End
-            If (GetValue 14) == 2 Then
+            If $ActivePreviewField == 19 Then
             Begin
-               Set $FontBoldMediumStr = $FontStr
-               ChangeFont 21 $FontBoldMediumStr
-            End
-            If (GetValue 14) == 3 Then
-            Begin
-               Set $FontBoldLargeStr = $FontStr
-               ChangeFont 21 $FontBoldLargeStr
+               Set $FontMonoBoldSmallStr = $FontConstruct
             End
          End
 
-         If (GetValue 16) == 3 Then # Italic
+         If (GetValue 10) == 2 Then
          Begin
-            If (GetValue 14) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $FontItalicSmallStr = $FontStr
-               ChangeFont 22 $FontItalicSmallStr
+               Set $FontNormalMediumStr = $FontConstruct
             End
-            If (GetValue 14) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $FontItalicMediumStr = $FontStr
-               ChangeFont 22 $FontItalicMediumStr
+               Set $FontBoldMediumStr = $FontConstruct
             End
-            If (GetValue 14) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $FontItalicLargeStr = $FontStr
-               ChangeFont 22 $FontItalicLargeStr
+               Set $FontItalicMediumStr = $FontConstruct
+            End
+            If $ActivePreviewField == 18 Then
+            Begin
+               Set $FontMonoMediumStr = $FontConstruct
+            End
+            If $ActivePreviewField == 19 Then
+            Begin
+               Set $FontMonoBoldMediumStr = $FontConstruct
             End
          End
 
-         If (GetValue 16) == 4 Then # Monospaced
+         If (GetValue 10) == 3 Then
          Begin
-            If (GetValue 14) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $FontMonoSmallStr = $FontStr
-               ChangeFont 23 $FontMonoSmallStr
+               Set $FontNormalLargeStr = $FontConstruct
             End
-            If (GetValue 14) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $FontMonoMediumStr = $FontStr
-               ChangeFont 23 $FontMonoMediumStr
+               Set $FontBoldLargeStr = $FontConstruct
             End
-            If (GetValue 14) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $FontMonoLargeStr = $FontStr
-               ChangeFont 23 $FontMonoLargeStr
+               Set $FontItalicLargeStr = $FontConstruct
             End
-         End
-
-         If (GetValue 16) == 5 Then # MonoBoldspaced Bold
-         Begin
-            If (GetValue 14) == 1 Then
+            If $ActivePreviewField == 18 Then
             Begin
-               Set $FontMonoBoldSmallStr = $FontStr
-               ChangeFont 24 $FontMonoBoldSmallStr
+               Set $FontMonoLargeStr = $FontConstruct
             End
-            If (GetValue 14) == 2 Then
+            If $ActivePreviewField == 19 Then
             Begin
-               Set $FontMonoBoldMediumStr = $FontStr
-               ChangeFont 24 $FontMonoBoldMediumStr
-            End
-            If (GetValue 14) == 3 Then
-            Begin
-               Set $FontMonoBoldLargeStr = $FontStr
-               ChangeFont 24 $FontMonoBoldLargeStr
+               Set $FontMonoBoldLargeStr = $FontConstruct
             End
          End
       End
+      2 :
+      Begin
+         Set $FontsetNameCmd = {$NSCDE_ROOT/libexec/fontmgr -F } (GetValue 5)
+         Set $FontsetName = (GetOutput $FontsetNameCmd 1 -1)
+         Set $FontsetDir = (GetOutput $FontsetNameCmd 2 -1)
+         Set $FontsetPath = $FontsetDir $FontsetName {.fontset}
+
+         Set $FontNormalSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s small}
+         Set $FontNormalSmallStr = (GetOutput $FontNormalSmallStrCmd 1 -1)
+
+         Set $FontBoldSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s small}
+         Set $FontBoldSmallStr = (GetOutput $FontBoldSmallStrCmd 1 -1)
+
+         Set $FontItalicSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s small}
+         Set $FontItalicSmallStr = (GetOutput $FontItalicSmallStrCmd 1 -1)
+
+         Set $FontMonoSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s small}
+         Set $FontMonoSmallStr = (GetOutput $FontMonoSmallStrCmd 1 -1)
+
+         Set $FontMonoBoldSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s small}
+         Set $FontMonoBoldSmallStr = (GetOutput $FontMonoBoldSmallStrCmd 1 -1)
+
+         Set $FontNormalMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s medium}
+         Set $FontNormalMediumStr = (GetOutput $FontNormalMediumStrCmd 1 -1)
+
+         Set $FontBoldMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s medium}
+         Set $FontBoldMediumStr = (GetOutput $FontBoldMediumStrCmd 1 -1)
+
+         Set $FontItalicMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s medium}
+         Set $FontItalicMediumStr = (GetOutput $FontItalicMediumStrCmd 1 -1)
+
+         Set $FontMonoMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s medium}
+         Set $FontMonoMediumStr = (GetOutput $FontMonoMediumStrCmd 1 -1)
+
+         Set $FontMonoBoldMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s medium}
+         Set $FontMonoBoldMediumStr = (GetOutput $FontMonoBoldMediumStrCmd 1 -1)
+
+         Set $FontNormalLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s large}
+         Set $FontNormalLargeStr = (GetOutput $FontNormalLargeStrCmd 1 -1)
+
+         Set $FontBoldLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s large}
+         Set $FontBoldLargeStr = (GetOutput $FontBoldLargeStrCmd 1 -1)
+
+         Set $FontItalicLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s large}
+         Set $FontItalicLargeStr = (GetOutput $FontItalicLargeStrCmd 1 -1)
+
+         Set $FontMonoLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s large}
+         Set $FontMonoLargeStr = (GetOutput $FontMonoLargeStrCmd 1 -1)
+
+         Set $FontMonoBoldLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s large}
+         Set $FontMonoBoldLargeStr = (GetOutput $FontMonoBoldLargeStrCmd 1 -1)
+
+         SendSignal 10 1
+      End
 End
 
-Widget 7
+Widget 6
    Property
-   Position 516 62
+   Position 334 62
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    LocaleTitle {Font Style}
@@ -471,27 +503,28 @@ Widget 7
       End
 End
 
-Widget 8
+Widget 7
    Property
-   Position 510 84
-   Size 180 160
+   Position 326 84
+   Size 182 168
    Flags NoReliefString
    Type List
    Colorset 20
-   Value 0
    Main
       Case message of
       SingleClic :
       Begin
-         If $FontSetInUse == 0 Then
-            SendSignal 6 1
+         If $OperationMode == 1 Then
+         Begin
+            SendSignal 5 1
+         End
       End
 End
 
-Widget 9
+Widget 8
    Property
    Position 10 56
-   Size 690 198
+   Size 508 206
    Flags NoReliefString NoFocus
    Type Rectangle
    Main
@@ -501,100 +534,189 @@ Widget 9
       End
 End
 
-Widget 10
+Widget 9
    Property
-   Position 12 260
-   Flags NoReliefString NoFocus
+   Position 12 270
+   Flags NoReliefString NoFocus Left
    Type ItemDraw
-   LocaleTitle {Set Fonts for DPI:}
+   LocaleTitle {Font Size Group:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
       Begin
+      End
+End
+
+Widget 10
+   Property
+   Position 12 296
+   Size 540 244
+   Flags NoReliefString
+   Type PopupMenu
+   Font "xft:::pixelsize=15"
+   Title {xxxxxxxxxxxxxx}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 10 1
+      End
+      1 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            # Holder for black on white - examine, extend if needed
+            Do {Schedule 120 SendToModule FontMgr SendString } $ActivePreviewField { 1 dummy}
+            ChangeFont 15 $FontNormalSmallStr
+            ChangeFont 16 $FontBoldSmallStr
+            ChangeFont 17 $FontItalicSmallStr
+            ChangeFont 18 $FontMonoSmallStr
+            ChangeFont 19 $FontMonoBoldSmallStr
+            If $ActivePreviewField == 15 Then
+            Begin
+               ChangeFont 20 $FontNormalSmallStr
+            End
+            If $ActivePreviewField == 16 Then
+            Begin
+               ChangeFont 20 $FontBoldSmallStr
+            End
+            If $ActivePreviewField == 17 Then
+            Begin
+               ChangeFont 20 $FontItalicSmallStr
+            End
+            If $ActivePreviewField == 18 Then
+            Begin
+               ChangeFont 20 $FontMonoSmallStr
+            End
+            If $ActivePreviewField == 19 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldSmallStr
+            End
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            # Holder for black on white - examine, extend if needed
+            Do {Schedule 120 SendToModule FontMgr SendString } $ActivePreviewField { 1 dummy}
+            ChangeFont 15 $FontNormalMediumStr
+            ChangeFont 16 $FontBoldMediumStr
+            ChangeFont 17 $FontItalicMediumStr
+            ChangeFont 18 $FontMonoMediumStr
+            ChangeFont 19 $FontMonoBoldMediumStr
+            If $ActivePreviewField == 15 Then
+            Begin
+               ChangeFont 20 $FontNormalMediumStr
+            End
+            If $ActivePreviewField == 16 Then
+            Begin
+               ChangeFont 20 $FontBoldMediumStr
+            End
+            If $ActivePreviewField == 17 Then
+            Begin
+               ChangeFont 20 $FontItalicMediumStr
+            End
+            If $ActivePreviewField == 18 Then
+            Begin
+               ChangeFont 20 $FontMonoMediumStr
+            End
+            If $ActivePreviewField == 19 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldMediumStr
+            End
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            # Holder for black on white - examine, extend if needed
+            Do {Schedule 120 SendToModule FontMgr SendString } $ActivePreviewField { 1 dummy}
+            ChangeFont 15 $FontNormalLargeStr
+            ChangeFont 16 $FontBoldLargeStr
+            ChangeFont 17 $FontItalicLargeStr
+            ChangeFont 18 $FontMonoLargeStr
+            ChangeFont 19 $FontMonoBoldLargeStr
+            If $ActivePreviewField == 15 Then
+            Begin
+               ChangeFont 20 $FontNormalLargeStr
+            End
+            If $ActivePreviewField == 16 Then
+            Begin
+               ChangeFont 20 $FontBoldLargeStr
+            End
+            If $ActivePreviewField == 17 Then
+            Begin
+               ChangeFont 20 $FontItalicLargeStr
+            End
+            If $ActivePreviewField == 18 Then
+            Begin
+               ChangeFont 20 $FontMonoLargeStr
+            End
+            If $ActivePreviewField == 19 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldLargeStr
+            End
+         End
       End
 End
 
 Widget 11
    Property
-   Position 14 284
-   Size 160 10
-   Flags NoReliefString Left
-   Value 2
-   Type PopupMenu
-   Title { 75x75 DPI | 96x96 DPI | 120x120 DPI | 144x144 DPI | Custom DPI ...}
+   Position 210 270
+   Flags NoReliefString NoFocus Left
+   Type ItemDraw
+   LocaleTitle {Font Style Group:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetValue 11) == 1 Then
-         Begin
-            Set $CurrentDPI = 75
-            Set $DefaultFontset = {$NSCDE_ROOT/share/fontsets/Default_} $CurrentDPI {dpi.fontset}
-            Set $SaveFontFile = {$FVWM_USERDIR/NsCDE-Font-} $CurrentDPI {dpi.conf}
-         End
-
-         If (GetValue 11) == 2 Then
-         Begin
-            Set $CurrentDPI = 96
-            Set $DefaultFontset = {$NSCDE_ROOT/share/fontsets/Default_} $CurrentDPI {dpi.fontset}
-            Set $SaveFontFile = {$FVWM_USERDIR/NsCDE-Font-} $CurrentDPI {dpi.conf}
-         End
-
-         If (GetValue 11) == 3 Then
-         Begin
-            Set $CurrentDPI = 120
-            Set $DefaultFontset = {$NSCDE_ROOT/share/fontsets/Default_} $CurrentDPI {dpi.fontset}
-            Set $SaveFontFile = {$FVWM_USERDIR/NsCDE-Font-} $CurrentDPI {dpi.conf}
-         End
-
-         If (GetValue 11) == 4 Then
-         Begin
-            Set $CurrentDPI = 144
-            Set $DefaultFontset = {$NSCDE_ROOT/share/fontsets/Default_} $CurrentDPI {dpi.fontset}
-            Set $SaveFontFile = {$FVWM_USERDIR/NsCDE-Font-} $CurrentDPI {dpi.conf}
-         End
-
-         If (GetValue 11) == 5 Then
-         Begin
-            Set $CurrentDPI = 144
-            ShowWidget 12
-         End
-         Else
-         Begin
-            HideWidget 12
-         End
-
-         # X compositor bug workaround
-         If $RedrawSelf == 1 Then
-         Begin
-            ChangeValue 11 (GetValue 11)
-         End
       End
 End
 
 Widget 12
    Property
-   Position 164 286
-   Size 60 20
-   Flags NoReliefString Left Hidden
-   Type TextField
-   Colorset 20
-   Title {}
+   Size 180 244
+   Position 212 296
+   Flags NoReliefString
+   Type PopupMenu
+   Font "xft:::pixelsize=15"
+   LocaleTitle {Regular|Bold|Italic|Monospaced|Monospaced Bold}
+   Value 5
    Main
       Case message of
       SingleClic :
       Begin
+         SendSignal 12 1
+      End
+      1 :
+      Begin
+         If (GetValue 12) == 1 Then
+         Begin
+            SendSignal 15 1
+         End
+         If (GetValue 12) == 2 Then
+         Begin
+            SendSignal 16 1
+         End
+         If (GetValue 12) == 3 Then
+         Begin
+            SendSignal 17 1
+         End
+         If (GetValue 12) == 4 Then
+         Begin
+            SendSignal 18 1
+         End
+         If (GetValue 12) == 5 Then
+         Begin
+            SendSignal 19 1
+         End
       End
 End
 
 Widget 13
    Property
-   Position 234 260
+   Position 428 270
    Flags NoReliefString NoFocus Left
    Type ItemDraw
-   LocaleTitle {Preview Set for Size:}
+   LocaleTitle {Set Size:}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -605,248 +727,407 @@ End
 
 Widget 14
    Property
-   Position 234 284
-   Size 160 10
+   Size 120 244
+   Position 428 296
    Flags NoReliefString
    Type PopupMenu
    Font "xft:::pixelsize=15"
-   Title {xxxxxxxxxxxxxx}
+   Title { xxxx }
    Main
       Case message of
       SingleClic :
       Begin
-         If $FontSetInUse == 0 Then
+         If $OperationMode == 1 Then
          Begin
-            # Get to Normal Font Group while changing Preview Set For Size View
-            ChangeValue 16 1
-
-            # Update
+            SendSignal 5 1
             SendSignal 14 1
-         End
-
-         # X compositor bug workaround
-         If $RedrawSelf == 1 Then
-         Begin
-            ChangeValue 14 (GetValue 14)
          End
       End
       1 :
-      # Set Font and Style list and size popup menu according to currenty selected
-      # values for set on preview
       Begin
-         If (GetValue 14) == 1 Then
+         Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
+         Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
+         Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
+         Set $FontSizeNum = (Add (GetValue 14) 3)
+         Set $FontName = (GetOutput $SplitFontStrCmd 4 -1)
+         Set $FontStyleCmd = {$NSCDE_ROOT/libexec/fontmgr -s } (GetValue 7) { -g '} $FontConstruct {'}
+         Set $FontStyle = (GetOutput $FontStyleListCmd 1 -1)
+         Set $FontConstruct = {xft:} $FontName {:Medium:} $FontStyle {:size=} $FontSizeNum
+
+         If (GetValue 10) == 1 Then
          Begin
-            If (GetValue 16) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $SetFontParams = $FontNormalSmallStr
-               SendSignal 14 2
+               Set $FontNormalSmallStr = $FontConstruct
             End
-
-            If (GetValue 16) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $SetFontParams = $FontBoldSmallStr
-               SendSignal 14 2
+               Set $FontBoldSmallStr = $FontConstruct
             End
-
-            If (GetValue 16) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $SetFontParams = $FontItalicSmallStr
-               SendSignal 14 2
+               Set $FontItalicSmallStr = $FontConstruct
             End
-
-            If (GetValue 16) == 4 Then
+            If $ActivePreviewField == 18 Then
             Begin
-               Set $SetFontParams = $FontMonoSmallStr
-               SendSignal 14 2
+               Set $FontMonoSmallStr = $FontConstruct
             End
-
-            If (GetValue 16) == 5 Then
+            If $ActivePreviewField == 19 Then
             Begin
-               Set $SetFontParams = $FontMonoBoldSmallStr
-               SendSignal 14 2
+               Set $FontMonoBoldSmallStr = $FontConstruct
             End
-
-            ChangeFont 20 $FontNormalSmallStr
-            ChangeFont 21 $FontBoldSmallStr
-            ChangeFont 22 $FontItalicSmallStr
-            ChangeFont 23 $FontMonoSmallStr
-            ChangeFont 24 $FontMonoBoldSmallStr
          End
-         If (GetValue 14) == 2 Then
+
+         If (GetValue 10) == 2 Then
          Begin
-            If (GetValue 16) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $SetFontParams = $FontNormalMediumStr
-               SendSignal 14 2
+               Set $FontNormalMediumStr = $FontConstruct
             End
-
-            If (GetValue 16) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $SetFontParams = $FontBoldMediumStr
-               SendSignal 14 2
+               Set $FontBoldMediumStr = $FontConstruct
             End
-
-            If (GetValue 16) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $SetFontParams = $FontItalicMediumStr
-               SendSignal 14 2
+               Set $FontItalicMediumStr = $FontConstruct
             End
-
-            If (GetValue 16) == 4 Then
+            If $ActivePreviewField == 18 Then
             Begin
-               Set $SetFontParams = $FontMonoMediumStr
-               SendSignal 14 2
+               Set $FontMonoMediumStr = $FontConstruct
             End
-
-            If (GetValue 16) == 5 Then
+            If $ActivePreviewField == 19 Then
             Begin
-               Set $SetFontParams = $FontMonoBoldMediumStr
-               SendSignal 14 2
+               Set $FontMonoBoldMediumStr = $FontConstruct
             End
-
-            ChangeFont 20 $FontNormalMediumStr
-            ChangeFont 21 $FontBoldMediumStr
-            ChangeFont 22 $FontItalicMediumStr
-            ChangeFont 23 $FontMonoMediumStr
-            ChangeFont 24 $FontMonoBoldMediumStr
          End
-         If (GetValue 14) == 3 Then
+
+         If (GetValue 10) == 3 Then
          Begin
-            If (GetValue 16) == 1 Then
+            If $ActivePreviewField == 15 Then
             Begin
-               Set $SetFontParams = $FontNormalLargeStr
-               SendSignal 14 2
+               Set $FontNormalLargeStr = $FontConstruct
             End
-
-            If (GetValue 16) == 2 Then
+            If $ActivePreviewField == 16 Then
             Begin
-               Set $SetFontParams = $FontBoldLargeStr
-               SendSignal 14 2
+               Set $FontBoldLargeStr = $FontConstruct
             End
-
-            If (GetValue 16) == 3 Then
+            If $ActivePreviewField == 17 Then
             Begin
-               Set $SetFontParams = $FontItalicLargeStr
-               SendSignal 14 2
+               Set $FontItalicLargeStr = $FontConstruct
             End
-
-            If (GetValue 16) == 4 Then
+            If $ActivePreviewField == 18 Then
             Begin
-               Set $SetFontParams = $FontMonoLargeStr
-               SendSignal 14 2
+               Set $FontMonoLargeStr = $FontConstruct
             End
-
-            If (GetValue 16) == 5 Then
+            If $ActivePreviewField == 19 Then
             Begin
-               Set $SetFontParams = $FontMonoBoldLargeStr
-               SendSignal 14 2
+               Set $FontMonoBoldLargeStr = $FontConstruct
             End
-
-            ChangeFont 20 $FontNormalLargeStr
-            ChangeFont 21 $FontBoldLargeStr
-            ChangeFont 22 $FontItalicLargeStr
-            ChangeFont 23 $FontMonoLargeStr
-            ChangeFont 24 $FontMonoBoldLargeStr
          End
-      End
-      2 :
-      # Worker for 14 1 which reverse calls fontmgr script to convert font string to
-      # pieces and set font and style list, and size popup menu.
-      Begin
-         Set $RevFontNameCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $SetFontParams {'}
-         Set $RevFontName = (GetOutput $RevFontNameCmd 1 1)
 
-         Set $RevFontStyleCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $SetFontParams {'}
-         Set $RevFontStyle = (GetOutput $RevFontStyleCmd 2 1)
-
-         Set $RevFontSizeCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $SetFontParams {'}
-         Set $RevFontSize = (Add (GetOutput $RevFontSizeCmd 3 1) -2)
-
-         ChangeValue 6 $RevFontName
-         ChangeValue 8 $RevFontStyle
-         ChangeValue 18 $RevFontSize
-
-         SendSignal 6 1
+         # Holder for black on white - examine, extend if needed
+         Do {Schedule 120 SendToModule FontMgr SendString } $ActivePreviewField { 1 dummy}
       End
 End
 
 Widget 15
    Property
-   Position 402 260
-   Flags NoReliefString NoFocus Left
+   Position 18 344
+   Size 490 4
+   Colorset 22
+   Flags NoReliefString Left
    Type ItemDraw
-   LocaleTitle {Font Group:}
-   Font "xft:::pixelsize=15"
+   Title {Quick Brown Fox}
+   Font "xft:::pixelsize=24"
    Main
       Case message of
       SingleClic :
       Begin
+         SendSignal 15 1
+      End
+      1 :
+      Begin
+         If $ActivePreviewField <> 15 Then
+         Begin
+            ShowWidget $ActivePreviewField
+         End
+         HideWidget 15
+         ChangePosition 20 18 344
+         ChangeTitle 20 (GetTitle 15)
+         ShowWidget 20
+         Set $ActivePreviewField = 15
+         SendSignal 15 2
+         SendSignal 101 1
+
+         If $OperationMode == 2 Then
+         Begin
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            ChangeTitle 7 $FontsetInfo
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            Set $FontConstruct = $FontNormalSmallStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            Set $FontConstruct = $FontNormalMediumStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            Set $FontConstruct = $FontNormalLargeStr
+            SendSignal 101 3
+         End
       End
 End
 
 Widget 16
    Property
-   Position 402 284
-   Flags NoReliefString
-   Value 1
-   Type PopupMenu
-   Font "xft:::pixelsize=15"
-   Title {Normal|Bold|Italic|Monospaced|Monospaced Bold}
+   Position 18 394
+   Size 490 4
+   Colorset 22
+   Flags NoReliefString Left
+   Type ItemDraw
+   Title {Quick Brown Fox}
+   Font "xft:::pixelsize=24"
    Main
       Case message of
       SingleClic :
       Begin
-         # X compositor bug workaround
-         If $RedrawSelf == 1 Then
+         SendSignal 16 1
+      End
+      1 :
+      Begin
+         If $ActivePreviewField <> 16 Then
          Begin
-            ChangeValue 16 (GetValue 16)
+            ShowWidget $ActivePreviewField
+         End
+         HideWidget 16
+         ChangePosition 20 18 394
+         ChangeTitle 20 (GetTitle 16)
+         ShowWidget 20
+         Set $ActivePreviewField = 16
+         SendSignal 16 2
+         SendSignal 101 1
+
+         If $OperationMode == 2 Then
+         Begin
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            ChangeTitle 7 $FontsetInfo
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            Set $FontConstruct = $FontBoldSmallStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            Set $FontConstruct = $FontBoldMediumStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            Set $FontConstruct = $FontBoldLargeStr
+            SendSignal 101 3
          End
       End
 End
 
 Widget 17
    Property
-   Position 580 260
-   Flags NoReliefString NoFocus Left
+   Position 18 444
+   Size 490 4
+   Colorset 22
+   Flags NoReliefString Left
    Type ItemDraw
-   LocaleTitle {Font Size:}
-   Font "xft:::pixelsize=15"
+   Title {Quick Brown Fox}
+   Font "xft:::pixelsize=24"
    Main
       Case message of
       SingleClic :
       Begin
+         SendSignal 17 1
+      End
+      1 :
+      Begin
+         If $ActivePreviewField <> 17 Then
+         Begin
+           ShowWidget $ActivePreviewField
+         End
+         HideWidget 17
+         ChangePosition 20 18 444
+         ChangeTitle 20 (GetTitle 17)
+         ShowWidget 20
+         Set $ActivePreviewField = 17
+         SendSignal 17 2
+         SendSignal 101 1
+
+         If $OperationMode == 2 Then
+         Begin
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            ChangeTitle 7 $FontsetInfo
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            Set $FontConstruct = $FontItalicSmallStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            Set $FontConstruct = $FontItalicMediumStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            Set $FontConstruct = $FontItalicLargeStr
+            SendSignal 101 3
+         End
       End
 End
 
 Widget 18
    Property
-   Position 580 284
-   Flags NoReliefString
-   Value 8
-   Type PopupMenu
-   Title {xxxxxxxxx}
-   Font "xft:::pixelsize=15"
+   Position 18 494
+   Size 490 4
+   Colorset 22
+   Flags NoReliefString Left
+   Type ItemDraw
+   Title {Quick Brown Fox}
+   Font "xft:::pixelsize=24"
    Main
       Case message of
       SingleClic :
       Begin
-         If $FontSetInUse == 0 Then
+         SendSignal 18 1
+      End
+      1 :
+      Begin
+         If $ActivePreviewField <> 18 Then
          Begin
-            SendSignal 6 1
+           ShowWidget $ActivePreviewField
          End
+         HideWidget 18
+         ChangePosition 20 18 494
+         ChangeTitle 20 (GetTitle 18)
+         ShowWidget 20
+         Set $ActivePreviewField = 18
+         SendSignal 18 2
+         SendSignal 101 1
 
-         # X compositor bug workaround
-         If $RedrawSelf == 1 Then
+         If $OperationMode == 2 Then
          Begin
-            ChangeValue 18 (GetValue 18)
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            ChangeTitle 7 $FontsetInfo
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            Set $FontConstruct = $FontMonoSmallStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            Set $FontConstruct = $FontMonoMediumStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            Set $FontConstruct = $FontMonoLargeStr
+            SendSignal 101 3
          End
       End
 End
 
+# Font here is to guarantee height of the TextField widget
 Widget 19
    Property
-   Position 10 324
-   Size 690 264
+   Position 18 544
+   Size 490 4
+   Colorset 22
+   Flags NoReliefString Left
+   Type ItemDraw
+   Title {Quick Brown Fox}
+   Font "xft:::pixelsize=24"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 19 1
+      End
+      1 :
+      Begin
+         If $ActivePreviewField <> 19 Then
+         Begin
+           ShowWidget $ActivePreviewField
+         End
+         HideWidget 19
+         ChangePosition 20 18 544
+         ChangeTitle 20 (GetTitle 19)
+         ChangeColorset 19 20
+         ShowWidget 20
+         Set $ActivePreviewField = 19
+         SendSignal 19 2
+         SendSignal 101 1
+
+         If $OperationMode == 2 Then
+         Begin
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            ChangeTitle 7 $FontsetInfo
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            Set $FontConstruct = $FontMonoBoldSmallStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 2 Then
+         Begin
+            Set $FontConstruct = $FontMonoBoldMediumStr
+            SendSignal 101 3
+         End
+         If (GetValue 10) == 3 Then
+         Begin
+            Set $FontConstruct = $FontMonoBoldLargeStr
+            SendSignal 101 3
+         End
+      End
+End
+
+Widget 20
+   Property
+   Position 18 554
+   Size 490 24
+   Flags NoReliefString Hidden Left
+   Type TextField
+   Colorset 20
+   Font "xft:::pixelsize=24"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 101 1
+      End
+End
+
+Widget 21
+   Property
+   Position 10 334
+   Size 508 260
    Flags NoReliefString NoFocus
    Type Rectangle
    Main
@@ -856,98 +1137,13 @@ Widget 19
       End
 End
 
-# Font here is to guarantee height of the TextField widget
-Widget 20
-   Property
-   Position 20 334
-   Size 670 75
-   Flags NoReliefString
-   Type TextField
-   Title {Quick Brown Fox Jumps Over a Lazy Dog ...}
-   Font "xft:::pixelsize=28"
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-# Font here is to guarantee height of the TextField widget
-Widget 21
-   Property
-   Position 20 384
-   Size 670 75
-   Flags NoReliefString
-   Type TextField
-   Title {Quick Brown Fox Jumps Over a Lazy Dog ...}
-   Font "xft:::pixelsize=28"
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-# Font here is to guarantee height of the TextField widget
 Widget 22
    Property
-   Position 20 434
-   Size 670 75
-   Flags NoReliefString
-   Type TextField
-   Title {Quick Brown Fox Jumps Over a Lazy Dog ...}
-   Font "xft:::pixelsize=28"
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-# Font here is to guarantee height of the TextField widget
-Widget 23
-   Property
-   Position 20 484
-   Size 670 75
-   Flags NoReliefString
-   Type TextField
-   Title {Quick Brown Fox Jumps Over a Lazy Dog ...}
-   Font "xft:::pixelsize=28"
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-# Font here is to guarantee height of the TextField widget
-Widget 24
-   Property
-   Position 20 534
-   Size 670 75
-   Flags NoReliefString
-   Type TextField
-   Title {Quick Brown Fox Jumps Over a Lazy Dog ...}
-   Font "xft:::pixelsize=28"
-   Colorset 20
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-Widget 25
-   Property
-   Position 14 600
+   Position 14 604
    Size 100 20
    Flags NoReliefString
    Type CheckBox
-   Font "xft:::pixelsize=15"
+   Font "xft:::pixelsize=14"
    Value 1
    Title { Run User Script}
    Main
@@ -957,112 +1153,42 @@ Widget 25
       End
 End
 
-Widget 26
+Widget 23
    Property
-   Position 160 600
+   Position 166 604
    Size 100 30
    Flags NoReliefString
    Type CheckBox
    Value 1
    Title { Refresh GTK2/GTK3}
-   Font "xft:::pixelsize=15"
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-Widget 27
-   Property
-   Position 344 600
-   Size 100 30
-   Flags NoReliefString
-   Type CheckBox
-   Value 1
-   Title { Refresh X Resources}
-   Font "xft:::pixelsize=15"
-   Main
-      Case message of
-      SingleClic :
-      Begin
-      End
-End
-
-Widget 28
-   Property
-   Position 522 596
-   Size 172 20
-   Flags NoReliefString
-   Type PushButton
-   LocaleTitle {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
    Font "xft:::pixelsize=14"
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetValue 28) == 2 Then
-         Begin
-            If (GetValue 4) <> 0 Then
-            Begin
-               Set $FontsetFileCmd = {$NSCDE_ROOT/libexec/fontmgr -F } (GetValue 4)
-               Set $FontsetFile = (GetOutput $FontsetFileCmd 1 -1)
-               Set $FontsetPath = (GetOutput $FontsetFileCmd 2 -1)
-               Set $FontsetFileRemoveCmd = {rm -f '} $FontsetPath $FontsetFile {.fontset' 2>&1}
-               Set $FontsetFileRemove = (GetOutput $FontsetFileRemoveCmd 1 -1)
-               If $FontsetFileRemove <> {} Then
-               Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] } $FontsetFile {: } $FontsetFileRemove {"}
-               End
-               Else
-               Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] } $FontsetFile { $[gt.removed from inventory.]"}
-                  Set $FontsetMenu = (GetOutput {sleep 1; $NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
-                  ChangeTitle 4 $FontsetMenu
-               End
-            End
-            Else
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.No fontset file was selected prior to removal action.]"}
-            End
-
-            # Set Widget 28 back in place after this actions, namely after removing fontset files or errors
-            # if trying to remove system fontsets, move fontlist list to first value
-            ChangeValue 28 2
-            ChangeValue 4 1
-            ChangeLocaleTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
-            Set $FontSetInUse = 0
-            ChangeColorset 4 22
-            ChangeColorset 6 20
-            ChangeColorset 8 20
-         End
-         Else
-         Begin
-            If $FontSetInUse == 0 Then
-            Begin
-               ChangeColorset 4 20
-               ChangeColorset 6 5
-               ChangeColorset 8 5
-               ChangeLocaleTitle 28 {Select Fonts Manually|Use Selected Font Set|Remove Fontset}
-               Set $FontSetInUse = 1
-               SendSignal 4 1
-            End
-            Else
-            Begin
-               ChangeColorset 4 22
-               ChangeColorset 6 20
-               ChangeColorset 8 20
-               ChangeLocaleTitle 28 {Use Selected Font Set|Select Fonts Manually|Remove Fontset}
-               Set $FontSetInUse = 0
-            End
-         End
       End
 End
 
-Widget 30
+Widget 24
    Property
-   Position 4 636
-   Size 698 0
+   Position 344 604
+   Size 100 30
+   Flags NoReliefString
+   Type CheckBox
+   Value 1
+   Title { Refresh X Resources}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 25
+   Property
+   Position 4 638
+   Size 518 0
    Flags NoReliefString NoFocus
    Type Rectangle
    Main
@@ -1072,9 +1198,9 @@ Widget 30
       End
 End
 
-Widget 31
+Widget 26
    Property
-   Position 16 648
+   Position 14 652
    Size 120 20
    Flags NoReliefString
    Type PushButton
@@ -1084,86 +1210,131 @@ Widget 31
       Case message of
       SingleClic :
       Begin
-         If (GetValue 25) == 1 Then
+         If $OperationMode == 1 Then
          Begin
-            Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" > /dev/null 2>&1; echo $?} 1 -1)
-            If $CheckUserCustomScriptExist == 0 Then
-            Begin
-               Set $RunUserScriptCmd = {$FVWM_USERDIR/libexec/fontmgr.local "} $SaveFontFile {" } $CurrentDPI
-               Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
-            End
+            Set $ARG = {InputForm "$[gt.Enter New Fontset Name:]" "Custom"}
+            Set $INPUTFORM = (LaunchScript $ARG )
          End
-
-         Do {Exec echo 'InfoStoreAdd font.variable.normal.small "} $FontNormalSmallStr {"' >  } $SaveFontFile
-         Do {Schedule 10 Exec echo 'InfoStoreAdd font.variable.normal.medium "} $FontNormalMediumStr {"' >>  } $SaveFontFile
-         Do {Schedule 20 Exec echo 'InfoStoreAdd font.variable.normal.large "} $FontNormalLargeStr {"' >>  } $SaveFontFile
-         Do {Schedule 30 Exec echo 'InfoStoreAdd font.variable.bold.small "} $FontBoldSmallStr {"' >>  } $SaveFontFile
-         Do {Schedule 40 Exec echo 'InfoStoreAdd font.variable.bold.medium "} $FontBoldMediumStr {"' >>  } $SaveFontFile
-         Do {Schedule 50 Exec echo 'InfoStoreAdd font.variable.bold.large "} $FontBoldLargeStr {"' >>  } $SaveFontFile
-         Do {Schedule 60 Exec echo 'InfoStoreAdd font.variable.italic.small "} $FontItalicSmallStr {"' >>  } $SaveFontFile
-         Do {Schedule 70 Exec echo 'InfoStoreAdd font.variable.italic.medium "} $FontItalicMediumStr {"' >>  } $SaveFontFile
-         Do {Schedule 80 Exec echo 'InfoStoreAdd font.variable.italic.large "} $FontItalicLargeStr {"' >>  } $SaveFontFile
-         Do {Schedule 90 Exec echo 'InfoStoreAdd font.monospaced.normal.small "} $FontMonoSmallStr {"' >>  } $SaveFontFile
-         Do {Schedule 100 Exec echo 'InfoStoreAdd font.monospaced.normal.medium "} $FontMonoMediumStr {"' >>  } $SaveFontFile
-         Do {Schedule 110 Exec echo 'InfoStoreAdd font.monospaced.normal.large "} $FontMonoLargeStr {"' >>  } $SaveFontFile
-         Do {Schedule 120 Exec echo 'InfoStoreAdd font.monospaced.bold.small "} $FontMonoBoldSmallStr {"' >>  } $SaveFontFile
-         Do {Schedule 130 Exec echo 'InfoStoreAdd font.monospaced.bold.medium "} $FontMonoBoldMediumStr {"' >>  } $SaveFontFile
-         Do {Schedule 140 Exec echo 'InfoStoreAdd font.monospaced.bold.large "} $FontMonoBoldLargeStr {"' >>  } $SaveFontFile
-
-         If (GetValue 26) == 1 Then
+         If $OperationMode == 2 Then
          Begin
-            Set $PrepareFontCmd = {$NSCDE_ROOT/libexec/fontmgr -T "} $FontNormalMediumStr {"}
-            Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
-            Set $Gtk2FontCmd={$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
-            Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
-            If $Gtk2Font <> {} Then
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
-            End
-            Set $Gtk3FontCmd={$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
-            Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
-            If $Gtk3Font <> {} Then
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
-            End
-
-            # XSETTINGS Daemon Integration
-            Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
-
-            # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
-            If $XSETTINGSFILE <> {} Then
-            Begin
-               Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Gtk\/FontName[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
-               Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
-               If $XsettingsParamExistance == 0 Then
-               Begin
-                  Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
-               End
-               Else
-               Begin
-                  Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
-               End
-               Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
-            End
+            SendSignal 26 2
          End
-
-         If (GetValue 27) == 1 Then
-         Begin
-            # Wait a second for $SaveFontFile to be written ... a race.
-            Set $DoXresourcesCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -X "} $SaveFontFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
-            Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
-         End
-
-         Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
-         Set $QUITFORM = (LaunchScript $QUITARG)
       End
-
       1 :
       Begin
+         If (LastString) <> {Cancel} Then
+         Begin
+            Set $UserFontsetCmd = {echo '} (LastString) {' | $NSCDE_ROOT/bin/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
+            Set $UserFontset = (GetOutput $UserFontsetCmd 1 1)
+
+            If $UserFontset == {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.Fontset name must be defined before saving it!]"}
+            End
+            Else
+            Begin
+               Set $UserConfigDir = (GetOutput {echo $FVWM_USERDIR} 1 -1)
+               Set $UserFontsetFile = $UserConfigDir {/fontsets/} $UserFontset {.fontset}
+               Do {Exec exec mkdir -p "$[FVWM_USERDIR]/fontsets"}
+   
+               Do {Schedule 20 Exec exec echo 'InfoStoreAdd font.variable.normal.small "} $FontNormalSmallStr {"' > '} $UserFontsetFile {'}
+               Do {Schedule 40 Exec exec echo 'InfoStoreAdd font.variable.bold.small "} $FontBoldSmallStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 60 Exec exec echo 'InfoStoreAdd font.variable.italic.small "} $FontItalicSmallStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 80 Exec exec echo 'InfoStoreAdd font.monospaced.normal.small "} $FontMonoSmallStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 100 Exec exec echo 'InfoStoreAdd font.monospaced.bold.small "} $FontMonoBoldSmallStr {"' >> '} $UserFontsetFile {'}
+   
+               Do {Schedule 120 Exec exec echo 'InfoStoreAdd font.variable.normal.medium "} $FontNormalMediumStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 140 Exec exec echo 'InfoStoreAdd font.variable.bold.medium "} $FontBoldMediumStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 160 Exec exec echo 'InfoStoreAdd font.variable.italic.medium "} $FontItalicMediumStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 180 Exec exec echo 'InfoStoreAdd font.monospaced.normal.medium "} $FontMonoMediumStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 200 Exec exec echo 'InfoStoreAdd font.monospaced.bold.medium "} $FontMonoBoldMediumStr {"' >> '} $UserFontsetFile {'}
+   
+               Do {Schedule 220 Exec exec echo 'InfoStoreAdd font.variable.normal.large "} $FontNormalLargeStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 240 Exec exec echo 'InfoStoreAdd font.variable.bold.large "} $FontBoldLargeStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 260 Exec exec echo 'InfoStoreAdd font.variable.italic.large "} $FontItalicLargeStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 280 Exec exec echo 'InfoStoreAdd font.monospaced.normal.large "} $FontMonoLargeStr {"' >> '} $UserFontsetFile {'}
+               Do {Schedule 300 Exec exec echo 'InfoStoreAdd font.monospaced.bold.large "} $FontMonoBoldLargeStr {"' >> '} $UserFontsetFile {'}
+   
+               Do {Schedule 340 Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/NsCDE-Font-$[NSCDE_FONT_DPI]dpi.conf"}
+   
+               SendSignal 26 3
+            End
+         End
+      End
+      2 :
+      Begin
+            Set $UserFontsetFile = $FontsetPath
+            Do {Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/NsCDE-Font-$[NSCDE_FONT_DPI]dpi.conf"}
+            SendSignal 26 3
+      End
+      3 :
+      Begin
+            If (GetValue 22) == 1 Then
+            Begin
+               Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckUserCustomScriptExist == 0 Then
+               Begin
+                  Set $RunUserScriptCmd = {sleep 1; $FVWM_USERDIR/libexec/fontmgr.local "} $UserFontsetFile {"}
+                  Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
+               End
+            End
+
+            If (GetValue 23) == 1 Then
+            Begin
+               Set $PrepareFontCmd = {$NSCDE_ROOT/libexec/fontmgr -T "} $FontNormalMediumStr {"}
+               Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
+               Set $Gtk2FontCmd = {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
+               Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
+               If $Gtk2Font <> {} Then
+               Begin
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
+               End
+               Set $Gtk3FontCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
+               Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
+               If $Gtk3Font <> {} Then
+               Begin
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
+               End
+   
+               # XSETTINGS Daemon Integration
+               Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
+   
+               # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
+               If $XSETTINGSFILE <> {} Then
+               Begin
+                  Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Gtk\/FontName[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+                  Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
+                  If $XsettingsParamExistance == 0 Then
+                  Begin
+                     Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
+                  End
+                  Else
+                  Begin
+                     Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
+                  End
+                  Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+               End
+            End
+
+            If (GetValue 24) == 1 Then
+            Begin
+               # Wait a second for $UserFontsetFile to be written ... a race.
+               Set $DoXresourcesCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
+               Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
+            End
+
+            Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
+            Set $QUITFORM = (LaunchScript $QUITARG)
+            Set $QuitStarted = 1
+            SendSignal 26 4
+      End
+      4 :
+      Begin
+         Do {Echo %%% %%% %%% QUIT-ACTION-STRING: } (LastString)
          If (LastString) == {Go} Then
          Begin
-            Do {Exec exec cd "$HOME"; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults}
-            Do {Schedule 100 Restart}
+            Do {Exec exec cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults}
+            Do {Schedule 380 Restart}
             Quit
          End
          If (LastString) == {Cancel} Then
@@ -1173,80 +1344,19 @@ Widget 31
       End
 End
 
-Widget 32
+Widget 27
    Property
-   Position 186 648
-   Size 170 20
-   Flags NoReliefString
-   Type PushButton
-   LocaleTitle {Save Font Set ...}
-   Font "xft:::pixelsize=15"
-   Main
-      Case message of
-      SingleClic :
-      Begin
-         Set $ARG = {InputForm "$[gt.Enter Fontset Name:]" }
-         Set $INPUTFORM = (LaunchScript $ARG )
-      End
-      1 :
-      Begin
-         If (LastString) <> {Cancel} Then
-         Begin
-            If (LastString) <> {} Then
-            Begin
-               Set $SaneNameCmd = {echo '} (LastString) {' | sed 's/://g; s/|//g; s/\$//' | tr -d '[:cntrl:]'; echo}
-               Set $SaneName = (GetOutput $SaneNameCmd 1 -1)
-               Set $Sanity = (GetOutput {mkdir -p "$FVWM_USERDIR/fontsets" 2>&1} 1 -1)
-               If $Sanity == {} Then
-               Begin
-                  Set $SaveFontsetFile = {$FVWM_USERDIR/fontsets/} $SaneName {.fontset}
-   
-                  Do {Exec echo 'InfoStoreAdd font.variable.normal.small "} $FontNormalSmallStr {"' >  } $SaveFontsetFile
-                  Do {Schedule 10 Exec echo 'InfoStoreAdd font.variable.normal.medium "} $FontNormalMediumStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 20 Exec echo 'InfoStoreAdd font.variable.normal.large "} $FontNormalLargeStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 30 Exec echo 'InfoStoreAdd font.variable.bold.small "} $FontBoldSmallStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 40 Exec echo 'InfoStoreAdd font.variable.bold.medium "} $FontBoldMediumStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 50 Exec echo 'InfoStoreAdd font.variable.bold.large "} $FontBoldLargeStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 60 Exec echo 'InfoStoreAdd font.variable.italic.small "} $FontItalicSmallStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 70 Exec echo 'InfoStoreAdd font.variable.italic.medium "} $FontItalicMediumStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 80 Exec echo 'InfoStoreAdd font.variable.italic.large "} $FontItalicLargeStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 90 Exec echo 'InfoStoreAdd font.monospaced.normal.small "} $FontMonoSmallStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 100 Exec echo 'InfoStoreAdd font.monospaced.normal.medium "} $FontMonoMediumStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 110 Exec echo 'InfoStoreAdd font.monospaced.normal.large "} $FontMonoLargeStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 120 Exec echo 'InfoStoreAdd font.monospaced.bold.small "} $FontMonoBoldSmallStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 130 Exec echo 'InfoStoreAdd font.monospaced.bold.medium "} $FontMonoBoldMediumStr {"' >>  } $SaveFontsetFile
-                  Do {Schedule 140 Exec echo 'InfoStoreAdd font.monospaced.bold.large "} $FontMonoBoldLargeStr {"' >>  } $SaveFontsetFile
-   
-   
-                  Set $FontsetMenu = (GetOutput {sleep 1; $NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
-                  ChangeTitle 4 $FontsetMenu
-               End
-               Else
-               Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error creating] $FVWM_USERDIR/fontsets: } $Sanity {"}
-               End
-            End
-            Else
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.Fontset name must be defined before saving it!]"}
-            End
-         End
-      End
-End
-
-Widget 33
-   Property
-   Position 410 648
+   Position 202 652
    Size 120 20
    Flags NoReliefString
    Type PushButton
-   LocaleTitle {Close}
+   LocaleTitle {Cancel}
    Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
       Begin
-         SendSignal 33 1
+         SendSignal 27 1
       End
       1 :
       Begin
@@ -1254,9 +1364,9 @@ Widget 33
       End
 End
 
-Widget 34
+Widget 28
    Property
-   Position 574 648
+   Position 392 652
    Size 120 20
    Flags NoReliefString
    Type PushButton
@@ -1266,11 +1376,159 @@ Widget 34
       Case message of
       SingleClic :
       Begin
-         SendSignal 34 1
+         SendSignal 28 1
       End
       1 :
       Begin
          Do {f_DisplayURL "Font Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-FontMgr.html}
       End
+End
+
+Widget 101
+   Property
+   Position 18 564
+   Size 490 48
+   Flags NoReliefString NoFocus Hidden
+   Type PushButton
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         If $ActivePreviewField == 15 Then
+         Begin
+            ChangeValue 12 1
+            ChangeColorset 16 22
+            ChangeColorset 17 22
+            ChangeColorset 18 22
+            ChangeColorset 19 22
+            ChangeColorset 15 20
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeFont 20 $FontNormalSmallStr
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               ChangeFont 20 $FontNormalMediumStr
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               ChangeFont 20 $FontNormalLargeStr
+            End
+         End
+         If $ActivePreviewField == 16 Then
+         Begin
+            ChangeValue 12 2
+            ChangeColorset 15 22
+            ChangeColorset 17 22
+            ChangeColorset 18 22
+            ChangeColorset 19 22
+            ChangeColorset 16 20
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeFont 20 $FontBoldSmallStr
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               ChangeFont 20 $FontBoldMediumStr
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               ChangeFont 20 $FontBoldLargeStr
+            End
+         End
+         If $ActivePreviewField == 17 Then
+         Begin
+            ChangeValue 12 3
+            ChangeColorset 15 22
+            ChangeColorset 16 22
+            ChangeColorset 18 22
+            ChangeColorset 19 22
+            ChangeColorset 17 20
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeFont 20 $FontItalicSmallStr
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               ChangeFont 20 $FontItalicMediumStr
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               ChangeFont 20 $FontItalicLargeStr
+            End
+         End
+         If $ActivePreviewField == 18 Then
+         Begin
+            ChangeValue 12 4
+            ChangeColorset 15 22
+            ChangeColorset 16 22
+            ChangeColorset 17 22
+            ChangeColorset 19 22
+            ChangeColorset 18 20
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeFont 20 $FontMonoSmallStr
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               ChangeFont 20 $FontMonoMediumStr
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               ChangeFont 20 $FontMonoLargeStr
+            End
+         End
+         If $ActivePreviewField == 19 Then
+         Begin
+            ChangeValue 12 5
+            ChangeColorset 15 22
+            ChangeColorset 16 22
+            ChangeColorset 17 22
+            ChangeColorset 18 22
+            ChangeColorset 19 20
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldSmallStr
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldMediumStr
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               ChangeFont 20 $FontMonoBoldLargeStr
+            End
+         End
+      End
+   2 :
+   Begin
+      # This is used for setting initial value on start.
+      ChangeValue 12 1
+      SendSignal 15 1
+   End
+   3 :
+   Begin
+      Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
+      Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
+      Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
+      Set $FontSizeNum = (Add (GetOutput $SplitFontStrCmd 3 -1) -3)
+      Set $FontName = (GetOutput $SplitFontStrCmd 4 -1)
+      Set $FontStyle = (GetOutput $SplitFontStrCmd 5 -1)
+   
+      Set $StyleListMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontName {'}
+      Set $StyleListMenu = (GetOutput $StyleListMenuCmd 1 -1)
+   
+      If $OperationMode == 1 Then
+      Begin
+         ChangeValue 5 $FontNameNum
+         ChangeTitle 7 $StyleListMenu
+         ChangeValue 7 $FontStyleNum
+         ChangeValue 14 $FontSizeNum
+      End
+   End
 End
 
