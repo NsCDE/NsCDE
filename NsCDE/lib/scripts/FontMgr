@@ -121,7 +121,7 @@ Begin
    If $QuitStarted == 0 Then
    Begin
       Set $MSG = (ReceivFromScript $INPUTFORM)
-      Do {Echo >>> >>> >>> INPUT-FORM MESSAGE: } $MSG
+      # Do {Echo >>> >>> >>> INPUT-FORM MESSAGE: } $MSG
       If $MSG <> {No message} Then
       Begin
         If $MSG <> {Go} Then
@@ -133,7 +133,7 @@ Begin
    Else
    Begin
       Set $QUITMSG = (ReceivFromScript $QUITFORM)
-      Do {Echo >>> >>> >>> QUIT-FORM MESSAGE: } $QUITMSG
+      # Do {Echo >>> >>> >>> QUIT-FORM MESSAGE: } $QUITMSG
       If $QUITMSG <> {No message} Then
       Begin
          Do {SendToModule FontMgr SendString 26 4 } $QUITMSG
@@ -176,7 +176,7 @@ Widget 2
             Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
             ChangeTitle 5 $FontsetList
             ChangeLocaleTitle 3 {Default|Default|Delete Fontset}
-            ChangeColorset 7 5
+            ChangeColorset 7 22
             ChangeTitle 7 {}
             ChangeLocaleTitle 4 {Font Sets}
             HideWidget 13
