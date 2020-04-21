@@ -179,7 +179,8 @@ function genxresourcedefs
 
    echo -ne "\nXft.dpi: 96\n\n"
 
-   cat "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
+   egrep '^InfoStoreAdd font\.(|variable|monospaced)\.(normal|bold|italic)\.(small|medium|large) ".*"' \
+          "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
    do
       if [ "x$fvar" != "x" ]; then
          cppfvar=$(echo "$fvar" | sed 's/\./_/g' | tr '[a-z]' '[A-Z]' | sed 's/ $//g')
