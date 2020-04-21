@@ -11,6 +11,13 @@ Colorset 22
 
 Init
 Begin
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 2 (GetTitle 2)
+   ChangeLocaleTitle 22 (GetTitle 22)
+   ChangeLocaleTitle 23 (GetTitle 23)
+   ChangeLocaleTitle 24 (GetTitle 24)
+
    Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 2 $SmallLabelFont
    ChangeFont 22 $SmallLabelFont
@@ -157,12 +164,12 @@ End
 Widget 2
    Property
    Position 108 14
-   Size 100 20
+   Size 180 20
    Flags NoReliefString
    Type CheckBox
    Font "xft:::pixelsize=14"
    Value 0
-   Title { Use Predefined Font Set}
+   Title { Use Predefined Font Set          }
    Main
       Case message of
       SingleClic :
@@ -1324,7 +1331,7 @@ Widget 26
             End
 
             Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
-            Set $QUITFORM = (LaunchScript $QUITARG)
+            Set $QUITFORM = (LaunchScript $QUITARG )
             Set $QuitStarted = 1
             SendSignal 26 4
       End
