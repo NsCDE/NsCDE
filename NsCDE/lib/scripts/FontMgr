@@ -117,6 +117,8 @@ Begin
    Set $DefaultFontsetPath = {$NSCDE_ROOT/share/fontsets/} $DefaultFontset {.fontset}
    Set $FontsetPath = $DefaultFontsetPath
 
+   Set $Notavail = (Gettext {Not available})
+
    # Manage race condition between messages for InputForm and ChoiceForm
    # Default will be the messages listening for InputForm
    Set $QuitStarted = 0
@@ -873,7 +875,17 @@ Widget 15
 
          If $OperationMode == 2 Then
          Begin
-            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            If $FontNameNum <> 0 Then
+            Begin
+               Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+            End
+            Else
+            Begin
+               Set $SubstNameCmd = {$NSCDE_ROOT/libexec/fontmgr -m "} $FontName {"}
+               Set $SubstName = (GetOutput $SubstNameCmd 1 -1)
+               Set $SubstStyle = (GetOutput $SubstNameCmd 2 -1)
+               Set $FontsetInfo = {Fontset:|} $FontsetName {||} $SubstName {|Style: } $SubstStyle {|Size: } (Add $FontSizeNum 3){|(} $Notavail {)}
+            End
             ChangeTitle 7 $FontsetInfo
          End
       End

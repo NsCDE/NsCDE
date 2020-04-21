@@ -152,7 +152,12 @@ function splitfontstr
    SelectedFont=${RevFontName}
 
    # Call getfontnumber
-   getfontnumber
+   fontnumber=$(getfontnumber)
+   if [ "x$fontnumber" != "x" ]; then
+      echo $fontnumber
+   else
+      echo 0
+   fi
 
    # Get style and style number and print it
    # If style is specified wrongly in the fontset, select first on the list
@@ -167,6 +172,22 @@ function splitfontstr
 
    echo $RevFontName
    echo $RevFontStyle
+}
+
+function matchfont
+{
+   type -p fc-match > /dev/null
+   if (($? == 0)); then
+      fc-match -f '%{+family,style{%{=unparse}}}\n' "$FontName" | while IFS=":" read matchname matchstyle
+      do
+         echo "$matchname"
+         echo "${matchstyle##*style=}"
+      done
+   else
+      # Handle absence of fc-match gracefully
+      echo "$FontName"
+      echo "Regular"
+   fi
 }
 
 function genxresourcedefs
@@ -200,7 +221,7 @@ function preparefontforgtk
    echo "$XftStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g'
 }
 
-while getopts pPF:f:g:G:n:N:s:r:X:T:h Option
+while getopts pPF:f:g:G:n:N:s:r:m:X:T:h Option
 do
    case $Option in
       p)
@@ -238,6 +259,10 @@ do
       r)
          XftFontStr="$OPTARG"
          splitfontstr
+      ;;
+      m)
+         FontName="$OPTARG"
+         matchfont
       ;;
       X)
          FileIn="$OPTARG"
