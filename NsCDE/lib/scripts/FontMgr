@@ -18,12 +18,14 @@ Begin
    ChangeLocaleTitle 23 (GetTitle 23)
    ChangeLocaleTitle 24 (GetTitle 24)
 
+   # CheckBox buttons get smaller font size
    Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 2 $SmallLabelFont
    ChangeFont 22 $SmallLabelFont
    ChangeFont 23 $SmallLabelFont
    ChangeFont 24 $SmallLabelFont
 
+   # Rest of the widgets will get standard fonts
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
@@ -40,6 +42,7 @@ Begin
    ChangeFont 27 $LabelFont
    ChangeFont 28 $LabelFont
 
+   # Fill initial preview values
    Set $FontExampleText = (Gettext {Quick Brown Fox Jumps Over a Lazy Dog ...})
    ChangeLocaleTitle 15 $FontExampleText
    ChangeLocaleTitle 16 $FontExampleText
@@ -47,13 +50,16 @@ Begin
    ChangeLocaleTitle 18 $FontExampleText
    ChangeLocaleTitle 19 $FontExampleText
 
+   # Fill List Widget 5 with font names
    Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
    ChangeTitle 5 $FontList
 
+   # Set Font Size Group choices, select Medium to be displayed by default
    Set $SizeGroupMenu = { Small| Medium| Large}
    ChangeLocaleTitle 10 $SizeGroupMenu
    ChangeValue 10 2
 
+   # Static list of choices for font sizes, size 11 is initial default
    Set $FontSizes = {4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26}
    ChangeLocaleTitle 14 $FontSizes
    ChangeValue 14 8
@@ -77,6 +83,7 @@ Begin
    Set $FontMonoLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s large} 1 -1)
    Set $FontMonoBoldLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t bold -s large} 1 -1)
 
+   # Apply Medium as previews initially
    ChangeFont 15 $FontNormalMediumStr
    ChangeFont 16 $FontBoldMediumStr
    ChangeFont 17 $FontItalicMediumStr
@@ -91,9 +98,12 @@ Begin
    Set $FontNormalMediumStrSizeNum = (Add (GetOutput $FontNormalMediumStrCmd 3 1) -3)
    Set $FontNormalMediumStrName = (GetOutput $FontNormalMediumStrCmd 4 -1)
 
+   # Initial styles menu for regular variable font of medium size
    Set $FontNormalMediumStrMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontNormalMediumStrName {'}
    Set $FontNormalMediumStrMenu = (GetOutput $FontNormalMediumStrMenuCmd 1 -1)
 
+   # Select variable font of medium size, display styles for that font, select style and set size
+   # from parsing $FontNormalMediumStrNameNum above
    ChangeValue 5 $FontNormalMediumStrNameNum
    ChangeTitle 7 $FontNormalMediumStrMenu
    ChangeValue 7 $FontNormalMediumStrStyleNum
@@ -104,12 +114,12 @@ Begin
    Key F1 A 28 1 {KeyHelp}
    Key Help A 28 1 {KeyHelp}
 
-   # Initial defaults
+   # Initial defaults: Manual font selection $OperationMode, Regular Medium Variable font
    Set $OperationMode = 1
    Set $ActivePreviewField = 15
    Do {Schedule 1000 SendToModule FontMgr SendString 101 2 initial}
 
-   # Defaults for Font Size Popup
+   # Defaults for Font Size Popup - same as above, select initial default on startup
    Set $FontConstruct = $FontNormalMediumStr
 
    # Defaults for fontset
@@ -117,6 +127,8 @@ Begin
    Set $DefaultFontsetPath = {$NSCDE_ROOT/share/fontsets/} $DefaultFontset {.fontset}
    Set $FontsetPath = $DefaultFontsetPath
 
+   # For Fontset info when some font from fontset does not exist, having
+   # this in variable does not produce "}" on fvwm stderr / xsession-errors
    Set $Notavail = (Gettext {Not available})
 
    # Manage race condition between messages for InputForm and ChoiceForm
@@ -125,6 +137,8 @@ Begin
 End
 
 # In PeriodicTasks be careful not to mess messages from two different dialogs.
+# MSG is the waiting for InputForm, while QUITMSG is the waiting for ChoiceForm
+# See Widget 26 - Save button - click and routine 3.
 PeriodicTasks
 Begin
    If $QuitStarted == 0 Then
@@ -1348,31 +1362,40 @@ Widget 26
       Begin
          If $OperationMode == 1 Then
          Begin
+            # Spawn InputForm, suggest new fontset name "Custom"
             Set $ARG = {InputForm "$[gt.Enter New Fontset Name:]" "Custom"}
             Set $INPUTFORM = (LaunchScript $ARG )
          End
          If $OperationMode == 2 Then
          Begin
+            # For existing fontset selection, skip 26 1, go to 26 2
             SendSignal 26 2
          End
       End
       1 :
       Begin
+         # (LastString) is here fontset name from the InputForm
+         # act upon that and write new fontset file from the current
+         # font variable values
          If (LastString) <> {Cancel} Then
          Begin
+            # Sanity check for input
             Set $UserFontsetCmd = {echo '} (LastString) {' | $NSCDE_ROOT/bin/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
             Set $UserFontset = (GetOutput $UserFontsetCmd 1 1)
 
             If $UserFontset == {} Then
             Begin
+               # Sanity check for input
                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Warning.xpm" "$[gt.Fontset name must be defined before saving it!]"}
             End
             Else
             Begin
+               # Define $UserFontsetFile - path and file, make sure fontsets directory exists
                Set $UserConfigDir = (GetOutput {echo $FVWM_USERDIR} 1 -1)
                Set $UserFontsetFile = $UserConfigDir {/fontsets/} $UserFontset {.fontset}
                Do {Exec exec mkdir -p "$[FVWM_USERDIR]/fontsets"}
    
+               # Write fontset
                Do {Schedule 20 Exec exec echo 'InfoStoreAdd font.variable.normal.small "} $FontNormalSmallStr {"' > '} $UserFontsetFile {'}
                Do {Schedule 40 Exec exec echo 'InfoStoreAdd font.variable.bold.small "} $FontBoldSmallStr {"' >> '} $UserFontsetFile {'}
                Do {Schedule 60 Exec exec echo 'InfoStoreAdd font.variable.italic.small "} $FontItalicSmallStr {"' >> '} $UserFontsetFile {'}
@@ -1391,20 +1414,25 @@ Widget 26
                Do {Schedule 280 Exec exec echo 'InfoStoreAdd font.monospaced.normal.large "} $FontMonoLargeStr {"' >> '} $UserFontsetFile {'}
                Do {Schedule 300 Exec exec echo 'InfoStoreAdd font.monospaced.bold.large "} $FontMonoBoldLargeStr {"' >> '} $UserFontsetFile {'}
    
+               # Link configuration to the new fontset
                Do {Schedule 340 Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/NsCDE-Font-$[NSCDE_FONT_DPI]dpi.conf"}
    
+               # Do widget and script integrations and move to finish
                SendSignal 26 3
             End
          End
       End
       2 :
       Begin
+            # 26 2 - called when selecting existing fontset
             Set $UserFontsetFile = $FontsetPath
             Do {Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/NsCDE-Font-$[NSCDE_FONT_DPI]dpi.conf"}
             SendSignal 26 3
       End
+      # Sleeps in integrations are set to allow asyncronous "Do" to write fontset file to the end
       3 :
       Begin
+            # User script (if exists)
             If (GetValue 22) == 1 Then
             Begin
                Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" > /dev/null 2>&1; echo $?} 1 -1)
@@ -1415,6 +1443,7 @@ Widget 26
                End
             End
 
+            # GTK2/GTK3
             If (GetValue 23) == 1 Then
             Begin
                Set $PrepareFontCmd = {$NSCDE_ROOT/libexec/fontmgr -T "} $FontNormalMediumStr {"}
@@ -1452,6 +1481,7 @@ Widget 26
                End
             End
 
+            # X resources
             If (GetValue 24) == 1 Then
             Begin
                # Wait a second for $UserFontsetFile to be written ... a race.
@@ -1459,6 +1489,7 @@ Widget 26
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
             End
 
+            # Spawn ChoiceForm to quit after saving changes
             Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
             Set $QUITFORM = (LaunchScript $QUITARG )
             Set $QuitStarted = 1
@@ -1466,21 +1497,24 @@ Widget 26
       End
       4 :
       Begin
+         # Finish
          Do {Echo %%% %%% %%% QUIT-ACTION-STRING: } (LastString)
          If (LastString) == {Go} Then
          Begin
             Do {Exec exec cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults}
+            # Restart NsCDE here, give it a delay, not to kill "Do" until it is executed
             Do {Schedule 380 Restart}
             Quit
          End
          If (LastString) == {Cancel} Then
          Begin
+            # On cancel, simply quit.
             Quit
          End
       End
 End
 
-# Bail out
+# Bail out - main cancel button which can be called any time
 Widget 27
    Property
    Position 202 652
@@ -1662,7 +1696,8 @@ Widget 101
    End
    3 :
    Begin
-      # Split and parse font, in manual font selection, change font list name, style list name and size
+      # Split and parse font, in manual font selection, change
+      # font list name, style list name and size
       Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
       Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
       Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
