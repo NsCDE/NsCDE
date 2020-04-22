@@ -150,6 +150,7 @@ Begin
    End
 End
 
+# Icon Logo top left
 Widget 1
    Property
    Position 10 8
@@ -163,6 +164,10 @@ Widget 1
       End
 End
 
+# Fontset or manual font selection choice
+# Value 2 == fontset list
+# Value 1 == manual fonts selection
+# $OperationMode spreads this globally
 Widget 2
    Property
    Position 108 14
@@ -194,6 +199,7 @@ Widget 2
             Set $SelectDefaultFontsetCmd = {$NSCDE_ROOT/libexec/fontmgr -f "} $DefaultFontset {"}
             Set $SelectDefaultFontset = (GetOutput $SelectDefaultFontsetCmd 1 -1)
             ChangeValue 5 $SelectDefaultFontset
+            # Fill all 15 font variables for widgets 15 - 19
             SendSignal 5 2
          End
          Else
@@ -206,12 +212,15 @@ Widget 2
             ShowWidget 13
             ShowWidget 14
             Set $OperationMode = 1
+            # Call hidden worker widget to split and parse XFT font str
+            # serves also as light TextField Colorset 20 workaround when
+            # Colorset 22 is dark with white foreground
             SendSignal 101 3
          End
       End
 End
 
-
+# Default button and hidden delete fontset functionality
 Widget 3
    Property
    Position 396 10
@@ -284,6 +293,7 @@ Widget 3
 
          ChangeValue 5 $SelectDefaultFontset
          Set $FontsetName = $DefaultFontset
+         # 10 1 is small, medium or large font group
          SendSignal 10 1
       End
       2 :
@@ -298,8 +308,11 @@ Widget 3
             Begin
                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
                Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
+               # Refill fontset list
                ChangeTitle 5 $FontsetList
+               # Refill all 15 font variables
                SendSignal 3 1
+               # 10 1 is small, medium or large font group
                SendSignal 10 1
             End
             Else
@@ -310,6 +323,7 @@ Widget 3
       End
 End
 
+# Label above font/fontset list
 Widget 4
    Property
    Position 22 62
@@ -325,6 +339,7 @@ Widget 4
       End
 End
 
+# Main Font and Fontset list
 Widget 5
    Property
    Position 20 84
@@ -338,21 +353,26 @@ Widget 5
       Begin
          If $OperationMode == 1 Then
          Begin
+            # Manual font name selection
             SendSignal 5 1
          End
          If $OperationMode == 2 Then
          Begin
+            # Fontset selection
             SendSignal 5 2
          End
       End
+      # 5 1 - Manual font name selection on list widget
       1 :
       Begin
+         # Find font name, and fill font styles in list of widget 7
          Set $ListFontNameCmd = {$NSCDE_ROOT/libexec/fontmgr -N } (GetValue 5)
          Set $ListFontName = (GetOutput $ListFontNameCmd 1 -1)
          Set $FontStylesCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $ListFontName {'}
          Set $FontStyles = (GetOutput $FontStylesCmd 1 -1)
          ChangeTitle 7 $FontStyles
 
+         # Change selection of the style list
          If (GetValue 7) == 0 Then
          Begin
             Set $SizeValCmd = {$NSCDE_ROOT/libexec/fontmgr -G total -g '} $ListFontName {'}
@@ -364,13 +384,17 @@ Widget 5
             Set $SizeVal = (GetValue 7)
          End
 
+         # fontmgr -s - get style name from it's number
          Set $FontStyleListCmd = {$NSCDE_ROOT/libexec/fontmgr -s } $SizeVal { -g '} $ListFontName {'}
          Set $FontStyleList = (GetOutput $FontStyleListCmd 1 -1)
 
+         # Construct controlled XFT font spec and set active preview field with it
          Set $FontConstruct = {xft:} $ListFontName {:Medium:} $FontStyleList {:size=} (Add (GetValue 14) 3)
          ChangeFont $ActivePreviewField $FontConstruct
          ChangeFont 20 $FontConstruct
 
+         # Set active preview field with parsed font
+         # small group:
          If (GetValue 10) == 1 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -395,6 +419,8 @@ Widget 5
             End
          End
 
+         # Set active preview field with parsed font
+         # medium group:
          If (GetValue 10) == 2 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -419,6 +445,8 @@ Widget 5
             End
          End
 
+         # Set active preview field with parsed font
+         # large group:
          If (GetValue 10) == 3 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -443,6 +471,7 @@ Widget 5
             End
          End
       End
+      # 5 2 - Fontset name selection on list widget
       2 :
       Begin
          Set $FontsetNameCmd = {$NSCDE_ROOT/libexec/fontmgr -F } (GetValue 5)
@@ -495,10 +524,12 @@ Widget 5
          Set $FontMonoBoldLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s large}
          Set $FontMonoBoldLargeStr = (GetOutput $FontMonoBoldLargeStrCmd 1 -1)
 
+         # 10 1 is small, medium or large font group
          SendSignal 10 1
       End
 End
 
+# Label above font style / fontset info list
 Widget 6
    Property
    Position 334 62
@@ -512,6 +543,7 @@ Widget 6
       End
 End
 
+# Font Style / Fontset info list
 Widget 7
    Property
    Position 326 84
@@ -525,6 +557,7 @@ Widget 7
       Begin
          If $OperationMode == 1 Then
          Begin
+            # Update font list and variables, workaround light cs 20 vs dark cs 22 bug too
             SendSignal 5 1
          End
       End
@@ -543,6 +576,7 @@ Widget 8
       End
 End
 
+# Label above font size group PopupMenu
 Widget 9
    Property
    Position 12 270
@@ -557,6 +591,8 @@ Widget 9
       End
 End
 
+# Font size group: small, medium or large
+# Changes preview in widgets 15 - 19
 Widget 10
    Property
    Position 12 296
@@ -666,6 +702,7 @@ Widget 10
       End
 End
 
+# Label above Font Style Group PopupMenu
 Widget 11
    Property
    Position 210 270
@@ -680,6 +717,7 @@ Widget 11
       End
 End
 
+# Font Style PopupMenu
 Widget 12
    Property
    Size 180 244
@@ -695,6 +733,7 @@ Widget 12
       Begin
          SendSignal 12 1
       End
+      # Refill the right font preview field based on this popup menu selection
       1 :
       Begin
          If (GetValue 12) == 1 Then
@@ -720,6 +759,7 @@ Widget 12
       End
 End
 
+# Label above font size PopupMenu
 Widget 13
    Property
    Position 428 270
@@ -734,6 +774,7 @@ Widget 13
       End
 End
 
+# Rightmost PopupMenu ... size
 Widget 14
    Property
    Size 120 244
@@ -748,12 +789,15 @@ Widget 14
       Begin
          If $OperationMode == 1 Then
          Begin
+            # Update font list prior to calling own routine 1
+            # Updates also styles and preview fields 15 - 19
             SendSignal 5 1
             SendSignal 14 1
          End
       End
       1 :
       Begin
+         # Parse font, make XFT font construction, update font variables for a size group
          Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
          Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
          Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
@@ -763,6 +807,7 @@ Widget 14
          Set $FontStyle = (GetOutput $FontStyleListCmd 1 -1)
          Set $FontConstruct = {xft:} $FontName {:Medium:} $FontStyle {:size=} $FontSizeNum
 
+         # W10 value #1 - small
          If (GetValue 10) == 1 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -787,6 +832,7 @@ Widget 14
             End
          End
 
+         # W10 value #2 - medium
          If (GetValue 10) == 2 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -811,6 +857,7 @@ Widget 14
             End
          End
 
+         # W10 value #3 - large
          If (GetValue 10) == 3 Then
          Begin
             If $ActivePreviewField == 15 Then
@@ -840,6 +887,8 @@ Widget 14
       End
 End
 
+# Preview ItemDraw widget for variable regular font
+# Font "xft:::pixelsize=24" guarantees height of the widget
 Widget 15
    Property
    Position 18 344
@@ -857,38 +906,37 @@ Widget 15
       End
       1 :
       Begin
+         # ActivePreviewField refers to the past selected preview field here
+         # until it is set to the current one.
          If $ActivePreviewField <> 15 Then
          Begin
             ShowWidget $ActivePreviewField
+            # Preserve manual preview field modifications for a session
             If (GetTitle 20) <> $FontExampleText Then
             Begin
                ChangeTitle $ActivePreviewField (GetTitle 20)
             End
          End
+         # Hide ItemDraw, position TextField Widget 20, change W20 title to ItemDraw
+         # from W10 values 1, 2 or 3.
          HideWidget 15
          ChangePosition 20 18 344
          ChangeTitle 20 (GetTitle 15)
          ShowWidget 20
+         # Set ActivePreviewField, 15 2 - set $FontConstruct for small, normal or large
          Set $ActivePreviewField = 15
          SendSignal 15 2
+         # 101 1 - set active and inactive preview fields, change font size group popup menu label
+         # Change TextField font to current ItemDraw
          SendSignal 101 1
 
-         If $OperationMode == 2 Then
-         Begin
-            If $FontNameNum <> 0 Then
-            Begin
-               Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
-            End
-            Else
-            Begin
-               Set $SubstNameCmd = {$NSCDE_ROOT/libexec/fontmgr -m "} $FontName {"}
-               Set $SubstName = (GetOutput $SubstNameCmd 1 -1)
-               Set $SubstStyle = (GetOutput $SubstNameCmd 2 -1)
-               Set $FontsetInfo = {Fontset:|} $FontsetName {||} $SubstName {|Style: } $SubstStyle {|Size: } (Add $FontSizeNum 3){|(} $Notavail {)}
-            End
-            ChangeTitle 7 $FontsetInfo
-         End
+         # Fontset operation mode
+         # Fill W7 List with fontset and selected font info.
+         # Match the existing font, handle missing fonts from fontset.
+         SendSignal 101 4
       End
+      # Set $FontConstruct for small, normal or large
+      # 101 3 must be called again because of light cs 20 vs dark cs 22 TextField bug
       2 :
       Begin
          If (GetValue 10) == 1 Then
@@ -909,6 +957,8 @@ Widget 15
       End
 End
 
+# Preview ItemDraw widget for variable bold font
+# Font "xft:::pixelsize=24" guarantees height of the widget
 Widget 16
    Property
    Position 18 394
@@ -926,28 +976,37 @@ Widget 16
       End
       1 :
       Begin
+         # ActivePreviewField refers to the past selected preview field here
+         # until it is set to the current one.
          If $ActivePreviewField <> 16 Then
          Begin
             ShowWidget $ActivePreviewField
+            # Preserve manual preview field modifications for a session
             If (GetTitle 20) <> $FontExampleText Then
             Begin
                ChangeTitle $ActivePreviewField (GetTitle 20)
             End
          End
+         # Hide ItemDraw, position TextField Widget 20, change W20 title to ItemDraw
+         # from W10 values 1, 2 or 3.
          HideWidget 16
          ChangePosition 20 18 394
          ChangeTitle 20 (GetTitle 16)
          ShowWidget 20
+         # Set ActivePreviewField, 16 2 - set $FontConstruct for small, normal or large
          Set $ActivePreviewField = 16
          SendSignal 16 2
+         # 101 1 - set active and inactive preview fields, change font size group popup menu label
+         # Change TextField font to current ItemDraw
          SendSignal 101 1
 
-         If $OperationMode == 2 Then
-         Begin
-            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
-            ChangeTitle 7 $FontsetInfo
-         End
+         # Fontset operation mode
+         # Fill W7 List with fontset and selected font info.
+         # Match the existing font, handle missing fonts from fontset.
+         SendSignal 101 4
       End
+      # Set $FontConstruct for small, normal or large
+      # 101 3 must be called again because of light cs 20 vs dark cs 22 TextField bug
       2 :
       Begin
          If (GetValue 10) == 1 Then
@@ -968,6 +1027,8 @@ Widget 16
       End
 End
 
+# Preview ItemDraw widget for variable italic font
+# Font "xft:::pixelsize=24" guarantees height of the widget
 Widget 17
    Property
    Position 18 444
@@ -985,28 +1046,37 @@ Widget 17
       End
       1 :
       Begin
+         # ActivePreviewField refers to the past selected preview field here
+         # until it is set to the current one.
          If $ActivePreviewField <> 17 Then
          Begin
            ShowWidget $ActivePreviewField
+            # Preserve manual preview field modifications for a session
             If (GetTitle 20) <> $FontExampleText Then
             Begin
                ChangeTitle $ActivePreviewField (GetTitle 20)
             End
          End
+         # Hide ItemDraw, position TextField Widget 20, change W20 title to ItemDraw
+         # from W10 values 1, 2 or 3.
          HideWidget 17
          ChangePosition 20 18 444
          ChangeTitle 20 (GetTitle 17)
          ShowWidget 20
+         # Set ActivePreviewField, 17 2 - set $FontConstruct for small, normal or large
          Set $ActivePreviewField = 17
          SendSignal 17 2
+         # 101 1 - set active and inactive preview fields, change font size group popup menu label
+         # Change TextField font to current ItemDraw
          SendSignal 101 1
 
-         If $OperationMode == 2 Then
-         Begin
-            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
-            ChangeTitle 7 $FontsetInfo
-         End
+         # Fontset operation mode
+         # Fill W7 List with fontset and selected font info.
+         # Match the existing font, handle missing fonts from fontset.
+         SendSignal 101 4
       End
+      # Set $FontConstruct for small, normal or large
+      # 101 3 must be called again because of light cs 20 vs dark cs 22 TextField bug
       2 :
       Begin
          If (GetValue 10) == 1 Then
@@ -1027,6 +1097,8 @@ Widget 17
       End
 End
 
+# Preview ItemDraw widget for monospaced regular font
+# Font "xft:::pixelsize=24" guarantees height of the widget
 Widget 18
    Property
    Position 18 494
@@ -1044,28 +1116,37 @@ Widget 18
       End
       1 :
       Begin
+         # ActivePreviewField refers to the past selected preview field here
+         # until it is set to the current one.
          If $ActivePreviewField <> 18 Then
          Begin
             ShowWidget $ActivePreviewField
+            # Preserve manual preview field modifications for a session
             If (GetTitle 20) <> $FontExampleText Then
             Begin
                ChangeTitle $ActivePreviewField (GetTitle 20)
             End
          End
+         # Hide ItemDraw, position TextField Widget 20, change W20 title to ItemDraw
+         # from W10 values 1, 2 or 3.
          HideWidget 18
          ChangePosition 20 18 494
          ChangeTitle 20 (GetTitle 18)
          ShowWidget 20
+         # Set ActivePreviewField, 18 2 - set $FontConstruct for small, normal or large
          Set $ActivePreviewField = 18
          SendSignal 18 2
+         # 101 1 - set active and inactive preview fields, change font size group popup menu label
+         # Change TextField font to current ItemDraw
          SendSignal 101 1
 
-         If $OperationMode == 2 Then
-         Begin
-            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
-            ChangeTitle 7 $FontsetInfo
-         End
+         # Fontset operation mode
+         # Fill W7 List with fontset and selected font info.
+         # Match the existing font, handle missing fonts from fontset.
+         SendSignal 101 4
       End
+      # Set $FontConstruct for small, normal or large
+      # 101 3 must be called again because of light cs 20 vs dark cs 22 TextField bug
       2 :
       Begin
          If (GetValue 10) == 1 Then
@@ -1086,7 +1167,8 @@ Widget 18
       End
 End
 
-# Font here is to guarantee height of the TextField widget
+# Preview ItemDraw widget for monospaced bold font
+# Font "xft:::pixelsize=24" guarantees height of the widget
 Widget 19
    Property
    Position 18 544
@@ -1104,29 +1186,38 @@ Widget 19
       End
       1 :
       Begin
+         # ActivePreviewField refers to the past selected preview field here
+         # until it is set to the current one.
          If $ActivePreviewField <> 19 Then
          Begin
             ShowWidget $ActivePreviewField
+            # Preserve manual preview field modifications for a session
             If (GetTitle 20) <> $FontExampleText Then
             Begin
                ChangeTitle $ActivePreviewField (GetTitle 20)
             End
          End
+         # Hide ItemDraw, position TextField Widget 20, change W20 title to ItemDraw
+         # from W10 values 1, 2 or 3.
          HideWidget 19
          ChangePosition 20 18 544
          ChangeTitle 20 (GetTitle 19)
          ChangeColorset 19 20
          ShowWidget 20
+         # Set ActivePreviewField, 19 2 - set $FontConstruct for small, normal or large
          Set $ActivePreviewField = 19
          SendSignal 19 2
+         # 101 1 - set active and inactive preview fields, change font size group popup menu label
+         # Change TextField font to current ItemDraw
          SendSignal 101 1
 
-         If $OperationMode == 2 Then
-         Begin
-            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
-            ChangeTitle 7 $FontsetInfo
-         End
+         # Fontset operation mode
+         # Fill W7 List with fontset and selected font info.
+         # Match the existing font, handle missing fonts from fontset.
+         SendSignal 101 4
       End
+      # Set $FontConstruct for small, normal or large
+      # 101 3 must be called again because of light cs 20 vs dark cs 22 TextField bug
       2 :
       Begin
          If (GetValue 10) == 1 Then
@@ -1147,6 +1238,7 @@ Widget 19
       End
 End
 
+# Mobile editable TextField widget used on positions of W15 - W19
 Widget 20
    Property
    Position 18 554
@@ -1159,6 +1251,7 @@ Widget 20
       Case message of
       SingleClic :
       Begin
+         # Update values and widget colorsets
          SendSignal 101 1
       End
 End
@@ -1176,6 +1269,7 @@ Widget 21
       End
 End
 
+#  If $FVWM_USERDIR/libexec/fontmgr.local exists, run it
 Widget 22
    Property
    Position 14 604
@@ -1192,6 +1286,7 @@ Widget 22
       End
 End
 
+# GTK2/GTK3 (and Qt4/Qt5) font theme synchronization
 Widget 23
    Property
    Position 166 604
@@ -1208,6 +1303,7 @@ Widget 23
       End
 End
 
+# X Resources integration
 Widget 24
    Property
    Position 344 604
@@ -1237,6 +1333,7 @@ Widget 25
       End
 End
 
+# Main Save button
 Widget 26
    Property
    Position 14 652
@@ -1383,6 +1480,7 @@ Widget 26
       End
 End
 
+# Bail out
 Widget 27
    Property
    Position 202 652
@@ -1403,6 +1501,7 @@ Widget 27
       End
 End
 
+# Help button
 Widget 28
    Property
    Position 392 652
@@ -1423,6 +1522,9 @@ Widget 28
       End
 End
 
+# Hidden worker Widget 101 and its routines
+# Called from W15 - W19 and others, also workarounds bug
+# when cs #20 is light and cs #22 dark
 Widget 101
    Property
    Position 18 564
@@ -1435,8 +1537,11 @@ Widget 101
       SingleClic :
       Begin
       End
+      # 101 1 - set active and inactive preview fields, change font size group popup menu label
+      # Change TextField font to current ItemDraw
       1 :
       Begin
+         # Variable Regular
          If $ActivePreviewField == 15 Then
          Begin
             ChangeValue 12 1
@@ -1458,6 +1563,7 @@ Widget 101
                ChangeFont 20 $FontNormalLargeStr
             End
          End
+         # Variable Bold
          If $ActivePreviewField == 16 Then
          Begin
             ChangeValue 12 2
@@ -1479,6 +1585,7 @@ Widget 101
                ChangeFont 20 $FontBoldLargeStr
             End
          End
+         # Variable Italic
          If $ActivePreviewField == 17 Then
          Begin
             ChangeValue 12 3
@@ -1500,6 +1607,7 @@ Widget 101
                ChangeFont 20 $FontItalicLargeStr
             End
          End
+         # Monospaced Regular
          If $ActivePreviewField == 18 Then
          Begin
             ChangeValue 12 4
@@ -1521,6 +1629,7 @@ Widget 101
                ChangeFont 20 $FontMonoLargeStr
             End
          End
+         # Monospaced Bold
          If $ActivePreviewField == 19 Then
          Begin
             ChangeValue 12 5
@@ -1546,11 +1655,14 @@ Widget 101
    2 :
    Begin
       # This is used for setting initial value on start.
+      # 12 1 - Font Style Group to Regular
+      # 15 1 - Select Variable Normal Font Preview Field
       ChangeValue 12 1
       SendSignal 15 1
    End
    3 :
    Begin
+      # Split and parse font, in manual font selection, change font list name, style list name and size
       Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
       Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
       Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
@@ -1558,15 +1670,39 @@ Widget 101
       Set $FontName = (GetOutput $SplitFontStrCmd 4 -1)
       Set $FontStyle = (GetOutput $SplitFontStrCmd 5 -1)
    
+      # Refresh style list menu variables
       Set $StyleListMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontName {'}
       Set $StyleListMenu = (GetOutput $StyleListMenuCmd 1 -1)
    
+      # Change font list name, style list name and size
+      # Important: serves as light cs #20 vs dark cs #22 bug workaround
       If $OperationMode == 1 Then
       Begin
          ChangeValue 5 $FontNameNum
          ChangeTitle 7 $StyleListMenu
          ChangeValue 7 $FontStyleNum
          ChangeValue 14 $FontSizeNum
+      End
+   End
+   4 :
+   Begin
+      # Fontset operation mode - fill info about fontset and fonts in it
+      If $OperationMode == 2 Then
+      Begin
+         # Fill W7 List with fontset and selected font info.
+         If $FontNameNum <> 0 Then
+         Begin
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $FontName {|Style: } $FontStyle {|Size: } (Add $FontSizeNum 3)
+         End
+         Else
+         Begin
+            # Match the existing font, handle missing fonts from fontset.
+            Set $SubstNameCmd = {$NSCDE_ROOT/libexec/fontmgr -m "} $FontName {"}
+            Set $SubstName = (GetOutput $SubstNameCmd 1 -1)
+            Set $SubstStyle = (GetOutput $SubstNameCmd 2 -1)
+            Set $FontsetInfo = {Fontset:|} $FontsetName {||} $SubstName {|Style: } $SubstStyle {|Size: } (Add $FontSizeNum 3){|(} $Notavail {)}
+         End
+         ChangeTitle 7 $FontsetInfo
       End
    End
 End
