@@ -52,6 +52,7 @@ Begin
 
    # Fill List Widget 5 with font names
    Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
+   Set $FontTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 2 -1)
    ChangeTitle 5 $FontList
 
    # Set Font Size Group choices, select Medium to be displayed by default
@@ -113,6 +114,13 @@ Begin
    Key Q C 27 1 {KeyClose}
    Key F1 A 28 1 {KeyHelp}
    Key Help A 28 1 {KeyHelp}
+   Key Prior A 101 5 {PreviewUp}
+   Key Next A 101 5 {PreviewDown}
+   Key Up A 101 6 {ListUp}
+   Key Down A 101 6 {ListDown}
+   Key S C 101 7 {KeySmall}
+   Key M C 101 7 {KeyMedium}
+   Key L C 101 7 {KeyLarge}
 
    # Initial defaults: Manual font selection $OperationMode, Regular Medium Variable font
    Set $OperationMode = 1
@@ -202,6 +210,7 @@ Widget 2
          If (GetValue 2) == 1 Then
          Begin
             Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
+            Set $FontsetTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 2 -1)
             ChangeTitle 5 $FontsetList
             ChangeLocaleTitle 3 {Default|Default|Delete Fontset}
             ChangeColorset 7 22
@@ -219,6 +228,7 @@ Widget 2
          Else
          Begin
             Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
+            Set $FontTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 2 -1)
             ChangeTitle 5 $FontList
             ChangeLocaleTitle 3 {Default|Default|Cancel}
             ChangeColorset 7 20
@@ -322,6 +332,7 @@ Widget 3
             Begin
                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
                Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
+               Set $FontsetTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 2 -1)
                # Refill fontset list
                ChangeTitle 5 $FontsetList
                # Refill all 15 font variables
@@ -1738,6 +1749,95 @@ Widget 101
             Set $FontsetInfo = {Fontset:|} $FontsetName {||} $SubstName {|Style: } $SubstStyle {|Size: } (Add $FontSizeNum 3){|(} $Notavail {)}
          End
          ChangeTitle 7 $FontsetInfo
+      End
+   End
+   5 :
+   Begin
+      # Keyboard walk up and down of font previews with Page Up and Page Down
+      If (LastString) == {PreviewUp} Then
+      Begin
+         If $ActivePreviewField <> 15 Then
+         Begin
+            SendSignal (Add $ActivePreviewField -1) 1
+         End
+         Else
+         Begin
+            SendSignal 19 1
+         End
+      End
+      If (LastString) == {PreviewDown} Then
+      Begin
+         If $ActivePreviewField <> 19 Then
+         Begin
+            SendSignal (Add $ActivePreviewField 1) 1
+         End
+         Else
+         Begin
+            SendSignal 15 1
+         End
+      End
+   End
+   6 :
+   Begin
+      # Keyboard walk up and down of fonts and fontsets on the list with Up and Down arrows
+      If $OperationMode == 1 Then
+      Begin
+         # Set in the Init and W5
+         Set $MaxVal = $FontTotalNum
+         # 5 1
+         Set $ListRoutine = 1
+      End
+      If $OperationMode == 2 Then
+      Begin
+         # Set in the W2 and W5
+         Set $MaxVal = $FontsetTotalNum
+         # 5 2
+         Set $ListRoutine = 2
+      End
+
+      If (LastString) == {ListUp} Then
+      Begin
+         If (GetValue 5) <> 1 Then
+         Begin
+            ChangeValue 5 (Add (GetValue 5) -1)
+         End
+         Else
+         Begin
+            ChangeValue 5 $MaxVal
+         End
+         SendSignal 5 $ListRoutine
+      End
+      If (LastString) == {ListDown} Then
+      Begin
+         If (GetValue 5) <> $MaxVal Then
+         Begin
+            ChangeValue 5 (Add (GetValue 5) 1)
+         End
+         Else
+         Begin
+            ChangeValue 5 1
+         End
+         SendSignal 5 $ListRoutine
+      End
+   End
+   7 :
+   Begin
+      # Small Medium and Large preview on the List W5
+      # That is: Ctrl+S, Ctrl+M and Ctrl+L
+      If (LastString) == {KeySmall} Then
+      Begin
+         ChangeValue 10 1
+         SendSignal 10 1
+      End
+      If (LastString) == {KeyMedium} Then
+      Begin
+         ChangeValue 10 2
+         SendSignal 10 1
+      End
+      If (LastString) == {KeyLarge} Then
+      Begin
+         ChangeValue 10 3
+         SendSignal 10 1
       End
    End
 End

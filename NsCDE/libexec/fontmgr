@@ -30,14 +30,20 @@ function findfontsets
       exit 2
    fi
 
-   SysFontsets=$(ls -1 ${NSCDE_ROOT}/share/fontsets/*.fontset | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
+   SysFontsetsOut=$(ls -1 ${NSCDE_ROOT}/share/fontsets/*.fontset)
+   SysFontsets=$(echo "$SysFontsetsOut" | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
+   SysFontsetsCnt=$(echo "$SysFontsetsOut" | wc -l)
 
    if [ -d "${FVWM_USERDIR}/fontsets" ]; then
       ls -1 ${FVWM_USERDIR}/fontsets/*.fontset > /dev/null 2>&1
       if (($? == 0)); then
-         UserFontsets=$(ls -1 ${FVWM_USERDIR}/fontsets/*.fontset | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
+         UserFontsetsOut=$(ls -1 ${FVWM_USERDIR}/fontsets/*.fontset)
+         UserFontsets=$(echo "$UserFontsetsOut" | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
+         UserFontsetsCnt=$(echo "$UserFontsetsOut" | wc -l)
       fi
    fi
+
+   fontsetsnum=$(($SysFontsetsCnt + $UserFontsetsCnt))
 }
 
 function fontsetsmenu
@@ -49,6 +55,8 @@ function fontsetsmenu
    do
       echo -ne "${fontset}|"
    done | sed 's/|$/\n/g'
+
+   echo $fontsetsnum
 }
 
 function getfontsetname
@@ -94,6 +102,7 @@ function styletname
 }
 
 fontname=""
+fntcnt=0
 function menugen
 {
    echo "$FNAMES" | sort -u | while IFS=":" read fontname styles
@@ -103,9 +112,11 @@ function menugen
          fontname=$(echo "$fontname" | awk -F"," '{ print $NF }')
       fi
       fontnames="${fontnames}|${fontname}"
+      (( fntcnt = fntcnt + 1 ))
    done
 
    echo "$fontnames" | sed 's/^|//g'
+   echo $fntcnt
 }
 
 StylesFmt=0
