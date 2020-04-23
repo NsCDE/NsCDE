@@ -124,6 +124,7 @@ Begin
    Key Plus C 101 8 {KeyIncrease}
    Key Minus C 101 8 {KeyDecrease}
    Key Equal C 101 8 {KeyDefSize}
+   Key F C 101 9 {KeyFlipOprMode}
 
    # Initial defaults: Manual font selection $OperationMode, Regular Medium Variable font
    Set $OperationMode = 1
@@ -1872,6 +1873,23 @@ Widget 101
          # Do what Widget 14 PopupMenu will do when clicked
          SendSignal 5 1
          SendSignal 14 1
+      End
+   End
+   9 :
+   Begin
+      # Flip flop operation mode with Ctrl F
+      If (LastString) == {KeyFlipOprMode} Then
+      Begin
+         If (GetValue 2) == 0 Then
+         Begin
+            ChangeValue 2 1
+            SendSignal 2 1
+         End
+         Else
+         Begin
+            ChangeValue 2 0
+            SendSignal 2 1
+         End
       End
    End
 End
