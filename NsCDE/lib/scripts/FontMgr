@@ -121,6 +121,9 @@ Begin
    Key S C 101 7 {KeySmall}
    Key M C 101 7 {KeyMedium}
    Key L C 101 7 {KeyLarge}
+   Key Plus C 101 8 {KeyIncrease}
+   Key Minus C 101 8 {KeyDecrease}
+   Key Equal C 101 8 {KeyDefSize}
 
    # Initial defaults: Manual font selection $OperationMode, Regular Medium Variable font
    Set $OperationMode = 1
@@ -1827,17 +1830,48 @@ Widget 101
       If (LastString) == {KeySmall} Then
       Begin
          ChangeValue 10 1
-         SendSignal 10 1
       End
       If (LastString) == {KeyMedium} Then
       Begin
          ChangeValue 10 2
-         SendSignal 10 1
       End
       If (LastString) == {KeyLarge} Then
       Begin
          ChangeValue 10 3
-         SendSignal 10 1
+      End
+      # Do what Widget 10 PopupMenu will do when clicked
+      SendSignal 10 1
+   End
+   8 :
+   Begin
+      # Ctrl + / Ctrl - and Ctrl 0 - change size of the font
+      # when $OperationMode == 1
+      If $OperationMode == 1 Then
+      Begin
+         If (LastString) == {KeyIncrease} Then
+         Begin
+            # Value 23 is size 26
+            If (GetValue 14) < 23 Then
+            Begin
+               ChangeValue 14 (Add (GetValue 14) 1)
+            End
+         End
+         If (LastString) == {KeyDecrease} Then
+         Begin
+            # Value 1 is size 4
+            If (GetValue 14) <> 1 Then
+            Begin
+               ChangeValue 14 (Add (GetValue 14) -1)
+            End
+         End
+         If (LastString) == {KeyDefSize} Then
+         Begin
+            # Value 8 is size 11
+            ChangeValue 14 8
+         End
+         # Do what Widget 14 PopupMenu will do when clicked
+         SendSignal 5 1
+         SendSignal 14 1
       End
    End
 End
