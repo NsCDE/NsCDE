@@ -1865,10 +1865,24 @@ Widget 101
                ChangeValue 14 (Add (GetValue 14) -1)
             End
          End
+         # Ctrl + Equal - set default size in the previewed group
          If (LastString) == {KeyDefSize} Then
          Begin
-            # Value 8 is size 11
-            ChangeValue 14 8
+            If (GetValue 10) == 1 Then
+            Begin
+               # Value 7 is size 10
+               ChangeValue 14 7
+            End
+            If (GetValue 10) == 2 Then
+            Begin
+               # Value 8 is size 11
+               ChangeValue 14 8
+            End
+            If (GetValue 10) == 3 Then
+            Begin
+               # Value 9 is size 12
+               ChangeValue 14 9
+            End
          End
          # Do what Widget 14 PopupMenu will do when clicked
          SendSignal 5 1

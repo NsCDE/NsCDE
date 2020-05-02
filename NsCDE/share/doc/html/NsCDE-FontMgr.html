@@ -38,84 +38,108 @@ Monospaced Bold Medium
 Monospaced Bold Large
 </p></li></ul></div><p>
 </p><p>
-This fonts are defined as FVWM <span class="emphasis"><em>infostore</em></span> variables in
-<code class="filename">$NSCDE_ROOT/config/NsCDE-Font-$DPI.conf</code> and/or in
-<code class="filename">$FVWM_USERDIR/NsCDE-Font-$DPI.conf</code>.
+This fonts are defined as FVWM <span class="emphasis"><em>infostore</em></span> variables in the file
+<code class="filename">$NSCDE_ROOT/config/NsCDE-Font-$NSCDE_FONT_DPI.conf</code> and/or in the file
+<code class="filename">$FVWM_USERDIR/NsCDE-Font-$NCDE_FONT_DPI.conf</code>. User's
+<code class="filename">$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.conf</code> is a symlink to either
+<code class="filename">$NSCDE_ROOT/share/fontsets/SomeName.fontset</code> or to
+<code class="filename">$FVWM_USERDIR/fontsets/SomeName.fontset</code>.
 Further, they are defined as CPP macros in
 <code class="filename">$FVWM_USERDIR/Xdefaults.fontdefs</code> which is included in
 <code class="filename">$FVWM_USERDIR/Xdefaults</code>
 where it is used. GTK2 and GTK3 are also getting default font (Normal Medium) in
 their configurations if integration option has been selected in Font Style Manager.
-X resources and GTK are not refreshed by default, their checkboxes must be selected
-by the user.
+X resources and GTK are not refreshed by default, their checkboxes can be unselected
+if some of this widget integrations is not desirable by the user.
 </p><p>
 The Font Style Manager itself consists of fontsets and fonts. Fontsets are
 named complete sets of five groups of three members of fonts defined above.
 Fontsets are stored in <code class="filename">$NSCDE_ROOT/share/fontsets</code> and in
 <code class="filename">$FVWM_USERDIR/fontsets</code>. If font set is selected in
 Font Style Manager, 15 fonts from the set are loaded into preview lists of the application and can be
-immediately applied or further customized before saving as
-<code class="filename">$FVWM_USERDIR/NsCDE-Font-$DPI.conf</code>. Fontsets are on the leftmost GUI list and
-inactive until button <span class="guilabel">Use Selected Font Set</span> is not clicked.
-Manual font selection contains list of XFT fonts found on the system in the
-middle list and their styles (regular, bold, italic ...) on the rightmost
+immediately applied or further customized by leaving <span class="guilabel">Use Predefined Font Set</span> mode
+before saving defined scheme as <code class="filename">$FVWM_USERDIR/fontsets/SomeName.fontset</code> and linking this
+name to <code class="filename">$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.conf</code>. List of fontsets on the left GUI list is
+inactive until button <span class="guilabel">Use Predefined Font Set</span> is not turned on, then Font Style Manager
+operates with sets of fonts, and not in compose mode with individual fonts. In this mode, right GUI list contains
+information about fontset and previewed fonts when they are selected with mouse or keyboard. This information can
+contain additional bottom line <span class="emphasis"><em>(Not available)</em></span> if font from the fontset does not exist under
+this name on the system. If such fontset is loaded and saved anyway, system's XFT subsystem will select nearest
+match or the default font instead of non-existing one.
+</p><p>
+By default, manual font selection contains list of XFT fonts found on the system in the
+left GUI list and their styles (regular, bold, italic ...) on the right GUI list.
 list.
 </p><p>
-Fonts can be set for the current DPI, or custom predefined DPI can be set. If
-custom DPI is set, fonts configuration file will change in <code class="varname">$DPI</code> part of the
-name.
+DPI value for fonts in NsCDE is by default defined to be 96 in <code class="filename">$FVWM_USERDIR/Xdefaults.fontdefs</code> as "Xft.dpi".
+This is to accomplish reasonable defaults for all widgets and programs which use them, but if overriden, existing
+user custom fontset for 96 DPI will not be considered anymore. System default from that approximate DPI range will
+be used until new custom fontset is created, where <code class="varname">NSCDE_FONT_DPI</code> will not be 96 anymore.
 </p><p>
 Main font selectors are:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-Preview Set For Size
+Font Size Group
 </p></li><li class="listitem"><p>
-Font Group
+Font Style Group
 </p></li><li class="listitem"><p>
-Font Size
+Set Size (available only in manual selection mode)
 </p></li></ul></div><p>
 First popup menu loads 5 fonts from one of the 3 sets: small, medium or large.
-Second popup determines on which font current selection is working (normal,
-bold, italic, mono, mono bold), and third popup menu sets font size.
-When Font Style Manager is started, current configuration is loaded and fonts
-selected for a preview.
+Second popup determines on which font current selection is working: normal,
+bold, italic, mono or mono bold (clicking on font preview itself has the same function)
+and third popup menu sets font size. When Font Style Manager is started, current fontset is
+loaded and previews are populated with that fonts. Default mode of operation will be switched
+to manual font selection for customizations into the new fontset.
 </p><p>
-Button <span class="guibutton">Default</span> loads
-<code class="filename">$NSCDE_ROOT/share/fontsets/Default_$DPI.fontset</code> which can
-then be saved or further customized. Bottom half of the Font Style Manager
-contains preview for all fonts from the one of the three selected size
-sets.
+Button <span class="guibutton">Default</span> loads default
+<code class="filename">$NSCDE_ROOT/share/fontsets/DejaVuSerif.fontset</code> which can
+then be saved as a choice or further customized into the new fontset. Bottom half of the
+Font Style Manager contains preview for all fonts from the one of the three selected size sets.
 </p><p>
-Checkboxes <span class="guilabel">Refresh Gtk2/Gtk3</span>, and <span class="guilabel">Refresh X Resources"</span>
-are integrating font selection with popular widgets by providing variable normal medium font and
+Checkboxes <span class="guilabel">Refresh GTK2/GTK3</span>, and <span class="guilabel">Refresh X Resources"</span>
+are integrating font selection with popular widgets by providing <span class="emphasis"><em>normal medium</em></span> font and
 it's size to their configuration files. Qt4 and Qt5 should automatically pick
-Gtk fonts if GTK2 font engine is active in their configurations. If not,
+Gtk fonts if Qt "GTK2" font engine is active in their configurations. If not,
 <span class="command"><strong>qtconfig-qt4</strong></span> and <span class="command"><strong>qt5ct</strong></span> applications can be started and
 some minor changes done and undone - enough for Apply/Save to take effect, and then font from Gtk will
 be loaded for sure. Checkbox <span class="guilabel">Run User Script</span> will attempt to run
-<span class="command"><strong>$FVWM_USERDIR/libexec/fontmgr.local</strong></span> if exists, with arguments of the new
-config file and current DPI. This is intended for user's customizations which
-are currently beyond NsCDE's scope of integrations.
+<span class="command"><strong>$FVWM_USERDIR/libexec/fontmgr.local</strong></span> if it exists, with argument of the new
+config file. This is intended for user's customizations which are currently beyond NsCDE's scope of
+program and widget integrations.
 </p><p>
-<span class="guibutton">Save</span> button will save configuration of fonts and ask user to immediately
-restart FVWM, while <span class="guibutton">Save Font Set</span> will first save configuration as a new
-fontset and then as active configuration. In that way, further experiments
-with fonts can be done by the user, but saved fontset from some good point can
-be loaded to replace current configuration. When <span class="guibutton">Use Selected Font Set</span> is
-clicked, list of the fontsets becomes active, and lists of fonts and their
-styles inactive. Once font set is clicked, it will load preview of all the
-fonts in the fontset and the same button which is now called <span class="guibutton">Select Fonts
-Manually</span> can be clicked for further customizations. Mentioned button will
-change back it's title to <span class="guibutton">Use Selected Font Set</span>.
-Button <span class="guibutton">Close</span> discards actions, and
-<span class="guibutton">Help</span> button will call help text (if implemented).
-</p><p>
-Configuration of fonts can be totally reset and discarded by removing file
-<code class="filename">$FVWM_USERDIR/NsCDE-Font-$DPI.conf</code> and FVWM restarted.
+<span class="guibutton">Save</span> button will save fontset choice, or generated selection as a new fontset in manual
+selection mode, make link to it in <code class="filename">$FVWM_USERDIR</code>. If manual modification
+has taken place, user will be asked to name a new fontset with the popup dialog. Name "custom" is the default proposal
+in the dialog, but it should be changed, because this name is predestinated to be rewritten on the next
+Font Style Manager saving action. Further, user will be asked to immediately restart FVWM, for changes to be
+applied from all parts from the new configuration.
 </p><p>
 Key Bindings:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 <span class="keysym">Ctrl+Q</span>: Quits Font Style Manager.
 </p></li><li class="listitem"><p>
 <span class="keysym">Sun Help and F1</span>: Displays this help text.
+</p></li><li class="listitem"><p>
+<span class="keysym">Up (Arrow Up)</span>: Selects prior font or fontset on the list
+</p></li><li class="listitem"><p>
+<span class="keysym">Down (Arrow Down)</span>: Selects next font or fontset on the list
+</p></li><li class="listitem"><p>
+<span class="keysym">Prior (Page Up)</span>: Selects preview box from the bottom to the top and cycles back to the bottom again
+</p></li><li class="listitem"><p>
+<span class="keysym">Next (Page Down)</span>: Selects preview box from the top to the botttom and cycles back to the top again
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+S</span>: Loads small group of fonts on the preview fileds
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+M</span>: Loads medium group of fonts on the preview fileds
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+L</span>: Loads large group of fonts on the preview fileds
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Plus</span>: In manual selection mode, increases font size for selected font
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Minus</span>: In manual selection mode, decreases font size for selected font
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Equal</span>: Sets font size to default start point size for current font size group previewed
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+F</span>: Changes mode of operation between prefedined fontsets and manual font selection mode
 </p></li></ul></div><p>
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-ExecDialog.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-KeyboardMgr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.5. Exec Dialog </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.7. Keyboard Style Manager</td></tr></table></div></body></html>
