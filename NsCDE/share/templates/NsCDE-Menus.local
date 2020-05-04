@@ -1,0 +1,35 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+#
+# This is NsCDE-Menus.local example
+#
+
+#
+# Quick Menu
+#
+
+DestroyMenu m_QuickMenu
+AddToMenu m_QuickMenu "Quick Menu" Title
++ "Games" Popup m_Games
++ "" Nop
+Test (x firefox) + "Firefox%hicolor/24x24/apps/firefox.png%" Exec exec firefox
+Test (x thunderbird) + "Thunderbird%hicolor/24x24/apps/thunderbird.png%" Exec exec thuderbird
+Test (x pidgin) + "Pidgin%hicolor/24x24/apps/pidgin.png%" Exec exec pidgin
++ "" Nop
+Test (x filezilla) + "Filezilla%24x24-filezilla.png%" Exec exec filezilla
+Test (x vlc) + "VLC%24x24-vlc.png%" Exec exec vlc
++ "" Nop
+Test (x xterm) + "Xterm%NsCDE/16x16/apps/xterm-color.png%" Exec exec xterm
+
+#
+# Custom "Games" menu as submenu of Quick Menu
+#
+DestroyMenu m_Games
+AddToMenu m_Games "Games" Title
+Test (x xboard) + "Xboard%24x24-xboard.png%" Exec exec xboard
+# Test (x xmahjongg) + "Xmahjongg%24x24-xmahjongg.png%" Exec exec xmahjongg -t real
+

@@ -166,17 +166,21 @@ function setup_nscde
       fi
    fi
 
-   # Initial NsCDE-Functions.local example for user function customizations
-   if [ ! -e "${FVWM_USERDIR}/NsCDE-Functions.local" ]; then
-      if (($VERBOSE == 1)); then
-         echo "Initializing default ${FVWM_USERDIR}/NsCDE-Functions.local ..."
+   # Initial NsCDE-Functions.local, NsCDE-Menus.local, NsCDE-Keybindings.local, and
+   # NsCDE-Style.local examples for user function customizations
+   for localcf in Functions Menus Keybindings Style
+   do
+      if [ ! -e "${FVWM_USERDIR}/NsCDE-${localcf}.local" ]; then
+         if (($VERBOSE == 1)); then
+            echo "Initializing default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
+         fi
+         cp ${NSCDE_ROOT}/share/templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
+      else
+         if (($VERBOSE == 1)); then
+            echo "${FVWM_USERDIR}/NsCDE-${localcf}.local already exists."
+         fi
       fi
-      cp ${NSCDE_ROOT}/share/templates/NsCDE-Functions.local ${FVWM_USERDIR}/NsCDE-Fucntions.local
-   else
-      if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/NsCDE-Functions.local already exists."
-      fi
-   fi
+   done
 
    # GeometryDB ini
    if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
