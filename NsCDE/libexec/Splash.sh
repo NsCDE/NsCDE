@@ -1,0 +1,294 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+Width=$1
+Height=$2
+
+W1Width=$(($Width - 80))
+W1Height=$(($Height - 80))
+
+W2Width=$(($Width - 88))
+W2Height=$(($Height - 88))
+
+W3Width=$(($Width - 96))
+W3Height=$(($Height - 96))
+
+W4Width=$(($Width - 104))
+W4Height=$(($Height - 104))
+
+TextH4=$(($Height / 4))
+TextHeight=$((($Height - $TextH4) - 40))
+
+if (($Width > 1024 && $Height < 900)) then
+   TextWidth=$(($Width / 18))
+   W9WH=$(($Width / 18))
+else
+   TextWidth=$(($Width / 14))
+   W9WH=$(($Width / 14))
+fi
+
+if (($Height <= 1050)); then
+   SplashBG="SplashBG1.xpm"
+else
+   SplashBG="SplashBG2.xpm"
+fi
+
+cat <<EOF
+WindowTitle {NsCDE-Splash}
+WindowSize $Width $Height
+WindowPosition 0 0
+Colorset 70
+
+Init
+Begin
+   Set \$ScrHeight = $Height
+   If \$ScrHeight < 700 Then
+   Begin
+      Quit
+   End
+
+   Do {Colorset 70 TiledPixmap \$[NSCDE_ROOT]/lib/progbits/$SplashBG}
+
+   Set \$MainFontCmd = (GetOutput {\$NSCDE_ROOT/bin/getfont -v -t bold -s large} 1 -1)
+   Set \$MainFont = {Shadow=1 0 SE:} \$MainFontCmd
+
+   ChangeFont 5 \$MainFont
+   ChangeFont 6 \$MainFont
+   ChangeFont 7 \$MainFont
+   ChangeFont 8 \$MainFont
+
+   Set \$Duration = (GetScriptArgument 1)
+
+   If \$Duration == {} Then
+   Begin
+      Set \$Duration = 8000
+   End
+
+   # Key bindings
+   Key Escape A 5 1 {QuitSplash}
+   Key C C 5 1 {QuitSplash}
+
+   # Variables
+   Set \$OS = (GetOutput {uname -sm} 1 -1)
+   Set \$Version = (GetOutput {echo \$NSCDE_VERSION} 1 -1)
+   Set \$FvwmVersion = (GetOutput {fvwm -V} 1 2)
+
+   Set \$VarTitle1 = { Not so Common Desktop Environment } \$Version { running on } \$OS {.}
+   Set \$VarTitle2 = { Using FVWM version } \$FvwmVersion { as the Window Manager.}
+   Set \$VarTitle3 = { Starting Up ...}
+
+   Set \$Beam = {}
+   Set \$Beam1 = {I}
+   Set \$Beam2 = {/}
+   Set \$Beam3 = {-}
+   Set \$Beam4 = {\}
+   Set \$Stop = 0
+   Set \$Sec = 0
+
+   ChangeLocaleTitle 5 \$VarTitle1
+   ChangeLocaleTitle 6 \$VarTitle2
+   ChangeLocaleTitle 7 { NsCDE is a Free Software released under GPLv3 licence.}
+   ChangeLocaleTitle 8 \$VarTitle3
+End
+
+PeriodicTasks
+Begin
+   Set \$Sec = (Add \$Sec 1)
+   # Do {Echo NsCDE Startup: } (GetTime) { (} \$Sec {)}
+   If (Mult \$Sec 1000) >= \$Duration Then
+   Begin
+      Quit
+   End
+   SendSignal 8 1
+   ChangeLocaleTitle 8 \$StartupTitle
+   Set \$Stop = 0
+End
+
+Widget 1
+   Property
+   Size $W1Width $W1Height
+   Position 40 40
+   Type ItemDraw
+   BackColor {#ed00a8007000}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size $W2Width $W2Height
+   Position 44 44
+   Type ItemDraw
+   Colorset 70
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size $W3Width $W3Height
+   Position 48 48
+   Type ItemDraw
+   BackColor {#49009200a700}
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size $W4Width $W4Height
+   Position 52 52
+   Type ItemDraw
+   Flags NoReliefString
+   Colorset 70
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
+   Size 800 40
+   Position $TextWidth $TextHeight
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 52
+   LocaleTitle {Not so Common Desktop Environment VERSION running on OS.}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         If (LastString) == {QuitSplash} Then
+         Begin
+            Quit
+         End
+      End
+End
+
+Widget 6
+   Property
+   Size 800 40
+   Position $TextWidth $(($TextHeight + 40))
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 52
+   LocaleTitle {Using FVWM version VERSION as the Window Manager.}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 800 40
+   Position $TextWidth $(($TextHeight + 80))
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 52
+   LocaleTitle {NsCDE is a Free Software released under GPLv3 licence.}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Size 800 40
+   Position $TextWidth $(($TextHeight + 120))
+   Type ItemDraw
+   Flags NoReliefString Left
+   Colorset 52
+   LocaleTitle {Starting Up ...}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+      1 :
+      Begin
+         If \$Beam == {} Then
+         Begin
+            Set \$Beam = \$Beam1
+            Set \$Stop = 1
+         End
+
+         If \$Stop <> 1 Then
+         Begin
+            If \$Beam == {I} Then
+            Begin
+               Set \$Beam = \$Beam2
+               Set \$Stop = 1
+            End
+         End
+
+         If \$Stop <> 1 Then
+         Begin
+            If \$Beam == {/} Then
+            Begin
+               Set \$Beam = \$Beam3
+               Set \$Stop = 1
+            End
+         End
+
+         If \$Stop <> 1 Then
+         Begin
+            If \$Beam == {-} Then
+            Begin
+               Set \$Beam = \$Beam4
+               Set \$Stop = 1
+            End
+         End
+
+         If \$Stop <> 1 Then
+         Begin
+            If \$Beam == {\} Then
+            Begin
+               Set \$Beam = \$Beam1
+               Set \$Stop = 1
+            End
+         End
+
+         Set \$StartupTitle = \$VarTitle3 { } \$Beam
+      End
+End
+
+Widget 9
+   Property
+   Size 232 232
+   Position $W9WH $W9WH
+   Type ItemDraw
+   Flags NoReliefString Left
+   Icon NsCDE/NsCDE.xpm
+   Colorset 52
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
