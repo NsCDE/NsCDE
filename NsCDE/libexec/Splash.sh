@@ -67,7 +67,7 @@ Begin
 
    If \$Duration == {} Then
    Begin
-      Set \$Duration = 8000
+      Set \$Duration = 6400
    End
 
    # Key bindings
