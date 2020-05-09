@@ -259,17 +259,6 @@ function install_nscde
       exit 3
    fi
 
-   if [ "$OS" == "FreeBSD" ]; then
-      echo "Patching XDG menu paths for $OS"
-      ./NsCDE/bin/ised -c 's/\/etc\/xdg\/menus/\/usr\/local\/etc\/xdg\/menus/g' -f "${instpath}/libexec/nscde-fvwm-menu-desktop"
-      retval=$?
-      if (($retval != 0)); then
-         echo "An error $retval occured while changing XDG menu paths for $OS"
-      else
-         echo "Done."
-      fi
-   fi
-
    if [ "x$photopath" != "x" ]; then
       echo "Copying additional photo collection from $photopath as ${instpath}/share/photos"
       if [ -d "$photopath" ]; then
