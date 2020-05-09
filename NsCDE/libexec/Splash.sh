@@ -53,7 +53,7 @@ Begin
    End
 
    Do {Colorset 70 TiledPixmap \$[NSCDE_ROOT]/lib/progbits/$SplashBG}
-   Do {Schedule 120 All (NsCDE-Splash) Move screen c 50-50w 50-50w ewmhiwa}
+   Do {Schedule 120 All (NsCDE-Splash) Move screen g 50-50w 50-50w ewmhiwa}
 
    Set \$MainFontCmd = (GetOutput {\$NSCDE_ROOT/bin/getfont -v -t bold -s large} 1 -1)
    Set \$MainFont = {Shadow=1 0 SE:} \$MainFontCmd
