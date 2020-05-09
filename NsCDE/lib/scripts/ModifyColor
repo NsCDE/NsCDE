@@ -50,7 +50,7 @@ Begin
    ChangeColorset 3 $ColorsetFromPalette
 
    # Set Colorset 69 for "New" color (Widget 4)
-   Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $HexColorArg {'"}
+   Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $HexColorArg {'"}
 
    # Parse hex color from the arg 1, set widget values
    Set $R = (HexToNum (StrCopy $HexColorArg 1 2))
@@ -148,7 +148,7 @@ Widget 5
          Set $CheckGrabHex = (StrCopy $GrabHEX 1 1)
          If $CheckGrabHex == {#} Then
          Begin
-            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
+            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
             Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
             Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
             Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
@@ -232,7 +232,7 @@ Widget 9
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -274,7 +274,7 @@ Widget 11
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -316,7 +316,7 @@ Widget 13
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -359,7 +359,7 @@ Widget 15
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -402,7 +402,7 @@ Widget 17
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -444,7 +444,7 @@ Widget 19
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -469,7 +469,7 @@ Widget 21
       Begin
          If $BuildHexForTest <> {} Then
          Begin
-            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
+            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
             Do {SendToModule ColorMgr SendString 19 1 } $ColorsetFromPalette
          End
          Quit

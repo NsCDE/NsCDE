@@ -40,6 +40,8 @@ function findfontsets
          UserFontsetsOut=$(ls -1 ${FVWM_USERDIR}/fontsets/*.fontset)
          UserFontsets=$(echo "$UserFontsetsOut" | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
          UserFontsetsCnt=$(echo "$UserFontsetsOut" | wc -l)
+      else
+         UserFontsetsCnt=0
       fi
    fi
 
