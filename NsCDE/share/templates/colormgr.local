@@ -45,13 +45,25 @@ if [ -d "$NSCDE_ROOT/share/templates/Gkrellm" ] && $(whence -q gkrellm); then
 
    cp -f gkrellmrc ${HOME}/.gkrellm2/themes/NsCDE/
 
-   if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
-      echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
-      echo "0" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
-      echo "100" >> "${HOME}/.gkrellm2/theme_config"
+   # Run this only on first setup
+   if [ "x$IVF" == "x1" ]; then
+      if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
+         echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
+         echo "0" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
+         echo "100" >> "${HOME}/.gkrellm2/theme_config"
+      fi
+
+      if [ ! -f "${HOME}/.gkrellm2/user-config" ]; then
+         echo 'decorated 1' > "${HOME}/.gkrellm2/user-config"
+         echo 'skip_taskbar 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'skip_pager 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'chart_width 80' >> "${HOME}/.gkrellm2/user-config"
+         echo 'sticky_state 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'save_position 1' >> "${HOME}/.gkrellm2/user-config"
+      fi
    fi
 fi
 
