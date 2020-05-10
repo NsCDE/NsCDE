@@ -53,6 +53,8 @@ export FVWM_USERDIR="${HOME}/.NsCDE"
 export NSCDE_ROOT=/opt/NsCDE
 export FVWM_DATADIR="${NSCDE_ROOT}/config"
 
+mkdir -p "${FVWM_USERDIR}/tmp"
+
 echo "$PATH" | egrep -q "/opt\/NsCDE\/bin"
 if (($? != 0)); then
    export PATH="${PATH}:${NSCDE_ROOT}"
