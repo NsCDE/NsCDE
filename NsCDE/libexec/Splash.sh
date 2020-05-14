@@ -77,7 +77,7 @@ Begin
    # Variables
    Set \$OS = (GetOutput {uname -sm} 1 -1)
    Set \$Version = (GetOutput {echo \$NSCDE_VERSION} 1 -1)
-   Set \$FvwmVersion = (GetOutput {fvwm -V} 1 2)
+   Set \$FvwmVersion = (GetOutput {echo $NSCDE_FVWM_VERSION} 1 2)
 
    Set \$VarTitle1 = { Not so Common Desktop Environment } \$Version { running on } \$OS {.}
    Set \$VarTitle2 = { Using FVWM version } \$FvwmVersion { as the Window Manager.}
