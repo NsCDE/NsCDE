@@ -15,12 +15,20 @@ IFS=" "
 
 function defaultcf
 {
+   fvwm_major_version="${NSCDE_FVWM_VERSION%%.*}"
+
+   if [ "x${fvwm_major_version}" == "x3" ] ; then
+      scrvar="$[pointer.screen]"
+   else
+      scrvar="0"
+   fi
+
    echo "InfoStoreAdd lscrn.sls 0"
    echo "InfoStoreAdd lscrn.cnt 1"
-   echo "InfoStoreAdd lscrn.0.width $[vp.width]"
-   echo "InfoStoreAdd lscrn.0.height $[vp.height]"
-   echo "InfoStoreAdd lscrn.0.pos.x 0"
-   echo "InfoStoreAdd lscrn.0.pos.y 0"
+   echo "InfoStoreAdd lscrn.${scrvar}.width $[vp.width]"
+   echo "InfoStoreAdd lscrn.${scrvar}.height $[vp.height]"
+   echo "InfoStoreAdd lscrn.${scrvar}.pos.x 0"
+   echo "InfoStoreAdd lscrn.${scrvar}.pos.y 0"
 }
 
 # Without xrandr(1) we cannot continue.
