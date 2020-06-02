@@ -136,15 +136,27 @@ function manage_launcher
          exit 0
       fi
    else
-      FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
-                  \"ERROR: Old value of FP.${2}LaunchersNum is not a number: $OldNum\""
-      exit 1
+      # Case where infostore variable exists, but parsed number is not what we expect.
+      if (($ADDLNCH_RETVAL == 0)); then
+         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+                     \"ERROR: Old value of FP.${2}LaunchersNum is not a number: $OldNum\""
+         exit 1
+      fi
    fi
 
    if (($ADDLNCH_RETVAL == 0)); then
+
       $NSCDE_ROOT/bin/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
        -f "$FVWM_USERDIR/NsCDE.conf"
    else
+      # Adding as new value - appending.
+      if [ "$1" == add ]; then
+         NewNum=6
+      fi
+      if [ "$1" == add ]; then
+         NewNum=4
+      fi
+
       echo "InfoStoreAdd FP.${2}LaunchersNum $NewNum" >> "$FVWM_USERDIR/NsCDE.conf"
    fi
 
