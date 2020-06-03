@@ -81,9 +81,6 @@ Begin
    Do {f_SendToPGM}
    Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
 
-   # Menus for Pages button menu
-   Set $ParsePg = {egrep "^PG:.*:.*:" } $ConfFile { | sort -t':' -nk2 | uniq | sed -n 's/:/ /g; 1,} $PageNo {p'}
-
    # Shortcut keys for renaming desks
    Key Space C 41 2 {EnterRename}
    Key Return C 41 3 {ReturnFromRename}
@@ -901,27 +898,7 @@ Property
           Begin
              Do {DestroyMenu m_WsmGoToPage}
              Do {AddToMenu m_WsmGoToPage}
-             For $p = 1 To $PageNo Do
-             Begin
-                Set $pgaddr = (GetOutput $ParsePg $p 3)
-                Set $pgX = (StrCopy $pgaddr 1 1)
-                Set $pgY = (StrCopy $pgaddr 2 2)
-                Set $pgline = (GetOutput $ParsePg $p -1)
-                Set $pgdescout = {echo } $pgline { | cut -d" " -f 4-32}
-                Set $pgdesc = (GetOutput  $pgdescout 1 -1)
-                If $pgdesc == {} Then
-                Begin
-                   If $p > 1 Then
-                      Do {+ "" Nop}
-                      Do {+ "Go to page &} $p {" GotoDeskAndPage 0} $NextDesk { } $pgX { } $pgY
-                End
-                Else
-                Begin
-                   If $p > 1 Then
-                      Do {+ "" Nop}
-                      Do {+ "&} $p {  } $pgdesc {" GotoDeskAndPage 0} $NextDesk { } $pgX { } $pgY
-                End
-             End
+             Do {PipeRead "$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
              Do {ChangeMenuStyle CommonAppMenu m_WsmGoToPage}
              Do {Menu m_WsmGoToPage}
           End

@@ -106,10 +106,10 @@ function reset_this_button
       if ((FPA_RETVAL == 0)); then
          $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
          FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"Button nr. $PanelNo has been restored to it's default configured function.\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
       else
          FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"Button $PanelNo is already set at it's default configured function.\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it's default configured function.]\""
       fi
 
       if (($RestartFP == 0)); then
@@ -139,7 +139,7 @@ function manage_launcher
       # Case where infostore variable exists, but parsed number is not what we expect.
       if (($ADDLNCH_RETVAL == 0)); then
          FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
-                     \"ERROR: Old value of FP.${2}LaunchersNum is not a number: $OldNum\""
+                     \"\$[gt.ERROR: Old value of FP.${2}LaunchersNum is not a number:] $OldNum\""
          exit 1
       fi
    fi
