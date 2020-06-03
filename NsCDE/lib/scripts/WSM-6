@@ -75,7 +75,7 @@ Begin
    End
 
    Do {f_SendToPGM}
-   Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+   Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
 
    # Menus for Pages button menu
    Set $ParsePg = {egrep "^PG:.*:.*:" } $ConfFile { | sort -t':' -nk2 | uniq | sed -n 's/:/ /g; 1,} $PageNo {p'}
@@ -91,7 +91,7 @@ Begin
    Set $BtnPressed = 0
 
    # Set background color (widget 30) to colorset 22 if $[infostore.wsmcolored] is 1
-   Do {Test (EnvMatch infostore.wsmcolored 1) SendToModule WSM-$[infostore.desknum] SendString 30 1 wsmcolored}
+   Do {Test (EnvMatch infostore.wsmcolored 1) SendToModule $[infostore.WSM] SendString 30 1 wsmcolored}
 End
 
 # Worker widget 30
@@ -258,7 +258,7 @@ Property
           Begin
              If $BtnPressed == 1 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 1
              ChangeColorset 1 41
@@ -273,7 +273,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 1) { 1 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 1) { 1 }
              ChangeColorset 1 40
           End
        End
@@ -299,7 +299,7 @@ Property
           Begin
              If $BtnPressed == 2 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 2
              ChangeColorset 2 43
@@ -314,7 +314,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 2) { 2 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 2) { 2 }
              ChangeColorset 2 42
           End
        End
@@ -340,7 +340,7 @@ Property
           Begin
              If $BtnPressed == 3 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 3
              ChangeColorset 3 45
@@ -355,7 +355,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 3) { 3 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 3) { 3 }
              ChangeColorset 3 44
           End
        End
@@ -381,7 +381,7 @@ Property
           Begin
              If $BtnPressed == 4 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 4
              ChangeColorset 4 47
@@ -396,7 +396,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 4) { 4 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 4) { 4 }
              ChangeColorset 4 46
           End
        End
@@ -422,7 +422,7 @@ Property
           Begin
              If $BtnPressed == 5 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 5
              ChangeColorset 5 41
@@ -437,7 +437,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 5) { 5 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 5) { 5 }
              ChangeColorset 5 40
           End
        End
@@ -463,7 +463,7 @@ Property
           Begin
              If $BtnPressed == 6 Then
              Begin
-                Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
              End
              Set $BtnPressed = 6
              ChangeColorset 6 43
@@ -478,7 +478,7 @@ Property
           End
           Else
           Begin
-             Do {SendToModule WSM-$[infostore.desknum] SendString 41 4 } (GetValue 6) { 6 }
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 6) { 6 }
              ChangeColorset 6 42
           End
        End
@@ -690,7 +690,7 @@ Property
                       ChangeColorset $CurrDesk 42
 
                    # Update buttons press state as if pressed.
-                   Do {SendToModule WSM-$[infostore.desknum] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                   Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
                 End
 
                 ChangeTitle 41 {}
