@@ -1,0 +1,1008 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-NProcMgr}
+WindowLocaleTitle { NsCDE Proces Management }
+WindowSize 548 724
+Colorset 22
+
+Init
+Begin
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $SelectFont = {Shadow=1 0 SE:} $DefaultFont
+   ChangeFont 20 $DefaultFont
+   ChangeFont 40 $DefaultFont
+   ChangeFont 21 $DefaultFont
+   ChangeFont 41 $DefaultFont
+   ChangeFont 22 $DefaultFont
+   ChangeFont 42 $DefaultFont
+   ChangeFont 23 $DefaultFont
+   ChangeFont 43 $DefaultFont
+   ChangeFont 24 $DefaultFont
+   ChangeFont 44 $DefaultFont
+   ChangeFont 25 $DefaultFont
+   ChangeFont 45 $DefaultFont
+   ChangeFont 26 $DefaultFont
+   ChangeFont 46 $DefaultFont
+   ChangeFont 27 $DefaultFont
+   ChangeFont 47 $DefaultFont
+   ChangeFont 28 $DefaultFont
+   ChangeFont 48 $DefaultFont
+   ChangeFont 29 $DefaultFont
+   ChangeFont 49 $DefaultFont
+
+   ChangeFont 50 $DefaultFont
+
+   ChangeLocaleTitle 20 {  Fvwm Main Process}
+   ChangeLocaleTitle 21 {  Xsettingsd}
+   ChangeLocaleTitle 22 {  Stalonetray}
+   ChangeLocaleTitle 23 {  Xscreensaver}
+   ChangeLocaleTitle 24 {  Fvwm Event}
+   ChangeLocaleTitle 25 {  Fvwm Animate}
+   ChangeLocaleTitle 26 {  Front Panel}
+   ChangeLocaleTitle 27 {  Local Pager}
+   ChangeLocaleTitle 28 {  Fvwm Backer}
+   ChangeLocaleTitle 29 {  Icon Box}
+
+   Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm -f .*NsCDE-Main\.conf .*'} 1 -1)
+   Set $FvwmStateInfo = {Enabled, Running (PID: } $FvwmPid {)}
+   ChangeLocaleTitle 40 $FvwmStateInfo
+
+   SendSignal 1 1
+End
+
+Widget 1
+   Property
+   Size 20 32
+   Position 10 10
+   Type ItemDraw
+   Flags NoReliefString
+   Title {}
+   Icon NsCDE/SDtProcMgr.m.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         SendSignal 20 2
+         Do {f_NProcMgrHandler 21 2 nscde_use_xsettingsd}
+         Do {f_NProcMgrHandler 22 2 nscde_use_stalonetray}
+         Do {f_NProcMgrHandler 23 2 nscde_use_xscreensaver}
+         SendSignal 24 2
+         SendSignal 25 2
+         SendSignal 26 2
+         SendSignal 27 2
+         SendSignal 28 2
+         Do {f_NProcMgrHandler 29 2 iconbox}
+      End
+      2 :
+      Begin
+         If (GetValue 20) == 1 Then
+            SendSignal 20 2
+         If (GetValue 21) == 1 Then
+            Do {f_NProcMgrHandler 21 2 nscde_use_xsettingsd}
+         If (GetValue 22) == 1 Then
+            Do {f_NProcMgrHandler 22 2 nscde_use_stalonetray}
+         If (GetValue 23) == 1 Then
+            Do {f_NProcMgrHandler 23 2 nscde_use_xscreensaver}
+         If (GetValue 24) == 1 Then
+            SendSignal 24 2
+         If (GetValue 25) == 1 Then
+            SendSignal 25 2
+         If (GetValue 26) == 1 Then
+            SendSignal 26 2
+         If (GetValue 27) == 1 Then
+            SendSignal 27 2
+         If (GetValue 28) == 1 Then
+            SendSignal 28 2
+         If (GetValue 29) == 1 Then
+            Do {f_NProcMgrHandler 29 2 iconbox}
+      End
+      3 :
+      Begin
+         Do {Schedule 1000 SendToModule NProcMgr SendString 1 2 recheck}
+      End
+End
+
+Widget 2
+   Property
+   Size 80 0
+   Position 18 50
+   Type ItemDraw
+   Flags NoReliefString
+   Title {Processes}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+Property
+   Size 532 510
+   Position 8 60
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 20
+Property
+   Position 22 84
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {Fvwm Main Process}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 20) == 1 Then
+         Begin
+            ChangeFont 40 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 40 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm -f .*NsCDE-Main\.conf .*' | egrep '^[[:digit:]]+$'} 1 -1)
+         If $FvwmPid == {} Then
+         Begin
+            Set $RunState20 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState20 = {Running (PID: } $FvwmPid {)}
+         End
+         Set $FvwmStateInfo = {Required, } $RunState20
+         ChangeLocaleTitle 40 $FvwmStateInfo
+      End
+      3 :
+      Begin
+         Do {f_RunQuickScriptDialog ActionForm "$[gt.Restart NsCDE?]" $[gt.Yes] $[gt.No] "$[gt.Restart NsCDE]" Restart Nop}
+      End
+      4 :
+      Begin
+         Do {f_RunQuickScriptDialog SysActionDialog 1}
+      End
+      5 :
+      Begin
+         Do {f_Notifier "NsCDE Process Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.FVWM is already running.]"}
+      End
+End
+
+Widget 21
+Property
+   Position 22 124
+   Type CheckBox
+   Flags NoReliefString
+   Title {Xsettingsd}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 21) == 1 Then
+         Begin
+            ChangeFont 41 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 41 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $EnableState21 = (LastString)
+
+         Set $XsettingsdPid = (GetOutput {pgrep -xf '.*xsettingsd.*\.NsCDE/Xsettingsd.conf.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $XsettingsdPid == {} Then
+         Begin
+            Set $RunState21 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState21 = {Running (PID: } $XsettingsdPid {)}
+         End
+         Set $XsettingsdStateInfo = $EnableState21 {, } $RunState21
+         ChangeLocaleTitle 41 $XsettingsdStateInfo
+      End
+      3 :
+      Begin
+         Do {f_Xsettingsd restart}
+      End
+      4 :
+      Begin
+         Do {f_Xsettingsd stop}
+      End
+      5 :
+      Begin
+         Do {f_Xsettingsd start}
+      End
+End
+
+Widget 22
+Property
+   Position 22 168
+   Type CheckBox
+   Flags NoReliefString
+   Title {Stalonetray}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 22) == 1 Then
+         Begin
+            ChangeFont 42 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 42 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $EnableState22 = (LastString)
+
+         Set $StaloneTrayPid = (GetOutput {pgrep -u $(id -u) -xf 'stalonetray -c .*\/Stalonetray.conf' | egrep '^[[:digit:]]+$'} 1 -1)
+         If $StaloneTrayPid == {} Then
+         Begin
+            Set $RunState22 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState22 = {Running (PID: } $StaloneTrayPid {)}
+         End
+         Set $StaloneTrayStateInfo = $EnableState22 {, } $RunState22
+         ChangeLocaleTitle 42 $StaloneTrayStateInfo
+      End
+      3 :
+      Begin
+         Do {f_Stalonetray restart}
+      End
+      4 :
+      Begin
+         Do {f_Stalonetray stop}
+      End
+      5 :
+      Begin
+         Do {f_Stalonetray start}
+      End
+End
+
+Widget 23
+Property
+   Position 22 212
+   Type CheckBox
+   Flags NoReliefString
+   Title {Xscreensaver}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 23) == 1 Then
+         Begin
+            ChangeFont 43 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 43 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $EnableState23 = (LastString)
+
+         Set $XscreensaverPid = (GetOutput {pgrep -u $(id -u) -xf '^xscreensaver.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $XscreensaverPid == {} Then
+         Begin
+            Set $RunState23 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState23 = {Running (PID: } $XscreensaverPid {)}
+         End
+         Set $XscreensaverStateInfo = $EnableState23 {, } $RunState23
+         ChangeLocaleTitle 43 $XscreensaverStateInfo
+      End
+      3 :
+      Begin
+         Do {f_Xscreensaver -restart}
+      End
+      4 :
+      Begin
+         Do {f_Xscreensaver -kill}
+      End
+      5 :
+      Begin
+         Do {f_Xscreensaver -start}
+      End
+End
+
+Widget 24
+Property
+   Position 22 256
+   Type CheckBox
+   Flags NoReliefString
+   Title {Fvwm Event}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 24) == 1 Then
+         Begin
+            ChangeFont 44 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 44 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmEventPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmEvent.*MainLoop.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $FvwmEventPid == {} Then
+         Begin
+            Set $RunState24 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState24 = {Running (PID: } $FvwmEventPid {)}
+         End
+         Set $FvwmEventInfo = {Required, } $RunState24
+         ChangeLocaleTitle 44 $FvwmEventInfo
+      End
+      3 :
+      Begin
+         Do {KillModule FvwmEvent MainLoop}
+         Do {Schedule 100 Module FvwmEvent MainLoop}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmEvent MainLoop}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 Module FvwmEvent MainLoop}
+      End
+End
+
+Widget 25
+Property
+   Position 22 300
+   Type CheckBox
+   Flags NoReliefString
+   Title {FvwmAnimate}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 25) == 1 Then
+         Begin
+            ChangeFont 45 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 45 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmAnimatePid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmAnimate.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $FvwmAnimatePid == {} Then
+         Begin
+            Set $RunState25 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState25 = {Running (PID: } $FvwmAnimatePid {)}
+         End
+         Set $FvwmAnimateInfo = {Required, } $RunState25
+         ChangeLocaleTitle 45 $FvwmAnimateInfo
+      End
+      3 :
+      Begin
+         Do {KillModule FvwmAnimate}
+         Do {Schedule 100 Module FvwmAnimate}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmAnimate}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 Module FvwmAnimate}
+      End
+End
+
+Widget 26
+Property
+   Position 22 344
+   Type CheckBox
+   Flags NoReliefString
+   Title {Front Panel}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 26) == 1 Then
+         Begin
+            ChangeFont 46 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 46 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmFrontPanelPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmButtons.*FrontPanel.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $FvwmFrontPanelPid == {} Then
+         Begin
+            Set $RunState26 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState26 = {Running (PID: } $FvwmFrontPanelPid {)}
+         End
+         Set $FvwmFrontPanelInfo = {Required, } $RunState26
+         ChangeLocaleTitle 46 $FvwmFrontPanelInfo
+      End
+      3 :
+      Begin
+         Do {f_RestartFrontPanel}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmButtons FrontPanel}
+         Do {Schedule 100 All (FrontPanel, CirculateHit) Deschedule $[w.id]}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 ModuleSynchronous FvwmButtons FrontPanel}
+      End
+End
+
+Widget 27
+Property
+   Position 22 388
+   Type CheckBox
+   Flags NoReliefString
+   Title {Local Pager}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 27) == 1 Then
+         Begin
+            ChangeFont 47 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 47 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmLocalPagerPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmPager.*LocalPager.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $FvwmLocalPagerPid == {} Then
+         Begin
+            Set $RunState27 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState27 = {Running (PID: } $FvwmLocalPagerPid {)}
+         End
+         Set $FvwmLocalPagerInfo = {Required, } $RunState27
+         ChangeLocaleTitle 47 $FvwmLocalPagerInfo
+      End
+      3 :
+      Begin
+         Do {KillModule FvwmPager LocalPager}
+         Do {Schedule 100 Module FvwmPager LocalPager * $[infostore.fvwmdesknum]}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmPager LocalPager}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 None (LocalPager, CirculateHit) Module FvwmPager LocalPager * $[infostore.fvwmdesknum]}
+      End
+End
+
+Widget 28
+Property
+   Position 22 432
+   Type CheckBox
+   Flags NoReliefString
+   Title {Fvwm Backer}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 28) == 1 Then
+         Begin
+            ChangeFont 48 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 48 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $FvwmBackerPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmBacker.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $FvwmBackerPid == {} Then
+         Begin
+            Set $RunState28 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState28 = {Running (PID: } $FvwmBackerPid {)}
+         End
+         Set $FvwmBackerInfo = {Required, } $RunState28
+         ChangeLocaleTitle 48 $FvwmBackerInfo
+      End
+      3 :
+      Begin
+         Do {KillModule FvwmBacker}
+         Do {Schedule 100 ModuleSynchronous FvwmBacker}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmBacker}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 ModuleSynchronous FvwmBacker}
+      End
+End
+
+Widget 29
+Property
+   Position 22 476
+   Type CheckBox
+   Flags NoReliefString
+   Title {Icon Box}
+   Font "xft:::pixelsize=18"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 29) == 1 Then
+         Begin
+            ChangeFont 49 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 49 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $EnableState29 = (LastString)
+      
+         Set $FvwmIconManPid = (GetOutput {pgrep -u $(id -u) -xf ".*FvwmIconMan.*NsCDEIconBox.*" | egrep "^[[:digit:]]+$" | grep -v ^$$} 1 -1)
+         If $FvwmIconManPid == {} Then
+         Begin
+            Set $RunState29 = {Not Running}
+         End
+         Else
+         Begin
+            Set $RunState29 = {Running (PID: } $FvwmIconManPid {)} 
+         End
+         Set $FvwmIconManStateInfo = $EnableState29 {, } $RunState29
+         ChangeLocaleTitle 49 $FvwmIconManStateInfo
+      End
+      3 :
+      Begin
+         Do {KillModule FvwmIconMan NsCDEIconBox}
+         Do {Schedule 100 Module FvwmIconMan NsCDEIconBox}
+      End
+      4 :
+      Begin
+         Do {KillModule FvwmIconMan NsCDEIconBox}
+      End
+      5 :
+      Begin
+         Do {Schedule 100 Module FvwmIconMan NsCDEIconBox}
+      End
+End
+
+Widget 40
+   Property
+   Size 286 0
+   Position 244 82
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {unknown, unknown (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 41
+   Property
+   Size 286 0
+   Position 244 122
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {unknown, unknown (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 42
+   Property
+   Size 286 0
+   Position 244 166
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 43
+   Property
+   Size 286 0
+   Position 244 210
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 44
+   Property
+   Size 286 0
+   Position 244 254
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 45
+   Property
+   Size 286 0
+   Position 244 298
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 46
+   Property
+   Size 286 0
+   Position 244 342
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 47
+   Property
+   Size 286 0
+   Position 244 386
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 48
+   Property
+   Size 286 0
+   Position 244 430
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 49
+   Property
+   Size 286 0
+   Position 244 474
+   Type ItemDraw
+   Flags NoReliefString Right
+   Title {Enabled, Running (PID: XXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 50
+   Property
+   Size 286 0
+   Position 24 526
+   Type ItemDraw
+   Flags NoReliefString Left
+   Title {Action:}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 51
+Property
+   Size 200 20
+   Position 84 524
+   Type PopupMenu
+   Flags NoReliefString Left
+   Title { Recheck | Restart | Stop | Start }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 51 1
+      End
+      1 :
+      Begin
+      End
+End
+
+Widget 52
+Property
+   Size 256 20
+   Position 260 524
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 52 1
+      End
+      1 :
+      Begin
+         # Status
+         If (GetValue 51) == 1 Then
+         Begin
+            For $procwidget = 20 To 29 Do
+            Begin
+               If (GetValue $procwidget) == 1 Then
+               Begin
+                  ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
+               End
+            End
+         End
+
+         # Restart
+         If (GetValue 51) == 2 Then
+         Begin
+            For $procwidget = 20 To 29 Do
+            Begin
+               If (GetValue $procwidget) == 1 Then
+               Begin
+                  SendSignal $procwidget 3
+                  ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
+               End
+            End
+         End
+
+         # Stop
+         If (GetValue 51) == 3 Then
+         Begin
+            For $procwidget = 20 To 29 Do
+            Begin
+               If (GetValue $procwidget) == 1 Then
+               Begin
+                  SendSignal $procwidget 4
+                  ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
+               End
+            End
+         End
+
+         # Start
+         If (GetValue 51) == 4 Then
+         Begin
+            For $procwidget = 20 To 29 Do
+            Begin
+               If (GetValue $procwidget) == 1 Then
+               Begin
+                  SendSignal $procwidget 5
+                  ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
+               End
+            End
+         End
+
+         # Refresh status of all items
+         SendSignal 1 3
+      End
+End
+
+Widget 4
+Property
+   Size 532 64
+   Position 8 590
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 5
+   Property
+   Size 104 0
+   Position 18 580
+   Type ItemDraw
+   Flags NoReliefString
+   Title {Configurations}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 53
+Property
+   Size 200 20
+   Position 32 612
+   Type PopupMenu
+   Flags NoReliefString Left
+   Title { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspPager|Script|Style}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 53 1
+      End
+      1 :
+      Begin
+      End
+End
+
+Widget 54
+Property
+   Size 284 20
+   Position 232 612
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Reread}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 54 1
+      End
+      1 :
+      Begin
+      End
+End
+
+
+Widget 6
+Property
+   Size 536 0
+   Position 4 670
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+Widget 7
+Property
+   Size 160 20
+   Position 24 684
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Close}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 7 1
+      End
+      1 :
+      Begin
+         Quit
+      End
+End
+
+Widget 8
+Property
+   Size 160 20
+   Position 358 684
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 8 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "Color Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-NProcMgr.html}
+      End
+End
+
