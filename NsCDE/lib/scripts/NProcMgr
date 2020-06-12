@@ -47,7 +47,7 @@ Begin
    ChangeLocaleTitle 28 {  Fvwm Backer}
    ChangeLocaleTitle 29 {  Icon Manager}
 
-   ChangeLocaleTitle 51 { Recheck | Restart | Stop | Start }
+   ChangeLocaleTitle 51 {      Recheck      |      Restart      |      Stop      |      Start      }
 
    SendSignal 1 1
 End
@@ -179,7 +179,7 @@ Property
       End
       2 :
       Begin
-         Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm -f .*NsCDE-Main\.conf .*' | egrep '^[[:digit:]]+$'} 1 -1)
+         Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm(2|3)? -f .*NsCDE-Main\.conf( .*)?' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmPid == {} Then
          Begin
             Set $RunState20 = {Not Running}
@@ -828,11 +828,11 @@ End
 
 Widget 51
 Property
-   Size 200 20
+   Size 256 20
    Position 84 524
    Type PopupMenu
    Flags NoReliefString Left
-   Title { Recheck | Restart | Stop | Start }
+   Title {      Recheck      |      Restart      |      Stop      |      Start      }
    Main
       Case message of
       SingleClic :
