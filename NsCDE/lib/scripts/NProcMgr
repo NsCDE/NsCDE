@@ -45,11 +45,9 @@ Begin
    ChangeLocaleTitle 26 {  Front Panel}
    ChangeLocaleTitle 27 {  Local Pager}
    ChangeLocaleTitle 28 {  Fvwm Backer}
-   ChangeLocaleTitle 29 {  Icon Box}
+   ChangeLocaleTitle 29 {  Icon Manager}
 
-   Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm -f .*NsCDE-Main\.conf .*'} 1 -1)
-   Set $FvwmStateInfo = {Enabled, Running (PID: } $FvwmPid {)}
-   ChangeLocaleTitle 40 $FvwmStateInfo
+   ChangeLocaleTitle 51 { Recheck | Restart | Stop | Start }
 
    SendSignal 1 1
 End
@@ -106,6 +104,29 @@ Widget 1
       3 :
       Begin
          Do {Schedule 1000 SendToModule NProcMgr SendString 1 2 recheck}
+      End
+End
+
+Widget 55
+Property
+   Size 180 20
+   Position 344 16
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Check All Now}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 55 1
+      End
+      1 :
+      Begin
+         For $procwidget = 20 To 29 Do
+         Begin
+            ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
+         End
+         SendSignal 1 1
       End
 End
 
@@ -592,7 +613,7 @@ Property
    Position 22 476
    Type CheckBox
    Flags NoReliefString
-   Title {Icon Box}
+   Title {Icon Manager}
    Font "xft:::pixelsize=18"
    Value 0
    Main
@@ -632,6 +653,7 @@ Property
       4 :
       Begin
          Do {KillModule FvwmIconMan NsCDEIconBox}
+         Do {f_ReadCfg Style}
       End
       5 :
       Begin
@@ -925,14 +947,10 @@ Property
    Position 32 612
    Type PopupMenu
    Flags NoReliefString Left
-   Title { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspPager|Script|Style}
+   Title { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
    Main
       Case message of
       SingleClic :
-      Begin
-         SendSignal 53 1
-      End
-      1 :
       Begin
       End
 End
@@ -952,6 +970,40 @@ Property
       End
       1 :
       Begin
+         Set $ReReadCfg = (GetValue 53)
+
+         If $ReReadCfg == 1 Then
+            Do {f_ReadCfg Animate}
+         If $ReReadCfg == 2 Then
+            Do {f_ReadCfg Backdrops}
+         If $ReReadCfg == 3 Then
+            Do {f_ReadCfg Backer}
+         If $ReReadCfg == 4 Then
+            Do {f_ReadCfg Colorset}
+         If $ReReadCfg == 5 Then
+            Do {f_ReadCfg Event}
+         If $ReReadCfg == 6 Then
+            Do {f_ReadCfg Functions}
+         If $ReReadCfg == 7 Then
+            Do {f_ReadCfg IconMan}
+         If $ReReadCfg == 8 Then
+            Do {f_ReadCfg Ident}
+         If $ReReadCfg == 9 Then
+            Do {f_ReadCfg Keybindings}
+         If $ReReadCfg == 10 Then
+            Do {f_ReadCfg Menus}
+         If $ReReadCfg == 11 Then
+            Do {f_ReadCfg Mousebindings}
+         If $ReReadCfg == 12 Then
+            Do {f_ReadCfg Pager-GlobalPager}
+         If $ReReadCfg == 13 Then
+            Do {f_ReadCfg Pager-LocalPager}
+         If $ReReadCfg == 14 Then
+            Do {f_ReadCfg Pager-WspLocPager}
+         If $ReReadCfg == 15 Then
+            Do {f_ReadCfg Script}
+         If $ReReadCfg == 16 Then
+            Do {f_ReadCfg Style}
       End
 End
 
