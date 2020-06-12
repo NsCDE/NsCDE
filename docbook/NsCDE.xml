@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.0.rc21">
+<!ENTITY appversion "1.0.rc22">
 <!ENTITY date "May 2020">
 <!ENTITY app "NsCDE">
 ]>
@@ -215,6 +215,7 @@ GUI tools are:
 <listitem><para>Sysinfo - FvwmScript, python</para></listitem>
 <listitem><para>Window Style Manager (WindowMgr) - FvwmScript, sed, egrep</para></listitem>
 <listitem><para>Workspaces and Pages Manager (WsPgMgr) - FvwmScript</para></listitem>
+<listitem><para>NsCDE Process Manager (NProcMgr) - FvwmScript</para></listitem>
 </itemizedlist>
 
 </para>
@@ -2028,18 +2029,64 @@ Workspaces and Pages Manager is called from the Front Panel's small
 left button menu which is called when that button is clicked with the right
 pointer button.
 </para>
+</sect2>
+
+<sect2 id="NsCDE-NProcMgr">
+<title>NsCDE Process Manager (NProcMgr)</title>
+<para>
+This tool is specific to NsCDE. It manages NsCDE FVWM and rest processes, and re-reads
+given part of FVWM configuration on demand. The followin actions are provided and supported:
+<itemizedlist>
+<listitem><para>
+ Recheck - Check selected item processes running state
+</para></listitem>
+<listitem><para>
+ Restart - Restarts selected item processes
+</para></listitem>
+<listitem><para>
+ Stop - Stops selected item processes
+</para></listitem>
+<listitem><para>
+ Start - Starts selected item processes
+</para></listitem>
+<listitem><para>
+ Reread - Reads fresh FVWM configuration for the item selected on the <guibutton>Configurations</guibutton> popup menu.
+</para></listitem>
+</itemizedlist>
+</para>
+<para>
+There can be more processes (items) selected for the given action. Items are not unselected after action.
+NsCDE Process Manager can be used for diagnostic, debugging and developing functions and other parts of
+the NsCDE. It Provides GUI for "KillModule", "Module" and various NsCDE FVWM functions, and for f_ReadCfg".
+Process list consists of check buttons with item/process names on the left, and their functional state, running
+state and PID on the right side. After every action, selected item is checked again and it's running state and
+PID are refreshed. <guibutton>Check All Now</guibutton> button when pressed will refresh status for all items,
+selected or not.
+</para>
 
 <para>
 Key Bindings:
 <itemizedlist>
 <listitem><para>
-<keysym>Escape</keysym>: Quits Workspaces and Pages Manager.
-</para></listitem>
-<listitem><para>
 <keysym>Ctrl+Q</keysym>: Quits Workspaces and Pages Manager.
 </para></listitem>
 <listitem><para>
 <keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+A</keysym>: Hits Apply button.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+R</keysym>: Hits Reread button.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+K</keysym>: Hits Check All Now button.
+</para></listitem>
+<listitem><para>
+<keysym>A</keysym>: Cycles actions from Action PopUp menu.
+</para></listitem>
+<listitem><para>
+<keysym>C</keysym>: Cycles configurations from Configurations PopUp menu.
 </para></listitem>
 </itemizedlist>
 </para>

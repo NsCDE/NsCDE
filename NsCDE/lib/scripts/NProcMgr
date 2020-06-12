@@ -6,13 +6,17 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-NProcMgr}
 WindowLocaleTitle { NsCDE Proces Management }
-WindowSize 548 724
+WindowSize 502 660
 Colorset 22
 
 Init
 Begin
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
    Set $SelectFont = {Shadow=1 0 SE:} $DefaultFont
+
+   ChangeFont 2 $DefaultFont
+   ChangeFont 5 $DefaultFont
+
    ChangeFont 20 $DefaultFont
    ChangeFont 40 $DefaultFont
    ChangeFont 21 $DefaultFont
@@ -35,6 +39,11 @@ Begin
    ChangeFont 49 $DefaultFont
 
    ChangeFont 50 $DefaultFont
+   ChangeFont 51 $DefaultFont
+   ChangeFont 52 $DefaultFont
+   ChangeFont 53 $DefaultFont
+   ChangeFont 54 $DefaultFont
+   ChangeFont 55 $DefaultFont
 
    ChangeLocaleTitle 20 {  Fvwm Main Process}
    ChangeLocaleTitle 21 {  Xsettingsd}
@@ -48,14 +57,26 @@ Begin
    ChangeLocaleTitle 29 {  Icon Manager}
 
    ChangeLocaleTitle 51 {      Recheck      |      Restart      |      Stop      |      Start      }
+   ChangeTitle 53 { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
+   ChangeLocaleTitle 54 {Reread}
 
    SendSignal 1 1
+
+   # Key bindings
+   Key Q C 7 1 {KeyClose}
+   Key F1 A 8 1 {KeyHelp}
+   Key Help A 8 1 {KeyHelp}
+   Key A C 52 1 {KeyApply}
+   Key R C 54 1 {KeyReread}
+   Key K A 55 1 {KeyRecheckAll}
+   Key A A 51 1 {KeyPopDownAction}
+   Key C A 53 1 {KeyPopDownReread}
 End
 
 Widget 1
    Property
    Size 20 32
-   Position 10 10
+   Position 10 8
    Type ItemDraw
    Flags NoReliefString
    Title {}
@@ -110,7 +131,7 @@ End
 Widget 55
 Property
    Size 180 20
-   Position 344 16
+   Position 294 16
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Check All Now}
@@ -133,7 +154,7 @@ End
 Widget 2
    Property
    Size 80 0
-   Position 18 50
+   Position 18 48
    Type ItemDraw
    Flags NoReliefString
    Title {Processes}
@@ -146,8 +167,8 @@ End
 
 Widget 3
 Property
-   Size 532 510
-   Position 8 60
+   Size 486 452
+   Position 8 58
    Type Rectangle
    Main
       Case message of
@@ -158,11 +179,11 @@ End
 
 Widget 20
 Property
-   Position 22 84
+   Position 20 82
    Type CheckBox
    Flags NoReliefString Left
-   Title {Fvwm Main Process}
-   Font "xft:::pixelsize=18"
+   Title {   Fvwm Main Process   }
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -182,13 +203,13 @@ Property
          Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm(2|3)? -f .*NsCDE-Main\.conf( .*)?' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmPid == {} Then
          Begin
-            Set $RunState20 = {Not Running}
+            Set $RunState20 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState20 = {Running (PID: } $FvwmPid {)}
+            Set $RunState20 = (Gettext {Running}) { (PID: } $FvwmPid {)}
          End
-         Set $FvwmStateInfo = {Required, } $RunState20
+         Set $FvwmStateInfo = (Gettext {Required, }) $RunState20
          ChangeLocaleTitle 40 $FvwmStateInfo
       End
       3 :
@@ -207,11 +228,11 @@ End
 
 Widget 21
 Property
-   Position 22 124
+   Position 20 120
    Type CheckBox
    Flags NoReliefString
    Title {Xsettingsd}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -233,13 +254,13 @@ Property
          Set $XsettingsdPid = (GetOutput {pgrep -xf '.*xsettingsd.*\.NsCDE/Xsettingsd.conf.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $XsettingsdPid == {} Then
          Begin
-            Set $RunState21 = {Not Running}
+            Set $RunState21 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState21 = {Running (PID: } $XsettingsdPid {)}
+            Set $RunState21 = (Gettext {Running}) { (PID: } $XsettingsdPid {)}
          End
-         Set $XsettingsdStateInfo = $EnableState21 {, } $RunState21
+         Set $XsettingsdStateInfo = (Gettext $EnableState21) {, } $RunState21
          ChangeLocaleTitle 41 $XsettingsdStateInfo
       End
       3 :
@@ -258,11 +279,11 @@ End
 
 Widget 22
 Property
-   Position 22 168
+   Position 20 158
    Type CheckBox
    Flags NoReliefString
    Title {Stalonetray}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -281,16 +302,16 @@ Property
       Begin
          Set $EnableState22 = (LastString)
 
-         Set $StaloneTrayPid = (GetOutput {pgrep -u $(id -u) -xf 'stalonetray -c .*\/Stalonetray.conf' | egrep '^[[:digit:]]+$'} 1 -1)
+         Set $StaloneTrayPid = (GetOutput {pgrep -u $(id -u) -xf 'stalonetray -c .*\/Stalonetray.conf' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $StaloneTrayPid == {} Then
          Begin
-            Set $RunState22 = {Not Running}
+            Set $RunState22 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState22 = {Running (PID: } $StaloneTrayPid {)}
+            Set $RunState22 = (Gettext {Running}) { (PID: } $StaloneTrayPid {)}
          End
-         Set $StaloneTrayStateInfo = $EnableState22 {, } $RunState22
+         Set $StaloneTrayStateInfo = (Gettext $EnableState22) {, } $RunState22
          ChangeLocaleTitle 42 $StaloneTrayStateInfo
       End
       3 :
@@ -309,11 +330,11 @@ End
 
 Widget 23
 Property
-   Position 22 212
+   Position 20 196
    Type CheckBox
    Flags NoReliefString
    Title {Xscreensaver}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -335,13 +356,13 @@ Property
          Set $XscreensaverPid = (GetOutput {pgrep -u $(id -u) -xf '^xscreensaver.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $XscreensaverPid == {} Then
          Begin
-            Set $RunState23 = {Not Running}
+            Set $RunState23 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState23 = {Running (PID: } $XscreensaverPid {)}
+            Set $RunState23 = (Gettext {Running}) { (PID: } $XscreensaverPid {)}
          End
-         Set $XscreensaverStateInfo = $EnableState23 {, } $RunState23
+         Set $XscreensaverStateInfo = (Gettext $EnableState23) {, } $RunState23
          ChangeLocaleTitle 43 $XscreensaverStateInfo
       End
       3 :
@@ -360,11 +381,11 @@ End
 
 Widget 24
 Property
-   Position 22 256
+   Position 20 234
    Type CheckBox
    Flags NoReliefString
    Title {Fvwm Event}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -384,13 +405,13 @@ Property
          Set $FvwmEventPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmEvent.*MainLoop.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmEventPid == {} Then
          Begin
-            Set $RunState24 = {Not Running}
+            Set $RunState24 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState24 = {Running (PID: } $FvwmEventPid {)}
+            Set $RunState24 = (Gettext {Running}) { (PID: } $FvwmEventPid {)}
          End
-         Set $FvwmEventInfo = {Required, } $RunState24
+         Set $FvwmEventInfo = (Gettext {Required, }) $RunState24
          ChangeLocaleTitle 44 $FvwmEventInfo
       End
       3 :
@@ -410,11 +431,11 @@ End
 
 Widget 25
 Property
-   Position 22 300
+   Position 20 272
    Type CheckBox
    Flags NoReliefString
    Title {FvwmAnimate}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -434,13 +455,13 @@ Property
          Set $FvwmAnimatePid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmAnimate.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmAnimatePid == {} Then
          Begin
-            Set $RunState25 = {Not Running}
+            Set $RunState25 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState25 = {Running (PID: } $FvwmAnimatePid {)}
+            Set $RunState25 = (Gettext {Running}) { (PID: } $FvwmAnimatePid {)}
          End
-         Set $FvwmAnimateInfo = {Required, } $RunState25
+         Set $FvwmAnimateInfo = (Gettext {Required, }) $RunState25
          ChangeLocaleTitle 45 $FvwmAnimateInfo
       End
       3 :
@@ -460,11 +481,11 @@ End
 
 Widget 26
 Property
-   Position 22 344
+   Position 20 310
    Type CheckBox
    Flags NoReliefString
-   Title {Front Panel}
-   Font "xft:::pixelsize=18"
+   Title {      Front Panel      }
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -484,13 +505,13 @@ Property
          Set $FvwmFrontPanelPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmButtons.*FrontPanel.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmFrontPanelPid == {} Then
          Begin
-            Set $RunState26 = {Not Running}
+            Set $RunState26 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState26 = {Running (PID: } $FvwmFrontPanelPid {)}
+            Set $RunState26 = (Gettext {Running}) { (PID: } $FvwmFrontPanelPid {)}
          End
-         Set $FvwmFrontPanelInfo = {Required, } $RunState26
+         Set $FvwmFrontPanelInfo = (Gettext {Required, }) $RunState26
          ChangeLocaleTitle 46 $FvwmFrontPanelInfo
       End
       3 :
@@ -510,11 +531,11 @@ End
 
 Widget 27
 Property
-   Position 22 388
+   Position 20 348
    Type CheckBox
    Flags NoReliefString
    Title {Local Pager}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -534,13 +555,13 @@ Property
          Set $FvwmLocalPagerPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmPager.*LocalPager.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmLocalPagerPid == {} Then
          Begin
-            Set $RunState27 = {Not Running}
+            Set $RunState27 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState27 = {Running (PID: } $FvwmLocalPagerPid {)}
+            Set $RunState27 = (Gettext {Running}) { (PID: } $FvwmLocalPagerPid {)}
          End
-         Set $FvwmLocalPagerInfo = {Required, } $RunState27
+         Set $FvwmLocalPagerInfo = (Gettext {Required, }) $RunState27
          ChangeLocaleTitle 47 $FvwmLocalPagerInfo
       End
       3 :
@@ -560,11 +581,11 @@ End
 
 Widget 28
 Property
-   Position 22 432
+   Position 20 386
    Type CheckBox
    Flags NoReliefString
    Title {Fvwm Backer}
-   Font "xft:::pixelsize=18"
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -584,13 +605,13 @@ Property
          Set $FvwmBackerPid = (GetOutput {pgrep -u $(id -u) -xf '.*FvwmBacker.*' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmBackerPid == {} Then
          Begin
-            Set $RunState28 = {Not Running}
+            Set $RunState28 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState28 = {Running (PID: } $FvwmBackerPid {)}
+            Set $RunState28 = (Gettext {Running}) { (PID: } $FvwmBackerPid {)}
          End
-         Set $FvwmBackerInfo = {Required, } $RunState28
+         Set $FvwmBackerInfo = (Gettext {Required, }) $RunState28
          ChangeLocaleTitle 48 $FvwmBackerInfo
       End
       3 :
@@ -610,11 +631,11 @@ End
 
 Widget 29
 Property
-   Position 22 476
+   Position 20 424
    Type CheckBox
    Flags NoReliefString
-   Title {Icon Manager}
-   Font "xft:::pixelsize=18"
+   Title {      Icon Manager      }
+   Font "xft:::pixelsize=16"
    Value 0
    Main
       Case message of
@@ -636,13 +657,13 @@ Property
          Set $FvwmIconManPid = (GetOutput {pgrep -u $(id -u) -xf ".*FvwmIconMan.*NsCDEIconBox.*" | egrep "^[[:digit:]]+$" | grep -v ^$$} 1 -1)
          If $FvwmIconManPid == {} Then
          Begin
-            Set $RunState29 = {Not Running}
+            Set $RunState29 = (Gettext {Not Running})
          End
          Else
          Begin
-            Set $RunState29 = {Running (PID: } $FvwmIconManPid {)} 
+            Set $RunState29 = (Gettext {Running}) { (PID: } $FvwmIconManPid {)}
          End
-         Set $FvwmIconManStateInfo = $EnableState29 {, } $RunState29
+         Set $FvwmIconManStateInfo = (Gettext $EnableState29) {, } $RunState29
          ChangeLocaleTitle 49 $FvwmIconManStateInfo
       End
       3 :
@@ -663,11 +684,11 @@ End
 
 Widget 40
    Property
-   Size 286 0
-   Position 244 82
+   Size 160 0
+   Position 210 81
    Type ItemDraw
    Flags NoReliefString Right
-   Title {unknown, unknown (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -678,11 +699,11 @@ End
 
 Widget 41
    Property
-   Size 286 0
-   Position 244 122
+   Size 160 0
+   Position 210 121
    Type ItemDraw
    Flags NoReliefString Right
-   Title {unknown, unknown (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -693,11 +714,11 @@ End
 
 Widget 42
    Property
-   Size 286 0
-   Position 244 166
+   Size 160 0
+   Position 210 157
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -708,11 +729,11 @@ End
 
 Widget 43
    Property
-   Size 286 0
-   Position 244 210
+   Size 160 0
+   Position 210 195
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -723,11 +744,11 @@ End
 
 Widget 44
    Property
-   Size 286 0
-   Position 244 254
+   Size 160 0
+   Position 210 233
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -738,11 +759,11 @@ End
 
 Widget 45
    Property
-   Size 286 0
-   Position 244 298
+   Size 160 0
+   Position 210 271
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -753,11 +774,11 @@ End
 
 Widget 46
    Property
-   Size 286 0
-   Position 244 342
+   Size 160 0
+   Position 210 309
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -768,11 +789,11 @@ End
 
 Widget 47
    Property
-   Size 286 0
-   Position 244 386
+   Size 160 0
+   Position 210 347
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -783,11 +804,11 @@ End
 
 Widget 48
    Property
-   Size 286 0
-   Position 244 430
+   Size 160 0
+   Position 210 385
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -798,11 +819,11 @@ End
 
 Widget 49
    Property
-   Size 286 0
-   Position 244 474
+   Size 160 0
+   Position 210 423
    Type ItemDraw
    Flags NoReliefString Right
-   Title {Enabled, Running (PID: XXX)}
+   Title {Enabled, Running (PID: XXXXXXX)}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -814,10 +835,10 @@ End
 Widget 50
    Property
    Size 286 0
-   Position 24 526
+   Position 24 470
    Type ItemDraw
    Flags NoReliefString Left
-   Title {Action:}
+   LocaleTitle {Action:}
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -829,28 +850,37 @@ End
 Widget 51
 Property
    Size 256 20
-   Position 84 524
+   Position 84 466
    Type PopupMenu
    Flags NoReliefString Left
-   Title {      Recheck      |      Restart      |      Stop      |      Start      }
+   Title {XXXXXXXXXXXX}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
       Begin
-         SendSignal 51 1
       End
       1 :
       Begin
+         If (GetValue 51) <> 4 Then
+         Begin
+            ChangeValue 51 (Add (GetValue 51) 1)
+         End
+         Else
+         Begin
+            ChangeValue 51 1
+         End
       End
 End
 
 Widget 52
 Property
-   Size 256 20
-   Position 260 524
+   Size 174 20
+   Position 294 466
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Apply}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -917,8 +947,8 @@ End
 
 Widget 4
 Property
-   Size 532 64
-   Position 8 590
+   Size 486 64
+   Position 8 530
    Type Rectangle
 Main
    Case message of
@@ -930,10 +960,10 @@ End
 Widget 5
    Property
    Size 104 0
-   Position 18 580
+   Position 18 520
    Type ItemDraw
    Flags NoReliefString
-   Title {Configurations}
+   LocaleTitle {Configurations}
    Main
       Case message of
       SingleClic :
@@ -944,24 +974,37 @@ End
 Widget 53
 Property
    Size 200 20
-   Position 32 612
+   Position 34 548
    Type PopupMenu
    Flags NoReliefString Left
-   Title { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
+   Title {XXXXXXXXXXXX}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
       Begin
       End
+      1 :
+      Begin
+         If (GetValue 53) <> 16 Then
+         Begin
+            ChangeValue 53 (Add (GetValue 53) 1)
+         End
+         Else
+         Begin
+            ChangeValue 53 1
+         End
+      End
 End
 
 Widget 54
 Property
-   Size 284 20
-   Position 232 612
+   Size 224 20
+   Position 244 548
    Type PushButton
    Flags NoReliefString
-   LocaleTitle {Reread}
+   Title {XXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -1010,8 +1053,8 @@ End
 
 Widget 6
 Property
-   Size 536 0
-   Position 4 670
+   Size 490 0
+   Position 4 608
    Type Rectangle
 Main
    Case message of
@@ -1023,7 +1066,7 @@ End
 Widget 7
 Property
    Size 160 20
-   Position 24 684
+   Position 24 620
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
@@ -1042,7 +1085,7 @@ End
 Widget 8
 Property
    Size 160 20
-   Position 358 684
+   Position 316 620
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}

@@ -224,6 +224,8 @@ Components of the NsCDE
 
      * Workspaces and Pages Manager (WsPgMgr) - FvwmScript
 
+     * NsCDE Process Manager (NProcMgr) - FvwmScript
+
     Helper Dialogs:
 
      * ActionForm - FvwmScript
@@ -1632,13 +1634,50 @@ GUI Tools
    Pages Manager is called from the Front Panel's small left button menu
    which is called when that button is clicked with the right pointer button.
 
-    Key Bindings:
+   --------------------------------------------------------------------------
 
-     *  Escape: Quits Workspaces and Pages Manager.
+  NsCDE Process Manager (NProcMgr)
+
+    This tool is specific to NsCDE. It manages NsCDE FVWM and rest processes,
+   and re-reads given part of FVWM configuration on demand. The followin
+   actions are provided and supported:
+
+     *   Recheck - Check selected item processes running state
+
+     *   Restart - Restarts selected item processes
+
+     *   Stop - Stops selected item processes
+
+     *   Start - Starts selected item processes
+
+     *   Reread - Reads fresh FVWM configuration for the item selected on the
+       Configurations popup menu.
+
+    There can be more processes (items) selected for the given action. Items
+   are not unselected after action. NsCDE Process Manager can be used for
+   diagnostic, debugging and developing functions and other parts of the
+   NsCDE. It Provides GUI for "KillModule", "Module" and various NsCDE FVWM
+   functions, and for f_ReadCfg". Process list consists of check buttons with
+   item/process names on the left, and their functional state, running state
+   and PID on the right side. After every action, selected item is checked
+   again and it's running state and PID are refreshed. Check All Now button
+   when pressed will refresh status for all items, selected or not.
+
+    Key Bindings:
 
      *  Ctrl+Q: Quits Workspaces and Pages Manager.
 
      *  Sun Help and F1: Displays this help text.
+
+     *  Ctrl+A: Hits Apply button.
+
+     *  Ctrl+R: Hits Reread button.
+
+     *  Ctrl+K: Hits Check All Now button.
+
+     *  A: Cycles actions from Action PopUp menu.
+
+     *  C: Cycles configurations from Configurations PopUp menu.
 
    --------------------------------------------------------------------------
 
