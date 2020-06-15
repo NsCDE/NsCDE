@@ -120,8 +120,9 @@ Begin
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 10.5} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 9 $DefFont
+
    ChangeFont 16 $DefFont
    ChangeFont 17 $DefFont
    ChangeFont 18 $DefFont
@@ -175,7 +176,7 @@ Widget 9
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    LocaleTitle {Manage Number of Workspaces and Pages}
-   Font "xft:::pixelsize=14"
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -418,6 +419,7 @@ Widget 11
    Size 316 10
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    MinValue 0
    Value 4
    MaxValue 8
@@ -606,6 +608,7 @@ Widget 13
    Size 146 20
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    MinValue 1
    MaxValue 4
    Value 2
@@ -646,6 +649,7 @@ Widget 15
    Size 146 20
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    MinValue 1
    MaxValue 4
    Value 2
@@ -673,6 +677,7 @@ Widget 16
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Nr. of Desks: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -687,6 +692,7 @@ Widget 17
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Pages per Desk: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -701,6 +707,7 @@ Widget 18
    Flags NoReliefString NoFocus Left
    Type ItemDraw
    Title {Total Pages: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -737,7 +744,7 @@ End
 Widget 21
    Property
    Position 16 406
-   Size 80 20
+   Size 96 20
    Flags NoReliefString
    Type PushButton
    LocaleTitle {OK}
@@ -912,8 +919,8 @@ End
 
 Widget 22
    Property
-   Position 132 406
-   Size 80 20
+   Position 127 406
+   Size 96 20
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Cancel}
@@ -936,8 +943,8 @@ End
 
 Widget 23
    Property
-   Position 250 406
-   Size 80 20
+   Position 238 406
+   Size 96 20
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Help}

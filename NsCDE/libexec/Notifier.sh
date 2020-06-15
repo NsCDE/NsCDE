@@ -6,6 +6,7 @@
 # Licence: GPLv3
 #
 
+OLD_LC_ALL="$LC_ALL"
 IFS=" "
 
 function usage
@@ -14,26 +15,44 @@ function usage
    exit $1
 }
 
-FontSize=$($NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16 -S)
+case $NSCDE_FONT_DPI in
+   96)
+      zoomfactor=0
+   ;;
+   120)
+      zoomfactor=22
+   ;;
+   144)
+      zoomfactor=44
+   ;;
+   192)
+      zoomfactor=64
+   ;;
+esac
+
+FontSize=$($NSCDE_ROOT/bin/getfont -v -t normal -s medium -S -Z 16)
+LC_ALL="C"
 if (($FontSize >= 16)); then
-   FoldFactor=56
+   FoldFactor=$((56 - (56 * $zoomfactor / 100)))
    verticalfactor=28
+   verticalfactor=$((28 + (28 * $zoomfactor / 100)))
 elif (($FontSize < 16)) && (($FontSize >= 14)); then
-   FoldFactor=60
-   verticalfactor=26
+   FoldFactor=$((60 - (60 * $zoomfactor / 100)))
+   verticalfactor=$((26 + (26 * $zoomfactor / 100)))
 elif (($FontSize < 14)) && (($FontSize >= 12)); then
-   FoldFactor=68
-   verticalfactor=24
+   FoldFactor=$((68 - (68 * $zoomfactor / 100)))
+   verticalfactor=$((24 + (24 * $zoomfactor / 100)))
 elif (($FontSize < 12)) && (($FontSize >= 11)); then
-   FoldFactor=88
-   verticalfactor=22
+   FoldFactor=$((88 - (88 * $zoomfactor / 100)))
+   verticalfactor=$((22 + (22 * $zoomfactor / 100)))
 elif (($FontSize == 10)) || (($FontSize == 9)); then
-   FoldFactor=90
-   verticalfactor=20
+   FoldFactor=$((90 - (90 * $zoomfactor / 100)))
+   verticalfactor=$((20 + (20 * $zoomfactor / 100)))
 else
-   FoldFactor=110
-   verticalfactor=18
+   FoldFactor=$((110 - (110 * $zoomfactor / 100)))
+   verticalfactor=$((18 + (18 * $zoomfactor / 100)))
 fi
+LC_ALL="$OLD_LC_ALL"
 
 while getopts t:b:i:s:f:h Option
 do
@@ -76,6 +95,7 @@ do
    esac
 done
 
+LC_ALL="C"
 HeightAppend=$(( $sh_WrappedTextLines * $verticalfactor ))
 ScriptHeight=$(( 104 + $HeightAppend ))
 
@@ -99,6 +119,7 @@ else
    RectangleWidth=746
    ButtonPos=314
 fi
+LC_ALL="$OLD_LC_ALL"
 
 cat <<EOF
 

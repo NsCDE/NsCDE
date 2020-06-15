@@ -19,8 +19,21 @@ Begin
 
    ChangeValue 5 1
 
+   ChangeLocaleTitle 3 {Use 4 Colors Scheme}
+   ChangeLocaleTitle 4 {Use 8 Colors Scheme}
+
    Set $DefaultTitle = (Gettext {Default}) { (} $Ncolors {)}
    ChangeTitle 5 $DefaultTitle
+
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 3 $DefaultFont
+   ChangeFont 4 $DefaultFont
+   ChangeFont 5 $DefaultFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 7 $BtnFont
+   ChangeFont 8 $BtnFont
+   ChangeFont 9 $BtnFont
 
    # Keybindings
    Key Escape A 8 1 {KeyClose}
@@ -60,7 +73,8 @@ Property
    Position 22 80
    Type RadioButton
    Flags NoReliefString
-   LocaleTitle {Use 4 Colors Scheme}
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -76,7 +90,8 @@ Property
    Position 22 130
    Type RadioButton
    Flags NoReliefString
-   LocaleTitle {Use 8 Colors Scheme}
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -92,7 +107,8 @@ Property
    Position 22 180
    Type RadioButton
    Flags NoReliefString
-   Title {Default            }
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -126,6 +142,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -142,6 +159,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -161,6 +179,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

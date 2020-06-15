@@ -40,6 +40,16 @@ do
    Name=$(egrep "S${subpn},NAME," $spactfile | cut -d"," -f3)
    Width=$(egrep "S${subpn},WIDTH," $spactfile | cut -d"," -f3)
 
+   if [ ! -z $NSCDE_FONT_DPI ]; then
+      if (($NSCDE_FONT_DPI > 100 && $NSCDE_FONT_DPI <= 124)); then
+         Width=$((Width + ($Width * 25 / 100)))
+      elif (($NSCDE_FONT_DPI > 124 && $NSCDE_FONT_DPI <= 148)); then
+         Width=$((Width + ($Width * 50 / 100)))
+      elif (($NSCDE_FONT_DPI > 148)); then
+         Width=$((Width + ($Width * 100 / 100)))
+      fi
+   fi
+
    EntryRows=$(egrep "^S${subpn},ENTRY," $spactfile | wc -l)
    Rows=$(($EntryRows + 3))
 

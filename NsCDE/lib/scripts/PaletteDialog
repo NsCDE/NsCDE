@@ -14,11 +14,16 @@ Begin
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 3 $DefaultFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   ChangeFont 2 $BtnFont
    ChangeFont 5 $BtnFont
    ChangeFont 6 $BtnFont
    ChangeFont 7 $BtnFont
 
+   ChangeFont 2 $DefaultFont
    # Keybindings
    Key Escape A 6 1 {KeyClose}
    Key F1 A 7 1 {KeyHelp}
@@ -47,7 +52,8 @@ Property
    Position 164 20
    Type RadioButton
    Flags NoReliefString
-   LocaleTitle { Default }
+   Title {   Default     }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -66,6 +72,7 @@ Widget 3
    Colorset 20
    Flags NoReliefString
    Title {}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

@@ -16,6 +16,7 @@ Begin
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 1 $DefaultFont
+   ChangeFont 5 $DefaultFont
    ChangeFont 6 $DefaultFont
    ChangeFont 8 $DefaultFont
    ChangeFont 9 $SmallFont
@@ -29,6 +30,10 @@ Begin
    ChangeFont 17 $SmallFont
    ChangeFont 18 $DefaultFont
    ChangeFont 19 $SmallFont
+
+   ChangeFont 21 $DefaultFont
+   ChangeFont 22 $DefaultFont
+   ChangeFont 23 $DefaultFont
 
    # Read which palette part we are modifying: from 1 to 8
    # Colorsets: 61 - 68
@@ -134,6 +139,7 @@ Widget 5
    Type PushButton
    LocaleTitle {Grab Color}
    Flags NoReliefString
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -461,6 +467,7 @@ Widget 21
    Position 16 524
    Type PushButton
    LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main
@@ -482,6 +489,7 @@ Widget 22
    Position 166 524
    Type PushButton
    LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main
@@ -502,6 +510,7 @@ Widget 23
    Position 316 524
    Type PushButton
    LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main

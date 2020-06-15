@@ -11,32 +11,36 @@ Colorset 22
 
 Init
 Begin
-   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
-   Set $SelectFont = {Shadow=1 0 SE:} $DefaultFont
+   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   Set $ItemFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $SelectFont = {Shadow=1 0 SE:} $ItemFont
 
    ChangeFont 2 $DefaultFont
    ChangeFont 5 $DefaultFont
 
-   ChangeFont 20 $DefaultFont
-   ChangeFont 40 $DefaultFont
-   ChangeFont 21 $DefaultFont
-   ChangeFont 41 $DefaultFont
-   ChangeFont 22 $DefaultFont
-   ChangeFont 42 $DefaultFont
-   ChangeFont 23 $DefaultFont
-   ChangeFont 43 $DefaultFont
-   ChangeFont 24 $DefaultFont
-   ChangeFont 44 $DefaultFont
-   ChangeFont 25 $DefaultFont
-   ChangeFont 45 $DefaultFont
-   ChangeFont 26 $DefaultFont
-   ChangeFont 46 $DefaultFont
-   ChangeFont 27 $DefaultFont
-   ChangeFont 47 $DefaultFont
-   ChangeFont 28 $DefaultFont
-   ChangeFont 48 $DefaultFont
-   ChangeFont 29 $DefaultFont
-   ChangeFont 49 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 8 $DefaultFont
+
+   ChangeFont 20 $ItemFont
+   ChangeFont 40 $ItemFont
+   ChangeFont 21 $ItemFont
+   ChangeFont 41 $ItemFont
+   ChangeFont 22 $ItemFont
+   ChangeFont 42 $ItemFont
+   ChangeFont 23 $ItemFont
+   ChangeFont 43 $ItemFont
+   ChangeFont 24 $ItemFont
+   ChangeFont 44 $ItemFont
+   ChangeFont 25 $ItemFont
+   ChangeFont 45 $ItemFont
+   ChangeFont 26 $ItemFont
+   ChangeFont 46 $ItemFont
+   ChangeFont 27 $ItemFont
+   ChangeFont 47 $ItemFont
+   ChangeFont 28 $ItemFont
+   ChangeFont 48 $ItemFont
+   ChangeFont 29 $ItemFont
+   ChangeFont 49 $ItemFont
 
    ChangeFont 50 $DefaultFont
    ChangeFont 51 $DefaultFont
@@ -135,6 +139,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Check All Now}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -1070,6 +1075,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :
@@ -1089,6 +1095,7 @@ Property
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
+   Font "xft:::pixelsize=16"
    Main
       Case message of
       SingleClic :

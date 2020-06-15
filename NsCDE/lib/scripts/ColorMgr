@@ -46,9 +46,13 @@ Begin
       ShowWidget 15
       ShowWidget 17
       ChangeSize 10 64 32
+      ChangeSize 11 64 32
       ChangeSize 12 64 32
+      ChangeSize 13 64 32
       ChangeSize 14 64 32
+      ChangeSize 15 64 32
       ChangeSize 16 64 32
+      ChangeSize 17 64 32
       ChangeIcon 9 NsCDE/Bframe8.xpm
       ChangeSize 9 72 40
    End
@@ -88,6 +92,7 @@ Begin
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 1 $DefaultFont
    ChangeFont 7 $DefaultFont
+   ChangeFont 19 $DefaultFont
    ChangeFont 20 $DefaultFont
    ChangeFont 21 $DefaultFont
 
@@ -103,14 +108,15 @@ Begin
    Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 3 $ListFont
 
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
+   Set $ExtraSmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.25} 1 -1)
    ChangeFont 23 $SmallFont
    ChangeFont 24 $SmallFont
    ChangeFont 25 $SmallFont
    ChangeFont 26 $SmallFont
    ChangeFont 27 $SmallFont
    ChangeFont 28 $SmallFont
-   ChangeFont 29 $SmallFont
+   ChangeFont 29 $ExtraSmallFont
 
    Set $GtkStr = {00}
    Set $Gtk2Str = 0
@@ -750,6 +756,7 @@ Widget 19
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Modify}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -863,7 +870,7 @@ Widget 20
       Case message of
       SingleClic :
       Begin
-         Do {Module FvwmScript NColorsDialog } $Ncolors
+         Do {f_ToggleFvwmModule FvwmScript NColorsDialog } $Ncolors
       End
       1 :
       Begin
@@ -1056,7 +1063,7 @@ End
 
 Widget 31
    Property
-   Size 80 26
+   Size 90 26
    Position 16 506
    Type PushButton
    Flags NoReliefString
@@ -1095,8 +1102,8 @@ End
 
 Widget 32
    Property
-   Size 80 26
-   Position 128 506
+   Size 90 26
+   Position 125 506
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Apply}
@@ -1285,8 +1292,8 @@ End
 
 Widget 33
    Property
-   Size 80 26
-   Position 240 506
+   Size 90 26
+   Position 234 506
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
@@ -1318,8 +1325,8 @@ End
 
 Widget 34
    Property
-   Size 80 26
-   Position 352 506
+   Size 90 26
+   Position 344 506
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
