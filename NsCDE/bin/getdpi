@@ -13,15 +13,20 @@ ARG="$1"
 
 function get_dpi
 {
-   type -p xdpyinfo > /dev/null 2>&1
-   if (($? == 0)); then
-      dpi1=$(xdpyinfo 2>/dev/null | egrep "resolution:.*dots per inch" | awk '{ print $2 }')
-      DPI=${dpi1##*x}
-      if [ "x$DPI" == "x" ]; then
+   if [ -z $DPI ]; then
+      type -p xdpyinfo > /dev/null 2>&1
+      if (($? == 0)); then
+         dpi1=$(xdpyinfo 2>/dev/null | egrep "resolution:.*dots per inch" | awk '{ print $2 }')
+         echo "${dpi1##*x}" | egrep -q "^[[:digit:]]+x[[:digit:]]+$"
+         if (($? == 0)); then
+            DPI=${dpi1##*x}
+         fi
+         if [ "x$DPI" == "x" ]; then
+            DPI=96
+         fi
+      else
          DPI=96
       fi
-   else
-      DPI=96
    fi
 
    if (($DPI <= 88 && $DPI != 75)); then

@@ -211,7 +211,16 @@ function genxresourcedefs
    echo '! Licence: GPLv3'
    echo '!'
 
-   echo -ne "\nXft.dpi: 96\n\n"
+   if [ -n $XFT_USE_DPI ]; then
+      echo "$XFT_USE_DPI" | egrep -q "^[[:digit:]]+$"
+      if (($? == 0)); then
+         echo -ne "\nXft.dpi: ${XFT_USE_DPI}\n\n"
+      else
+         echo -ne "\nXft.dpi: 96\n\n"
+      fi
+   else
+      echo -ne "\nXft.dpi: 96\n\n"
+   fi
 
    egrep '^InfoStoreAdd font\.(|variable|monospaced)\.(normal|bold|italic)\.(small|medium|large) ".*"' \
           "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
