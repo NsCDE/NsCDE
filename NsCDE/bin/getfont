@@ -85,7 +85,15 @@ function GetFont
    else
       echo $GetSize | egrep -q '^([[:digit:]]+)(\.[[:digit:]]+)?$'
       if (($? == 0)); then
-         if (($NSCDE_FONT_DPI > 100 && $NSCDE_FONT_DPI <= 124)); then
+         if (($NSCDE_FONT_DPI < 84)); then
+            if [ "$FnSize" == "small" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            elif [ "$FnSize" == "medium" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            elif [ "$FnSize" == "large" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            fi
+         elif (($NSCDE_FONT_DPI > 100 && $NSCDE_FONT_DPI <= 124)); then
             if [ "$FnSize" == "small" ]; then
                FnMaxSize=$(($FnMaxSize - 3))
             elif [ "$FnSize" == "medium" ]; then
