@@ -1477,7 +1477,7 @@ Widget 26
                End
    
                # XSETTINGS Daemon Integration
-               Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
+               Set $XSETTINGSFILE = (GetOutput {ls -1 "$FVWM_USERDIR/Xsettingsd.conf" 2>/dev/null} -1 1)
    
                # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
                If $XSETTINGSFILE <> {} Then
@@ -1493,6 +1493,23 @@ Widget 26
                      Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
                   End
                   Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+
+                  # Custom DPI handling
+                  Set $CustomDPI = (GetOutput {echo "$XFT_USE_DPI"} 1 -1)
+                  If $CustomDPI <> {} Then
+                  Begin
+                     Set $XsettingsDpiParamExistanceCmd = {egrep -q '^([[:space:]]+)?Xft\/DPI[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+                     Set $XsettingsDpiParamExistance = (GetOutput $XsettingsDpiParamExistanceCmd 1 1)
+                     If $XsettingsDpiParamExistance == 0 Then
+                     Begin
+                        Set $WriteXSettingsdDpiCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1} (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
+                     End
+                     Else
+                     Begin
+                        Set $WriteXSettingsdDpiCmd = {echo -ne "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
+                     End
+                     Set $WriteXSettingsdDpi = (GetOutput $WriteXSettingsdDpiCmd 1 -1)
+                  End
                End
             End
 
