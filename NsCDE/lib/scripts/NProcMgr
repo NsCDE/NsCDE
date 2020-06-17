@@ -61,7 +61,7 @@ Begin
    ChangeLocaleTitle 29 {  Icon Manager}
 
    ChangeLocaleTitle 51 {      Recheck      |      Restart      |      Stop      |      Start      }
-   ChangeTitle 53 { Animate|Backdrops|Backer|Colorset|Event|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
+   ChangeTitle 53 { Animate|Backdrops|Backer|Colorset|Event|Font|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
    ChangeLocaleTitle 54 {Reread}
 
    SendSignal 1 1
@@ -1031,26 +1031,28 @@ Property
          If $ReReadCfg == 5 Then
             Do {f_ReadCfg Event}
          If $ReReadCfg == 6 Then
-            Do {f_ReadCfg Functions}
+            Do {f_ReadCfg Font-$[NSCDE_FONT_DPI]dpi}
          If $ReReadCfg == 7 Then
-            Do {f_ReadCfg IconMan}
+            Do {f_ReadCfg Functions}
          If $ReReadCfg == 8 Then
-            Do {f_ReadCfg Ident}
+            Do {f_ReadCfg IconMan}
          If $ReReadCfg == 9 Then
-            Do {f_ReadCfg Keybindings}
+            Do {f_ReadCfg Ident}
          If $ReReadCfg == 10 Then
-            Do {f_ReadCfg Menus}
+            Do {f_ReadCfg Keybindings}
          If $ReReadCfg == 11 Then
-            Do {f_ReadCfg Mousebindings}
+            Do {f_ReadCfg Menus}
          If $ReReadCfg == 12 Then
-            Do {f_ReadCfg Pager-GlobalPager}
+            Do {f_ReadCfg Mousebindings}
          If $ReReadCfg == 13 Then
-            Do {f_ReadCfg Pager-LocalPager}
+            Do {f_ReadCfg Pager-GlobalPager}
          If $ReReadCfg == 14 Then
-            Do {f_ReadCfg Pager-WspLocPager}
+            Do {f_ReadCfg Pager-LocalPager}
          If $ReReadCfg == 15 Then
-            Do {f_ReadCfg Script}
+            Do {f_ReadCfg Pager-WspLocPager}
          If $ReReadCfg == 16 Then
+            Do {f_ReadCfg Script}
+         If $ReReadCfg == 17 Then
             Do {f_ReadCfg Style}
       End
 End
