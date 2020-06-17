@@ -38,6 +38,18 @@ else
    SplashBG="SplashBG2.xpm"
 fi
 
+if [ ! -z $NSCDE_FONT_DPI ]; then
+   if (($NSCDE_FONT_DPI == 144)); then
+      TxtWidgetWidth=1000
+   elif (($NSCDE_FONT_DPI == 192)); then
+      TxtWidgetWidth=1400
+   else
+      TxtWidgetWidth=800
+   fi
+else
+   TxtWidgetWidth=800
+fi
+
 cat <<EOF
 WindowTitle {NsCDE-Splash}
 WindowSize $Width $Height
@@ -167,7 +179,7 @@ End
 
 Widget 5
    Property
-   Size 800 40
+   Size $TxtWidgetWidth 40
    Position $TextWidth $TextHeight
    Type ItemDraw
    Flags NoReliefString Left
@@ -189,7 +201,7 @@ End
 
 Widget 6
    Property
-   Size 800 40
+   Size $TxtWidgetWidth 40
    Position $TextWidth $(($TextHeight + 40))
    Type ItemDraw
    Flags NoReliefString Left
@@ -204,7 +216,7 @@ End
 
 Widget 7
    Property
-   Size 800 40
+   Size $TxtWidgetWidth 40
    Position $TextWidth $(($TextHeight + 80))
    Type ItemDraw
    Flags NoReliefString Left
@@ -219,7 +231,7 @@ End
 
 Widget 8
    Property
-   Size 800 40
+   Size $TxtWidgetWidth 40
    Position $TextWidth $(($TextHeight + 120))
    Type ItemDraw
    Flags NoReliefString Left

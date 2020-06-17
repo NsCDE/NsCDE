@@ -20,13 +20,13 @@ case $NSCDE_FONT_DPI in
       zoomfactor=0
    ;;
    120)
-      zoomfactor=22
+      zoomfactor=18
    ;;
    144)
-      zoomfactor=44
+      zoomfactor=32
    ;;
    192)
-      zoomfactor=64
+      zoomfactor=38
    ;;
 esac
 
@@ -34,7 +34,6 @@ FontSize=$($NSCDE_ROOT/bin/getfont -v -t normal -s medium -S -Z 16)
 LC_ALL="C"
 if (($FontSize >= 16)); then
    FoldFactor=$((56 - (56 * $zoomfactor / 100)))
-   verticalfactor=28
    verticalfactor=$((28 + (28 * $zoomfactor / 100)))
 elif (($FontSize < 16)) && (($FontSize >= 14)); then
    FoldFactor=$((60 - (60 * $zoomfactor / 100)))
@@ -102,22 +101,22 @@ ScriptHeight=$(( 104 + $HeightAppend ))
 if (($sh_WrappedTextLines == 1)); then
    textcharsnum=$(echo "$sh_WrappedText" | wc -c)
    if (($textcharsnum < 48)) && (($FontSize <= 12)); then
-      ScriptWidth=480
-      RectangleWidth=472
-      ButtonPos=180
+      ScriptWidth=$((480 + (480 * $zoomfactor / 100)))
+      RectangleWidth=$((472 + (472 * $zoomfactor / 100)))
+      ButtonPos=$((180 + (180 * $zoomfactor / 100)))
    elif (($textcharsnum < 72)) && (($FontSize <= 12)); then
-      ScriptWidth=620
-      RectangleWidth=612
-      ButtonPos=246
+      ScriptWidth=$((620 + (620 * $zoomfactor / 100)))
+      RectangleWidth=$((612 + (612 * $zoomfactor / 100)))
+      ButtonPos=$((246 + (246 * $zoomfactor / 100)))
    else
-      ScriptWidth=754
-      RectangleWidth=746
-      ButtonPos=314
+      ScriptWidth=$((754 + (754 * $zoomfactor / 100)))
+      RectangleWidth=$((746 + (746 * $zoomfactor / 100)))
+      ButtonPos=$((314 + (314 * $zoomfactor / 100)))
    fi
 else
-   ScriptWidth=754
-   RectangleWidth=746
-   ButtonPos=314
+   ScriptWidth=$((754 + (754 * $zoomfactor / 100)))
+   RectangleWidth=$((746 + (746 * $zoomfactor / 100)))
+   ButtonPos=$((314 + (314 * $zoomfactor / 100)))
 fi
 LC_ALL="$OLD_LC_ALL"
 
