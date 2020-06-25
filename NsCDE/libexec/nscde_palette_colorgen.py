@@ -273,7 +273,7 @@ def initcolors(palette,endrange):
     except NameError: endrange = 9
 
     for a in range(1,endrange):
-        if endrange is 9:
+        if endrange == 9:
             color16=encode16bpp(palette[a-1])
         else:
             color16=encode16bpp(palette)
@@ -338,7 +338,7 @@ def readOneMotifColor(n,colorarg,pmode,colorset_number):
     initcolors(colorarg,2)
     # round_colors_6()
     colors={}
-    if pmode is "plain":
+    if pmode == "plain":
         for a in range(1,2):
             colors['bg_color']=bg[a]
             colors['fg_color']=fg[a]
@@ -346,7 +346,7 @@ def readOneMotifColor(n,colorarg,pmode,colorset_number):
             colors['bs_color']=bs[a]
             colors['sel_color']=sel[a]
         return colors
-    if pmode is "fvwm":
+    if pmode == "fvwm":
         print ("Colorset", colorset_number, "fg", fg[1]+str(","), "bg", bg[1]+str(","), "hi",
                 ts[1]+str(","), "sh", bs[1]+str(","), "fgsh", sel[1]+str(","), "Plain, NoShape")
 
@@ -616,7 +616,7 @@ def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
     else: 
         use_4_colors=False
     initcolors(palette,9)
-    if shorten_colorhex is 1:
+    if shorten_colorhex == 1:
         round_colors_6()
     bgg=bg
     tsg=ts
@@ -734,7 +734,7 @@ def main():
 
             pmode = "plain"
             colorarg = a
-            motifcolor=readOneMotifColor(ncolors,colorarg,pmode)
+            motifcolor=readOneMotifColor(ncolors,colorarg,pmode,colorset_number)
             for key in motifcolor:
                 print (key, motifcolor[key])
         elif o in ("-n", "--ncolors"):
