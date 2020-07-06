@@ -2382,6 +2382,29 @@ Here is the example of the custom swallowed applet which does not accept mouse c
 </para>
 
 <para>
+This example is replacing standard Front Panel Clock with Solaris Globe Icon based
+Front Panel clock, using the same pclock program as standard one, but with a
+slightly different options:
+
+<programlisting>
+<![CDATA[
+
+   Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
+   \\"Exec exec $NSCDE_ROOT/bin/fpclock-$(uname-s)_$(uname -m)
+   -H red -S white --hands-width=4
+   --hour-hand-length=15 --minute-hand-length=20
+   --second-hand-length=22 -w 
+   -B $FVWM_ROOT/share/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
+
+   Btn1,,M2,FVWM,Nop
+
+   Btn1,,M3,FVWM,f_FrontPanelPropsMenu 1 Browser
+]]>
+</programlisting>
+
+</para>
+
+<para>
 Notice that button definition for mouse M1 (first line) is split in 3 lines in this examples,
 but in the <filename>FrontPanel.actions</filename> must be written as one line.
 </para>
