@@ -311,7 +311,7 @@ def readPalette(filename):
     
 use_4_colors=False
 
-def readMotifColors2(n,filename):
+def readMotifColors2(n,filename,shorten_colorhex):
     global use_4_colors
     palette=readPalette(filename)
     if n==4: 
@@ -319,7 +319,10 @@ def readMotifColors2(n,filename):
     else: 
         use_4_colors=False
     initcolors(palette,9)
-    # round_colors_6()
+
+    if shorten_colorhex == 1:
+        round_colors_6()
+
     colors={}
     for a in range(1,9):
         colors['bg_color_'+str(a)]=bg[a]
@@ -747,7 +750,7 @@ def main():
              palettepart = int(a)
         elif o in ("-l", "--list-colors"):
             # Debug: print colors out
-            motifcolors=readMotifColors2(ncolors,palettefile)
+            motifcolors = readMotifColors2(ncolors,palettefile, shorten_colorhex)
             for key in motifcolors:
                 print (key, motifcolors[key])
         elif o in ("-h", "--help"):
