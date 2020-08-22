@@ -1,0 +1,35 @@
+#!/bin/ksh
+  
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+FontFile="$1"
+if [ -r "$FontFile" ]; then
+   NewFont=$(egrep 'InfoStoreAdd font\.monospaced\.normal\.medium' "$FontFile" | \
+    awk -F'xft:' '{ print $2 }' | awk -F: '{ print $1, $4 }' | sed 's/size=//g;s/"//g')
+else
+   exit 2
+fi
+
+# mate-terminal
+whence -q mate-terminal
+if (($? == 0)); then
+   if [ -n $NewFont ]; then
+      dconf write /org/mate/terminal/profiles/default/font "'${NewFont}'"
+   else
+      exit 3
+   fi
+fi
+
+# Dunst
+if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
+   if [ -n $NewFont ]; then
+      $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "${NewFont}"
+   else
+      exit 4
+   fi
+fi
+

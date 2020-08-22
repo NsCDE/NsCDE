@@ -71,7 +71,7 @@ function check_dependencies
       fi
    fi
 
-   for oexe in xscreensaver stalonetray xsettingsd xrandr
+   for oexe in xscreensaver stalonetray xsettingsd xrandr dunst
    do
       whence -q $oexe
       retval=$?
