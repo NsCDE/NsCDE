@@ -8,7 +8,9 @@
 
 FontFile="$1"
 if [ -r "$FontFile" ]; then
-   NewFont=$(egrep 'InfoStoreAdd font\.monospaced\.normal\.medium' "$FontFile" | \
+   NewMonoFont=$(egrep 'InfoStoreAdd font\.monospaced\.normal\.medium' "$FontFile" | \
+    awk -F'xft:' '{ print $2 }' | awk -F: '{ print $1, $4 }' | sed 's/size=//g;s/"//g')
+   NewFont=$(egrep 'InfoStoreAdd font\.variable\.normal\.medium' "$FontFile" | \
     awk -F'xft:' '{ print $2 }' | awk -F: '{ print $1, $4 }' | sed 's/size=//g;s/"//g')
 else
    exit 2
@@ -17,8 +19,8 @@ fi
 # mate-terminal
 whence -q mate-terminal
 if (($? == 0)); then
-   if [ -n $NewFont ]; then
-      dconf write /org/mate/terminal/profiles/default/font "'${NewFont}'"
+   if [ -n $NewMonoFont ]; then
+      dconf write /org/mate/terminal/profiles/default/font "'${NewMonoFont}'"
    else
       exit 3
    fi
