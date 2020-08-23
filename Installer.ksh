@@ -298,36 +298,6 @@ function install_nscde
       fi
    fi
 
-   if [ "x$vuepath" != "x" ]; then
-      if [ -d "${vuepath}" ]; then
-         echo "Copying additional VUE palettes from $vuepath"
-         cp -f "$vuepath"/share/palettes/*.dp ${instpath}/share/palettes/
-         retval=$?
-         if (($retval != 0)); then
-            echo "An error $retval occured while copying VUE palettes collection from ${vuepath}/share/palettes"
-         else
-            echo "Done."
-         fi
-         echo "Copying additional VUE backdrops from $vuepath"
-         cp -f "$vuepath"/share/backdrops/*.pm ${instpath}/share/backdrops/
-         retval=$?
-         if (($retval != 0)); then
-            echo "An error $retval occured while copying VUE backdrops collection from ${vuepath}/share/backdrops"
-         else
-            echo "Done."
-         fi
-      else
-         echo "Error: Cannot read directory with additional VUE palettes and backdrops: $vuepath"
-      fi
-   else
-      if [ ! -r "${instpath}/share/palettes/CoralReef.dp" ]; then
-         if (($upgrade_mode == 0)); then
-            echo "Info: Additional collection of VUE palettes and backdrops not installed in ${instpath}/share/{palettes,backdrops}"
-            echo "See: https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz"
-         fi
-      fi
-   fi
-
    if (($fvwm_patched == 1)); then
       configure_installed patched
    else
@@ -762,7 +732,8 @@ function upgrade_nscde
       fi
    fi
 
-   # Backup photos and VUE if exists, unpack new, put photos and VUE back
+   # Backup photos, backdrops and palettes, put it back if there was something
+   # customized
    old_photos=$(ls "${instpath}/share/photos")
    old_backdrops=$(ls "${instpath}/share/backdrops")
    old_palettes=$(ls "${instpath}/share/palettes")
@@ -1000,7 +971,6 @@ function usage
    echo "   -D <dest>   destination for staged installation. Used for packaging mainly."
    echo "   -p <path>   filesystem path where NsCDE should be installed. Defaults to /opt/NsCDE."
    echo "   -P <path>   where to look for wallpapers for installing into <instpath>/share/photos."
-   echo "   -V <path>   where to look for VUE backdrops and palettes to add into NsCDE."
    echo "   -X <path>   where to put nscde.desktop xsession. Defaults to /usr/share/xsessions."
    echo "   -I <path>   where to put freedesktop icons directory symlink. Defaults to"
    echo "               /usr/local/share/icons. Special path \"nowhere\" means omit symlink creation."
@@ -1012,20 +982,20 @@ function usage
    echo ""
    echo "Examples:"
    echo "   - Install non-interactively for patched FVWM into default path /opt/NsCDE"
-   echo "     without looking for additional photos and VUE files."
+   echo "     without looking for additional photos."
    echo "   ./Installer.ksh -f -n -i"
    echo ""
-   echo "   - Install without VUE and photo addons for non-patched FVWM into default"
+   echo "   - Install without photo addons for non-patched FVWM into default"
    echo "     path /opt/NsCDE:"
    echo "   ./Installer.ksh -w -i"
    echo ""
-   echo "   - Install non-interectively with VUE and photo addons for non-patched FVWM"
+   echo "   - Install non-interectively with photo addons for non-patched FVWM"
    echo "     into default path /opt/NsCDE:"
-   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -i"
    echo ""
-   echo "   - Install NsCDE in interactive mode with VUE addons for non-patched FVWM"
-   echo "     into path /usr/local/nscde:"
-   echo "   ./Installer.ksh -w -n -p /usr/local/nscde -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo "   - Install NsCDE in interactive mode for non-patched FVWM into"
+   echo "     path /usr/local/nscde:"
+   echo "   ./Installer.ksh -w -n -p /usr/local/nscde -i"
    echo ""
    echo "   - Simply upgrade patched NsCDE (additional photos, backdrops and palettes"
    echo "     will remain preserved):"
@@ -1104,9 +1074,6 @@ do
    ;;
    P)
       photopath="$OPTARG"
-   ;;
-   V)
-      vuepath="$OPTARG"
    ;;
    X)
       xsess_dir="$OPTARG"
