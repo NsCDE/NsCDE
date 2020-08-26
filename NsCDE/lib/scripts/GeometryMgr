@@ -49,7 +49,8 @@ Begin
    Set $WindowH = (GetScriptArgument 8)
    Set $IconFile = (GetScriptArgument 9)
 
-   Set $WinParamScreenInfo = {(Gettext {Window Parameters (screen size:}) } $ScreenWidth {x} $ScreenHeight {)}
+   Set $WinParamScreenInfoLocPart = (Gettext {Window Parameters (screen size:}) 
+   Set $WinParamScreenInfo = $WinParamScreenInfoLocPart { } $ScreenWidth {x} $ScreenHeight {)}
    ChangeLocaleTitle 8 $WinParamScreenInfo
    ChangeLocaleTitle 4 $WindowClass
    ChangeLocaleTitle 6 $WindowResource
