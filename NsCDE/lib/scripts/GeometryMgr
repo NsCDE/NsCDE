@@ -37,7 +37,7 @@ Begin
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
-   ChangeLocaleTitle 1 (GetTitle 1)
+   ChangeLocaleTitle 1 { Set Window Initial Geometry }
 
    Set $ScreenWidth = (GetScriptArgument 1)
    Set $ScreenHeight = (GetScriptArgument 2)
@@ -49,7 +49,7 @@ Begin
    Set $WindowH = (GetScriptArgument 8)
    Set $IconFile = (GetScriptArgument 9)
 
-   Set $WinParamScreenInfo = {Window Parameters (screen size: } $ScreenWidth {x} $ScreenHeight {)}
+   Set $WinParamScreenInfo = {(Gettext {Window Parameters (screen size:}) } $ScreenWidth {x} $ScreenHeight {)}
    ChangeLocaleTitle 8 $WinParamScreenInfo
    ChangeLocaleTitle 4 $WindowClass
    ChangeLocaleTitle 6 $WindowResource
@@ -76,7 +76,7 @@ Widget 1
    Position 18 4
    Type ItemDraw
    Flags NoReliefString Left
-   Title { Set Window Initial Geometry }
+   Title {      Set Window Initial Geometry      }
    Font "xft:::pixelsize=15"
 End
 
@@ -159,7 +159,7 @@ Widget 9
    Position 44 140
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {Pixel Values: }
+   LocaleTitle {Pixel Values:}
    Font "xft:::pixelsize=14"
    Main
       Case message of
