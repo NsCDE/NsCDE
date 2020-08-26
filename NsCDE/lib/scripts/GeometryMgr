@@ -58,10 +58,10 @@ Begin
    ChangeLocaleTitle 8 $WinParamScreenInfo
    ChangeLocaleTitle 4 $WindowClass
    ChangeLocaleTitle 6 $WindowResource
-   ChangeLocaleTitle 11 $WindowX
-   ChangeLocaleTitle 13 $WindowY
-   ChangeLocaleTitle 15 $WindowW
-   ChangeLocaleTitle 17 $WindowH
+   ChangeLocaleTitle 11 $WindowW
+   ChangeLocaleTitle 13 $WindowH
+   ChangeLocaleTitle 15 $WindowX
+   ChangeLocaleTitle 17 $WindowY
 
    Set $CheckIconCmd = {ls -1 '} $IconFile {' 2>/dev/null}
    Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
@@ -69,6 +69,24 @@ Begin
    If $CheckIcon <> {} Then
    Begin
       ChangeIcon 7 $IconFile
+   End
+   Else
+   Begin
+      Set $CheckIconCmd = {$NSCDE_ROOT/libexec/geticon.py 16 '} $WindowResource {'}
+      Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
+      If $CheckIcon <> {} Then
+      Begin
+         ChangeIcon 7 $CheckIcon
+      End
+      Else
+      Begin
+         Set $CheckIconCmd = {$NSCDE_ROOT/libexec/geticon.py 16 '} $WindowClass {'}
+         Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
+         If $CheckIcon <> {} Then
+         Begin
+            ChangeIcon 7 $CheckIcon
+         End
+      End
    End
 
    Set $GetExistingMappingCmd = {$NSCDE_ROOT/bin/confget.py -c $FVWM_USERDIR/GeoDB.ini -s } $ScreenWidth {x} $ScreenHeight { -k } $WindowResource {,} $WindowClass
@@ -182,7 +200,7 @@ Widget 10
    Position 18 172
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {X Position}
+   LocaleTitle {Width}
    Font "xft:::pixelsize=15"
 End
 
@@ -209,7 +227,7 @@ Widget 12
    Position 116 172
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {Y Position}
+   LocaleTitle {Height}
    Font "xft:::pixelsize=15"
 End
 
@@ -236,7 +254,7 @@ Widget 14
    Position 206 172
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {Width}
+   LocaleTitle {X Position}
    Font "xft:::pixelsize=15"
 End
 
@@ -263,7 +281,7 @@ Widget 16
    Position 304 172
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {Height}
+   LocaleTitle {Y Position}
    Font "xft:::pixelsize=15"
 End
 
@@ -369,33 +387,33 @@ Widget 22
                Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Resource Name contains non-allowed characters:] } (GetTitle 4) {" "e2"}
             End
 
-            Set $WidthNumCheckCmd = {echo '} (GetTitle 15) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $WidthNumCheckCmd = {echo '} (GetTitle 11) {' | egrep -q '^[[:digit:]]+$'; echo $?}
             Set $WidthNumCheck = (GetOutput $WidthNumCheckCmd 1 1)
-            Set $HeightNumCheckCmd = {echo '} (GetTitle 17) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $HeightNumCheckCmd = {echo '} (GetTitle 13) {' | egrep -q '^[[:digit:]]+$'; echo $?}
             Set $HeightNumCheck = (GetOutput $HeightNumCheckCmd 1 1)
-            Set $XNumCheckCmd = {echo '} (GetTitle 11) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $XNumCheckCmd = {echo '} (GetTitle 15) {' | egrep -q '^[[:digit:]]+$'; echo $?}
             Set $XNumCheck = (GetOutput $XNumCheckCmd 1 1)
-            Set $YNumCheckCmd = {echo '} (GetTitle 13) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $YNumCheckCmd = {echo '} (GetTitle 17) {' | egrep -q '^[[:digit:]]+$'; echo $?}
             Set $YNumCheck = (GetOutput $YNumCheckCmd 1 1)
 
             If $WidthNumCheck <> 0 Then
             Begin
-               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Width value is not a number:] } (GetTitle 15) {" "e3"}
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Width value is not a number:] } (GetTitle 11) {" "e3"}
             End
 
             If $HeightNumCheck <> 0 Then
             Begin
-               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Height value is not a number:] } (GetTitle 17) {" "e4"}
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Height value is not a number:] } (GetTitle 13) {" "e4"}
             End
 
             If $XNumCheck <> 0 Then
             Begin
-               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X position value is not a number:] } (GetTitle 11) {" "e5"}
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X position value is not a number:] } (GetTitle 15) {" "e5"}
             End
 
             If $YNumCheck <> 0 Then
             Begin
-               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Y position value is not a number:] } (GetTitle 13) {" "e6"}
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Y position value is not a number:] } (GetTitle 17) {" "e6"}
             End
 
             Set $ErrCount = $ClassNameCheck $ResNameCheck $WidthNumCheck $HeightNumCheck $XNumCheck $YNumCheck
@@ -404,7 +422,7 @@ Widget 22
             Begin
                Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
                    $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4) { -v "}
-                   (GetTitle 15) {p } (GetTitle 17) {p } (GetTitle 11) {p } (GetTitle 13) {p"}
+                   (GetTitle 11) {p } (GetTitle 13) {p } (GetTitle 15) {p } (GetTitle 17) {p"}
                Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
                If $MainCmd <> {} Then
                Begin
