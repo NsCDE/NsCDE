@@ -14,9 +14,10 @@ def usage():
 def cmdoptions():
     section = ''
     typecf = ''
+    removekey = 0
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "c:t:s:k:v:h", ["conffile=", "typecf=", "section=", "key=", "value=", "help"])
+        opts, args = getopt.getopt(sys.argv[1:], "c:t:rs:k:v:h", ["conffile=", "typecf=", "remove", "section=", "key=", "value=", "help"])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -27,6 +28,8 @@ def cmdoptions():
             conffile = a
         elif o in ("-t", "--typecf"):
             typecf = a
+        elif o in ("-r", "--remove"):
+            removekey = 1
         elif o in ("-s", "--section"):
             section = a
         elif o in ("-k", "--key"):
@@ -39,7 +42,10 @@ def cmdoptions():
         else:
             assert False, "getopt: unhandled option"
 
-    return conffile, typecf, section, key, value
+    if removekey:
+       value = ''
+
+    return conffile, typecf, section, key, value, removekey
 
 def removew(d):
     for k, v in d.iteritems():
@@ -49,7 +55,7 @@ def removew(d):
             d[k]=v.strip()
 
 def main ():
-    conffile, typecf, section, key, value = cmdoptions()
+    conffile, typecf, section, key, value, removekey = cmdoptions()
 
     if typecf == '':
         typecf = 'ini'
@@ -60,11 +66,15 @@ def main ():
         parser.read(conffile)
 
         try:
-            parser.set(section, key, value)
+            if removekey:
+                parser.remove_option(section, key)
+            else:
+                parser.set(section, key, value)
         except configparser.NoSectionError:
-            print ("No section named " + section + " creating it.")
-            parser.add_section(section)
-            parser.set(section, key, value)
+            if not removekey:
+                print ("No section named " + section + " creating it.")
+                parser.add_section(section)
+                parser.set(section, key, value)
 
         with open(conffile, 'w') as cff:
             parser.write(cff)

@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GeometryMgr}
 WindowLocaleTitle {Window Geometry Manager}
-WindowSize 400 306
+WindowSize 400 366
 Colorset 22
 
 Init
@@ -22,18 +22,22 @@ Begin
    ChangeFont 12 $FontDefault
    ChangeFont 14 $FontDefault
    ChangeFont 16 $FontDefault
+   ChangeFont 18 $FontDefault
    ChangeFont 19 $FontDefault
    ChangeFont 20 $FontDefault
    ChangeFont 21 $FontDefault
+   ChangeFont 22 $FontDefault
+   ChangeFont 23 $FontDefault
+   ChangeFont 24 $FontDefault
    ChangeFont 11 $FontNormalMono
    ChangeFont 13 $FontNormalMono
    ChangeFont 15 $FontNormalMono
    ChangeFont 17 $FontNormalMono
 
-   Key Return A 19 1 {KeySave}
-   Key Escape A 20 1 {KeyQuit}
-   Key F1 A 5 21 1 {KeyHelp}
-   Key Help A 21 1 {KeyHelp}
+   Key Return A 22 1 {KeySave}
+   Key Escape A 23 1 {KeyQuit}
+   Key F1 A 5 24 1 {KeyHelp}
+   Key Help A 24 1 {KeyHelp}
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
@@ -66,6 +70,19 @@ Begin
    Begin
       ChangeIcon 7 $IconFile
    End
+
+   Set $GetExistingMappingCmd = {$NSCDE_ROOT/bin/confget.py -c $FVWM_USERDIR/GeoDB.ini -s } $ScreenWidth {x} $ScreenHeight { -k } $WindowResource {,} $WindowClass
+   Set $GetExistingMapping = (GetOutput $GetExistingMappingCmd 1 -1)
+   If $GetExistingMapping <> {} Then
+   Begin
+      ChangeTitle 19 $GetExistingMapping
+   End
+   Else
+   Begin
+      ChangeLocaleTitle 19 {(none)}
+   End
+
+   Set $RemoveFromGeoDB = 0
 
    # Colorset 20 ForeColor bug when Colorset 22 foreground is dark - Workaround
    Do {Schedule 250 SendToModule GeometryMgr SendString 30 1 workaround}
@@ -117,11 +134,6 @@ Widget 5
    Flags NoReliefString Left
    LocaleTitle {X11 Resource Name}
    Font "xft:::pixelsize=15"
-   Main
-      Case message of
-      1 :
-      Begin
-      End
 End
 
 Widget 6
@@ -162,11 +174,6 @@ Widget 9
    Flags NoReliefString Left
    LocaleTitle {Pixel Values:}
    Font "xft:::pixelsize=14"
-   Main
-      Case message of
-      1 :
-      Begin
-      End
 End
 
 Widget 10
@@ -177,11 +184,6 @@ Widget 10
    Flags NoReliefString Left
    LocaleTitle {X Position}
    Font "xft:::pixelsize=15"
-   Main
-      Case message of
-      1 :
-      Begin
-      End
 End
 
 Widget 11
@@ -193,6 +195,12 @@ Widget 11
    Title {}
    Font "xft:::pixelsize=15"
    Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
 End
 
 Widget 12
@@ -214,6 +222,12 @@ Widget 13
    Title {}
    Font "xft:::pixelsize=15"
    Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
 End
 
 Widget 14
@@ -235,6 +249,12 @@ Widget 15
    Title {}
    Font "xft:::pixelsize=15"
    Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
 End
 
 Widget 16
@@ -256,19 +276,70 @@ Widget 17
    Title {}
    Font "xft:::pixelsize=15"
    Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
 End
 
 Widget 18
    Property
-   Size 390 1
-   Position 4 256
-   Type Rectangle
+   Size 78 20
+   Position 10 256
+   Type ItemDraw
+   Flags NoReliefString Left
+   LocaleTitle {Existing Mapping:}
+   Font "xft:::pixelsize=15"
 End
 
 Widget 19
    Property
+   Size 78 20
+   Position 10 280
+   Type ItemDraw
+   Flags NoReliefString Left
+   Title {0000p 0000p 0000p 0000p}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 20
+   Property
+   Size 90 20
+   Position 284 264
+   Type PushButton
+   Flags NoReliefString
+   Title {Clear}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 20 1
+      End
+      1 :
+      Begin
+         Set $RemoveFromGeoDB = 1
+         ChangeLocaleTitle 19 {(none)}
+         ChangeTitle 11 {}
+         ChangeTitle 13 {}
+         ChangeTitle 15 {}
+         ChangeTitle 17 {}
+      End
+End
+
+Widget 21
+   Property
+   Size 390 1
+   Position 4 314
+   Type Rectangle
+End
+
+Widget 22
+   Property
    Size 112 20
-   Position 16 268
+   Position 16 328
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Save}
@@ -277,65 +348,82 @@ Widget 19
       Case message of
       SingleClic :
       Begin
-         SendSignal 19 1
+         SendSignal 22 1
       End
       1 :
       Begin
-         Set $ClassNameCheckCmd = {echo '} (GetTitle 6) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
-         Set $ClassNameCheck = (GetOutput $ClassNameCheckCmd 1 1)
-         Set $ResNameCheckCmd = {echo '} (GetTitle 4) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
-         Set $ResNameCheck = (GetOutput $ResNameCheckCmd 1 1)
-
-         If $ClassNameCheck <> 0 Then
+         If $RemoveFromGeoDB == 0 Then
          Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Class Name contains non-allowed characters:] } (GetTitle 6) {" "e1"}
+            Set $ClassNameCheckCmd = {echo '} (GetTitle 6) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
+            Set $ClassNameCheck = (GetOutput $ClassNameCheckCmd 1 1)
+            Set $ResNameCheckCmd = {echo '} (GetTitle 4) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
+            Set $ResNameCheck = (GetOutput $ResNameCheckCmd 1 1)
+
+            If $ClassNameCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Class Name contains non-allowed characters:] } (GetTitle 6) {" "e1"}
+            End
+
+            If $ResNameCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Resource Name contains non-allowed characters:] } (GetTitle 4) {" "e2"}
+            End
+
+            Set $WidthNumCheckCmd = {echo '} (GetTitle 15) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $WidthNumCheck = (GetOutput $WidthNumCheckCmd 1 1)
+            Set $HeightNumCheckCmd = {echo '} (GetTitle 17) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $HeightNumCheck = (GetOutput $HeightNumCheckCmd 1 1)
+            Set $XNumCheckCmd = {echo '} (GetTitle 11) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $XNumCheck = (GetOutput $XNumCheckCmd 1 1)
+            Set $YNumCheckCmd = {echo '} (GetTitle 13) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $YNumCheck = (GetOutput $YNumCheckCmd 1 1)
+
+            If $WidthNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Width value is not a number:] } (GetTitle 15) {" "e3"}
+            End
+
+            If $HeightNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Height value is not a number:] } (GetTitle 17) {" "e4"}
+            End
+
+            If $XNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X position value is not a number:] } (GetTitle 11) {" "e5"}
+            End
+
+            If $YNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Y position value is not a number:] } (GetTitle 13) {" "e6"}
+            End
+
+            Set $ErrCount = $ClassNameCheck $ResNameCheck $WidthNumCheck $HeightNumCheck $XNumCheck $YNumCheck
+
+            If $ErrCount == {000000} Then
+            Begin
+               Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
+                   $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4) { -v "}
+                   (GetTitle 15) {p } (GetTitle 17) {p } (GetTitle 11) {p } (GetTitle 13) {p"}
+               Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
+               If $MainCmd <> {} Then
+               Begin
+                  Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] } $MainCmd {" "e7"}
+               End
+               Else
+               Begin
+                  Quit
+               End
+            End
          End
-
-         If $ResNameCheck <> 0 Then
+         Else
          Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Resource Name contains non-allowed characters:] } (GetTitle 4) {" "e2"}
-         End
-
-         Set $WidthNumCheckCmd = {echo '} (GetTitle 15) {' | egrep -q '^[[:digit:]]+$'; echo $?}
-         Set $WidthNumCheck = (GetOutput $WidthNumCheckCmd 1 1)
-         Set $HeightNumCheckCmd = {echo '} (GetTitle 17) {' | egrep -q '^[[:digit:]]+$'; echo $?}
-         Set $HeightNumCheck = (GetOutput $HeightNumCheckCmd 1 1)
-         Set $XNumCheckCmd = {echo '} (GetTitle 11) {' | egrep -q '^[[:digit:]]+$'; echo $?}
-         Set $XNumCheck = (GetOutput $XNumCheckCmd 1 1)
-         Set $YNumCheckCmd = {echo '} (GetTitle 13) {' | egrep -q '^[[:digit:]]+$'; echo $?}
-         Set $YNumCheck = (GetOutput $YNumCheckCmd 1 1)
-
-         If $WidthNumCheck <> 0 Then
-         Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Width value is not a number:] } (GetTitle 15) {" "e3"}
-         End
-
-         If $HeightNumCheck <> 0 Then
-         Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Height value is not a number:] } (GetTitle 17) {" "e4"}
-         End
-
-         If $XNumCheck <> 0 Then
-         Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X position value is not a number:] } (GetTitle 11) {" "e5"}
-         End
-
-         If $YNumCheck <> 0 Then
-         Begin
-            Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Y position value is not a number:] } (GetTitle 13) {" "e6"}
-         End
-
-         Set $ErrCount = $ClassNameCheck $ResNameCheck $WidthNumCheck $HeightNumCheck $XNumCheck $YNumCheck
-
-         If $ErrCount == {000000} Then
-         Begin
-            Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
-                $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4) { -v "}
-                (GetTitle 15) {p } (GetTitle 17) {p } (GetTitle 11) {p } (GetTitle 13) {p"}
+            Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -r -s }
+                $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4)
             Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
             If $MainCmd <> {} Then
             Begin
-               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] } $MainCmd {"}
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error deleting geometry values:] } $MainCmd {" "e8"}
             End
             Else
             Begin
@@ -345,10 +433,10 @@ Widget 19
       End
 End
 
-Widget 20
+Widget 23
    Property
    Size 112 20
-   Position 144 268
+   Position 144 328
    Type PushButton
    LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
@@ -357,7 +445,7 @@ Widget 20
       Case message of
       SingleClic :
       Begin
-         SendSignal 20 1
+         SendSignal 23 1
       End
       1 :
       Begin
@@ -365,10 +453,10 @@ Widget 20
       End
 End
 
-Widget 21
+Widget 24
    Property
    Size 112 20
-   Position 272 268
+   Position 272 328
    Type PushButton
    LocaleTitle {Help}
    Font "xft:::pixelsize=15"
@@ -377,7 +465,7 @@ Widget 21
       Case message of
       SingleClic :
       Begin
-         SendSignal 21 1
+         SendSignal 24 1
       End
       1 :
       Begin
