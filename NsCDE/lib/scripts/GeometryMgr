@@ -111,7 +111,7 @@ Widget 1
    Size 20 20
    Position 18 4
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Title {      Set Window Initial Geometry      }
    Font "xft:::pixelsize=15"
 End
@@ -121,6 +121,7 @@ Widget 2
    Size 386 214
    Position 6 14
    Type Rectangle
+   Flags NoReliefString
 End
 
 Widget 3
@@ -128,7 +129,7 @@ Widget 3
    Size 172 20
    Position 18 36
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {X11 Class Name}
    Font "xft:::pixelsize=15"
 End
@@ -149,7 +150,7 @@ Widget 5
    Size 172 20
    Position 212 36
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {X11 Resource Name}
    Font "xft:::pixelsize=15"
 End
@@ -170,7 +171,7 @@ Widget 7
    Size 24 24
    Position 16 106
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Icon NsCDE/Nominiicon.xpm
 End
 
@@ -179,7 +180,7 @@ Widget 8
    Size 0 20
    Position 44 106
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Window Parameters (screen size: 00000x00000)}
    Font "xft:::pixelsize=14"
 End
@@ -189,7 +190,7 @@ Widget 9
    Size 24 24
    Position 44 128
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Pixel Values:}
    Font "xft:::pixelsize=14"
 End
@@ -199,7 +200,7 @@ Widget 10
    Size 78 20
    Position 18 160
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Width}
    Font "xft:::pixelsize=15"
 End
@@ -226,7 +227,7 @@ Widget 12
    Size 78 20
    Position 116 160
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Height}
    Font "xft:::pixelsize=15"
 End
@@ -253,7 +254,7 @@ Widget 14
    Size 78 20
    Position 210 160
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {X Position}
    Font "xft:::pixelsize=15"
 End
@@ -280,7 +281,7 @@ Widget 16
    Size 78 20
    Position 308 160
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Y Position}
    Font "xft:::pixelsize=15"
 End
@@ -307,7 +308,7 @@ Widget 18
    Size 78 20
    Position 10 236
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Existing Mapping:}
    Font "xft:::pixelsize=15"
 End
@@ -317,7 +318,7 @@ Widget 19
    Size 78 20
    Position 10 262
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Title {0000p 0000p 0000p 0000p}
    Font "xft:::pixelsize=15"
 End
@@ -352,6 +353,7 @@ Widget 21
    Size 390 1
    Position 4 294
    Type Rectangle
+   Flags NoReliefString
 End
 
 Widget 22
@@ -430,6 +432,7 @@ Widget 22
                End
                Else
                Begin
+                  Do {Schedule 250 f_RepositionWindow}
                   Quit
                End
             End
