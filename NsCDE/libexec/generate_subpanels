@@ -38,7 +38,15 @@ do
    fi
 
    Name=$(egrep "S${subpn},NAME," $spactfile | cut -d"," -f3)
+   if [ "x${Name}" == "x" ]; then
+      Name=$(egrep "S${subpn},NAME," "$NSCDE_ROOT/config/Subpanels.actions" | cut -d"," -f3)
+   fi
+
    Width=$(egrep "S${subpn},WIDTH," $spactfile | cut -d"," -f3)
+   echo $Width | egrep -q '^[[:digit:]]+$'
+   if (($? != 0)); then
+      Width=194
+   fi
 
    if [ ! -z $NSCDE_FONT_DPI ]; then
       if (($NSCDE_FONT_DPI > 100 && $NSCDE_FONT_DPI <= 124)); then
@@ -54,9 +62,13 @@ do
    Rows=$(($EntryRows + 3))
 
    Enabled=$(egrep "S${subpn},ENABLED," $spactfile | cut -d"," -f3)
+   echo "$Enabled" | egrep -q '0|1'
+   if (($? != 0)); then
+      Enabled=0
+   fi
 
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Name \"$Name\""
-   echo "InfoStoreAdd $[gt.NsCDE-Subpanel${subpn}-Width $Width]"
+   echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Width $Width"
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Rows $Rows"
    echo "InfoStoreAdd NsCDE-Subpanel${subpn}-Enabled $Enabled"
    echo "InfoStoreAdd subpanel_NsCDE-Subpanel${subpn}_last_sel_id inst_ico_s${subpn}"
@@ -85,7 +97,7 @@ do
    echo ""
 
    id=1
-   egrep -v '^#' $spactfile | egrep "^S${subpn},ENTRY," | while IFS="," read subp esign title check iconfile cmdargs
+   egrep -v '^#' $spactfile | egrep "^S${subpn},ENTRY,.*,.*,.*,.*" | while IFS="," read subp esign title check iconfile cmdargs
    do
       subp="${subp##*S}"
       newid="Btn-${subpn}-${id}"
