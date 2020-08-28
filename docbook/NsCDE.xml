@@ -207,6 +207,7 @@ GUI tools are:
 <listitem><para>Keyboard Style Manager (KeyboardMgr) - FvwmScript</para></listitem>
 <listitem><para>Occupy Workspace (OccupyWorkspace) - FvwmScript</para></listitem>
 <listitem><para>Occupy Page (OccupyPage) - FvwmScript</para></listitem>
+<listitem><para>Window Geometry Manager - FvwmScript</para></listitem>
 <listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
 <listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
 <listitem><para>Subpanel Manager (SubpanelMgr) - FvwmScript</para></listitem>
@@ -1445,6 +1446,52 @@ page to the same destination.
 </itemizedlist>
 </para>
 </sect2>
+
+<sect2 id="NsCDE-GeometryMgr">
+<title>Window Geometry Manager</title>
+<para>
+This tool dialog is called from the left titlebar button menu. Or from
+<keysym>Meta+F6</keysym> key combination from the window context. This Manager offers convenience
+to save size and position of the non-transient window. Once window geometry is saved, next run of
+the same application window on FVWM page where it is not already present that window will cause window
+to be resized to that exact width, height, X position and Y position X11 coordinates as stored in the
+<filename>$FVWM_USERDIR/GeoDB.ini</filename>. This ini-style file is managed by this application, as
+well as from the background runner <filename>$NSCDE_ROOT/bin/confset.py</filename> and read by the
+<filename>$NSCDE_ROOT/bin/confget.py</filename>. Application automatically fills X11 Class and X11
+Resource names on contextual call, as well as geometry parameters. Before applying this settings,
+user has a chance to fine tune this parameters in text fields and confirm (or cancel) the action
+on the end. Using <guibutton>Clear</guibutton> all geometry values, as well as those which may be
+saved from the past are cleared and deleted. After the Clear action, there are two options:
+<itemizedlist>
+<listitem><para>
+Filling all fields manually and saving the result
+</para></listitem>
+<listitem><para>
+Saving empty fields: this action will cancel and/or remove any existing geometry
+mappings for the selected X11 window.
+</para></listitem>
+</itemizedlist>
+Note that geometry savings are dependent on the current monitor resolution. In other words,
+size and position of the X11 window are saved for 1920x1080, 2560x1440, 1600x900 and any
+other possible monitor resolution. Multiple savings on different monitor resolutions are
+possible and saved under separate sections in <filename>$FVWM_USERDIR/GeoDB.ini</filename>.
+</para>
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Window Geometry Manager without performing an action.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
+</para></listitem>
+<listitem><para>
+<keysym>Return</keysym>: Performs action like Save button was pressed.
+</para></listitem>
+</itemizedlist>
+</para>
+</sect2>
+
 
 <sect2 id="NsCDE-PointerMgr">
 <title>Mouse Style Manager</title>
@@ -3032,7 +3079,7 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Meta+F6</keysym> saves geometry information for a current window in GeoDB.ini
+  <keysym>Meta+F6</keysym> Calls Window Geometry Manager and saves geometry information for a current window in GeoDB.ini
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -4808,6 +4855,10 @@ with complete explanations:
 
 <listitem><para>
   WsPgMgr - Manage Workspaces and Pages. NsCDE invention.
+</para></listitem>
+
+<listitem><para>
+  <link linkend="NsCDE-GeometryMgr">GeometryMgr</link> - Manages custom X11 window starting size and position.
 </para></listitem>
 
 <listitem><para>
