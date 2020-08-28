@@ -47,7 +47,7 @@ Begin
    # Fill the Subpanel app List on the right with all entries found there.
    Set $SubpListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.SubpLst}
    Set $SubpListTmpFile = (GetOutput $SubpListTmpFileCmd 1 -1)
-   Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
+   Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*,.*,.*,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
    Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
    Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
