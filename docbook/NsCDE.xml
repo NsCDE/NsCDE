@@ -2678,7 +2678,9 @@ Some of the important FVWM Infostore variables which can be set only by the edit
 <listitem><para>InfoStoreAdd wsmcolored 0|1 - additional menu color around Workspace Manager like in some versions of CDE</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_xscreensaver 0|1</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_stalonetray 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_dunst 0|1</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_xsettingsd 0|1</para></listitem>
+<listitem><para>InfoStoreAdd wsm.eco 0|1</para></listitem>
 <listitem><para>InfoStoreAdd windowlist.fontsize <varname>small | medium | large</varname></para></listitem>
 <listitem><para>InfoStoreAdd windowlist.title.fontsize <varname>small | medium | large</varname></para></listitem>
 <listitem><para>InfoStoreAdd xlogcmd <varname>custom-command</varname> if <filename>$HOME/.xsession-errors</filename>
@@ -4060,7 +4062,8 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
     loaded as bare default early on start, before FvwmBacker(1) sets up
     backdrops on each user's workspace. From there, on initial setup, default
     <filename>Xsettingsd.conf</filename>, <filename>Stalonetray.conf</filename>,
-    <filename>colormgr.local</filename> and some other files are installed into
+    <filename>Dunst.conf</filename>, 
+    <filename>colormgr.local</filename> and possibly other files are installed into
     user's <filename class="directory">$FVWM_USERDIR</filename>.
 </para></listitem>
 
@@ -4375,6 +4378,10 @@ any part of the NsCDE. (optional)
 </para></listitem>
 
 <listitem><para>
+<command>Dunst</command> for notification daemon (optional)
+</para></listitem>
+
+<listitem><para>
 <command>xterm</command>
 </para></listitem>
 
@@ -4501,7 +4508,7 @@ is created as <command>fvwm-menu-desktop</command> is run. User will be presente
 system setup and with default color theme <emphasis>Broica</emphasis> in 8 colors, and
 <function>f_FindApp</function> function will try hard to find some usable terminal
 application and run it with setup. If Gkrellm, pnmixer programs are installed,
-on the system and found, they will be run too. Stalonetray will be run if enabled by the user.
+on the system and found, they will be run too. Stalonetray and Dunst will be run if enabled by the user.
 </para>
 <para>
 Initial setup is a simple script (<command>$NSCDE_ROOT/libexec/nscde_setup</command>) from
@@ -4521,6 +4528,7 @@ the terminal which will run automatically and will set up the following:
 <listitem><para> <filename>~/.config/Trolltech.conf</filename> </para></listitem>
 <listitem><para> <filename>~/.config/qt5ct/qt5ct.conf</filename> </para></listitem>
 <listitem><para> <filename>~/NsCDE/Stalonetray.conf if it does not exist yet</filename> </para></listitem>
+<listitem><para> <filename>~/NsCDE/Dunst.conf if it does not exist yet</filename> </para></listitem>
 <listitem><para> <filename>Visual Pager NsCDE addon Option</filename> </para></listitem>
 <listitem><para> <filename>Disable or enable XscreenSaver</filename> </para></listitem>
 <listitem><para> <filename>Disable or enable use of the XSETTINGS xsettingsd daemon</filename> </para></listitem>
@@ -4707,9 +4715,9 @@ In the directory <filename class="directory">$NSCDE_ROOT/share/doc/examples/Gkre
 is the complete NsCDE theme for the Gkrellm.
 File <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename>
 can be used for this integration. There are also examples for
-<command>Stalonetray</command> and <command>mate-terminal</command>. Local script
-<command>colormgr.local</command> will most likely use
-<command>$NSCDE_ROOT/libexec/nscde_palette_colorgen.py</command> in some way.
+<command>Stalonetray</command>, <command>Dunst</command> and
+<command>mate-terminal</command>. Local script <command>colormgr.local</command>
+will most likely use <command>$NSCDE_ROOT/libexec/nscde_palette_colorgen.py</command> in some way.
 </para>
 </sect2>
 

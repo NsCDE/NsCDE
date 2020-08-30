@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7. Configuration files explained</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Backdrops-Palettes-Fonts.html" title="6. Backdrops, Palettes and Fonts"><link rel="next" href="AppMenus_conf.html" title="7.2. AppMenus.conf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Configuration files explained</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Backdrops-Palettes-Fonts.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="AppMenus_conf.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Configuration-Files"></a>7. Configuration files explained</h2></div></div></div><div class="abstract"><p class="title"><b>Abstract</b></p><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7. Configuration files explained</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Backdrops-Palettes-Fonts.html" title="6. Backdrops, Palettes and Fonts"><link rel="next" href="AppMenus_conf.html" title="7.2. AppMenus.conf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Configuration files explained</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Backdrops-Palettes-Fonts.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="AppMenus_conf.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Configuration-Files"></a>7. Configuration files explained</h2></div></div></div><div class="abstract"><p class="title"><b>Abstract</b></p><p>
 As pointed above, NsCDE has a quite complex set of configuration
 files. ~ 90% of them are the FVWM configurations. But, this system
 of configurations is arranged in some logical and consistent way.
@@ -65,6 +65,27 @@ Here is the example of the custom swallowed applet which does not accept mouse c
    Btn10,,M2,FVWM,Nop
 
    Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 VLC
+
+</pre><p>
+
+</p><p>
+This example is replacing standard Front Panel Clock with Solaris Globe Icon based
+Front Panel clock, using the same pclock program as standard one, but with a
+slightly different options:
+
+</p><pre class="programlisting">
+
+
+   Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
+   \\"Exec exec $NSCDE_ROOT/bin/fpclock-$(uname-s)_$(uname -m)
+   -H red -S white --hands-width=4
+   --hour-hand-length=15 --minute-hand-length=20
+   --second-hand-length=22 -w 
+   -B $FVWM_ROOT/share/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
+
+   Btn1,,M2,FVWM,Nop
+
+   Btn1,,M3,FVWM,f_FrontPanelPropsMenu 1 Browser
 
 </pre><p>
 

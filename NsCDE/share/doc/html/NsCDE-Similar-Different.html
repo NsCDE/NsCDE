@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>17. Similarities and differences in usage and look between CDE and NsCDE</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Single-Logical-Screen.html" title="16. Single Logical Screen, Xinerama - multiscreen support"><link rel="next" href="NsCDE-Patches-FVWM.html" title="18. Patches for FVWM"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17. Similarities and differences in usage and look between CDE and NsCDE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Single-Logical-Screen.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Similar-Different"></a>17. Similarities and differences in usage and look between CDE and NsCDE</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>18. Similarities and differences in usage and look between CDE and NsCDE</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Single-Logical-Screen.html" title="17. Single Logical Screen, Xinerama - multiscreen support"><link rel="next" href="NsCDE-Patches-FVWM.html" title="19. Patches for FVWM"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">18. Similarities and differences in usage and look between CDE and NsCDE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Single-Logical-Screen.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Similar-Different"></a>18. Similarities and differences in usage and look between CDE and NsCDE</h2></div></div></div><p>
 NsCDE is not a mere clone of CDE. Under the first visual impression,
 there are unintentional and intentional differences.
 </p><p>
@@ -15,18 +15,10 @@ What is similar or the same:
 Differencies exist: for worse or better. They are described here in detail
 with complete explanations:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-  Workspace Manager has a four fixed choices for workspaces (desks). As in CDE four is a
-  default, but combinations with 2, 6 and 8 are possible. If reduced to
-  2 desks, WSM buttons will grow in width to fill fixed space of the WSM
-  FvwmScript applet. If 6 or 8 desks are configured, buttons will shrink
-  and will be narrower. For that reason, in 6 and 8 desks mode it is not
-  possible to have page indicator (<code class="filename">WSM.conf</code>: WSPPG) on the right side
-  of the workspace buttons,
-  but this doesn't exist in CDE anyway, since CDE doesn't have concept
-  of pages (in my best knowledge). This means that Front Panel has always a
-  fixed width which is ok for a distinctive look and for screens with
-  smaller resolutions - it will not grow or shrink depending of number
-  of desks and their buttons shown in WSM.
+  Workspace Manager has a four default choices for workspaces (desks). As in CDE four is a
+  default, but combinations with 2, 6 and 8 are possible. Workspace Manger can be of dynamic
+  width when number of workspaces is changed, or it can be of fixed width if InfoStore
+  variable wsm.eco is set to 1 in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>.
 </p></li><li class="listitem"><p>
   No drag and drop. This is specially visible in <span class="emphasis"><em>Install Icon</em></span> action
   which actually calls custom tool Subpanel Manager for this actions.
@@ -69,7 +61,7 @@ with complete explanations:
     on PC. CDE original in default installation at least, seems to have
     only auto-repeat and click volume controls.
 </p></li><li class="listitem"><p>
-  <a class="link" href="NsCDE-PointerMgr.html" title="4.10. Mouse Style Manager">Mouse Style Manager</a> does not have
+  <a class="link" href="NsCDE-PointerMgr.html" title="4.11. Mouse Style Manager">Mouse Style Manager</a> does not have
     configurable middle mouse (button
     2) action since this is not applicable very much on today's GUI widgets.
 </p></li><li class="listitem"><p>
@@ -79,12 +71,12 @@ with complete explanations:
   Screensaver Style Manager is in fact Xscreensaver setup. Perfect
   drop in replacement and much fancier than original.
 </p></li><li class="listitem"><p>
-  <a class="link" href="NsCDE-WindowMgr.html" title="4.16. Window Style Manager">Window Style Manager</a>
+  <a class="link" href="NsCDE-WindowMgr.html" title="4.17. Window Style Manager">Window Style Manager</a>
   manages much more of window, icon, pages and animation
   behavior than original program in CDE, and even this is a small subset of
   options in FVWM. See it's documentation and fvwm(1) man page.
 </p></li><li class="listitem"><p>
-  <a class="link" href="NsCDE-PowerSaveMgr.html" title="4.11. Power Save Manager">Power Style Manager</a> is actually very
+  <a class="link" href="NsCDE-PowerSaveMgr.html" title="4.12. Power Save Manager">Power Style Manager</a> is actually very
    rare in Style Manager across
    old CDE setups. It manages DPMS setting of the monitor with xset(1).
 </p></li><li class="listitem"><p>
@@ -100,6 +92,8 @@ with complete explanations:
 </p></li><li class="listitem"><p>
   WsPgMgr - Manage Workspaces and Pages. NsCDE invention.
 </p></li><li class="listitem"><p>
+  <a class="link" href="NsCDE-GeometryMgr.html" title="4.10. Window Geometry Manager">GeometryMgr</a> - Manages custom X11 window starting size and position.
+</p></li><li class="listitem"><p>
   FpLite is measuring system load, not desktop activity. It has much
     more fine grained indication of activity with colors, and it's
     height is 3x of the original for a better visibility. On click it is
@@ -111,4 +105,4 @@ with complete explanations:
   to do what user wants.
 </p></li><li class="listitem"><p>
   Probably some more small differences.
-</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Single-Logical-Screen.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">16. Single Logical Screen, Xinerama - multiscreen support </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 18. Patches for FVWM</td></tr></table></div></body></html>
+</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Single-Logical-Screen.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Patches-FVWM.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">17. Single Logical Screen, Xinerama - multiscreen support </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 19. Patches for FVWM</td></tr></table></div></body></html>
