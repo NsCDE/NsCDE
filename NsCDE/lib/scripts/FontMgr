@@ -1519,6 +1519,8 @@ Widget 26
                # Wait a second for $UserFontsetFile to be written ... a race.
                Set $DoXresourcesCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
+               Set $DoMiscXCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -M '} $FontNormalMediumStr {'}
+               Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
             End
 
             # Spawn ChoiceForm to quit after saving changes

@@ -84,39 +84,3 @@ if (($? == 0)); then
    rm -f $TEMP1 $TEMP2
 fi
 
-# Stalonetray
-if [ -r "$FVWM_USERDIR/Stalonetray.conf" ]; then
-   st_back=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -l | grep sel_color_5 | cut -d" " -f 2)
-   echo "$st_back" | egrep -q '^#[[:xdigit:]]{12}'
-   if (($? == 0)); then
-      $NSCDE_ROOT/bin/ised -c "s/^\([[:space:]]\+\)\?background[[:space:]]\+\(\"#.*\"\)/background \"${st_back}\"/g" -f "$FVWM_USERDIR/Stalonetray.conf"
-   fi
-fi
-
-# Dunst
-if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
-   frame_color=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^bg_color_1 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k frame_color -v "\"$frame_color\""
-
-   ulbg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^bg_color_2 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k background -v "\"$ulbg\""
-   ulfg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^fg_color_2 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k foreground -v "\"$ulfg\""
-   ulfr=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^ts_color_2 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k frame_color -v "\"$ulfr\""
-
-   unbg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^bg_color_5 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k background -v "\"$unbg\""
-   unfg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^fg_color_5 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k foreground -v "\"$unfg\""
-   unfr=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^ts_color_5 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k frame_color -v "\"$unfr\""
-
-   ucbg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^bg_color_1 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k background -v "\"$ucbg\""
-   ucfg=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^fg_color_1 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k foreground -v "\"$ucfg\""
-   ucfr=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -s -l | egrep '^ts_color_1 ' | cut -d" " -f 2)
-   $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k frame_color -v "\"$ucfr\""
-fi
-

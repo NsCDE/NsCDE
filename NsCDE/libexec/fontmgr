@@ -243,7 +243,19 @@ function preparefontforgtk
    echo "$XftStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g'
 }
 
-while getopts pPF:f:g:G:n:N:s:r:m:X:T:h Option
+function miscintegrations
+{
+   # Dunst
+   DunstFont=$(echo "$XftFontStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g')
+   if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
+      if [ -n $NewFont ]; then
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "$DunstFont"
+      fi
+   fi
+}
+
+
+while getopts pPF:f:g:G:n:N:s:r:m:X:T:M:h Option
 do
    case $Option in
       p)
@@ -293,6 +305,10 @@ do
       T)
          XftStr="$OPTARG"
          preparefontforgtk
+      ;;
+      M)
+         XftFontStr="$OPTARG"
+         miscintegrations
       ;;
       h)
          echo "Usage: ..."

@@ -26,12 +26,3 @@ if (($? == 0)); then
    fi
 fi
 
-# Dunst
-if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
-   if [ -n $NewFont ]; then
-      $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "${NewFont}"
-   else
-      exit 4
-   fi
-fi
-
