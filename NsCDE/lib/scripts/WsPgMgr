@@ -833,6 +833,8 @@ Widget 21
          End
          If $PerformRestart == 1 Then
          Begin
+            Do {InfoStoreRemove fvwmdesknum}
+            Do {InfoStoreRemove WSM}
             Do {Schedule 320 Restart}
          End
          Else
