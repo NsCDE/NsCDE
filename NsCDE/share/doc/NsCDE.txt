@@ -249,6 +249,23 @@ M. Z.
    customization (of course, most parts of the existing FVWM
    configuration can be overridden or destroyed and recreated even
    in local files.
+
+   One notable addon to this system of configuration is the way
+   FVWM Styles are read. In addition to reading
+   $FVWM_USERDIR/NsCDE-Style.local "early" configuration in
+   $FVWM_USERDIR/NsCDE-Style.override will be read from
+   $NSCDE_ROOT/config/NsCDE-Style.conf just after applying general
+   core style for all applications (*) but before reading custom
+   application styles and prior to reading
+   $FVWM_USERDIR/NsCDE-Style.local. This mechanism is intended for
+   changing and overriding core style options which are not
+   customizable by the Window Style Manager. Putting core Style
+   options after NsCDE applications in the
+   $NSCDE_ROOT/NsCDE-Style.conf are processed can nullify
+   overrides for that particular applications, this is why this
+   mechanism is provided. This file is not created in
+   $FVWM_USERDIR by setup procedure or Style Managers, but it will
+   be read if created manually.
      __________________________________________________________
 
 2.2. Applets and GUI Tools
@@ -2852,7 +2869,12 @@ M. Z.
      * Cursor styles (not a style commands, but styles anyway)
 
    This styles can be extended and/or overridden by the user's own
-   $FVWM_USERDIR/NsCDE-Style.local.
+   $FVWM_USERDIR/NsCDE-Style.local, and core style for all windows
+   (*) can be overriden by creating
+   $FVWM_USERDIR/NsCDE-Style.override which extends or changes
+   directives for core style from $NSCDE_ROOT/NsCDE-Style.conf
+   prior to applying particular application styles and prior to
+   reading $FVWM_USERDIR/NsCDE-Style.local.
 
    Colorsets and fonts used in this configuration are generated
    and stored in NsCDE-Font-$DPIdpi.conf and NsCDE-Colorset.conf.
@@ -3110,6 +3132,20 @@ M. Z.
        Subpanel are exception of this, that is, it is preferred
        (if not only thing possible) to have it as .conf files only
        and not .local files.
+       NsCDE-Style.override file: If created, it will be read by
+       the $NSCDE_ROOT/NsCDE-Style.conf. Here, core style for all
+       windows (*) can be overriden prior to reading particular
+       NsCDE application style overrides and addons, and prior to
+       reading $FVWM_USERDIR/NsCDE-Style.local. Here, advanced
+       users can override or extend core styles which are not
+       customizable by the Window Style Manager. See fvwm(1) for a
+       huge list of Style options. Putting core Style options
+       after NsCDE applications in the
+       $NSCDE_ROOT/NsCDE-Style.conf are processed can nullify
+       overrides for that particular applications, this is why
+       this mechanism is provided. This file is not created in
+       $FVWM_USERDIR by setup procedure or Style Managers, but if
+       created (manually) it will be read and processed.
        XYZ is here placeholder/example for Style, Functions,
        Keybindings, Init, Menus etc ...
      * NsCDE.conf: managed by Window Style Manager, Workspaces and

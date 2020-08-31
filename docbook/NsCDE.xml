@@ -168,6 +168,20 @@ for customization: If user doesn't need to override and change a lot of
 file is place for such customization (of course, most parts of the existing FVWM
 configuration can be overridden or destroyed and recreated even in local files.
 </para>
+<para>
+One notable addon to this system of configuration is the way FVWM Styles are read.
+In addition to reading <filename>$FVWM_USERDIR/NsCDE-Style.local</filename> "early"
+configuration in <filename>$FVWM_USERDIR/NsCDE-Style.override</filename> will be read from
+<filename>$NSCDE_ROOT/config/NsCDE-Style.conf</filename> just after applying general core
+style for all applications <emphasis>(*)</emphasis> but before reading custom application
+styles and prior to reading <filename>$FVWM_USERDIR/NsCDE-Style.local</filename>.
+This mechanism is intended for changing and overriding core style options which are not
+customizable by the Window Style Manager. Putting core <emphasis>Style</emphasis> options
+after NsCDE applications in the <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename> are processed
+can nullify overrides for that particular applications, this is why this mechanism is provided.
+This file is not created in <varname>$FVWM_USERDIR</varname> by setup procedure or Style
+Managers, but it will be read if created manually.
+</para>
 </sect2>
 
 <sect2 id="NsCDE-components-applets-tools">
@@ -3773,6 +3787,11 @@ Options are grouped in 5 categories:
 </itemizedlist>
 <para>
 This styles can be extended and/or overridden by the user's own
+<filename>$FVWM_USERDIR/NsCDE-Style.local</filename>, and core style
+for all windows <emphasis>(*)</emphasis> can be overriden by creating
+<filename>$FVWM_USERDIR/NsCDE-Style.override</filename> which extends or
+changes directives for core style from <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename>
+prior to applying particular application styles and prior to reading
 <filename>$FVWM_USERDIR/NsCDE-Style.local</filename>.
 </para>
 <para>
@@ -4193,6 +4212,20 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
   Animate, Font-$DPIdpi, Init, and Subpanel are exception of this,
   that is, it is preferred (if not only thing possible) to have it as
   <emphasis>.conf</emphasis> files only and not <emphasis>.local</emphasis> files.
+</para>
+<para>
+  <filename>NsCDE-Style.override</filename> file:
+  If created, it will be read by the <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename>.
+  Here, core style for all windows (*) can be overriden prior to reading particular
+  NsCDE application style overrides and addons, and prior to reading
+  <filename>$FVWM_USERDIR/NsCDE-Style.local</filename>. Here, advanced users can override
+  or extend core styles which are not customizable by the Window Style Manager. See fvwm(1) for
+  a huge list of <emphasis>Style</emphasis> options.
+  Putting core <emphasis>Style</emphasis> options after NsCDE applications in the
+  <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename> are processed can nullify overrides
+  for that particular applications, this is why this mechanism is provided.
+  This file is not created in <varname>$FVWM_USERDIR</varname> by setup procedure or Style
+  Managers, but if created (manually) it will be read and processed.
 </para>
 <para>
   <emphasis>XYZ</emphasis> is here placeholder/example for Style, Functions, Keybindings,

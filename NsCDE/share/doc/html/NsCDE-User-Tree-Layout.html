@@ -75,6 +75,19 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
   that is, it is preferred (if not only thing possible) to have it as
   <span class="emphasis"><em>.conf</em></span> files only and not <span class="emphasis"><em>.local</em></span> files.
 </p><p>
+  <code class="filename">NsCDE-Style.override</code> file:
+  If created, it will be read by the <code class="filename">$NSCDE_ROOT/NsCDE-Style.conf</code>.
+  Here, core style for all windows (*) can be overriden prior to reading particular
+  NsCDE application style overrides and addons, and prior to reading
+  <code class="filename">$FVWM_USERDIR/NsCDE-Style.local</code>. Here, advanced users can override
+  or extend core styles which are not customizable by the Window Style Manager. See fvwm(1) for
+  a huge list of <span class="emphasis"><em>Style</em></span> options.
+  Putting core <span class="emphasis"><em>Style</em></span> options after NsCDE applications in the
+  <code class="filename">$NSCDE_ROOT/NsCDE-Style.conf</code> are processed can nullify overrides
+  for that particular applications, this is why this mechanism is provided.
+  This file is not created in <code class="varname">$FVWM_USERDIR</code> by setup procedure or Style
+  Managers, but if created (manually) it will be read and processed.
+</p><p>
   <span class="emphasis"><em>XYZ</em></span> is here placeholder/example for Style, Functions, Keybindings,
   Init, Menus etc ...
 </p></li><li class="listitem"><p>
