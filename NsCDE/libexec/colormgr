@@ -208,6 +208,53 @@ function Xresources
             mv "$tmpl" $(echo "$tmpl" | sed 's/\.tmpl//g')
          done
       fi
+
+      # Put Stalonetray and Dunst here, we don't have a space
+      # for yet another checkbox on the Color Style Manager.
+
+      # Stalonetray
+      if [ -r "${FVWM_USERDIR}/Stalonetray.conf" ]; then
+         st_back=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p ${PaletteNamePath} -n $Ncolors -l | egrep "^sel_color_5" | cut -d" " -f 2)
+         echo "$st_back" | egrep -q '^#[[:xdigit:]]{12}'
+         if (($? == 0)); then
+            $NSCDE_ROOT/bin/ised -c "s/^\([[:space:]]\+\)\?background[[:space:]]\+\(\"#.*\"\)/background \"${st_back}\"/g" \
+            -f "$FVWM_USERDIR/Stalonetray.conf"
+         fi
+      fi
+
+      # Dunst
+      if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
+         OIFS="$IFS"
+         IFS=" "
+            colorblock=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p ${PaletteNamePath} -n $Ncolors -s -l | \
+                         egrep '^bg_color_1|fg_color_1|ts_color_1|bg_color_2|fg_color_2|ts_color_2|bg_color_5|fg_color_5|ts_color_5')
+
+ 
+         ulbg=$(echo "$colorblock" | egrep '^bg_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k background -v "\"$ulbg\""
+         ulfg=$(echo "$colorblock" | egrep '^fg_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k foreground -v "\"$ulfg\""
+         ulfr=$(echo "$colorblock" | egrep '^ts_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k frame_color -v "\"$ulfr\""
+ 
+         unbg=$(echo "$colorblock" | egrep '^bg_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k background -v "\"$unbg\""
+         unfg=$(echo "$colorblock" | egrep '^fg_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k foreground -v "\"$unfg\""
+         unfr=$(echo "$colorblock" | egrep '^ts_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k frame_color -v "\"$unfr\""
+ 
+         ucbg=$(echo "$colorblock" | egrep '^bg_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k background -v "\"$ucbg\""
+         ucfg=$(echo "$colorblock" | egrep '^fg_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k foreground -v "\"$ucfg\""
+         ucfr=$(echo "$colorblock" | egrep '^ts_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k frame_color -v "\"$ucfr\""
+
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k frame_color -v "\"$ucbg\""
+
+         IFS="$OIFS"
+      fi
    else
       ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \

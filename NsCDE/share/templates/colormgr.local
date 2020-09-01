@@ -45,13 +45,25 @@ if [ -d "$NSCDE_ROOT/share/templates/Gkrellm" ] && $(whence -q gkrellm); then
 
    cp -f gkrellmrc ${HOME}/.gkrellm2/themes/NsCDE/
 
-   if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
-      echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
-      echo "0" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
-      echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
-      echo "100" >> "${HOME}/.gkrellm2/theme_config"
+   # Run this only on first setup
+   if [ "x$IVF" == "x1" ]; then
+      if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
+         echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
+         echo "0" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
+         echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
+         echo "100" >> "${HOME}/.gkrellm2/theme_config"
+      fi
+
+      if [ ! -f "${HOME}/.gkrellm2/user-config" ]; then
+         echo 'decorated 1' > "${HOME}/.gkrellm2/user-config"
+         echo 'skip_taskbar 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'skip_pager 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'chart_width 80' >> "${HOME}/.gkrellm2/user-config"
+         echo 'sticky_state 1' >> "${HOME}/.gkrellm2/user-config"
+         echo 'save_position 1' >> "${HOME}/.gkrellm2/user-config"
+      fi
    fi
 fi
 
@@ -61,6 +73,8 @@ if (($? == 0)); then
    TEMP1=$(mktemp --suffix=".dconfgen1")
    echo dconf write /org/mate/terminal/profiles/default/background-color \"\'NSCDE_BG_COLOR_4\'\" > $TEMP1
    echo dconf write /org/mate/terminal/profiles/default/foreground-color \"\'NSCDE_FG_COLOR_4\'\" >> $TEMP1
+   echo dconf write /org/mate/terminal/profiles/default/bold-color-same-as-fg true >> $TEMP1
+   echo dconf write /org/mate/terminal/profiles/default/use-theme-colors false >> $TEMP1
    TEMP2=$(mktemp --suffix=".dconfgen2")
    $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
     -i $TEMP1 -c > $TEMP2
@@ -68,14 +82,5 @@ if (($? == 0)); then
    sh $TEMP2
    sleep 1
    rm -f $TEMP1 $TEMP2
-fi
-
-# Stalonetray
-if [ -r "$FVWM_USERDIR/Stalonetray.conf" ]; then
-   st_back=$($NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n $NCOLORS -p $PPATH -l | grep sel_color_5 | cut -d" " -f 2)
-   echo "$st_back" | egrep -q '^#[[:xdigit:]]{12}'
-   if (($? == 0)); then
-      $NSCDE_ROOT/bin/ised -c "s/^\([[:space:]]\+\)\?background[[:space:]]\+\(\"#.*\"\)/background \"${st_back}\"/g" -f "$FVWM_USERDIR/Stalonetray.conf"
-   fi
 fi
 

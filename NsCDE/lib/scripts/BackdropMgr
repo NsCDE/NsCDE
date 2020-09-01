@@ -78,11 +78,13 @@ Begin
    ChangeFont 10 $ListFont
 
    # Set different font for some elements
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
-   ChangeFont 6 $SmallFont
-   ChangeFont 7 $SmallFont
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
    ChangeFont 8 $SmallFont
    ChangeFont 9 $SmallFont
+
+   Set $ExtraSmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   ChangeFont 6 $ExtraSmallFont
+   ChangeFont 7 $ExtraSmallFont
 
    # X compositor bug workaround
    Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
@@ -114,7 +116,7 @@ Widget 1
    Size 8 0
    Position 16 2
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Colorset 52
    Title { Backdrops }
    Font "xft:::pixelsize=16"
@@ -145,7 +147,7 @@ Widget 4
    Size 262 262
    Position 18 28
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Colorset 20
    Icon NsCDE/None.xpm
    Main
@@ -364,8 +366,9 @@ Widget 8
    Size 4 0
    Position 22 344
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Background Variant: }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -423,7 +426,7 @@ End
 
 Widget 10
    Property
-   Size 192 22
+   Size 236 22
    Position 22 412
    Type PushButton
    Flags NoReliefString
@@ -635,7 +638,7 @@ End
 
 Widget 16
    Property
-   Size 80 26
+   Size 90 26
    Position 16 472
    Type PushButton
    Flags NoReliefString
@@ -664,8 +667,8 @@ End
 
 Widget 17
    Property
-   Size 80 26
-   Position 140 472
+   Size 90 26
+   Position 135 472
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Apply}
@@ -751,8 +754,8 @@ End
 
 Widget 18
    Property
-   Size 80 26
-   Position 260 472
+   Size 90 26
+   Position 254 472
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
@@ -775,8 +778,8 @@ End
 
 Widget 19
    Property
-   Size 80 26
-   Position 384 472
+   Size 90 26
+   Position 376 472
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}

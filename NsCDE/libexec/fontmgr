@@ -40,6 +40,8 @@ function findfontsets
          UserFontsetsOut=$(ls -1 ${FVWM_USERDIR}/fontsets/*.fontset)
          UserFontsets=$(echo "$UserFontsetsOut" | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
          UserFontsetsCnt=$(echo "$UserFontsetsOut" | wc -l)
+      else
+         UserFontsetsCnt=0
       fi
    fi
 
@@ -209,7 +211,16 @@ function genxresourcedefs
    echo '! Licence: GPLv3'
    echo '!'
 
-   echo -ne "\nXft.dpi: 96\n\n"
+   if [ -n $XFT_USE_DPI ]; then
+      echo "$XFT_USE_DPI" | egrep -q "^[[:digit:]]+$"
+      if (($? == 0)); then
+         echo -ne "\nXft.dpi: ${XFT_USE_DPI}\n\n"
+      else
+         echo -ne "\nXft.dpi: 96\n\n"
+      fi
+   else
+      echo -ne "\nXft.dpi: 96\n\n"
+   fi
 
    egrep '^InfoStoreAdd font\.(|variable|monospaced)\.(normal|bold|italic)\.(small|medium|large) ".*"' \
           "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
@@ -232,7 +243,19 @@ function preparefontforgtk
    echo "$XftStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g'
 }
 
-while getopts pPF:f:g:G:n:N:s:r:m:X:T:h Option
+function miscintegrations
+{
+   # Dunst
+   DunstFont=$(echo "$XftFontStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g')
+   if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
+      if [ -n $NewFont ]; then
+         $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "$DunstFont"
+      fi
+   fi
+}
+
+
+while getopts pPF:f:g:G:n:N:s:r:m:X:T:M:h Option
 do
    case $Option in
       p)
@@ -282,6 +305,10 @@ do
       T)
          XftStr="$OPTARG"
          preparefontforgtk
+      ;;
+      M)
+         XftFontStr="$OPTARG"
+         miscintegrations
       ;;
       h)
          echo "Usage: ..."

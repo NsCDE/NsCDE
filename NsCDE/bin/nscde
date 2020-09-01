@@ -13,7 +13,7 @@ if [ -z $HOME ]; then
    echo "Error: HOME not set." >&2
    exit 2
 else
-   export NSCDE_VERSION="1.0rc21"
+   export NSCDE_VERSION="1.0rc24"
 fi
 
 # Either print version and exit, or construct main options for and output
@@ -36,22 +36,13 @@ else
    export DPI=96
 fi
 
-# Fuzzy decisions for font handling
-if (($DPI <= 85)); then
-   NSCDE_DPI=75
-elif (($DPI > 85 && $DPI < 108)); then
-   NSCDE_DPI=96
-elif (($DPI >= 108 && $DPI < 132)); then
-   NSCDE_DPI=120
-elif (($DPI >= 132)); then
-   NSCDE_DPI=144
-fi
-
 # Set main NSCDE and FVWM variables. Most of the things later
 # depends on this core variables.
 export FVWM_USERDIR="${HOME}/.NsCDE"
 export NSCDE_ROOT=/opt/NsCDE
 export FVWM_DATADIR="${NSCDE_ROOT}/config"
+
+mkdir -p "${FVWM_USERDIR}/tmp"
 
 echo "$PATH" | egrep -q "/opt\/NsCDE\/bin"
 if (($? != 0)); then

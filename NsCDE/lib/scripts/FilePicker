@@ -39,6 +39,8 @@ Init
   ChangeTitle 9 {}
 
   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+  ChangeFont 1 $DefFont
+  ChangeFont 2 $DefFont
   ChangeFont 4 $DefFont
   ChangeFont 5 $DefFont
   ChangeFont 8 $DefFont
@@ -67,6 +69,7 @@ Property
  Flags NoReliefString
  Type PushButton
  LocaleTitle {OK}
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :
@@ -83,6 +86,7 @@ Property
  Flags NoReliefString
  Type PushButton
  LocaleTitle {Cancel}
+ Font "xft:::pixelsize=15"
 Main
  Case message of
   SingleClic :

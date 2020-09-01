@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.2. User Tree Layout</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-System-User-Tree-Layout.html" title="8. System and User NsCDE Tree Layout"><link rel="prev" href="NsCDE-System-User-Tree-Layout.html" title="8. System and User NsCDE Tree Layout"><link rel="next" href="NsCDE-Installation-Dependencies.html" title="9. Installation Dependencies"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.2. User Tree Layout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-System-User-Tree-Layout.html">Prev</a> </td><th width="60%" align="center">8. System and User NsCDE Tree Layout</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Installation-Dependencies.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-User-Tree-Layout"></a>8.2. User Tree Layout</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.2. User Tree Layout</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-System-User-Tree-Layout.html" title="8. System and User NsCDE Tree Layout"><link rel="prev" href="NsCDE-System-User-Tree-Layout.html" title="8. System and User NsCDE Tree Layout"><link rel="next" href="NsCDE-Installation-Dependencies.html" title="9. Installation Dependencies"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.2. User Tree Layout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-System-User-Tree-Layout.html">Prev</a> </td><th width="60%" align="center">8. System and User NsCDE Tree Layout</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Installation-Dependencies.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-User-Tree-Layout"></a>8.2. User Tree Layout</h3></div></div></div><p>
 User's configuration is located in <code class="filename">$HOME/.NSCDE</code>
 - this place is what is referred as <code class="varname">$FVWM_USERDIR</code> in this
 documentation. There was no need to redefine this variable, since it server well for
@@ -75,11 +75,24 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
   that is, it is preferred (if not only thing possible) to have it as
   <span class="emphasis"><em>.conf</em></span> files only and not <span class="emphasis"><em>.local</em></span> files.
 </p><p>
+  <code class="filename">NsCDE-Style.override</code> file:
+  If created, it will be read by the <code class="filename">$NSCDE_ROOT/NsCDE-Style.conf</code>.
+  Here, core style for all windows (*) can be overriden prior to reading particular
+  NsCDE application style overrides and addons, and prior to reading
+  <code class="filename">$FVWM_USERDIR/NsCDE-Style.local</code>. Here, advanced users can override
+  or extend core styles which are not customizable by the Window Style Manager. See fvwm(1) for
+  a huge list of <span class="emphasis"><em>Style</em></span> options.
+  Putting core <span class="emphasis"><em>Style</em></span> options after NsCDE applications in the
+  <code class="filename">$NSCDE_ROOT/NsCDE-Style.conf</code> are processed can nullify overrides
+  for that particular applications, this is why this mechanism is provided.
+  This file is not created in <code class="varname">$FVWM_USERDIR</code> by setup procedure or Style
+  Managers, but if created (manually) it will be read and processed.
+</p><p>
   <span class="emphasis"><em>XYZ</em></span> is here placeholder/example for Style, Functions, Keybindings,
   Init, Menus etc ...
 </p></li><li class="listitem"><p>
   <code class="filename">NsCDE.conf</code>: managed by
-  <a class="link" href="NsCDE-WindowMgr.html" title="4.16. Window Style Manager">Window Style Manager</a>, Workspaces and Pages
+  <a class="link" href="NsCDE-WindowMgr.html" title="4.17. Window Style Manager">Window Style Manager</a>, Workspaces and Pages
   Manager, Pointer Style Manager and users own editor manually. See
   the rest of the documentation.
 </p></li><li class="listitem"><p>

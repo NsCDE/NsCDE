@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>15. Additional recommended software</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Integration-Custom.html" title="14.3. Custom application integration"><link rel="next" href="NsCDE-Single-Logical-Screen.html" title="16. Single Logical Screen, Xinerama - multiscreen support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">15. Additional recommended software</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Integration-Custom.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Single-Logical-Screen.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Additional-Software"></a>15. Additional recommended software</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>16. Additional recommended software</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Integration-Custom.html" title="15.3. Custom application integration"><link rel="next" href="NsCDE-Single-Logical-Screen.html" title="17. Single Logical Screen, Xinerama - multiscreen support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">16. Additional recommended software</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Integration-Custom.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Single-Logical-Screen.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Additional-Software"></a>16. Additional recommended software</h2></div></div></div><p>
 Since NsCDE is basically a collection of configurations, themes and tools around FVWM
 and not desktop environment in official definition, user must choose some favorite and
 default applications such as X terminal emulator file manager, and X editor, which will
@@ -15,6 +15,34 @@ shrinking depending on number of widgets or tray icons, and apart from
 that, this can significantly alter the precious CDE look of the Front Panel. A window
 with traditional mwm/dtwm borders and without title in corner of the screen is
 default in NsCDE. Ideas are welcome.
+</p><p>
+There are some programs which needs to be run under escalated privileges. Usually as root.
+Some examples are firewall-applet(1) for managing firewalld on Linux systems, Wireshark etc ...
+For this purpose on Linux (and most probably BSD systems), so called <span class="emphasis"><em>PolicyKit</em></span>
+or "polkitd" is used as a authenticator component, while on the client side, PolicyKit agent
+must be used. This will then prompt user for a password. Since there is no equivalent of
+this agent as standalone DE-indepentent program analogously to stalonetray(1) or dunst(1),
+probably the closest match and most often used is polkit-gnome-authentication-agent-1 which is
+usually installed in <code class="filename">/usr/libexec</code> and relatively without
+huge dependencies on some desktop environment. It can be started from profile, for example from
+InitFunction in <code class="filename">$FVWM_USERDIR/NsCDE-Init.conf</code> or by using dex autostarter
+from this very file (default NsCDE-Init.conf has an example for this).
+</p><p>
+Small python program <span class="emphasis"><em>dex(1)</em></span> can be installed and used fromo InitFunction
+in <code class="filename">$FVWM_USERDIR/NsCDE-Init.conf</code>. This program can be configured to read
+system autostart files in <code class="filename">/etc/xdg/autostart</code> and/or
+user's from <code class="filename">$HOME/.config/autostart</code>. From here,
+PolicyKit agent, NetworkManager applet, Nextcloud agent, Firewall agent, pnmixer and similar
+can be started. Programs such as stalonetray(1), dunst(1), xsettingsd(1), xscreensaver(1)
+are not candidates for this, since they are integrated directly with NsCDE and managed
+by it's configuration and autodetenction procedures.
+</p><p>
+If found, and if configured in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with InfoStore
+variable <code class="varname">nscde_use_dunst</code> set to 1, NsCDE will make fresh copy of
+<code class="filename">$FVWM_USERDIR/Dunst.conf</code> if it doesn't already exist, and start
+<span class="emphasis"><em>dunst(1)</em></span> notification daemon. This standalone notification daemon is
+highly configurable and is Window Manager and Desktop Environment agnostic. Usage of
+dunst(1) is highly recommended.
 </p><p>
 X Terminal program? <span class="command"><strong>Urxvt</strong></span>, <span class="command"><strong> xterm</strong></span>,
 <span class="command"><strong>mate-terminal</strong></span>, <span class="command"><strong> terminus</strong></span> ... user's choice
@@ -69,4 +97,4 @@ I simply turn it off in some moment.
 Maybe it can be better if it is configured more conservative than example. See
 <code class="filename">/opt/NsCDE/share/doc/examples/compton-integration</code> for
 a starting point.
-</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Integration-Custom.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Single-Logical-Screen.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">14.3. Custom application integration </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 16. Single Logical Screen, Xinerama - multiscreen support</td></tr></table></div></body></html>
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Integration-Custom.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Single-Logical-Screen.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">15.3. Custom application integration </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 17. Single Logical Screen, Xinerama - multiscreen support</td></tr></table></div></body></html>

@@ -86,8 +86,8 @@ Begin
    ChangeValue 13 (Div (Mult (StrCopy $tmp 1 $pos2) 20) (StrCopy $tmp (Add $pos2 2) 256))
    ChangeValue 15 (GetOutput {xset -q} $pos 4)
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
-   Set $DefFontBtn = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $DefFontBtn = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
 
    ChangeFont 3 $DefFont
    ChangeFont 6 $DefFontBtn
@@ -190,6 +190,7 @@ Widget 3
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    LocaleTitle {Test Double-Click }
+   Font "xft:::pixelsize=15"
 End
 
 Widget 4
@@ -217,6 +218,7 @@ Widget 6
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Default}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -242,6 +244,7 @@ Widget 7
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    LocaleTitle {Handedness:}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -255,6 +258,7 @@ Widget 8
    Flags NoReliefString
    Type RadioButton
    LocaleTitle {Right}
+   Font "xft:::pixelsize=15"
    Value 1
    Main
       Case message of
@@ -272,6 +276,7 @@ Widget 9
    Flags NoReliefString
    Type RadioButton
    LocaleTitle {Left}
+   Font "xft:::pixelsize=15"
    Value 0
    Main
       Case message of
@@ -290,6 +295,7 @@ Widget 10
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    LocaleTitle {Double-Click}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -306,6 +312,7 @@ Widget 11
    MaxValue 2500
    Value 450
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -337,6 +344,7 @@ Widget 12
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    LocaleTitle {Acceleration}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -352,6 +360,7 @@ Widget 13
    MinValue 5
    MaxValue 100
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -367,6 +376,7 @@ Widget 14
    Flags NoReliefString NoFocus Right
    Type ItemDraw
    LocaleTitle {Threshold}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -382,6 +392,7 @@ Widget 15
    MaxValue 20
    Flags NoReliefString
    Type HScrollBar
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -409,6 +420,7 @@ Widget 17
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Apply}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -434,6 +446,7 @@ Widget 18
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Save}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -534,6 +547,7 @@ Widget 19
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -553,6 +567,7 @@ Widget 20
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Dismiss}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

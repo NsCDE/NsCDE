@@ -1,0 +1,529 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GeometryMgr}
+WindowLocaleTitle {Window Geometry Manager}
+WindowSize 400 348
+Colorset 22
+
+Init
+Begin
+   Set $FontDefault = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $FontNormalMono = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 1 $FontDefault
+   ChangeFont 3 $FontDefault
+   ChangeFont 5 $FontDefault
+   ChangeFont 8 $FontDefault
+   ChangeFont 9 $FontDefault
+   ChangeFont 10 $FontDefault
+   ChangeFont 11 $FontNormalMono
+   ChangeFont 12 $FontDefault
+   ChangeFont 13 $FontNormalMono
+   ChangeFont 14 $FontDefault
+   ChangeFont 15 $FontNormalMono
+   ChangeFont 16 $FontDefault
+   ChangeFont 17 $FontNormalMono
+   ChangeFont 18 $FontDefault
+   ChangeFont 19 $FontNormalMono
+   ChangeFont 20 $FontDefault
+   ChangeFont 21 $FontDefault
+   ChangeFont 22 $FontDefault
+   ChangeFont 23 $FontDefault
+   ChangeFont 24 $FontDefault
+
+   Key Return A 22 1 {KeySave}
+   Key Escape A 23 1 {KeyQuit}
+   Key F1 A 24 1 {KeyHelp}
+   Key Help A 24 1 {KeyHelp}
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 1 { Set Window Initial Geometry }
+
+   Set $ScreenWidth = (GetScriptArgument 1)
+   Set $ScreenHeight = (GetScriptArgument 2)
+   Set $WindowClass = (GetScriptArgument 3)
+   Set $WindowResource = (GetScriptArgument 4)
+   Set $WindowX = (GetScriptArgument 5)
+   Set $WindowY = (GetScriptArgument 6)
+   Set $WindowW = (GetScriptArgument 7)
+   Set $WindowH = (GetScriptArgument 8)
+   Set $IconFile = (GetScriptArgument 9)
+
+   Set $WinParamScreenInfoLocPart = (Gettext {Window Parameters (screen size:}) 
+   Set $WinParamScreenInfo = $WinParamScreenInfoLocPart { } $ScreenWidth {x} $ScreenHeight {)}
+   ChangeLocaleTitle 8 $WinParamScreenInfo
+   ChangeLocaleTitle 4 $WindowClass
+   ChangeLocaleTitle 6 $WindowResource
+   ChangeLocaleTitle 11 $WindowW
+   ChangeLocaleTitle 13 $WindowH
+   ChangeLocaleTitle 15 $WindowX
+   ChangeLocaleTitle 17 $WindowY
+
+   Set $CheckIconCmd = {ls -1 '} $IconFile {' 2>/dev/null}
+   Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
+
+   If $CheckIcon <> {} Then
+   Begin
+      ChangeIcon 7 $IconFile
+   End
+   Else
+   Begin
+      Set $CheckIconCmd = {$NSCDE_ROOT/libexec/geticon.py 16 '} $WindowResource {'}
+      Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
+      If $CheckIcon <> {} Then
+      Begin
+         ChangeIcon 7 $CheckIcon
+      End
+      Else
+      Begin
+         Set $CheckIconCmd = {$NSCDE_ROOT/libexec/geticon.py 16 '} $WindowClass {'}
+         Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
+         If $CheckIcon <> {} Then
+         Begin
+            ChangeIcon 7 $CheckIcon
+         End
+      End
+   End
+
+   Set $GetExistingMappingCmd = {$NSCDE_ROOT/bin/confget.py -c $FVWM_USERDIR/GeoDB.ini -s } $ScreenWidth {x} $ScreenHeight { -k } $WindowResource {,} $WindowClass
+   Set $GetExistingMapping = (GetOutput $GetExistingMappingCmd 1 -1)
+   If $GetExistingMapping <> {} Then
+   Begin
+      ChangeTitle 19 $GetExistingMapping
+   End
+   Else
+   Begin
+      ChangeLocaleTitle 19 {(none)}
+   End
+
+   Set $RemoveFromGeoDB = 0
+
+   # Colorset 20 ForeColor bug when Colorset 22 foreground is dark - Workaround
+   Do {Schedule 250 SendToModule GeometryMgr SendString 30 1 workaround}
+End
+
+Widget 1
+   Property
+   Size 20 20
+   Position 18 4
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {      Set Window Initial Geometry      }
+   Font "xft:::pixelsize=15"
+End
+
+Widget 2
+   Property
+   Size 386 214
+   Position 6 14
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 3
+   Property
+   Size 172 20
+   Position 18 36
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {X11 Class Name}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 4
+   Property
+   Size 172 0
+   Position 16 62
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=14"
+   Colorset 20
+End
+
+Widget 5
+   Property
+   Size 172 20
+   Position 212 36
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {X11 Resource Name}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 6
+   Property
+   Size 172 0
+   Position 210 62
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=14"
+   Colorset 20
+End
+
+Widget 7
+   Property
+   Size 24 24
+   Position 16 106
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Icon NsCDE/Nominiicon.xpm
+End
+
+Widget 8
+   Property
+   Size 0 20
+   Position 44 106
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Window Parameters (screen size: 00000x00000)}
+   Font "xft:::pixelsize=14"
+End
+
+Widget 9
+   Property
+   Size 24 24
+   Position 44 128
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Pixel Values:}
+   Font "xft:::pixelsize=14"
+End
+
+Widget 10
+   Property
+   Size 78 20
+   Position 18 160
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Width}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 11
+   Property
+   Size 72 0
+   Position 16 184
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=15"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
+End
+
+Widget 12
+   Property
+   Size 78 20
+   Position 116 160
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Height}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 13
+   Property
+   Size 72 0
+   Position 114 184
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=15"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
+End
+
+Widget 14
+   Property
+   Size 78 20
+   Position 210 160
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {X Position}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 15
+   Property
+   Size 72 0
+   Position 208 184
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=15"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
+End
+
+Widget 16
+   Property
+   Size 78 20
+   Position 308 160
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Y Position}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 17
+   Property
+   Size 72 0
+   Position 306 184
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=15"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $RemoveFromGeoDB = 0
+      End
+End
+
+Widget 18
+   Property
+   Size 78 20
+   Position 10 236
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Existing Mapping:}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 19
+   Property
+   Size 78 20
+   Position 10 262
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {0000p 0000p 0000p 0000p}
+   Font "xft:::pixelsize=15"
+End
+
+Widget 20
+   Property
+   Size 94 20
+   Position 290 246
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Clear}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 20 1
+      End
+      1 :
+      Begin
+         Set $RemoveFromGeoDB = 1
+         ChangeLocaleTitle 19 {(none)}
+         ChangeTitle 11 {}
+         ChangeTitle 13 {}
+         ChangeTitle 15 {}
+         ChangeTitle 17 {}
+      End
+End
+
+Widget 21
+   Property
+   Size 390 1
+   Position 4 294
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 22
+   Property
+   Size 112 20
+   Position 16 308
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Save}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 22 1
+      End
+      1 :
+      Begin
+         If $RemoveFromGeoDB == 0 Then
+         Begin
+            Set $ClassNameCheckCmd = {echo '} (GetTitle 6) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
+            Set $ClassNameCheck = (GetOutput $ClassNameCheckCmd 1 1)
+            Set $ResNameCheckCmd = {echo '} (GetTitle 4) {' | egrep -q '^([[:alnum:]]|-|_|\+|@|~)+$'; echo $?}
+            Set $ResNameCheck = (GetOutput $ResNameCheckCmd 1 1)
+
+            If $ClassNameCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Class Name contains non-allowed characters:] } (GetTitle 6) {" "e1"}
+            End
+
+            If $ResNameCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X11 Window Resource Name contains non-allowed characters:] } (GetTitle 4) {" "e2"}
+            End
+
+            Set $WidthNumCheckCmd = {echo '} (GetTitle 11) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $WidthNumCheck = (GetOutput $WidthNumCheckCmd 1 1)
+            Set $HeightNumCheckCmd = {echo '} (GetTitle 13) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $HeightNumCheck = (GetOutput $HeightNumCheckCmd 1 1)
+            Set $XNumCheckCmd = {echo '} (GetTitle 15) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $XNumCheck = (GetOutput $XNumCheckCmd 1 1)
+            Set $YNumCheckCmd = {echo '} (GetTitle 17) {' | egrep -q '^[[:digit:]]+$'; echo $?}
+            Set $YNumCheck = (GetOutput $YNumCheckCmd 1 1)
+
+            If $WidthNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Width value is not a number:] } (GetTitle 11) {" "e3"}
+            End
+
+            If $HeightNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Height value is not a number:] } (GetTitle 13) {" "e4"}
+            End
+
+            If $XNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.X position value is not a number:] } (GetTitle 15) {" "e5"}
+            End
+
+            If $YNumCheck <> 0 Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] $[gt.Y position value is not a number:] } (GetTitle 17) {" "e6"}
+            End
+
+            Set $ErrCount = $ClassNameCheck $ResNameCheck $WidthNumCheck $HeightNumCheck $XNumCheck $YNumCheck
+
+            If $ErrCount == {000000} Then
+            Begin
+               Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
+                   $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4) { -v "}
+                   (GetTitle 11) {p } (GetTitle 13) {p } (GetTitle 15) {p } (GetTitle 17) {p"}
+               Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
+               If $MainCmd <> {} Then
+               Begin
+                  Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error setting geometry values:] } $MainCmd {" "e7"}
+               End
+               Else
+               Begin
+                  Do {Schedule 250 f_RepositionWindow}
+                  Quit
+               End
+            End
+         End
+         Else
+         Begin
+            Set $MainCmdLine = {$NSCDE_ROOT/bin/confset.py -t ini -c $FVWM_USERDIR/GeoDB.ini -r -s }
+                $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4)
+            Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
+            If $MainCmd <> {} Then
+            Begin
+               Do {f_Notifier "Window Geometry Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error deleting geometry values:] } $MainCmd {" "e8"}
+            End
+            Else
+            Begin
+               Quit
+            End
+         End
+      End
+End
+
+Widget 23
+   Property
+   Size 112 20
+   Position 144 308
+   Type PushButton
+   LocaleTitle {Dismiss}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 23 1
+      End
+      1 :
+      Begin
+         Quit
+      End
+End
+
+Widget 24
+   Property
+   Size 112 20
+   Position 272 308
+   Type PushButton
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 24 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "Window Geometry Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-GeometryMgr.html}
+      End
+
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 30
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Title {WWWWWWWWWWWWWWWWWWWWWWWWWWW}
+   Flags NoReliefString Hidden NoFocus
+   Main
+      Case message of
+      1 :
+      Begin
+         If (LastString) == {workaround} Then
+         Begin
+            SendSignal 30 2
+         End
+      End
+      2 :
+      Begin
+         ChangeColorset 30 20
+         ChangeColorset 4 20
+         ChangeColorset 6 20
+         ChangeColorset 11 20
+         ChangeColorset 13 20
+         ChangeColorset 15 20
+         ChangeColorset 17 20
+      End
+
+End
+

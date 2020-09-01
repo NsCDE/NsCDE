@@ -20,15 +20,18 @@ print (platform.node().split(".", 1)[0])
 # Uname mpi
 print (platform.processor(), platform.machine(), os.uname()[4])
 
-# Internet (IP) Address
-print (socket.gethostbyname(socket.gethostname()))
+try:
+    # Internet (IP) Address
+    print (socket.gethostbyname(socket.gethostname()))
+except:
+    print ("(none)")
 
 # Internet Domain
-finddomain = socket.getfqdn(socket.gethostbyname(socket.gethostname()))
-if '.' in finddomain:
+try:
+    finddomain = socket.getfqdn(socket.gethostbyname(socket.gethostname()))
     domainpart = finddomain.split(".", 1)[1]
     print (domainpart)
-else:
+except:
     print ("(none)")
 
 try:

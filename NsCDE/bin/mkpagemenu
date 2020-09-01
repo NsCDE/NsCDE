@@ -57,6 +57,10 @@ do
       fi
    elif [ "$Fmt" == "menu_noicons" ]; then
       echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" $FvwmPageCmd $pagenum_fvwm"
+   elif [ "$Fmt" == "menu_custom_desk" ]; then
+      if [ "${FvwmPageCmd%%:*}" == "GotoDeskAndPage" ]; then
+         echo "+ \"&${pg} ${MenuLeftTitle}${pagename}\" ${FvwmPageCmd%%:*} ${FvwmPageCmd##*:} $pagenum_fvwm"
+      fi
    elif [ "$Fmt" == "pgnum" ]; then
       echo "${pg}"
    elif [ "$Fmt" == "pgid" ]; then

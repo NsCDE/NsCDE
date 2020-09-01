@@ -18,7 +18,7 @@ fi
 function xdofunc
 {
    userid=$(id -u)
-   for subp in {1..10}
+   for subp in {1..20}
    do
       pgrep -U $userid -xf ".*FvwmButtons.*-transientpanel NsCDE-Subpanel${subp}$" >/dev/null
       if (($? == 0)); then
@@ -36,7 +36,7 @@ function xdofunc
 cnt=0
 while $(sleep 1)
 do
-   if (($cnt == 10)); then
+   if (($cnt == 20)); then
       exit 10
    fi
 

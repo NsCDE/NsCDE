@@ -62,9 +62,11 @@ Begin
            ChangeTitle 5 $CancelStr
         End
 
-        Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
-        ChangeFont 4 $BtnFont
-        ChangeFont 5 $BtnFont
+        Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+        ChangeFont 1 $DefFont
+        ChangeFont 2 $DefFont
+        ChangeFont 4 $DefFont
+        ChangeFont 5 $DefFont
 
 	WarpPointer 2
 	Key Escape A 5 1 {Quit}
@@ -78,6 +80,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    Title {}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -92,6 +95,7 @@ Widget 2
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    Title {}
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :

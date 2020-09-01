@@ -408,6 +408,25 @@ function setup_nscde
          fi
       fi
 
+      whence -q dunst
+      if (($? == 0)); then
+         echo -ne "Do you want to enable dunst notification daemon? (y|n)[y] \c"
+         read ans
+         if [ "x$ans" == "x" ]; then
+            ans="y"
+         fi
+         if [ "x$ans" == "xy" ]; then
+            echo "Enabling: nscde_use_dunst --> 1"
+            cp -f "$NSCDE_ROOT/share/templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
+            $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_dunst 0/InfoStoreAdd nscde_use_dunst 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+         elif [ "x$ans" == "xn" ]; then
+            echo "Not enabling: nscde_use_dunst --> 0"
+         else
+            echo "Answer not understood."
+            echo "Not enabling: nscde_use_dunst --> 0"
+         fi
+      fi
+
       echo -ne "Do you want to remember last page on workspace when changing back to it? (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then

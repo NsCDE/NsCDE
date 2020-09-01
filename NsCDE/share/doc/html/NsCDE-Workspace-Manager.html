@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.3. Workspace Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-applets-docks-panels.html" title="3. Applets Docks and Panels"><link rel="prev" href="NsCDE-Subpanels.html" title="3.2. Subpanels"><link rel="next" href="NsCDE-PGM.html" title="3.4. Page Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3. Workspace Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Subpanels.html">Prev</a> </td><th width="60%" align="center">3. Applets Docks and Panels</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-PGM.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Workspace-Manager"></a>3.3. Workspace Manager</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.3. Workspace Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-applets-docks-panels.html" title="3. Applets Docks and Panels"><link rel="prev" href="NsCDE-Subpanels.html" title="3.2. Subpanels"><link rel="next" href="NsCDE-PGM.html" title="3.4. Page Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3. Workspace Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Subpanels.html">Prev</a> </td><th width="60%" align="center">3. Applets Docks and Panels</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-PGM.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Workspace-Manager"></a>3.3. Workspace Manager</h3></div></div></div><p>
 Workspace Manager is a Widget in the center of the Front Panel. Visually, it
 replicates in almost a pixel similarity with the center of the CDE's Workspace
 Manager's buttons, but with a few exceptions beneath the surface and further
@@ -7,16 +7,19 @@ configuration:
  There is a limited number for possible of workspaces. There can be no odd number of
   workspaces, and combinations are: 2, 4, 6 and 8. Default is of course 4.
 </p></li><li class="listitem"><p>
- Buttons are not fixed in width size as in CDE. They are not extending a
-  width of the Front Panel, rather they are more wide in 2-buttons
-  combination, and narrow in 6 and 8 button combination.
+ If InfoStore variable wsm.eco is defined as <span class="emphasis"><em>"InfoStoreAdd wsm.eco 1"</em></span> in
+ user's profile <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>, WSM buttons will not be fixed
+ in width as in CDE. They are not extending a width of the Front Panel, rather they are more
+ wide in 2-buttons combination, and narrow in 6 and specially 8 button combination. By default,
+ buttons are all of the same width and they are extending or narrowing width of the Front Panel
+ if changed from default 4 workspaces to 2, 6 or 8.
 </p></li><li class="listitem"><p>
  As in CDE, workspace names can be renamed. There is a keyboard combination in
   FvwmScript WSM which enters rename mode: Ctrl+Space on the current active
   desk, while pointer is inside WSM. <span class="keysym">Ctrl+Enter</span> saves new name. Names are
   synchronized with FVWM desktop names and used in the rest of the
   configuration. Names are saved in <code class="filename">$FVWM_USERDIR/WSM.conf</code>, and EWMH
-  desktop names are applied immediately in a runtime.
+  desktop names are applied immediately in a existing X11 NsCDE session.
 </p></li><li class="listitem"><p>
 If Sun type keyboard is in use, <span class="keysym">Help</span> key above
 WSM will bring this help text in browser. On PC keyboard, <span class="keysym">F1</span> has the

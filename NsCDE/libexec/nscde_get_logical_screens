@@ -15,12 +15,20 @@ IFS=" "
 
 function defaultcf
 {
+   fvwm_major_version="${NSCDE_FVWM_VERSION%%.*}"
+
+   if [ "x${fvwm_major_version}" == "x3" ] ; then
+      scrvar="$[pointer.screen]"
+   else
+      scrvar="0"
+   fi
+
    echo "InfoStoreAdd lscrn.sls 0"
    echo "InfoStoreAdd lscrn.cnt 1"
-   echo "InfoStoreAdd lscrn.0.width $[vp.width]"
-   echo "InfoStoreAdd lscrn.0.height $[vp.height]"
-   echo "InfoStoreAdd lscrn.0.pos.x 0"
-   echo "InfoStoreAdd lscrn.0.pos.y 0"
+   echo "InfoStoreAdd lscrn.${scrvar}.width $[vp.width]"
+   echo "InfoStoreAdd lscrn.${scrvar}.height $[vp.height]"
+   echo "InfoStoreAdd lscrn.${scrvar}.pos.x 0"
+   echo "InfoStoreAdd lscrn.${scrvar}.pos.y 0"
 }
 
 # Without xrandr(1) we cannot continue.
@@ -76,6 +84,8 @@ fi
 # Main monitor geometry enumeration
 menudata=""
 rootmenudata=""
+fvwm_major_version="${NSCDE_FVWM_VERSION%%.*}"
+
 echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
 do
    scnum="${scnum%%:*}"
@@ -86,6 +96,12 @@ do
    scpos_x=${scpos_xy%+*}
    scpos_y=${scpos_xy#*+}
 
+   if [ "x${fvwm_major_version}" == "x3" ] ; then
+      scrvar="${mname}"
+   else
+      scrvar="${scnum}"
+   fi
+
    echo "$scwidth" | egrep -q '^[[:digit:]]+$'
    retval_w=$?
 
@@ -95,13 +111,13 @@ do
    retval=$(($retval_w + $retval_h))
 
    if (($retval == 0)); then
-      echo "InfoStoreAdd lscrn.${scnum}.width $scwidth"
-      echo "InfoStoreAdd lscrn.${scnum}.height $scheight"
-      echo "InfoStoreAdd lscrn.${scnum}.pos.x $scpos_x"
-      echo "InfoStoreAdd lscrn.${scnum}.pos.y $scpos_y"
-      echo "InfoStoreAdd lscrn.${scnum}.name $mname"
-      menudata=$(echo -ne "$menudata\n+ \"Logical Screen &$scnum ($[infostore.lscrn.${scnum}.name])\" MoveToScreen $scnum")
-      rootmenudata=$(echo -ne "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($mname) ...\"           MoveToScreen ${scnum}")
+      echo "InfoStoreAdd lscrn.${scrvar}.width $scwidth"
+      echo "InfoStoreAdd lscrn.${scrvar}.height $scheight"
+      echo "InfoStoreAdd lscrn.${scrvar}.pos.x $scpos_x"
+      echo "InfoStoreAdd lscrn.${scrvar}.pos.y $scpos_y"
+      echo "InfoStoreAdd lscrn.${scrvar}.name $mname"
+      menudata=$(echo -ne "$menudata\n+ \"Logical Screen &$scnum ($[infostore.lscrn.${scrvar}.name])\" MoveToScreen $scrvar")
+      rootmenudata=$(echo -ne "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           MoveToScreen ${scrvar}")
    else
       echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
       defaultcf

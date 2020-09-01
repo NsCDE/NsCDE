@@ -19,7 +19,7 @@ Begin
    ChangeLocaleTitle 24 (GetTitle 24)
 
    # CheckBox buttons get smaller font size
-   Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 2 $SmallLabelFont
    ChangeFont 22 $SmallLabelFont
    ChangeFont 23 $SmallLabelFont
@@ -200,7 +200,7 @@ Widget 2
    Size 180 20
    Flags NoReliefString
    Type CheckBox
-   Font "xft:::pixelsize=14"
+   Font "xft:::pixelsize=15"
    Value 0
    Title { Use Predefined Font Set          }
    Main
@@ -1477,7 +1477,7 @@ Widget 26
                End
    
                # XSETTINGS Daemon Integration
-               Set $XSETTINGSFILE = (GetOutput {echo $FVWM_USERDIR/Xsettingsd.conf} -1 1)
+               Set $XSETTINGSFILE = (GetOutput {ls -1 "$FVWM_USERDIR/Xsettingsd.conf" 2>/dev/null} -1 1)
    
                # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
                If $XSETTINGSFILE <> {} Then
@@ -1493,6 +1493,23 @@ Widget 26
                      Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
                   End
                   Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+
+                  # Custom DPI handling
+                  Set $CustomDPI = (GetOutput {echo "$XFT_USE_DPI"} 1 -1)
+                  If $CustomDPI <> {} Then
+                  Begin
+                     Set $XsettingsDpiParamExistanceCmd = {egrep -q '^([[:space:]]+)?Xft\/DPI[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+                     Set $XsettingsDpiParamExistance = (GetOutput $XsettingsDpiParamExistanceCmd 1 1)
+                     If $XsettingsDpiParamExistance == 0 Then
+                     Begin
+                        Set $WriteXSettingsdDpiCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1} (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
+                     End
+                     Else
+                     Begin
+                        Set $WriteXSettingsdDpiCmd = {echo -ne "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
+                     End
+                     Set $WriteXSettingsdDpi = (GetOutput $WriteXSettingsdDpiCmd 1 -1)
+                  End
                End
             End
 
@@ -1502,6 +1519,8 @@ Widget 26
                # Wait a second for $UserFontsetFile to be written ... a race.
                Set $DoXresourcesCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
+               Set $DoMiscXCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -M '} $FontNormalMediumStr {'}
+               Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
             End
 
             # Spawn ChoiceForm to quit after saving changes
@@ -1516,7 +1535,8 @@ Widget 26
          Do {Echo %%% %%% %%% QUIT-ACTION-STRING: } (LastString)
          If (LastString) == {Go} Then
          Begin
-            Do {Exec exec cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults}
+            Do {Exec exec ksh -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"}
+            Do {Test (EnvIsSet XFT_USE_DPI) SetEnv NSCDE_FONT_DPI $[XFT_USE_DPI]}
             # Restart NsCDE here, give it a delay, not to kill "Do" until it is executed
             Do {Schedule 380 Restart}
             Quit

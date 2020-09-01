@@ -106,10 +106,10 @@ function reset_this_button
       if ((FPA_RETVAL == 0)); then
          $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
          FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"Button nr. $PanelNo has been restored to it's default configured function.\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
       else
          FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"Button $PanelNo is already set at it's default configured function.\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it's default configured function.]\""
       fi
 
       if (($RestartFP == 0)); then
@@ -121,7 +121,49 @@ function reset_this_button
    fi
 }
 
-while getopts p:adr: Option
+function manage_launcher
+{
+   OldNumOut=$(egrep "^([[:space:]])?InfoStoreAdd FP.${2}LaunchersNum [[:digit:]].*" "$FVWM_USERDIR/NsCDE.conf")
+   ADDLNCH_RETVAL=$?
+   OldNum=$(echo "${OldNumOut#*LaunchersNum }" | awk '{ print $1 }')
+   echo "$OldNum" | egrep -q '^[[:digit:]]+$'
+   if (($? == 0)); then
+      if [ "$1" == "add" ] && [ $OldNum -lt 10 ]; then
+         NewNum=$(($OldNum + 1))
+      elif [ "$1" == "del" ] && [ $OldNum -ne 0 ]; then
+         NewNum=$(($OldNum - 1))
+      else
+         exit 0
+      fi
+   else
+      # Case where infostore variable exists, but parsed number is not what we expect.
+      if (($ADDLNCH_RETVAL == 0)); then
+         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+                     \"\$[gt.ERROR: Old value of FP.${2}LaunchersNum is not a number:] $OldNum\""
+         exit 1
+      fi
+   fi
+
+   if (($ADDLNCH_RETVAL == 0)); then
+
+      $NSCDE_ROOT/bin/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
+       -f "$FVWM_USERDIR/NsCDE.conf"
+   else
+      # Adding as new value - appending.
+      if [ "$1" == add ]; then
+         NewNum=6
+      fi
+      if [ "$1" == del ]; then
+         NewNum=4
+      fi
+
+      echo "InfoStoreAdd FP.${2}LaunchersNum $NewNum" >> "$FVWM_USERDIR/NsCDE.conf"
+   fi
+
+   echo "InfoStoreAdd FP.${Direction}LaunchersNum ${NewNum}"
+}
+
+while getopts p:adr:A:D: Option
 do
    case $Option in
       p)
@@ -143,6 +185,14 @@ do
       r)
          BUTTONTYPE="$OPTARG"
          reset_this_button
+      ;;
+      A)
+         Direction="$OPTARG"
+         manage_launcher add $Direction
+      ;;
+      D)
+         Direction="$OPTARG"
+         manage_launcher del $Direction
       ;;
    esac
 done

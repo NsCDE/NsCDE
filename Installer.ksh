@@ -71,7 +71,7 @@ function check_dependencies
       fi
    fi
 
-   for oexe in xscreensaver stalonetray xsettingsd xrandr
+   for oexe in xscreensaver stalonetray xsettingsd xrandr dunst
    do
       whence -q $oexe
       retval=$?
@@ -194,7 +194,13 @@ function install_nscde
 
    if [ "x$instpath" == "x" ]; then
       if (($noninteractive == 1)); then
-         instpath="/opt/NsCDE"
+            if [ "x$destdir" == "x" ]; then
+               instpath="/opt/NsCDE"
+               realinstpath="${instpath}"
+            else
+               instpath="${destdir}/opt/NsCDE"
+               realinstpath="/opt/NsCDE"
+            fi
       else
          echo -ne "Installation directory for NsCDE [/opt/NsCDE]: \c"
          read ans
@@ -203,6 +209,13 @@ function install_nscde
          else
             instpath="$ans"
          fi
+      fi
+   else
+      if [ "x$destdir" != "x" ]; then
+         realinstpath="${instpath}"
+         instpath="${destdir}/${instpath}"
+      else
+         realinstpath="${instpath}"
       fi
    fi
 
@@ -248,26 +261,15 @@ function install_nscde
       else
          echo "Error $retval occured while copying NsCDE distribution files into $instpath"
       fi
-      if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+      if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
          echo "Adapting NSCDE_ROOT path for custom installation."
-         ./NsCDE/bin/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${instpath%*/}@g" -f "${instpath}/bin/nscde"
-         ./NsCDE/bin/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${instpath%*/}@g" -f "${instpath}/config/NsCDE-Main.conf"
+         ./NsCDE/bin/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${realinstpath%*/}@g" -f "${instpath}/bin/nscde"
+         ./NsCDE/bin/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${realinstpath%*/}@g" -f "${instpath}/config/NsCDE-Main.conf"
          echo "Adaptation done."
       fi
    else
       echo "Directory $instpath does not exist after attempting to create it. Exiting."
       exit 3
-   fi
-
-   if [ "$OS" == "FreeBSD" ]; then
-      echo "Patching XDG menu paths for $OS"
-      ./NsCDE/bin/ised -c 's/\/etc\/xdg\/menus/\/usr\/local\/etc\/xdg\/menus/g' -f "${instpath}/libexec/nscde-fvwm-menu-desktop"
-      retval=$?
-      if (($retval != 0)); then
-         echo "An error $retval occured while changing XDG menu paths for $OS"
-      else
-         echo "Done."
-      fi
    fi
 
    if [ "x$photopath" != "x" ]; then
@@ -293,36 +295,6 @@ function install_nscde
       if (($photospopulated < 1)) && [ -z $phcnt ]; then
          echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
          echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
-      fi
-   fi
-
-   if [ "x$vuepath" != "x" ]; then
-      if [ -d "${vuepath}" ]; then
-         echo "Copying additional VUE palettes from $vuepath"
-         cp -f "$vuepath"/share/palettes/*.dp ${instpath}/share/palettes/
-         retval=$?
-         if (($retval != 0)); then
-            echo "An error $retval occured while copying VUE palettes collection from ${vuepath}/share/palettes"
-         else
-            echo "Done."
-         fi
-         echo "Copying additional VUE backdrops from $vuepath"
-         cp -f "$vuepath"/share/backdrops/*.pm ${instpath}/share/backdrops/
-         retval=$?
-         if (($retval != 0)); then
-            echo "An error $retval occured while copying VUE backdrops collection from ${vuepath}/share/backdrops"
-         else
-            echo "Done."
-         fi
-      else
-         echo "Error: Cannot read directory with additional VUE palettes and backdrops: $vuepath"
-      fi
-   else
-      if [ ! -r "${instpath}/share/palettes/CoralReef.dp" ]; then
-         if (($upgrade_mode == 0)); then
-            echo "Info: Additional collection of VUE palettes and backdrops not installed in ${instpath}/share/{palettes,backdrops}"
-            echo "See: https://github.com/NsCDE/NsCDE-VUE/releases/download/1.0/NsCDE-VUE-1.0.tar.gz"
-         fi
       fi
    fi
 
@@ -547,7 +519,11 @@ function configure_installed
    else
       # Set default icon theme link path
       if [ "$icons_dirlink" == "" ]; then
-         icons_dirlink="/usr/local/share/icons/NsCDE"
+         if [ "x$destdir" == "x" ]; then
+            icons_dirlink="/usr/local/share/icons/NsCDE"
+         else
+            icons_dirlink="${destdir}/usr/local/share/icons/NsCDE"
+         fi
       fi
 
       # Set magic no-install pseudopath and if not found, continue
@@ -559,10 +535,10 @@ function configure_installed
             exit 15
          fi
 
-         ln -sf "${instpath}/share/icons/freedesktop/theme/NsCDE" "${icons_dirlink}"
+         ln -sf "${realinstpath}/share/icons/freedesktop/theme/NsCDE" "${icons_dirlink}"
          retval=$?
          if (($retval != 0)); then
-            echo "Error: symlinking ${instpath}/share/icons/freedesktop/theme/NsCDE"
+            echo "Error: symlinking ${realinstpath}/share/icons/freedesktop/theme/NsCDE"
             echo "to ${icons_dirlink} failed with exit status $retval"
             exit 15
          fi
@@ -638,10 +614,20 @@ function configure_installed
       # Not set with -X
       if [ -z $xsess_dir ]; then
          if [ -d "/usr/share/xsessions" ]; then
-            xsess_dir="/usr/share/xsessions"
+            if [ "x${destdir}" == "x" ]; then
+               xsess_dir="/usr/share/xsessions"
+            else
+               xsess_dir="${destdir}//usr/share/xsessions"
+               mkdir -p "${xsess_dir}"
+            fi
             xsession_inst=1
          elif [ -d "/usr/local/share/xsessions" ]; then
-            xsess_dir="/usr/local/share/xsessions"
+            if [ "x${destdir}" == "x" ]; then
+               xsess_dir="/usr/local/share/xsessions"
+            else
+               xsess_dir="${destdir}//usr/local/share/xsessions"
+               mkdir -p "${xsess_dir}"
+            fi
             xsession_inst=1
          else
             echo "Error: Cannot locate xsessions directory in /usr/share and /usr/local/share"
@@ -649,11 +635,18 @@ function configure_installed
             xsession_inst=0
          fi
       else
-         if [ -d "$xsess_dir" ]; then
-            xsession_inst=1
+         if [ "x${destdir}" == "x" ]; then
+            if [ -d "$xsess_dir" ]; then
+               xsession_inst=1
+            else
+               echo "Error: X Display Session directory $xsess_dir provided with -X does not exist."
+               echo "Skipping nscde.desktop installation."
+            fi
          else
-            echo "Error: X Display Session directory $xsess_dir provided with -X does not exist."
-            echo "Skipping nscde.desktop installation."
+               real_xsess_dir="${xsess_dir}"
+               xsess_dir="${destdir}/${xsess_dir}"
+               mkdir -p "${xsess_dir}"
+               xsession_inst=1
          fi
       fi
 
@@ -666,9 +659,9 @@ function configure_installed
             echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
             echo "into ${xsess_dir}/"
          else
-            if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
+            if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
                echo "Adapting Exec line in nscde.desktop ..."
-               ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+               ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${realinstpath}/bin/nscde@g" -f \
                "${xsess_dir}/nscde.desktop"
                retval=$?
                if (($retval > 0)); then
@@ -685,9 +678,9 @@ function configure_installed
          echo ""
          echo "For a reboot/poweroff, suspend and hibernate functionality of the"
          echo "System Action Dialog, you should have \"sudo\" installed and configured"
-         echo "for user to launch ${instpath}/libexec/nscde-acpi script."
+         echo "for user to launch ${realinstpath}/libexec/nscde-acpi script."
          echo ""
-         echo "See ${instpath}/share/doc/examples/sudo/006_PowerManager for the"
+         echo "See ${realinstpath}/share/doc/examples/sudo/006_PowerManager for the"
          echo "example which needs to be edited for existing user(s) and put"
          echo "into /etc/sudoers.d/ on modern systems with a newer sudo package"
          echo "Option requiretty should also be set to false. See sudo(8)."
@@ -739,7 +732,8 @@ function upgrade_nscde
       fi
    fi
 
-   # Backup photos and VUE if exists, unpack new, put photos and VUE back
+   # Backup photos, backdrops and palettes, put it back if there was something
+   # customized
    old_photos=$(ls "${instpath}/share/photos")
    old_backdrops=$(ls "${instpath}/share/backdrops")
    old_palettes=$(ls "${instpath}/share/palettes")
@@ -961,7 +955,7 @@ function deinstall_nscde
 
 function usage
 {
-   echo "Usage: ./Installer.ksh [ -f | -w ] [ -h ] [ -n ] [ -C ] [ -p <path> ]"
+   echo "Usage: ./Installer.ksh [ -f | -w ] [ -h ] [ -n ] [ -C ] [ -p <path> ] [ -D <destdir> ]"
    echo "       [ -P <path> ] [ -V <path> ] [ -X <path> ] [ -I <path> ] [ -i | -u | -d ]"
    echo ""
    echo ""
@@ -974,9 +968,9 @@ function usage
    echo "Additional options for installation are:"
    echo "   -n   fully automatic, non-interactive mode"
    echo "   -C   dependencies check failures will be non-fatal, except for Korn Shell obviously."
+   echo "   -D <dest>   destination for staged installation. Used for packaging mainly."
    echo "   -p <path>   filesystem path where NsCDE should be installed. Defaults to /opt/NsCDE."
    echo "   -P <path>   where to look for wallpapers for installing into <instpath>/share/photos."
-   echo "   -V <path>   where to look for VUE backdrops and palettes to add into NsCDE."
    echo "   -X <path>   where to put nscde.desktop xsession. Defaults to /usr/share/xsessions."
    echo "   -I <path>   where to put freedesktop icons directory symlink. Defaults to"
    echo "               /usr/local/share/icons. Special path \"nowhere\" means omit symlink creation."
@@ -988,27 +982,27 @@ function usage
    echo ""
    echo "Examples:"
    echo "   - Install non-interactively for patched FVWM into default path /opt/NsCDE"
-   echo "     without looking for additional photos and VUE files."
+   echo "     without looking for additional photos."
    echo "   ./Installer.ksh -f -n -i"
    echo ""
-   echo "   - Install without VUE and photo addons for non-patched FVWM into default"
+   echo "   - Install without photo addons for non-patched FVWM into default"
    echo "     path /opt/NsCDE:"
    echo "   ./Installer.ksh -w -i"
    echo ""
-   echo "   - Install non-interectively with VUE and photo addons for non-patched FVWM"
+   echo "   - Install non-interectively with photo addons for non-patched FVWM"
    echo "     into default path /opt/NsCDE:"
-   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -i"
    echo ""
-   echo "   - Install NsCDE in interactive mode with VUE addons for non-patched FVWM"
-   echo "     into path /usr/local/nscde:"
-   echo "   ./Installer.ksh -w -n -p /usr/local/nscde -V /tmp/NsCDE-VUE/NsCDE -i"
+   echo "   - Install NsCDE in interactive mode for non-patched FVWM into"
+   echo "     path /usr/local/nscde:"
+   echo "   ./Installer.ksh -w -n -p /usr/local/nscde -i"
    echo ""
    echo "   - Simply upgrade patched NsCDE (additional photos, backdrops and palettes"
    echo "     will remain preserved):"
    echo "   ./Installer.ksh -f -u"
    echo ""
-   echo "   - Upgrade in default path, but for non-patched version:"
-   echo "   ./Installer.ksh -w -u"
+   echo "   - Upgrade in default path, but non-interactive and for non-patched version:"
+   echo "   ./Installer.ksh -w -n -u"
    echo ""
    echo "   - Upgrade in path /sfw/X11/NsCDE, patched, noninteractive."
    echo "   ./Installer.ksh -f -n -p /sfw/X11/NsCDE -u"
@@ -1042,7 +1036,7 @@ function usage
    echo ""
 }
 
-while getopts iucCdp:wfP:V:X:I:nh Option
+while getopts iucCdD:p:wfP:V:X:I:nh Option
 do
    case $Option in
    i)
@@ -1066,6 +1060,9 @@ do
       deinstall_nscde
       exit $?
    ;;
+   D)
+      destdir="$OPTARG"
+   ;;
    p)
       instpath="$OPTARG"
    ;;
@@ -1077,9 +1074,6 @@ do
    ;;
    P)
       photopath="$OPTARG"
-   ;;
-   V)
-      vuepath="$OPTARG"
    ;;
    X)
       xsess_dir="$OPTARG"

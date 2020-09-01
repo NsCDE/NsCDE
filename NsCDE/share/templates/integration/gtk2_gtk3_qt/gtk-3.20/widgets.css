@@ -1291,9 +1291,7 @@ color:@fg_gen;
  flowbox flowboxchild:selected, 
  spinbutton:not(.vertical) selection:focus, 
  spinbutton:not(.vertical) selection,
- .view:selected:focus,
  iconview:selected:focus,
- .view:selected,
  iconview:selected,
  entry selection:focus,
  entry selection,
@@ -1310,6 +1308,14 @@ semicolondummy
 	/*its inverted like in the style of olld crt green monitors. But this must only for text to be*/
 	background-color: @fg_text;
 	color: @bg_text;
+}
+
+/* Libre Office selection is not normal under dark theme if we do not separate this two from __textcolors above */
+ .view:selected:focus,
+ .view:selected
+{
+        background-color: @sel_text;
+        color: @fg_text;
 }
 
 /*disabled must be _text color but etched with shadow*/

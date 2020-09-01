@@ -47,7 +47,7 @@ Begin
    # Fill the Subpanel app List on the right with all entries found there.
    Set $SubpListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.SubpLst}
    Set $SubpListTmpFile = (GetOutput $SubpListTmpFileCmd 1 -1)
-   Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
+   Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*,.*,.*,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
    Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
    Set $FmtSubpListCmd = {cut -d"," -f 4 < "} $SubpListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
@@ -148,7 +148,7 @@ Widget 1
    Size 280 20
    Position 312 10
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Existing Items in Subpanel:}
    Colorset 22
    Main
@@ -163,7 +163,7 @@ Widget 2
    Size 280 20
    Position 12 10
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Available Applications:}
    Colorset 22
    Main
@@ -531,7 +531,7 @@ Widget 7
    Size 280 20
    Position 12 284
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Name:}
    Colorset 22
    Main
@@ -561,7 +561,7 @@ Widget 9
    Size 280 20
    Position 12 346
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Command:}
    Colorset 22
    Main
@@ -591,7 +591,7 @@ Widget 11
    Size 280 20
    Position 12 412
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Icon File:}
    Colorset 22
    Main
@@ -621,7 +621,7 @@ Widget 13
    Size 290 20
    Position 542 280
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Type:}
    Colorset 22
    Main
@@ -684,7 +684,7 @@ Widget 16
    Size 140 26
    Position 450 370
    Type TextField
-   Flags NoReliefString Left Hidden
+   Flags NoReliefString Left Hidden NoFocus
    Value 0
    Colorset 20
    Main

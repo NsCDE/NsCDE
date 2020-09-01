@@ -1,0 +1,154 @@
+NsCDE 1.0rc24 (pre)release notes
+
+Two and half months after 1.0rc22 prerelease, new release candidate again has
+extended functionality of the NsCDE. There will be no more new functionalities
+before 1.1 release, just couple of months for fixing and polishing existing
+code. NsCDE 1.1 (1.0 was actually long ago), will be released probably in
+december, on the day when all started 2 years ago.
+
+Here are the highlights of what has changed and what is added between 1.0rc22
+and 1.0rc24
+
+1. New Apps and Features
+
+- NProcMgr: NsCDE Process Manager: application which shows NsCDE FVWM and
+  other processes, their pids and running/presence state. Processes can be
+  started, stopped and restarted. It also has capabilities for rereading
+  various parts of the configuration: Menus, Functions, Style, Keybindings
+  etc. NsCDE Process Manager is present by default on the Desktop Settings
+  submenu (7) of the Front Panel, but it can also be found on the Workspace
+  Menu NsCDE submenu, as well as from Watch Errors and Fvwm Console contextual
+  part of the Window Options Menu.
+
+- GeometryMgr: Before 1.0rc22, "Save Geometry" option on the Window Options
+  Menu or Meta+F6 directly called function which saved current window
+  geometry, so windows will be positioned and sized on exact geometry
+  coordinates next time when they appear on the page and workspace for the
+  first time, or with "Reposition Window" option of the Window Options Menu.
+  Needles to say, this option was easy to catch with mouse by mistake, and
+  even more with key binding.
+  New FvwmScript application brings dialog with window class and resource
+  names, and exact coordinates when Save Geometry is called, plus info about
+  previous remembered pixel size and position if any. Here, user can inspect,
+  tune, cancel or confirm that new saving. Clearing all values and choosing
+  save clears that and any before existing geometry mapping for that screen
+  resolution.
+
+- Custom Front Panel Launchers: from the beginning until now, Front Panel
+  had fixed number of launchers (big icon or applet plus optional submenu)
+  on the left and right side of the Workspace Manager. Now, with a usage of
+  Front Panel Controls menu and it's "Number of Launchers ..." submenu, user
+  can reduce to 0, or extend to 20 number of launchers. As in CDE, default
+  is 10 launchers (5 left, and 5 right), which gives 10. This can be doubled
+  or reduced to 4, 3, 2, 1 or no launchers at all. This allows user to make
+  configurations with Workspace Manager leftmost or rightmost on the Front
+  Panel, to make minimal only Workspace Manager plus handlers Front Panel
+  without launchers, or to make really wide Front Panels with 18, 19 and
+  with maximum 20 launchers (screen resolution must support such stretching
+  of the Front Panel). All new custom launchers can be customized to contain
+  icons or applets, to have or not subpanels.
+
+- Wide or Eco Workspace Manager: together with custom launchers on the Front
+  Panel, Workspace Manager (WSM) now by default has fixed width of workspace
+  buttons. This means that shrinking workspace to 2 workspaces will shrink
+  Front Panel, and expanding workspaces to 6 or 8 will expand it. This is
+  in contrast to fixed WSM on which until now the buttons themselves where
+  shrinked (6, 8) or expanded (2), but WSM frame remained of the same width.
+  New behaviour is in sync with visual CDE behaviour and gives a chance for
+  wider workspace names in 6  or 8 workspaces mode. Old fixed width WSM can
+  be used if InfoStore variable wsm.eco is defined and set to 1 in
+  $FVWM_USERDIR/NsCDE.conf
+
+- Splash screen: NsCDE has now splash screen on startup. It displays logo,
+  information about system on which it is running, NsCDE and FVWM version,
+  licence and such. It lasts some 6 seconds on start, but can be speed up
+  with Control+C or by clicking on the text.
+
+- Show Workspace functionality: called by the Root Menu as "Clean/Restore
+  Workspace", by Ctrl + Left click on the root window and with Meta+Alt+W
+  keybinding. It will iconify all windows on the page or restore them on
+  subsequent calls. Already iconified windows prior to calling this function,
+  as well as newly opened windows on the page will not be affected by this
+  group iconify / deiconify (show desktop) action. During this action, any
+  animation which may be configured with Window Style Manager for FvwmAnimate
+  will be temporary disabled to avoid long dance on the screen if there are
+  many windows on it.
+
+- New keybindings:
+  - Meta+Shift+Tab will cycle workspaces backwards.
+  - Meta+Alt+W calls Show Desktop
+
+- Dunst support: A nice FVWM-friendly notification daemon dunst(1) is probably
+  the best choice for custom DE environments and classis Window Managers. It
+  is now tightly integrated with NsCDE in the same was as stalonetray: it can
+  be enabled or disabled with InfoStore variable nscde_use_dunst 0/1 in user's
+  $FVWM_USERDIR/NsCDE.conf. Configuration is provided and partially managed
+  (Color Style Manager and Font Style Manager) by the NsCDE as
+  $FVWM_USERDIR/Dunst.conf
+  This means that handling of dunst(1) and stalonetray(1) can be removed from
+  $FVWM_USERDIR/libexec/colormgr.local, because this is now handled
+  internally.
+
+- New Palettes and Backdrops:
+  - palettes: LateSummer
+  - backdrops: CubesSmall and Pearls
+
+- Merge of the VUE Palettes and Backdrops: there is no need to install this as
+  addon. It is merged with other palettes and backdrops, because it is fully
+  compatible, no matter that this comes from pre-CDE era.
+
+- New finder for Audio Volume Control application: gives it's best to find
+  working audio mixer app on the subpanel of launcher 9 on the Front Panel.
+
+- Installer.ksh: support staged installation (for packaging) with -D
+
+
+2. Bug fixes
+
+- Fix possible indefinite Wait in share/templates/NsCDE-Functions.local sample
+
+- Fix WSM truncating WSM.conf bug after initial creation before first restart
+
+- Style fixes for Gkrellm, Sysinfo, menus etc ...
+
+- Removed xscreensaver splash
+
+- Iconify Event function fix when PipeRead gets dash(1) shell on Debian, which is
+  aliased to /bin/sh (called by the system()) users will not have '=' and '60' empty
+  files in their homedir anymore.
+
+- Better error handling for sysinfo.py (Workstation Information)
+
+- Python syntax fixes (warnings noticed on Debian)
+
+- Major works on higher DPI corrections for font handling
+
+- Localization fixes
+
+- Fix Splash Screen under fvwm3 (hopefully) on multi display
+
+- Fixes for monitor enumeration, preparations for FVWM3 support
+
+- Fix default Front Panel Iconified IconBox position not to overlap stalonetray
+
+
+3. Removed / discontinued
+
+- Stop using FvwmBanner (removed in FVWM3) - we have Splash now
+
+- Removed Black.dp, BlackWhite.dp and White.dp obsolete nonworking palettes
+
+
+4. Misc
+
+- Documentation revision and update, new sections and corrections
+
+- Consolidated Delete/Close/Destroy Window Options menu actions
+
+- Front Panel Controls menu consolidation and help
+
+- Add Solaris Earth Watch icon in the icon set, document example how to use it
+  on the Front Panel as a custom applet.
+
+- Init and setup procedure polishing
+

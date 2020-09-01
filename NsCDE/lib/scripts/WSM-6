@@ -1,0 +1,756 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WSM}
+WindowTitle {WSM-6}
+WindowSize 392 70
+Colorset 52
+
+Init
+Begin
+   Set $DeskNo = (GetScriptArgument 1)
+   Set $PageMatrixX = (GetScriptArgument 2)
+   Set $PageMatrixY = (GetScriptArgument 3)
+   Set $PagesXY = $PageMatrixX {x} $PageMatrixY
+
+   # Default PageNo
+   If $PagesXY == {x} Then
+   Begin
+      Do {Echo Warning: PageNo is not set. Using 2x2 as default.}
+      Set $PageMatrixX = 2
+      Set $PageMatrixY = 2
+   End
+
+   # Multiply Pages X and Y to get number of pages
+   Set $PageNo = (Mult $PageMatrixX $PageMatrixY)
+
+   # Configuration source selection
+   Set $UserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/WSM.conf ] && echo 1 || echo 0'} 1 1)
+   If $UserConfig == 1 Then
+   Begin
+      Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
+   End
+   Else
+   Begin
+      Set $ConfFile = {$NSCDE_ROOT/config/WSM.conf}
+      Set $CreateUserConfig = 1
+   End
+
+   # Font size/type setup
+   Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large -Z 16} 1 -1)
+   Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
+
+   # Button names for desks
+   Set $btnname = 0
+   While $btnname < $DeskNo Do
+   Begin
+      Set $btnname = (Add $btnname 1) 
+      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' } $ConfFile { | cut -d":" -f3}
+      Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
+
+      # Button Menu
+      Set $NameDeskStr = { } $NameDesk {|} (Gettext {Workspace}) { } $NameDesk {:} (Gettext {|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...})
+
+      ChangeFont $btnname $MainFontRegular
+      ChangeTitle $btnname $NameDeskStr
+
+      # Refresh runtime
+      Do {DesktopName } (Add $btnname -1) { } $NameDesk
+
+      If $btnname == 1 Then
+         ChangeColorset $btnname 40
+      If $btnname == 2 Then
+         ChangeColorset $btnname 42
+      If $btnname == 3 Then
+         ChangeColorset $btnname 44
+      If $btnname == 4 Then
+         ChangeColorset $btnname 46
+      If $btnname == 5 Then
+         ChangeColorset $btnname 40
+      If $btnname == 6 Then
+         ChangeColorset $btnname 42
+   End
+
+   Do {f_SendToPGM}
+   Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+
+   # Shortcut keys for renaming desks
+   Key Space C 41 2 {EnterRename}
+   Key Return C 41 3 {ReturnFromRename}
+   Key F1 A 41 5 {KeyHelp}
+   Key Help A 41 5 {KeyHelp}
+
+   # For avoiding turned on button when past button was active and pressed again
+   # Value: Desk Button Number. Start value is meaningless.
+   Set $BtnPressed = 0
+
+   # Set background color (widget 30) to colorset 22 if $[infostore.wsmcolored] is 1
+   Do {Test (EnvMatch infostore.wsmcolored 1) SendToModule $[infostore.WSM] SendString 30 1 wsmcolored}
+End
+
+# Worker widget 30
+# 1 :
+# If $[infostore.wsmcolored] is set, this will be activated
+# so Workspace Manager will be colored with colorset 22 as
+# this is the case in some historical visual appereances
+# of CDE. String "wsmcolored" sets colorset to 22, while
+# string if received, reverts to colorset 21.
+#
+# 2 :
+# Set hilighted desk button, restore previous hilighted.
+#
+# 3 :
+# Called by PushButton 1-8 clicks to trigger select
+Widget 30
+Property
+    Position 0 0
+    Size 524 70
+    Type ItemDraw
+    Title {}
+    Flags NoReliefString NoFocus
+    Colorset 21
+    Main
+       Case message of
+       1 :
+       Begin
+          If (LastString) == {wsmcolored} Then
+          Begin
+             ChangeColorset 30 22
+          End
+          If (LastString) == {wsmclassic} Then
+          Begin
+             ChangeColorset 30 21
+          End
+       End
+       2 :
+       Begin
+          If (LastString) == {unclick} Then
+          Begin
+             # Moving select frame (Widget 31 across buttons)
+             If $CurrDesk == 1 Then
+                ChangePosition 31 0 1
+             If $CurrDesk == 2 Then
+                ChangePosition 31 132 1
+             If $CurrDesk == 3 Then
+                ChangePosition 31 264 1
+             If $CurrDesk == 4 Then
+                ChangePosition 31 0 36
+             If $CurrDesk == 5 Then
+                ChangePosition 31 132 36
+             If $CurrDesk == 6 Then
+                ChangePosition 31 264 36
+
+             ShowWidget 31
+          End
+          If (LastString) == {unselect} Then
+          Begin
+             HideWidget 31
+          End
+       End
+       3 :
+       Begin
+          Do {f_ClearFrontPanelPressed}
+          Do {Schedule 10 InfoStoreAdd fplastpressed FpWSM}
+          Do {f_UnclickScript 50 WSM 30 2 unclick}
+       End
+End
+
+# Select frame around PushButton. Moved around and resized by routines in widget 30.
+Widget 31
+Property
+    Flags NoReliefString Hidden NoFocus
+    Position 0 0
+    Size 128 32
+    Type ItemDraw
+    Title {}
+    Colorset 2
+End
+
+Widget 21
+Property
+    Flags NoReliefString NoFocus
+    Position 1 2
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn1.xpm
+    Colorset 53
+End
+
+Widget 22
+Property
+    Flags NoReliefString NoFocus
+    Position 133 2
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn2.xpm
+    Colorset 53
+End
+
+Widget 23
+Property
+    Flags NoReliefString NoFocus
+    Position 265 2
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn3.xpm
+    Colorset 53
+End
+
+Widget 24
+Property
+    Flags NoReliefString NoFocus
+    Position 1 37
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn4.xpm
+    Colorset 53
+End
+
+Widget 25
+Property
+    Flags NoReliefString NoFocus
+    Position 133 37
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn1.xpm
+    Colorset 53
+End
+
+Widget 26
+Property
+    Flags NoReliefString NoFocus
+    Position 265 37
+    Size 126 29
+    Type ItemDraw
+    Title {}
+    Icon NsCDE/WSM4BackBtn2.xpm
+    Colorset 53
+End
+
+Widget 1
+Property
+    Position 2 3
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 1) == 1 Then
+          Begin
+             If $BtnPressed == 1 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 1
+             ChangeColorset 1 41
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 1) { 1 }
+             ChangeColorset 1 40
+          End
+       End
+End
+
+Widget 2
+Property
+    Position 134 3
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 2) == 1 Then
+          Begin
+             If $BtnPressed == 2 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 2
+             ChangeColorset 2 43
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 2) { 2 }
+             ChangeColorset 2 42
+          End
+       End
+End
+
+Widget 3
+Property
+    Position 266 3
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 3) == 1 Then
+          Begin
+             If $BtnPressed == 3 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 3
+             ChangeColorset 3 45
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 3) { 3 }
+             ChangeColorset 3 44
+          End
+       End
+End
+
+Widget 4
+Property
+    Position 2 38
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 4) == 1 Then
+          Begin
+             If $BtnPressed == 4 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 4
+             ChangeColorset 4 47
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 4) { 4 }
+             ChangeColorset 4 46
+          End
+       End
+End
+
+Widget 5
+Property
+    Position 134 38
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 5) == 1 Then
+          Begin
+             If $BtnPressed == 5 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 5
+             ChangeColorset 5 41
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 5) { 5 }
+             ChangeColorset 5 40
+          End
+       End
+End
+
+Widget 6
+Property
+    Position 266 38
+    Size 124 26
+    Type PushButton
+    Title {||||||}
+    Flags NoReliefString Left
+    Colorset 1
+    Font "xft:::pixelsize=14"
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 30 3
+
+          If (GetValue 6) == 1 Then
+          Begin
+             If $BtnPressed == 6 Then
+             Begin
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+             Set $BtnPressed = 6
+             ChangeColorset 6 43
+             If $CurrDesk <> $BtnPressed Then
+             Begin
+                Do {f_GotoDeskAndPage 0 } (Add $BtnPressed -1)
+             End
+             Else
+             Begin
+                Do {f_SameWspActionForWSM}
+             End
+          End
+          Else
+          Begin
+             Do {SendToModule $[infostore.WSM] SendString 41 4 } (GetValue 6) { 6 }
+             ChangeColorset 6 42
+          End
+       End
+End
+
+Widget 40
+Property
+    Position 0 0
+    Size 32 32
+    Type PushButton
+    Flags NoReliefString Hidden NoFocus
+    Title {}
+    Main
+    Case message of
+    10 :
+       Begin
+          Set $DeskPageStr = (LastString)
+
+          Set $CurrDesk = (Add (StrCopy $DeskPageStr 1 1) 1)
+          Set $CurrPage = (StrCopy $DeskPageStr 2 3)
+
+          For $deskiter = 1 To $DeskNo Do
+          Begin
+             If $deskiter == $CurrDesk Then
+             Begin
+                If (GetValue $deskiter) == 0 Then
+                Begin
+                   If $deskiter == 1 Then
+                      ChangeColorset $deskiter 41
+                   If $deskiter == 2 Then
+                      ChangeColorset $deskiter 43
+                   If $deskiter == 3 Then
+                      ChangeColorset $deskiter 45
+                   If $deskiter == 4 Then
+                      ChangeColorset $deskiter 47
+                   If $deskiter == 5 Then
+                      ChangeColorset $deskiter 41
+                   If $deskiter == 6 Then
+                      ChangeColorset $deskiter 43
+
+                   ChangeValue $deskiter 1
+                End
+             End
+             Else
+             Begin
+                If (GetValue $deskiter) == 1 Then
+                Begin
+                   If $deskiter == 1 Then
+                      ChangeColorset $deskiter 40
+                   If $deskiter == 2 Then
+                      ChangeColorset $deskiter 42
+                   If $deskiter == 3 Then
+                      ChangeColorset $deskiter 44
+                   If $deskiter == 4 Then
+                      ChangeColorset $deskiter 46
+                   If $deskiter == 5 Then
+                      ChangeColorset $deskiter 40
+                   If $deskiter == 6 Then
+                      ChangeColorset $deskiter 42
+
+                   ChangeValue $deskiter 0
+                End
+             End
+          End
+  End
+End
+
+Widget 41
+Property
+    Position 2 3
+    Size 124 8
+    Type TextField
+    Flags NoReliefString Left Hidden
+    Title {}
+    Colorset 20
+    Main
+       Case message of
+       1 :
+       Begin
+       End
+
+       2 : 
+       Begin
+          # Return $DeskToRename to initial signal, see "41 4 :" ...
+          If $DeskToRename <> {} Then
+          Begin
+             Set $CurrDesk = $DeskToRename
+          End
+
+          ChangeSize 41 124 28
+
+          If $CurrDesk == 1 Then
+          Begin
+             ChangePosition 41 2 3
+             ChangeColorset 1 20
+          End
+          If $CurrDesk == 2 Then
+          Begin
+             ChangePosition 41 134 3
+             ChangeColorset 2 20
+          End
+          If $CurrDesk == 3 Then
+          Begin
+             ChangePosition 41 266 3
+             ChangeColorset 3 20
+          End
+          If $CurrDesk == 4 Then
+          Begin
+             ChangePosition 41 2 38
+             ChangeColorset 4 20
+          End
+          If $CurrDesk == 5 Then
+          Begin
+             ChangePosition 41 134 38
+             ChangeColorset 5 20
+          End
+          If $CurrDesk == 6 Then
+          Begin
+             ChangePosition 41 266 38
+             ChangeColorset 6 20
+          End
+
+          ShowWidget 41
+       End
+
+       3 :
+       Begin
+          If (GetTitle 41) <> {} Then
+          Begin
+             Set $NewButtonLabelOut = {echo '} (GetTitle 41) {' | sed 's/://g; s/|//g; s/\$//' | tr -d '[:cntrl:]'; echo}
+             Set $NewButtonLabel = (GetOutput $NewButtonLabelOut 1 -1)
+             If $CreateUserConfig == 1 Then
+             Begin
+                Do {Exec exec sed 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' < } $ConfFile { > $FVWM_USERDIR/WSM.conf}
+                Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
+                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
+                ChangeTitle $CurrDesk $ShiftNewLabel
+                Set $CreateUserConfig = 0
+
+                If $DeskToRename == {} Then
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 47
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 43
+                End
+                Else
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 46
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 42
+
+                   Do {GotoDesk}
+                End
+
+                ChangeTitle 41 {}
+             End
+             Else
+             Begin
+                Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f } $ConfFile
+                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Local Pager|Windows ...|Go to Page ...}
+                ChangeTitle $CurrDesk $ShiftNewLabel
+
+                If $DeskToRename == {} Then
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 43
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 45
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 47
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 41
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 43
+                End
+                Else
+                Begin
+                   If $CurrDesk == 1 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 2 Then
+                      ChangeColorset $CurrDesk 42
+                   If $CurrDesk == 3 Then
+                      ChangeColorset $CurrDesk 44
+                   If $CurrDesk == 4 Then
+                      ChangeColorset $CurrDesk 46
+                   If $CurrDesk == 5 Then
+                      ChangeColorset $CurrDesk 40
+                   If $CurrDesk == 6 Then
+                      ChangeColorset $CurrDesk 42
+
+                   # Update buttons press state as if pressed.
+                   Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+                End
+
+                ChangeTitle 41 {}
+             End
+          End
+
+          HideWidget 41
+          Set $DeskToRename = {}
+
+          # Update runtime.
+          Do {DesktopName } (Add $CurrDesk -1) { } $NewButtonLabel
+       End
+
+       4 :
+       Begin
+          Set $NextDesk = (Add (StrCopy (LastString) 3 99) -1)
+          Set $Action = (Add (StrCopy (LastString) 1 2) -1)
+          If $Action == 1 Then
+             Begin
+                # $DeskToRename is somehow $NextDesk + 1, but not for GotoDesk
+                Set $DeskToRename = (Add $NextDesk 1)
+                Do {Next (FrontPanel, CirculateHit) Focus}
+                # Do {GotoDesk 0 } $NextDesk
+                WarpPointer $DeskToRename
+                # WarpPointer correction
+                Do {Schedule 100 CursorMove 0p -20p}
+                SendSignal 41 2
+             End
+          If $Action == 2 Then
+             Begin
+                Do {f_ToggleFvwmModule FvwmScript WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]}
+             End
+          If $Action == 3 Then
+             Begin
+                Do {f_MoveCursorAndExec 0 -10 Module FvwmPager -transient WspLocPager } $NextDesk { } $NextDesk
+             End
+          If $Action == 4 Then
+             # $CurrDesk is 1-based; $NextDesk is 0-based
+             Do {WindowList mouse -0m -0m NoGeometry TitleForAllDesks NoCurrentDeskTitle NoNumInDeskTitle ShowPage Desk } $NextDesk
+             If (Add $NextDesk 1) == $CurrDesk Then
+             Begin
+                If $CurrDesk == 1 Then
+                   ChangeColorset $CurrDesk 41
+                If $CurrDesk == 2 Then
+                   ChangeColorset $CurrDesk 43
+                If $CurrDesk == 3 Then
+                   ChangeColorset $CurrDesk 45
+                If $CurrDesk == 4 Then
+                   ChangeColorset $CurrDesk 47
+                If $CurrDesk == 5 Then
+                   ChangeColorset $CurrDesk 41
+                If $CurrDesk == 6 Then
+                   ChangeColorset $CurrDesk 43
+
+                ChangeValue (Add $NextDesk 1) 1
+             End
+          If $Action == 5 Then
+          Begin
+             Do {DestroyMenu m_WsmGoToPage}
+             Do {AddToMenu m_WsmGoToPage}
+             Do {PipeRead "$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
+             Do {ChangeMenuStyle CommonAppMenu m_WsmGoToPage}
+             Do {Menu m_WsmGoToPage}
+          End
+       End
+
+       5 :
+       Begin
+          Do {f_DisplayURL "Workspace Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-Workspace-Manager.html}
+       End
+End
+

@@ -1,0 +1,28 @@
+#!/bin/ksh
+  
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+FontFile="$1"
+if [ -r "$FontFile" ]; then
+   NewMonoFont=$(egrep 'InfoStoreAdd font\.monospaced\.normal\.medium' "$FontFile" | \
+    awk -F'xft:' '{ print $2 }' | awk -F: '{ print $1, $4 }' | sed 's/size=//g;s/"//g')
+   NewFont=$(egrep 'InfoStoreAdd font\.variable\.normal\.medium' "$FontFile" | \
+    awk -F'xft:' '{ print $2 }' | awk -F: '{ print $1, $4 }' | sed 's/size=//g;s/"//g')
+else
+   exit 2
+fi
+
+# mate-terminal
+whence -q mate-terminal
+if (($? == 0)); then
+   if [ -n $NewMonoFont ]; then
+      dconf write /org/mate/terminal/profiles/default/font "'${NewMonoFont}'"
+   else
+      exit 3
+   fi
+fi
+

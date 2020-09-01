@@ -16,6 +16,7 @@ Begin
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 1 $DefaultFont
+   ChangeFont 5 $DefaultFont
    ChangeFont 6 $DefaultFont
    ChangeFont 8 $DefaultFont
    ChangeFont 9 $SmallFont
@@ -29,6 +30,10 @@ Begin
    ChangeFont 17 $SmallFont
    ChangeFont 18 $DefaultFont
    ChangeFont 19 $SmallFont
+
+   ChangeFont 21 $DefaultFont
+   ChangeFont 22 $DefaultFont
+   ChangeFont 23 $DefaultFont
 
    # Read which palette part we are modifying: from 1 to 8
    # Colorsets: 61 - 68
@@ -50,7 +55,7 @@ Begin
    ChangeColorset 3 $ColorsetFromPalette
 
    # Set Colorset 69 for "New" color (Widget 4)
-   Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $HexColorArg {'"}
+   Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $HexColorArg {'"}
 
    # Parse hex color from the arg 1, set widget values
    Set $R = (HexToNum (StrCopy $HexColorArg 1 2))
@@ -80,7 +85,7 @@ Widget 1
    Size 4 0
    Position 22 4
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Color Sample}
    Font "xft:::pixelsize=15"
    Main
@@ -103,7 +108,7 @@ Widget 3
    Position 22 28
    Type PushButton
    LocaleTitle {Old}
-   Flags NoReliefString
+   Flags NoReliefString NoFocus
    Colorset 2
    Main
       Case message of
@@ -118,7 +123,7 @@ Widget 4
    Position 106 28
    Type PushButton
    LocaleTitle {New}
-   Flags NoReliefString
+   Flags NoReliefString NoFocus
    Colorset 69
    Main
       Case message of
@@ -134,6 +139,7 @@ Widget 5
    Type PushButton
    LocaleTitle {Grab Color}
    Flags NoReliefString
+   Font "xft:::pixelsize=15"
    Colorset 22
    Main
       Case message of
@@ -148,7 +154,7 @@ Widget 5
          Set $CheckGrabHex = (StrCopy $GrabHEX 1 1)
          If $CheckGrabHex == {#} Then
          Begin
-            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
+            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
             Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
             Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
             Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
@@ -177,7 +183,7 @@ Widget 6
    Size 4 0
    Position 22 114
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Color Editor}
    Font "xft:::pixelsize=15"
    Main
@@ -199,7 +205,7 @@ Widget 8
    Size 4 0
    Position 28 176
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {R}
    Font "xft:::pixelsize=15"
    Main
@@ -232,7 +238,7 @@ Widget 9
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -241,7 +247,7 @@ Widget 10
    Size 4 0
    Position 28 242
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {G}
    Font "xft:::pixelsize=15"
    Main
@@ -274,7 +280,7 @@ Widget 11
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -283,7 +289,7 @@ Widget 12
    Size 4 0
    Position 28 304
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {B}
    Font "xft:::pixelsize=15"
    Main
@@ -316,7 +322,7 @@ Widget 13
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -325,7 +331,7 @@ Widget 14
    Size 4 0
    Position 20 390
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Title {}
    Font "xft:::pixelsize=15"
    Icon NsCDE/Saturation.xpm
@@ -359,7 +365,7 @@ Widget 15
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -368,7 +374,7 @@ Widget 16
    Size 4 0
    Position 24 454
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    Title {}
    Font "xft:::pixelsize=15"
    Icon NsCDE/Value.xpm
@@ -402,7 +408,7 @@ Widget 17
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -411,7 +417,7 @@ Widget 18
    Size 4 0
    Position 388 132
    Type ItemDraw
-   Flags NoReliefString Center
+   Flags NoReliefString Center NoFocus
    LocaleTitle {Hue}
    Font "xft:::pixelsize=15"
    Main
@@ -444,7 +450,7 @@ Widget 19
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -461,6 +467,7 @@ Widget 21
    Position 16 524
    Type PushButton
    LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main
@@ -469,7 +476,7 @@ Widget 21
       Begin
          If $BuildHexForTest <> {} Then
          Begin
-            Do {PipeRead "/opt/NsCDE/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
+            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
             Do {SendToModule ColorMgr SendString 19 1 } $ColorsetFromPalette
          End
          Quit
@@ -482,6 +489,7 @@ Widget 22
    Position 166 524
    Type PushButton
    LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main
@@ -502,6 +510,7 @@ Widget 23
    Position 316 524
    Type PushButton
    LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
    Flags NoReliefString
    Colorset 22
    Main
@@ -515,3 +524,4 @@ Widget 23
          Do {f_DisplayURL "Color Style Manager" $[NSCDE_ROOT]/share/doc/html/NsCDE-ColorMgr.html}
       End
 End
+
