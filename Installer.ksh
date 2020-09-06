@@ -206,8 +206,10 @@ function install_nscde
          read ans
          if [ "x$ans" == "x" ]; then
             instpath="/opt/NsCDE"
+            realinstpath="${instpath}"
          else
             instpath="$ans"
+            realinstpath="${instpath}"
          fi
       fi
    else
