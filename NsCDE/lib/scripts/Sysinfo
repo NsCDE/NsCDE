@@ -72,7 +72,17 @@ Begin
    Set $osver = (GetOutput {uname -r} 1 -1)
    Set $sysstring = {  } $sysname { Release } $osver { } $osname
 
-   Set $winmgr = {  } (GetOutput {fvwm -version} 1 -1)
+   Set $winmgrnamecheck = (GetOutput {echo $FVWM_IS_FVWM3} 1 -1)
+   If $winmgrnamecheck == 1 Then
+   Begin
+      Set $FvwmName = {fvwm3}
+   End
+   Else
+   Begin
+      Set $FvwmName = {fvwm}
+   End
+
+   Set $winmgr = {  } $FvwmName { Version } (GetOutput {echo $NSCDE_FVWM_VERSION} 1 -1)
    Set $nscdever = {  } (GetOutput {$NSCDE_ROOT/bin/nscde -V} 1 -1)
 
    If $sysname == {Linux} Then

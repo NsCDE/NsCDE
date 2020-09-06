@@ -65,8 +65,8 @@ Begin
    End
 
    Do {Colorset 70 TiledPixmap \$[NSCDE_ROOT]/lib/progbits/$SplashBG}
-   Do {Test (Version < 3.0.0) Schedule 120 All (NsCDE-Splash) Move screen g 50-50w 50-50w ewmhiwa}
-   Do {Test (Version >= 3.0.0) Schedule 120 All (NsCDE-Splash) Move screen p +0p +0p}
+   Do {Test (!EnvMatch FVWM_IS_FVWM3 1) Schedule 120 All (NsCDE-Splash) Move screen g 50-50w 50-50w ewmhiwa}
+   Do {Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 120 All (NsCDE-Splash) Move screen p +0p +0p}
 
    Set \$MainFontCmd = (GetOutput {\$NSCDE_ROOT/bin/getfont -v -t bold -s large} 1 -1)
    Set \$MainFont = {Shadow=1 0 SE:} \$MainFontCmd
@@ -92,8 +92,18 @@ Begin
    Set \$Version = (GetOutput {echo \$NSCDE_VERSION} 1 -1)
    Set \$FvwmVersion = (GetOutput {echo \$NSCDE_FVWM_VERSION} 1 -1)
 
+   Set \$CheckFvwm3 = (GetOutput {echo \$FVWM_IS_FVWM3} 1 -1)
+   If \$CheckFvwm3 == 1 Then
+   Begin
+      Set \$FvwmName = {FVWM3}
+   End
+   Else
+   Begin
+      Set \$FvwmName = {FVWM}
+   End
+
    Set \$VarTitle1 = { Not so Common Desktop Environment } \$Version { running on } \$OS {.}
-   Set \$VarTitle2 = { Using FVWM version } \$FvwmVersion { as the Window Manager.}
+   Set \$VarTitle2 = { Using } \$FvwmName { version } \$FvwmVersion { as the Window Manager.}
    Set \$VarTitle3 = { Starting Up ...}
 
    Set \$Beam = {}
