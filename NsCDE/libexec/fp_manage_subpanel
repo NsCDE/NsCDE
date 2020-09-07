@@ -105,18 +105,18 @@ function reset_this_button
       FPA_RETVAL=$?
       if ((FPA_RETVAL == 0)); then
          $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
-         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                      \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
       else
-         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                      \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it's default configured function.]\""
       fi
 
       if (($RestartFP == 0)); then
-         FvwmCommand "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
       else
-         FvwmCommand "InfoStoreRemove FP.Btn${PanelNo}.type"
-         FvwmCommand "f_RestartFrontPanel"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "InfoStoreRemove FP.Btn${PanelNo}.type"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
       fi
    fi
 }
@@ -138,7 +138,7 @@ function manage_launcher
    else
       # Case where infostore variable exists, but parsed number is not what we expect.
       if (($ADDLNCH_RETVAL == 0)); then
-         FvwmCommand "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
                      \"\$[gt.ERROR: Old value of FP.${2}LaunchersNum is not a number:] $OldNum\""
          exit 1
       fi

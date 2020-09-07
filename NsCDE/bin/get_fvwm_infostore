@@ -9,7 +9,7 @@ if [ ! -d "$FVWM_USERDIR"/tmp ]; then
    mkdir -p "$FVWM_USERDIR"/tmp
 fi
 
-FvwmCommand "Exec exec echo \$[infostore.$1] > \"$FVWM_USERDIR\"/tmp/ifsvar_get.$$"
+$NSCDE_ROOT/bin/nscde_fvwmclnt "Exec exec echo \$[infostore.$1] > \"$FVWM_USERDIR\"/tmp/ifsvar_get.$$"
 cnt=50
 while [ ! -r "$FVWM_USERDIR"/tmp/ifsvar_get.$$ ]
 do

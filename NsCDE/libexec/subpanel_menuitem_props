@@ -65,9 +65,9 @@ function subpanels_file_tstamp
       if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/NsCDE-Subpanels.conf" ]; then
          echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/NsCDE-Subpanels.conf ... regenerating latest one." >&2
          $NSCDE_ROOT/libexec/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
-         FvwmCommand "f_ReadCfg Subpanels"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
          sleep 1
-         FvwmCommand "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          exit 0
       fi
    fi
@@ -96,7 +96,7 @@ function manage_entry
    if [ "$ACTION" == "up" ]; then
       if (($entryid == 1)); then
          if [[ -n $DISPLAY ]]; then
-            FvwmCommand "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                         \"Item '$TITLE' is already on the top of the Subpanel $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
@@ -131,7 +131,7 @@ function manage_entry
    if [ "$ACTION" == "down" ]; then
       if (($entryid == $endaddr)); then
          if [[ -n $DISPLAY ]]; then
-            FvwmCommand "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                         \"Item '$TITLE' is already on the bottom of the Subpanel $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
@@ -180,7 +180,7 @@ function manage_entry
    if [ "$ACTION" == "begin" ]; then
       if (($entryid == 1)); then
          if [[ -n $DISPLAY ]]; then
-            FvwmCommand "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                         \"Item '$TITLE' is already on the top of the Subpanel $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
@@ -205,7 +205,7 @@ function manage_entry
    if [ "$ACTION" == "end" ]; then
       if (($entryid == $endaddr)); then
          if [[ -n $DISPLAY ]]; then
-            FvwmCommand "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                         \"Item '$TITLE' is already on the bottom of the Subpanel $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
@@ -253,12 +253,12 @@ function manage_entry
          cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"
          cat "$tmpfile" > "$FVWM_USERDIR/Subpanels.actions"
          $NSCDE_ROOT/libexec/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
-         FvwmCommand "f_ReadCfg Subpanels"
-         FvwmCommand "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          rm "$tmpfile"
       else
          if [[ -n $DISPLAY ]]; then
-            FvwmCommand "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Error.xpm\" \
                         \"Action for item '$TITLE' not performed on Subpanel $subpid. Errors in $tmpfile found.\""
          else
             echo "Action for item $TITLE not performed on Subpanel $subpid. Errors in $tmpfile found." >&2
@@ -429,11 +429,11 @@ function copy_to_main_panel
 
       echo "$fp_m1" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
       echo "$fp_m3" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
-      FvwmCommand "SendToModule FrontPanel ChangeButton Btn${subpid} Icon \"$icon\""
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "SendToModule FrontPanel ChangeButton Btn${subpid} Icon \"$icon\""
 
       # If changing from applet to icon, restart Front Panel for settings to be visible
       if (($RestartFP == 1)); then
-         FvwmCommand "f_RestartFrontPanel"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
       fi
    done
 }
@@ -596,14 +596,14 @@ function find_appropriate_icon
 function delete_confirm
 {
    if [[ -n $DISPLAY ]]; then
-      FvwmCommand "f_RunQuickScriptDialog ActionForm \"Delete item \\\"$TITLE\\\" from the subpanel ${subpid}?\" \
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RunQuickScriptDialog ActionForm \"Delete item \\\"$TITLE\\\" from the subpanel ${subpid}?\" \
                    Yes No \"Confirm Entry Deletion\" \"f_DeleteFromSubpanel $subpid $entryid\" Nop"
    fi
 }
 
 function exec_entry
 {
-   FvwmCommand "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
+   NSCDE_ROOT/bin/nscde_fvwmclnt "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
 }
 
 while getopts p:s:a:t:edc: Option

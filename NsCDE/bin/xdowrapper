@@ -25,7 +25,7 @@ function xdofunc
          xdotool search --name "NsCDE-Subpanel${subp}$" > /dev/null 2>&1
          if (($? == 0)); then
             echo "Refreshing subpanel NsCDE-Subpanel${subp}" >&2
-            FvwmCommand "Exec exec xdotool search --name "NsCDE-Subpanel${subp}\$" \
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "Exec exec xdotool search --name "NsCDE-Subpanel${subp}\$" \
                          set_window --name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\" \
                          --icon-name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\""
          fi

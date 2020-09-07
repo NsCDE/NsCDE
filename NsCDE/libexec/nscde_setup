@@ -499,7 +499,7 @@ function setup_nscde
       echo "that you want to apply and confirm with OK in Color Style Manager"
       sleep 2
       echo ""
-      FvwmCommand 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
       echo "Logout and login again for the full changes to take effect."
       echo ""
       echo "You can set \$[infostore.terminal] variable to your favorite"
@@ -514,8 +514,8 @@ function setup_nscde
    if (($INTERACTIVE == 1)); then
       echo "Press RETURN to exit setup and use Color Style Manager now."
       read RET
-      FvwmCommand 'EdgeThickness 1'
-      FvwmCommand 'All ("ColorMgr", CirculateHit) AnimatedMove 50-50w 50-50w ewmhiwa'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'EdgeThickness 1'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'All ("ColorMgr", CirculateHit) AnimatedMove 50-50w 50-50w ewmhiwa'
       exit 0
    fi
 }

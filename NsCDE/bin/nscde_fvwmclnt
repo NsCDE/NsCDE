@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+import socket
+import getopt
+import sys
+import os
+import stat
+
+# import json
+
+# Fvwm3 - socket API and MFL UNIX socket
+def mflclnt(verbose):
+    # Create a UDS socket
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    
+    # Connect the socket to the port where the server is listening
+    nscde_fvwm_socket = str(os.environ.get('FVWMMFL_SOCKET'))
+    try:
+        if verbose:
+            print ("Trying to determine if", nscde_fvwm_socket, "exists as MFL socket ...")
+        mode = os.stat(nscde_fvwm_socket).st_mode
+        if stat.S_ISSOCK(mode):
+            server_address = nscde_fvwm_socket
+            if verbose:
+                print ("Using", nscde_fvwm_socket, "as MFL socket.")
+    except FileNotFoundError:
+        if verbose:
+            print ("No", nscde_fvwm_socket, "Trying fallback MFL socket path /tmp/fvwm_mfl.sock ...")
+        server_address = '/tmp/fvwm_mfl.sock'
+
+    if verbose:
+        print('Connecting to {}'.format(server_address))
+    try:
+        sock.connect(server_address)
+    except socket.error as msg:
+        print(msg)
+        sys.exit(1)
+
+    try:
+        if verbose:
+            print ("Sending data to MFL socket", server_address)
+        # Send data
+        message = sys.argv[-1].encode()
+        if verbose:
+            print('Sending {!r}'.format(message))
+        sock.sendall(message)
+    
+        amount_received = 0
+        data = sock.recv(32768)
+        # amount_received += len(data)
+        # print (amount_received)
+        if verbose:
+            print('Received {!r}'.format(data))
+            # print (json.dumps(data.decode("utf-8"), sort_keys=True, indent=4))
+    
+    finally:
+        if verbose:
+            print('Closing connection to socket', server_address)
+        sock.close()
+
+# Pre fvwm3 - FvwmCommand
+def fvwmcommand(verbose):
+   if verbose:
+       print ("FVWM2 mode: redirecting data to FvwmCommand")
+   sav1 = format(sys.argv[-1])
+   cmdargs = sav1.replace("'", "'\\''")
+   if verbose:
+       print ("Sending", cmdargs)
+   os.system ("FvwmCommand '%s'" %(cmdargs))
+
+def usage():
+    print (sys.argv[0], "[ -h ] | [ -v ] <fvwmcmds>")
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hv", ["help", "verbose"])
+    except getopt.GetoptError as err:
+        # print help and usage informations and exit
+        print(err)
+        usage()
+        sys.exit(2)
+    verbose = False
+    for opt, arg in opts:
+        if opt == "-v":
+            verbose = True
+        elif opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        else:
+            assert False, "unhandled option"
+
+    # Select fvwm communication method based on fvwm major version
+    if os.environ.get('FVWM_IS_FVWM3') != "1":
+        fvwmcommand(verbose)
+    else:
+        mflclnt(verbose)
+
+if __name__ == "__main__":
+    main()
+

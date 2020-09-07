@@ -295,7 +295,7 @@ function Backdrops
    # Initial
    if [ ! -s "${FVWM_USERDIR}/NsCDE-Backdrops.conf" ]; then
       mkdir -p "${FVWM_USERDIR}/tmp"
-      FvwmCommand 'Exec exec echo $[infostore.desknum] > "$[FVWM_USERDIR]/tmp/_ndesks"'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec echo $[infostore.desknum] > "$[FVWM_USERDIR]/tmp/_ndesks"'
       sync
       sleep 1
       DeskNo=$(<"${FVWM_USERDIR}/tmp/_ndesks")

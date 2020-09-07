@@ -15,9 +15,9 @@ IFS=" "
 
 function defaultcf
 {
-   fvwm_major_version="${NSCDE_FVWM_VERSION%%.*}"
+   check_fvwm3=${FVWM_IS_FVWM3}
 
-   if [ "x${fvwm_major_version}" == "x3" ] ; then
+   if [ "x${check_fvwm3}" == "x1" ] ; then
       scrvar="$[pointer.screen]"
    else
       scrvar="0"
@@ -84,7 +84,7 @@ fi
 # Main monitor geometry enumeration
 menudata=""
 rootmenudata=""
-fvwm_major_version="${NSCDE_FVWM_VERSION%%.*}"
+check_fvwm3=${FVWM_IS_FVWM3}
 
 echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
 do
@@ -96,7 +96,7 @@ do
    scpos_x=${scpos_xy%+*}
    scpos_y=${scpos_xy#*+}
 
-   if [ "x${fvwm_major_version}" == "x3" ] ; then
+   if [ "x${check_fvwm3}" == "x1" ] ; then
       scrvar="${mname}"
    else
       scrvar="${scnum}"
