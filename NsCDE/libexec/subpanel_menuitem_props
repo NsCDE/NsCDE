@@ -97,7 +97,7 @@ function manage_entry
       if (($entryid == 1)); then
          if [[ -n $DISPLAY ]]; then
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                        \"Item '$TITLE' is already on the top of the Subpanel $subpid.\""
+                        \"$[gt.Item] '$TITLE' $[gt.is already on the top of the Subpanel] $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
          exit 0
@@ -132,7 +132,7 @@ function manage_entry
       if (($entryid == $endaddr)); then
          if [[ -n $DISPLAY ]]; then
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                        \"Item '$TITLE' is already on the bottom of the Subpanel $subpid.\""
+                        \"$[gt.Item] '$TITLE' $[gt.is already on the bottom of the Subpanel] $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
          exit 0
@@ -181,7 +181,7 @@ function manage_entry
       if (($entryid == 1)); then
          if [[ -n $DISPLAY ]]; then
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                        \"Item '$TITLE' is already on the top of the Subpanel $subpid.\""
+                        \"$[gt.Item] '$TITLE' $[gt.is already on the top of the Subpanel] $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
          exit 0
@@ -206,7 +206,7 @@ function manage_entry
       if (($entryid == $endaddr)); then
          if [[ -n $DISPLAY ]]; then
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                        \"Item '$TITLE' is already on the bottom of the Subpanel $subpid.\""
+                        \"$[gt.Item] '$TITLE' $[gt.is already on the bottom of the Subpanel] $subpid.\""
          fi
          # Important to exit here, else Subpanels.actions will be clobbered
          exit 0
@@ -259,7 +259,7 @@ function manage_entry
       else
          if [[ -n $DISPLAY ]]; then
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Error.xpm\" \
-                        \"Action for item '$TITLE' not performed on Subpanel $subpid. Errors in $tmpfile found.\""
+                        \"$[gt.Action for item] '$TITLE' $[gt.not performed on Subpanel] $subpid. $[gt.Errors found in] $tmpfile.\""
          else
             echo "Action for item $TITLE not performed on Subpanel $subpid. Errors in $tmpfile found." >&2
          fi
@@ -596,8 +596,10 @@ function find_appropriate_icon
 function delete_confirm
 {
    if [[ -n $DISPLAY ]]; then
-      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RunQuickScriptDialog ActionForm \"Delete item \\\"$TITLE\\\" from the subpanel ${subpid}?\" \
-                   Yes No \"Confirm Entry Deletion\" \"f_DeleteFromSubpanel $subpid $entryid\" Nop"
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RunQuickScriptDialog ActionForm \
+                   \"$[gt.Delete item] \\\"$TITLE\\\" $[gt.from the subpanel] ${subpid}?\" \
+                   $[gt.Yes] $[gt.No] \"$[gt.Confirm Entry Deletion]\" \
+                   \"f_DeleteFromSubpanel $subpid $entryid\" Nop"
    fi
 }
 
