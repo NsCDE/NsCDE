@@ -75,7 +75,7 @@ function setup_nscde
    # Xdefaults includes
    if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
-       -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
+       -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/config_templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults already exists."
@@ -91,7 +91,7 @@ function setup_nscde
    fi
 
    if [ ! -e "${FVWM_USERDIR}/Xdefaults.fontdefs" ]; then
-      cp "${NSCDE_ROOT}/share/templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
+      cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults.fontdefs already exists."
@@ -99,7 +99,7 @@ function setup_nscde
    fi
 
    if [ ! -e "${FVWM_USERDIR}/Xdefaults.mouse" ]; then
-      cp "${NSCDE_ROOT}/share/templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
+      cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults.mouse already exists."
@@ -109,7 +109,7 @@ function setup_nscde
    # Xdefaults pieces dir (XAPPLRESDIR)
    if [ ! -e "${FVWM_USERDIR}/app-defaults" ]; then
       mkdir -p "${FVWM_USERDIR}/app-defaults"
-      for appres in $NSCDE_ROOT/share/templates/app-defaults/*.tmpl
+      for appres in $NSCDE_ROOT/share/config_templates/app-defaults/*.tmpl
       do
          appres="${appres%.tmpl}"
          $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
@@ -123,7 +123,7 @@ function setup_nscde
 
    # Xsettingsd daemon configuration
    if [ ! -e "${FVWM_USERDIR}/Xsettingsd.conf" ]; then
-      cp "${NSCDE_ROOT}/share/templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
+      cp "${NSCDE_ROOT}/share/config_templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xsettingsd.conf already exists."
@@ -135,7 +135,7 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          echo "Writing default background pixel ${FVWM_USERDIR}/.BGdefault ..."
       fi
-      cp ${NSCDE_ROOT}/share/templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
+      cp ${NSCDE_ROOT}/share/config_templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/.BGdefault already exists."
@@ -174,7 +174,7 @@ function setup_nscde
          if (($VERBOSE == 1)); then
             echo "Initializing default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
          fi
-         cp ${NSCDE_ROOT}/share/templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
+         cp ${NSCDE_ROOT}/share/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
       else
          if (($VERBOSE == 1)); then
             echo "${FVWM_USERDIR}/NsCDE-${localcf}.local already exists."
@@ -187,7 +187,7 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          echo "Initializing default ${FVWM_USERDIR}/GeoDB.ini ..."
       fi
-      cp ${NSCDE_ROOT}/share/templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
+      cp ${NSCDE_ROOT}/share/config_templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/GeoDB.ini already exists."
@@ -324,7 +324,7 @@ function setup_nscde
          echo "Setting default ${FVWM_USERDIR}/libexec/colormgr.local ..."
       fi
       mkdir -p "${FVWM_USERDIR}/libexec"
-      cp ${NSCDE_ROOT}/share/templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
+      cp ${NSCDE_ROOT}/share/config_templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
       chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
    else
       if (($VERBOSE == 1)); then
@@ -368,7 +368,7 @@ function setup_nscde
          if (($VERBOSE == 1)); then
             echo "Setting default ${FVWM_USERDIR}/Stalonetray.conf ..."
          fi
-         cp ${NSCDE_ROOT}/share/templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
+         cp ${NSCDE_ROOT}/share/config_templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
       else
          if (($VERBOSE == 1)); then
             echo "${FVWM_USERDIR}/Stalonetray.conf already in place."
@@ -417,7 +417,7 @@ function setup_nscde
          fi
          if [ "x$ans" == "xy" ]; then
             echo "Enabling: nscde_use_dunst --> 1"
-            cp -f "$NSCDE_ROOT/share/templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
+            cp -f "$NSCDE_ROOT/share/config_templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
             $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_dunst 0/InfoStoreAdd nscde_use_dunst 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          elif [ "x$ans" == "xn" ]; then
             echo "Not enabling: nscde_use_dunst --> 0"

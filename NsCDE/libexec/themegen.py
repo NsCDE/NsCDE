@@ -102,7 +102,7 @@ else:
     print ('Palette not found: ' + palettefile)
     sys.exit()
 
-Globals.themedir=nscde_root + "/share/templates/integration/gtk2_gtk3_qt"
+Globals.themedir=nscde_root + "/share/config_templates/integration/gtk2_gtk3_qt"
 Globals.userthemedir=os.path.join(userhome,'.themes',nscdetheme)
 Globals.themesrcdir=Globals.themedir
 Globals.palettedir=os.path.join(Globals.themedir,'palettes')

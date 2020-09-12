@@ -3039,25 +3039,25 @@ M. Z.
        backdrops (selectable from Backdrop Style Manager) or in
        $HOME/.xscreensaver for some screensavers which are loading
        photos.
-     * share/templates/app-defaults
+     * share/config_templates/app-defaults
        X resources for a particular X applications (like XTerm)
        which are processed by the Color Style Manager for user to
        be put into $FVWM_USERDIR/app-defaults (if enabled).
        Referenced by the usual XAPPLRESDIR environment variable.
-     * share/templates/integration/gtk2_gtk3_qt
+     * share/config_templates/integration/gtk2_gtk3_qt
        Part of the CDE theme which are used by libexec/themegen.py
        and the rest of lib/python/*.py to generate
        $HOME/.themes/NsCDE with a selected palette and color
        depth.
-       share/templates also contains Xdefaults and some include
-       files for it, as well as configuration for stalonetray
-       which is installed on initial setup, and BGdefault, which
-       is a monochrome pixmap loaded as bare default early on
-       start, before FvwmBacker(1) sets up backdrops on each
-       user's workspace. From there, on initial setup, default
-       Xsettingsd.conf, Stalonetray.conf, Dunst.conf,
-       colormgr.local and possibly other files are installed into
-       user's $FVWM_USERDIR.
+       share/config_templates also contains Xdefaults and some
+       include files for it, as well as configuration for
+       stalonetray which is installed on initial setup, and
+       BGdefault, which is a monochrome pixmap loaded as bare
+       default early on start, before FvwmBacker(1) sets up
+       backdrops on each user's workspace. From there, on initial
+       setup, default Xsettingsd.conf, Stalonetray.conf,
+       Dunst.conf, colormgr.local and possibly other files are
+       installed into user's $FVWM_USERDIR.
      * src
        Here is the patch for fvwm 2.6.7 and 2.6.8 which adds
        additional small features to fvwm, so we can achieve even
@@ -3484,8 +3484,9 @@ M. Z.
    $FVWM_USERDIR/templates/app-defaults and reworked for Color
    Style Manager integration, because if find in that directory,
    and with .tmpl extension, it will be processed in the same way
-   as system files from $NSCDE_ROOT/share/templates/app-defaults/
-   and put in $FVWM_USERDIR/app-defaults.
+   as system files from
+   $NSCDE_ROOT/share/config_templates/app-defaults/ and put in
+   $FVWM_USERDIR/app-defaults.
 
    Plain custom X resources can be put in
    $FVWM_USERDIR/Xdefaults.local. This file will not be
@@ -3496,7 +3497,8 @@ M. Z.
 15.2. Gtk2, Gtk3, Qt4 and Qt5
 
    $NSCDE_ROOT/libexec/themegen.py with $NSCDE_ROOT/lib/python and
-   with $NSCDE_ROOT/share/templates/integration/gtk2_gtk3_qt are
+   with
+   $NSCDE_ROOT/share/config_templates/integration/gtk2_gtk3_qt are
    parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration
    suite. When run from the Color Style Manager or manually with
    the $NSCDE_ROOT/libexec/themegen.py, with proper options, this
