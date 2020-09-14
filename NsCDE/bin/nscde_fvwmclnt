@@ -11,7 +11,6 @@ import getopt
 import sys
 import os
 import stat
-
 # import json
 
 # Fvwm3 - socket API and MFL UNIX socket
@@ -20,6 +19,8 @@ def mflclnt(verbose):
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     
     # Connect the socket to the port where the server is listening
+    # FvwmMFL is setting this in environment, so we can really treat
+    # absence of the environment FVWMMFL_SOCKET as error.
     nscde_fvwm_socket = str(os.environ.get('FVWMMFL_SOCKET'))
     try:
         if verbose:
@@ -30,9 +31,8 @@ def mflclnt(verbose):
             if verbose:
                 print ("Using", nscde_fvwm_socket, "as MFL socket.")
     except FileNotFoundError:
-        if verbose:
-            print ("No", nscde_fvwm_socket, "Trying fallback MFL socket path /tmp/fvwm_mfl.sock ...")
-        server_address = '/tmp/fvwm_mfl.sock'
+        print ("Cannot find FvwmMFL socket. Env:", nscde_fvwm_socket)
+        sys.exit(1)
 
     if verbose:
         print('Connecting to {}'.format(server_address))
