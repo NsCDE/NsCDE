@@ -87,9 +87,9 @@
 
 # Hook of the RestartFunction called when
 # FVWM is restarted.
-# DestroyFunc f_UserRestartFunction
-# AddToFunc f_UserRestartFunction
-# + I None (BuggyApp) Exec exec buggyapp
+DestroyFunc f_UserRestartFunction
+AddToFunc f_UserRestartFunction
++ I All (Gkrellm,gkrellm CirculateHit) Schedule 500 Move -0 +0
 
 # Function: f_UserEnterWindow
 # Called from f_EnterWindow on mouse hover (FvwmEvent)
