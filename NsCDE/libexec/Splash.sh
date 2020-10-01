@@ -90,7 +90,16 @@ Begin
    # Variables
    Set \$OS = (GetOutput {uname -sm} 1 -1)
    Set \$Version = (GetOutput {echo \$NSCDE_VERSION} 1 -1)
-   Set \$FvwmVersion = (GetOutput {echo \$NSCDE_FVWM_VERSION} 1 -1)
+   Set \$FvwmVersionInfo = (GetOutput {echo \$NSCDE_FVWM_VERSION_INFO} 1 -1)
+   Set \$FvwmVersionNum = (GetOutput {echo \$NSCDE_FVWM_VERSION_NUM} 1 -1)
+   If \$FvwmVersionInfo == {} Then
+   Begin
+      Set \$FvwmVersion = \$FvwmVersionNum
+   End
+   Else
+   Begin
+      Set \$FvwmVersion = \$FvwmVersionNum {(} \$FvwmVersionInfo  {)}
+   End
 
    Set \$CheckFvwm3 = (GetOutput {echo \$FVWM_IS_FVWM3} 1 -1)
    If \$CheckFvwm3 == 1 Then

@@ -1,4 +1,4 @@
-r* XPM */
+/* XPM */
 static char *Noise_pm[] = {
 /* columns rows colors chars-per-pixel */
 "200 200 4 1 ",
