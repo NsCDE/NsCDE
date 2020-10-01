@@ -98,7 +98,7 @@ Begin
    End
    Else
    Begin
-      Set \$FvwmVersion = \$FvwmVersionNum {(} \$FvwmVersionInfo  {)}
+      Set \$FvwmVersion = \$FvwmVersionNum { (} \$FvwmVersionInfo  {)}
    End
 
    Set \$CheckFvwm3 = (GetOutput {echo \$FVWM_IS_FVWM3} 1 -1)
