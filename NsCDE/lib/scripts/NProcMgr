@@ -78,6 +78,15 @@ Begin
    Key K A 55 1 {KeyRecheckAll}
    Key A A 51 1 {KeyPopDownAction}
    Key C A 53 1 {KeyPopDownReread}
+
+   If (GetScriptArgument 1) <> {} Then
+   Begin
+      ChangeValue 51 (GetScriptArgument 1)
+   End
+   If (GetScriptArgument 2) <> {} Then
+   Begin
+      ChangeValue 53 (GetScriptArgument 2)
+   End
 End
 
 Widget 1
@@ -1054,6 +1063,10 @@ Property
 
          # Refresh status of all items
          SendSignal 1 3
+
+         # Save last Action and Conf Value in runtime
+         Do {InfoStoreAdd nprocmgr.confval } (GetValue 53)
+         Do {InfoStoreAdd nprocmgr.actionval } (GetValue 51)
       End
 End
 
@@ -1161,6 +1174,10 @@ Property
             Do {f_ReadCfg Script}
          If $ReReadCfg == 17 Then
             Do {f_ReadCfg Style}
+
+         # Save last Action and Conf Value in runtime
+         Do {InfoStoreAdd nprocmgr.confval } (GetValue 53)
+         Do {InfoStoreAdd nprocmgr.actionval } (GetValue 51)
       End
 End
 

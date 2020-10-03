@@ -4636,12 +4636,12 @@ aspects of the interface. NsCDE is now ready for usage.
 </sect1>
 
 <sect1 id="NsCDE-Logging">
-<title>Diagnostic: X11, FVWM and NsCDE Log</title>
+<title>Diagnostic: X11, FVWM and Watch Errors</title>
 
 <para>
 Most of the X11 Display Managers, such as XDM, sddm, gdm etc, are redirecting diagnostic
 output (standard error, stderr, file descriptor 2) into a file or some logging facility.
-This file is usually <filename>$HOME/.xsession-errors</filename>. When "NsCDE Log" item
+This file is usually <filename>$HOME/.xsession-errors</filename>. When "Watch Errors" item
 is launched from default subpanel 7 (Desktop Settings), it will execute <command>xterm -e $[infostore.xlogcmd]</command>. If not redefined in <filename>$FVWM_USERDIR/NsCDE.conf</filename>,
 contents of the variable FVWM infostore variable <varname>$[infostore.xlogcmd]</varname> will be
 <emphasis>"tail -300f ~/.xsession-errors"</emphasis>.
@@ -4661,7 +4661,7 @@ unexpected or unexplainable problems with desktop setup.
 Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window under
 FVWM 2.X has a custom menu entry <guimenuitem>Fvwm Diagnostic Console</guimenuitem> which
 starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
-<guimenuitem>Watch Errors</guimenuitem> which calls NsCDE Log (Watch errors).
+<guimenuitem>Watch Errors</guimenuitem> which calls Watch errors.
 When both windows are on the screen, this menu entries will simply transfer focus to each other.
 </para>
 </sect1>
