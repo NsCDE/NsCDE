@@ -89,7 +89,10 @@
 # FVWM is restarted.
 DestroyFunc f_UserRestartFunction
 AddToFunc f_UserRestartFunction
-+ I All (Gkrellm,gkrellm CirculateHit) Schedule 500 Move -0 +0
++ I All (Gkrellm,gkrellm,CirculateHit) Schedule 250 Move screen p -0 +0
+# + I Test (!EnvMatch infostore.nscde_use_stalonetray 1) Break 1
+# + I Wait stalonetray
+# + I All (stalonetray,stalonetray,CirculateHit) Move screen p -0 -0 ewmhiwa
 
 # Function: f_UserEnterWindow
 # Called from f_EnterWindow on mouse hover (FvwmEvent)
