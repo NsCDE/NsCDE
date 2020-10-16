@@ -1,0 +1,304 @@
+/*************************************************************************
+ * ROFI Color theme
+ * This file is a part of the NsCDE - Not so Common Desktop Environment
+ *
+ * Theme designed for NsCDE - Not so Common Desktop Environment
+ * Author: Hegel3DReloaded
+ * Licence: GPLv3
+ **************************************************************************/
+
+* {
+    common-bg-color:  NSCDE_BG_COLOR_6; // CS22 bg
+    common-fg-color:  NSCDE_FG_COLOR_6; // CS22 fg
+    common-sel-color: NSCDE_BS_COLOR_6; // CS22 sel
+    border-bg-color:  NSCDE_BG_COLOR_1; // CS2 bg
+    border-fg-color:  NSCDE_FG_COLOR_1; // CS2 fg
+    border-ts-color:  NSCDE_TS_COLOR_1; // CS2 ts
+    border-bs-color:  NSCDE_BS_COLOR_1; // CS2 bs
+    border-sel-color: NSCDE_SEL_COLOR_1; // CS2 fgsh
+    core-bg-color:    NSCDE_BG_COLOR_2; // CS1 bg
+    core-fg-color:    NSCDE_FG_COLOR_2; // CS1 fg
+    core-ts-color:    NSCDE_TS_COLOR_2; // CS1 ts
+    core-bs-color:    NSCDE_BS_COLOR_2; // CS1 bs
+    core-sel-color:   NSCDE_SEL_COLOR_2; // CS1 sel
+    main-bg-color:    NSCDE_BG_COLOR_5; // CS21 bg
+    main-fg-color:    NSCDE_FG_COLOR_5; // CS21 fg
+    main-bs-color:    NSCDE_BS_COLOR_5; // CS21 bs
+    main-ts-color:    NSCDE_TS_COLOR_5; // CS21 ts
+    main-sel-color:   NSCDE_SEL_COLOR_5; // CS21 sel
+    text-bg-color:    NSCDE_BG_COLOR_4; // CS20 bg
+    text-fg-color:    NSCDE_FG_COLOR_4; // CS20 fg
+    text-ts-color:    NSCDE_TS_COLOR_4; // CS20 ts
+    text-bs-color:    NSCDE_BS_COLOR_4; // CS20 bs
+    text-sel-color:   NSCDE_SEL_COLOR_4; // CS20 sel
+
+    selected-normal-foreground:  #ffffff;
+    selected-normal-background:  #000000;
+
+    background-color:            transparent;
+
+    active-foreground:           @selected-normal-foreground;
+    active-background:           grey/96%;
+    selected-active-foreground:  @border-ts-color;
+    selected-active-background:  @selected-normal-background;
+    alternate-active-foreground: @active-foreground;
+    alternate-active-background: @active-background;
+
+    urgent-foreground:           @border-fg-color;
+    urgent-background:           @border-bg-color;
+    selected-urgent-foreground:  #000000;
+    selected-urgent-background:  #ffff00;
+    alternate-urgent-background: @urgent-background;
+    alternate-urgent-foreground: @urgent-foreground;
+
+    font:      "__ROFI_DEFAULT_FONT__";
+    highlight: underline bold;
+}
+
+window {
+    border-color:     @border-ts-color;
+    background-color: @border-bg-color;
+    border:           2px;
+    padding:          1px;
+    border-radius:    0px;
+    spacing:          0px;
+    margin:           1px;
+
+    anchor:           north;
+    location:         center;
+    y-offset:         -15.5em;
+
+    children: [ mainbox ];
+}
+
+mainbox {
+    border-color:     @border-bs-color;
+    background-color: @common-bg-color;
+    spacing:          0px;
+    padding:          8px;
+    border:           1px;
+    margin:           2px;
+    children: [ inputbar, message, wrapper-mode-switcher, listview ];
+}
+
+wrapper-mode-switcher {
+    orientation: horizontal;
+    expand:      false;
+    spacing:     0;
+    children:    [ icon-ms-ic1, mode-switcher, icon-ms-ic2 ];
+}
+icon-ms-ic1 {
+    filename:      "go-previous";
+    border-radius: 6 0 0 0;
+}
+icon-ms-ic2 {
+    filename:      "go-next";
+    border-radius: 0 6 0 0;
+}
+icon-ms-ic1,icon-ms-ic2 {
+    border-color:     @core-ts-color;
+    background-color: @main-bg-color;
+    size:             24;
+    vertical-align:   0.8;
+    expand:           false;
+    border:           1px 0px 0px ;
+}
+
+mode-switcher {
+    border:  0px;
+    spacing: 0px;
+    expand:  true;
+}
+
+button {
+    border-color:     @core-ts-color;
+    text-color:       @main-fg-color;
+    background-color: @main-bg-color;
+    padding:          6px;
+    border:           1px 1px 1px ;
+    border-radius:    8 8 0 0;
+}
+
+button selected.normal {
+    border:           1px 1px 0px ;
+    border-radius:    8 8 0 0;
+    border-color:     @main-ts-color;
+    text-color:       @main-fg-color;
+    background-color: @main-bg-color;
+}
+
+sidebar {
+    expand: false;
+}
+
+message {
+    border:           2px;
+    border-radius:    5px;
+    padding:          4px;
+    margin:           0px 0px 0.5em;
+    expand:           false;
+    text-color:       @core-fg-color;
+    background-color: @core-bg-color;
+    border-color:     @core-bs-color;
+}
+
+listview {
+    background-color: @main-bg-color;
+    border-color:     @main-bs-color;
+    text-color:       @main-fg-color;
+    spacing:          2px ;
+    padding:          0.3em;
+    expand:           true;
+    border:           0px 1px 1px ;
+    border-radius:    0px 0px 0px 0px;
+    scrollbar:        true;
+}
+
+element {
+    border-color: transparent;
+    border:       1;
+    padding:      4px;
+    font:         "__ROFI_MONO_FONT__";
+}
+
+element.normal.normal {
+    background-color: @main-bg-color;
+    text-color:       @main-fg-color;
+}
+
+element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+
+element.normal.active {
+    border-color:     @border-ts-color;
+    background-color: @active-background;
+    text-color:       @active-foreground;
+    highlight: italic;
+}
+
+element.selected.normal {
+    border-color:     @border-sel-color;
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+    border:           1;
+}
+
+element.selected.urgent {
+    border-color:     @border-sel-color;
+    background-color: @selected-urgent-background;
+    text-color:       @selected-urgent-foreground;
+    border:           1;
+}
+
+element.selected.active {
+    border-color:     @border-sel-color;
+    background-color: @selected-active-background;
+    text-color:       @selected-active-foreground;
+    border:           1;
+}
+
+element.alternate.normal {
+    background-color: @main-sel-color;
+    text-color:       @main-fg-color;
+}
+
+element.alternate.urgent {
+    background-color: @alternate-urgent-background;
+    text-color:       @alternate-urgent-foreground;
+}
+
+element.alternate.active {
+    background-color: @alternate-active-background;
+    text-color:       @alternate-active-foreground;
+}
+
+scrollbar {
+    width:            6px;
+    border:           2;
+    handle-width:     8px;
+    padding:          0;
+    background-color: @main-sel-color;
+    border-color:     @main-bg-color;
+    handle-color:     @main-bg-color;
+}
+
+sidebar {
+    border-color: @core-ts-color;
+    border:       2px 0px 0px ;
+}
+
+inputbar {
+    background-color: @common-bg-color;
+    text-color:       @common-fg-color;
+    padding:          6px 2px 12px 2px;
+    children:         [ icon-k, prompt, textbox-prompt-colon, entry, case-indicator ];
+}
+
+case-indicator {
+    border-color:     @border-sel-color;
+    background-color: @core-bg-color;
+    text-color:       @core-fg-color;
+    padding:          4px;
+    border:           1px;
+    vertical-align:   0.5;
+
+}
+
+entry {
+    text-color:       @text-fg-color;
+    background-color: @text-bg-color;
+    border-color:     @border-sel-color;
+    orientation:      horizontal;
+    border:           2px;
+    border-radius:    0px;
+    padding:          4px;
+    spacing:          0.5em;
+    vertical-align:   0.5;
+}
+
+icon-k {
+    expand:         false;
+    filename:       "preferences-desktop-keyboard";
+    size:           32;
+    vertical-align: 0.5;
+    padding:        2px;
+}
+
+prompt {
+    padding:          6px;
+    border:           1px;
+    vertical-align:   0.75;
+    border-color:     @border-bg-color;
+    background-color: @common-bg-color;
+    text-color:       @common-fg-color;
+}
+
+textbox-prompt-colon {
+    expand:           false;
+    margin:           1px;
+    vertical-align:   0.5;
+    str:              " : ";
+    background-color: @common-bg-color;
+    text-color:       @common-fg-color;
+}
+
+error-message {
+    margin:           1px;
+    border-radius:    0px;
+    border:           1px;
+    padding:          0px;
+    background-color: @border-bg-color;
+    border-color:     @border-bs-color;
+    children:         [ textbox ];
+}
+
+textbox {
+    border:           0px;
+    padding:          10px;
+    font:             "__ROFI_LARGE_FONT__";
+    background-color: @common-bg-color;
+    text-color:       @common-fg-color;
+}
+

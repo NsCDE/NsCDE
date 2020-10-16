@@ -10,6 +10,7 @@ export LC_ALL=C
 
 # Initialize default values for some variables
 PrintFnSize=0
+PrettyName=0
 
 if [ -z $NSCDE_ROOT ]; then
    echo "No \$NSCDE_ROOT set. Exiting."
@@ -74,7 +75,11 @@ function GetFont
    Catch2="${Catch/InfoStoreAdd font./}"
    Catch3="${Catch2#*\"}"
    GetSize=$(echo "${Catch3/\"/}" | $NSCDE_ROOT/bin/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
-   FontStruct="${Catch3/\"/}"
+   if (($PrettyName == 1)); then
+      FontStruct=$(echo "${Catch3/\"/}" | awk -F: '{ $1=""; print $0 }' | sed 's/^ //g; s/size=//g')
+   else
+      FontStruct="${Catch3/\"/}"
+   fi
 
    if [ "x$FnMaxSize" == "x" ]; then
       if (($PrintFnSize == 0)); then
@@ -142,7 +147,7 @@ function GetFont
    fi
 }
 
-while getopts f:vmt:s:SZ:h Option
+while getopts f:vmt:s:pSZ:h Option
 do
    case $Option in
       f)
@@ -162,6 +167,9 @@ do
       ;;
       s)
          FnSize="$OPTARG"
+      ;;
+      p)
+         PrettyName=1
       ;;
       S)
          PrintFnSize=1
