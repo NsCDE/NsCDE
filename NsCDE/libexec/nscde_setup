@@ -427,6 +427,24 @@ function setup_nscde
          fi
       fi
 
+      whence -q rofi
+      if (($? == 0)); then
+         echo -ne "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog? (y|n)[y] \c"
+         read ans
+         if [ "x$ans" == "x" ]; then
+            ans="y"
+         fi
+         if [ "x$ans" == "xy" ]; then
+            echo "Enabling: nscde_use_rofi --> 1"
+            $NSCDE_ROOT/bin/ised -c 's/# InfoStoreAdd nscde_use_rofi 1/InfoStoreAdd nscde_use_rofi 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+         elif [ "x$ans" == "xn" ]; then
+            echo "Not enabling: nscde_use_rofi --> 0"
+         else
+            echo "Answer not understood."
+            echo "Not enabling: nscde_use_rofi --> 0"
+         fi
+      fi
+
       echo -ne "Do you want to remember last page on workspace when changing back to it? (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
