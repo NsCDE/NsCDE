@@ -1521,6 +1521,7 @@ Widget 26
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
                Set $DoMiscXCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -M '} $FontNormalMediumStr {'}
                Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
+               Do {Test (EnvMatch infostore.nscde_use_rofi 1) f_RofiSetup 1}
             End
 
             # Spawn ChoiceForm to quit after saving changes
@@ -1532,7 +1533,6 @@ Widget 26
       4 :
       Begin
          # Finish
-         Do {Echo %%% %%% %%% QUIT-ACTION-STRING: } (LastString)
          If (LastString) == {Go} Then
          Begin
             Do {Exec exec ksh -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"}

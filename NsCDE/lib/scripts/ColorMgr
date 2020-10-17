@@ -1271,6 +1271,7 @@ Widget 32
                   Set $RunUserScriptCmd = {$FVWM_USERDIR/libexec/colormgr.local } $PalletePath { } $Ncolors
                   Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
                End
+               Do {Test (EnvMatch infostore.nscde_use_rofi 1) f_RofiSetup 1}
             End
 
             Set $CheckUseXsettingsd = (GetOutput {$NSCDE_ROOT/bin/get_fvwm_infostore nscde_use_xsettingsd} 1 1)

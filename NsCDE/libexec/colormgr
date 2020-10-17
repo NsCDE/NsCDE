@@ -255,12 +255,6 @@ function Xresources
 
          IFS="$OIFS"
       fi
-
-      # Rofi theme will get regenerated automatically on next use after
-      # changing color theme.
-      if [ -f "$FVWM_USERDIR/NsCDE.rasi" ]; then
-         rm -f "$FVWM_USERDIR/NsCDE.rasi"
-      fi
    else
       ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
