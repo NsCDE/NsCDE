@@ -1,0 +1,53 @@
+Preliminary FVWM3 DesktopConfiguration per-monitor support for NsCDE
+
+Warning: this is "technology preview" which is overriding system FvwmBacker
+configuration in NsCDE-Backer.conf with the version which uses a kludge
+shell script "nitrowrapper" which should be located in the user's
+$FVWM_USERDIR/libexec/ and external background settet "nitrogen" to
+translate RandR monitor names into format expected by the nitrogen(1)
+program.
+
+Until FVWM3 FvwmBacker is not monitor aware, this method can be used to
+set different backdrop on different monitors under FVWM3.
+
+Instructions:
+
+- Install nitrogen (yum apt pacman pkg whatever ...)
+
+- Copy NsCDE-Backer.conf into your ~/.NsCDE/
+
+- Copy nitrowrapper into your ~/.NsCDE/libexec/
+
+- Edit ~/.NsCDE/libexec/nitrowrapper and assign monitor names to
+  variables MONITOR0, MONITOR1, MONITOR2, MONITORN ...
+
+- Make it executable: chmod 0755 ~/.NsCDE/libexec/nitrowrapper
+
+- Uncomment or add if not present
+
+  Test (EnvMatch FVWM_IS_FVWM3 1) DesktopConfiguration per-monitor
+
+  line in your ~/.NsCDE/NsCDE.conf
+
+- At the beginning of InitFuncation in your ~/.NsCDE/NsCDE-Init.conf put
+
+  + I Exec exec nitrogen --set-tiled $[HOME]/.NsCDE/backer/Desk1-*
+
+  to set initial background on both monitors after login (it will be on
+  first workspace)
+
+- Restart FVWM3 / NsCDE see if it is working for you. Experiment with
+  FVWM3 and enjoy
+
+
+Caveats:
+
+- Setter nitrogen does not have rich error checking in it. Therefore,
+  it can core dump occasionally. For example when adding or removing
+  monitors if it is called early from ~/.NsCDE/NsCDE-Backer.conf and
+  it's wrapper, but since this is not long running process (daemon)
+  it is mostly not noticable
+
+- This whole hack is temporary solution for early versions of FVWM3
+  Once FVWM3 Backer gets ready, this will be obsoleted and soon removed.
+

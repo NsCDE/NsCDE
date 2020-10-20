@@ -1,0 +1,35 @@
+#!/bin/ksh
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+MONITOR0="Virtual-0"
+MONITOR1="Virtual-1"
+MONITOR2=
+MONITOR3=
+
+wkspathnum=${3##*/}
+wksnum=${wkspathnum:4:1}
+dsknum=$(($2 + 1))
+
+if (($wksnum == $dsknum)); then
+   # echo "NITRO DEBUG: $@"
+   case $1 in
+   $MONITOR0)
+      /usr/bin/nitrogen --set-tiled --head=0 $3
+   ;;
+   $MONITOR1)
+      /usr/bin/nitrogen --set-tiled --head=1 $3
+   ;;
+   $MONITOR2)
+      /usr/bin/nitrogen --set-tiled --head=1 $3
+   ;;
+   $MONITOR3)
+      /usr/bin/nitrogen --set-tiled --head=1 $3
+   ;;
+   esac
+fi
+
