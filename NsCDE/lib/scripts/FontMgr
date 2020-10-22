@@ -1521,7 +1521,7 @@ Widget 26
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
                Set $DoMiscXCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -M '} $FontNormalMediumStr {'}
                Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
-               Do {Test (EnvMatch infostore.nscde_use_rofi 1) f_RofiSetup 1}
+               Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
             End
 
             # Spawn ChoiceForm to quit after saving changes
