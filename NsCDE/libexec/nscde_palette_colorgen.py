@@ -416,12 +416,13 @@ Colorset 6 fg {fgg[6]}, bg {selg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, P
 Colorset 20 fg {fgg[4]}, bg {bgg[4]}, hi {tsg[4]}, sh {bsg[4]}, fgsh {selg[4]}, Plain, NoShape
 
 # 2nd windows color when Colors == 8
-# Colorset 21 fg {fgg[2]}, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[5]}, Plain, NoShape
-# Colorset 21 fg {fgg[2]}, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh {selg[2]}, Plain, NoShape
 Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[5]}, Plain, NoShape
 
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
+
+# Alternative variant for Front Panel, and Icons (see also Colorset 48)
+Colorset 23 fg #ffffffffffff, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh {selg[8]}, Plain, NoShape
 
 # Light gaps on the Front Panel menu and iconify buttons (topShadowColor from cs #1)
 Colorset 14 fg {tsg[2]}, bg {tsg[2]}, hi {tsg[2]}, sh {tsg[2]}, fgsh {tsg[2]}, Plain, NoShape
@@ -493,9 +494,6 @@ Colorset 45 fg #ffffffffffff, bg {bgg[6]}, hi {bsg[6]}, sh {tsg[6]}, fgsh #33003
 # Four, Eight ...
 Colorset 46 fg #ffffffffffff, bg {bgg[7]}, hi {tsg[7]}, sh {bsg[7]}, fgsh #330033003300, Plain, NoShape
 Colorset 47 fg #ffffffffffff, bg {bgg[7]}, hi {bsg[7]}, sh {tsg[7]}, fgsh #330033003300, Plain, NoShape
-
-# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
-Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape
 """.format(**locals())
 
     elif ncolors == 4:
@@ -513,12 +511,16 @@ Colorset 45 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #33003
 # Four, Eight ...
 Colorset 46 fg #ffffffffffff, bg {bgg[3]}, hi {tsg[3]}, sh {bsg[3]}, fgsh #330033003300, Plain, NoShape
 Colorset 47 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #330033003300, Plain, NoShape
-
-# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
-Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[2]}, sh {bsg[2]}, fgsh #330033003300, Plain, NoShape
 """.format(**locals())
 
     lines+="""
+# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
+# 8th color alternative (see Colorset 23)
+Colorset 48 fg #ffffffffffff, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh #330033003300, Plain, NoShape
+
+# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
+Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh #330033003300, Plain, NoShape
+
 # Transparent handler (WSM, MonthDayApplet, CheckMailApplet ...)
 Colorset 52 fg #ffffffffffff, Transparent
 
