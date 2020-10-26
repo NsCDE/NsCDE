@@ -15,6 +15,8 @@ export LANG=en_US.UTF-8
 # Defaults for -t and -e.
 PreviewMode=0
 EchoInfo=0
+FpVariant=5
+WsmVariant=0
 
 # Load common functions
 if [ -f "${NSCDE_ROOT}/libexec/style_managers.shlib" ]; then
@@ -78,11 +80,13 @@ function ProgBits
        -P 3 -b
 
    # Type b, subtype 5
-   ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-       -p ${PaletteNamePath} -n $Ncolors \
-       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/lib/progbits/type_b5 \
-       -P 5 -b
+   if (($FpVariant == 5)); then
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_ROOT}/lib/progbits/type_b5 \
+          -P 5 -b
+   fi
 
    # Type b, subtype 6
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
@@ -98,12 +102,39 @@ function ProgBits
        -i ${NSCDE_ROOT}/lib/progbits/type_b7 \
        -P 7 -b
 
+   # Type b, subtype 8
+   if (($FpVariant == 8)); then
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_ROOT}/lib/progbits/type_b8 \
+          -P 8 -b
+   fi
+
    # Type c
    ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
        -i ${NSCDE_ROOT}/lib/progbits/type_c \
        -c
+
+   # Type c5
+   if (($FpVariant == 5)); then
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_ROOT}/lib/progbits/type_c5 \
+          -c
+   fi
+
+   # Type c8
+   if (($FpVariant == 8)); then
+      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_ROOT}/lib/progbits/type_c8 \
+          -c
+   fi
 
    # Freedesktop icon type (type c)
    mkdir -p ""${HOME}"/.icons/NsCDE/tmp"
@@ -270,16 +301,37 @@ function Xresources
 # Regenerate user's NsCDE-Colorset.conf
 function FvwmColorsets
 {
+   if ((WsmVariant == 1)); then
+      WsmArg="-w"
+   else
+      WsmArg=""
+   fi
+
    if (($PreviewMode == 0)); then
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-       -p ${PaletteNamePath} -n $Ncolors \
-       -f > ${FVWM_USERDIR}/NsCDE-Colorset.conf
+      if (($FpVariant == 5)); then
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/NsCDE-Colorset.conf
+      fi
+      if (($FpVariant == 8)); then
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -8 $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/NsCDE-Colorset.conf
+      fi
    else
       mkdir -p ${FVWM_USERDIR}/tmp || exit 1
 
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
-       -p ${PaletteNamePath} -n $Ncolors \
-       -f > ${FVWM_USERDIR}/tmp/NsCDE-Colorset-Preview.conf
+      if (($FpVariant == 5)); then
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/tmp/NsCDE-Colorset-Preview.conf
+      fi
+
+      if (($FpVariant == 8)); then
+         ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+          -p ${PaletteNamePath} -8 $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/tmp/NsCDE-Colorset-Preview.conf
+      fi
 
       if (($EchoInfo == 1)); then
          echo "${FVWM_USERDIR}/tmp/NsCDE-Colorset-Preview.conf"
@@ -370,7 +422,7 @@ function Backdrops
 # -b Syncronizes existing backdrops with new palette color sheme
 # -X Syncronizes X resources file with new palette color sheme
 # -h Help
-while getopts C:c:tepg:n:N:f:FPbXh Option
+while getopts C:c:85wtepg:n:N:f:FPbXh Option
 do
    case $Option in
       C)
@@ -378,6 +430,15 @@ do
       ;;
       c)
          Ncolors="$OPTARG"
+      ;;
+      5)
+         FpVariant=5
+      ;;
+      8)
+         FpVariant=8
+      ;;
+      w)
+         WsmVariant=1
       ;;
       t)
          export PreviewMode=1

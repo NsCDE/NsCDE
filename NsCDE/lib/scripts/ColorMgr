@@ -57,6 +57,12 @@ Begin
       ChangeSize 9 72 40
    End
 
+   # Default Front Panel Variant
+   Do {SendToModule ColorMgr SendString 20 2 $[infostore.fp_8color_variant]}
+
+   # Default Front Panel Variant
+   Do {SendToModule ColorMgr SendString 20 3 $[infostore.wsmcolored]}
+
    Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
@@ -870,7 +876,7 @@ Widget 20
       Case message of
       SingleClic :
       Begin
-         Do {f_ToggleFvwmModule FvwmScript NColorsDialog } $Ncolors
+         Do {f_ToggleFvwmModule FvwmScript NColorsDialog } $Ncolors { } (StrCopy $FpVariantArg 2 2) { } (StrCopy $WsmVariantArg 2 2)
       End
       1 :
       Begin
@@ -903,6 +909,28 @@ Widget 20
             ChangeSize 16 64 32
             ChangeIcon 9 NsCDE/Bframe8.xpm
             ChangeSize 9 72 40
+         End
+      End
+      2 :
+      Begin
+         If (LastString) == {8} Then
+         Begin
+            Set $FpVariantArg = {-8}
+         End
+         Else
+         Begin
+            Set $FpVariantArg = {-5}
+         End
+      End
+      3 :
+      Begin
+         If (LastString) == {1} Then
+         Begin
+            Set $WsmVariantArg = {-w}
+         End
+         Else
+         Begin
+            Set $WsmVariantArg = {}
          End
       End
 End
@@ -1141,9 +1169,9 @@ Widget 32
                Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied.]" "..." 5000}
             End
          End
-         Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -F}
+         Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
-         Set $PerformProgBitsChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -P}
+         Set $PerformProgBitsChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { } $FpVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -P}
          Set $PerformProgBitsChange = (GetOutput $PerformProgBitsChangeCmd 1 -1)
 
          If (GetValue 24) == 1 Then

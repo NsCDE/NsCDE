@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ColorMgr}
 WindowLocaleTitle { Number Of Colors To Use }
-WindowSize 280 294
+WindowSize 296 358
 Colorset 22
 
 Init
@@ -17,10 +17,37 @@ Begin
       Set $Ncolors = 8
    End
 
+   # Static value for examining default
+   Set $StartNcolors = $Ncolors
+
+   Set $FpVariantScriptArg = (GetScriptArgument 2)
+   If $FpVariantScriptArg == {8} Then
+   Begin
+      Set $FpVariantArg = {8}
+      ChangeValue 6 1
+   End
+   Else
+   Begin
+      Set $FpVariantArg = {5}
+   End
+
+   Set $WsmVariantScriptArg = (GetScriptArgument 3)
+   If $WsmVariantScriptArg == {w} Then
+   Begin
+      Set $WsmVariantArg = {1}
+      ChangeValue 7 1
+   End
+   Else
+   Begin
+      Set $WsmVariantArg = {0}
+   End
+
    ChangeValue 5 1
 
    ChangeLocaleTitle 3 {Use 4 Colors Scheme}
    ChangeLocaleTitle 4 {Use 8 Colors Scheme}
+   ChangeLocaleTitle 6 { Color 8 for Front Panel and Icons}
+   ChangeLocaleTitle 7 { Color 22 for Workspace Manager}
 
    Set $DefaultTitle = (Gettext {Default}) { (} $Ncolors {)}
    ChangeTitle 5 $DefaultTitle
@@ -29,16 +56,19 @@ Begin
    ChangeFont 3 $DefaultFont
    ChangeFont 4 $DefaultFont
    ChangeFont 5 $DefaultFont
+   ChangeFont 6 $DefaultFont
+   ChangeFont 7 $DefaultFont
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
-   ChangeFont 7 $BtnFont
-   ChangeFont 8 $BtnFont
    ChangeFont 9 $BtnFont
+   ChangeFont 10 $BtnFont
+   ChangeFont 11 $BtnFont
 
    # Keybindings
-   Key Escape A 8 1 {KeyClose}
-   Key F1 A 9 1 {KeyHelp}
-   Key Help A 9 1 {KeyHelp}
+   Key Return A 9 1 {KeyOk}
+   Key Escape A 10 1 {KeyClose}
+   Key F1 A 11 1 {KeyHelp}
+   Key Help A 11 1 {KeyHelp}
 End
 
 Widget 1
@@ -58,7 +88,7 @@ End
 
 Widget 2
 Property
-   Size 264 170
+   Size 280 170
    Position 8 54
    Type Rectangle
    Main
@@ -80,8 +110,12 @@ Property
       SingleClic :
       Begin
          Set $Ncolors = 4
+         Set $FpVariantArg = {5}
+         Set $WsmVariantArg = {0}
          ChangeValue 4 0
          ChangeValue 5 0
+         ChangeValue 6 0
+         ChangeValue 7 0
       End
 End
 
@@ -115,6 +149,13 @@ Property
       Begin
          ChangeValue 3 0
          ChangeValue 4 0
+         If (GetValue 6) == 1 Then
+         Begin
+            If $StartNcolors == 4 Then
+            Begin
+               ChangeValue 6 0
+            End
+         End
 
          If $Ncolors == {} Then
          Begin
@@ -124,9 +165,71 @@ Property
 End
 
 Widget 6
+   Property
+   Size 180 0
+   Position 10 234
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title { Color 8 for Front Panel and Icons}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 6) == 1 Then
+         Begin
+            ChangeValue 3 0
+            If $Ncolors == 4 Then
+            Begin
+               ChangeValue 4 1
+               ChangeValue 5 0
+               Set $Ncolors = 8
+            End
+            Set $FpVariantArg = {8}
+         End
+         Else
+         Begin
+            Set $FpVariantArg = {5}
+         End
+      End
+End
+
+Widget 7
+   Property
+   Size 180 0
+   Position 10 266
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title { Color 22 for Workspace Manager}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 7) == 1 Then
+         Begin
+            ChangeValue 3 0
+            If $Ncolors == 4 Then
+            Begin
+               ChangeValue 4 1
+               ChangeValue 5 0
+               Set $Ncolors = 8
+            End
+            Set $WsmVariantArg = 1
+         End
+         Else
+         Begin
+            Set $WsmVariantArg = 0
+         End
+      End
+End
+
+Widget 8
 Property
-   Size 270 0
-   Position 4 240
+   Size 286 0
+   Position 4 304
    Type Rectangle
 Main
    Case message of
@@ -135,10 +238,10 @@ Main
          End
 End
 
-Widget 7
+Widget 9
 Property
    Size 60 20
-   Position 16 254
+   Position 16 318
    Type PushButton
    Flags NoReliefString
    LocaleTitle {OK}
@@ -147,15 +250,21 @@ Property
       Case message of
       SingleClic :
       Begin
+         SendSignal 9 1
+      End
+      1 :
+      Begin
          Do {SendToModule ColorMgr SendString 20 1 } $Ncolors
+         Do {SendToModule ColorMgr SendString 20 2 } $FpVariantArg
+         Do {SendToModule ColorMgr SendString 20 3 } $WsmVariantArg
          Quit
       End
 End
 
-Widget 8
+Widget 10
 Property
    Size 60 20
-   Position 110 254
+   Position 118 318
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Cancel}
@@ -164,7 +273,7 @@ Property
       Case message of
       SingleClic :
       Begin
-         SendSignal 8 1
+         SendSignal 10 1
       End
       1 :
       Begin
@@ -172,10 +281,10 @@ Property
       End
 End
 
-Widget 9
+Widget 11
 Property
    Size 60 20
-   Position 204 254
+   Position 212 318
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
@@ -184,7 +293,7 @@ Property
       Case message of
       SingleClic :
       Begin
-         SendSignal 9 1
+         SendSignal 11 1
       End
       1 :
       Begin

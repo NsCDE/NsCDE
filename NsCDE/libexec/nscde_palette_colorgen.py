@@ -357,7 +357,7 @@ def readOneMotifColor(n,colorarg,pmode,colorset_number):
 #######################
 # End program functions
 #######################
-def genfvwmcolorset(palettefile,ncolors):
+def genfvwmcolorset(palettefile,ncolors,fpvariant,wsmvariant):
     palette=readPalette(palettefile)
     global use_4_colors
     if ncolors == 4: 
@@ -390,6 +390,9 @@ SetEnv NSCDE_PALETTE {palettename[0]}
 UnsetEnv NSCDE_PALETTE_NCOLORS
 SetEnv NSCDE_PALETTE_NCOLORS {ncolors}
 
+InfoStoreAdd fp_8color_variant {fpvariant}
+InfoStoreAdd wsmcolored {wsmvariant}
+
 # Bare default (should not be seen at all)
 Colorset 0 fg {fgg[3]}, bg {selg[8]}
 
@@ -420,11 +423,22 @@ Colorset 21 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[
 
 # 2nd Color for transient windows when Colors == 8
 Colorset 22 fg {fgg[6]}, bg {bgg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
+""".format(**locals())
 
-# Alternative variant for Front Panel, and Icons (see also Colorset 48)
+    if fpvariant == 5:
+        lines+="""
+# Front Panel variant of 21 - can be 5 or 8 variant - 5
+Colorset 23 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh {selg[5]}, Plain, NoShape
+
+""".format(**locals())
+    if fpvariant == 8:
+        lines+="""
+# Front Panel variant of 21 - can be 5 or 8 variant - 8
 Colorset 23 fg #ffffffffffff, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh {selg[8]}, Plain, NoShape
 
-# Light gaps on the Front Panel menu and iconify buttons (topShadowColor from cs #1)
+""".format(**locals())
+
+    lines+="""# Light gaps on the Front Panel menu and iconify buttons (topShadowColor from cs #1)
 Colorset 14 fg {tsg[2]}, bg {tsg[2]}, hi {tsg[2]}, sh {tsg[2]}, fgsh {tsg[2]}, Plain, NoShape
 
 # Dark gaps on the Front Panel menu and iconify buttons (bottomShadowColor from cs #1)
@@ -513,15 +527,21 @@ Colorset 46 fg #ffffffffffff, bg {bgg[3]}, hi {tsg[3]}, sh {bsg[3]}, fgsh #33003
 Colorset 47 fg #ffffffffffff, bg {bgg[3]}, hi {bsg[3]}, sh {tsg[3]}, fgsh #330033003300, Plain, NoShape
 """.format(**locals())
 
-    lines+="""
-# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
-# 8th color alternative (see Colorset 23)
-Colorset 48 fg #ffffffffffff, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh #330033003300, Plain, NoShape
-
-# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3)
+    if fpvariant == 5:
+        lines+="""
+# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3) when FP variant is 5
 Colorset 49 fg #ffffffffffff, bg {bgg[5]}, hi {tsg[5]}, sh {bsg[5]}, fgsh #330033003300, Plain, NoShape
 
-# Transparent handler (WSM, MonthDayApplet, CheckMailApplet ...)
+""".format(**locals())
+
+    if fpvariant == 8:
+        lines+="""
+# Exception from Colorset 1: Panel SubMenus Font Shadow darker (fgsh == sel_color_3) when FP variant is 8
+Colorset 49 fg #ffffffffffff, bg {bgg[8]}, hi {tsg[8]}, sh {bsg[8]}, fgsh #330033003300, Plain, NoShape
+
+""".format(**locals())
+
+    lines+="""# Transparent handler (WSM, MonthDayApplet, CheckMailApplet ...)
 Colorset 52 fg #ffffffffffff, Transparent
 
 # For ItemDraw Widget of FvwmScript (used in WSM)
@@ -688,11 +708,13 @@ def usage():
 def main():
     shorten_colorhex = 0
     colorset_number = 69
+    fpvariant = 5
+    wsmvariant = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "cfCbp:i:n:S:sP:o:g:t:T:lh",
-                     ["palette=", "infile", "fvwm-colorsets", "colormgr", "backdrop", \
-                      "colorgen", "ncolors=", "csnum=", "shortencolorhex", "palettepart=", "outdir=", \
-                      "fext=", "test=", "fvwmtest=", "list-colors"])
+        opts, args = getopt.getopt(sys.argv[1:], "c8wfCbp:i:n:S:sP:o:g:t:T:lh",
+                     ["palette=", "infile", "fp-variant8", "wsm-variant", "fvwm-colorsets", "colormgr", \
+                      "backdrop", "colorgen", "ncolors=", "csnum=", "shortencolorhex", "palettepart=", \
+                      "outdir=", "fext=", "test=", "fvwmtest=", "list-colors"])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -701,7 +723,11 @@ def main():
     verbose = False
     for o, a in opts:
         if o in ("-f", "--fvwm-colorsets"):
-            genfvwmcolorset(palettefile,ncolors)
+            genfvwmcolorset(palettefile,ncolors,fpvariant, wsmvariant)
+        elif o in ("-8", "--fp-variant8"):
+            fpvariant = 8
+        elif o in ("-w", "--wsm-variant"):
+            wsmvariant = 1
         elif o in ("-C", "--colormgr"):
             gencolormgrpreview(palettefile,ncolors)
         elif o in ("-b", "--backdrop"):
