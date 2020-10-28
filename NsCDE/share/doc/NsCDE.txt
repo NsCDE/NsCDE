@@ -2,7 +2,7 @@ Not so Common Desktop Environment (NsCDE) Manual
 
 M. Z.
 
-   This manual describes version 1.0.rc24 of NsCDE.
+   This manual describes version 1.0.rc28 of NsCDE.
 
    Copyright © 2019 M. Z.
 
@@ -129,8 +129,9 @@ M. Z.
           and NsCDE
 
    19. Patches for FVWM
-   20. Credits
-   21. Missing parts and existing problems
+   20. FVWM3 Support
+   21. Credits
+   22. Missing parts and existing problems
      __________________________________________________________
 
 1. Introduction
@@ -1019,7 +1020,7 @@ M. Z.
 
    GTK2 and GTK3 are heavy work part. Here, we are using work
    derived from one CDE theme for XFCE desktop and GTK2 + GTK3,
-   purified and adapted for NsCDE (see Section 20). This is
+   purified and adapted for NsCDE (see Section 21). This is
    written in python. If turned on, this will produce
    $HOME/.themes/NsCDE directory with the theme for GTK2 and GTK3,
    and will edit $HOME/.gtkrc-2.0 and
@@ -3907,7 +3908,79 @@ NsCDE
    xdowrapper script.
      __________________________________________________________
 
-20. Credits
+20. FVWM3 Support
+
+   NsCDE from version 1.0rc28 experimentaly supports FVWM3, but it
+   is and will stay compatible for FVWM2 as long as possible. In
+   the time of this writing, FVWM3 was in it's first releases and
+   had some problems with workspaces and screens layout, as well
+   as FvwmPager and FvwmBacker in multi-monitor setup.
+   Nevertheless, NsCDE will search for "fvwm" and then "fvwm3" in
+   $PATH. If both, FVWM3 and FVWM2 are installed on the same
+   system, FVWM2 will be find first currently. This can be
+   overriden in user's environment (for example $HOME/.bashrc) by
+   setting environment variable FVWM_BIN with the value which
+   points to name of the FVWM binary, or full path to the binary
+   if for example, FVWM3 was installed from source in some
+   non-standard place out of the path.
+
+   For example:
+export FVWM_BIN=/opt/fvwm3/bin/fvwm3
+
+   or ...
+export FVWM_BIN=fvwm3
+
+   or ...
+export FVWM_BIN=fvwm
+
+   When running with FVWM3, NsCDE will behave almost identical as
+   in FVWM2, with benefit of RandR support in multiple monitors
+   setup. This allows dynamic addition and removal of physical
+   monitors and better management of such configurations.
+
+   Probably the most notable feature of FVWM3 is
+   DesktopConfiguration. FVWM3 configuration parameter
+   DesktopConfiguration decides of workspaces layout in case of
+   multiple monitors. For now, there are two options: "global"
+   (default) and "per-monitor". First option is very similar in
+   layout to old Xinerama support in FVWM2, while second one
+   splits workspaces and different parts of different workspaces
+   can be shown on different monitors. For NsCDE to work with
+   this, currently there is one workaround in the for of external
+   background setter. For more information and instructions, refer
+   to the $NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README.
+   As in the future more desktop layouts are planned by FVWM3
+   developers, this setting will most probably get it's GUI
+   control usable on FVWM3 in the Workspaces and Pages Manager.
+   Currently, NsCDE provides DesktopConfiguration directive as an
+   example for optional uncommenting in the
+   $FVWM_USERDIR/NsCDE.conf.
+
+   Third difference between NsCDE under FVWM2 and FVWM3 is
+   logging. While FVWM2 logged all it's actions on X server's
+   standard output and standard error, which usually ended up in
+   $HOME/.xsession-errors, FVWM3 logs into default or configured
+   log file. In NsCDE this file is $FVWM_USERDIR/tmp/fvwm.log. By
+   default FVWM3 does not log anything there if not invoked with
+   "-v" option, but logging can be toggled by sending SIGUSR2 to
+   FVWM3 process. When Watch Errors menu item is called, it has
+   one new option on personalized window menu which is called from
+   the first (left) titlebar button: Togle FVWM3 Logging. When
+   opening this log window, FVWM3 logging will be enabled almost
+   immediately. To have logging enabled as soon as possible when
+   FVWM3 is started or restarted, infostore variable
+   $[infostore.fvwm3_default_logging] should be set in
+   $FVWM_USERDIR/NsCDE.conf.
+
+   Caution: using NsCDE under FVWM3 is still a bit experimental.
+   Any misbehaviour should be carefully distinguished if it is
+   NsCDE or FVWM3 bug while deciding where to report bugs.
+   Watching logs, trying to trigger the same error under FVWM2
+   will be a good starting point for diagnostic of such problems
+   which may manifest itself.
+     __________________________________________________________
+
+21. Credits
 
    Apart from FVWM, GTK integration framework was forked from one
    advanced theme, clock is old standalone widget which I have
@@ -3921,7 +3994,7 @@ NsCDE
      * For using Xscreensaver: Jamie Zawinski
      __________________________________________________________
 
-21. Missing parts and existing problems
+22. Missing parts and existing problems
 
      * Application Manager: Maybe with the help of some extensible
        (but sane and standalone, with titlebar) file manager, but

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.0.rc24">
-<!ENTITY date "September 2020">
+<!ENTITY appversion "1.0.rc28">
+<!ENTITY date "November 2020">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -5194,6 +5194,79 @@ triangles on subpanel launcher buttons, and XOverrideFontCursor dynamic preloadi
 library piece which will handle XC_left_ptr for some FvwmScript(1) widgets instead
 of strange default of the XC_hand2. Subpanel window names will be set by the xdotool(1)
 xdowrapper script.
+</para>
+</sect1>
+
+<sect1 id="NsCDE-FVWM3">
+<title>FVWM3 Support</title>
+<para>
+NsCDE from version 1.0rc28 experimentaly supports FVWM3, but it is and
+will stay compatible for FVWM2 as long as possible. In the time of this
+writing, FVWM3 was in it's first releases and had some problems with
+workspaces and screens layout, as well as FvwmPager and FvwmBacker in
+multi-monitor setup. Nevertheless, NsCDE will search for "fvwm" and then
+"fvwm3" in <varname>$PATH</varname>. If both, FVWM3 and FVWM2 are installed
+on the same system, FVWM2 will be find first currently. This can be overriden
+in user's environment (for example <filename>$HOME/.bashrc</filename>) by
+setting environment variable <varname>FVWM_BIN</varname> with the value which
+points to name of the FVWM binary, or full path to the binary if for example,
+FVWM3 was installed from source in some non-standard place out of the path.
+</para>
+<para>
+For example:
+<programlisting>
+<![CDATA[export FVWM_BIN=/opt/fvwm3/bin/fvwm3]]>
+</programlisting>
+or ...
+<programlisting>
+<![CDATA[export FVWM_BIN=fvwm3]]>
+</programlisting>
+or ...
+<programlisting>
+<![CDATA[export FVWM_BIN=fvwm]]>
+</programlisting>
+</para>
+<para>
+When running with FVWM3, NsCDE will behave almost identical as in FVWM2, with
+benefit of RandR support in multiple monitors setup. This allows dynamic
+addition and removal of physical monitors and better management of such
+configurations.
+</para>
+<para>
+Probably the most notable feature of FVWM3 is <varname>DesktopConfiguration</varname>.
+FVWM3 configuration parameter <varname>DesktopConfiguration</varname> decides
+of workspaces layout in case of multiple monitors. For now, there are two
+options: "global" (default) and "per-monitor". First option is very similar
+in layout to old Xinerama support in FVWM2, while second one splits workspaces
+and different parts of different workspaces can be shown on different
+monitors. For NsCDE to work with this, currently there is one workaround in
+the for of external background setter. For more information and instructions, refer
+to the <filename>$NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README</filename>.
+As in the future more desktop layouts are planned by FVWM3 developers, this
+setting will most probably get it's GUI control usable on FVWM3 in the
+<link linkend="NsCDE-WsPgMgr">Workspaces and Pages Manager</link>. Currently, NsCDE
+provides DesktopConfiguration directive as an example for optional uncommenting in
+the <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+</para>
+<para>
+Third difference between NsCDE under FVWM2 and FVWM3 is logging. While FVWM2 logged
+all it's actions on X server's standard output and standard error, which usually
+ended up in <filename>$HOME/.xsession-errors</filename>, FVWM3 logs into default
+or configured log file. In NsCDE this file is <filename>$FVWM_USERDIR/tmp/fvwm.log</filename>.
+By default FVWM3 does not log anything there if not invoked with "-v" option, but
+logging can be toggled by sending SIGUSR2 to FVWM3 process. When <guimenuitem>Watch Errors</guimenuitem>
+menu item is called, it has one new option on personalized window menu which is
+called from the first (left) titlebar button: <guimenuitem>Togle FVWM3 Logging</guimenuitem>.
+When opening this log window, FVWM3 logging will be enabled almost immediately. To have logging
+enabled as soon as possible when FVWM3 is started or restarted, infostore variable
+<varname>$[infostore.fvwm3_default_logging]</varname> should be set in
+<filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+</para>
+<para>
+Caution: using NsCDE under FVWM3 is still a bit experimental. Any misbehaviour should
+be carefully distinguished if it is NsCDE or FVWM3 bug while deciding where to report
+bugs. Watching logs, trying to trigger the same error under FVWM2 will be a good
+starting point for diagnostic of such problems which may manifest itself.
 </para>
 </sect1>
 
