@@ -32,7 +32,7 @@ function check_dependencies
       dep_exit 20
    fi
 
-   for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3
+   for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3 gettext
    do
       whence -q $exe
       retval=$?

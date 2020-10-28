@@ -1214,6 +1214,15 @@ both checked.
 </para></listitem>
 </itemizedlist>
 </para>
+<para>
+If installed, NsCDE can use rofi(1) command and application launcher from the
+keybinding Meta+F2 instead of built in Exec Dialog. For this to work,
+InfoStore variable <varname>nscde_use_rofi</varname> must be set to "1" in
+<filename>$FVWM_USERDIR/NsCDE.conf</filename>. Rofi is integrated with
+NsCDE color theme and will be set up on the first use, which lasts 3 seconds
+initially and after changing color theme with
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+</para>
 
 </sect2>
 
@@ -2729,6 +2738,7 @@ Some of the important FVWM Infostore variables which can be set only by the edit
 <listitem><para>InfoStoreAdd nscde_use_xscreensaver 0|1</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_stalonetray 0|1</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_dunst 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_rofi 0|1</para></listitem>
 <listitem><para>InfoStoreAdd nscde_use_xsettingsd 0|1</para></listitem>
 <listitem><para>InfoStoreAdd wsm.eco 0|1</para></listitem>
 <listitem><para>InfoStoreAdd windowlist.fontsize <varname>small | medium | large</varname></para></listitem>
@@ -4836,7 +4846,7 @@ InitFunction in <filename>$FVWM_USERDIR/NsCDE-Init.conf</filename> or by using d
 from this very file (default NsCDE-Init.conf has an example for this).
 </para>
 <para>
-Small python program <emphasis>dex(1)</emphasis> can be installed and used fromo InitFunction
+Small python program <emphasis>dex(1)</emphasis> can be installed and used from InitFunction
 in <filename>$FVWM_USERDIR/NsCDE-Init.conf</filename>. This program can be configured to read
 system autostart files in <filename class="directory">/etc/xdg/autostart</filename> and/or
 user's from <filename class="directory">$HOME/.config/autostart</filename>. From here,

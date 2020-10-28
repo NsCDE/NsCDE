@@ -1077,6 +1077,14 @@ M. Z.
      * Up/Down: Brings back and forth command history in text
        dialog box
      * Sun Help and F1: Displays this help text.
+
+   If installed, NsCDE can use rofi(1) command and application
+   launcher from the keybinding Meta+F2 instead of built in Exec
+   Dialog. For this to work, InfoStore variable nscde_use_rofi
+   must be set to "1" in $FVWM_USERDIR/NsCDE.conf. Rofi is
+   integrated with NsCDE color theme and will be set up on the
+   first use, which lasts 3 seconds initially and after changing
+   color theme with Color Style Manager.
      __________________________________________________________
 
 4.6. Font Style Manager
@@ -2185,6 +2193,7 @@ M. Z.
      * InfoStoreAdd nscde_use_xscreensaver 0|1
      * InfoStoreAdd nscde_use_stalonetray 0|1
      * InfoStoreAdd nscde_use_dunst 0|1
+     * InfoStoreAdd nscde_use_rofi 0|1
      * InfoStoreAdd nscde_use_xsettingsd 0|1
      * InfoStoreAdd wsm.eco 0|1
      * InfoStoreAdd windowlist.fontsize small | medium | large
@@ -3610,7 +3619,7 @@ M. Z.
    by using dex autostarter from this very file (default
    NsCDE-Init.conf has an example for this).
 
-   Small python program dex(1) can be installed and used fromo
+   Small python program dex(1) can be installed and used from
    InitFunction in $FVWM_USERDIR/NsCDE-Init.conf. This program can
    be configured to read system autostart files in
    /etc/xdg/autostart and/or user's from $HOME/.config/autostart.

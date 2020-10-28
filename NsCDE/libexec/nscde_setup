@@ -11,32 +11,33 @@ export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
 export TEXTDOMAIN="nscde_setup"
 
 if [ -z $HOME ]; then
-   echo "Error: HOME is not set cannot continue."
+   gettext -s "Error: HOME is not set cannot continue."
    exit 3
 fi
 
 if [ -z $NSCDE_ROOT ]; then
-   echo "Error: NSCDE_ROOT is not set cannot continue."
+   gettext -s "Error: NSCDE_ROOT is not set cannot continue."
    exit 4
 fi
 
 if [ ! -e "$NSCDE_ROOT" ]; then
-   echo "Error: NSCDE_ROOT does not exist. Cannot continue."
+   gettext -s "Error: NSCDE_ROOT does not exist. Cannot continue."
    exit 5
 fi
 
 if [ -z $FVWM_USERDIR ]; then
-   echo "Error: FVWM_USERDIR is not set cannot continue."
+   gettext -s "Error: FVWM_USERDIR is not set cannot continue."
    exit 6
 fi
 
 function setup_nscde
 {
+   already_exists=$(gettext -s "already exists")
    if (($VERBOSE == 1)); then
       echo ""
       echo "#####################################################################"
       echo "#"
-      echo "# NsCDE First Run Setup"
+      gettext -s "# NsCDE First Run Setup"
       echo "#"
       echo "#####################################################################"
       echo ""
@@ -51,34 +52,37 @@ function setup_nscde
    fi
 
    if (($INTERACTIVE == 1)); then
-      echo "Enter RETURN to run this script"
+      gettext -s "Enter RETURN to run setup"
       read RET
    fi
 
    if [ ! -e "${FVWM_USERDIR}/NsCDE-Colorset.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Generating NsCDE fvwm Colorset ..."
+         gettext -s "Generating NsCDE fvwm Colorset ..."
       fi
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/NsCDE-Colorset.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/NsCDE-Colorset.conf already exists."
+         echo -ne "${FVWM_USERDIR}/NsCDE-Colorset.conf ${already_exists}"
       fi
    fi
 
    if (($VERBOSE == 1)); then
-      echo "Setting up X resources in $HOME/.NsCDE - pieces that do not exist:"
+      localebits1=$(gettext -s "Setting up X resources in")
+      localebits2=$(gettext -s "pieces that do not exist:")
+      echo "$localebits1 $HOME/.NsCDE - $localebits2"
       echo "(Xdefaults, Xdefaults.local, Xdefaults.fontdefs, app-defaults) ..."
    fi
 
    # Xdefaults includes
+   localebits5=$(gettext -s "Initializing default")
    if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/config_templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Xdefaults already exists."
+         echo "${FVWM_USERDIR}/Xdefaults ${already_exists}."
       fi
    fi
 
@@ -86,7 +90,7 @@ function setup_nscde
       touch "${FVWM_USERDIR}/Xdefaults.local"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Xdefaults.local already exists."
+         echo "${FVWM_USERDIR}/Xdefaults.local ${already_exists}."
       fi
    fi
 
@@ -94,7 +98,7 @@ function setup_nscde
       cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Xdefaults.fontdefs already exists."
+         echo "${FVWM_USERDIR}/Xdefaults.fontdefs ${already_exists}."
       fi
    fi
 
@@ -102,7 +106,7 @@ function setup_nscde
       cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Xdefaults.mouse already exists."
+         echo "${FVWM_USERDIR}/Xdefaults.mouse ${already_exists}."
       fi
    fi
 
@@ -117,7 +121,7 @@ function setup_nscde
       done
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/app-defaults already exists."
+         echo "${FVWM_USERDIR}/app-defaults ${already_exists}."
       fi
    fi
 
@@ -126,43 +130,44 @@ function setup_nscde
       cp "${NSCDE_ROOT}/share/config_templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Xsettingsd.conf already exists."
+         echo "${FVWM_USERDIR}/Xsettingsd.conf ${already_exists}."
       fi
    fi
 
    # Bare background before backer setup
    if [ ! -e "${FVWM_USERDIR}/.BGdefault" ]; then
       if (($VERBOSE == 1)); then
-         echo "Writing default background pixel ${FVWM_USERDIR}/.BGdefault ..."
+         localebits4=$(gettext -s "Writing default background pixel")
+         echo "$localebits4 ${FVWM_USERDIR}/.BGdefault ..."
       fi
       cp ${NSCDE_ROOT}/share/config_templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/.BGdefault already exists."
+         echo "${FVWM_USERDIR}/.BGdefault ${already_exists}."
       fi
    fi
 
    # Initial NsCDE.conf after InitFunction is run
    if [ ! -e "${FVWM_USERDIR}/NsCDE.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Initializing default ${FVWM_USERDIR}/NsCDE.conf ..."
+         echo "$localebits5 ${FVWM_USERDIR}/NsCDE.conf ..."
       fi
       cp ${NSCDE_ROOT}/config/NsCDE.conf ${FVWM_USERDIR}/NsCDE.conf
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/NsCDE.conf already exists."
+         echo "${FVWM_USERDIR}/NsCDE.conf ${already_exists}."
       fi
    fi
 
    # Initial NsCDE-Init.conf for user session customizations
    if [ ! -e "${FVWM_USERDIR}/NsCDE-Init.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Initializing default ${FVWM_USERDIR}/NsCDE-Init.conf ..."
+         echo "$localebits5 ${FVWM_USERDIR}/NsCDE-Init.conf ..."
       fi
       cp ${NSCDE_ROOT}/config/NsCDE-Init.conf ${FVWM_USERDIR}/NsCDE-Init.conf
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/NsCDE-Init.conf already exists."
+         echo "${FVWM_USERDIR}/NsCDE-Init.conf ${already_exists}."
       fi
    fi
 
@@ -172,12 +177,12 @@ function setup_nscde
    do
       if [ ! -e "${FVWM_USERDIR}/NsCDE-${localcf}.local" ]; then
          if (($VERBOSE == 1)); then
-            echo "Initializing default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
+            echo "$localebits5 ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
          fi
          cp ${NSCDE_ROOT}/share/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
       else
          if (($VERBOSE == 1)); then
-            echo "${FVWM_USERDIR}/NsCDE-${localcf}.local already exists."
+            echo "${FVWM_USERDIR}/NsCDE-${localcf}.local ${already_exists}."
          fi
       fi
    done
@@ -185,31 +190,34 @@ function setup_nscde
    # GeometryDB ini
    if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
       if (($VERBOSE == 1)); then
-         echo "Initializing default ${FVWM_USERDIR}/GeoDB.ini ..."
+         echo "$localebits5 ${FVWM_USERDIR}/GeoDB.ini ..."
       fi
       cp ${NSCDE_ROOT}/share/config_templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/GeoDB.ini already exists."
+         echo "${FVWM_USERDIR}/GeoDB.ini ${already_exists}."
       fi
    fi
 
    # Misc paths
    if (($VERBOSE == 1)); then
-      echo "Making additional subdirectories in ${FVWM_USERDIR} ..."
+      localebits6=$(gettext -s "Making additional subdirectories in")
+      echo "$localebits6 ${FVWM_USERDIR} ..."
    fi
    mkdir -p ${FVWM_USERDIR}/{palettes,templates,fontsets,backdrops,photos}
 
    # Disable "fancy" curors
    if [ ! -e "$HOME/.icons/default/index.theme" ]; then
       if (($VERBOSE == 1)); then
-         echo "Writing $HOME/.icons/default/index.theme ..."
+         localebits7=$(gettext -s "Writing")
+         echo "$localebits7 $HOME/.icons/default/index.theme ..."
       fi
       mkdir -p "$HOME/.icons/default"
       echo -ne '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.icons/default/index.theme already exists. Setting default cursor theme."
+         localebits8=$(gettext -s "Setting default cursor theme")
+         echo "${HOME}/.icons/default/index.theme ${already_exists}. ${localebits8}."
          $NSCDE_ROOT/bin/confset.py -t ini -c settingz.ini -s "Icon Theme" -k Inherits -v dmz-aa
       fi
    fi
@@ -219,7 +227,7 @@ function setup_nscde
    if (($? == 0)) && [ ! -r "$FVWM_USERDIR/WSM.conf" ]; then
       if [ "x$LANGUAGE" != "x" ] && [ "$LANUGAGE" != "en" ] && [ "$LANGUAGE" != "C" ] && [ "$LANGUAGE" != "POSIX" ]; then
          if (($VERBOSE == 1)); then
-            echo "Setting up localized workspace names."
+            gettext -s "Setting up localized workspace names."
          fi
          wspcnt=1
          for wsp in One Two Three Four Five Six Seven Eight
@@ -236,13 +244,14 @@ function setup_nscde
    # Gtk2
    if [ ! -e "$HOME/.gtkrc-2.0" ]; then
       if (($VERBOSE == 1)); then
-         echo "Writing $HOME/.gtkrc-2.0 ..."
+         echo "$localebits7 $HOME/.gtkrc-2.0 ..."
       fi
       echo -ne 'gtk-key-theme-name = "Emacs"\ngtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
       echo -ne 'gtk-icon-theme-name = "NsCDE"\ngtk-button-images = 0\ngtk-menu-images = 0\ngtk-cursor-blink = 0\n' >> "$HOME/.gtkrc-2.0"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.gtkrc-2.0 already exists. Setting NsCDE theme options."
+         echo -ne "${HOME}/.gtkrc-2.0 ${already_exists}. "
+         gettext -s "Setting NsCDE theme options."
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-key-theme-name -v '"Emacs"'
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v '"NsCDE"'
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v '"DejaVu Serif Book 10"'
@@ -256,7 +265,7 @@ function setup_nscde
    # Gtk3
    if [ ! -e "$HOME/.config/gtk-3.0/settings.ini" ]; then
       if (($VERBOSE == 1)); then
-         echo "Writing $HOME/.config/gtk-3.0/settings.ini ..."
+         echo "$localebits7 $HOME/.config/gtk-3.0/settings.ini ..."
       fi
       mkdir -p "$HOME/.config/gtk-3.0"
       echo -ne "[Settings]\ngtk-theme-name = NsCDE\ngtk-cursor-theme-name = dmz-aa\ngtk-button-images = 0\n" > "$HOME/.config/gtk-3.0/settings.ini"
@@ -279,39 +288,42 @@ function setup_nscde
    # Gtk2 and Gtk3 themes
    if [ ! -e "$HOME/.themes/NsCDE" ]; then
       if (($VERBOSE == 1)); then
-         echo "Generating default theme for Gtk2/Gtk3 in $HOME/.themes/NsCDE ..."
+         localebits9=$(gettext -s "Generating default theme for Gtk2/Gtk3 in")
+         echo "$localebits9 $HOME/.themes/NsCDE ..."
       fi
       mkdir -p "$HOME/.themes"
       $NSCDE_ROOT/libexec/themegen.py $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp $NSCDE_PALETTE_NCOLORS gtk2 gtk3
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.themes/NsCDE already exists."
+         echo "${HOME}/.themes/NsCDE ${already_exists}."
       fi
    fi
 
    # Qt4 and Qt5
    if [ ! -r "$HOME/.config/Trolltech.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Integrating Qt4 with generated Gtk2 theme ..."
+         gettext -s "Integrating Qt4 theme with generated Gtk2 theme ..."
       fi
       mkdir -p "$HOME/.config"
       echo -ne '[Qt]\nstyle=GTK+\n' > "$HOME/.config/Trolltech.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.config/Trolltech.conf already exists. Setting NsCDE style."
+         echo -ne "${HOME}/.config/Trolltech.conf ${already_exists}. "
+         gettext -s "Setting NsCDE style."
          $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v GTK+
       fi
    fi
 
    if [ ! -e "$HOME/.config/qt5ct/qt5ct.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "Integrating Qt5 with generated Gtk2 theme ..."
+         gettext -s "Integrating Qt5 theme with generated Gtk2 theme ..."
       fi
       mkdir -p "$HOME/.config/qt5ct"
       echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\n' > "$HOME/.config/qt5ct/qt5ct.conf"
    else
       if (($VERBOSE == 1)); then
-         echo "${HOME}/.config/qt5ct/qt5ct.conf already exists. Setting NsCDE style."
+         echo "${HOME}/.config/qt5ct/qt5ct.conf ${already_exists}."
+         gettext -s "Setting NsCDE style."
          $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
          $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
          $NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
@@ -321,148 +333,166 @@ function setup_nscde
    # Color Manager local hooks
    if [ ! -e "${FVWM_USERDIR}/libexec/colormgr.local" ]; then
       if (($VERBOSE == 1)); then
-         echo "Setting default ${FVWM_USERDIR}/libexec/colormgr.local ..."
+         setting_default=$(gettext -s "Setting default")
+         echo "$setting_default ${FVWM_USERDIR}/libexec/colormgr.local ..."
       fi
       mkdir -p "${FVWM_USERDIR}/libexec"
       cp ${NSCDE_ROOT}/share/config_templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
       chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/libexec/colormgr.local already exists."
+         echo "${FVWM_USERDIR}/libexec/colormgr.local ${already_exists}."
       fi
    fi
 
+   locale_enabling=$(gettext -s "Enabling:")
+   locale_not_enabling=$(gettext -s "Not Enabling:")
+   locale_enabled_by_default=$(gettext -s "Enabled by default:")
+   locale_disabling=$(gettext -s "Disabling:")
    if (($INTERACTIVE == 1)); then
-      echo -ne "Do you want to enable NsCDE-specific visual pager preview on page/desk change? (y|n)[y] \c"
+      localebits13=$(gettext -s "Do you want to enable NsCDE-specific visual pager preview on page/workspace change?")
+      echo -ne "$localebits13 (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
       fi
       if [ "x$ans" == "xy" ]; then
-         echo "Enabling: pageshowrootpager --> 1"
+         echo "${locale_enabling}: pageshowrootpager --> 1"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd pageshowrootpager 0/InfoStoreAdd pageshowrootpager 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
       elif [ "x$ans" == "xn" ]; then
-         echo "Not enabling: pageshowrootpager --> 0"
+         echo "${locale_not_enabling} pageshowrootpager --> 0"
       else
-         echo "Answer not understood."
-         echo "Not enabling: pageshowrootpager --> 0"
+         gettext -s "Answer not understood."
+         echo "$locale_not_enabling pageshowrootpager --> 0"
       fi
 
-      echo -ne "Do you want to enable X Screen Saver? (y|n)[y] \c"
+      localebits14=$(gettext -s "Do you want to enable X Screen Saver?")
+      whence -q xscreensaver
+      if (($? != 0)); then
+         localebits14a=$(gettext -s "WARNING: Xscreensaver installation not found.")
+         echo "$localebits14a"
+      fi
+      echo -ne "$localebits14 (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
       fi
       if [ "x$ans" == "xy" ]; then
-         echo "Enabled by default: nscde_use_xscreensaver --> 1"
+         echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
       elif [ "x$ans" == "xn" ]; then
-         echo "Disabling: nscde_use_xscreensaver --> 0"
+         echo "$locale_disabling nscde_use_xscreensaver --> 0"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_xscreensaver 1/InfoStoreAdd nscde_use_xscreensaver 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       else
-         echo "Answer not understood."
-         echo "Enabled by default: nscde_use_xscreensaver --> 1"
+         gettext -s "Answer not understood."
+         echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
       fi
 
       # Stalonetray - if it doesn't have configuration yet ready.
       if [ ! -e "${FVWM_USERDIR}/Stalonetray.conf" ]; then
          if (($VERBOSE == 1)); then
-            echo "Setting default ${FVWM_USERDIR}/Stalonetray.conf ..."
+            echo "$setting_default ${FVWM_USERDIR}/Stalonetray.conf ..."
          fi
          cp ${NSCDE_ROOT}/share/config_templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
       else
          if (($VERBOSE == 1)); then
-            echo "${FVWM_USERDIR}/Stalonetray.conf already in place."
+            localebits15=$(gettext -s "already in place")
+            echo "${FVWM_USERDIR}/Stalonetray.conf ${localebits15}."
          fi
       fi
 
-      echo -ne "Do you want to enable Stalonetray Tray? (y|n)[y] \c"
+      localebits16=$(gettext -s "Do you want to enable Stalonetray Tray?")
+      echo -ne "$localebits16 (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
       fi
       if [ "x$ans" == "xy" ]; then
-         echo "Enabled by default: nscde_use_stalonetray --> 1"
+         echo "$locale_enabled_by_default nscde_use_stalonetray --> 1"
       elif [ "x$ans" == "xn" ]; then
-         echo "Disabling: nscde_use_stalonetray --> 0"
+         echo "$locale_disabling nscde_use_stalonetray --> 0"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_stalonetray 1/InfoStoreAdd nscde_use_stalonetray 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       else
-         echo "Answer not understood."
-         echo "Enabled by default: nscde_use_stalonetray --> 1"
+         gettext -s "Answer not understood."
+         echo "$locale_enabled_by_default nscde_use_stalonetray --> 1"
       fi
 
       whence -q xsettingsd
       if (($? == 0)); then
-         echo -ne "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd? (y|n)[y] \c"
+         localebits17=$(gettext -s "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd?")
+         echo -ne "$localebits17 (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
          fi
          if [ "x$ans" == "xy" ]; then
-            echo "Enabling: nscde_use_xsettingsd --> 1"
+            echo "$locale_enabling nscde_use_xsettingsd --> 1"
             $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_xsettingsd 0/InfoStoreAdd nscde_use_xsettingsd 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          elif [ "x$ans" == "xn" ]; then
-            echo "Not enabling: nscde_use_xsettingsd --> 0"
+            echo "$locale_not_enabling nscde_use_xsettingsd --> 0"
          else
-            echo "Answer not understood."
-            echo "Not enabling: nscde_use_xsettingsd --> 0"
+            gettext -s "Answer not understood."
+            echo "$locale_not_enabling nscde_use_xsettingsd --> 0"
          fi
       fi
 
       whence -q dunst
       if (($? == 0)); then
-         echo -ne "Do you want to enable dunst notification daemon? (y|n)[y] \c"
+         localebits18=$(gettext -s "Do you want to enable dunst notification daemon?")
+         echo -ne "$localebits18 (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
          fi
          if [ "x$ans" == "xy" ]; then
-            echo "Enabling: nscde_use_dunst --> 1"
+            echo "$locale_enabling nscde_use_dunst --> 1"
             cp -f "$NSCDE_ROOT/share/config_templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
             $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd nscde_use_dunst 0/InfoStoreAdd nscde_use_dunst 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          elif [ "x$ans" == "xn" ]; then
-            echo "Not enabling: nscde_use_dunst --> 0"
+            echo "$locale_not_enabling nscde_use_dunst --> 0"
          else
-            echo "Answer not understood."
-            echo "Not enabling: nscde_use_dunst --> 0"
+            gettext -s "Answer not understood."
+            echo "$locale_not_enabling nscde_use_dunst --> 0"
          fi
       fi
 
       whence -q rofi
       if (($? == 0)); then
-         echo -ne "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog? (y|n)[y] \c"
+         localebits19=$(gettext -s "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog?")
+         echo -ne "$localebits19 (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
          fi
          if [ "x$ans" == "xy" ]; then
-            echo "Enabling: nscde_use_rofi --> 1"
+            echo "$locale_enabling nscde_use_rofi --> 1"
             $NSCDE_ROOT/bin/ised -c 's/# InfoStoreAdd nscde_use_rofi 1/InfoStoreAdd nscde_use_rofi 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          elif [ "x$ans" == "xn" ]; then
-            echo "Not enabling: nscde_use_rofi --> 0"
+            echo "$locale_not_enabling nscde_use_rofi --> 0"
          else
-            echo "Answer not understood."
-            echo "Not enabling: nscde_use_rofi --> 0"
+            gettext -s "Answer not understood."
+            echo "$locale_not_enabling nscde_use_rofi --> 0"
          fi
       fi
 
-      echo -ne "Do you want to remember last page on workspace when changing back to it? (y|n)[y] \c"
+      localebits20=$(gettext -s "Do you want to remember last page on workspace when changing back to it?")
+      echo -ne "$localebits20 (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
       fi
       if [ "x$ans" == "xy" ]; then
-         echo "Enabling: desklastpage --> 1"
+         echo "$locale_enabling desklastpage --> 1"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 0/InfoStoreAdd desklastpage 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
       elif [ "x$ans" == "xn" ]; then
-         echo "Not enabling: desklastpage --> 0"
+         echo "$locale_not_enabling desklastpage --> 0"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 1/InfoStoreAdd desklastpage 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       else
-         echo "Answer not understood."
-         echo "Not enabling: desklastpage --> 0"
+         gettext -s "Answer not understood."
+         echo "$locale_not_enabling desklastpage --> 0"
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 1/InfoStoreAdd desklastpage 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       fi
 
-      for filemgr in pcmanfm krusader caja nemo thunar dolphin nautilus
+      for filemgr in pcmanfm-qt pcmanfm krusader caja nemo thunar dolphin nautilus
       do
          whence -q $filemgr
          if (($? == 0)); then
@@ -471,16 +501,20 @@ function setup_nscde
          fi
       done
 
-      echo -ne "Your favorite X File Manager (command)? [${fmsugestion}] \c"
+      localebits21=$(gettext -s "Your favorite X File Manager (command)?")
+      locale_setting_filemgr=$(gettext -s "Setting X File Manager:")
+      locale_setting_proposed_filemgr=$(gettext -s "Setting Proposed X File Manager:")
+      locale_skipping_fm_set_later=$(gettext -s "Skipping File Manager selection. You can set it later in")
+      echo -ne "$localebits21 [${fmsugestion}] \c"
       read ans
       if [ "x$ans" != "x" ]; then
-         echo "Setting X File Manager: filemgr --> ${ans}"
+         echo "$locale_setting_filemgr filemgr --> ${ans}"
          $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
       elif [ "x${fmsugestion}" != "x" ]; then
-         echo "Setting Proposed X File Manager: filemgr --> ${fmsugestion}"
+         echo "$locale_setting_proposed_filemgr filemgr --> ${fmsugestion}"
          $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${fmsugestion}/g" -f "$FVWM_USERDIR/NsCDE.conf"
       else
-         echo "Skipping File Manager selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
+         echo "$locale_skipping_fm_set_later $FVWM_USERDIR/NsCDE.conf."
       fi
 
       for xeditor in gvim emacs xemacs nedit
@@ -492,45 +526,53 @@ function setup_nscde
          fi
       done
 
-      echo -ne "Your favorite X Text Editor (command)? [$xedit_suggest] \c"
+      localebits22=$(gettext -s "Your favorite X Text Editor (command)?")
+      echo -ne "$localebits22 [$xedit_suggest] \c"
+      locale_setting_editor=$(gettext -s "Setting X Text Editor:")
+      locale_setting_proposed_editor=$(gettext -s "Setting Proposed X Text Editor:")
+      locale_skipping_ed_set_later=$(gettext -s "Skipping X Editor selection. You can set it later in")
       read ans
       if [ "x$ans" != "x" ]; then
-         echo "Setting X Text Editor: xeditor --> ${ans}"
+         echo "$locale_setting_editor xeditor --> ${ans}"
          if [ "x$ans" != "gvim" ]; then
             $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd xeditor gvim/InfoStoreAdd xeditor ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
          fi
       elif [ "x${xedit_suggest}" != "x" ]; then
-         echo "Setting Proposed X Text Editor: xeditor --> ${xedit_suggest}"
+         echo "$locale_setting_proposed_editor xeditor --> ${xedit_suggest}"
          if [ "x$ans" != "gvim" ]; then
             $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd xeditor ${xedit_suggest}/g" -f "$FVWM_USERDIR/NsCDE.conf"
          fi
       else
-         echo "Skipping X Editor selection. You can set it in $FVWM_USERDIR/NsCDE.conf later."
+         echo "$locale_setting_proposed_editor $FVWM_USERDIR/NsCDE.conf."
       fi
    fi
 
    if (($VERBOSE == 1)); then
+      localebits23=$(gettext -s "terminal program in")
+      localebits24=$(gettext -s "or leave autodiscovery")
+      localebits25=$(gettext -s "Hint: See")
+      localebits26=$(gettext -s "for Gkrellm, X session and")
       sleep 1
-      echo '... done!'
+      gettext -s '... done!'
       echo ""
-      echo "Please select a color palette (default: Broica) and GUI widgets integrations"
-      echo "that you want to apply and confirm with OK in Color Style Manager"
+      gettext -s "Please select a color palette (default: Broica) and GUI widgets integrations"
+      gettext -s "that you want to apply and confirm with OK in Color Style Manager"
       sleep 2
       echo ""
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]'
-      echo "Logout and login again for the full changes to take effect."
+      gettext -s "Logout and login again for the full changes to take effect."
       echo ""
-      echo "You can set \$[infostore.terminal] variable to your favorite"
-      echo "terminal program in \$HOME/.NsCDE/NsCDE.conf or leave autodiscovery."
+      gettext -s "You can set \$[infostore.terminal] variable to your favorite"
+      echo "$localebits23 \$HOME/.NsCDE/NsCDE.conf ${localebits24}."
       echo ""
-      echo "Hint: See $NSCDE_ROOT/share/doc/examples for Gkrellm, X session and"
-      echo "other integration options you may want to apply."
+      echo "$localebits25 $NSCDE_ROOT/share/doc/examples $localebits26"
+      gettext -s "other integration options you may want to apply."
       sleep 1
       echo ""
    fi
 
    if (($INTERACTIVE == 1)); then
-      echo "Press RETURN to exit setup and use Color Style Manager now."
+      gettext -s "Press RETURN to finish setup and start Color Style Manager."
       read RET
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'EdgeThickness 1'
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'All ("ColorMgr", CirculateHit) AnimatedMove 50-50w 50-50w ewmhiwa'
