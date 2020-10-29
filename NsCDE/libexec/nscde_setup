@@ -69,14 +69,14 @@ function setup_nscde
    fi
 
    if (($VERBOSE == 1)); then
-      localebits1=$(gettext -s "Setting up X resources in")
-      localebits2=$(gettext -s "pieces that do not exist:")
-      echo "$localebits1 $HOME/.NsCDE - $localebits2"
+      locale_Setting_up_X_resources_in=$(gettext -s "Setting up X resources in")
+      locale_pieces_that_do_not_exist=$(gettext -s "pieces that do not exist:")
+      echo "$locale_Setting_up_X_resources_in $HOME/.NsCDE - $locale_pieces_that_do_not_exist"
       echo "(Xdefaults, Xdefaults.local, Xdefaults.fontdefs, app-defaults) ..."
    fi
 
    # Xdefaults includes
-   localebits5=$(gettext -s "Initializing default")
+   locale_Initializing_default=$(gettext -s "Initializing default")
    if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/config_templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
@@ -137,8 +137,8 @@ function setup_nscde
    # Bare background before backer setup
    if [ ! -e "${FVWM_USERDIR}/.BGdefault" ]; then
       if (($VERBOSE == 1)); then
-         localebits4=$(gettext -s "Writing default background pixel")
-         echo "$localebits4 ${FVWM_USERDIR}/.BGdefault ..."
+         locale_Writing_default_background_pixel=$(gettext -s "Writing default background pixel")
+         echo "$locale_Writing_default_background_pixel ${FVWM_USERDIR}/.BGdefault ..."
       fi
       cp ${NSCDE_ROOT}/share/config_templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
    else
@@ -150,7 +150,7 @@ function setup_nscde
    # Initial NsCDE.conf after InitFunction is run
    if [ ! -e "${FVWM_USERDIR}/NsCDE.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "$localebits5 ${FVWM_USERDIR}/NsCDE.conf ..."
+         echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE.conf ..."
       fi
       cp ${NSCDE_ROOT}/config/NsCDE.conf ${FVWM_USERDIR}/NsCDE.conf
    else
@@ -162,7 +162,7 @@ function setup_nscde
    # Initial NsCDE-Init.conf for user session customizations
    if [ ! -e "${FVWM_USERDIR}/NsCDE-Init.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "$localebits5 ${FVWM_USERDIR}/NsCDE-Init.conf ..."
+         echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE-Init.conf ..."
       fi
       cp ${NSCDE_ROOT}/config/NsCDE-Init.conf ${FVWM_USERDIR}/NsCDE-Init.conf
    else
@@ -177,7 +177,7 @@ function setup_nscde
    do
       if [ ! -e "${FVWM_USERDIR}/NsCDE-${localcf}.local" ]; then
          if (($VERBOSE == 1)); then
-            echo "$localebits5 ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
+            echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
          fi
          cp ${NSCDE_ROOT}/share/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
       else
@@ -190,7 +190,7 @@ function setup_nscde
    # GeometryDB ini
    if [ ! -e "${FVWM_USERDIR}/GeoDB.ini" ]; then
       if (($VERBOSE == 1)); then
-         echo "$localebits5 ${FVWM_USERDIR}/GeoDB.ini ..."
+         echo "$locale_Initializing_default ${FVWM_USERDIR}/GeoDB.ini ..."
       fi
       cp ${NSCDE_ROOT}/share/config_templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
    else
@@ -201,23 +201,23 @@ function setup_nscde
 
    # Misc paths
    if (($VERBOSE == 1)); then
-      localebits6=$(gettext -s "Making additional subdirectories in")
-      echo "$localebits6 ${FVWM_USERDIR} ..."
+      locale_making_additiona_subdirectories=$(gettext -s "Making additional subdirectories in")
+      echo "$locale_making_additiona_subdirectories ${FVWM_USERDIR} ..."
    fi
    mkdir -p ${FVWM_USERDIR}/{palettes,templates,fontsets,backdrops,photos}
 
    # Disable "fancy" curors
    if [ ! -e "$HOME/.icons/default/index.theme" ]; then
       if (($VERBOSE == 1)); then
-         localebits7=$(gettext -s "Writing")
-         echo "$localebits7 $HOME/.icons/default/index.theme ..."
+         locale_Writing=$(gettext -s "Writing")
+         echo "$locale_Writing $HOME/.icons/default/index.theme ..."
       fi
       mkdir -p "$HOME/.icons/default"
       echo -ne '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
    else
       if (($VERBOSE == 1)); then
-         localebits8=$(gettext -s "Setting default cursor theme")
-         echo "${HOME}/.icons/default/index.theme ${already_exists}. ${localebits8}."
+         locale_setting_default_cursor_theme=$(gettext -s "Setting default cursor theme")
+         echo "${HOME}/.icons/default/index.theme ${already_exists}. ${locale_setting_default_cursor_theme}."
          $NSCDE_ROOT/bin/confset.py -t ini -c settingz.ini -s "Icon Theme" -k Inherits -v dmz-aa
       fi
    fi
@@ -244,7 +244,7 @@ function setup_nscde
    # Gtk2
    if [ ! -e "$HOME/.gtkrc-2.0" ]; then
       if (($VERBOSE == 1)); then
-         echo "$localebits7 $HOME/.gtkrc-2.0 ..."
+         echo "$locale_Writing $HOME/.gtkrc-2.0 ..."
       fi
       echo -ne 'gtk-key-theme-name = "Emacs"\ngtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
       echo -ne 'gtk-icon-theme-name = "NsCDE"\ngtk-button-images = 0\ngtk-menu-images = 0\ngtk-cursor-blink = 0\n' >> "$HOME/.gtkrc-2.0"
@@ -265,7 +265,7 @@ function setup_nscde
    # Gtk3
    if [ ! -e "$HOME/.config/gtk-3.0/settings.ini" ]; then
       if (($VERBOSE == 1)); then
-         echo "$localebits7 $HOME/.config/gtk-3.0/settings.ini ..."
+         echo "$locale_Writing $HOME/.config/gtk-3.0/settings.ini ..."
       fi
       mkdir -p "$HOME/.config/gtk-3.0"
       echo -ne "[Settings]\ngtk-theme-name = NsCDE\ngtk-cursor-theme-name = dmz-aa\ngtk-button-images = 0\n" > "$HOME/.config/gtk-3.0/settings.ini"
@@ -288,8 +288,8 @@ function setup_nscde
    # Gtk2 and Gtk3 themes
    if [ ! -e "$HOME/.themes/NsCDE" ]; then
       if (($VERBOSE == 1)); then
-         localebits9=$(gettext -s "Generating default theme for Gtk2/Gtk3 in")
-         echo "$localebits9 $HOME/.themes/NsCDE ..."
+         locale_generating_default_theme_for_gtk2_gtk3_in=$(gettext -s "Generating default theme for Gtk2/Gtk3 in")
+         echo "$locale_generating_default_theme_for_gtk2_gtk3_in $HOME/.themes/NsCDE ..."
       fi
       mkdir -p "$HOME/.themes"
       $NSCDE_ROOT/libexec/themegen.py $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp $NSCDE_PALETTE_NCOLORS gtk2 gtk3
@@ -350,8 +350,8 @@ function setup_nscde
    locale_enabled_by_default=$(gettext -s "Enabled by default:")
    locale_disabling=$(gettext -s "Disabling:")
    if (($INTERACTIVE == 1)); then
-      localebits13=$(gettext -s "Do you want to enable NsCDE-specific visual pager preview on page/workspace change?")
-      echo -ne "$localebits13 (y|n)[y] \c"
+      locale_enable_visual_pager_question=$(gettext -s "Do you want to enable NsCDE-specific visual pager preview on page/workspace change?")
+      echo -ne "$locale_enable_visual_pager_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -366,13 +366,12 @@ function setup_nscde
          echo "$locale_not_enabling pageshowrootpager --> 0"
       fi
 
-      localebits14=$(gettext -s "Do you want to enable X Screen Saver?")
+      locale_enable_xscreensaver_question=$(gettext -s "Do you want to enable X Screen Saver?")
       whence -q xscreensaver
       if (($? != 0)); then
-         localebits14a=$(gettext -s "WARNING: Xscreensaver installation not found.")
-         echo "$localebits14a"
+         gettext -s "WARNING: Xscreensaver installation not found."
       fi
-      echo -ne "$localebits14 (y|n)[y] \c"
+      echo -ne "$locale_enable_xscreensaver_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -395,13 +394,13 @@ function setup_nscde
          cp ${NSCDE_ROOT}/share/config_templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
       else
          if (($VERBOSE == 1)); then
-            localebits15=$(gettext -s "already in place")
-            echo "${FVWM_USERDIR}/Stalonetray.conf ${localebits15}."
+            locale_already_in_place=$(gettext -s "already in place")
+            echo "${FVWM_USERDIR}/Stalonetray.conf ${locale_already_in_place}."
          fi
       fi
 
-      localebits16=$(gettext -s "Do you want to enable Stalonetray Tray?")
-      echo -ne "$localebits16 (y|n)[y] \c"
+      locale_enable_stalonetray_question=$(gettext -s "Do you want to enable Stalonetray Tray?")
+      echo -ne "$locale_enable_stalonetray_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -418,8 +417,8 @@ function setup_nscde
 
       whence -q xsettingsd
       if (($? == 0)); then
-         localebits17=$(gettext -s "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd?")
-         echo -ne "$localebits17 (y|n)[y] \c"
+         locale_enable_xsettingsd_question=$(gettext -s "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd?")
+         echo -ne "$locale_enable_xsettingsd_question (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
@@ -437,8 +436,8 @@ function setup_nscde
 
       whence -q dunst
       if (($? == 0)); then
-         localebits18=$(gettext -s "Do you want to enable dunst notification daemon?")
-         echo -ne "$localebits18 (y|n)[y] \c"
+         locale_enable_dunst_question=$(gettext -s "Do you want to enable dunst notification daemon?")
+         echo -ne "$locale_enable_dunst_question (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
@@ -457,8 +456,8 @@ function setup_nscde
 
       whence -q rofi
       if (($? == 0)); then
-         localebits19=$(gettext -s "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog?")
-         echo -ne "$localebits19 (y|n)[y] \c"
+         locale_run_rofi_question=$(gettext -s "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog?")
+         echo -ne "$locale_run_rofi_question (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then
             ans="y"
@@ -474,8 +473,8 @@ function setup_nscde
          fi
       fi
 
-      localebits20=$(gettext -s "Do you want to remember last page on workspace when changing back to it?")
-      echo -ne "$localebits20 (y|n)[y] \c"
+      locale_remember_workspace_question=$(gettext -s "Do you want to remember last page on workspace when changing back to it?")
+      echo -ne "$locale_remember_workspace_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -501,11 +500,11 @@ function setup_nscde
          fi
       done
 
-      localebits21=$(gettext -s "Your favorite X File Manager (command)?")
+      locale_your_favorite_X_File_Manager_command=$(gettext -s "Your favorite X File Manager (command)?")
       locale_setting_filemgr=$(gettext -s "Setting X File Manager:")
       locale_setting_proposed_filemgr=$(gettext -s "Setting Proposed X File Manager:")
       locale_skipping_fm_set_later=$(gettext -s "Skipping File Manager selection. You can set it later in")
-      echo -ne "$localebits21 [${fmsugestion}] \c"
+      echo -ne "$locale_your_favorite_X_File_Manager_command [${fmsugestion}] \c"
       read ans
       if [ "x$ans" != "x" ]; then
          echo "$locale_setting_filemgr filemgr --> ${ans}"
@@ -526,8 +525,8 @@ function setup_nscde
          fi
       done
 
-      localebits22=$(gettext -s "Your favorite X Text Editor (command)?")
-      echo -ne "$localebits22 [$xedit_suggest] \c"
+      locale_your_favorite_X_Text_Editor_command=$(gettext -s "Your favorite X Text Editor (command)?")
+      echo -ne "$locale_your_favorite_X_Text_Editor_command [$xedit_suggest] \c"
       locale_setting_editor=$(gettext -s "Setting X Text Editor:")
       locale_setting_proposed_editor=$(gettext -s "Setting Proposed X Text Editor:")
       locale_skipping_ed_set_later=$(gettext -s "Skipping X Editor selection. You can set it later in")
@@ -548,10 +547,10 @@ function setup_nscde
    fi
 
    if (($VERBOSE == 1)); then
-      localebits23=$(gettext -s "terminal program in")
-      localebits24=$(gettext -s "or leave autodiscovery")
-      localebits25=$(gettext -s "Hint: See")
-      localebits26=$(gettext -s "for Gkrellm, X session and")
+      locale_terminal_program_in=$(gettext -s "terminal program in")
+      locale_or_leave_autodiscovery=$(gettext -s "or leave autodiscovery")
+      locale_Hint_See=$(gettext -s "Hint: See")
+      locale_for_Gkrellm_X_session_and=$(gettext -s "for Gkrellm, X session and")
       sleep 1
       gettext -s '... done!'
       echo ""
@@ -563,9 +562,9 @@ function setup_nscde
       gettext -s "Logout and login again for the full changes to take effect."
       echo ""
       gettext -s "You can set \$[infostore.terminal] variable to your favorite"
-      echo "$localebits23 \$HOME/.NsCDE/NsCDE.conf ${localebits24}."
+      echo "$locale_terminal_program_in \$HOME/.NsCDE/NsCDE.conf ${locale_or_leave_autodiscovery}."
       echo ""
-      echo "$localebits25 $NSCDE_ROOT/share/doc/examples $localebits26"
+      echo "$locale_Hint_See $NSCDE_ROOT/share/doc/examples $locale_for_Gkrellm_X_session_and"
       gettext -s "other integration options you may want to apply."
       sleep 1
       echo ""
