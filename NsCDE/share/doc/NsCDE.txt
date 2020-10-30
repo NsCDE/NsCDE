@@ -2520,8 +2520,16 @@ M. Z.
      * Meta+Alt+F in the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
        this keybinding again, restores a window.
-     * Meta+Alt+Insert takes a screenshot of the root window with
-       200 ms delay
+     * Meta+Shift+Print takes a screenshot of the root window with
+       3 seconds delay. Screenshots in PNG format are saved in
+       XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is not
+       defined.
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+Control+Print pops cross cursor to pick selected
+       screen area for screenshot. Screenshots in PNG format are
+       saved in XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is
+       not defined.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Meta+F1 invokes default terminal app
@@ -2809,10 +2817,12 @@ M. Z.
        double click action deiconifies a window
      * Middle pointer click on icon calls m_IconM2 menu
      * Right pointer click on icon directly deiconifies a window
-     * Left double click on the root window calls Root Menu whith
-       handy shortcuts for calling visual pagers and window lists.
+     * Left click on the root window calls Root Menu whith handy
+       shortcuts for calling visual pagers and window lists.
        Submenu "Window Operations" will show Window Options
        actions.
+     * Left double click on the root window calls Window
+       Operations.
      * Middle click calls FVWM WindowList super-menu see fvwm(1)
        for WindowList
      * Right click calls main root menu MenuFvwmRoot
