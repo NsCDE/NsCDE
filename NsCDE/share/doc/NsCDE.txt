@@ -2471,10 +2471,20 @@ M. Z.
      * Alt+F6 raises or lowers the window
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+F7 maximizes window 100% (whole screen + decorations)
+     * Alt+F7 maximizes window 100% (whole screen + decorations);
+       when pressed again it maximizes to 86% (stretch), while
+       third press will put window into normal state. We can say
+       how window is cycling between normal, stretched an
+       maximized state. This is a cyclic keybinding in a "shrink"
+       direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+F8 maximizes window ~ 80% - avoids Front Panel
+     * Alt+F8 maximizes window ~ 86% - avoids Front Panel; when
+       pressed again it maximizes to 100% (whole screen +
+       decorations); third call to Alt+F8 restores window into
+       normal state. We can say how window is cycling between
+       normal, stretched and maximized state. This is a cyclic
+       keybinding in a "grow" direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F9 is empty
@@ -2777,13 +2787,14 @@ M. Z.
      * Titlebar 2nd (right) button right click: Shade (Roll
        up/down) Window
      * Titlebar 3rd (rightmost) button left click: (Un)Maximize
-       Window 82% double click (un)maximizes 100%, covering Front
-       Panel and it's area
+       Window 86% or up to the Front Panel on the bottom of the
+       screen. Double click (un)maximizes 100%, covering Front
+       Panel and it's EWMH panel area
      * Titlebar 3rd (rightmost) button middle click: (Un)Maximizes
-       82% and makes window sticky or unsticks it depending on
+       86% and makes window sticky or unsticks it depending on
        window's initial state
      * Titlebar 3rd (rightmost) button right click: (Un)Maximizes
-       82% and makes window raise or lower depending on window's
+       86% and makes window raise or lower depending on window's
        initial state
      * Titlebar left click: Moves window on move, raises/lowers on
        click
@@ -3208,9 +3219,9 @@ M. Z.
        only.
      * GeoDB.ini: part of the Geometry Manager functionality.
        Written and read by the bin/confset.py and bin/confget.py
-       on Save Geometry" and Reposition Window from Window
-       Operations menu. Windows-like ini files are WAY nicer than
-       dconf and such binary registry-like facilities.
+       on Save Geometry" and Reposition from Extended and Standard
+       Window Operations menus. Windows-like ini files are WAY
+       nicer than dconf and such binary registry-like facilities.
      * Xdefaults: Read on startup by xrdb(1).
      * Xdefaults.local, Xdefaults.fontdefs, Xdefaults.mouse:
        Included with preprocessor directives from Xdefaults
@@ -3424,6 +3435,8 @@ M. Z.
      * Visual Pager NsCDE addon Option
      * Disable or enable XscreenSaver
      * Disable or enable use of the XSETTINGS xsettingsd daemon
+     * Disable or enable use of Rofi Launcher on Meta+F1 if
+       installed
      * Enable NsCDE to remember last used page on workspace if
        selected
      * Configure favorite X file manager, if desired

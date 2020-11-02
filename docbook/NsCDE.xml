@@ -3117,7 +3117,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+F7</keysym> maximizes window 100% (whole screen + decorations)
+  <keysym>Alt+F7</keysym> maximizes window 100% (whole screen + decorations);
+  when pressed again it maximizes to 86% (stretch), while third press will put
+  window into normal state. We can say how window is cycling between normal, stretched an
+  maximized state. This is a cyclic keybinding in a "shrink" direction.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -3125,7 +3128,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+F8</keysym> maximizes window ~ 80% - avoids Front Panel
+  <keysym>Alt+F8</keysym> maximizes window ~ 86% - avoids Front Panel; when pressed again
+  it maximizes to 100% (whole screen + decorations); third call to Alt+F8 restores
+  window into normal state. We can say how window is cycling between normal, stretched and
+  maximized state. This is a cyclic keybinding in a "grow" direction.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -3632,18 +3638,19 @@ menu, and to refresh all windows on the screen.
 </para></listitem>
 
 <listitem><para>
-  Titlebar 3rd (rightmost) button left click: (Un)Maximize Window 82%
-    double click (un)maximizes 100%, covering Front Panel and it's area
+  Titlebar 3rd (rightmost) button left click: (Un)Maximize Window 86% or up to
+  the Front Panel on the bottom of the screen. Double click (un)maximizes 100%,
+  covering Front Panel and it's EWMH panel area
 </para></listitem>
 
 <listitem><para>
-  Titlebar 3rd (rightmost) button middle click: (Un)Maximizes 82% and
+  Titlebar 3rd (rightmost) button middle click: (Un)Maximizes 86% and
     makes window sticky or unsticks it depending on window's initial
     state
 </para></listitem>
 
 <listitem><para>
-  Titlebar 3rd (rightmost) button right click: (Un)Maximizes 82% and
+  Titlebar 3rd (rightmost) button right click: (Un)Maximizes 86% and
     makes window raise or lower depending on window's initial state
 </para></listitem>
 
@@ -4323,8 +4330,8 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
 <listitem><para>
   <filename>GeoDB.ini</filename>: part of the Geometry Manager functionality. Written
     and read by the <command>bin/confset.py</command> and <command>bin/confget.py</command> on
-    <guimenuitem>Save Geometry</guimenuitem>" and <guimenuitem>Reposition Window</guimenuitem>
-    from Window Operations menu.
+    <guimenuitem>Save Geometry</guimenuitem>" and <guimenuitem>Reposition</guimenuitem>
+    from Extended and Standard Window Operations menus.
     Windows-like <emphasis>ini</emphasis> files are WAY nicer than dconf and such binary
     registry-like facilities.
 </para></listitem>
@@ -4633,12 +4640,13 @@ the terminal which will run automatically and will set up the following:
 <listitem><para> <filename>~/.config/qt5ct/qt5ct.conf</filename> </para></listitem>
 <listitem><para> <filename>~/NsCDE/Stalonetray.conf if it does not exist yet</filename> </para></listitem>
 <listitem><para> <filename>~/NsCDE/Dunst.conf if it does not exist yet</filename> </para></listitem>
-<listitem><para> <filename>Visual Pager NsCDE addon Option</filename> </para></listitem>
-<listitem><para> <filename>Disable or enable XscreenSaver</filename> </para></listitem>
-<listitem><para> <filename>Disable or enable use of the XSETTINGS xsettingsd daemon</filename> </para></listitem>
-<listitem><para> <filename>Enable NsCDE to remember last used page on workspace if selected</filename> </para></listitem>
-<listitem><para> <filename>Configure favorite X file manager, if desired</filename> </para></listitem>
-<listitem><para> <filename>Configure favorite X text editor, if desired</filename> </para></listitem>
+<listitem><para>Visual Pager NsCDE addon Option</para></listitem>
+<listitem><para>Disable or enable XscreenSaver</para></listitem>
+<listitem><para>Disable or enable use of the XSETTINGS xsettingsd daemon</para></listitem>
+<listitem><para>Disable or enable use of Rofi Launcher on <keysym>Meta+F1</keysym> if installed</para></listitem>
+<listitem><para>Enable NsCDE to remember last used page on workspace if selected</para></listitem>
+<listitem><para>Configure favorite X file manager, if desired</para></listitem>
+<listitem><para>Configure favorite X text editor, if desired</para></listitem>
 
 </itemizedlist>
 
