@@ -22,9 +22,9 @@ Begin
 
    # WarpPointer 2
    Key Escape A 2 1 {Quit}
-   Key H A 6 1 {DisplayHelp}
-   Key Help A 6 1 {DisplayHelp}
-   Key F1 A 6 1 {DisplayHelp}
+   Key H A 7 1 {DisplayHelp}
+   Key Help A 7 1 {DisplayHelp}
+   Key F1 A 7 1 {DisplayHelp}
    Key A A 3 1 {AllWSPToggle}
    Key Return A 2 3 {Move}
    Key Return C 2 3 {MoveGo}
@@ -33,7 +33,7 @@ Begin
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 5 $BtnFont
-   ChangeFont 6 $BtnFont
+   ChangeFont 7 $BtnFont
    ChangeFont 8 $BtnFont
 
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
@@ -52,6 +52,9 @@ Begin
    # which will be trimmed by LocaleTitle Widget directive.
    ChangeLocaleTitle 3 (GetTitle 3)
    ChangeLocaleTitle 10 (GetTitle 10)
+
+   # Get Max number of workspaces
+   Do {SendToModule OccupyWorkspace SendString 1 4 $[infostore.desknum]}
 End
 
 Widget 1
@@ -77,6 +80,33 @@ Widget 1
       Begin
          Set $WorkSpaces = (LastString)
          ChangeTitle 2 $WorkSpaces
+      End
+      3 :
+      Begin
+         Set $WinIdPlusName = (LastString)
+         Set $WinIdOut = {echo "} $WinIdPlusName {"}
+         Set $WinId = (GetOutput $WinIdOut 1 1)
+         Set $WinName = (GetOutput $WinIdOut 2 -1)
+
+         If $WinIdPlusName == {$[w.id]\n$[w.name]} Then
+         Begin
+            Set $WinId = {}
+               Set $WinName = {}
+         End
+         Else
+         Begin
+            Set $WinNameRest = (StrCopy $WinName 29 30)
+            If $WinNameRest <> {} Then
+            Begin
+               Set $WinName = (StrCopy $WinName 1 28) {...'}
+            End
+
+            ChangeTitle 9 $WinName
+         End
+      End
+      4 :
+      Begin
+         Set $MaxElements = (Add (LastString) -1)
       End
 End
 
@@ -106,7 +136,7 @@ Widget 2
          Set $DeskNo = (GetValue 2)
          If $WinName == {} Then
          Begin
-            Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
+            Do {Pick () SendToModule OccupyWorkspace SendString 1 3 $[w.id]\n$[w.name]}
          End
       End
       1 :
@@ -121,8 +151,6 @@ Widget 2
       Begin
          If (LastString) == {Down} Then
          Begin
-            Set $MaxElementsOut = {MaxDesk=$(echo '} (GetTitle 2) {' | tr "|" "\n" | wc -l); MaxDesk=$(($MaxDesk - 1)); echo $MaxDesk}
-            Set $MaxElements = (GetOutput $MaxElementsOut 1 1)
             If (GetValue 2) <= $MaxElements Then
             Begin
                Set $NextValue = (Add (GetValue 2) 1)
@@ -200,7 +228,7 @@ Widget 3
          Begin
             If $WinName == {} Then
             Begin
-               Do {Pick () SendToModule OccupyWorkspace SendString 9 1 $[w.id] $[w.name]}
+               Do {Pick () SendToModule OccupyWorkspace SendString 1 3 $[w.id]\n$[w.name]}
             End
 
             Set $OldDeskNo = $DeskNo
@@ -275,6 +303,13 @@ End
 
 Widget 6
    Property
+   Size 344 1
+   Position 2 248
+   Type Rectangle
+End
+
+Widget 7
+   Property
    Size 80 20
    Position 208 260
    Type PushButton
@@ -285,7 +320,7 @@ Widget 6
       Case message of
       SingleClic :
       Begin
-         SendSignal 6 1
+         SendSignal 7 1
       End
       1 :
       Begin
@@ -309,13 +344,6 @@ Widget 8
       End
 End
 
-Widget 7
-   Property
-   Size 344 1
-   Position 2 248
-   Type Rectangle
-End
-
 Widget 9
    Property
    Size 226 20
@@ -325,32 +353,5 @@ Widget 9
    Title {}
    Colorset 22
    Font "xft:::pixelsize=14"
-   Main
-      Case message of
-      1 :
-      Begin
-         Set $WinIdPlusName = (LastString)
-
-         If $WinIdPlusName == {$[w.id] $[w.name]} Then
-         Begin
-            Set $WinId = {}
-               Set $WinName = {}
-         End
-         Else
-         Begin
-            Set $WinIdOut = {echo "} $WinIdPlusName {"}
-            Set $WinId = (GetOutput $WinIdOut 1 1)
-            Set $WinNameOut = {echo "} $WinIdPlusName {" | cut -d" " -f2-22 | fold -w 38 -s}
-            Set $WinName = (GetOutput $WinNameOut 1 -1)
-            Set $WinNameLenOut = {echo "} $WinName {" | wc -c}
-            Set $WinNameLen = (GetOutput $WinNameLenOut 1 1)
-            If $WinNameLen > 34 Then
-            Begin
-               Set $WinNameOut = {echo "} $WinName {" | fold -w 32 | sed "s/\(.\)\(.\)\(.\)$/...'/g"}
-               Set $WinName = (GetOutput $WinNameOut 1 -1)
-            End
-            ChangeTitle 9 $WinName
-         End
-      End
 End
 
