@@ -120,7 +120,7 @@ Widget 1
       3 :
       Begin
          Set $WinIdPlusName = (LastString)
-         Set $WinIdOut = {echo -ne "} $WinIdPlusName {"}
+         Set $WinIdOut = {ksh -c 'echo -ne "} $WinIdPlusName {"'}
          Set $WinId = (GetOutput $WinIdOut 1 1)
          Set $WinName = (GetOutput $WinIdOut 2 -1)
 
@@ -549,6 +549,7 @@ Widget 9
 
             If $GoWithWindow == 0 Then
             Begin
+Do {Echo HHHHHHHHHHHHHHHHHHHHHHHHH: } $WinId { MoveToPage } $CurrentPageX { } $CurrentPageY { Nop }
                Do {f_Occupy } $WinId { MoveToPage } $CurrentPageX { } $CurrentPageY { Nop }
             End
             Else
