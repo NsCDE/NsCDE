@@ -220,8 +220,8 @@ GUI tools are:
 <listitem><para>ExecDialog - FvwmScript</para></listitem>
 <listitem><para>Font Style Manager (FontMgr) - FvwmScript + Korn Shell</para></listitem>
 <listitem><para>Keyboard Style Manager (KeyboardMgr) - FvwmScript</para></listitem>
-<listitem><para>Occupy Workspace (OccupyWorkspace) - FvwmScript</para></listitem>
-<listitem><para>Occupy Page (OccupyPage) - FvwmScript</para></listitem>
+<listitem><para>Occupy Workspace (Occupy) - FvwmScript</para></listitem>
+<listitem><para>Occupy Page (Occupy) - FvwmScript</para></listitem>
 <listitem><para>Window Geometry Manager - FvwmScript</para></listitem>
 <listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
 <listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
@@ -1478,85 +1478,53 @@ Key Bindings:
 
 </sect2>
 
-<sect2 id="NsCDE-OccupyWorkspace">
-<title>Occupy Workspace</title>
+<sect2 id="NsCDE-Occupy">
+<title>Occupy Workspace and Occupy Page</title>
 <para>
-This tool dialog is called from the left titlebar button menu. Or from
-<keysym>Meta+Space</keysym> key combination from the window context. It is exact copy of the
-same CDE dialog and it sends selected window to workspace selected from the list, or it can
-make it sticky across workspaces with <guibutton>All Workspaces</guibutton> checkbox pressed in.
-One addition here is the checkbox <guibutton>Go With the Window</guibutton>; when checked,
-makes NsCDE to change a current workspace and go where window was sent.
-<guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits
-Occupy Workspace tool without action taken.
+This tool dialog is called from the left titlebar button 1 Window Operations Menu as
+"Occupy Workspace" or "Occupy Page". Or from <keysym>Meta+Space</keysym> key for Workspace and
+<keysym>Alt+Space</keysym> for Page key combinations from the window context. Occupy tool is
+the extended (for FVWM pages) version of the same CDE dialog and it sends selected window to a
+workspace or page selected from the list, or it can make it sticky across workspaces and/or
+pages with <guibutton>All Workspaces</guibutton> or <guibutton>All Pages</guibutton> checkbox
+pressed in. One addition here is the checkbox <guibutton>Go With the Window</guibutton>; when checked,
+makes NsCDE to change a current workspace and/or page and go with the window, or where window was sent.
+Radio buttons <guibutton>Workspaces:</guibutton> and <guibutton>Pages:</guibutton> are changing the
+current context of operation between workspaces and pages, which is visually also manifested in the
+main list as the names of either workspaces or pages. If called as "Occupy Workspace", pages can also
+be selected and changed by switching this context with this buttons or with the <keysym>Space</keysym>
+key shortcut.
+<guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits Occupy tool without
+action taken.
 </para>
 <para>
 Key Bindings:
 <itemizedlist>
 <listitem><para>
-<keysym>Escape</keysym>: Quits Occupy Workspace without performing an action.
+<keysym>Escape</keysym>: Quits Occupy Tool without performing an action.
 </para></listitem>
 <listitem><para>
-<keysym>H</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
+<keysym>H, Sun Help and F1</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
 </para></listitem>
 <listitem><para>
-<keysym>A</keysym>: Checks <guilabel>All Workspaces</guilabel> checkbox.
-</para></listitem>
-<listitem><para>
-<keysym>Return</keysym>: Performs move action like OK button was pressed, without going to the
-selected workspace.
-</para></listitem>
-<listitem><para>
-<keysym>Ctrl+Return</keysym>: Performs move action like OK button was pressed, and changes active
-workspace to the same destination.
-</para></listitem>
-<listitem><para>
-<keysym>Up/Down</keysym>: Selects workspace in the up or down direction on the list.
-</para></listitem>
-<listitem><para>
-<keysym>Sun Help and F1</keysym>: Displays this help text.
-</para></listitem>
-</itemizedlist>
-</para>
-</sect2>
-
-<sect2 id="NsCDE-OccupyPage">
-<title>Occupy Page</title>
-<para>
-This tool dialog is called from the left titlebar button menu. Or from
-<keysym>Alt+Space</keysym> key combination from the window context. It is exact copy of the
-same CDE dialog and it sends selected window to named page selected from the list, or it can
-make it sticky across pages of the current workspace with <guibutton>All Pages</guibutton>
-checkbox pressed in. One addition here is the checkbox <guibutton>Go With the Window</guibutton>;
-when checked, makes NsCDE to change a current page and go where window was sent.
-<guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits
-Occupy Page tool.
-</para>
-<para>
-Key Bindings:
-<itemizedlist>
-<listitem><para>
-<keysym>Escape</keysym>: Quits Occupy Page without performing an action.
-</para></listitem>
-<listitem><para>
-<keysym>H</keysym>: Displays this help text, like <guibutton>Help</guibutton> was pressed.
-</para></listitem>
-<listitem><para>
-<keysym>A</keysym>: Checks <guilabel>All Pagess</guilabel> checkbox.
+<keysym>A</keysym>: Checks <guilabel>All Workspaces</guilabel> or if context is pages,
+<guilabel>All Pages</guilabel> checkbox.
 </para></listitem>
 <listitem><para>
 <keysym>Return</keysym>: Performs move action like OK button was pressed, without going to the
-selected page.
+selected workspace and/or page.
 </para></listitem>
 <listitem><para>
 <keysym>Ctrl+Return</keysym>: Performs move action like OK button was pressed, and changes active
-page to the same destination.
+workspace and/or page to the same destination where window has been sent.
 </para></listitem>
 <listitem><para>
-<keysym>Up/Down</keysym>: Selects page in the up or down direction on the list.
+<keysym>Up/Down</keysym>: Selects workspace or page in the up or down direction on the list.
 </para></listitem>
 <listitem><para>
-<keysym>Sun Help and F1</keysym>: Displays this help text.
+<keysym>Space</keysym>: Changes between workspaces and pages mode of operation. Actions on workspaces
+and pages can be comined in on tool call, no matter if it was initially called as "Occupy Workspace"
+or "Occupy Page".
 </para></listitem>
 </itemizedlist>
 </para>
@@ -2169,7 +2137,7 @@ Manager. Every button when clicked becomes editable and it's name can
 be changed (pres <keysym>return</keysym> on the text field after writing new name).
 This change will be written immediately WITHOUT pressing <guibutton>OK</guibutton> button.
 Name of the workspace will be changed across all NsCDE and FVWM (WSM, Occupy
-Workspace, menus etc) after window manager restart is triggered with <guibutton>OK</guibutton>
+Workspace/Page, menus etc) after window manager restart is triggered with <guibutton>OK</guibutton>
 button. In NsCDE, there are 4 options for desks: 2, 4, 6 and 8 desks.
 FVWM itself supports infinite number, but in NsCDE care must be taken
 about presentation of this desks in various applets and tools.

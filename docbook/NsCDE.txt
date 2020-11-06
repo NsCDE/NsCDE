@@ -44,24 +44,23 @@ M. Z.
         4.6. Font Style Manager
         4.7. Keyboard Style Manager
         4.8. Occupy Workspace and Occupy Page
-        4.9. Occupy Page
-        4.10. Window Geometry Manager
-        4.11. Mouse Style Manager
-        4.12. Power Save Manager
-        4.13. Subpanel Manager
-        4.14. Subpanel Settings
-        4.15. System Action Dialog
-        4.16. Sysinfo
-        4.17. Window Style Manager
+        4.9. Window Geometry Manager
+        4.10. Mouse Style Manager
+        4.11. Power Save Manager
+        4.12. Subpanel Manager
+        4.13. Subpanel Settings
+        4.14. System Action Dialog
+        4.15. Sysinfo
+        4.16. Window Style Manager
 
-              4.17.1. Configuration Section: Window Behavior
-              4.17.2. Configuration Section: Window Icons
-              4.17.3. Configuration Section: Page Edges
-              4.17.4. Configuration Section: Animation
-              4.17.5. Misc Window Style Manager Functions
+              4.16.1. Configuration Section: Window Behavior
+              4.16.2. Configuration Section: Window Icons
+              4.16.3. Configuration Section: Page Edges
+              4.16.4. Configuration Section: Animation
+              4.16.5. Misc Window Style Manager Functions
 
-        4.18. Workspaces and Pages Manager (WsPgMgr)
-        4.19. NsCDE Process Manager (NProcMgr)
+        4.17. Workspaces and Pages Manager (WsPgMgr)
+        4.18. NsCDE Process Manager (NProcMgr)
 
    5. Helper Dialogs
 
@@ -1296,33 +1295,7 @@ M. Z.
        "Occupy Workspace" or "Occupy Page".
      __________________________________________________________
 
-4.9. Occupy Page
-
-   This tool dialog is called from the left titlebar button menu.
-   Or from Alt+Space key combination from the window context. It
-   is exact copy of the same CDE dialog and it sends selected
-   window to named page selected from the list, or it can make it
-   sticky across pages of the current workspace with All Pages
-   checkbox pressed in. One addition here is the checkbox Go With
-   the Window; when checked, makes NsCDE to change a current page
-   and go where window was sent. OK performs an action, Dismiss
-   quits Occupy Page tool.
-
-   Key Bindings:
-
-     * Escape: Quits Occupy Page without performing an action.
-     * H: Displays this help text, like Help was pressed.
-     * A: Checks All Pagess checkbox.
-     * Return: Performs move action like OK button was pressed,
-       without going to the selected page.
-     * Ctrl+Return: Performs move action like OK button was
-       pressed, and changes active page to the same destination.
-     * Up/Down: Selects page in the up or down direction on the
-       list.
-     * Sun Help and F1: Displays this help text.
-     __________________________________________________________
-
-4.10. Window Geometry Manager
+4.9. Window Geometry Manager
 
    This tool dialog is called from the left titlebar button menu.
    Or from Meta+F6 key combination from the window context. This
@@ -1363,7 +1336,7 @@ M. Z.
      * Return: Performs action like Save button was pressed.
      __________________________________________________________
 
-4.11. Mouse Style Manager
+4.10. Mouse Style Manager
 
    Mouse Style Manager tool manages pointer - that is, mouse
    settings. It's duties are few more than only xset(1) m command.
@@ -1409,7 +1382,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.12. Power Save Manager
+4.11. Power Save Manager
 
    This tool manages screen DPMS values. It uses standard xset(1)
    to set screen standby, suspend and off times. Values are from 0
@@ -1436,7 +1409,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.13. Subpanel Manager
+4.12. Subpanel Manager
 
    Only in NsCDE. Tool written for managing FvwmButtons transient
    Subpanels which are opened from the Front Panel. It is called
@@ -1503,7 +1476,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.14. Subpanel Settings
+4.13. Subpanel Settings
 
    A small helper dialog with functions to change display name of
    the subpanel, width of the subpanel if titles require wider (or
@@ -1528,7 +1501,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.15. System Action Dialog
+4.14. System Action Dialog
 
    This is the login/logout form with the possibilities to reboot
    or shutdown the system, or change X session. It has also
@@ -1557,7 +1530,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.16. Sysinfo
+4.15. Sysinfo
 
    Copy of the Sun Solaris Workstation Information info dialog. It
    doesn't have any functions apart close (Dismiss) button. It's
@@ -1574,7 +1547,7 @@ M. Z.
    Sun Help and F1 displays this documentation.
      __________________________________________________________
 
-4.17. Window Style Manager
+4.16. Window Style Manager
 
    In the beginning, this GUI tool has been exact copy of the CDE
    Window Style Manager. In a way, this was bad. While providing
@@ -1604,7 +1577,7 @@ M. Z.
    is more than enough.
      __________________________________________________________
 
-4.17.1. Configuration Section: Window Behavior
+4.16.1. Configuration Section: Window Behavior
 
      * Only Pointer Inside Window Makes Focus: this configures so
        called MouseFocus as catch-all FVWM Style (*). See fvwm(1)
@@ -1640,7 +1613,7 @@ M. Z.
        MoveThreshold option. 5 pixels is the default.
      __________________________________________________________
 
-4.17.2. Configuration Section: Window Icons
+4.16.2. Configuration Section: Window Icons
 
      * Use Icon Box: if this option is selected, main FVWM
        configuration in NsCDE-Main.conf will spawn FvwmIconBox
@@ -1661,7 +1634,7 @@ M. Z.
      * Maximum Icon Size: in pixels. See IconSIze in fvwm(1).
      __________________________________________________________
 
-4.17.3. Configuration Section: Page Edges
+4.16.3. Configuration Section: Page Edges
 
      * Raise Front Panel On Page Change: as is says, when current
        active page changes, Front Panel will be raised.
@@ -1692,7 +1665,7 @@ M. Z.
        Defaults to 320 pixels.
      __________________________________________________________
 
-4.17.4. Configuration Section: Animation
+4.16.4. Configuration Section: Animation
 
    This tab controls behavior of the FvwmAnimate. See
    FvwmAnimate(1).
@@ -1708,7 +1681,7 @@ M. Z.
        really slower than on host system with the same parameters.
      __________________________________________________________
 
-4.17.5. Misc Window Style Manager Functions
+4.16.5. Misc Window Style Manager Functions
 
    Button Default on the top right edge of the window will read
    system defaults into options and they will be set in permanent
@@ -1724,7 +1697,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.18. Workspaces and Pages Manager (WsPgMgr)
+4.17. Workspaces and Pages Manager (WsPgMgr)
 
    This tool is specific to NsCDE. It configures three things:
 
@@ -1763,7 +1736,7 @@ M. Z.
    button is clicked with the right pointer button.
      __________________________________________________________
 
-4.19. NsCDE Process Manager (NProcMgr)
+4.18. NsCDE Process Manager (NProcMgr)
 
    This tool is specific to NsCDE. It manages NsCDE FVWM and rest
    processes, and re-reads given part of FVWM configuration on
@@ -2177,7 +2150,7 @@ M. Z.
    managed by the Workspace and Pages Manager while menudclicktm
    infostore variable is managed by the Pointer Style Manager. In
    NsCDE.conf, defaults for page edges, focus, icons, and such are
-   defined. See Section 4.17 and fvwm(1) for details. Since this
+   defined. See Section 4.16 and fvwm(1) for details. Since this
    is read by FVWM, user can set in this file local variables and
    additional configuration options if needful, which are not
    covered in other parts of the configuration. While applications

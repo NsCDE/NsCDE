@@ -1,0 +1,629 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Occupy}
+WindowLocaleTitle {Occupy}
+WindowSize 296 298
+Colorset 22
+
+Init
+Begin
+   If $WinName == {} Then
+   Begin
+      ChangeLocaleTitle 2 {Select Workspace, pick a Window.}
+   End
+   Else
+   Begin
+      ChangeTitle 2 $WinName
+   End
+
+   Set $OpModeArg = (GetScriptArgument 1)
+   Set $DeskNo = (Add (GetScriptArgument 2) 1)
+   Set $PageX = (GetScriptArgument 3)
+   Set $PageY = (GetScriptArgument 4)
+   Set $DesksNo = (Add (GetScriptArgument 5) -1)
+   Set $PageMatrixX = (GetScriptArgument 6)
+   Set $PageMatrixY = (GetScriptArgument 7)
+   Set $PagesNo = (Mult $PageMatrixX $PageMatrixY)
+
+   If $OpModeArg == {pg} Then
+   Begin
+      Set $OpMode = 2
+      ChangeWindowTitle (Gettext {Occupy Page})
+   End
+   Else
+   Begin
+      Set $OpMode = 1
+      ChangeWindowTitle (Gettext {Occupy Workspace})
+      ChangeValue 5 $DeskNo
+   End
+
+   # WarpPointer 2
+   Key Escape A 10 1 {Quit}
+   Key H A 11 1 {DisplayHelp}
+   Key Help A 11 1 {DisplayHelp}
+   Key F1 A 11 1 {DisplayHelp}
+   Key A A 6 1 {AllToggle}
+   Key Return A 1 5 {Move}
+   Key Return C 1 5 {MoveGo}
+   Key Down A 5 1 {Down}
+   Key Up A 5 1 {Up}
+   Key Space A 1 4 {ChangeOpMode}
+
+   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   ChangeFont 9 $BtnFont
+   ChangeFont 11 $BtnFont
+   ChangeFont 10 $BtnFont
+
+   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   ChangeFont 1 $LabelFont
+   ChangeFont 5 $LabelFont
+   ChangeFont 3 $LabelFont
+   ChangeFont 4 $LabelFont
+
+   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   ChangeFont 6 $SmallFont
+   ChangeFont 7 $SmallFont
+   ChangeFont 2 $SmallFont
+
+   Set $GoWithWindow = 0
+   Set $AllPages = 0
+   Set $AllWorkspaces = 0
+   Set $WorkspacesMode = {normal}
+   Set $PagesMode = {normal}
+
+   If $OpMode == 1 Then
+   Begin
+      Do {WindowId $[w.id] (StickyAcrossDesks) SendToModule Occupy SendString 6 1 AllToggle}
+   End
+   If $OpMode == 2 Then
+   Begin
+      Do {WindowId $[w.id] (StickyAcrossPages) SendToModule Occupy SendString 6 1 AllToggle}
+   End
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 6 (GetTitle 6)
+   ChangeLocaleTitle 7 (GetTitle 7)
+End
+
+Widget 1
+   Property
+   Size 4 20
+   Position 4 10
+   Type ItemDraw
+   Flags NoReliefString NoFocus Right
+   LocaleTitle {Window:}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      1 :
+      Begin
+         Set $WorkSpaces = (LastString)
+         If $OpMode == 1 Then
+         Begin
+            SendSignal 3 1
+         End
+      End
+      2 :
+      Begin
+         Set $Pages = (LastString)
+         If $OpMode == 2 Then
+         Begin
+            SendSignal 4 1
+         End
+      End
+      3 :
+      Begin
+         Set $WinIdPlusName = (LastString)
+         Set $WinIdOut = {echo -ne "} $WinIdPlusName {"}
+         Set $WinId = (GetOutput $WinIdOut 1 1)
+         Set $WinName = (GetOutput $WinIdOut 2 -1)
+
+         If $WinIdPlusName == {$[w.id]\n$[w.name]} Then
+         Begin
+            Set $WinId = {}
+               Set $WinName = {}
+         End
+         Else
+         Begin
+            Set $WinNameRest = (StrCopy $WinName 29 30)
+            If $WinNameRest <> {} Then
+            Begin
+               Set $WinName = (StrCopy $WinName 1 28) {...'}
+            End
+
+            ChangeTitle 2 $WinName
+         End
+      End
+      4 :
+      Begin
+         If (LastString) == {ChangeOpMode} Then
+         Begin
+            If $OpMode == 1 Then
+            Begin
+               SendSignal 4 1
+            End
+            Else
+            Begin
+               SendSignal 3 1
+            End
+         End
+      End
+      5 :
+      Begin
+         If (LastString) == {Move} Then
+         Begin
+            SendSignal 9 1
+         End
+         If (LastString) == {MoveGo} Then
+         Begin
+            SendSignal 7 1
+            SendSignal 9 1
+         End
+      End
+End
+
+Widget 2
+   Property
+   Size 218 20
+   Position 74 10
+   Type ItemDraw
+   Flags NoReliefString Left
+   Title {}
+   Colorset 22
+   Font "xft:::pixelsize=14"
+End
+
+Widget 3
+   Property
+   Size 100 0
+   Position 4 38
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Workspaces:}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 3 1
+      End
+      1 :
+      Begin
+         ChangeValue 4 0
+         ChangeValue 3 1
+         ChangeValue 6 $AllWorkspaces
+         Set $PagesListValue = (GetValue 5)
+         If $WorkspacesMode == {normal} Then
+         Begin
+            ChangeTitle 5 $WorkSpaces
+            If $WorkspacesListValue == {} Then
+            Begin
+               Set $WorkspacesListValue = (GetValue 5)
+            End
+            ChangeValue 5 $WorkspacesListValue
+         End
+         Else
+         Begin
+            ChangeLocaleTitle 5 { All Workspaces}
+            ChangeValue 5 1
+         End
+
+         ChangeWindowTitle (Gettext {Occupy Workspace})
+         ChangeLocaleTitle 6 { All Workspaces}
+         Set $OpMode = 1
+      End
+End
+
+Widget 4
+   Property
+   Size 100 0
+   Position 4 68
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Pages:}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 4 1
+      End
+      1 :
+      Begin
+         ChangeValue 3 0
+         ChangeValue 4 1
+         ChangeValue 6 $AllPages
+         Set $WorkspacesListValue = (GetValue 5)
+
+         If $PagesMode == {normal} Then
+         Begin
+            ChangeTitle 5 $Pages
+
+            If $CurrentPageNum == {} Then
+            Begin
+               Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
+               Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
+               ChangeValue 5 $CurrentPageNum
+            End
+            Else
+            Begin
+               If $PagesListValue > 0 Then
+               Begin
+                  ChangeValue 5 $PagesListValue
+               End
+            End
+         End
+         Else
+         Begin
+            ChangeLocaleTitle 5 { All Pages}
+            ChangeValue 5 1
+         End
+
+         ChangeWindowTitle (Gettext {Occupy Page})
+         ChangeLocaleTitle 6 { All Pages}
+         Set $OpMode = 2
+      End
+End
+
+Widget 5
+   Property
+   Size 178 134
+   Position 110 42
+   Type List
+   Flags NoReliefString
+   Title {}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $OpMode == 1 Then
+         Begin
+            Set $DeskNo = (GetValue 5)
+            Set $WorkspacesListValue = (GetValue 5)
+         End
+         If $OpMode == 2 Then
+         Begin
+            Set $PageNo = (GetValue 5)
+            Set $PagesListValue = (GetValue 5)
+         End
+         If $WinName == {} Then
+         Begin
+            Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]\n$[w.name]}
+         End
+      End
+      1 :
+      Begin
+         If $OpMode == 1 Then
+         Begin
+            SendSignal 5 2
+         End
+         If $OpMode == 2 Then
+         Begin
+            SendSignal 5 3
+         End
+      End
+      2 :
+      Begin
+         If (LastString) == {Down} Then
+         Begin
+            If (GetValue 5) <= $DesksNo Then
+            Begin
+               Set $NextValue = (Add (GetValue 5) 1)
+               ChangeValue 5 $NextValue
+               Set $DeskNo = $NextValue
+            End
+            Else
+            Begin
+               ChangeValue 5 1
+               Set $DeskNo = 1
+            End
+         End
+         If (LastString) == {Up} Then
+         Begin
+               Set $PrevValue = (Add (GetValue 5) -1)
+               If $PrevValue >= 1 Then
+               Begin
+                  ChangeValue 5 $PrevValue
+                  Set $DeskNo = $PrevValue
+               End
+               Else
+               Begin
+                  Set $MaxDesksNoFromOne = (Add $DesksNo 1)
+                  ChangeValue 5 $MaxDesksNoFromOne
+                  Set $DeskNo = $MaxDesksNoFromOne
+               End
+         End
+      End
+      3 :
+      Begin
+         If (LastString) == {Down} Then
+         Begin
+            If (GetValue 5) <= (Add $PagesNo -1) Then
+            Begin
+               Set $NextValue = (Add (GetValue 5) 1)
+               ChangeValue 5 $NextValue
+               Set $PageNo = $NextValue
+            End
+            Else
+            Begin
+               ChangeValue 5 1
+               Set $PageNo = 1
+            End
+         End
+         If (LastString) == {Up} Then
+         Begin
+            Set $PrevValue = (Add (GetValue 5) -1)
+            If $PrevValue >= 1 Then
+            Begin
+               ChangeValue 5 $PrevValue
+               Set $PageNo = $PrevValue
+            End
+            Else
+            Begin
+               ChangeValue 5 $PagesNo
+               Set $PageNo = $PagesNo
+            End
+         End
+      End
+End
+
+Widget 6
+   Property
+   Size 100 20
+   Position 112 184
+   Type CheckBox
+   Value 0
+   Flags NoReliefString
+   Title { All Workspaces}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 6 1
+      End
+      1 :
+      Begin
+         # Keyboard "A" handling
+         # Workspaces mode
+         If $OpMode == 1 Then
+         Begin
+            If (LastString) == {AllToggle} Then
+            Begin
+               If (GetValue 6) == 0 Then
+               Begin
+                  Set $AllWorkspaces = 1
+               End
+               Else
+               Begin
+                  Set $AllWorkspaces = 0
+               End
+               ChangeValue 6 $AllWorkspaces
+            End
+   
+            # Called with click
+            If (GetValue 6) == 1 Then
+            Begin
+               If $WinName == {} Then
+               Begin
+                  Do {Pick () SendToModule Occupy SendString 1 4 $[w.id]\n$[w.name]}
+               End
+   
+               Set $OldDeskNo = $DeskNo
+               Set $DeskNo = 999
+               ChangeLocaleTitle 5 { All Workspaces}
+               ChangeValue 5 1
+               Set $WorkspacesMode = {allworkspaces}
+            End
+            If (GetValue 6) == 0 Then
+            Begin
+               ChangeTitle 5 $WorkSpaces
+               ChangeValue 5 $OldDeskNo
+               Set $DeskNo = $OldDeskNo
+               Set $WorkspacesMode = {normal}
+            End
+            Set $AllWorkspaces = (GetValue 6)
+         End
+
+         # Keyboard "A" handling
+         # Pages mode
+         If $OpMode == 2 Then
+         Begin
+            If (LastString) == {AllToggle} Then
+            Begin
+               If (GetValue 6) == 0 Then
+               Begin
+                  Set $AllPages = 1
+               End
+               Else
+               Begin
+                  Set $AllPages = 0
+               End
+               ChangeValue 6 $AllPages
+            End
+   
+            # Called with click
+            If (GetValue 6) == 1 Then
+            Begin
+               If $WinName == {} Then
+               Begin
+                  Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]\n$[w.name]}
+               End
+   
+               Set $OldPageNo = $PageNo
+               Set $PageNo = 999
+               ChangeLocaleTitle 5 { All Pages}
+               ChangeValue 5 1
+               Set $PagesMode = {allpages}
+            End
+            If (GetValue 6) == 0 Then
+            Begin
+               ChangeTitle 5 $Pages
+               If $OldPageNo <> {} Then
+               Begin
+                  ChangeValue 5 $OldPageNo
+               End
+               Else
+               Begin
+                  Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
+                  Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
+                  ChangeValue 5 $CurrentPageNum
+               End
+               Set $PageNo = $OldPageNo
+               Set $PagesMode = {normal}
+            End
+            Set $AllPages = (GetValue 6)
+         End
+      End
+End
+
+Widget 7
+   Property
+   Size 100 20
+   Position 112 214
+   Type CheckBox
+   Value 0
+   Flags NoReliefString
+   Title { Go with the Window}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 7 1
+      End
+      1 :
+      Begin
+         Set $GoWithWindow = 1
+      End
+End
+
+Widget 8
+   Property
+   Size 292 1
+   Position 2 248
+   Type Rectangle
+End
+
+Widget 9
+   Property
+   Size 80 20
+   Position 8 260
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 9 1
+      End
+      1 :
+      Begin
+         If $PageNo <> 999 Then
+         Begin
+            Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '^} $PageNo { '}
+            Set $CurrentPage = (GetOutput $CurrentPageCmd 1 -1)
+            Set $CurrentPageX = (StrCopy $CurrentPage 3 3)
+            Set $CurrentPageY = (StrCopy $CurrentPage 5 5)
+            If $CurrentPageX == { } Then
+            Begin
+               Set $CurrentPageX = (StrCopy $CurrentPage 4 4)
+            End
+            If $CurrentPageY == { } Then
+            Begin
+               Set $CurrentPageY = (StrCopy $CurrentPage 6 6)
+            End
+
+            If $GoWithWindow == 0 Then
+            Begin
+               Do {f_Occupy } $WinId { MoveToPage } $CurrentPageX { } $CurrentPageY { Nop }
+            End
+            Else
+            Begin
+               Do {f_Occupy } $WinId { MoveToPage } $CurrentPageX { } $CurrentPageY { GoToPage }
+            End
+         End
+
+         If $DeskNo <> 999 Then
+         Begin
+            If $GoWithWindow == 0 Then
+            Begin
+               Do {f_Occupy } $WinId { MoveToDesk 0 } (Add $DeskNo -1) { Nop }
+            End
+            Else
+            Begin
+               Do {f_Occupy } $WinId { MoveToDesk 0 } (Add $DeskNo -1) { GoToDesk }
+            End
+         End
+
+         If $DeskNo == 999 Then
+         Begin
+            Do {WindowId } $WinId { StickAcrossDesks True}
+         End
+
+         If $PageNo == 999 Then
+         Begin
+            Do {WindowId } $WinId { StickAcrossPages True}
+         End
+
+         Quit
+      End
+End
+
+Widget 10
+   Property
+   Size 80 20
+   Position 108 260
+   Type PushButton
+   LocaleTitle {Dismiss}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+      1 :
+      Begin
+         Set $qstr = (LastString)
+         If $qstr == {Quit} Then
+         Begin
+            Quit
+         End
+      End
+End
+
+Widget 11
+   Property
+   Size 80 20
+   Position 208 260
+   Type PushButton
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 11 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.Occupy Workspace]" $[NSCDE_ROOT]/share/doc/html/NsCDE-Occupy.html}
+      End
+End
+
