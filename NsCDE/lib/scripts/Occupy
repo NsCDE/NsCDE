@@ -83,6 +83,9 @@ Begin
       Do {WindowId $[w.id] (StickyAcrossPages) SendToModule Occupy SendString 6 1 AllToggle}
    End
 
+   Do {WindowId $[w.id] (StickyAcrossDesks) SendToModule Occupy SendString 6 2 Run}
+   Do {WindowId $[w.id] (StickyAcrossPages) SendToModule Occupy SendString 6 3 Run}
+
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
    ChangeLocaleTitle 6 (GetTitle 6)
@@ -213,6 +216,8 @@ Widget 3
          End
          Else
          Begin
+            ChangeValue 6 1
+            Set $DeskNo = 999
             ChangeLocaleTitle 5 { All Workspaces}
             ChangeValue 5 1
          End
@@ -266,6 +271,8 @@ Widget 4
          End
          Else
          Begin
+            ChangeValue 6 1
+            Set $PageNo = 999
             ChangeLocaleTitle 5 { All Pages      }
             ChangeValue 5 1
          End
@@ -486,6 +493,14 @@ Widget 6
             End
             Set $AllPages = (GetValue 6)
          End
+      End
+      2 :
+      Begin
+         Set $WorkspacesMode = {allworkspaces}
+      End
+      3 :
+      Begin
+         Set $PagesMode = {allpages}
       End
 End
 
