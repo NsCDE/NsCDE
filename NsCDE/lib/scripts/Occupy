@@ -11,6 +11,7 @@ Colorset 22
 
 Init
 Begin
+   # Pick mode out of window context initially
    If $WinName == {} Then
    Begin
       ChangeLocaleTitle 2 {Select Workspace, pick a Window.}
@@ -20,15 +21,21 @@ Begin
       ChangeTitle 2 $WinName
    End
 
+   # Mode of operation
    Set $OpModeArg = (GetScriptArgument 1)
+
+   # Dynamic current values
    Set $DeskNo = (Add (GetScriptArgument 2) 1)
    Set $PageX = (GetScriptArgument 3)
    Set $PageY = (GetScriptArgument 4)
+
+   # Configured workspaces and pages static arguments
    Set $DesksNo = (Add (GetScriptArgument 5) -1)
    Set $PageMatrixX = (GetScriptArgument 6)
    Set $PageMatrixY = (GetScriptArgument 7)
    Set $PagesNo = (Mult $PageMatrixX $PageMatrixY)
 
+   # OpMode 1 is workspaces operation, OpMode 2 is pages mode of operation
    If $OpModeArg == {pg} Then
    Begin
       Set $OpMode = 2
@@ -41,6 +48,7 @@ Begin
       ChangeValue 5 $DeskNo
    End
 
+   # Keyboard shortcuts for navigation, toggling and action
    Key Escape A 10 1 {Quit}
    Key H A 11 1 {DisplayHelp}
    Key Help A 11 1 {DisplayHelp}
@@ -68,12 +76,26 @@ Begin
    ChangeFont 7 $SmallFont
    ChangeFont 2 $SmallFont
 
+   #
+   # Defaults for variables during initialization
+   #
+
+   # Do not go with window
    Set $GoWithWindow = 0
+
+   # Not sticky
    Set $AllPages = 0
    Set $AllWorkspaces = 0
    Set $WorkspacesMode = {normal}
    Set $PagesMode = {normal}
 
+   # Starred states of Workspaces and Pages radio buttons
+   Set $StarredWspSet = 0
+   Set $StarredPgSet = 0
+   Set $InitialDeskNo = $DeskNo
+   Set $InitialPageNoSet = 0
+
+   # This takes care of handling sticky windows across workspaces as well as pages
    If $OpMode == 1 Then
    Begin
       Do {WindowId $[w.id] (StickyAcrossDesks) SendToModule Occupy SendString 6 1 AllToggle}
@@ -82,7 +104,6 @@ Begin
    Begin
       Do {WindowId $[w.id] (StickyAcrossPages) SendToModule Occupy SendString 6 1 AllToggle}
    End
-
    Do {WindowId $[w.id] (StickyAcrossDesks) SendToModule Occupy SendString 6 2 Run}
    Do {WindowId $[w.id] (StickyAcrossPages) SendToModule Occupy SendString 6 3 Run}
 
@@ -92,6 +113,8 @@ Begin
    ChangeLocaleTitle 7 (GetTitle 7)
 End
 
+# Upper Left static "Window" label. Serves as execution and message passing
+# widget under the hood.
 Widget 1
    Property
    Size 4 20
@@ -103,6 +126,9 @@ Widget 1
    Colorset 22
    Main
       Case message of
+      # Accept list of workspaces in FvwmScript List menu format
+      # send signal to workspaces radio button if mode of operation
+      # is workspaces
       1 :
       Begin
          Set $WorkSpaces = (LastString)
@@ -111,6 +137,7 @@ Widget 1
             SendSignal 3 1
          End
       End
+      # Same as "1 :" but for pages
       2 :
       Begin
          Set $Pages = (LastString)
@@ -119,11 +146,14 @@ Widget 1
             SendSignal 4 1
          End
       End
+      # Accept $[w.id] from f_SendToOccupy, send it to "4 :" that will obtain
+      # window name from it.
       3 :
       Begin
          Set $WinId = (LastString)
          Do {Current WindowId } $WinId { SendToModule Occupy SendString 1 4 $[w.name]}
       End
+      # Get window name from "3 :", set it on widget 2
       4 :
       Begin
          Set $WinName = (LastString)
@@ -144,6 +174,8 @@ Widget 1
             ChangeTitle 2 $WinName
          End
       End
+      # Accept keyboard shortcut SPACE to change mode of operation
+      # between workspaces (1) and pages (2) ...
       5 :
       Begin
          If (LastString) == {ChangeOpMode} Then
@@ -158,6 +190,8 @@ Widget 1
             End
          End
       End
+      # Accept action to finally move the window or to move it and go
+      # with it on that workspace and/or page
       6 :
       Begin
          If (LastString) == {Move} Then
@@ -172,6 +206,7 @@ Widget 1
       End
 End
 
+# Window name from "1 4" goes here
 Widget 2
    Property
    Size 218 20
@@ -183,6 +218,7 @@ Widget 2
    Font "xft:::pixelsize=14"
 End
 
+# Toggle workspaces mode of operation
 Widget 3
    Property
    Size 100 0
@@ -205,6 +241,51 @@ Widget 3
          ChangeValue 3 1
          ChangeValue 6 $AllWorkspaces
          Set $PagesListValue = (GetValue 5)
+
+         # This block takes care for putting (*) at the end of
+         # Pages: label on its radio button when something is
+         # changed from the initial default. Special case is 999
+         # which represents sticky state. There is also procedure
+         # for removing (*) when settings are put back as it was
+         # initially.
+         If $OpMode == 2 Then
+         Begin
+            If $PageNo <> {} Then
+            Begin
+               If $StarredPgSet <> 1 Then
+               Begin
+                  If $PageNo == 999 Then
+                  Begin
+                     Set $InitialPageNo = 999
+                  End
+                  Else
+                  Begin
+                     Set $OrigPgTitle = (GetTitle 4)
+                     Set $StarredPgTitle = $OrigPgTitle {*}
+                     ChangeTitle 4 $StarredPgTitle
+                     Set $StarredPgSet = 1
+                  End
+               End
+               Else
+               Begin
+                  If $PageNo == 999 Then
+                  Begin
+                     Set $InitialPageNo = 999
+                  End
+                  Do {Echo NNNNNNNNNNNNNNNNNNNNN: } $PageNo { --- } $InitialPageNo
+                  If $PageNo == $InitialPageNo Then
+                  Begin
+                     ChangeTitle 4 $OrigPgTitle
+                     Set $StarredPgSet = 0
+                  End
+               End
+            End
+         End
+
+         # Normal is non-sticky, allworkspaces is sticky
+         # allworkspaces DeskNo value is virtual place holder 999
+         # $WorkspacesListValue puts back saved value when changing
+         # mode of operation
          If $WorkspacesMode == {normal} Then
          Begin
             ChangeTitle 5 $WorkSpaces
@@ -228,6 +309,7 @@ Widget 3
       End
 End
 
+# Toggle pages mode of operation
 Widget 4
    Property
    Size 100 0
@@ -251,6 +333,42 @@ Widget 4
          ChangeValue 6 $AllPages
          Set $WorkspacesListValue = (GetValue 5)
 
+         # This block takes care for putting (*) at the end of
+         # Workspaces: label on its radio button when something is
+         # changed from the initial default. Special case is 999
+         # which represents sticky state. There is also procedure
+         # for removing (*) when settings are put back as it was
+         # initially.
+         If $OpMode == 1 Then
+         Begin
+            If $DeskNo == 999 Then
+            Begin
+               Set $InitialDeskNo = $DeskNo
+            End
+            If $StarredWspSet <> 1 Then
+            Begin
+               If $DeskNo <> $InitialDeskNo Then
+               Begin
+                  Set $OrigWspTitle = (GetTitle 3)
+                  Set $StarredWspTitle = $OrigWspTitle {*}
+                  ChangeTitle 3 $StarredWspTitle
+                  Set $StarredWspSet = 1
+               End
+            End
+            Else
+            Begin
+               If $DeskNo == $InitialDeskNo Then
+               Begin
+                  ChangeTitle 3 $OrigWspTitle
+                  Set $StarredWspSet = 0
+               End
+            End
+         End
+
+         # Normal is non-sticky, allpages is sticky
+         # allpages PageNo value is virtual place holder 999
+         # $PagesListValue puts back saved value when changing
+         # mode of operation
          If $PagesMode == {normal} Then
          Begin
             ChangeTitle 5 $Pages
@@ -283,10 +401,11 @@ Widget 4
       End
 End
 
+# List of workspaces and/or pages
 Widget 5
    Property
-   Size 178 134
-   Position 110 42
+   Size 172 134
+   Position 116 42
    Type List
    Flags NoReliefString
    Title {}
@@ -297,19 +416,36 @@ Widget 5
       Begin
          If $OpMode == 1 Then
          Begin
+            # Set DeskNo for further processing
             Set $DeskNo = (GetValue 5)
+            # Save selected item for putting it back when
+            # mode is changed and then changed back
             Set $WorkspacesListValue = (GetValue 5)
          End
          If $OpMode == 2 Then
          Begin
+            # Set PageNo for further processing
             Set $PageNo = (GetValue 5)
+
+            # Set default here if $InitialPageNo was empty
+            # $InitialPageNoSet serves as break
+            If $InitialPageNoSet <> 1 Then
+            Begin
+               Set $InitialPageNo = $CurrentPageNum
+               Set $InitialPageNoSet = 1
+            End
+
+            # Save selected item for putting it back when
+            # mode is changed and then changed back
             Set $PagesListValue = (GetValue 5)
          End
+         # Main pick mode
          If $WinName == {} Then
          Begin
             Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
          End
       End
+      # Dispatcher for Up and Down on the list in workspaces and pages mode
       1 :
       Begin
          If $OpMode == 1 Then
@@ -321,6 +457,7 @@ Widget 5
             SendSignal 5 3
          End
       End
+      # Up and Down on the list in workspaces mode
       2 :
       Begin
          If (LastString) == {Down} Then
@@ -353,6 +490,7 @@ Widget 5
                End
          End
       End
+      # Up and Down on the list in pages mode
       3 :
       Begin
          If (LastString) == {Down} Then
@@ -386,6 +524,7 @@ Widget 5
       End
 End
 
+# All Workspaces / All Pages stickyness control
 Widget 6
    Property
    Size 100 20
@@ -428,12 +567,15 @@ Widget 6
                   Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
                End
    
+               # Set DeskNo to 999 for sticky state, save old DeskNo into
+               # OldDeskNo to get it back
                Set $OldDeskNo = $DeskNo
                Set $DeskNo = 999
                ChangeLocaleTitle 5 { All Workspaces}
                ChangeValue 5 1
                Set $WorkspacesMode = {allworkspaces}
             End
+            # Restore workspace states if sticky all workspaces is turned off
             If (GetValue 6) == 0 Then
             Begin
                ChangeTitle 5 $WorkSpaces
@@ -469,12 +611,15 @@ Widget 6
                   Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
                End
    
+               # Set PageNo to 999 for sticky state, save old PageNo into
+               # OldPageNo to get it back
                Set $OldPageNo = $PageNo
                Set $PageNo = 999
                ChangeLocaleTitle 5 { All Pages      }
                ChangeValue 5 1
                Set $PagesMode = {allpages}
             End
+            # Restore page states if sticky all workspaces is turned off
             If (GetValue 6) == 0 Then
             Begin
                ChangeTitle 5 $Pages
@@ -494,6 +639,8 @@ Widget 6
             Set $AllPages = (GetValue 6)
          End
       End
+      # Small helpers for accepting internal SendToModule from Init for
+      # sticky states handling
       2 :
       Begin
          Set $WorkspacesMode = {allworkspaces}
@@ -504,6 +651,7 @@ Widget 6
       End
 End
 
+# Set "Go with the Window" property for OK button
 Widget 7
    Property
    Size 100 20
@@ -532,6 +680,7 @@ Widget 8
    Type Rectangle
 End
 
+# Main action starter
 Widget 9
    Property
    Size 80 20
@@ -548,6 +697,7 @@ Widget 9
       End
       1 :
       Begin
+         # If pages are not sticky ...
          If $PageNo <> 999 Then
          Begin
             Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '^} $PageNo { '}
@@ -573,6 +723,7 @@ Widget 9
             End
          End
 
+         # If workspaces are not sticky
          If $DeskNo <> 999 Then
          Begin
             If $GoWithWindow == 0 Then
@@ -585,11 +736,13 @@ Widget 9
             End
          End
 
+         # If desks are sticky
          If $DeskNo == 999 Then
          Begin
             Do {WindowId } $WinId { StickAcrossDesks True}
          End
 
+         # If pages are sticky
          If $PageNo == 999 Then
          Begin
             Do {WindowId } $WinId { StickAcrossPages True}
@@ -599,6 +752,7 @@ Widget 9
       End
 End
 
+# Quit button
 Widget 10
    Property
    Size 80 20
@@ -623,6 +777,7 @@ Widget 10
       End
 End
 
+# Help button
 Widget 11
    Property
    Size 80 20
