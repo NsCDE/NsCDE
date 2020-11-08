@@ -1,4 +1,4 @@
-#!/bin/ksh
+backdrops/#!/bin/ksh
 
 noninteractive=0
 noexitatdepfail=0
@@ -761,10 +761,398 @@ function upgrade_nscde
       cd ${get_back}
    fi
 
+   # Backup any custom unknown to NsCDE backdrops and put them back later
+   get_back=$(pwd)
+   known_backdrops_list='backdrops/Abstract.pm
+backdrops/Afternoon.pm
+backdrops/Ankh.pm
+backdrops/Antilop.pm
+backdrops/ArabescaDark.pm
+backdrops/ArabescaLight.pm
+backdrops/ArabianMosaic.pm
+backdrops/Armor.pm
+backdrops/ArtDeco.pm
+backdrops/Asanoha.pm
+backdrops/Background.pm
+backdrops/Balkan.pm
+backdrops/Bark.pm
+backdrops/Barrack.pm
+backdrops/Basketry.pm
+backdrops/BasketWeave.pm
+backdrops/BellFlowers.pm
+backdrops/BigLeaves.pm
+backdrops/Bijouterie.pm
+backdrops/Binding.pm
+backdrops/Bloom.pm
+backdrops/BlueCircles.pm
+backdrops/Blue.pm
+backdrops/BrickWall.pm
+backdrops/BrokenIce.pm
+backdrops/Bubbles.pm
+backdrops/Burl.pm
+backdrops/Canvas.pm
+backdrops/Carpet.pm
+backdrops/Carps.pm
+backdrops/Celtic.pm
+backdrops/Chip.pm
+backdrops/ChitzDk.pm
+backdrops/ChitzLt.pm
+backdrops/CirclePieces.pm
+backdrops/CircleWeave.pm
+backdrops/CircuitBoards.pm
+backdrops/Clange.pm
+backdrops/CoffeeLeaves.pm
+backdrops/Concave.pm
+backdrops/Convex.pm
+backdrops/Corduroy.pm
+backdrops/Cotton.pm
+backdrops/Cracked.pm
+backdrops/Crinkled.pm
+backdrops/Crochet.pm
+backdrops/CrosslineDots.pm
+backdrops/Crystal.pm
+backdrops/Cubes.pm
+backdrops/CubesSmall.pm
+backdrops/Cubismo.pm
+backdrops/CuminSeeds.pm
+backdrops/CurtainDark.pm
+backdrops/Curtain.pm
+backdrops/CyberTile.pm
+backdrops/DecoWall.pm
+backdrops/Diamonds.pm
+backdrops/Dimple.pm
+backdrops/Discs.pm
+backdrops/Dissolve.pm
+backdrops/Dolphins.pm
+backdrops/Dome.pm
+backdrops/Dotwave.pm
+backdrops/Dune.pm
+backdrops/Ebony.pm
+backdrops/Emblem.pm
+backdrops/Facade.pm
+backdrops/Feathering.pm
+backdrops/FeatherLeaves.pm
+backdrops/Fibre.pm
+backdrops/FineDecor.pm
+backdrops/Fingerprint.pm
+backdrops/Fireballs.pm
+backdrops/FloralRed.pm
+backdrops/Flora.pm
+backdrops/Floreale.pm
+backdrops/Foreground.pm
+backdrops/Fossil.pm
+backdrops/FullBloom.pm
+backdrops/FvwmBg1.pm
+backdrops/FvwmBg2.pm
+backdrops/GalvanizedSteel.pm
+backdrops/Geiger.pm
+backdrops/Girlande.pm
+backdrops/GoldenParapet.pm
+backdrops/Golden.pm
+backdrops/Greece.pm
+backdrops/HardFabric.pm
+backdrops/Heating.pm
+backdrops/Impression.pm
+backdrops/Indian.pm
+backdrops/India.pm
+backdrops/InlayColor.pm
+backdrops/InlayPlain.pm
+backdrops/Ironworks.pm
+backdrops/Jungle.pm
+backdrops/Jute.pm
+backdrops/K2.pm
+backdrops/Kapnos.pm
+backdrops/Kimono.pm
+backdrops/KnitLight.pm
+backdrops/Knit.pm
+backdrops/Lace.pm
+backdrops/LatticeBig.pm
+backdrops/Lattice.pm
+backdrops/Laurel.pm
+backdrops/Leather.pm
+backdrops/Leaves.pm
+backdrops/Lichen.pm
+backdrops/Lichens.pm
+backdrops/Linen.pm
+backdrops/Magreb.pm
+backdrops/Makedonia.pm
+backdrops/Marble.pm
+backdrops/Margarites.pm
+backdrops/Maze.pm
+backdrops/Memphis.pm
+backdrops/MetallicBaskets.pm
+backdrops/Miniweave.pm
+backdrops/MoroccoDark.pm
+backdrops/MoroccoLite.pm
+backdrops/Mortar.pm
+backdrops/Nautical.pm
+backdrops/Nav.pm
+backdrops/NestedCubes.pm
+backdrops/NestRectangles.pm
+backdrops/NoBackdrop.pm
+backdrops/Noise.pm
+backdrops/Oil.pm
+backdrops/OldChars.pm
+backdrops/OldPaper.pm
+backdrops/OldStones.pm
+backdrops/Oriental.pm
+backdrops/OrientDk.pm
+backdrops/OrientLt.pm
+backdrops/Ornamental.pm
+backdrops/Parquet.pm
+backdrops/Paver.pm
+backdrops/Pearls.pm
+backdrops/Pebbles.pm
+backdrops/PinStripe.pm
+backdrops/Planktons.pm
+backdrops/Plaster.pm
+backdrops/Plates.pm
+backdrops/Pyramid.pm
+backdrops/Quicksand.pm
+backdrops/RadioWaves.pm
+backdrops/Rain.pm
+backdrops/RakedSand.pm
+backdrops/RicePaper.pm
+backdrops/Ridged.pm
+backdrops/Rivets.pm
+backdrops/Rocks.pm
+backdrops/Romaion.pm
+backdrops/RomaionSmall.pm
+backdrops/Russia.pm
+backdrops/SandDark.pm
+backdrops/SandLight.pm
+backdrops/Sayagata.pm
+backdrops/Seamless.pm
+backdrops/Shingle.pm
+backdrops/SilkBunch.pm
+backdrops/Skin.pm
+backdrops/SkyDark.pm
+backdrops/SkyDarkTall.pm
+backdrops/SkyLight.pm
+backdrops/SkyLightTall.pm
+backdrops/Slats.pm
+backdrops/SmallFlowers.pm
+backdrops/SmallLeaves.pm
+backdrops/SmallSquares.pm
+backdrops/Smoke.pm
+backdrops/SnakeLeather.pm
+backdrops/SnakeSet.pm
+backdrops/Southwest.pm
+backdrops/Space.pm
+backdrops/Spagetti.pm
+backdrops/Spiral.pm
+backdrops/Spring.pm
+backdrops/Sprinkles.pm
+backdrops/Square.pm
+backdrops/Squares.pm
+backdrops/StarJam.pm
+backdrops/Stars.pm
+backdrops/SteelBrick.pm
+backdrops/Stix.pm
+backdrops/Stream.pm
+backdrops/Stripe.pm
+backdrops/Structura.pm
+backdrops/Structure.pm
+backdrops/SunLogo.pm
+backdrops/Sun.pm
+backdrops/Swirl.pm
+backdrops/Symphony.pm
+backdrops/Tartan.pm
+backdrops/Thorns.pm
+backdrops/Tile.pm
+backdrops/Tissue.pm
+backdrops/Toronto.pm
+backdrops/TriangleMess.pm
+backdrops/Triangles.pm
+backdrops/Tundra.pm
+backdrops/Turbulence.pm
+backdrops/Twister.pm
+backdrops/UpFeathers.pm
+backdrops/Vignette.pm
+backdrops/Vintage.pm
+backdrops/Waffle.pm
+backdrops/WaterDrops.pm
+backdrops/Wave.pm
+backdrops/Weave.pm
+backdrops/WinterTree.pm
+backdrops/Wirtschaft.pm
+backdrops/Wood.pm
+backdrops/Wooly.pm
+backdrops/Wrinkle.pm
+backdrops/Wrought.pm
+backdrops/Xenon.pm'
+
+   if [ -d "${instpath}/share/backdrops" ]; then
+      cd "${instpath}/share"
+
+      ublist=""
+      for ub in backdrops/*.pm
+      do
+         echo $known_backdrops_list | grep -q ${ub}
+         if (($? != 0)); then
+            ublist+="${ub} "
+         fi
+      done
+   
+      ublist=$(echo "$ublist" | egrep -v '^$')
+      if [ "x$ublist" != "x" ]; then
+         tar cpvf /tmp/custom_unknown_backdrops_save_$$.tar $ublist
+         TARUB_RETVAL=$?
+         if (($TARUB_RETVAL == 0)); then
+            echo ""
+            echo "WARNING: Unknown backdrops found in ${instpath}/share/backdrops."
+            echo "WARNING: they were backed up as /tmp/custom_unknown_backdrops_save_$$.tar"
+            echo "WARNING: please use FVWM_USERDIR/backdrops for custom backdrops in the"
+            echo "WARNING: future. If you wish, you can restore them into local user backdrop"
+            echo "WARNING: directory from the /tmp/custom_unknown_backdrops_save_$$.tar."
+         else
+            echo "WARNING: Backing up of unknown custom backdrops went wrong. Command tar(1)"
+            echo "WARNING: exited with exit status $TARUB_RETVAL."
+            echo ""
+         fi
+      fi
+
+      cd ${get_back}
+   fi
+
+   # Backup any custom unknown to NsCDE palettes and put them back later
+   get_back=$(pwd)
+   known_palettes_list='palettes/Africa.dp
+palettes/Alpine.dp
+palettes/Arizona.dp
+palettes/Ashley.dp
+palettes/Atrium.dp
+palettes/Autumn.dp
+palettes/BeigeBrown.dp
+palettes/BeigeRose.dp
+palettes/BlueNight.dp
+palettes/BlueOrange.dp
+palettes/BlueShades.dp
+palettes/Broica.dp
+palettes/BroicaLtVUE.dp
+palettes/BroicaVUE.dp
+palettes/BrownShades.dp
+palettes/Cabernet.dp
+palettes/Camouflage.dp
+palettes/Charcoal.dp
+palettes/Chocolate.dp
+palettes/Ciao.dp
+palettes/Cinnamon.dp
+palettes/Clay.dp
+palettes/Coalmine.dp
+palettes/Cocoa.dp
+palettes/CoralReef.dp
+palettes/Crimson.dp
+palettes/Dakota.dp
+palettes/Dalla.dp
+palettes/DarkBlue.dp
+palettes/DarkGold.dp
+palettes/DefaultVUE.dp
+palettes/Delphinium.dp
+palettes/Desert.dp
+palettes/Dierra.dp
+palettes/Equinox.dp
+palettes/Esquire.dp
+palettes/FlowerBed.dp
+palettes/Forest.pm
+palettes/FVWM.dp
+palettes/Golden.dp
+palettes/Grass.dp
+palettes/GrayScale.dp
+palettes/GreenShades.dp
+palettes/Irix.dp
+palettes/Kamari.dp
+palettes/LateSummer.dp
+palettes/Lilac.dp
+palettes/Martini.dp
+palettes/Metro.dp
+palettes/Mocha.dp
+palettes/Mountain.dp
+palettes/Mud.dp
+palettes/Mustard.dp
+palettes/Neptune.dp
+palettes/NorthernSky.dp
+palettes/Nutmeg.dp
+palettes/Oasis.dp
+palettes/Ocean.dp
+palettes/Olive.dp
+palettes/Orange.dp
+palettes/Orchid.dp
+palettes/OrchidVUE.dp
+palettes/Orient.dp
+palettes/Pastel.dp
+palettes/Pavia.dp
+palettes/PBNJ.dp
+palettes/PolarSky.dp
+palettes/Prism.dp
+palettes/RainForest.dp
+palettes/RedWine.dp
+palettes/Regal.dp
+palettes/Safari.dp
+palettes/SafariVUE.dp
+palettes/Sand.dp
+palettes/SantaClaus.dp
+palettes/SantaFe.dp
+palettes/Savannah.dp
+palettes/SeaFoam.dp
+palettes/SkyRed.dp
+palettes/SoftBlue.dp
+palettes/Solaris.dp
+palettes/Sotto.dp
+palettes/SouthWest.dp
+palettes/Summer.dp
+palettes/Terracotta.dp
+palettes/Tundra.dp
+palettes/Tust.dp
+palettes/Urchin.dp
+palettes/Vetro.dp
+palettes/Walnut.dp
+palettes/Wheat.dp
+palettes/White.dp
+palettes/Xinky.dp
+palettes/Yukon.dp
+palettes/Zutto.dp'
+
+   if [ -d "${instpath}/share/palettes" ]; then
+      cd "${instpath}/share"
+
+      uplist=""
+      for up in palettes/*.dp
+      do
+         echo $known_palettes_list | grep -q ${up}
+         if (($? != 0)); then
+            uplist+="${up} "
+         fi
+      done
+   
+      uplist=$(echo "$uplist" | egrep -v '^$')
+      if [ "x$uplist" != "x" ]; then
+         tar cpvf /tmp/custom_unknown_palettes_save_$$.tar $uplist
+         TARUP_RETVAL=$?
+         if (($TARUP_RETVAL == 0)); then
+            echo ""
+            echo "WARNING: Unknown palettes found in ${instpath}/share/palettes."
+            echo "WARNING: they were backed up as /tmp/custom_unknown_palettes_save_$$.tar"
+            echo "WARNING: please use FVWM_USERDIR/palettes for custom palettes in the"
+            echo "WARNING: future. If you wish, you can restore them into local user palette"
+            echo "WARNING: directory from the /tmp/custom_unknown_palettes_save_$$.tar."
+         else
+            echo "WARNING: Backing up of unknown custom palettes went wrong. Command tar(1)"
+            echo "WARNING: exited with exit status $TARUP_RETVAL."
+            echo ""
+         fi
+      fi
+
+      cd ${get_back}
+   fi
+
+   # Call main deinstallation/removal procedure
    deinstall_nscde
 
+   # Call main install procedure
    install_nscde
 
+   # Put back any additional photos
    if (($phcnt > 0)); then
       echo "Restoring additional photos back in ${instpath}/share/photos ..."
       mkdir -p "${instpath}/share/photos"
