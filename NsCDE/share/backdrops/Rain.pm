@@ -6,7 +6,7 @@ static char *Rain_pm[] = {
 /* colors */
 "  s selectColor   m black   c #737373737373",
 ". s background   m black   c #949494949494",
-"X s foreground   m white   c #ffffffffffff",
+"X s topShadowColor   m white   c #ffffffffffff",
 "o c white",
 /* pixels */
 "...X..........X...............X.....X......XX.......X.... ......",

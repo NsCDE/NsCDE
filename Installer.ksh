@@ -734,11 +734,8 @@ function upgrade_nscde
       fi
    fi
 
-   # Backup photos, backdrops and palettes, put it back if there was something
-   # customized
+   # Backup photos, put it back if there was something customized
    old_photos=$(ls "${instpath}/share/photos")
-   old_backdrops=$(ls "${instpath}/share/backdrops")
-   old_palettes=$(ls "${instpath}/share/palettes")
 
    get_back=$(pwd)
 
@@ -764,47 +761,6 @@ function upgrade_nscde
       cd ${get_back}
    fi
 
-   palcnt=0
-   for pal in $old_palettes
-   do
-      if [ ! -r "NsCDE/share/palettes/$pal" ]; then
-         ((palcnt = palcnt + 1))
-         palette_savelist="$palette_savelist $pal"
-      fi
-   done
-   if (($palcnt > 0)); then
-      cd "${instpath}/share/palettes" && tar cpf /tmp/_nscde_palette_savelist.tar $palette_savelist
-      retval=$?
-      if (($retval > 0)); then
-         echo "Archive (tar) process for ${instpath}/share/palettes to /tmp/_nscde_palette_savelist.tar"
-         echo "exited with status $retval"
-         exit 14
-      else
-         echo "Backing up custom palettes: done."
-      fi
-      cd ${get_back}
-   fi
-
-   bdrcnt=0
-   for bdr in $old_backdrops
-   do
-      if [ ! -r "NsCDE/share/backdrops/$bdr" ]; then
-         ((bdrcnt = bdrcnt + 1))
-         backdrop_savelist="$backdrop_savelist $bdr"
-      fi
-   done
-   if (($bdrcnt > 0)); then
-      cd "${instpath}/share/backdrops" && tar cpf /tmp/_nscde_backdrop_savelist.tar $backdrop_savelist
-      if (($retval > 0)); then
-         echo "Archive (tar) process for ${instpath}/share/backdrops to /tmp/_nscde_backdrop_savelist.tar"
-         echo "exited with status $retval"
-         exit 14
-      else
-         echo "Backing up custom backdrops: done."
-      fi
-      cd ${get_back}
-   fi
-
    deinstall_nscde
 
    install_nscde
@@ -813,20 +769,6 @@ function upgrade_nscde
       echo "Restoring additional photos back in ${instpath}/share/photos ..."
       mkdir -p "${instpath}/share/photos"
       cd "${instpath}/share/photos" && tar xpf /tmp/_nscde_photo_savelist.tar && rm -f /tmp/_nscde_photo_savelist.tar
-      echo "Done."
-   fi
-
-   if (($palcnt > 0)); then
-      echo "Restoring additional palettes back in ${instpath}/share/palettes ..."
-      mkdir -p "${instpath}/share/palettes"
-      cd "${instpath}/share/palettes" && tar xpf /tmp/_nscde_palette_savelist.tar && rm -f /tmp/_nscde_palette_savelist.tar
-      echo "Done."
-   fi
-
-   if (($bdrcnt > 0)); then
-      echo "Restoring additional backdrops back in ${instpath}/share/backdrops ..."
-      mkdir -p "${instpath}/share/backdrops"
-      cd "${instpath}/share/backdrops" && tar xpf /tmp/_nscde_backdrop_savelist.tar && rm -f /tmp/_nscde_backdrop_savelist.tar
       echo "Done."
    fi
 }
@@ -999,8 +941,7 @@ function usage
    echo "     path /usr/local/nscde:"
    echo "   ./Installer.ksh -w -n -p /usr/local/nscde -i"
    echo ""
-   echo "   - Simply upgrade patched NsCDE (additional photos, backdrops and palettes"
-   echo "     will remain preserved):"
+   echo "   - Simply upgrade patched NsCDE (additional photos will remain preserved):"
    echo "   ./Installer.ksh -f -u"
    echo ""
    echo "   - Upgrade in default path, but non-interactive and for non-patched version:"

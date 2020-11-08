@@ -2,7 +2,7 @@
 /* This file is a part of the NsCDE - Not so Common Desktop Environment */
 static char * GoldenParapet_xpm[] = {
 "640 640 5 1",
-".      s iconGray2     m black c gray20",
+".      s iconGray8	m black c #212121212121",
 "@      s bottomShadowColor     m black c #636363636363",
 "+      s selectColor   m black c #737373737373",
 "#      s background    m black c #949494949494",
