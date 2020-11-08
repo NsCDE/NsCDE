@@ -1,4 +1,4 @@
-backdrops/#!/bin/ksh
+#!/bin/ksh
 
 noninteractive=0
 noexitatdepfail=0
