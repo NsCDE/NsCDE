@@ -996,7 +996,7 @@ backdrops/Xenon.pm'
    
       ublist=$(echo "$ublist" | egrep -v '^$')
       if [ "x$ublist" != "x" ]; then
-         tar cpvf /tmp/custom_unknown_backdrops_save_$$.tar $ublist
+         tar cpf /tmp/custom_unknown_backdrops_save_$$.tar $ublist
          TARUB_RETVAL=$?
          if (($TARUB_RETVAL == 0)); then
             echo ""
@@ -1127,7 +1127,7 @@ palettes/Zutto.dp'
    
       uplist=$(echo "$uplist" | egrep -v '^$')
       if [ "x$uplist" != "x" ]; then
-         tar cpvf /tmp/custom_unknown_palettes_save_$$.tar $uplist
+         tar cpf /tmp/custom_unknown_palettes_save_$$.tar $uplist
          TARUP_RETVAL=$?
          if (($TARUP_RETVAL == 0)); then
             echo ""
