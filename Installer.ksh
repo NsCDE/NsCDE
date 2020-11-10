@@ -849,6 +849,10 @@ backdrops/Geiger.pm
 backdrops/Girlande.pm
 backdrops/GoldenParapet.pm
 backdrops/Golden.pm
+backdrops/Gradient.pm
+backdrops/GrayDk.pm
+backdrops/GrayLt.pm
+backdrops/Gray.pm
 backdrops/Greece.pm
 backdrops/HardFabric.pm
 backdrops/Heating.pm
@@ -1074,6 +1078,9 @@ palettes/Neptune.dp
 palettes/NorthernSky.dp
 palettes/Nutmeg.dp
 palettes/Oasis.dp
+palettes/OasisDark.dp
+palettes/OasisLight.dp
+palettes/OasisSpring.dp
 palettes/Ocean.dp
 palettes/Olive.dp
 palettes/Orange.dp
@@ -1109,6 +1116,7 @@ palettes/Vetro.dp
 palettes/Walnut.dp
 palettes/Wheat.dp
 palettes/White.dp
+palettes/WhiteBlack.dp
 palettes/Xinky.dp
 palettes/Yukon.dp
 palettes/Zutto.dp'
