@@ -1193,7 +1193,7 @@ Widget 23
             ChangeValue 25 0
             ChangeValue 26 0
             Set $WorkspaceIconsPlacementChange = 1
-            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)(,[[:space:]]+IconGrid [[:digit:]]+ [[:digit:]]+)? IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
          End
       End
 End
@@ -1217,7 +1217,7 @@ Widget 24
             ChangeValue 25 0
             ChangeValue 26 0
             Set $WorkspaceIconsPlacementChange = 1
-            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)(,[[:space:]]+IconGrid [[:digit:]]+ [[:digit:]]+)?, IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
          End
       End
 End
@@ -1241,7 +1241,7 @@ Widget 25
             ChangeValue 25 1
             ChangeValue 26 0
             Set $WorkspaceIconsPlacementChange = 1
-            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)(,[[:space:]]+IconGrid [[:digit:]]+ [[:digit:]]+)?, IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
          End
       End
 End
@@ -1265,7 +1265,7 @@ Widget 26
             ChangeValue 25 0
             ChangeValue 26 1
             Set $WorkspaceIconsPlacementChange = 1
-            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*), IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
+            Set $check_w23-w26_cmd = {egrep '([[:space:]]+)?Style[[:space:]]+\*[[:space:]]+(.*)IconBox[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)[[:space:]]+(.*)(,[[:space:]]+IconGrid [[:digit:]]+ [[:digit:]]+)?, IconFill[[:space:]]+(top|bottom)[[:space:]]+(left|right)' "} $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1}
          End
       End
 End
@@ -2093,44 +2093,44 @@ Widget 122
             Begin
                If $check_w23-w26 == {} Then
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 1 -1 -1, IconFill bottom left' >> "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 2 1 -1 -4, IconGrid 4 6, IconFill bottom left' >> "} $ConfigurationFile {"}
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1bottom left/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 1 -1 -4, IconGrid 4 6, IconFill bottom left/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 24) == 1 Then
             Begin
                If $check_w23-w26 == {} Then
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 1 -1 -1, IconFill top left' >> "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 2 4 -1 -1, IconGrid 4 6, IconFill top left' >> "} $ConfigurationFile {"}
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1top left/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 4 -1 -1, IconGrid 4 6, IconFill top left/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 25) == 1 Then
             Begin
                If $check_w23-w26 == {} Then
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 1 -1 -1, IconFill bottom right' >> "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 1 -2 -4, IconGrid 4 6, IconFill bottom right' >> "} $ConfigurationFile {"}
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1bottom right/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 1 -2 -4, IconGrid 4 6, IconFill bottom right/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 26) == 1 Then
             Begin
                If $check_w23-w26 == {} Then
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 1 -1 -1, IconFill top right' >> "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {echo 'Style * IconBox screen c 1 4 -2 -1, IconGrid 4 6, IconFill top right' >> "} $ConfigurationFile {"}
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\)[[:space:]]\+\(.*\),[[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1top right/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_ROOT/bin/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 4 -2 -1, IconGrid 4 6, IconFill top right/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $WorkspaceIconsPlacementDo = (GetOutput $WorkspaceIconsPlacementCmd 1 -1)
