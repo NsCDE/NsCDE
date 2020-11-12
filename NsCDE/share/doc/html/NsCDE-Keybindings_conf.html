@@ -21,6 +21,9 @@ config and extended a bit). Namely:
   <span class="keysym">left</span> and <span class="keysym">right</span> with ctrl modifier are
     moving viewport from page to page in any context.
 </p></li><li class="listitem"><p>
+  cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>, with Alt modifier are cycling
+  window focus and raises or lowers them on the current page.
+</p></li><li class="listitem"><p>
   the same combination, but with <span class="keysym">meta</span> (<span class="keysym">mod4</span>) is moving viewport by
     4% of the screen. (<span class="keysym">Ctrl</span> moves 100%)
 </p></li><li class="listitem"><p>
@@ -67,7 +70,7 @@ config and extended a bit). Namely:
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  Key <span class="keysym">Shift+Space</span> in the context of the window, frame corners, frame
+  Key <span class="keysym">Meta+Alt+Space</span> in the context of the window, frame corners, frame
     sides and a title bar pops up Window Options context menu
 </p></li><li class="listitem"><p>
 Key <span class="keysym">Alt+Insert</span> will give a focus to the last opened window
@@ -181,6 +184,15 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+F</span> in the context of a window, frame, or corner, puts a current window
   into a real fullscreen mode. Calling this keybinding again, restores a window.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+I</span> in any context apart from icon context will move focus and pointer
+  to icons on the currect page (if any). Here, Up and Down keys can be used to browse icons.
+  In the context of icon itself, this keybinding will choose last non-iconified window and move
+  off focus from icons.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Up/Down</span> in the context of a icon focuses first icon above or below of
+  the current selected and focused icon. Key Space will bring main icon menu in the
+  context of the focused icon.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Shift+Print</span> takes a screenshot of the root window with 3 seconds delay.
  Screenshots in PNG format are saved in <code class="filename">XDG_PICTURES_DIR</code> or

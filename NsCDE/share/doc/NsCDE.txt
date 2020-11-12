@@ -2403,6 +2403,8 @@ M. Z.
 
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
+     * cursor keys up, down, with Alt modifier are cycling window
+       focus and raises or lowers them on the current page.
      * the same combination, but with meta (mod4) is moving
        viewport by 4% of the screen. (Ctrl moves 100%)
      * the same combination, but with shift modifier moves mouse
@@ -2439,7 +2441,7 @@ M. Z.
        between the desks.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Key Shift+Space in the context of the window, frame
+     * Key Meta+Alt+Space in the context of the window, frame
        corners, frame sides and a title bar pops up Window Options
        context menu
      * Key Alt+Insert will give a focus to the last opened window
@@ -2529,6 +2531,15 @@ M. Z.
      * Meta+Alt+F in the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
        this keybinding again, restores a window.
+     * Meta+Alt+I in any context apart from icon context will move
+       focus and pointer to icons on the currect page (if any).
+       Here, Up and Down keys can be used to browse icons. In the
+       context of icon itself, this keybinding will choose last
+       non-iconified window and move off focus from icons.
+     * Up/Down in the context of a icon focuses first icon above
+       or below of the current selected and focused icon. Key
+       Space will bring main icon menu in the context of the
+       focused icon.
      * Meta+Shift+Print takes a screenshot of the root window with
        3 seconds delay. Screenshots in PNG format are saved in
        XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is not
