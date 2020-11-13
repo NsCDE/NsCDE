@@ -861,6 +861,7 @@ backdrops/Indian.pm
 backdrops/India.pm
 backdrops/InlayColor.pm
 backdrops/InlayPlain.pm
+backdrops/Irix.pm
 backdrops/Ironworks.pm
 backdrops/Jungle.pm
 backdrops/Jute.pm
