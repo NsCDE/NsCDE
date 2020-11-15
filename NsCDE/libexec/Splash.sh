@@ -316,7 +316,7 @@ Widget 9
    Position $W9WH $W9WH
    Type ItemDraw
    Flags NoReliefString Left
-   Icon NsCDE/NsCDE.xpm
+   Icon NsCDE/NsCDELogoM.xpm
    Colorset 52
    Main
       Case message of
