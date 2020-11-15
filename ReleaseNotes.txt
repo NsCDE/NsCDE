@@ -1,4 +1,102 @@
+NsCDE 1.0rc28 (pre)release notes
+================================
+
+This pre-release focuses on 5 major points:
+- FVWM3 support
+- Menus and keybinding ergonomic reworked for usability as well as CDE
+  similarity where applicable and useful
+- Front Panel color 8 and colored WSM options support, which covers a wide
+  range of CDE variants on old UNIX systems
+- Reworked OccupyWorkspace/Page dialog for extended usability
+- General polishing and fixing for release 1.1 which should happen in the
+  middle of december 2020 on the 2th anniversary of starting work on NsCDE
+
+1. New features
+
+- Color Style Manager in "Number Of Colors ..." dialog now offers two new
+  (sub)options: to use color 8 of the palette for icon background on Front
+  Panel and interior Icon background as on some versions of HP-UX and AIX.
+  Also, some versions of UNIX systems had Workspace Manager in the color 6
+  of the palette, which is also offered as an option in NsCDE now. Both of
+  this features are available only in 8-colors mode, not in 4-colors.
+  Because of this change, after upgrade, Front Panel will appear gray, with
+  it's colorset for icons out of sync. This is because new FVWM Colorset 23
+  has been introduced, and there was no way to get this going without
+  noticing. Notify dialog will appear shortly after upgrade to announce this
+  and Color Style Manager will start on the screen. User must confirm
+  existing theme (or choose new). Other option is to manually generate new
+  $FVWM_USERDIR/NsCDE-Colorset.conf with
+  $NSCDE_ROOT/libexec/nscde_palette_colorgen.py.
+
+- Smooth use with FVWM3 as much as it can be, during this still "young"
+  phase of FVWM3. On system with both FVWM2 and FVWM3 installed, FVWM2 will
+  still be used by default, but this can be overriden by putting FVWM_BIN
+  variable in startup or login profile to point to main FVWM2 or FVWM3 binary.
+
+- Occupy Workspace and Occupy Page dialogs were merged. Pages now can be
+  choosen by clicking "Pages" radio button or pressing space. Workspaces can
+  be choosen back in the same way if Occupy dialog was called as Occupy Page.
+  In other words, different modes of calling Occupy dialog will set it to look
+  and behave as that (Workspace or Page) mode initially. Now workspace and
+  page can be changed from one and the same dialog in one step.
+
+- Window Operations Menu can be now called with Meta+Alt+Space or Meta+Alt+m.
+
+- Icons can now be focused and browsed with up/down arrows on the one page
+  with Meta+Alt+i. Pressing Meta+Alt+i selects back last non-iconic window on
+  the current workspace/page.
+
+- CDE Alt+ArrowUp and Alt+ArrowDown raise/lower overlapping windows support.
+
+- Flipping windows on the current workspace/page with Ctrl+Menu and
+  Ctrl+ISO_Level3_Shift
+
+- Icon placement now in pixes matches CDE placement of iconified windows.
+
+- Menus are now logical and consolidated. Specially Window Operations Menu.
+  There are no dead or non-usable options presented. Same is now tuned also
+  for the Front Panel and Subpanels.
+
+- It should be possible now to work with keyboard without touching mouse in
+  the most cases.
+
+- New logo based on brutalism achitecture style and patterns, which nicely
+  fits general CDE and NsCDE experience.
+
+- nscde_setup wizard now supports localization.
+
+- Select Area screenshot option
+
+
+2. Bug fixes
+
+   - See ChangeLog or "git log" for detailed working list of fixes. Generally
+     most of the fixes are working fixes, but there was some old findings.
+
+
+3. Removed / discontinued
+
+   - Removed old logo, removed some faulty and wrong backdrops and the rest
+     consolidated. Removed duplicate and very similar palettes from some old
+     non-standard CDE palettes collection.
+
+   - OccupyWorkspace and OccupyPage dialogs replaced with Occupy dialog.
+
+
+4. Misc
+
+   - Backdrops were consolidated, named logically from their ad hoc working
+     versions, paletted were also consolidated.
+
+   - New TallSkyDark and TallSkyLight backdrops for moden big displays.
+     Diethering of course remains.
+
+   - First mouse button click on the root window now gives root menu, not
+     double click. Double click will give Window Options menu.
+
+
 NsCDE 1.0rc25 (pre)release notes
+================================
 
 - NsCDE 1.0rc25 release
 
@@ -12,6 +110,7 @@ NsCDE 1.0rc25 (pre)release notes
 
 
 NsCDE 1.0rc24 (pre)release notes
+================================
 
 Two and half months after 1.0rc22 prerelease, new release candidate again has
 extended functionality of the NsCDE. There will be no more new functionalities
