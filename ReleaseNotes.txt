@@ -21,14 +21,13 @@ This pre-release focuses on 5 major points:
   this features are available only in 8-colors mode, not in 4-colors.
   Because of this change, after upgrade, Front Panel will appear gray, with
   it's colorset for icons out of sync. This is because new FVWM Colorset 23
-  has been introduced, and there was no way to get this going without
-  noticing. Notify dialog will appear shortly after upgrade to announce this
-  and Color Style Manager will start on the screen. User must confirm
-  existing theme (or choose new). Other option is to manually generate new
-  $FVWM_USERDIR/NsCDE-Colorset.conf with
+  has been introduced. Notify dialog will appear shortly after upgrade to
+  announce this and Color Style Manager will start on the screen. User must
+  confirm existing color theme (or choose new). Other option is to manually
+  generate new $FVWM_USERDIR/NsCDE-Colorset.conf by calling
   $NSCDE_ROOT/libexec/nscde_palette_colorgen.py.
 
-- Smooth use with FVWM3 as much as it can be, during this still "young"
+- Smooth use with FVWM3 as much as this can be, during this still "young"
   phase of FVWM3. On system with both FVWM2 and FVWM3 installed, FVWM2 will
   still be used by default, but this can be overriden by putting FVWM_BIN
   variable in startup or login profile to point to main FVWM2 or FVWM3 binary.
@@ -51,11 +50,11 @@ This pre-release focuses on 5 major points:
 - Flipping windows on the current workspace/page with Ctrl+Menu and
   Ctrl+ISO_Level3_Shift
 
-- Icon placement now in pixes matches CDE placement of iconified windows.
+- Icon placement now in pixels matches CDE placement of iconified windows.
 
 - Menus are now logical and consolidated. Specially Window Operations Menu.
-  There are no dead or non-usable options presented. Same is now tuned also
-  for the Front Panel and Subpanels.
+  There are no dead or non-usable options presented. Dynamic menus are used.
+  This is now tuned also for the Front Panel and Subpanels menus.
 
 - It should be possible now to work with keyboard without touching mouse in
   the most cases.
@@ -71,7 +70,8 @@ This pre-release focuses on 5 major points:
 2. Bug fixes
 
    - See ChangeLog or "git log" for detailed working list of fixes. Generally
-     most of the fixes are working fixes, but there was some old findings.
+     most of the fixes are working same-day fixes, but there was some old
+     findings.
 
 
 3. Removed / discontinued
@@ -80,13 +80,15 @@ This pre-release focuses on 5 major points:
      consolidated. Removed duplicate and very similar palettes from some old
      non-standard CDE palettes collection.
 
-   - OccupyWorkspace and OccupyPage dialogs replaced with Occupy dialog.
+   - OccupyWorkspace and OccupyPage dialogs are replaced with unified Occupy
+     dialog.
 
 
 4. Misc
 
-   - Backdrops were consolidated, named logically from their ad hoc working
-     versions, paletted were also consolidated.
+   - Backdrops were consolidated, named logically from their ad hoc choosen
+     names, palettes were also consolidated with duplicates and almost
+     duplicates removed.
 
    - New TallSkyDark and TallSkyLight backdrops for moden big displays.
      Diethering of course remains.
