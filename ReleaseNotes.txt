@@ -15,35 +15,33 @@ This pre-release focuses on 5 major points:
 
 - Color Style Manager in "Number Of Colors ..." dialog now offers two new
   (sub)options: to use color 8 of the palette for icon background on Front
-  Panel and interior Icon background as on some versions of HP-UX and AIX.
-  Also, some versions of UNIX systems had Workspace Manager in the color 6
-  of the palette, which is also offered as an option in NsCDE now. Both of
-  this features are available only in 8-colors mode, not in 4-colors.
-  Because of this change, after upgrade, Front Panel will appear gray, with
-  it's colorset for icons out of sync. This is because new FVWM Colorset 23
-  has been introduced. Notify dialog will appear shortly after upgrade to
-  announce this and Color Style Manager will start on the screen. User must
-  confirm existing color theme (or choose new). Other option is to manually
-  generate new $FVWM_USERDIR/NsCDE-Colorset.conf by calling
-  $NSCDE_ROOT/libexec/nscde_palette_colorgen.py.
+  Panel and interior Icon background as on some versions of CDE on HP-UX
+  and AIX. Further, some versions of UNIX systems had Workspace Manager in
+  the color 6 of the palette, which is also offered as an option in NsCDE
+  now. Both of this features are available only in 8-colors mode, not in
+  4-colors. Because of necessary internal changes, (Colorset 23 addition)
+  $FVWM_USERDIR/NsCDE-Colorset.conf must be rebuilt. After upgrade, Color
+  Style Manager and popup message with that info will appear on screen
+  after upgrade from pre-1.0rc28 and (re)start of FVWM. Select existing
+  or any other color scheme to get Front Panel properly colored again.
+
+- Icons can now be focused and browsed with up/down arrows on the one page
+  with Meta+Alt+i. Pressing Meta+Alt+i selects back last non-iconic window on
+  the current workspace/page.
 
 - Smooth use with FVWM3 as much as this can be, during this still "young"
   phase of FVWM3. On system with both FVWM2 and FVWM3 installed, FVWM2 will
   still be used by default, but this can be overriden by putting FVWM_BIN
   variable in startup or login profile to point to main FVWM2 or FVWM3 binary.
 
-- Occupy Workspace and Occupy Page dialogs were merged. Pages now can be
-  choosen by clicking "Pages" radio button or pressing space. Workspaces can
-  be choosen back in the same way if Occupy dialog was called as Occupy Page.
-  In other words, different modes of calling Occupy dialog will set it to look
-  and behave as that (Workspace or Page) mode initially. Now workspace and
-  page can be changed from one and the same dialog in one step.
+- Occupy Workspace and Occupy Page dialogs has been merged into one app. When
+  called as "Occupy Workspace" initial behaviour and list is workspaces, and
+  when called as "Occupy Page" initially list of pages will be shown. By
+  pressing workspace or page radio button, or space key shortcut, mode of
+  operation will switch from pages to workspaces and vice versa. In short,
+  it is enough to call Occupy to select workspace and page in one move.
 
 - Window Operations Menu can be now called with Meta+Alt+Space or Meta+Alt+m.
-
-- Icons can now be focused and browsed with up/down arrows on the one page
-  with Meta+Alt+i. Pressing Meta+Alt+i selects back last non-iconic window on
-  the current workspace/page.
 
 - CDE Alt+ArrowUp and Alt+ArrowDown raise/lower overlapping windows support.
 
