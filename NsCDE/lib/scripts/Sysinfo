@@ -55,10 +55,9 @@ Begin
 
    Set $username = {  } (GetOutput {id -un} 1 -1)
    Set $hostname = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 2 -1)
-   Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
 
    Set $ipaddr = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 4 -1)
-   Set $hostid = {  } (GetOutput {ksh -c '[ "$(whence hostid)" != "" ] && hostid || sysctl -nh kern.hostid'} 1 -1)
+   Set $hostid = {  } (GetOutput {ksh -c '[ "$(whence hostid)" != "" ] && hostid || sysctl -n kern.hostid'} 1 -1)
    Set $domainname = {  } (GetOutput {domainname} 1 -1)
    Set $inetdomain = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 5 -1)
 
@@ -66,11 +65,6 @@ Begin
    Set $swap = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 7 -1) { Megabytes}
    Set $swappct = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 8 -1)
    Set $swapinfo = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 9 -1) { } (Gettext {Available})
-
-   Set $sysname = (GetOutput {uname -s} 1 -1)
-   Set $osname = (GetOutput {uname -o} 1 -1)
-   Set $osver = (GetOutput {uname -r} 1 -1)
-   Set $sysstring = {  } $sysname { Release } $osver { } $osname
 
    Set $winmgrnamecheck = (GetOutput {echo $FVWM_IS_FVWM3} 1 -1)
    If $winmgrnamecheck == 1 Then
@@ -93,14 +87,60 @@ Begin
    End
    Set $nscdever = {  } (GetOutput {$NSCDE_ROOT/bin/nscde -V} 1 -1)
 
+   Set $sysname = (GetOutput {uname -s} 1 -1)
+   Set $osver = (GetOutput {uname -r} 1 -1)
+   Set $NoSysBootTime = 1
+
    If $sysname == {Linux} Then
    Begin
       Set $lastboot = {  } (GetOutput {date '+%A, %B %d, %Y %H:%M:%S' -d "-$(cut -d"." -f1 /proc/uptime) seconds"} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
    End
-   Else
+
+   If $sysname == {SunOS} Then
+   Begin
+      Set $solboottime = (GetOutput {kstat -p unix:0:system_misc:boot_time | cut -d'    ' -f2} 1 1)
+      Set $lastbootcmd = {/usr/bin/date -r } $solboottime { '+%A, %B %d, %Y %H:%M:%S'}
+      Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {FreeBSD} Then
+   Begin
+      Set $lastboot = {  } (GetOutput {date '+%A, %B %d, %Y %H:%M:%S' -d "-$(cut -d"." -f1 /proc/uptime) seconds"} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {NetBSD} Then
+   Begin
+      Set $lastboot = { } (GetOutput {date -r $(sysctl -n kern.boottime) '+%A, %B %d, %Y %H:%M:%S'} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
+   End
+
+   If $sysname == {OpenBSD} Then
+   Begin
+      Set $lastboot = { } (GetOutput {date -r $(sysctl -n kern.boottime) '+%A, %B %d, %Y %H:%M:%S'} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
+   End
+
+   If $NoSysBootTime == 1 Then
    Begin
       Set $lastboot = {  Not available/displayed on } $sysname
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
    End
+
+   Set $sysstring = {  } $sysname { Release } $osver { } $osname
 
    ChangeTitle 21 $username
    ChangeTitle 22 $hostname
@@ -516,7 +556,7 @@ End
 
 Widget 34
    Property
-   Size 256 0
+   Size 300 0
    Position 159 284
    Type ItemDraw
    Flags NoReliefString Left NoFocus

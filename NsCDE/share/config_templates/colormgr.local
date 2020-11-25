@@ -70,12 +70,12 @@ fi
 # mate-terminal
 whence -q mate-terminal
 if (($? == 0)); then
-   TEMP1=$(mktemp --suffix=".dconfgen1")
+   TEMP1=$(mktemp -t "XXXXXXXXX.dconfgen1")
    echo dconf write /org/mate/terminal/profiles/default/background-color \"\'NSCDE_BG_COLOR_4\'\" > $TEMP1
    echo dconf write /org/mate/terminal/profiles/default/foreground-color \"\'NSCDE_FG_COLOR_4\'\" >> $TEMP1
    echo dconf write /org/mate/terminal/profiles/default/bold-color-same-as-fg true >> $TEMP1
    echo dconf write /org/mate/terminal/profiles/default/use-theme-colors false >> $TEMP1
-   TEMP2=$(mktemp --suffix=".dconfgen2")
+   TEMP2=$(mktemp -t "XXXXXXXXX.dconfgen2")
    $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
     -i $TEMP1 -c > $TEMP2
    chmod 0755 $TEMP2

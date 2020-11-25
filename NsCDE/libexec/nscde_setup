@@ -9,6 +9,7 @@
 VERBOSE=0
 export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
 export TEXTDOMAIN="nscde_setup"
+export OS=$(uname -s)
 
 if [ -z $HOME ]; then
    gettext -s "Error: HOME is not set cannot continue."
@@ -153,6 +154,10 @@ function setup_nscde
          echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE.conf ..."
       fi
       cp ${NSCDE_ROOT}/config/NsCDE.conf ${FVWM_USERDIR}/NsCDE.conf
+
+      if [ "$OS" == "NetBSD" ]; then
+         echo 'SetEnv XDG_DATA_DIRS $[XDG_DATA_DIRS]:/usr/pkg/share' >> ${FVWM_USERDIR}/NsCDE.conf
+      fi
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/NsCDE.conf ${already_exists}."
