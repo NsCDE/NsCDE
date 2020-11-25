@@ -1,7 +1,7 @@
-PREFIX = /usr
+CC=gcc
 
 colorpicker: main.c
-	cc -o colorpicker main.c `pkg-config --libs --cflags x11`
+	$(CC) -o colorpicker main.c `pkg-config --libs --cflags x11`
 
 clean:
 	rm -f colorpicker
