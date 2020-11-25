@@ -23,7 +23,7 @@ done
 whence -q systemctl
 systemctlretval=$?
 
-# Check for FreeBSD (acpiconf)
+# Check for FreeBSD (acpiconf) or SunOS
 OS=$(uname -s)
 
 if (($pmcnt == 3)); then
@@ -35,6 +35,8 @@ elif [ "$OS" == "FreeBSD" ]; then
    if (($? == 0)); then
       Opmode="acpiconf"
    fi
+elif [ "$OS" == "SunOS" ]; then
+   Opmode="sunos"
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
@@ -51,6 +53,8 @@ function s3_suspend
       systemctl suspend -i
    elif [ "$Opmode" == "acpiconf" ]; then
       acpiconf -s 3
+   elif [ "$Opmode" == "sunos" ]; then
+      pfexec sys-suspend -n
    fi
 }
 
@@ -62,6 +66,8 @@ function hibernate
       systemctl hibernate -i
    elif [ "$Opmode" == "acpiconf" ]; then
       acpiconf -s 4
+   elif [ "$Opmode" == "sunos" ]; then
+      pfexec sys-suspend -n
    fi
 }
 
@@ -73,6 +79,8 @@ function hybrid_suspend
       systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
       echo "Not available on $OS" >&2
+   elif [ "$Opmode" == "sunos" ]; then
+      pfexec sys-suspend -n
    fi
 }
 
@@ -86,6 +94,8 @@ function f_poweroff
       fi
    elif [ "$OS" == "FreeBSD" ]; then
       shutdown -p now
+   elif [ "$OS" == "SunOS" ]; then
+      pfexec shutdown -i5 -g0 -y
    fi
 }
 
@@ -99,6 +109,8 @@ function f_reboot
       fi
    elif [ "$OS" == "FreeBSD" ]; then
       shutdown -r now
+   elif [ "$OS" == "SunOS" ]; then
+      pfexec shutdown -i6 -g0 -y
    fi
 }
 
