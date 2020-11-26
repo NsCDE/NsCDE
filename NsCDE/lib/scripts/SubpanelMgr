@@ -19,7 +19,7 @@ Begin
    End
 
    # Fill the App List on the left with all apps found by fvwm-menu-desktop
-   Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst}
+   Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst.XXXXXXXX}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
    Set $AppListToFileCmd = {fvwm-menu-desktop --mini-icon-dir "$FVWM_USERDIR/icons" --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | }
                            { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | }
@@ -46,7 +46,7 @@ Begin
    Set $SystemSubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
 
    # Fill the Subpanel app List on the right with all entries found there.
-   Set $SubpListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.SubpLst}
+   Set $SubpListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.SubpLst.XXXXXXXX}
    Set $SubpListTmpFile = (GetOutput $SubpListTmpFileCmd 1 -1)
    Set $SubpListToFileCmd = {egrep '^S} $SubpanelNo {,ENTRY,.*,.*,.*,.*' "} $SubpanelActionsRead {" | grep -n '' | sed 's/:/,/' > "} $SubpListTmpFile {"}
    Set $SubpListToFile = (GetOutput $SubpListToFileCmd 1 -1)
@@ -54,7 +54,7 @@ Begin
    Set $FmtSubpList = (GetOutput $FmtSubpListCmd 1 -1)
 
    # Added for Localization of existing default entries.
-   Set $LocalizedListTmpFile = (GetOutput {mktemp -t tmp.XXXXXXXX.SubpLocLst} 1 -1)
+   Set $LocalizedListTmpFile = (GetOutput {mktemp -t tmp.XXXXXXXX.SubpLocLst.XXXXXXXX} 1 -1)
    Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
    Set $FmtLocalizedSubpListCmd = {$NSCDE_ROOT/bin/nscde_usleep 250000 ; cat '} $LocalizedListTmpFile {'}
    Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
@@ -436,7 +436,7 @@ Widget 5
                                    $StrippedAppIdxIconPath {,} (GetTitle 10) {'}
                Set $NewAppToSubp = (GetOutput $NewAppToSubpCmd 1 -1)
 
-               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst}
+               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst.XXXXXXXX}
                Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
 
                Set $CreateNewListCmd = {(sed -n '1,} $SubpListSelected {p' < "} $SubpListTmpFile {"; echo '} $NewAppToSubp
@@ -487,7 +487,7 @@ Widget 6
 
             If (GetValue 4) > 0 Then
             Begin
-               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst}
+               Set $SubpListTmpNewFileCmd = {mktemp -t tmp.XXXXXXXX.SubpNewLst.XXXXXXXX}
                Set $SubpListTmpNewFile = (GetOutput $SubpListTmpNewFileCmd 1 -1)
 
                Set $RemoveAppFromSubpCmd = {egrep -v "^} (GetValue 4) {,.*" "} $SubpListTmpFile {" > "} $SubpListTmpNewFile {"}
@@ -754,7 +754,7 @@ Widget 20
       End
       1 :
       Begin
-         Set $SubpNewActionsPartCmd = {mktemp -t tmp.XXXXXXXX.SubpNewActP}
+         Set $SubpNewActionsPartCmd = {mktemp -t tmp.XXXXXXXX.SubpNewActP.XXXXXXXX}
          Set $SubpNewActionsPart = (GetOutput $SubpNewActionsPartCmd 1 -1)
 
          Set $CreateUserActionsCfgCmd = {[ ! -r "} $UserSubpanelActionsFile {" ] && touch "} $UserSubpanelActionsFile {"}

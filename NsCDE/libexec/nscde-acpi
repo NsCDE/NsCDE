@@ -39,6 +39,8 @@ elif [ "$OS" == "SunOS" ]; then
    Opmode="sunos"
 elif [ "$OS" == "NetBSD" ]; then
    Opmode="netbsd"
+elif [ "$OS" == "OpenBSD" ]; then
+   Opmode="openbsd"
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
@@ -59,6 +61,8 @@ function s3_suspend
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
       /sbin/sysctl -w hw.acpi.sleep.state=3
+   elif [ "$Opmode" == "openbsd" ]; then
+      /usr/sbin/apm -z
    fi
 }
 
@@ -74,6 +78,8 @@ function hibernate
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
       echo "Notice: Hibernate to disk is not supported on NetBSD."
+   elif [ "$Opmode" == "openbsd" ]; then
+      /usr/sbin/apm -Z
    fi
 }
 
@@ -89,6 +95,8 @@ function hybrid_suspend
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
       echo "Notice: Hybrid suspend is not supported on NetBSD."
+   elif [ "$Opmode" == "openbsd" ]; then
+      echo "Notice: Hybrid suspend is not supported on OpenBSD."
    fi
 }
 
@@ -105,7 +113,9 @@ function f_poweroff
    elif [ "$OS" == "SunOS" ]; then
       pfexec shutdown -i5 -g0 -y
    elif [ "$OS" == "NetBSD" ]; then
-      /sbin/shutdown -h now
+      /sbin/shutdown -p now
+   elif [ "$OS" == "OpenBSD" ]; then
+      /sbin/shutdown -p now
    fi
 }
 
@@ -122,6 +132,8 @@ function f_reboot
    elif [ "$OS" == "SunOS" ]; then
       pfexec shutdown -i6 -g0 -y
    elif [ "$OS" == "NetBSD" ]; then
+      /sbin/shutdown -r now
+   elif [ "$OS" == "OpenBSD" ]; then
       /sbin/shutdown -r now
    fi
 }
