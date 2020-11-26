@@ -5,8 +5,8 @@ OBJS = Main.o Graphics.o getopt.o getopt1.o
 
 DEFAULT_XPM = Fpclock.xpm
 
-INCDIR = -I/usr/include -I.
-LIBDIR = -L/usr/lib64
+INCDIR = -I/usr/X11R6/include -I/usr/X11R7/include -I/usr/include -I.
+LIBDIR = -L/usr/X11R6/lib -L/usr/X11R7/lib -L/usr/lib64
 CC = gcc
 CFLAGS = -O2 -g -Wall
 LIBS = -lXpm -lXext -lX11 -lm
