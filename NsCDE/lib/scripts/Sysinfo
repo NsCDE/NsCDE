@@ -111,7 +111,9 @@ Begin
 
    If $sysname == {FreeBSD} Then
    Begin
-      Set $lastboot = {  } (GetOutput {date '+%A, %B %d, %Y %H:%M:%S' -d "-$(cut -d"." -f1 /proc/uptime) seconds"} 1 -1)
+      Set $fbsdboottime = {  } (GetOutput {sysctl -n kern.boottime | cut -d' ' -f4 | sed 's/,//g'} 1 -1)
+      Set $lastbootcmd = {/bin/date -r } $fbsdboottime { '+%A, %B %d, %Y %H:%M:%S'}
+      Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
       Set $NoSysBootTime = 0
       Set $osname = (GetOutput {uname -o} 1 -1)
       Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
