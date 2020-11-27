@@ -45,14 +45,14 @@ function check_dependencies
       fi
    done
 
-   # GNU sed on FreeBSD and Solaris."
-   if [ "$OS" == "FreeBSD" ] || [ "$OS" == "SunOS" ]; then
+   # GNU sed on non-Linux systems check.
+   if [[ "$OS" == @(FreeBSD|SunOS|NetBSD|OpenBSD|DragonFly) ]]; then
       whence -q gsed
       retval=$?
       if (($retval > 0)); then
          echo ""
-         echo "Error: Command or program \"$gexe\" as NsCDE dependency is missing"
-         echo "on this system. On FreeBSD: \"pkg install gsed\"."
+         echo "Error: Command / Package \"gsed\" as NsCDE dependency is missing"
+         echo "on this system. Use \"pkg install\" or \"pkg_add\" to install gsed."
          echo ""
          dep_exit 20
       fi
