@@ -35,6 +35,11 @@ elif [ "$OS" == "FreeBSD" ]; then
    if (($? == 0)); then
       Opmode="acpiconf"
    fi
+elif [ "$OS" == "DragonFly" ]; then
+   whence -q acpiconf
+   if (($? == 0)); then
+      Opmode="acpiconf"
+   fi
 elif [ "$OS" == "SunOS" ]; then
    Opmode="sunos"
 elif [ "$OS" == "NetBSD" ]; then
@@ -116,6 +121,8 @@ function f_poweroff
       /sbin/shutdown -p now
    elif [ "$OS" == "OpenBSD" ]; then
       /sbin/shutdown -p now
+   elif [ "$OS" == "DragonFly" ]; then
+      /sbin/shutdown -p now
    fi
 }
 
@@ -134,6 +141,8 @@ function f_reboot
    elif [ "$OS" == "NetBSD" ]; then
       /sbin/shutdown -r now
    elif [ "$OS" == "OpenBSD" ]; then
+      /sbin/shutdown -r now
+   elif [ "$OS" == "DragonFly" ]; then
       /sbin/shutdown -r now
    fi
 }
