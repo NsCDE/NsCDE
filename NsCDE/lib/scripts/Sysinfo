@@ -101,7 +101,7 @@ Begin
 
    If $sysname == {SunOS} Then
    Begin
-      Set $solboottime = (GetOutput {kstat -p unix:0:system_misc:boot_time | cut -d'    ' -f2} 1 1)
+      Set $solboottime = (GetOutput {kstat -p unix:0:system_misc:boot_time | cut -d'	' -f2} 1 1)
       Set $lastbootcmd = {/usr/bin/date -r } $solboottime { '+%A, %B %d, %Y %H:%M:%S'}
       Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
       Set $NoSysBootTime = 0
