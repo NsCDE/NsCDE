@@ -735,7 +735,7 @@ function upgrade_nscde
    fi
 
    # Backup photos, put it back if there was something customized
-   old_photos=$(ls "${instpath}/share/photos")
+   old_photos=$(ls "${instpath}/share/photos" 2>/dev/null)
 
    get_back=$(pwd)
 
