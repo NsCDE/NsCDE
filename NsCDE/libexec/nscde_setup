@@ -156,7 +156,7 @@ function setup_nscde
       cp ${NSCDE_ROOT}/config/NsCDE.conf ${FVWM_USERDIR}/NsCDE.conf
 
       if [ "$OS" == "NetBSD" ]; then
-         echo 'SetEnv XDG_CONFIG_DIRS $[XDG_DATA_DIRS]:/usr/pkg/etc/xdg' >> ${FVWM_USERDIR}/NsCDE.conf
+         echo 'SetEnv XDG_CONFIG_DIRS $[XDG_CONFIG_DIRS]:/usr/pkg/etc/xdg' >> ${FVWM_USERDIR}/NsCDE.conf
          echo 'SetEnv XDG_DATA_DIRS $[XDG_DATA_DIRS]:/usr/pkg/share' >> ${FVWM_USERDIR}/NsCDE.conf
       fi
    else
