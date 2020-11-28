@@ -130,11 +130,11 @@ Widget 1
       Begin
             If (GetValue 2) == 0 Then
             Begin
-               Do {Exec exec ksh -c '} (GetTitle 4) { & disown'}
+               Do {Exec exec /usr/bin/env ksh93 -c '} (GetTitle 4) { & disown'}
             End
             Else
             Begin
-               Do {Exec exec $[infostore.terminal] -e ksh -c '} (GetTitle 4) {'}
+               Do {Exec exec $[infostore.terminal] -e '} (GetTitle 4) {' & disown}
             End
             Do {Exec echo '} (GetTitle 4) {' >> $FVWM_USERDIR/.Exec-History}
 

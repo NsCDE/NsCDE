@@ -1535,7 +1535,7 @@ Widget 26
          # Finish
          If (LastString) == {Go} Then
          Begin
-            Do {Exec exec ksh -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"}
+            Do {Exec exec /usr/bin/env ksh93 -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"}
             Do {Test (EnvIsSet XFT_USE_DPI) SetEnv NSCDE_FONT_DPI $[XFT_USE_DPI]}
             # Restart NsCDE here, give it a delay, not to kill "Do" until it is executed
             Do {Schedule 380 Restart}

@@ -57,7 +57,7 @@ Begin
    Set $hostname = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 2 -1)
 
    Set $ipaddr = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 4 -1)
-   Set $hostid = {  } (GetOutput {ksh -c '[ "$(whence hostid)" != "" ] && hostid || sysctl -n kern.hostid'} 1 -1)
+   Set $hostid = {  } (GetOutput {/usr/bin/env ksh93 -c '[ "$(whence hostid)" != "" ] && hostid || sysctl -n kern.hostid'} 1 -1)
    Set $domainname = {  } (GetOutput {domainname} 1 -1)
    Set $inetdomain = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 5 -1)
 

@@ -286,11 +286,11 @@ Widget 2
       End
       1 :
       Begin
-         Set $SecToHourCmd = {ksh -c 'echo $((} $RawSec {/3600))'}
+         Set $SecToHourCmd = {/usr/bin/env ksh03 -c 'echo $((} $RawSec {/3600))'}
          Set $SecToHour = (GetOutput $SecToHourCmd 1 -1)
-         Set $SecToMinCmd = {ksh -c 'echo $(((} $RawSec {%3600)/60))'}
+         Set $SecToMinCmd = {/usr/bin/env ksh93 -c 'echo $(((} $RawSec {%3600)/60))'}
          Set $SecToMin = (GetOutput $SecToMinCmd 1 -1)
-         Set $SecToSecCmd = {ksh -c 'echo $(((} $RawSec {%60)))'}
+         Set $SecToSecCmd = {/usr/bin/env ksh93 -c 'echo $(((} $RawSec {%60)))'}
          Set $SecToSec = (GetOutput $SecToSecCmd 1 -1)
          If (StrCopy $SecToHour 2 2) == {} Then
             Begin

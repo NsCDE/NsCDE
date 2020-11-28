@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/usr/bin/env ksh93
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment

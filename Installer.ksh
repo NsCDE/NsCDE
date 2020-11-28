@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/usr/bin/env ksh93
 
 noninteractive=0
 noexitatdepfail=0
@@ -15,23 +15,33 @@ function dep_exit
 function check_dependencies
 {
    # Python 3, ImageMagick, xdotool, yaml, PyQt, ksh (obviously) etc etc ...
-   whence -q python3
+   whence -qp python3
    if (($? > 0)); then
-      echo "Cannot find python3 as a named command. This is needed for NsCDE"
-      echo "If you have python3 installed with some other name (for example \"python\""
-      echo "or \"python34\", \"python3.6\" ... you should make symlink on it"
-      echo "anywhere in your PATH."
+      echo "For NsCDE, Python 3 must be present on the system. If you already have"
+      echo "Python 3 installed, but under the different name or not in your PATH"
+      echo "you will either need to put it in your PATH, or to make symlink from"
+      echo "Python 3 interpreter binary to \"python3\" name someware in your PATH."
       echo ""
-      echo "For example (FreeBSD 12 example):"
-      echo "ln -s /usr/local/bin/python3.6 /usr/local/bin/python3"
+      echo "Example on NetBSD 9.1:"
+      echo "# ln -s /usr/pkg/bin/python3.7 /usr/pkg/bin/python3"
       echo ""
-      echo "Python is referenced with \"#!/usr/bin/env python3\" in NsCDE Python"
-      echo "parts since plain \"python\" command might refer to Python 2.X on"
-      echo "older systems, and minor revision in Python 3 differs across systems."
+      echo "Example on OpenBSD 6.X:"
+      echo "# ln -s /usr/local/bin/python3.8 /usr/local/bin/python3"
+      echo ""
+      echo "On most Linux systems and SunOS variants, this symlink or binary should"
+      echo "exist in /usr/bin by default. On FreeBSD and DragonFly BSD, you should"
+      echo "install \"python3\" meta package. This may also be true for some Linux"
+      echo "variants. This way, symlink will be maintened by the package system. If"
+      echo "not, just make a symlink similar as on examples given above."
+      echo ""
+      echo "Python is referenced with \"#!/usr/bin/env python3\" in NsCDE, because"
+      echo "plain \"python\" command might point to Python 2.X on many older systems"
+      echo "but minor revision in Python 3 differs across systems."
       echo ""
       dep_exit 20
    fi
 
+   missingexe=""
    for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3 gettext
    do
       whence -q $exe
@@ -41,9 +51,16 @@ function check_dependencies
          echo "Error: Command or program \"$exe\" as NsCDE dependency is missing"
          echo "on this system."
          echo ""
-         dep_exit 20
+         missingexe="$missingexe $exe"
       fi
    done
+
+   if [ "x$missingexe" != "x" ]; then
+      echo "Error: Missing required commands or packages:${missingexe}."
+      echo "Install them and run Installer.ksh again"
+      echo ""
+      dep_exit 20
+   fi
 
    # GNU sed on non-Linux systems check.
    if [[ "$OS" == @(FreeBSD|SunOS|NetBSD|OpenBSD|DragonFly) ]]; then
@@ -71,35 +88,49 @@ function check_dependencies
       fi
    fi
 
+   missingoexe=""
    for oexe in xscreensaver stalonetray xsettingsd xrandr dunst
    do
       whence -q $oexe
       retval=$?
       if (($retval > 0)); then
-         echo ""
-         echo "Warning: Optional command or program \"$oexe\" as NsCDE dependency"
-         echo "is missing on this system."
-         echo ""
-         sleep 3
+         missingoexe="$missingoexe $oexe"
       fi
    done
 
-   if [ ! -f "/usr/share/icons/hicolor/index.theme" ]; then
-      if [ ! -f "/usr/local/share/icons/hicolor/index.theme" ]; then
-         echo ""
-         echo "Warning: Optional dependency hicolor theme index not found in"
-         echo "path /usr/share/icons and/or /usr/local/share/icons."
-         echo "Expect missing icons in Workspace Menu and Subpanel Manager,"
-         echo "or install hicolor icon theme package for your system."
-         echo ""
-         sleep 2
-      fi
+   if [ "x$missingoexe" != "x" ]; then
+      echo ""
+      echo "Warning: Optional commands or programs are missing on this system"
+      echo "as non-essential NsCDE dependences:${missingoexe}."
+      echo "Installation will continue without this."
+      echo ""
+      sleep 3
    fi
 
+   found_hicolor_theme=0
+   for hicoloridx in /usr/share/icons/hicolor/index.theme \
+                     /usr/local/share/icons/hicolor/index.theme \
+                     /usr/pkg/share/icons/hicolor/index.theme
+   do
+      if [ -f "$hicoloridx" ]; then
+         found_hicolor_theme=1
+      fi
+   done
+   if ((found_hicolor_theme == 0)); then
+      echo ""
+      echo "Warning: Optional dependency \"hicolor\" icon theme not found on the system."
+      echo "Paths tried: /usr/share/icons /usr/local/share/icons /usr/pkg/share/icons."
+      echo "Expect missing icons in Workspace Menu and Subpanel Manager,"
+      echo "or install hicolor icon theme package for your system."
+      echo ""
+      sleep 2
+   fi
+
+   pymissing=""
    for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
        fnmatch getopt time platform psutil pwd socket
    do
-      python3 -c "import $pymodule"
+      python3 -c "import $pymodule" 2>/dev/null
       retval=$?
       if (($retval > 0)); then
          if [ "$pymodule" == "PyQt5" ]; then
@@ -108,29 +139,40 @@ function check_dependencies
             qtretval=$?
             if (($qtretval > 0)); then
                echo "Error: cannot find Python 3 module PyQt5 nor PyQt4. Import failed."
-               dep_exit 20
+               pymissing="$pymissing $pymodule"
             else
                echo "Import of PyQt4 suceeded. Continuing."
                continue
             fi
          fi
          echo "Error: cannot find Python 3 module ${pymodule}. Import failed."
-         dep_exit 20
+         pymissing="$pymissing $pymodule"
       fi
    done
+
+   if [ "x$pymissing" != "x" ]; then
+      echo ""
+      echo "Error: Python modules missing:${pymissing}."
+      echo "Install them which package manager, pip or source and run Installer.ksh again."
+      echo ""
+      dep_exit 20
+   else
+      echo "List of Python 3 modules is OK. Continuing installation."
+      echo ""
+   fi
 }
 
 function install_nscde
 {
    if (($upgrade_mode == 0)); then
       echo ""
-      echo "*************************************************************************"
-      echo "*                                                                       *"
-      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
-      echo "*                                                                       *"
-      echo "*  Installation procedure in progress ...                               *"
-      echo "*                                                                       *"
-      echo "*************************************************************************"
+      echo "**************************************************************************"
+      echo "*                                                                        *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE)  *"
+      echo "*                                                                        *"
+      echo "*  Installation procedure in progress ...                                *"
+      echo "*                                                                        *"
+      echo "**************************************************************************"
       echo ""
    fi
 
@@ -252,6 +294,9 @@ function install_nscde
    else
       echo "Creating $instpath"
       mkdir -p "$instpath"
+      if (($? == 0)); then
+         echo "Done."
+      fi
    fi
 
    if [ -d "NsCDE" ]; then
@@ -262,6 +307,16 @@ function install_nscde
          echo "Done."
       else
          echo "Error $retval occured while copying NsCDE distribution files into $instpath"
+      fi
+      # Adapt ExecUseSHell
+      kshpath=$(whence -p ksh93)
+      if [ "x$kshpath" != "x" ]; then
+         echo "Adapting ExecUseShell to find ksh93 in ${instpath}/config/NsCDE-Main.conf."
+         ./NsCDE/bin/ised -c "s@ExecUseShell __KSH93__@ExecUseShell ${kshpath}@g" -f "${instpath}/config/NsCDE-Main.conf"
+         echo "Done."
+      else
+         echo "Error setting Korn Shell in ${instpath}/config/NsCDE-Main.conf. Korn shell (ksh93) not found."
+         exit 4
       fi
       if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
          echo "Adapting NSCDE_ROOT path for custom installation."
@@ -317,10 +372,12 @@ function configure_installed
       echo '# Since FVWM has been compiled with NsCDE patches, we are enabling' >> ${instpath}/config/NsCDE.conf
       echo '# HAS_WINDOWNAME for this installation to avoid workarounds.' >> ${instpath}/config/NsCDE.conf
       echo 'SetEnv HAS_WINDOWNAME 1' >> ${instpath}/config/NsCDE.conf
+      echo 'Done.'
 
       # Patch NsCDE-FrontPanel.conf for "indicator 12 in"
       echo "Setting patched indicator with shadow in in NsCDE-FrontPanel.conf"
       ./NsCDE/bin/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
+      echo "Done."
 
       # Regenerate system NsCDE-Subpanels.conf with window name
       echo "Regenerating system NsCDE-Subpanels.conf"
@@ -559,6 +616,8 @@ function configure_installed
                xsess_dir="/usr/share/xsessions"
             elif [ -d "/usr/local/share/xsessions" ]; then
                xsess_dir="/usr/local/share/xsessions"
+            elif [ -d "/usr/pkg/share/xsessions" ]; then
+               xsess_dir="/usr/pkg/share/xsessions"
             else
                xsess_dir=""
             fi
@@ -631,9 +690,21 @@ function configure_installed
                mkdir -p "${xsess_dir}"
             fi
             xsession_inst=1
+         elif [ -d "/usr/pkg/share/xsessions" ]; then
+            if [ "x${destdir}" == "x" ]; then
+               xsess_dir="/usr/pkg/share/xsessions"
+            else
+               xsess_dir="${destdir}//usr/pkg/share/xsessions"
+               mkdir -p "${xsess_dir}"
+            fi
+            xsession_inst=1
          else
-            echo "Error: Cannot locate xsessions directory in /usr/share and /usr/local/share"
-            echo "Enable NsCDE X Session startup manually in your X Display Manager configuration"
+            echo ""
+            echo "Warning: X Display Manager file:"
+            echo "Cannot locate xsessions directory in /usr/share /usr/local/share or /usr/pkg/share."
+            echo "Enable NsCDE X Session startup manually in your X Display Manager configuration."
+            echo "Hint: use ${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+            echo ""
             xsession_inst=0
          fi
       else
@@ -695,13 +766,13 @@ function upgrade_nscde
 {
    if (($upgrade_mode == 1)); then
       echo ""
-      echo "*************************************************************************"
-      echo "*                                                                       *"
-      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
-      echo "*                                                                       *"
-      echo "*  Upgrade/Reinstall procedure in progress ...                          *"
-      echo "*                                                                       *"
-      echo "*************************************************************************"
+      echo "**************************************************************************"
+      echo "*                                                                        *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE)  *"
+      echo "*                                                                        *"
+      echo "*  Upgrade/Reinstall procedure in progress ...                           *"
+      echo "*                                                                        *"
+      echo "**************************************************************************"
       echo ""
    fi
 
