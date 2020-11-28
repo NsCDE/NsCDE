@@ -190,37 +190,40 @@ function install_nscde
          exit 1
       else
          # Early detection of FVWM before check_dependencies is needed
-         # for patch state detection of fvwm binary.
+         # for patch state detection of fvwm binary. Try with names fvwm and fvwm2.
          whence -q fvwm
          fvwmretval=$?
          whence -q fvwm2
          fvwm2retval=$?
          fvwmsumretval=$(($fvwmretval + $fvwm2retval))
 
+         # Try new FVWM3
          if (($fvwmsumretval > 1)); then
             whence -q fvwm3
                if (($? > 0)); then
                   echo "Error: cannot find fvwm binary. Install FVWM before continuing."
                   exit 1
                else
+                  # FVWM3 found.
                   def_instmode="f"
                   fvwm_patched=1
                fi
-         fi
-         # A nasty hack ...
-         if (($fvwmretval != 0)) && (($fvwm2retval == 0)); then
-            strings $(whence fvwm2) | grep -q -- -NsCDE
-            stringsretval=$?
          else
-            strings $(whence fvwm) | grep -q -- -NsCDE
-            stringsretval=$?
-         fi
-         if (($stringsretval == 0)); then
-            def_instmode="f"
-            fvwm_patched=1
-         else
-            def_instmode="w"
-            fvwm_patched=0
+            # A nasty hack ...
+            if (($fvwmretval != 0)) && (($fvwm2retval == 0)); then
+               strings $(whence fvwm2) | grep -q -- -NsCDE
+               stringsretval=$?
+            else
+               strings $(whence fvwm) | grep -q -- -NsCDE
+               stringsretval=$?
+            fi
+            if (($stringsretval == 0)); then
+               def_instmode="f"
+               fvwm_patched=1
+            else
+               def_instmode="w"
+               fvwm_patched=0
+            fi
          fi
 
          echo ""
@@ -1264,13 +1267,13 @@ function deinstall_nscde
 {
    if (($upgrade_mode == 0)); then
       echo ""
-      echo "*************************************************************************"
-      echo "*                                                                       *"
-      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE) *"
-      echo "*                                                                       *"
-      echo "*  Deinstallation procedure in progress ...                             *"
-      echo "*                                                                       *"
-      echo "*************************************************************************"
+      echo "**************************************************************************"
+      echo "*                                                                        *"
+      echo "*  Starting Installer.ksh for Not So Common Desktop Environment (NsCDE)  *"
+      echo "*                                                                        *"
+      echo "*  Deinstallation procedure in progress ...                              *"
+      echo "*                                                                        *"
+      echo "**************************************************************************"
       echo ""
    fi
 

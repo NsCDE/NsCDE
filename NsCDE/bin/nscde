@@ -56,8 +56,11 @@ if [ ! -x "$FVWM_BIN" ]; then
    if (($? != 0)); then
       FVWM_BIN=$(whence -p fvwm3)
       if (($? != 0)); then
-         echo "Error: cannot detect fvwm or fvwm3 in $PATH"
-         exit 3
+         FVWM_BIN=$(whence -p fvwm2)
+         if (($? != 0)); then
+            echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH"
+            exit 3
+         fi
       fi
    fi
 fi
