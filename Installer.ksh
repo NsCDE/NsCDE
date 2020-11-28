@@ -135,11 +135,11 @@ function check_dependencies
       if (($retval > 0)); then
          if [ "$pymodule" == "PyQt5" ]; then
             echo "Import of PyQt5 failed. Trying PyQt4 ..."
-            python3 -c "import PyQt4"
+            python3 -c "import PyQt4" 2>/dev/null
             qtretval=$?
             if (($qtretval > 0)); then
-               echo "Error: cannot find Python 3 module PyQt5 nor PyQt4. Import failed."
-               pymissing="$pymissing $pymodule"
+               echo "Error: cannot find Python 3 module PyQt5 or PyQt4. Import failed."
+               pymissing="$pymissing PyQt4"
             else
                echo "Import of PyQt4 suceeded. Continuing."
                continue
@@ -184,16 +184,23 @@ function install_nscde
       if (($noninteractive == 1)); then
          echo "You must provide either -w or -f. If your installation of FVWM has been"
          echo "patched with \"FvwmButtons_sunkraise_windowname_unified.patch\" and with"
-         echo "\"FvwmScript_XC_left_ptr.patch\", specify \"-f\" to the installer. If not,"
-         echo "then specify \"-w\" for workarounds to be applied (see the docs)."
+         echo "\"FvwmScript_XC_left_ptr.patch\", or you are using FVWM3, specify \"-f\""
+         echo "to the installer. If not, then specify \"-w\" for workarounds to be"
+         echo "applied on this installation (see the docs)."
          exit 1
       else
          # Early detection of FVWM before check_dependencies is needed
          # for patch state detection of fvwm binary.
          whence -q fvwm
          if (($? > 0)); then
-            echo "Error: cannot find fvwm binary. Install FVWM before continuing."
-            exit 1
+            whence -q fvwm3
+               if (($? > 0)); then
+                  echo "Error: cannot find fvwm binary. Install FVWM before continuing."
+                  exit 1
+               else
+                  def_instmode="f"
+                  fvwm_patched=1
+               fi
          fi
          # A nasty hack ...
          strings $(whence fvwm) | grep -q -- -NsCDE
@@ -211,6 +218,7 @@ function install_nscde
          echo "configuration options will be enabled (or not) during this installation."
          echo ""
          echo "Type \"f\" for NsCDE installation with patched FVWM,"
+         echo "or if your FVWM is acutally newer FVWM3 (assumed as patched)"
          echo "or \"w\" for NsCDE installation with plain/non-patched FVWM."
          echo ""
          echo -ne "Simply press return for guessed default [${def_instmode}]: \c"
