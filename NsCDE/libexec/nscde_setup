@@ -158,6 +158,7 @@ function setup_nscde
       if [ "$OS" == "NetBSD" ]; then
          echo 'SetEnv XDG_CONFIG_DIRS $[XDG_CONFIG_DIRS]:/usr/pkg/etc/xdg' >> ${FVWM_USERDIR}/NsCDE.conf
          echo 'SetEnv XDG_DATA_DIRS $[XDG_DATA_DIRS]:/usr/pkg/share' >> ${FVWM_USERDIR}/NsCDE.conf
+         echo 'Test (EnvMatch FVWM_IS_FVWM3 1, EnvMatch NSCDE_OS NetBSD, x gtail) InfoStoreAdd xlogcmd "gtail -n 300 -f ~/.xsession-errors ~/.NsCDE/tmp/fvwm.log"' >> ${FVWM_USERDIR}/NsCDE.conf
       fi
    else
       if (($VERBOSE == 1)); then

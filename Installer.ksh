@@ -61,6 +61,7 @@ function check_dependencies
       dep_exit 20
    fi
 
+   # Mandatory program dependencies check
    missingexe=""
    for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3 gettext
    do
@@ -95,7 +96,14 @@ function check_dependencies
       fi
    fi
 
-   # Dependency only if fvwm_patched=0
+   if [ "$OS" == "NetBSD" ]; then
+      if [ ! -x "/usr/pkg/bin/gtail" ]; then
+         echo "Warning: for \"Watch Errors\" to work on fvwm3, you need"
+         echo "to install GNU coreutils package with \"gtail\" command."
+      fi
+   fi
+
+   # Dependency only if fvwm_patched == 0
    if (($fvwm_patched == 0)); then
       whence -q xdotool
       retval=$?
@@ -108,6 +116,7 @@ function check_dependencies
       fi
    fi
 
+   # Optional program dependencies check and warnings
    missingoexe=""
    for oexe in xscreensaver stalonetray xsettingsd xrandr dunst
    do
@@ -126,7 +135,8 @@ function check_dependencies
       echo ""
       sleep 3
    fi
-
+ 
+   # Hicolor Icon Theme warning
    found_hicolor_theme=0
    for hicoloridx in /usr/share/icons/hicolor/index.theme \
                      /usr/local/share/icons/hicolor/index.theme \
@@ -148,17 +158,16 @@ function check_dependencies
 
    # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
    if [ ! -d "/etc/xdg/menus" ]; then
-      echo "Warning: Directory /etc/xdg/menus does not exist. This will break"
-      echo "fvwm-menu-desktop and as a consequence, NsCDE Workspace Menu will"
-      echo "have empty Applications submenu. While NsCDE reads it menu files"
-      echo "from own resources pointed by XDG_DATA_DIRS, and system maybe"
-      echo "uses /usr/local/etc/xdg/menus or /usr/pkg/etc/xdg/menus, this"
-      echo "one in /etc must exist to satisfy fvwm-menu-directory."
+      echo "Warning: If you find NsCDE Workspace Menu Applications submenu to"
+      echo "be empty, you should create empty directory /etc/xdg/menus."
+      echo "This can be due to fvwm-menu-desktop hardcoded and not changed by"
+      echo "package management pathname."
       echo ""
-      echo "Just make as root: \"mkdir -p /etc/xdg/menus\" to have it fixed."
+      echo "If needed make as root: \"mkdir -p /etc/xdg/menus\" to have it fixed."
       echo ""
    fi
 
+   # Check for needed python3 modules
    pymissing=""
    for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
        fnmatch getopt time platform psutil pwd socket
