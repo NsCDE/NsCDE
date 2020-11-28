@@ -41,6 +41,26 @@ function check_dependencies
       dep_exit 20
    fi
 
+   # Find FVWM
+   fvwmcnt=0
+   for fvwmname in fvwm3 fvwm fvwm2 $FVWM_BIN
+   do
+      whence -q $fvwmname
+      if (($? == 0)); then
+         (( fvwmcnt = fvwmcnt + 1 ))
+      fi
+   done
+   if (($fvwmcnt == 0)); then
+      echo ""
+      echo "Error: cannot find FVWM binary installation. This is main component."
+      echo "Tried in:"
+      echo "$PATH" | tr ':' '\n' | sed 's/^/   - &/g'
+      echo "If FVWM is installed, put it in the PATH or put full path to the fvwm"
+      echo "pathname in FVWM_BIN environment variable and rerun Installer.ksh."
+      echo ""
+      dep_exit 20
+   fi
+
    missingexe=""
    for exe in convert cpp xrdb xset xrefresh xprop xdpyinfo xterm python3 gettext
    do
