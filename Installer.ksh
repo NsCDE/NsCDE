@@ -192,7 +192,12 @@ function install_nscde
          # Early detection of FVWM before check_dependencies is needed
          # for patch state detection of fvwm binary.
          whence -q fvwm
-         if (($? > 0)); then
+         fvwmretval=$?
+         whence -q fvwm2
+         fvwm2retval=$?
+         fvwmsumretval=$(($fvwmretval + $fvwm2retval))
+
+         if (($fvwmsumretval > 1)); then
             whence -q fvwm3
                if (($? > 0)); then
                   echo "Error: cannot find fvwm binary. Install FVWM before continuing."
@@ -203,8 +208,14 @@ function install_nscde
                fi
          fi
          # A nasty hack ...
-         strings $(whence fvwm) | grep -q -- -NsCDE
-         if (($? == 0)); then
+         if (($fvwmretval != 0)) && (($fvwm2retval == 0)); then
+            strings $(whence fvwm2) | grep -q -- -NsCDE
+            stringsretval=$?
+         else
+            strings $(whence fvwm) | grep -q -- -NsCDE
+            stringsretval=$?
+         fi
+         if (($stringsretval == 0)); then
             def_instmode="f"
             fvwm_patched=1
          else
