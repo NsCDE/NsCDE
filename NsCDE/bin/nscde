@@ -51,18 +51,19 @@ fi
 
 # Find fvwm(1) binary. This is a critical point.
 # We cannot continue without main workforce.
-if [ ! -x "$FVWM_BIN" ]; then
-   FVWM_BIN=$(whence -p fvwm)
-   if (($? != 0)); then
-      FVWM_BIN=$(whence -p fvwm3)
-      if (($? != 0)); then
-         FVWM_BIN=$(whence -p fvwm2)
-         if (($? != 0)); then
-            echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH"
-            exit 3
-         fi
+if [ "x$FVWM_BIN" == "x" ]; then
+   for fvwmname in fvwm3 fvwm fvwm2
+   do
+      FVWM_BIN=$(whence -p $fvwmname)
+      if (($? == 0)); then
+         break
       fi
-   fi
+   done
+fi
+if [ "x$FVWM_BIN" == "x" ]; then
+   echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH and"
+   echo "environment variable FVWM_BIN is not set. Exiting."
+   exit 3
 fi
 
 # Handle our X defaults if it exists.

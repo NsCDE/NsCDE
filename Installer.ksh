@@ -126,6 +126,19 @@ function check_dependencies
       sleep 2
    fi
 
+   # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
+   if [ ! -d "/etc/xdg/menus" ]; then
+      echo "Warning: Directory /etc/xdg/menus does not exist. This will break"
+      echo "fvwm-menu-desktop and as a consequence, NsCDE Workspace Menu will"
+      echo "have empty Applications submenu. While NsCDE reads it menu files"
+      echo "from own resources pointed by XDG_DATA_DIRS, and system maybe"
+      echo "uses /usr/local/etc/xdg/menus or /usr/pkg/etc/xdg/menus, this"
+      echo "one in /etc must exist to satisfy fvwm-menu-directory."
+      echo ""
+      echo "Just make as root: \"mkdir -p /etc/xdg/menus\" to have it fixed."
+      echo ""
+   fi
+
    pymissing=""
    for pymodule in yaml PyQt5 xdg os re shutil subprocess sys \
        fnmatch getopt time platform psutil pwd socket
@@ -191,39 +204,43 @@ function install_nscde
       else
          # Early detection of FVWM before check_dependencies is needed
          # for patch state detection of fvwm binary. Try with names fvwm and fvwm2.
-         whence -q fvwm
-         fvwmretval=$?
-         whence -q fvwm2
-         fvwm2retval=$?
-         fvwmsumretval=$(($fvwmretval + $fvwm2retval))
-
-         # Try new FVWM3
-         if (($fvwmsumretval > 1)); then
-            whence -q fvwm3
-               if (($? > 0)); then
-                  echo "Error: cannot find fvwm binary. Install FVWM before continuing."
-                  exit 1
-               else
+         fvwmbincnt=0
+         for fvwmname in fvwm3 fvwm fvwm2
+         do
+            whence -qp $fvwmname
+            fvwmbinretval=$?
+            if (($fvwmbinretval == 0)); then
+               (( fvwmbincnt = fvwmbincnt + 1 ))
+               echo "Found: $fvwmname"
+               if [[ "$fvwmname" == @(fvwm|fvwm2) ]] && ((fvwmbinretval == 0)); then
+                  # A nasty hack ...
+                  strings $(whence $fvwmname) | grep -q -- -NsCDE
+                  stringsretval=$?
+                  if (($stringsretval == 0)); then
+                     def_instmode="f"
+                     fvwm_patched=1
+                  else
+                     def_instmode="w"
+                     fvwm_patched=0
+                  fi
+               elif [[ "$fvwmname" == "fvwm3" ]]; then
                   # FVWM3 found.
                   def_instmode="f"
                   fvwm_patched=1
+               else
+                  # Wild guess. We should not get here.
+                  echo "Unknown FVWM Binary. Probably FVWM2 unpatched."
+                  def_instmode="w"
+                  fvwm_patched=0
                fi
-         else
-            # A nasty hack ...
-            if (($fvwmretval != 0)) && (($fvwm2retval == 0)); then
-               strings $(whence fvwm2) | grep -q -- -NsCDE
-               stringsretval=$?
-            else
-               strings $(whence fvwm) | grep -q -- -NsCDE
-               stringsretval=$?
+               break
             fi
-            if (($stringsretval == 0)); then
-               def_instmode="f"
-               fvwm_patched=1
-            else
-               def_instmode="w"
-               fvwm_patched=0
-            fi
+         done
+
+         if (($fvwmbincnt == 0)); then
+            echo "Error: cannot find fvwm binary. Install FVWM before continuing."
+            echo ""
+            exit 1
          fi
 
          echo ""
