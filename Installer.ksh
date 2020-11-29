@@ -101,9 +101,17 @@ function check_dependencies
          echo "Warning: for \"Watch Errors\" to work on fvwm3, you need"
          echo "to install GNU coreutils package with \"gtail\" command."
       fi
+      pkg_info dejavu-ttf > /dev/null 2>&1
+      if (($? != 0)); then
+         echo "Warning: it is highly recommended to install dejavu-ttf package."
+      fi
    fi
 
    # Dependency only if fvwm_patched == 0
+   # Set forcefully to unpatched in check-only mode when it is undefined.
+   if [ "x$fvwm_patched" == "x" ]; then
+      fvwm_patched=0
+   fi
    if (($fvwm_patched == 0)); then
       whence -q xdotool
       retval=$?
@@ -157,13 +165,16 @@ function check_dependencies
    fi
 
    # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
-   if [ ! -d "/etc/xdg/menus" ]; then
+   if [ ! -d "/etc/xdg/menus" ] && [ "$OS" != @(FreeBSD|DragonFly) ]; then
       echo "Warning: If you find NsCDE Workspace Menu Applications submenu to"
       echo "be empty, you should create empty directory /etc/xdg/menus."
-      echo "This can be due to fvwm-menu-desktop hardcoded and not changed by"
-      echo "package management pathname."
       echo ""
-      echo "If needed make as root: \"mkdir -p /etc/xdg/menus\" to have it fixed."
+   fi
+
+   # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
+   if [ ! -d "/usr/local/etc/xdg/menus" ] && [ "$OS" == @(FreeBSD|DragonFly) ]; then
+      echo "Warning: If you find NsCDE Workspace Menu Applications submenu to"
+      echo "be empty, you should create empty directory /usr/local/etc/xdg/menus."
       echo ""
    fi
 
