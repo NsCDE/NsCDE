@@ -261,25 +261,25 @@ function Xresources
                          egrep '^bg_color_1|fg_color_1|ts_color_1|bg_color_2|fg_color_2|ts_color_2|bg_color_5|fg_color_5|ts_color_5')
 
  
-         ulbg=$(echo "$colorblock" | egrep '^bg_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ulbg=$(echo "$colorblock" | egrep '^bg_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k background -v "\"$ulbg\""
-         ulfg=$(echo "$colorblock" | egrep '^fg_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ulfg=$(echo "$colorblock" | egrep '^fg_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k foreground -v "\"$ulfg\""
-         ulfr=$(echo "$colorblock" | egrep '^ts_color_2 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ulfr=$(echo "$colorblock" | egrep '^ts_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k frame_color -v "\"$ulfr\""
  
-         unbg=$(echo "$colorblock" | egrep '^bg_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         unbg=$(echo "$colorblock" | egrep '^bg_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k background -v "\"$unbg\""
-         unfg=$(echo "$colorblock" | egrep '^fg_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         unfg=$(echo "$colorblock" | egrep '^fg_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k foreground -v "\"$unfg\""
-         unfr=$(echo "$colorblock" | egrep '^ts_color_5 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         unfr=$(echo "$colorblock" | egrep '^ts_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k frame_color -v "\"$unfr\""
  
-         ucbg=$(echo "$colorblock" | egrep '^bg_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ucbg=$(echo "$colorblock" | egrep '^bg_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k background -v "\"$ucbg\""
-         ucfg=$(echo "$colorblock" | egrep '^fg_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ucfg=$(echo "$colorblock" | egrep '^fg_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k foreground -v "\"$ucfg\""
-         ucfr=$(echo "$colorblock" | egrep '^ts_color_1 #[[:xdigit:]]{,6}$' | cut -d" " -f 2)
+         ucfr=$(echo "$colorblock" | egrep '^ts_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k frame_color -v "\"$ucfr\""
 
          $NSCDE_ROOT/bin/confset.py -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k frame_color -v "\"$ucbg\""
