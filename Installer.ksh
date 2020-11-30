@@ -165,14 +165,14 @@ function check_dependencies
    fi
 
    # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
-   if [ ! -d "/etc/xdg/menus" ] && [ "$OS" != @(FreeBSD|DragonFly) ]; then
+   if [ ! -d "/etc/xdg/menus" ] && [[ "$OS" != @(FreeBSD|DragonFly) ]]; then
       echo "Warning: If you find NsCDE Workspace Menu Applications submenu to"
       echo "be empty, you should create empty directory /etc/xdg/menus."
       echo ""
    fi
 
    # Warn about hardcoded fvwm-menu-desktop dependency for /etc/xdg/menus existance.
-   if [ ! -d "/usr/local/etc/xdg/menus" ] && [ "$OS" == @(FreeBSD|DragonFly) ]; then
+   if [ ! -d "/usr/local/etc/xdg/menus" ] && [[ "$OS" == @(FreeBSD|DragonFly) ]]; then
       echo "Warning: If you find NsCDE Workspace Menu Applications submenu to"
       echo "be empty, you should create empty directory /usr/local/etc/xdg/menus."
       echo ""
