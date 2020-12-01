@@ -2,21 +2,24 @@
 
 ![ScreenShot](NsCDE.png)
 
-Notice: for a full documentation, see NsCDE/share/doc/*
+Notices:
+- for a full documentation, see NsCDE/share/doc/*
+- FAQ: https://github.com/NsCDE/NsCDE/wiki/NsCDE---Frequently-Asked-Questions-(FAQ)
 
-Some of the screenshots here: https://imgur.com/gallery/nHkw35X
-... and here: https://imgur.com/gallery/RroGvLH
+Screenshots:
+- https://imgur.com/gallery/nHkw35X
+- https://imgur.com/gallery/RroGvLH
 
 Video Presentations and guides: Set of 12 NsCDE video presentations
 (commented and titled screen captures) on NsCDE Youtube channel.
 https://www.youtube.com/watch?v=BwuTOghS3ac&list=PLpVwwj0aIJjeHbA38F1z693-fKIC8IHS5
 
-Author will like to apologize for bad english in docs. A rand() function putting
-articles (the, a, an) will probably be more accurate.
-
 Notice: for a set of additional wallpapers, download
 https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz
 and put into /opt/NsCDE/share/photos/
+
+Author will like to apologize for bad english in docs. A rand() function putting
+articles (the, a, an) will probably be more accurate.
 
 # **Introduction**
 
