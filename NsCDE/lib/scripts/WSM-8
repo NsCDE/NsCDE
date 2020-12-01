@@ -1,4 +1,4 @@
-#
+   #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
 # Author: Hegel3DReloaded
 # Licence: GPLv3
@@ -601,8 +601,10 @@ Property
           Set $CurrDesk = (Add (StrCopy $DeskPageStr 1 1) 1)
           Set $CurrPage = (StrCopy $DeskPageStr 2 3)
 
-          For $deskiter = 1 To $DeskNo Do
+          Set $deskiter = 0
+          While $deskiter < $DeskNo Do
           Begin
+             Set $deskiter = (Add $deskiter 1)
              If $deskiter == $CurrDesk Then
              Begin
                 If (GetValue $deskiter) == 0 Then
