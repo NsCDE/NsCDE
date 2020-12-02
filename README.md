@@ -14,10 +14,6 @@ Video Presentations and guides: Set of 12 NsCDE video presentations
 (commented and titled screen captures) on NsCDE Youtube channel.
 https://www.youtube.com/watch?v=BwuTOghS3ac&list=PLpVwwj0aIJjeHbA38F1z693-fKIC8IHS5
 
-Notice: for a set of additional wallpapers, download
-https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz
-and put into /opt/NsCDE/share/photos/
-
 Author will like to apologize for bad english in docs. A rand() function putting
 articles (the, a, an) will probably be more accurate.
 
