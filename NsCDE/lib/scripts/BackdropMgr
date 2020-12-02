@@ -44,6 +44,7 @@ Begin
 
    # Defaults
    Set $ColorVariant = 0
+   Set $PixmapVariant = {AspectPixmap}
    Set $Performed = 0
    Set $PreviewContaminated = 0
    Set $PhotoMode = 0
@@ -95,6 +96,9 @@ Begin
    ChangeLocaleTitle 7 (GetTitle 7)
    ChangeLocaleTitle 9 (GetTitle 9)
    ChangeLocaleTitle 11 (GetTitle 11)
+
+   # Get Screen X and Y
+   Do {SendToModule BackdropMgr SendString 7 1 $[vp.width]x$[vp.height]}
 End
 
 PeriodicTasks
@@ -338,12 +342,13 @@ Widget 7
             ChangeSize 1 80 22
             Set $Photos = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
             ChangeTitle 5 $Photos
-            ChangeTitle 6 { Use this picture for all workspaces}
+            ChangeLocaleTitle 6 { Use this picture for all workspaces}
             ChangeColorset 4 20
-            HideWidget 8
-            HideWidget 9
+            ChangeLocaleTitle 8 {Picture Variant: }
+            ChangeLocaleTitle 9 { Stretch Picture | Tile Picture| Original Picture }
             HideWidget 10
             Set $PhotoMode = 1
+            ChangeValue 9 1
          End
          Else
          Begin
@@ -351,13 +356,20 @@ Widget 7
             ChangeSize 1 90 22
             Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
             ChangeTitle 5 $Backdrops
-            ChangeTitle 6 { Use this backdrop for all workspaces}
+            ChangeLocaleTitle 6 { Use this backdrop for all workspaces}
             ChangeIcon 4 NsCDE/None.xpm
-            ShowWidget 8
-            ShowWidget 9
+            # ShowWidget 8
+            # ShowWidget 9
+            ChangeLocaleTitle 8 {Background Variant: }
+            ChangeLocaleTitle 9 { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
             ShowWidget 10
             Set $PhotoMode = 0
+            ChangeValue 9 1
          End
+      End
+      1 :
+      Begin
+         Set $ScreenXY = (LastString)
       End
 End
 
@@ -390,36 +402,54 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         If (GetValue 9) == 1 Then
+         If $PhotoMode == 0 Then
          Begin
-            Set $ColorVariant = $CurrDesk
-            SendSignal 5 1
+            If (GetValue 9) == 1 Then
+            Begin
+               Set $ColorVariant = $CurrDesk
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 2 Then
+            Begin
+               Set $ColorVariant = 1
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 3 Then
+            Begin
+               Set $ColorVariant = 2
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 4 Then
+            Begin
+               Set $ColorVariant = 3
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 5 Then
+            Begin
+               Set $ColorVariant = 4
+               SendSignal 5 1
+            End
+   
+            # X compositor bug workaround
+            If $RedrawSelf == 1 Then
+            Begin
+               ChangeValue 9 (GetValue 9)
+            End
          End
-         If (GetValue 9) == 2 Then
+         If $PhotoMode == 1 Then
          Begin
-            Set $ColorVariant = 1
-            SendSignal 5 1
-         End
-         If (GetValue 9) == 3 Then
-         Begin
-            Set $ColorVariant = 2
-            SendSignal 5 1
-         End
-         If (GetValue 9) == 4 Then
-         Begin
-            Set $ColorVariant = 3
-            SendSignal 5 1
-         End
-         If (GetValue 9) == 5 Then
-         Begin
-            Set $ColorVariant = 4
-            SendSignal 5 1
-         End
-
-         # X compositor bug workaround
-         If $RedrawSelf == 1 Then
-         Begin
-            ChangeValue 9 (GetValue 9)
+            If (GetValue 9) == 1 Then
+            Begin
+               Set $PixmapVariant = {AspectPixmap}
+            End
+            If (GetValue 9) == 2 Then
+            Begin
+               Set $PixmapVariant = {TiledPixmap}
+            End
+            If (GetValue 9) == 3 Then
+            Begin
+               Set $PixmapVariant = {Pixmap}
+            End
          End
       End
 End
@@ -484,7 +514,8 @@ Widget 11
             Begin
                If $BackdropPreview <> {} Then
                Begin
-                  Do {Exec exec fvwm-root -r } $BackdropPreview
+                  # Do {Exec exec fvwm-root -r } $BackdropPreview
+                  Do {Colorset 3} $CurrDesk { TiledPixmap } $BackdropPreview
                   Set $PreviewContaminated = 1
                End
             End
@@ -494,7 +525,8 @@ Widget 11
                Begin
                   Set $PhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f "} $PhotoName {"}
                   Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
-                  Do {Exec exec fvwm-root -r } $PhotoPath
+                  # Do {Exec exec fvwm-root -r } $PhotoPath
+                  Do {Colorset 3} $CurrDesk { } $PixmapVariant { } $PhotoPath
                   Set $PreviewContaminated = 1
                End
             End
@@ -704,8 +736,10 @@ Widget 17
             End
             If (GetValue 6) <> 0 Then
             Begin
-               For $deskiter = 1 To $DeskNo Do
+               Set $deskiter = 0
+               While $deskiter < $DeskNo Do
                Begin
+                  Set $deskiter = (Add $deskiter 1)
                   Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $deskiter { -b "} $BackdropName {"}
                   Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
                End
@@ -722,8 +756,10 @@ Widget 17
             End
             If (GetValue 6) <> 0 Then
             Begin
-               For $deskiter = 1 To $DeskNo Do
+               Set $deskiter = 0
+               While $deskiter < $DeskNo Do
                Begin
+                  Set $deskiter = (Add $deskiter 1)
                   Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $deskiter {:} $ColorVariant {" -b "} $BackdropName {"}
                   Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
                End
@@ -737,14 +773,16 @@ Widget 17
       Begin
          If (GetValue 6) == 0 Then
          Begin
-            Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $CurrDesk { -s "} $PhotoName {"}
+            Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $CurrDesk { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
             Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
          End
          If (GetValue 6) <> 0 Then
          Begin
-            For $deskiter = 1 To $DeskNo Do
+            Set $deskiter = 0
+            While $deskiter < $DeskNo Do
             Begin
-               Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $deskiter { -s "} $PhotoName {"}
+               Set $deskiter = (Add $deskiter 1)
+               Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $deskiter { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
                Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
             End
          End

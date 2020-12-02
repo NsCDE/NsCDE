@@ -408,32 +408,6 @@ function install_nscde
       exit 3
    fi
 
-   if [ "x$photopath" != "x" ]; then
-      echo "Copying additional photo collection from $photopath as ${instpath}/share/photos"
-      if [ -d "$photopath" ]; then
-         mkdir -p "${instpath}/share/photos"
-         cp -rf "$photopath"/*.png ${instpath}/share/photos/
-         retval=$?
-         if (($retval != 0)); then
-            echo "An error $retval occured while copying photo collection from $photopath"
-         else
-            echo "Done."
-         fi
-      else
-         echo "Error: Cannot read directory with additional photo collection: $photopath"
-      fi
-   else
-      if [ ! -d "${instpath}/share/photos" ]; then
-         photospopulated=0
-      else
-         photospopulated=$(ls -1 "${instpath}/share/photos" 2>&1 | wc -l)
-      fi
-      if (($photospopulated < 1)) && [ -z $phcnt ]; then
-         echo "Info: Additional photo collection not installed in ${instpath}/share/photos"
-         echo "See: https://github.com/NsCDE/NsCDE-photos/releases/download/1.0/NsCDE-Photos-1.0.tar.gz"
-      fi
-   fi
-
    if (($fvwm_patched == 1)); then
       configure_installed patched
    else
@@ -884,33 +858,6 @@ function upgrade_nscde
       fi
    fi
 
-   # Backup photos, put it back if there was something customized
-   old_photos=$(ls "${instpath}/share/photos" 2>/dev/null)
-
-   get_back=$(pwd)
-
-   phcnt=0
-   for ph in $old_photos
-   do
-      if [ ! -r "NsCDE/share/photos/$ph" ]; then
-         ((phcnt = phcnt + 1))
-         photo_savelist="$photo_savelist $ph"
-      fi
-   done
-   if (($phcnt > 0)); then
-      echo "Backing up photos not found in the new installation for later restore."
-      cd "${instpath}/share/photos" && tar cpf /tmp/_nscde_photo_savelist.tar $photo_savelist
-      retval=$?
-      if (($retval > 0)); then
-         echo "Archive (tar) process for ${instpath}/share/photos to /tmp/_nscde_photo_savelist.tar"
-         echo "exited with status $retval"
-         exit 14
-      else
-         echo "Backing up custom photos: done."
-      fi
-      cd ${get_back}
-   fi
-
    # Backup any custom unknown to NsCDE backdrops and put them back later
    get_back=$(pwd)
    known_backdrops_list='backdrops/Abstract.pm
@@ -1310,14 +1257,6 @@ palettes/Zutto.dp'
 
    # Call main install procedure
    install_nscde
-
-   # Put back any additional photos
-   if (($phcnt > 0)); then
-      echo "Restoring additional photos back in ${instpath}/share/photos ..."
-      mkdir -p "${instpath}/share/photos"
-      cd "${instpath}/share/photos" && tar xpf /tmp/_nscde_photo_savelist.tar && rm -f /tmp/_nscde_photo_savelist.tar
-      echo "Done."
-   fi
 }
 
 function deinstall_nscde
@@ -1461,7 +1400,6 @@ function usage
    echo "   -C   dependencies check failures will be non-fatal, except for Korn Shell obviously."
    echo "   -D <dest>   destination for staged installation. Used for packaging mainly."
    echo "   -p <path>   filesystem path where NsCDE should be installed. Defaults to /opt/NsCDE."
-   echo "   -P <path>   where to look for wallpapers for installing into <instpath>/share/photos."
    echo "   -X <path>   where to put nscde.desktop xsession. Defaults to /usr/share/xsessions."
    echo "   -I <path>   where to put freedesktop icons directory symlink. Defaults to"
    echo "               /usr/local/share/icons. Special path \"nowhere\" means omit symlink creation."
@@ -1472,17 +1410,13 @@ function usage
    echo "      last option, and it is exclusive with \"-i\" and/or \"-d\"."
    echo ""
    echo "Examples:"
-   echo "   - Install non-interactively for patched FVWM into default path /opt/NsCDE"
+   echo "   - Install non-interactively for patched FVWM or FVWM3 into default path /opt/NsCDE"
    echo "     without looking for additional photos."
    echo "   ./Installer.ksh -f -n -i"
    echo ""
    echo "   - Install without photo addons for non-patched FVWM into default"
    echo "     path /opt/NsCDE:"
    echo "   ./Installer.ksh -w -i"
-   echo ""
-   echo "   - Install non-interectively with photo addons for non-patched FVWM"
-   echo "     into default path /opt/NsCDE:"
-   echo "   ./Installer.ksh -w -n -P /tmp/NsCDE-Photos -i"
    echo ""
    echo "   - Install NsCDE in interactive mode for non-patched FVWM into"
    echo "     path /usr/local/nscde:"
@@ -1526,7 +1460,7 @@ function usage
    echo ""
 }
 
-while getopts iucCdD:p:wfP:V:X:I:nh Option
+while getopts iucCdD:p:wfV:X:I:nh Option
 do
    case $Option in
    i)
@@ -1561,9 +1495,6 @@ do
    ;;
    f)
       fvwm_patched=1
-   ;;
-   P)
-      photopath="$OPTARG"
    ;;
    X)
       xsess_dir="$OPTARG"

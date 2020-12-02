@@ -107,8 +107,8 @@ function GenerateBackdropPreview
 
       grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
       if (($? == 0)); then
-         OldBackdrop=$(egrep "Colorset 3${Desk} TiledPixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
-         $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+         OldBackdrop=$(egrep "Colorset 3${Desk}( bg \$\[bg\.cs..\],)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
+         $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk}\( bg \$\[bg\.cs..\],\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
          if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [ "${OldBackdrop##*/}" != "Desk${Desk}-${1}.pm" ]; then
             rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
          fi
@@ -133,14 +133,35 @@ function GeneratePhotoPreview
 
    GetPhoto $1
 
+   case $Desk in
+      1) bgcs='\$\[bg\.cs40\]' ;;
+      2) bgcs='\$\[bg\.cs42\]' ;;
+      3) bgcs='\$\[bg\.cs44\]' ;;
+      4) bgcs='\$\[bg\.cs46\]' ;;
+      5) bgcs='\$\[bg\.cs40\]' ;;
+      6) bgcs='\$\[bg\.cs42\]' ;;
+      7) bgcs='\$\[bg\.cs44\]' ;;
+      8) bgcs='\$\[bg\.cs46\]' ;;
+   esac
+
    if (($PreviewMode == 0)); then
       grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
       if (($? == 0)); then
          if [ -s "$PhotoNamePath" ]; then
-            OldBackdrop=$(egrep "Colorset 3${Desk} TiledPixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
-            sededpath=$(echo "$PhotoNamePath" | sed 's/\//\\\//g')
-            $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk} TiledPixmap \(.*\)/Colorset 3${Desk} TiledPixmap $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
-            if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ]; then
+            if [ "x$ScreenXY" != "x" ]; then
+               convert -resize ${ScreenXY} "$PhotoNamePath" "${FVWM_USERDIR}/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            else
+               cp -f "$PhotoNamePath" "${FVWM_USERDIR}/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            fi
+            if (($? == 0)) then
+               ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            else
+               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+            fi
+            OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
+            sededpath=$(echo "$ConvertedPhoto" | sed 's/\//\\\//g')
+            $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk}\( bg ${bgcs},\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} bg ${bgcs}, $PixmapVariant $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+            if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [[ "${OldBackdrop##*/}" != "Desk${Desk}-${1}."@(png|xpm) ]]; then
                rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
             fi
          else
@@ -148,7 +169,18 @@ function GeneratePhotoPreview
          fi
       else
          if [ -s "$PhotoNamePath" ]; then
-            echo "Colorset 3${Desk} TiledPixmap $PhotoNamePath" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+            if [ "x$ScreenXY" != "x" ]; then
+               convert -resize $ScreenXY "$PhotoNamePath" "${FVWM_USERDIR}/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            else
+               cp -f "$PhotoNamePath" "${FVWM_USERDIR}/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            fi
+            if (($? == 0)) then
+               ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
+            else
+               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+            fi
+            bgcs_clean=$(echo "${bgcs}" | sed 's/\\//g')
+            echo "Colorset 3${Desk} bg ${bgcs_clean}, $PixmapVariant $ConvertedPhoto" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
          else
             echo "Error getting image path for $1."
          fi
@@ -173,6 +205,8 @@ function GeneratePhotoPreview
 # -g retrives palette path, files variables and echoes if in echo mode
 # -G get backdrop path, files variables and echoes if in echo mode
 # -b Generates backdrops preview or final backdrops in user's directory, writes NsCDE-Backdrops.conf
+# -a Receive Pixmap Aspect Mode from Backdrop Style Manager
+# -x Receive $[vp.width] and $[vp.height] from Backdrop Style Manager
 # -s Generates photo preview or writes definition of final photo path defnition in user's NsCDE-Backdrops.conf
 # -p generates backdrop menu
 # -P generates photo menu
@@ -180,7 +214,7 @@ function GeneratePhotoPreview
 # -f Retreives photo pathname from photo logical name
 # -n Retreives backdrop logical name from number in FvwmScript List widget
 # -h Help
-while getopts teC:T:c:D:pg:G:b:n:PF:f:s:h Option
+while getopts teC:T:c:D:pg:G:b:n:PF:f:a:x:s:h Option
 do
    case $Option in
       t)
@@ -209,6 +243,12 @@ do
       ;;
       b)
          GenerateBackdropPreview "$OPTARG"
+      ;;
+      x)
+         export ScreenXY=$OPTARG
+      ;;
+      a)
+         export PixmapVariant=$OPTARG
       ;;
       s)
          GeneratePhotoPreview "$OPTARG"
