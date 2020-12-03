@@ -526,7 +526,23 @@ Widget 11
                   Set $PhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f "} $PhotoName {"}
                   Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
                   # Do {Exec exec fvwm-root -r } $PhotoPath
-                  Do {Colorset 3} $CurrDesk { } $PixmapVariant { } $PhotoPath
+                  If $CurrDesk == 1 Then
+                     Set $BgCs = 40
+                  If $CurrDesk == 2 Then
+                     Set $BgCs = 42
+                  If $CurrDesk == 3 Then
+                     Set $BgCs = 44
+                  If $CurrDesk == 4 Then
+                     Set $BgCs = 46
+                  If $CurrDesk == 5 Then
+                     Set $BgCs = 40
+                  If $CurrDesk == 6 Then
+                     Set $BgCs = 42
+                  If $CurrDesk == 7 Then
+                     Set $BgCs = 44
+                  If $CurrDesk == 8 Then
+                     Set $BgCs = 46
+                  Do {Colorset 3} $CurrDesk { bg $[bg.cs} $BgCs {],} $PixmapVariant { } $PhotoPath
                   Set $PreviewContaminated = 1
                End
             End
