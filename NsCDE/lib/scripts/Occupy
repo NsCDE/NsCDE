@@ -35,6 +35,18 @@ Begin
    Set $PageMatrixY = (GetScriptArgument 7)
    Set $PagesNo = (Mult $PageMatrixX $PageMatrixY)
 
+   # Middle mouse button selects to go with the window
+   Set $GoNoGo = (GetScriptArgument 8)
+   If $GoNoGo == {go} Then
+   Begin
+      Set $GoWithWindow = 1
+      ChangeValue 7 1
+   End
+   Else
+   Begin
+      Set $GoWithWindow = 0
+   End
+
    # OpMode 1 is workspaces operation, OpMode 2 is pages mode of operation
    If $OpModeArg == {pg} Then
    Begin
@@ -79,9 +91,6 @@ Begin
    #
    # Defaults for variables during initialization
    #
-
-   # Do not go with window
-   Set $GoWithWindow = 0
 
    # Not sticky
    Set $AllPages = 0
