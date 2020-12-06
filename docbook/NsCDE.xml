@@ -9,7 +9,7 @@
 <article id="index" lang="en"> 
 <!-- please do not change the id; for translations, change lang to -->
 <!-- appropriate code -->
-<articleinfo> 
+<articleinfo>
  <title>Not so Common Desktop Environment (&app;) Manual</title>
  <abstract role="description">
     <para>
@@ -3133,9 +3133,10 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 
 <listitem><para>
   <keysym>Alt+F7</keysym> maximizes window 100% (whole screen + decorations);
-  when pressed again it maximizes to 86% (stretch), while third press will put
-  window into normal state. We can say how window is cycling between normal, stretched an
-  maximized state. This is a cyclic keybinding in a "shrink" direction.
+  when pressed again it maximizes to 86% (stretch), third press will put window
+  in the grow state (Maximized on page up to the first obstacle), while third press will put
+  window into normal state. We can say how window is cycling between maximized, stretched,
+  grow and maximized states. This is a cyclic keybinding in a "shrink" direction.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -3143,14 +3144,28 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Alt+F8</keysym> maximizes window ~ 86% - avoids Front Panel; when pressed again
+  <keysym>Alt+F8</keysym> grows window up to the first obstacle on page,
+  when pressed again, it maximizes window ~ 86% - avoids Front Panel; when pressed further,
   it maximizes to 100% (whole screen + decorations); third call to Alt+F8 restores
-  window into normal state. We can say how window is cycling between normal, stretched and
-  maximized state. This is a cyclic keybinding in a "grow" direction.
+  window into normal state. We can say how window is cycling between normal, grow,
+  stretched and maximized state. This is a cyclic keybinding in a "grow" direction.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
     for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+F7</keysym> Works like <keysym>Alt+F7</keysym>, but selects every second
+  operation. In practice, from restored state goes to stretched and back, and from grow
+  state goes to fully maximized and back.
+</para></listitem>
+
+<listitem><para>
+   <keysym>Meta+F8</keysym> is the same as <keysym>Meta+F7</keysym>. This variant is
+   presented on Window Operations menu for actions when going towards bigger maximized
+   state, while <keysym>Meta+F7</keysym> is presented for actions which are shrinking
+   back.
 </para></listitem>
 
 <listitem><para>
@@ -3309,7 +3324,7 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Meta+F7</keysym> centers the window in the middle of the screen
+  <keysym>Meta+F12</keysym> centers the window in the middle of the screen
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -3317,7 +3332,7 @@ Key <keysym>Meta+BackSpace</keysym> will warp a pointer and give a focus to the 
 </para></listitem>
 
 <listitem><para>
-  <keysym>Meta+F8</keysym> reads <filename>GeoDB.ini</filename> and if it finds an entry for the current
+  <keysym>Meta+F5</keysym> reads <filename>GeoDB.ini</filename> and if it finds an entry for the current
     resolution and <varname>$[w.class],</varname> it resizes and moves a window according to
     the specification in <varname>$FVWM_USERDIR/GeoDB.ini</varname> 
     </para>

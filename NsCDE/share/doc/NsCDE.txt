@@ -2491,21 +2491,31 @@ M. Z.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F7 maximizes window 100% (whole screen + decorations);
-       when pressed again it maximizes to 86% (stretch), while
-       third press will put window into normal state. We can say
-       how window is cycling between normal, stretched an
-       maximized state. This is a cyclic keybinding in a "shrink"
-       direction.
+       when pressed again it maximizes to 86% (stretch), third
+       press will put window in the grow state (Maximized on page
+       up to the first obstacle), while third press will put
+       window into normal state. We can say how window is cycling
+       between maximized, stretched, grow and maximized states.
+       This is a cyclic keybinding in a "shrink" direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+F8 maximizes window ~ 86% - avoids Front Panel; when
-       pressed again it maximizes to 100% (whole screen +
-       decorations); third call to Alt+F8 restores window into
-       normal state. We can say how window is cycling between
-       normal, stretched and maximized state. This is a cyclic
-       keybinding in a "grow" direction.
+     * Alt+F8 grows window up to the first obstacle on page, when
+       pressed again, it maximizes window ~ 86% - avoids Front
+       Panel; when pressed further, it maximizes to 100% (whole
+       screen + decorations); third call to Alt+F8 restores window
+       into normal state. We can say how window is cycling between
+       normal, grow, stretched and maximized state. This is a
+       cyclic keybinding in a "grow" direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
+     * Meta+F7 Works like Alt+F7, but selects every second
+       operation. In practice, from restored state goes to
+       stretched and back, and from grow state goes to fully
+       maximized and back.
+     * Meta+F8 is the same as Meta+F7. This variant is presented
+       on Window Operations menu for actions when going towards
+       bigger maximized state, while Meta+F7 is presented for
+       actions which are shrinking back.
      * Alt+F9 is empty
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
@@ -2583,10 +2593,10 @@ M. Z.
        information for a current window in GeoDB.ini
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Meta+F7 centers the window in the middle of the screen
+     * Meta+F12 centers the window in the middle of the screen
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Meta+F8 reads GeoDB.ini and if it finds an entry for the
+     * Meta+F5 reads GeoDB.ini and if it finds an entry for the
        current resolution and $[w.class], it resizes and moves a
        window according to the specification in
        $FVWM_USERDIR/GeoDB.ini
