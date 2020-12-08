@@ -22,83 +22,160 @@ config and extended a bit). Namely:
     moving viewport from page to page in any context.
 </p></li><li class="listitem"><p>
   cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>, with Alt modifier are cycling
-  window focus and raises or lowers them on the current page.
+  window focus and raises or lowers them on the current page in all contexts except icon
 </p></li><li class="listitem"><p>
-  the same combination, but with <span class="keysym">meta</span> (<span class="keysym">mod4</span>) is moving viewport by
-    4% of the screen. (<span class="keysym">Ctrl</span> moves 100%)
+  cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>, <span class="keysym">left</span> and
+  <span class="keysym">right</span>, with <span class="keysym">meta</span> (<span class="keysym">mod4</span>) are moving viewport by
+  4% of the screen. (<span class="keysym">Ctrl</span> moves 100%)
 </p></li><li class="listitem"><p>
-  the same combination, but with <span class="keysym">shift</span> modifier moves mouse by 1%
-    of the screen
+  the same cursor keys as above, but with <span class="keysym">shift</span> modifier moves pointer by
+  1% of the screen
 </p></li><li class="listitem"><p>
-  <span class="keysym">Menu (Compose)</span> key if  pressed twice in a time window of two seconds
-  pops up root menu in any context
+  <span class="keysym">Meta+Alt+I</span> in any context apart from icon context will move focus and pointer
+  to icons on the currect page (if any). Here, Up and Down keys can be used to browse icons.
+  In the context of icon itself, this keybinding will choose last non-iconified window and move
+  off focus from icons.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Menu / Meta+ISO_Level3_Shift</span> combination pops up root Window Operations Menu
+  <span class="keysym">Up/Down</span> in the context of a icon focuses first icon above or below of
+  the current selected and focused icon. Key Space will bring main icon menu in the
+  context of the focused icon.
+</p></li><li class="listitem"><p>
+<span class="keysym">I</span> in the context of the icon deiconifies that icon.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Menu (Compose)</span> key, if pressed twice in a time window of two seconds
+  pops up root menu in any context. On keyboards without <span class="keysym">Menu (Compose)</span> key,
+  combination <span class="keysym">Alt+ISO_Level3_Shift</span> does the same thing
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Menu</span> combination pops up root Window Operations Menu
+  On keyboards without <span class="keysym">Menu (Compose)</span> key, combination
+  <span class="keysym">Meta+ISO_Level3_Shift</span> does the same thing
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+Menu</span> pressed twice, brings up page menu on the Front Panel
+  and Local Pager in the middle of the screen if enabled. On keyboards without
+  <span class="keysym">Menu (Compose)</span>, combination <span class="keysym">Meta+Alt+U</span>
+  does the same thing
 </p></li><li class="listitem"><p>
-  <span class="keysym">Ctrl+Menu</span> Cycles window focus between all
-  windows on the current page, raises them, and moves pointer to them.
+  <span class="keysym">Meta+Alt+N</span> Cycles window focus between all
+  windows on the current page, raises them, and moves pointer to them
 </p></li><li class="listitem"><p>
-  <span class="keysym">Ctrl+ISO_Level3_Shift</span> Cycles window focus between all
-  windows on the current page, raises them, and moves pointer to them in
-  the same way as <span class="keysym">Ctrl+Menu</span>. This duplication is intended
-  for keyboars which don't have some of this keys. They are usually close
-  enough to be of the same functionality.
+  <span class="keysym">Meta+Alt+B</span> Same as <span class="keysym">Meta+Alt+N</span> but in
+  backward direction
 </p></li><li class="listitem"><p>
-  <span class="keysym">Ctrl+Shift+Menu</span> Cycles window focus between all
-  windows on the current page, raises them, and moves pointer to them.
-  Backward operation.
+  <span class="keysym">Meta+Shift+N</span> Cycles window focus between all windows on
+  the current workspace, raises them, and moves pointer to them
 </p></li><li class="listitem"><p>
-  <span class="keysym">Ctrl+Shift+ISO_Level3_Shift</span> Cycles window focus between all
-  windows on the current page, raises them, and moves pointer to them.
-  Backward operation. Same as <span class="keysym">Ctrl+Shift+Menu</span>.
+  <span class="keysym">Meta+Shift+B</span> Same as <span class="keysym">Meta+Shift+N</span> but
+  in backward direction
 </p></li><li class="listitem"><p>
-  <span class="keysym">Alt+Menu / Alt+ISO_Level3_Shift</span> Moves pointer to the focused window
-  if pointer is not already there.
+  <span class="keysym">Meta+Alt+J</span> Moves pointer to the focused window
+  if pointer is not already there
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+ISO_Level3_Shift</span> (right alt) Cycles window focus between all
-  windows on the current Workspace.
+  Key <span class="keysym">Meta+Alt+Space</span> in the context of the window, frame corners, frame
+    sides and a title bar pops up Window Options context menu
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Menu</span> Same as <span class="keysym">Shift+ISO_Level3_Shift</span> (see above).
+  <span class="keysym">Space</span> in the icon frame context pops up icon-specific contextual menu
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F12</span> Again executes last selected item from the last used subpanel.
+Key <span class="keysym">Meta+Alt+Insert</span> will give a focus to the last opened window
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Sun Again (Redo)</span> Again executes last selected item from the last used subpanel.
+Key <span class="keysym">Meta+Alt+BackSpace</span> will give a focus to the previously focused window
 </p></li><li class="listitem"><p>
-  <span class="keysym">Space</span> under icon frame pops up icon-specific contextual menu
+  <span class="keysym">Shift+BackSpace</span> If pressed twice in a time frame of two seconds will call LocalPager in any context.
+  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again once, while pager is still visible.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager which shows matrix of pages and workspaces.
+This keybinding works in any context, but it must be called twice to avoid accidental invocation
+when Global Pager is visible, calling it second time will add title bar and make it as permanent
+tool until closed or clicked on border with middle mouse button or closed with a third invocation
+of this keybinding. In normal semi-transient mode, this pager disappears shortly after losing
+mouse focus to free space on the screen.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+Tab</span> is cycling trough pages of the active page of the current workspace
+  from up to down and then right up to down
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Tab</span> is cycling trough the all workspaces (desks)
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Shift+Tab</span> is reverse cycling trough the all workspaces (desks)
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+L</span> activates screensaver, that is, locks the screen
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+S</span> Executes "xrandr --auto"
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+W</span> will call f_CleanRestoreWorkspace function.
+  This will iconify and put into invisible group all iconified windows on the active page.
+  Repeating this action once again, restores all iconified windows back in place quickly
+  and without animation. Windows which were iconified before calling this action or from
+  windows started and iconified after this action are not affected by this function. This
+  is NsCDE smart version of the "show desktop" functionality. Individual windows from the
+  group can be deiconified too, which will sign off this windows from the group.
+</p></li><li class="listitem"><p>
+  Key <span class="keysym">Meta+Alt+M</span> same as <span class="keysym">Meta+Alt+Space</span>.
+</p></li><li class="listitem"><p>
+  Key <span class="keysym">Meta+Alt+O</span> - same as <span class="keysym">Meta+Space</span> if called in the
+  window context.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+E</span> Again executes last selected item from the last used subpanel.
+  From the Sun keyboard, this can also be accomplished with <span class="keysym">Meta+Sun Again (Redo)</span>.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Escape</span> Will cycle trough focus-accepting windows on the current page of
+  the current desk, avoiding CirculateSkip windows and the FrontPanel.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+Escape</span> Will open WindowList in the middle of the screen for the
+ current workspace (desk) if pressed twice, local WindowList will be replaced with
+ global WindowList
+</p></li><li class="listitem"><p>
+  <span class="keysym">XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system suspend (S3) option selected.
+  For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Ctrl+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system shutdown option selected.
+  For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system reboot option selected.
+  For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with X Session logout option selected.
+  For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Help</span> key on Sun keyboards if pressed twice in a second, in the context of the root window will
+  call PDF viewer (if any) with complete (this) NsCDE documentation.
+</p></li><li class="listitem"><p>
+  Sun <span class="keysym">Front</span> key on Sun keyboards acts as a <span class="keysym">Alt+F6</span> - Raise or Lower the window.
+</p></li><li class="listitem"><p>
+  Sun <span class="keysym">Find</span> key on Sun keyboards calls f_Find NsCDE FVWM function which has to be user defined to be usefull.
+</p></li><li class="listitem"><p>
+  Sun <span class="keysym">Props</span> key on Sun keyboards will call Style Manager window when pointer is on the root window.
+</p></li><li class="listitem"><p>
+  Sun <span class="keysym">Meta+Props</span> key on Sun keyboards will call Style Manager window.
+</p></li><li class="listitem"><p>
+  Sun <span class="keysym">Open</span> same as <span class="keysym">Alt+F12</span> invokes Exec dialog or Rofi launcher
+  if configured with nscde_use_rofi infostore variable in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
+</p></li><li class="listitem"><p>
+  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_ROOT/config/NsCDE-Keybindings.conf</code> for f_Mixer options and interaction.
+</p></li><li class="listitem"><p>
+  <span class="keysym">XF86AudioMute</span> key on Sun keyboards will mute the sound. Function f_Mixer expects PulseAudio system. See previous item for possible alternatives.
+</p></li><li class="listitem"><p>
+<span class="keysym">Shift+BackSpace</span> if pressed twice in a short time frame will spawn Local Pager under the pointer.
+Pressend second time just once, it will dismiss Local Pager
 </p></li><li class="listitem"><p>
   Key <span class="keysym">Meta+Space</span> in the context of the window, frame corners, frame
-    sides, title bar and icon (ovoids root window context!) calls
-    Occupy Workspace dialog for window moving between the desks.
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
+  sides, title bar and icon (ovoids root window context!) calls
+  Occupy Workspace dialog for window moving between the desks.
+  </p><p>
+  Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+  for automatic description on menus.
 </p></li><li class="listitem"><p>
-  Key <span class="keysym">Alt+Space</span> in the context of the window, frame corners, frame
+ Key <span class="keysym">Alt+Space</span> in the context of the window, frame corners, frame
     sides, title bar and icon (ovoids root window context!) calls
     Occupy Page dialog for window moving between the desks.
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  Key <span class="keysym">Meta+Alt+O</span> - same as <span class="keysym">Meta+Space</span> if called in the
-  window context.
-</p></li><li class="listitem"><p>
-  Key <span class="keysym">Meta+Alt+Space</span> in the context of the window, frame corners, frame
-    sides and a title bar pops up Window Options context menu
-</p></li><li class="listitem"><p>
-  Key <span class="keysym">Meta+Alt+M</span> same as <span class="keysym">Meta+Alt+Space</span> above.
-</p></li><li class="listitem"><p>
-Key <span class="keysym">Alt+Insert</span> will give a focus to the last opened window
-</p></li><li class="listitem"><p>
-Key <span class="keysym">Meta+Insert</span> will warp a pointer and give a focus to the last opened window
-</p></li><li class="listitem"><p>
-Key <span class="keysym">Alt+BackSpace</span> will give a focus to the previously focused window
-</p></li><li class="listitem"><p>
-Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a focus to the previously focused window
-</p></li><li class="listitem"><p>
   <span class="keysym">Alt+F1</span> regenerates and refreshes the window
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F1</span> Calls xrefresh(1) command to refresh the X11 display
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
@@ -108,7 +185,21 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Alt+F3</span> "shades" or rolls up the window to titlebar only view
+  <span class="keysym">Meta+F2</span> "shades" or rolls up the window to titlebar only view
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Alt+F3</span> Repositions the window according to saved geometry
+  (see <a class="link" href="NsCDE-GeometryMgr.html" title="4.9. Window Geometry Manager">Geometry Manager</a>), or if there
+  is no record for a window in <code class="filename">GeoDB.ini</code>, places again
+  window with FVWM <span class="command"><strong>PlaceAgain</strong></span> command
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F3</span> Centers the window in the middle of the screen where
+  mouse pointer currently resides, together with frame
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
@@ -119,8 +210,26 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
+<span class="keysym">Meta+F4</span> will resize and enlarge any resizable focused window by 25 pixels in all
+directions and place it again on page
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+Shift+F4</span> will resize and shrink any resizable focused window by 25 pixels in all
+directions and place it again on page
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
   <span class="keysym">Alt+F5</span> enters move mode which can be finished with cursors keys
     and enter
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F5</span> In the context of the window and it's frames places that
+  window in a full sticky state. That is, it occupies all workspaces and pages.
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
@@ -139,6 +248,10 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F7</span> Works like <span class="keysym">Alt+F7</span>, but selects every second
+  operation. In practice, from restored state goes to stretched and back, and from grow
+  state goes to fully maximized and back.
+</p></li><li class="listitem"><p>
   <span class="keysym">Alt+F8</span> grows window up to the first obstacle on page,
   when pressed again, it maximizes window ~ 86% - avoids Front Panel; when pressed further,
   it maximizes to 100% (whole screen + decorations); third call to Alt+F8 restores
@@ -147,10 +260,6 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F7</span> Works like <span class="keysym">Alt+F7</span>, but selects every second
-  operation. In practice, from restored state goes to stretched and back, and from grow
-  state goes to fully maximized and back.
 </p></li><li class="listitem"><p>
    <span class="keysym">Meta+F8</span> is the same as <span class="keysym">Meta+F7</span>. This variant is
    presented on Window Operations menu for actions when going towards bigger maximized
@@ -161,6 +270,10 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Meta+F9</span> in the context of the known terminal application windows
+    scratches the window to some 75%x72% of the screen, which is also a
+    menu option in this windows called <span class="emphasis"><em>Wide Terminal</em></span>
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F10</span> deletes a window (see fvwm(1))
     </p><p>
@@ -182,45 +295,33 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Alt+F12</span> calls xrefresh
+  <span class="keysym">Meta+F11</span> is empty
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Alt+Escape</span> Will open WindowList in the middle of the screen for the
- current workspace (desk) if pressed twice, local WindowList will be replaced with
- global WindowList
+  <span class="keysym">Alt+F12</span> invokes Exec dialog or Rofi launcher if configured with nscde_use_rofi infostore
+  variable in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+BackSpace</span> If pressed twice in a time frame of two seconds will call LocalPager in any context.
-  This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again once, while pager is still visible.
+  <span class="keysym">Meta+F12</span> invokes default terminal app ($[infostore.terminal])
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Alt+Tab</span> is cycling trough pages of the active page of the current workspace
-  from up to down and then right up to down
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Tab</span> is cycling trough the all workspaces (desks)
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Shift+Tab</span> is reverse cycling trough the all workspaces (desks)
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Alt+W</span> will call f_CleanRestoreWorkspace function.
-  This will iconify and put into invisible group all iconified windows on the active page.
-  Repeating this action once again, restores all iconified windows back in place quickly
-  and without animation. Windows which were iconified before calling this action or from
-  windows started and iconified after this action are not affected by this function. This
-  is NsCDE smart version of the "show desktop" functionality.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Alt+L</span> activates screensaver, that is, locks the screen
+  <span class="keysym">Meta+Alt+G</span> Calls Window Geometry Manager dialog which saves geometry
+  information for a current window in the GeoDB.ini
+    </p><p>
+    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
+    for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+F</span> in the context of a window, frame, or corner, puts a current window
   into a real fullscreen mode. Calling this keybinding again, restores a window.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Alt+I</span> in any context apart from icon context will move focus and pointer
-  to icons on the currect page (if any). Here, Up and Down keys can be used to browse icons.
-  In the context of icon itself, this keybinding will choose last non-iconified window and move
-  off focus from icons.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Up/Down</span> in the context of a icon focuses first icon above or below of
-  the current selected and focused icon. Key Space will bring main icon menu in the
-  context of the focused icon.
+  <span class="keysym">Meta+Alt+D</span>In the context of a window calls FVWM Ident module which presents
+  dialog with various X11 and window manager attributes on the screen
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Shift+Print</span> takes a screenshot of the root window with 3 seconds delay.
  Screenshots in PNG format are saved in <code class="filename">XDG_PICTURES_DIR</code> or
@@ -236,40 +337,13 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F1</span> invokes default terminal app ($[infostore.terminal])
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F2</span> invokes Exec dialog
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F3</span> toggles visibility of the titlebar
+  <span class="keysym">Shift+Escape</span> will do the same as <span class="keysym">Ctrl+Escape,</span> but Front Panel is
+    after repositioning shaded to bottom border of the screen. Invoking
+    this key sequence again will unshade the Front Panel. Middle mouse
+    button on the borders of the frame has the same effect
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F4</span> toggles window's sticky state
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F6</span> Calls Window Geometry Manager and saves geometry information for a current window in GeoDB.ini
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F12</span> centers the window in the middle of the screen
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F5</span> reads <code class="filename">GeoDB.ini</code> and if it finds an entry for the current
-    resolution and <code class="varname">$[w.class],</code> it resizes and moves a window according to
-    the specification in <code class="varname">$FVWM_USERDIR/GeoDB.ini</code> 
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+F9</span> in the context of the known terminal application windows
-    scratches the window to some 75%x72% of the screen, which is also a
-    menu option in this windows called <span class="emphasis"><em>Wide Terminal</em></span>
 </p></li><li class="listitem"><p>
   <span class="keysym">Ctrl+Escape</span> will raise Front Panel and reposition it to it's default
     place on the screen. If key combination is pressed for the second time, focus and
@@ -279,24 +353,6 @@ Key <span class="keysym">Meta+BackSpace</span> will warp a pointer and give a fo
     </p><p>
     Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
     for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Escape</span> will do the same as <span class="keysym">Ctrl+Escape,</span> but Front Panel is
-    after repositioning shaded to bottom border of the screen. Invoking
-    this key sequence again will unshade the Front Panel. Middle mouse
-    button on the borders of the frame has the same effect
-    </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_ROOT/config/Keymenu.actions</code>
-    for automatic description on menus.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+Escape</span> Will cycle trough focus-accepting windows on the current page of
-  the current desk, avoiding CirculateSkip windows and the FrontPanel.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager which shows matrix of pages and workspaces.
-This keybinding works in any context, but it must be called twice to avoid accidental invocation
-when Global Pager is visible, calling it second time will add title bar and make it as permanent
-tool until closed or clicked on border with middle mouse button or closed with a third invocation
-of this keybinding. In normal semi-transient mode, this pager disappears shortly after losing
-mouse focus to free space on the screen.
 </p></li><li class="listitem"><p>
 In the context of the Front Panel, <span class="keysym">Meta+ 1-10</span> will pop up subpanels 1 to 10
 and warp pointer to it
@@ -309,28 +365,4 @@ under the pointer and execute FvwmButton action defined in configuration of that
 </p></li><li class="listitem"><p>
 In the context of the Front Panel and any Subpanel, Sun <span class="keysym">Help</span> key will display
 Front Panel or Subpanels documentation.
-</p></li><li class="listitem"><p>
-  <span class="keysym">XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system suspend (S3) option selected.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Ctrl+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system shutdown option selected.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Alt+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with system reboot option selected.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Meta+XF86PowerOff</span> on Sun keyboards (most upper right) calls System Action Dialog with X Session logout option selected.
-</p></li><li class="listitem"><p>
-  <span class="keysym">Help</span> key on Sun keyboards if pressed twice in a second will call PDF viewer (if any) with complete (this) NsCDE documentation.
-</p></li><li class="listitem"><p>
-  Sun <span class="keysym">Front</span> key on Sun keyboards acts as a <span class="keysym">Alt+F6</span> - Raise or Lower the window.
-</p></li><li class="listitem"><p>
-  Sun <span class="keysym">Find</span> key on Sun keyboards calls f_Find NsCDE FVWM function which has to be user defined to be usefull.
-</p></li><li class="listitem"><p>
-  Sun <span class="keysym">Props</span> key on Sun keyboards will call Style Manager window when pointer is on the root window.
-</p></li><li class="listitem"><p>
-  Sun <span class="keysym">Meta+Props</span> key on Sun keyboards will call Style Manager window.
-</p></li><li class="listitem"><p>
-  Sun <span class="keysym">Open</span> key on Sun keyboards will call Exec dialog.
-</p></li><li class="listitem"><p>
-  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_ROOT/config/NsCDE-Keybindings.conf</code> for f_Mixer options and interaction.
-</p></li><li class="listitem"><p>
-  <span class="keysym">XF86AudioMute</span> key on Sun keyboards will mute the sound. Function f_Mixer expects PulseAudio system. See previous item for possible alternatives.
 </p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Init_conf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.15. NsCDE-Init.conf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.17. Keymenu.actions</td></tr></table></div></body></html>

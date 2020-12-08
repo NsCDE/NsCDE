@@ -2408,42 +2408,141 @@ M. Z.
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
      * cursor keys up, down, with Alt modifier are cycling window
-       focus and raises or lowers them on the current page.
-     * the same combination, but with meta (mod4) is moving
-       viewport by 4% of the screen. (Ctrl moves 100%)
-     * the same combination, but with shift modifier moves mouse
-       by 1% of the screen
-     * Menu (Compose) key if pressed twice in a time window of two
-       seconds pops up root menu in any context
-     * Meta+Menu / Meta+ISO_Level3_Shift combination pops up root
-       Window Operations Menu
+       focus and raises or lowers them on the current page in all
+       contexts except icon
+     * cursor keys up, down, left and right, with meta (mod4) are
+       moving viewport by 4% of the screen. (Ctrl moves 100%)
+     * the same cursor keys as above, but with shift modifier
+       moves pointer by 1% of the screen
+     * Meta+Alt+I in any context apart from icon context will move
+       focus and pointer to icons on the currect page (if any).
+       Here, Up and Down keys can be used to browse icons. In the
+       context of icon itself, this keybinding will choose last
+       non-iconified window and move off focus from icons.
+     * Up/Down in the context of a icon focuses first icon above
+       or below of the current selected and focused icon. Key
+       Space will bring main icon menu in the context of the
+       focused icon.
+     * I in the context of the icon deiconifies that icon.
+     * Menu (Compose) key, if pressed twice in a time window of
+       two seconds pops up root menu in any context. On keyboards
+       without Menu (Compose) key, combination
+       Alt+ISO_Level3_Shift does the same thing
+     * Meta+Menu combination pops up root Window Operations Menu
+       On keyboards without Menu (Compose) key, combination
+       Meta+ISO_Level3_Shift does the same thing
      * Meta+Alt+Menu pressed twice, brings up page menu on the
-       Front Panel
-     * Ctrl+Menu Cycles window focus between all windows on the
-       current page, raises them, and moves pointer to them.
-     * Ctrl+ISO_Level3_Shift Cycles window focus between all
-       windows on the current page, raises them, and moves pointer
-       to them in the same way as Ctrl+Menu. This duplication is
-       intended for keyboars which don't have some of this keys.
-       They are usually close enough to be of the same
-       functionality.
-     * Ctrl+Shift+Menu Cycles window focus between all windows on
-       the current page, raises them, and moves pointer to them.
-       Backward operation.
-     * Ctrl+Shift+ISO_Level3_Shift Cycles window focus between all
-       windows on the current page, raises them, and moves pointer
-       to them. Backward operation. Same as Ctrl+Shift+Menu.
-     * Alt+Menu / Alt+ISO_Level3_Shift Moves pointer to the
-       focused window if pointer is not already there.
-     * Shift+ISO_Level3_Shift (right alt) Cycles window focus
-       between all windows on the current Workspace.
-     * Shift+Menu Same as Shift+ISO_Level3_Shift (see above).
-     * Meta+F12 Again executes last selected item from the last
-       used subpanel.
-     * Meta+Sun Again (Redo) Again executes last selected item
-       from the last used subpanel.
-     * Space under icon frame pops up icon-specific contextual
-       menu
+       Front Panel and Local Pager in the middle of the screen if
+       enabled. On keyboards without Menu (Compose), combination
+       Meta+Alt+U does the same thing
+     * Meta+Alt+N Cycles window focus between all windows on the
+       current page, raises them, and moves pointer to them
+     * Meta+Alt+B Same as Meta+Alt+N but in backward direction
+     * Meta+Shift+N Cycles window focus between all windows on the
+       current workspace, raises them, and moves pointer to them
+     * Meta+Shift+B Same as Meta+Shift+N but in backward direction
+     * Meta+Alt+J Moves pointer to the focused window if pointer
+       is not already there
+     * Key Meta+Alt+Space in the context of the window, frame
+       corners, frame sides and a title bar pops up Window Options
+       context menu
+     * Space in the icon frame context pops up icon-specific
+       contextual menu
+     * Key Meta+Alt+Insert will give a focus to the last opened
+       window
+     * Key Meta+Alt+BackSpace will give a focus to the previously
+       focused window
+     * Shift+BackSpace If pressed twice in a time frame of two
+       seconds will call LocalPager in any context. This Pager
+       will disappear soon as it looses a pointer focus, or if
+       keybinding is pressed again once, while pager is still
+       visible.
+     * Shift+TabCalls visual GlobalPager which shows matrix of
+       pages and workspaces. This keybinding works in any context,
+       but it must be called twice to avoid accidental invocation
+       when Global Pager is visible, calling it second time will
+       add title bar and make it as permanent tool until closed or
+       clicked on border with middle mouse button or closed with a
+       third invocation of this keybinding. In normal
+       semi-transient mode, this pager disappears shortly after
+       losing mouse focus to free space on the screen.
+     * Alt+Tab is cycling trough pages of the active page of the
+       current workspace from up to down and then right up to down
+     * Meta+Tab is cycling trough the all workspaces (desks)
+     * Meta+Shift+Tab is reverse cycling trough the all workspaces
+       (desks)
+     * Meta+Alt+L activates screensaver, that is, locks the screen
+     * Meta+Alt+S Executes "xrandr --auto"
+     * Meta+Alt+W will call f_CleanRestoreWorkspace function. This
+       will iconify and put into invisible group all iconified
+       windows on the active page. Repeating this action once
+       again, restores all iconified windows back in place quickly
+       and without animation. Windows which were iconified before
+       calling this action or from windows started and iconified
+       after this action are not affected by this function. This
+       is NsCDE smart version of the "show desktop" functionality.
+       Individual windows from the group can be deiconified too,
+       which will sign off this windows from the group.
+     * Key Meta+Alt+M same as Meta+Alt+Space.
+     * Key Meta+Alt+O - same as Meta+Space if called in the window
+       context.
+     * Meta+Alt+E Again executes last selected item from the last
+       used subpanel. From the Sun keyboard, this can also be
+       accomplished with Meta+Sun Again (Redo).
+     * Meta+Escape Will cycle trough focus-accepting windows on
+       the current page of the current desk, avoiding
+       CirculateSkip windows and the FrontPanel.
+     * Alt+Escape Will open WindowList in the middle of the screen
+       for the current workspace (desk) if pressed twice, local
+       WindowList will be replaced with global WindowList
+     * XF86PowerOff on Sun keyboards (most upper right) calls
+       System Action Dialog with system suspend (S3) option
+       selected. For this to work, ACPI action needs to be
+       configured on the system. Otherwise, this will likely
+       initiate direct system shutdown.
+     * Ctrl+XF86PowerOff on Sun keyboards (most upper right) calls
+       System Action Dialog with system shutdown option selected.
+       For this to work, ACPI action needs to be configured on the
+       system. Otherwise, this will likely initiate direct system
+       shutdown.
+     * Alt+XF86PowerOff on Sun keyboards (most upper right) calls
+       System Action Dialog with system reboot option selected.
+       For this to work, ACPI action needs to be configured on the
+       system. Otherwise, this will likely initiate direct system
+       shutdown.
+     * Meta+XF86PowerOff on Sun keyboards (most upper right) calls
+       System Action Dialog with X Session logout option selected.
+       For this to work, ACPI action needs to be configured on the
+       system. Otherwise, this will likely initiate direct system
+       shutdown.
+     * Help key on Sun keyboards if pressed twice in a second, in
+       the context of the root window will call PDF viewer (if
+       any) with complete (this) NsCDE documentation.
+     * Sun Front key on Sun keyboards acts as a Alt+F6 - Raise or
+       Lower the window.
+     * Sun Find key on Sun keyboards calls f_Find NsCDE FVWM
+       function which has to be user defined to be usefull.
+     * Sun Props key on Sun keyboards will call Style Manager
+       window when pointer is on the root window.
+     * Sun Meta+Props key on Sun keyboards will call Style Manager
+       window.
+     * Sun Open same as Alt+F12 invokes Exec dialog or Rofi
+       launcher if configured with nscde_use_rofi infostore
+       variable in the $FVWM_USERDIR/NsCDE.conf
+     * XF86AudioLowerVolume and XF86AudioRaiseVolume on Sun type 6
+       or 7 keyboards will lower and raise sound volume by 1
+       percent, or by 10 percent if combined with Ctrl modifier.
+       This works by default on systems on which pactl(1)
+       PulseAudio tool is installed. On other systems, f_Mixer
+       function has to be redefined. See
+       $NSCDE_ROOT/config/NsCDE-Keybindings.conf for f_Mixer
+       options and interaction.
+     * XF86AudioMute key on Sun keyboards will mute the sound.
+       Function f_Mixer expects PulseAudio system. See previous
+       item for possible alternatives.
+     * Shift+BackSpace if pressed twice in a short time frame will
+       spawn Local Pager under the pointer. Pressend second time
+       just once, it will dismiss Local Pager
      * Key Meta+Space in the context of the window, frame corners,
        frame sides, title bar and icon (ovoids root window
        context!) calls Occupy Workspace dialog for window moving
@@ -2456,35 +2555,51 @@ M. Z.
        between the desks.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Key Meta+Alt+O - same as Meta+Space if called in the window
-       context.
-     * Key Meta+Alt+Space in the context of the window, frame
-       corners, frame sides and a title bar pops up Window Options
-       context menu
-     * Key Meta+Alt+M same as Meta+Alt+Space above.
-     * Key Alt+Insert will give a focus to the last opened window
-     * Key Meta+Insert will warp a pointer and give a focus to the
-       last opened window
-     * Key Alt+BackSpace will give a focus to the previously
-       focused window
-     * Key Meta+BackSpace will warp a pointer and give a focus to
-       the previously focused window
      * Alt+F1 regenerates and refreshes the window
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+F1 Calls xrefresh(1) command to refresh the X11
+       display
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F2 iconifies (deiconifies if in icon context)
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+F3 "shades" or rolls up the window to titlebar only
+     * Meta+F2 "shades" or rolls up the window to titlebar only
        view
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Alt+F3 Repositions the window according to saved geometry
+       (see Geometry Manager), or if there is no record for a
+       window in GeoDB.ini, places again window with FVWM
+       PlaceAgain command
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+F3 Centers the window in the middle of the screen
+       where mouse pointer currently resides, together with frame
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F4 enters resize mode which can be finished with
        cursors keys and enter
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
+     * Meta+F4 will resize and enlarge any resizable focused
+       window by 25 pixels in all directions and place it again on
+       page
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+Shift+F4 will resize and shrink any resizable focused
+       window by 25 pixels in all directions and place it again on
+       page
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
      * Alt+F5 enters move mode which can be finished with cursors
        keys and enter
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+F5 In the context of the window and it's frames places
+       that window in a full sticky state. That is, it occupies
+       all workspaces and pages.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F6 raises or lowers the window
@@ -2499,6 +2614,10 @@ M. Z.
        This is a cyclic keybinding in a "shrink" direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
+     * Meta+F7 Works like Alt+F7, but selects every second
+       operation. In practice, from restored state goes to
+       stretched and back, and from grow state goes to fully
+       maximized and back.
      * Alt+F8 grows window up to the first obstacle on page, when
        pressed again, it maximizes window ~ 86% - avoids Front
        Panel; when pressed further, it maximizes to 100% (whole
@@ -2508,10 +2627,6 @@ M. Z.
        cyclic keybinding in a "grow" direction.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Meta+F7 Works like Alt+F7, but selects every second
-       operation. In practice, from restored state goes to
-       stretched and back, and from grow state goes to fully
-       maximized and back.
      * Meta+F8 is the same as Meta+F7. This variant is presented
        on Window Operations menu for actions when going towards
        bigger maximized state, while Meta+F7 is presented for
@@ -2519,6 +2634,10 @@ M. Z.
      * Alt+F9 is empty
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
+     * Meta+F9 in the context of the known terminal application
+       windows scratches the window to some 75%x72% of the screen,
+       which is also a menu option in this windows called Wide
+       Terminal
      * Alt+F10 deletes a window (see fvwm(1))
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
@@ -2531,43 +2650,28 @@ M. Z.
      * Alt+F11 is empty
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+F12 calls xrefresh
+     * Meta+F11 is empty
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Alt+Escape Will open WindowList in the middle of the screen
-       for the current workspace (desk) if pressed twice, local
-       WindowList will be replaced with global WindowList
-     * Shift+BackSpace If pressed twice in a time frame of two
-       seconds will call LocalPager in any context. This Pager
-       will disappear soon as it looses a pointer focus, or if
-       keybinding is pressed again once, while pager is still
-       visible.
-     * Alt+Tab is cycling trough pages of the active page of the
-       current workspace from up to down and then right up to down
-     * Meta+Tab is cycling trough the all workspaces (desks)
-     * Meta+Shift+Tab is reverse cycling trough the all workspaces
-       (desks)
-     * Meta+Alt+W will call f_CleanRestoreWorkspace function. This
-       will iconify and put into invisible group all iconified
-       windows on the active page. Repeating this action once
-       again, restores all iconified windows back in place quickly
-       and without animation. Windows which were iconified before
-       calling this action or from windows started and iconified
-       after this action are not affected by this function. This
-       is NsCDE smart version of the "show desktop" functionality.
-     * Meta+Alt+L activates screensaver, that is, locks the screen
+     * Alt+F12 invokes Exec dialog or Rofi launcher if configured
+       with nscde_use_rofi infostore variable in the
+       $FVWM_USERDIR/NsCDE.conf
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+F12 invokes default terminal app
+       ($[infostore.terminal])
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Meta+Alt+G Calls Window Geometry Manager dialog which saves
+       geometry information for a current window in the GeoDB.ini
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
      * Meta+Alt+F in the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
        this keybinding again, restores a window.
-     * Meta+Alt+I in any context apart from icon context will move
-       focus and pointer to icons on the currect page (if any).
-       Here, Up and Down keys can be used to browse icons. In the
-       context of icon itself, this keybinding will choose last
-       non-iconified window and move off focus from icons.
-     * Up/Down in the context of a icon focuses first icon above
-       or below of the current selected and focused icon. Key
-       Space will bring main icon menu in the context of the
-       focused icon.
+     * Meta+Alt+DIn the context of a window calls FVWM Ident
+       module which presents dialog with various X11 and window
+       manager attributes on the screen
      * Meta+Shift+Print takes a screenshot of the root window with
        3 seconds delay. Screenshots in PNG format are saved in
        XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is not
@@ -2580,32 +2684,13 @@ M. Z.
        not defined.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Meta+F1 invokes default terminal app
-       ($[infostore.terminal])
-     * Meta+F2 invokes Exec dialog
-     * Meta+F3 toggles visibility of the titlebar
+     * Shift+Escape will do the same as Ctrl+Escape, but Front
+       Panel is after repositioning shaded to bottom border of the
+       screen. Invoking this key sequence again will unshade the
+       Front Panel. Middle mouse button on the borders of the
+       frame has the same effect
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Meta+F4 toggles window's sticky state
-       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
-       automatic description on menus.
-     * Meta+F6 Calls Window Geometry Manager and saves geometry
-       information for a current window in GeoDB.ini
-       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
-       automatic description on menus.
-     * Meta+F12 centers the window in the middle of the screen
-       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
-       automatic description on menus.
-     * Meta+F5 reads GeoDB.ini and if it finds an entry for the
-       current resolution and $[w.class], it resizes and moves a
-       window according to the specification in
-       $FVWM_USERDIR/GeoDB.ini
-       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
-       automatic description on menus.
-     * Meta+F9 in the context of the known terminal application
-       windows scratches the window to some 75%x72% of the screen,
-       which is also a menu option in this windows called Wide
-       Terminal
      * Ctrl+Escape will raise Front Panel and reposition it to
        it's default place on the screen. If key combination is
        pressed for the second time, focus and pointer focus will
@@ -2614,25 +2699,6 @@ M. Z.
        Front Panel itself.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
-     * Shift+Escape will do the same as Ctrl+Escape, but Front
-       Panel is after repositioning shaded to bottom border of the
-       screen. Invoking this key sequence again will unshade the
-       Front Panel. Middle mouse button on the borders of the
-       frame has the same effect
-       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
-       automatic description on menus.
-     * Meta+Escape Will cycle trough focus-accepting windows on
-       the current page of the current desk, avoiding
-       CirculateSkip windows and the FrontPanel.
-     * Shift+TabCalls visual GlobalPager which shows matrix of
-       pages and workspaces. This keybinding works in any context,
-       but it must be called twice to avoid accidental invocation
-       when Global Pager is visible, calling it second time will
-       add title bar and make it as permanent tool until closed or
-       clicked on border with middle mouse button or closed with a
-       third invocation of this keybinding. In normal
-       semi-transient mode, this pager disappears shortly after
-       losing mouse focus to free space on the screen.
      * In the context of the Front Panel, Meta+ 1-10 will pop up
        subpanels 1 to 10 and warp pointer to it
      * In the context of the any subpanel, Meta + 1-10 will pop
@@ -2644,38 +2710,6 @@ M. Z.
      * In the context of the Front Panel and any Subpanel, Sun
        Help key will display Front Panel or Subpanels
        documentation.
-     * XF86PowerOff on Sun keyboards (most upper right) calls
-       System Action Dialog with system suspend (S3) option
-       selected.
-     * Ctrl+XF86PowerOff on Sun keyboards (most upper right) calls
-       System Action Dialog with system shutdown option selected.
-     * Alt+XF86PowerOff on Sun keyboards (most upper right) calls
-       System Action Dialog with system reboot option selected.
-     * Meta+XF86PowerOff on Sun keyboards (most upper right) calls
-       System Action Dialog with X Session logout option selected.
-     * Help key on Sun keyboards if pressed twice in a second will
-       call PDF viewer (if any) with complete (this) NsCDE
-       documentation.
-     * Sun Front key on Sun keyboards acts as a Alt+F6 - Raise or
-       Lower the window.
-     * Sun Find key on Sun keyboards calls f_Find NsCDE FVWM
-       function which has to be user defined to be usefull.
-     * Sun Props key on Sun keyboards will call Style Manager
-       window when pointer is on the root window.
-     * Sun Meta+Props key on Sun keyboards will call Style Manager
-       window.
-     * Sun Open key on Sun keyboards will call Exec dialog.
-     * XF86AudioLowerVolume and XF86AudioRaiseVolume on Sun type 6
-       or 7 keyboards will lower and raise sound volume by 1
-       percent, or by 10 percent if combined with Ctrl modifier.
-       This works by default on systems on which pactl(1)
-       PulseAudio tool is installed. On other systems, f_Mixer
-       function has to be redefined. See
-       $NSCDE_ROOT/config/NsCDE-Keybindings.conf for f_Mixer
-       options and interaction.
-     * XF86AudioMute key on Sun keyboards will mute the sound.
-       Function f_Mixer expects PulseAudio system. See previous
-       item for possible alternatives.
      __________________________________________________________
 
 7.17. Keymenu.actions
