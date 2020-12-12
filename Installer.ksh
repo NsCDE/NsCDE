@@ -1173,6 +1173,7 @@ palettes/Mountain.dp
 palettes/Mud.dp
 palettes/Mustard.dp
 palettes/Neptune.dp
+palettes/Nordic.dp
 palettes/NorthernSky.dp
 palettes/Nutmeg.dp
 palettes/Oasis.dp
