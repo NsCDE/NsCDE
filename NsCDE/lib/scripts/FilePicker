@@ -60,6 +60,8 @@ Init
   # Locale stuff: Hack to keep leading or ending space(s)
   # which will be trimmed by LocaleTitle Widget directive.
   ChangeLocaleTitle 12 (GetTitle 12)
+
+  Set $Sent = 0
 End
 
 Widget 1
@@ -74,8 +76,19 @@ Main
  Case message of
   SingleClic :
   Begin
-   SendToScript (GetScriptFather) $PWD {/} (GetTitle 9)
-   Quit
+   If $Sent <> 1 Then
+   Begin
+      SendToScript (GetScriptFather) $PWD {/} (GetTitle 9)
+      Set $Sent = 1
+   End
+   Do {Schedule 1010 SendToModule FilePicker SendString 1 1 Quit}
+  End
+  1 :
+  Begin
+     If (LastString) == {Quit} Then
+     Begin
+        Quit
+     End
   End
 End
 
