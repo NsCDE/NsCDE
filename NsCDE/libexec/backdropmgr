@@ -45,9 +45,16 @@ function CheckBackdrop
 function CheckPicture
 {
    if [ -x $(type -p file) ]; then
-      file $1 | grep -q 'PNG image data'
+      echo "$1" | egrep -iq '\.(png|xpm|jpg|jpeg|gif|tiff)'
       if (($? == 0)); then
          echo "pic"
+         echo "$1" | egrep -iq '\.(png|xpm)'
+         if (($? == 0)); then
+            echo "noconv"
+         else
+            echo "conv"
+         fi
+         echo "${1##*/}" | $NSCDE_ROOT/bin/ised -c 's/\(.*\)\.\(.*$\)/\1/g' -o -f -
       else
          echo "notpic"
       fi

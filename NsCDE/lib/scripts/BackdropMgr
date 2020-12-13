@@ -590,16 +590,35 @@ Widget 12
          Else
          Begin
             Set $CheckPhotoFileCmd = {$NSCDE_ROOT/libexec/backdropmgr -T } (LastString)
-            Set $CheckPhotoFile = (GetOutput $CheckPhotoFileCmd 1 -1)
-            If $CheckPhotoFile == {pic} Then
+            Set $CheckPhotoFileType = (GetOutput $CheckPhotoFileCmd 1 1)
+            Set $CheckPhotoFileConv = (GetOutput $CheckPhotoFileCmd 2 1)
+            Set $CheckPhotoFileBaseName = (GetOutput $CheckPhotoFileCmd 3 -1)
+            If $CheckPhotoFileType == {pic} Then
             Begin
-               Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/photos/}
-               Set $Photos = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
-               ChangeTitle 5 $Photos
+               If $CheckPhotoFileConv == {noconv} Then
+               Begin
+                  Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/photos/}
+                  Set $Photos = (GetOutput {sleep 0.2; $NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+                  ChangeTitle 5 $Photos
+               End
+               If $CheckPhotoFileConv == {conv} Then
+               Begin
+                  Do {Exec exec convert "} (LastString) {" "$FVWM_USERDIR/photos/} $CheckPhotoFileBaseName {.png"}
+                  Set $Photos = (GetOutput {sleep 0.5; $NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+                  ChangeTitle 5 $Photos
+               End
+               Else
+               Begin
+                  # Workaround FvwmScript lack of programatic cases or elifs ...
+                  If $CheckPhotoFileConv <> {noconv} Then
+                  Begin
+                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error from libexec/backdropmgr: } $CheckPhotoFileConv {."}
+                  End
+               End
             End
             Else
             Begin
-               Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file is not a valid PNG file for photo background."}
+               Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file does not appear to be in the suitable image format for setting desktop background."}
             End
          End
       End
@@ -623,7 +642,7 @@ Widget 13
             Set $DelBckNumToName = (GetOutput $DelBckNumToNameCmd 1 -1)
             Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -G } $DelBckNumToName
             Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
-            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Backdrop] } $DelBckNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Backdrop]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Backdrop] } $DelBckNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Backdrop]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
          Else
          Begin
@@ -631,7 +650,7 @@ Widget 13
             Set $DelPhotoNumToName = (GetOutput $DelPhotoNumToNameCmd 1 -1)
             Set $CheckDelPhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f } $DelPhotoNumToName
             Set $CheckDelPhotoPath = (GetOutput $CheckDelPhotoPathCmd 1 -1)
-            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Picture] } $DelPhotoNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Picture]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Picture] } $DelPhotoNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Picture]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
       End
       1 :
