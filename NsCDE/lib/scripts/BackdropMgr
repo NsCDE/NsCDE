@@ -29,6 +29,11 @@ Begin
       Set $Ncolors = 8
    End
 
+   If $Ncolors == 4 Then
+   Begin
+      ChangeLocaleTitle 9 { Default for this Workspace}
+   End
+
    Set $CurrentPalette = (GetOutput {echo "$NSCDE_PALETTE"} 1 -1)
    If $CurrentPalette == {} Then
    Begin
@@ -363,7 +368,14 @@ Widget 7
             # ShowWidget 8
             # ShowWidget 9
             ChangeLocaleTitle 8 {Background Variant: }
-            ChangeLocaleTitle 9 { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+            If $Ncolors <> 4 Then
+            Begin
+               ChangeLocaleTitle 9 { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+            End
+            Else
+            Begin
+               ChangeLocaleTitle 9 { Default for this Workspace}
+            End
             ShowWidget 10
             Set $PhotoMode = 0
             ChangeValue 9 1
