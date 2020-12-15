@@ -338,8 +338,19 @@ Widget 7
          Begin
             ChangeTitle 9 (GetOutput $CMD3 (GetValue 7) -1)
             Set $FileExamine = (GetOutput $CMD3 (GetValue 7) -1)
-            Set $IsIconCmd = {ls } $PWD2 {/} $FileExamine { | egrep '.*\.(png|pm|bm|xpm|gif|jpg|jpeg)'}
+            Set $IsIconCmd = {ls '} $PWD2 {/} $FileExamine {' | egrep -i '^.*\.(png|pm|bm|xbm|xpm|svg|svgz)$'}
             Set $IsIcon = (GetOutput $IsIconCmd 1 -1)
+
+            If $IsIcon <> {} Then
+            Begin
+               Set $IconSizeCmd = {du -k '} $IsIcon {'}
+               Set $IconSize = (GetOutput $IconSizeCmd 1 1)
+               If $IconSize > 2048 Then
+               Begin
+                  Set $IsIcon = {}
+               End
+            End
+
             If $IsIcon == {} Then
             Begin
                If $W13Visible == 1 Then
