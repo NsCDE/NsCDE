@@ -10,9 +10,11 @@ Screenshots:
 - https://imgur.com/gallery/nHkw35X
 - https://imgur.com/gallery/RroGvLH
 
-Video Presentations and guides: Set of 12 NsCDE video presentations
-(commented and titled screen captures) on NsCDE Youtube channel.
-https://www.youtube.com/watch?v=BwuTOghS3ac&list=PLpVwwj0aIJjeHbA38F1z693-fKIC8IHS5
+Video Presentations and guides:
+- https://www.youtube.com/watch?v=BwuTOghS3ac&list=PLpVwwj0aIJjeHbA38F1z693-fKIC8IHS5
+Set of 12 NsCDE video presentations (commented and titled screen captures) on
+NsCDE Youtube channel.
+
 
 Author will like to apologize for bad english in docs. A rand() function putting
 articles (the, a, an) will probably be more accurate.
