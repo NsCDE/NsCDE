@@ -3,7 +3,7 @@
 ![ScreenShot](NsCDE.png)
 
 Notices:
-- for a full documentation, see NsCDE/share/doc/*
+- For a full documentation, see NsCDE/share/doc/*
 - FAQ: https://github.com/NsCDE/NsCDE/wiki/NsCDE---Frequently-Asked-Questions-(FAQ)
 
 Screenshots:
