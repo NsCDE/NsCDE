@@ -1,22 +1,65 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>10. Installation</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Installation-Dependencies.html" title="9. Installation Dependencies"><link rel="next" href="NsCDE-Startup.html" title="11. NsCDE Startup"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">10. Installation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Installation-Dependencies.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Startup.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Installation"></a>10. Installation</h2></div></div></div><p>
-When FVWM and all/most above mentioned dependencies are met, NsCDE can
-be used. Present installation is very simple:
+There is a script Installer.ksh in NsCDE top level directory when unpacked. When run without
+any arguments, installer script will print usage with explanations and examples. Installing NsCDE
+is relatively simple: if some mandatory dependency is missing (for example FVWM or ksh), installer
+will print that error, as well for some Python3 modules. For optional dependencies, that is,
+programs and components which are not essential it will just print a warning.
+</p><p>
+The main moduses of installation are:
 </p><pre class="programlisting">
 
   $ su - || sudo -i
   # umask 0022
   # cd /tmp
-  # wget https://github.com/NsCDE/NsCDE/archive/&lt;version&gt;.tar.gz
-  # tar xpzf &lt;version&gt;.tar.gz
-  # cp -rp NsCDE-&lt;version&gt;/NsCDE /opt
+  # wget https://github.com/NsCDE/NsCDE/archive/NsCDE-&lt;version&gt;.tar.gz
+  # tar xpzf NsCDE-&lt;version&gt;.tar.gz
+  # cd NsCDE-&lt;version&gt;
+  # ./Installer -w -n -i
 
 </pre><p>
-  ... and optionally:
+For FVWM3 or FVWM2 patched with NsCDE patches from NsCDE-&lt;version&gt;/src
+one can use "-f" mode of installation instead "-w".
 </p><pre class="programlisting">
 
-  # cd /usr/local/bin || cd /usr/bin
-  ln -s /opt/NsCDE/bin/nscde
+  $ su - || sudo -i
+  # umask 0022
+  # cd /tmp
+  # wget https://github.com/NsCDE/NsCDE/archive/NsCDE-&lt;version&gt;.tar.gz
+  # tar xpzf NsCDE-&lt;version&gt;.tar.gz
+  # cd NsCDE-&lt;version&gt;
+  # ./Installer -f -n -i
 
 </pre><p>
-That's it. NsCDE is installed.
+Both of the examples above will install NsCDE into /opt/NsCDE. However, it is
+possible to install to some other place. For example, this will install NsCDE
+in /data/programs/nscde:
+</p><pre class="programlisting">
+
+  # ./Installer -p /data/programs/nscde -f -n -i
+
+</pre><p>
+For interactive mode of installation "-n" must be ommited. An asking wizard type
+of installation will appear.
+</p><p>
+For a latest master tree from development page on Github, NsCDE can be fetched with
+git(1) and upgraded with fetching changes in the master or some other branch. An example
+of this would be:
+</p><pre class="programlisting">
+
+  # git clone https://github.com/NsCDE/NsCDE.git
+  # cd NsCDE
+  # ./Installer.ksh -w -n -i
+
+</pre><p>
+Upgrades, either from tarball or from git, once new version is downloaded can be made
+by replacing "-i" option with "-u" option for the installer. Example of upgrade:
+</p><pre class="programlisting">
+
+  # git clone https://github.com/NsCDE/NsCDE.git
+  # cd NsCDE
+  # ./Installer.ksh -w -n -u (or ./Installer.ksh -f -n -u)
+
+</pre><p>
+Similarly, option "-d" is for uninstallation etc ... run
+Installer.ksh without arguments for a full set of options.
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Installation-Dependencies.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Startup.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">9. Installation Dependencies </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 11. NsCDE Startup</td></tr></table></div></body></html>

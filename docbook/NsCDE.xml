@@ -4630,8 +4630,30 @@ any part of the NsCDE. (optional)
 <sect1 id="NsCDE-Installation">
 <title>Installation</title>
 <para>
-When FVWM and all/most above mentioned dependencies are met, NsCDE can
-be used. Present installation is very simple:
+There is a script Installer.ksh in NsCDE top level directory when unpacked. When run without
+any arguments, installer script will print usage with explanations and examples. Installing NsCDE
+is relatively simple: if some mandatory dependency is missing (for example FVWM or ksh), installer
+will print that error, as well for some Python3 modules. For optional dependencies, that is,
+programs and components which are not essential it will just print a warning.
+</para>
+<para>
+The main moduses of installation are:
+</para>
+<programlisting>
+<![CDATA[
+  $ su - || sudo -i
+  # umask 0022
+  # cd /tmp
+  # wget https://github.com/NsCDE/NsCDE/archive/NsCDE-<version>.tar.gz
+  # tar xpzf NsCDE-<version>.tar.gz
+  # cd NsCDE-<version>
+  # ./Installer -w -n -i
+]]>
+</programlisting>
+
+<para>
+For FVWM3 or FVWM2 patched with NsCDE patches from NsCDE-&lt;version&gt;/src
+one can use "-f" mode of installation instead "-w".
 </para>
 
 <programlisting>
@@ -4639,23 +4661,60 @@ be used. Present installation is very simple:
   $ su - || sudo -i
   # umask 0022
   # cd /tmp
-  # wget https://github.com/NsCDE/NsCDE/archive/<version>.tar.gz
-  # tar xpzf <version>.tar.gz
-  # cp -rp NsCDE-<version>/NsCDE /opt
-]]>
-</programlisting>
-<para>
-  ... and optionally:
-</para>
-<programlisting>
-<![CDATA[
-  # cd /usr/local/bin || cd /usr/bin
-  ln -s /opt/NsCDE/bin/nscde
+  # wget https://github.com/NsCDE/NsCDE/archive/NsCDE-<version>.tar.gz
+  # tar xpzf NsCDE-<version>.tar.gz
+  # cd NsCDE-<version>
+  # ./Installer -f -n -i
 ]]>
 </programlisting>
 
 <para>
-That's it. NsCDE is installed.
+Both of the examples above will install NsCDE into /opt/NsCDE. However, it is
+possible to install to some other place. For example, this will install NsCDE
+in /data/programs/nscde:
+</para>
+
+<programlisting>
+<![CDATA[
+  # ./Installer -p /data/programs/nscde -f -n -i
+]]>
+</programlisting>
+
+<para>
+For interactive mode of installation "-n" must be ommited. An asking wizard type
+of installation will appear.
+</para>
+
+<para>
+For a latest master tree from development page on Github, NsCDE can be fetched with
+git(1) and upgraded with fetching changes in the master or some other branch. An example
+of this would be:
+</para>
+
+<programlisting>
+<![CDATA[
+  # git clone https://github.com/NsCDE/NsCDE.git
+  # cd NsCDE
+  # ./Installer.ksh -w -n -i
+]]>
+</programlisting>
+
+<para>
+Upgrades, either from tarball or from git, once new version is downloaded can be made
+by replacing "-i" option with "-u" option for the installer. Example of upgrade:
+</para>
+
+<programlisting>
+<![CDATA[
+  # git clone https://github.com/NsCDE/NsCDE.git
+  # cd NsCDE
+  # ./Installer.ksh -w -n -u (or ./Installer.ksh -f -n -u)
+]]>
+</programlisting>
+
+<para>
+Similarly, option "-d" is for uninstallation etc ... run
+Installer.ksh without arguments for a full set of options.
 </para>
 
 </sect1>
@@ -4663,20 +4722,20 @@ That's it. NsCDE is installed.
 <title>NsCDE Startup</title>
 <para>
 Session can be started from the <filename>$HOME/.xsession</filename> in last command line
-as <command>exec nscde</command>, or <command>exec /opt/NsCDE/bin/nscde</command> or
+as <command>exec /opt/NsCDE/bin/nscde</command> or
 <command>ssh-agent nscde</command> or with <command>gpg-agent</command>,
 <command>lxsession</command> or whatever.
 </para>
 <para>
-If supported by the X Display Manager which is in use, an xsession file
-<filename>/opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop</filename>
-can be put in <filename class="directory">/usr/share/xsessions</filename>
+If supported by the X Display Manager which is in use on the target system, an xsession
+file <filename>/opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop</filename>
+will be put by Installer.ksh during the installation into
+<filename class="directory">/usr/share/xsessions</filename>
 (or in whatever place your system and your X Display Manager reads this files)
-and then selected from the manager's menu or similar selector. See the rest of the X Session
-Manager integration examples are in directory
-<filename class="directory">/opt/NsCDE/share/doc/examples/</filename>
-for MATE, KDE, LXDE and similar DE integrations and play with this if you
-like.
+and afterwards NsCDE can be selected from the display manager's menu or similar
+session selector. See the rest of the X Session Manager integration examples in the
+directory <filename class="directory">/opt/NsCDE/share/doc/examples/</filename>
+for MATE, KDE, LXDE and similar DE integrations and play with this if you like.
 </para>
 </sect1>
 
@@ -4719,7 +4778,6 @@ For more information about localization see README.localization text file which 
 provided with software in the root of the unpacked tarball.
 </para>
 </sect1>
-
 
 <sect1 id="NsCDE-Initial-Configuration">
 <title>Initial Configuration</title>
