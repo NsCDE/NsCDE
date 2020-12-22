@@ -25,10 +25,10 @@ Begin
    End
 
    Set $PWD = (StrCopy $PWD 1 $POS)
-   Set $CMD2 = {cd;cd } $PWD {; pwd}
-   Set $PWD = (GetOutput $CMD2 0 0)
+   Set $CMD2 = {cd;cd '} $PWD {'; pwd}
+   Set $PWD = (GetOutput $CMD2 1 -1)
    Set $OPT = { }
-   Set $CMD= {cd } $PWD {; ls} $OPT {-1 -F}
+   Set $CMD= {cd '} $PWD {'; ls} $OPT {-1 -F}
    Set $LS = (GetOutput $CMD 1 -1)
    Set $ID = 2
 
@@ -195,9 +195,9 @@ Widget 6
       End
       1 :
       Begin
-         Set $CMD = {cd } $PWD {/..; pwd}
-         Set $PWD = (GetOutput $CMD 0 0)
-         Set $CMD = {cd } $PWD {; ls} $OPT {-1 -F}
+         Set $CMD = {cd '} $PWD {/..'; pwd}
+         Set $PWD = (GetOutput $CMD 1 -1)
+         Set $CMD = {cd '} $PWD {'; ls} $OPT {-1 -F}
          Set $LS = (GetOutput $CMD 1 -1)
          Set $ID = 2
 
@@ -284,7 +284,7 @@ Widget 12
          Else
             Set $OPT={ }
    
-         Set $CMD = {cd } $PWD {; ls} $OPT {-1 -F}
+         Set $CMD = {cd '} $PWD {'; ls} $OPT {-1 -F}
          Set $LS = (GetOutput $CMD 1 -1)
          Set $ID = 2
    
@@ -312,15 +312,15 @@ Widget 7
       Case message of
       SingleClic :
       Begin
-         Set $CMD3 = {cd } $PWD {; ls} $OPT {-1}
+         Set $CMD3 = {cd '} $PWD {'; ls} $OPT {-1}
          Set $PWD2 = $PWD {/} (GetOutput $CMD3 (GetValue 7) -1)
-         Set $CMD2 = {cd } $PWD {;cd } $PWD2 { 2>/dev/null; pwd}
-         Set $PWD2 = (GetOutput $CMD2 0 0)
+         Set $CMD2 = {cd '} $PWD {';cd '} $PWD2 {' 2>/dev/null; pwd}
+         Set $PWD2 = (GetOutput $CMD2 1 -1)
 
          If $PWD2 <> $PWD Then
          Begin
             Set $PWD = $PWD2
-            Set $CMD = {cd } $PWD {; ls} $OPT {-1 -F}
+            Set $CMD = {cd '} $PWD {'; ls} $OPT {-1 -F}
             Set $LS = (GetOutput $CMD 1 -1)
             Set $ID = 2
 
