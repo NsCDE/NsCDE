@@ -2228,8 +2228,8 @@ M. Z.
        applications and have gtk3-nocsd installed
      * SetEnv NSCDE_REDRAW_WORKAROUND 1 - Uncomment this if you
        are having problems with FvwmScript PopupMenu widgets under
-       compton or compton-ng in the form of not refreshing their
-       part of the screen.
+       compton, compton-ng or picom in the form of not refreshing
+       their part of the screen.
      __________________________________________________________
 
 7.8. NsCDE-Event.conf
@@ -2401,13 +2401,22 @@ M. Z.
    to have good graphic (such as anti-aliased fonts, but this also
    can be turned off), a set of useful key bindings is defined by
    default. This default keybindings set can be extended,
-   partially overridden, or completely replaced (copy the
-   NsCDE-Keybinding.conf in $FVWM_USERDIR and edit, or even write
-   from scratch). Defaults are author's daily driver. Notice when
-   there is a reference to the "Menu" key this means also
-   "Compose" on some keyboards. For explanation what is the
-   context, and what modifier, see FVWM explanation (copied from
-   original default FVWM config and extended a bit). Namely:
+   partially overridden (write your
+   $FVWM_USERDIR/NsCDE-Keybinding.local), or completely replaced
+   (copy the NsCDE-Keybinding.conf in $FVWM_USERDIR and edit, or
+   even write from scratch). Defaults are author's daily driver.
+   Notice when there is a reference to the "Menu" key this means
+   also "Compose" on some keyboards.
+
+   If some unwanted or clashing keybindings needs to be cleared,
+   for example Shift+Tab from the any context, use the following
+   FVWM syntax:
+Silent Key Tab A S -
+
+
+   For explanation what is the context, and what modifier, see
+   FVWM explanation (copied from original default FVWM config and
+   extended a bit). Namely:
 
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
@@ -3733,8 +3742,8 @@ M. Z.
    resources. Also "skins" for programs like smplayer, audacious
    and Gkrellm can be processed from custom colormgr.local.
 
-   In the directory $NSCDE_ROOT/share/doc/examples/Gkrellm is the
-   complete NsCDE theme for the Gkrellm. File
+   In the directory $NSCDE_ROOT/share/config_templates/Gkrellm is
+   the complete NsCDE theme for the Gkrellm. File
    $NSCDE_ROOT/share/doc/examples/colormgr.local.example can be
    used for this integration. There are also examples for Gkrellm
    and mate-terminal. Local script colormgr.local will most likely
@@ -3835,7 +3844,7 @@ M. Z.
 
    Another nice and useful app is Gkrellm for which NsCDE has a
    ready drop-in theme called (of course) NsCDE in
-   share/doc/examples and it can be put in user's
+   share/config_templates and it can be put in user's
    ~/.gkrellm2/themes and integrated with Color Style Manager with
    the $NSCDE_ROOT/share/doc/examples/colormgr.local.example which
    can be installed as $FVWM_USERDIR/libexec/colormgr.local.
@@ -3847,16 +3856,24 @@ M. Z.
    $HOME/.config/autostart directory.
 
    X Compositor: if user likes visual effects with tinting,
-   transparency, shadows, 3D, smooth changes and so on, compton(1)
-   standalone compositor is an excellent program and tool for such
-   users - who want to combine retro and modern style. Personally,
-   I feel it like some kind of lag, no matter how powerful GPU,
-   CPU and RAM I have. I turn it on occasionally, more as an
-   amusement of xsnow, xsanta or xeyes type, but when I have
-   serious work to do, I simply turn it off in some moment. Maybe
-   it can be better if it is configured more conservative than
-   example. See /opt/NsCDE/share/doc/examples/compton-integration
-   for a starting point.
+   transparency, shadows, 3D, smooth changes and so on,
+   compton(1), compton-ng(1) or picom(1) standalone compositors
+   are excellent programs and tools for such users, who want to
+   combine retro and modern style. It the time of writing this, it
+   looks like picom(1) is the most maintained of this three X
+   compositors. Personally, I feel it like some kind of lag, no
+   matter how powerful GPU, CPU and RAM I have. I turn it on
+   occasionally, more as an amusement of xsnow, xsanta or xeyes
+   type, but when I have serious work to do, I simply turn it off
+   in some moment. Maybe it can be better if it is configured more
+   conservative than example. See
+   /opt/NsCDE/share/doc/examples/compton-integration for a
+   starting point. Syntax of this file is largely compatible for
+   all three above mentioned X compositors.
+
+   Notice: when X Compositor is active on X display, FVWM geometry
+   indicator which is shown at the center of the screen during
+   window move or resize actions will not be visible.
      __________________________________________________________
 
 17. Single Logical Screen, Xinerama - multiscreen support

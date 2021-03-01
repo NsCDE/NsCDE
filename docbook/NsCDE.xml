@@ -2741,7 +2741,7 @@ if needed or desirable:
 <listitem><para><varname>GTK_OVERLAY_SCROLLING 0</varname> - handy to turn off irritating blinking of scrollbar area in GTK3 applications</para></listitem>
 <listitem><para><varname>SetEnv GTK_CSD 0</varname> - if you have misfortune to must use some of the GNOME 3 applications and have gtk3-nocsd installed</para></listitem>
 <listitem><para><varname>f_VarAppend : LD_PRELOAD /usr/local/lib/libgtk3-nocsd.so.0</varname> - if you have misfortune to must use some of the GNOME 3 applications and have gtk3-nocsd installed</para></listitem>
-<listitem><para><varname>SetEnv NSCDE_REDRAW_WORKAROUND 1</varname> - Uncomment this if you are having problems with FvwmScript PopupMenu widgets under compton or compton-ng in the form of not refreshing their part of the screen.</para></listitem>
+<listitem><para><varname>SetEnv NSCDE_REDRAW_WORKAROUND 1</varname> - Uncomment this if you are having problems with FvwmScript PopupMenu widgets under compton, compton-ng or picom in the form of not refreshing their part of the screen.</para></listitem>
 </itemizedlist>
 </para>
 </sect2>
@@ -2940,12 +2940,24 @@ by a lot of people) and to be seriously productive in the same time,
 comfortable and quick, to have good graphic (such as anti-aliased fonts,
 but this also can be turned off), a set of useful key bindings is
 defined by default. This default keybindings set can be extended, partially
-overridden, or completely replaced (copy the <filename>NsCDE-Keybinding.conf</filename> in
+overridden (write your <varname>$FVWM_USERDIR/NsCDE-Keybinding.local</varname>),
+or completely replaced (copy the <filename>NsCDE-Keybinding.conf</filename> in
 <varname>$FVWM_USERDIR</varname> and edit, or even write from scratch). Defaults are
 author's <emphasis>daily driver</emphasis>. Notice when there is a reference to the "Menu" key
-this means also "Compose" on some keyboards. For explanation what is the context, and what
-modifier, see FVWM explanation (copied from original default FVWM
-config and extended a bit). Namely:
+this means also "Compose" on some keyboards.
+</para>
+<para>
+If some unwanted or clashing keybindings needs to be cleared, for example <keysym>Shift+Tab</keysym>
+from the any context, use the following FVWM syntax:
+<programlisting>
+<![CDATA[
+Silent Key Tab A S -
+]]>
+</programlisting>
+</para>
+<para>
+For explanation what is the context, and what modifier, see FVWM explanation
+(copied from original default FVWM config and extended a bit). Namely:
 </para>
 
 <itemizedlist>
@@ -4993,7 +5005,7 @@ of this resources. Also "skins" for programs like <command>smplayer,</command> <
 and <command>Gkrellm</command> can be processed from custom <command>colormgr.local</command>.
 </para>
 <para>
-In the directory <filename class="directory">$NSCDE_ROOT/share/doc/examples/Gkrellm</filename>
+In the directory <filename class="directory">$NSCDE_ROOT/share/config_templates/Gkrellm</filename>
 is the complete NsCDE theme for the Gkrellm.
 File <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename>
 can be used for this integration. There are also examples for
@@ -5093,7 +5105,7 @@ Editor? Gvim, Emacs, Xemacs, Nedit ... user's choice.
 <para>
 Another nice and useful app is <command>Gkrellm</command> for which
 NsCDE has a ready drop-in theme called (of course) NsCDE in
-<filename class="directory">share/doc/examples</filename> and it can be put in user's
+<filename class="directory">share/config_templates</filename> and it can be put in user's
 <filename class="directory">~/.gkrellm2/themes</filename> and integrated with
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>
 with the <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename> which can be
@@ -5107,15 +5119,21 @@ in the <filename class="directory">$HOME/.config/autostart</filename> directory.
 </para>
 <para>
 X Compositor: if user likes visual effects with tinting, transparency,
-shadows, 3D, smooth changes and so on, <emphasis>compton(1)</emphasis> standalone compositor
-is an excellent program and tool for such users - who want to combine retro and
-modern style. Personally, I feel it like some kind of <emphasis>lag</emphasis>, no matter how
+shadows, 3D, smooth changes and so on, <emphasis>compton(1)</emphasis>, <emphasis>compton-ng(1)</emphasis>
+or <emphasis>picom(1)</emphasis> standalone compositors are excellent programs and tools for such users,
+who want to combine retro and modern style. It the time of writing this, it looks like <emphasis>picom(1)</emphasis> is
+the most maintained of this three X compositors. Personally, I feel it like some kind of <emphasis>lag</emphasis>, no matter how
 powerful GPU, CPU and RAM I have. I turn it on occasionally, more as an
 amusement of xsnow, xsanta or xeyes type, but when I have serious work to do,
 I simply turn it off in some moment.
 Maybe it can be better if it is configured more conservative than example. See
 <filename class="directory">/opt/NsCDE/share/doc/examples/compton-integration</filename> for
-a starting point.
+a starting point. Syntax of this file is largely compatible for all three above mentioned
+X compositors.
+</para>
+<para>
+Notice: when X Compositor is active on X display, FVWM geometry indicator which is shown
+at the center of the screen during window move or resize actions will not be visible.
 </para>
 </sect1>
 
