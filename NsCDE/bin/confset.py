@@ -93,7 +93,8 @@ def main ():
                     for dkey, val in props.items():
                         mkey = re.findall(key + '.*', dkey)
                         if mkey:
-                            cff.write(key + ' = ' + value + '\n')
+                            if not removekey:
+                                cff.write(key + ' = ' + value + '\n')
                         else:
                             cff.write(dkey + '=' + val)
             cff.close()

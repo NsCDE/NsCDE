@@ -248,11 +248,11 @@ Widget 3
          ChangeTitle 7 $PalNumToName
 
          # Figure out Palette Path
-         Set $PalletePathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $PalNumToName
-         Set $PalletePath = (GetOutput $PalletePathCmd 1 -1)
+         Set $PalettePathCmd = {$NSCDE_ROOT/libexec/colormgr -e -g } $PalNumToName
+         Set $PalettePath = (GetOutput $PalettePathCmd 1 -1)
 
          # Colorsets 61 - 68 are for Color Style Manager preview only
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -n } $Ncolors { -p } $PalletePath { -C}
+         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -n } $Ncolors { -p } $PalettePath { -C}
 
          ChangeColorset 10 61
          ChangeColorset 11 65
@@ -263,7 +263,7 @@ Widget 3
          ChangeColorset 16 64
          ChangeColorset 17 68
 
-         Set $FullColorCmd = {$NSCDE_ROOT/libexec/colormgr -c } $Ncolors { -f } $PalletePath
+         Set $FullColorCmd = {$NSCDE_ROOT/libexec/colormgr -c } $Ncolors { -f } $PalettePath
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
          ChangeIcon 18 $FullColor
       End
@@ -1210,15 +1210,38 @@ Widget 32
 
             Set $GtkStr = $Gtk2Str $Gtk3Str
 
+            If $GtkStr <> {00} Then
+            Begin
+               Set $Foreground4Cmd = {$NSCDE_ROOT/libexec/nscde_palette_colorgen.py -n } $Ncolors { -p } $PalettePath { -l | egrep '^fg_color_4'}
+               Set $Foreground4 = (GetOutput $Foreground4Cmd 1 2)
+            End
+
             If $GtkStr == {11} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { gtk2 gtk3}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { gtk2 gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
-               Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
-               If $CheckGtkrc2 <> 0 Then
+               If $Foreground4 == {#ffffffffffff} Then
                Begin
-                  Set $DoGtkrc2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DoDark1 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
+               End
+               If $Foreground4 == {#000000000000} Then
+               Begin
+                  Set $DoDark1 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
+               End
+
+               Set $CheckGtkrc2_a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2_a <> 0 Then
+               Begin
+                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+               End
+
+               Set $CheckGtkrc2_b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2_b <> 0 Then
+               Begin
+                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
                End
 
                Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
@@ -1227,29 +1250,76 @@ Widget 32
                   Set $MkGtk3 = (GetOutput {mkdir -p "$HOME/.config/gtk-3.0"} 1 -1)
                End
 
-               Set $CheckGtkrc3 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
-               If $CheckGtkrc3 <> 0 Then
+               Set $CheckGtkrc3a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3a <> 0 Then
                Begin
-                  Set $DoGtkrc3 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+               End
+               Set $CheckGtkrc3b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3b <> 0 Then
+               Begin
+                  Set $DoGtkrc3b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
                End
             End
 
             If $GtkStr == {10} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { gtk2 False}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { gtk2 False}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
-               Set $CheckGtkrc2 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
-               If $CheckGtkrc2 <> 0 Then
+               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_ROOT/bin/confget.py -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
+               If $DeintegrateGtk3Check_a == {NsCDE} Then
                Begin
-                  Set $DoGtkrc2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
+               End
+               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_ROOT/bin/confget.py -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
+               If $DeintegrateGtk3Check_b == {NsCDE} Then
+               Begin
+                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
+               End
+               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
+
+               If $Foreground4 == {#ffffffffffff} Then
+               Begin
+                  Set $DoDark1 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
+               End
+               If $Foreground4 == {#000000000000} Then
+               Begin
+                  Set $DoDark1 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+               End
+
+               Set $CheckGtkrc2_a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2_a <> 0 Then
+               Begin
+                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+               End
+               Set $CheckGtkrc2_b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc2_b <> 0 Then
+               Begin
+                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
                End
             End
 
             If $GtkStr == {01} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False gtk3}
+               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { False gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
+
+               Set $DeintegrateGtk2a =
+                (GetOutput {$NSCDE_ROOT/bin/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+               Set $DeintegrateGtk2b =
+                (GetOutput {$NSCDE_ROOT/bin/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+               Set $DeintegrateGtk2c =
+                (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+
+               If $Foreground4 == {#ffffffffffff} Then
+               Begin
+                  Set $DoDark2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
+               End
+               If $Foreground4 == {#000000000000} Then
+               Begin
+                  Set $DoDark2 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
+               End
 
                Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
                If $CheckGtk3Exist <> 0 Then
@@ -1257,16 +1327,41 @@ Widget 32
                   Set $MkGtk3 = (GetOutput {mkdir -p "$HOME/.config/gtk-3.0"} 1 -1)
                End
 
-               Set $CheckGtkrc3 = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
-               If $CheckGtkrc3 <> 0 Then
+               Set $CheckGtkrc3a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3a <> 0 Then
                Begin
-                  Set $DoGtkrc3 = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
                End
+               Set $CheckGtkrc3b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
+               If $CheckGtkrc3b <> 0 Then
+               Begin
+                  Set $DoGtkrc3b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
+               End
+
             End
 
             If $GtkStr == {00} Then
             Begin
-               Set $PerformGtk2Cmd = {$NSCDE_ROOT/libexec/themegen.py } $PalletePath { } $Ncolors { False False}
+               Set $DeintegrateGtk2a =
+                (GetOutput {$NSCDE_ROOT/bin/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+               Set $DeintegrateGtk2b =
+                (GetOutput {$NSCDE_ROOT/bin/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+               Set $DeintegrateGtk2c =
+                (GetOutput {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+
+               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_ROOT/bin/confget.py -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
+               If $DeintegrateGtk3Check_a == {NsCDE} Then
+               Begin
+                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
+               End
+               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_ROOT/bin/confget.py -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
+               If $DeintegrateGtk3Check_b == {NsCDE} Then
+               Begin
+                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
+               End
+               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
+
+               Set $PerformGtk2Cmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { False False}
                Set $PerformGtk2 = (GetOutput $PerformGtk2Cmd 1 -1)
             End
 
@@ -1296,7 +1391,7 @@ Widget 32
                Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/colormgr.local" > /dev/null 2>&1; echo $?} 1 -1)
                If $CheckUserCustomScriptExist == 0 Then
                Begin
-                  Set $RunUserScriptCmd = {$FVWM_USERDIR/libexec/colormgr.local } $PalletePath { } $Ncolors
+                  Set $RunUserScriptCmd = {$FVWM_USERDIR/libexec/colormgr.local } $PalettePath { } $Ncolors
                   Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
                End
                Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
