@@ -32,7 +32,7 @@ OS=$(uname -s)
 
 if (($pmcnt == 3)); then
    Opmode="pm"
-elif  (($systemctlretval == 0)) && [ "initmode" == "systemd" ]; then
+elif  (($systemctlretval == 0)) && [ "$initmode" == "systemd" ]; then
    Opmode="systemd"
 elif [ "$OS" == "FreeBSD" ]; then
    whence -q acpiconf
