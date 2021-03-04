@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env ksh93
 
 #
 # This file is a part of the NsCDE - Not so Common Desktop Environment
@@ -6,101 +6,50 @@
 # Licence: GPLv3
 #
 
-import socket
-import getopt
-import sys
-import os
-import stat
-# import json
+# Find suitable FvwmCommand on the system which may have this situations:
+# fvwm 2x
+# fvwm3 in standard path
+# fvwm3 in non-standard path
+# fvwm2 and fvwm3 on the same system in all possible paths and non-paths
+# fvwm2 with fvwm2 as binary name
+# fallback if found
 
-# Fvwm3 - socket API and MFL UNIX socket
-def mflclnt(verbose):
-    # Create a UDS socket
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    
-    # Connect the socket to the port where the server is listening
-    # FvwmMFL is setting this in environment, so we can really treat
-    # absence of the environment FVWMMFL_SOCKET as error.
-    nscde_fvwm_socket = str(os.environ.get('FVWMMFL_SOCKET'))
-    try:
-        if verbose:
-            print ("Trying to determine if", nscde_fvwm_socket, "exists as MFL socket ...")
-        mode = os.stat(nscde_fvwm_socket).st_mode
-        if stat.S_ISSOCK(mode):
-            server_address = nscde_fvwm_socket
-            if verbose:
-                print ("Using", nscde_fvwm_socket, "as MFL socket.")
-    except FileNotFoundError:
-        print ("Cannot find FvwmMFL socket. Env:", nscde_fvwm_socket)
-        sys.exit(1)
+# Check if NsCDE FVWM_BIN is set, and try to find FvwmCommand in the same directory.
+if [ "x$FVWM_BIN" != "x" ]; then
+   FVWM_BASE=${FVWM_BIN%/*}
+   if [ -x "${FVWM_BASE}/FvwmCommand" ]; then
+      FVWM_CLNT="${FVWM_BASE}/FvwmCommand"
+   fi
+# If there is no FVWM_BIN set, check if fvwm3 FVWM_IS_FVWM3 is set to 1
+# search for fvwm3 binary and try to find FvwmCommand in the same directory.
+elif [ "x$FVWM_IS_FVWM3" == "x1" ]; then
+   FVWM_FINDBIN=$(whence fvwm3)
+   FVWM_BASE=${FVWM_FINDBIN%/*}
+   if [ -x "${FVWM_BASE}/FvwmCommand" ]; then
+      FVWM_CLNT="${FVWM_BASE}/FvwmCommand"
+   fi
+# Search for plain "fvwm" name and "fvwm2" if "fvwm" is not found
+# try to find FvwmCommand in the same directory.
+else
+   FVWM_FINDBIN=$(whence fvwm)
+   if [ "x$FVWM_FINDBIN" == "x" ]; then
+      FVWM_FINDBIN=$(whence fvwm2)
+   fi
+   FVWM_BASE=${FVWM_FINDBIN%/*}
+   if [ -x "${FVWM_BASE}/FvwmCommand" ]; then
+      FVWM_CLNT="${FVWM_BASE}/FvwmCommand"
+   fi
+fi
 
-    if verbose:
-        print('Connecting to {}'.format(server_address))
-    try:
-        sock.connect(server_address)
-    except socket.error as msg:
-        print(msg)
-        sys.exit(1)
+# Last resort really
+if [ "x$FVWM_CLNT" == "x" ]; then
+   FVWM_CLNT="FvwmCommand"
+fi
 
-    try:
-        if verbose:
-            print ("Sending data to MFL socket", server_address)
-        # Send data
-        message = sys.argv[-1].encode()
-        if verbose:
-            print('Sending {!r}'.format(message))
-        sock.sendall(message)
-    
-        amount_received = 0
-        data = sock.recv(32768)
-        # amount_received += len(data)
-        # print (amount_received)
-        if verbose:
-            print('Received {!r}'.format(data))
-            # print (json.dumps(data.decode("utf-8"), sort_keys=True, indent=4))
-    
-    finally:
-        if verbose:
-            print('Closing connection to socket', server_address)
-        sock.close()
-
-# Pre fvwm3 - FvwmCommand
-def fvwmcommand(verbose):
-   if verbose:
-       print ("FVWM2 mode: redirecting data to FvwmCommand")
-   sav1 = format(sys.argv[-1])
-   cmdargs = sav1.replace("'", "'\\''")
-   if verbose:
-       print ("Sending", cmdargs)
-   os.system ("FvwmCommand '%s'" %(cmdargs))
-
-def usage():
-    print (sys.argv[0], "[ -h ] | [ -v ] <fvwmcmds>")
-
-def main():
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hv", ["help", "verbose"])
-    except getopt.GetoptError as err:
-        # print help and usage informations and exit
-        print(err)
-        usage()
-        sys.exit(2)
-    verbose = False
-    for opt, arg in opts:
-        if opt in ("-v", "--verbose"):
-            verbose = True
-        elif opt in ("-h", "--help"):
-            usage()
-            sys.exit()
-        else:
-            assert False, "unhandled option"
-
-    # Select fvwm communication method based on fvwm major version
-    if os.environ.get('FVWM_IS_FVWM3') != "1":
-        fvwmcommand(verbose)
-    else:
-        mflclnt(verbose)
-
-if __name__ == "__main__":
-    main()
+# Execute FvwmCommand if found, with all of the argument vector provided
+if [ "x$FVWM_CLNT" != "x" ]; then
+   exec $FVWM_CLNT "$@"
+else
+   echo "ERROR: Cannot find suitable FvwmCommand for your setup." >&2
+fi
 
