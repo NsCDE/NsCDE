@@ -23,12 +23,16 @@ done
 whence -q systemctl
 systemctlretval=$?
 
+if [ "$OS" == "Linux" ]; then
+   initmode=$(ps -p 1 -o comm=)
+fi
+
 # Check for FreeBSD (acpiconf) or SunOS
 OS=$(uname -s)
 
 if (($pmcnt == 3)); then
    Opmode="pm"
-elif  (($systemctlretval == 0)); then
+elif  (($systemctlretval == 0)) && [ "initmode" == "systemd" ]; then
    Opmode="systemd"
 elif [ "$OS" == "FreeBSD" ]; then
    whence -q acpiconf
@@ -108,7 +112,7 @@ function hybrid_suspend
 function f_poweroff
 {
    if [ "$OS" == "Linux" ]; then
-      if  (($systemctlretval == 0)); then
+      if  (($systemctlretval == 0)) && [ "$initmode" == "systemd" ]; then
          systemctl poweroff -i
       else
          shutdown -h now
