@@ -19,6 +19,9 @@ do
    fi
 done
 
+# Check for FreeBSD (acpiconf) or SunOS
+OS=$(uname -s)
+
 # Check for systemd
 whence -q systemctl
 systemctlretval=$?
@@ -26,9 +29,6 @@ systemctlretval=$?
 if [ "$OS" == "Linux" ]; then
    initmode=$(ps -p 1 -o comm=)
 fi
-
-# Check for FreeBSD (acpiconf) or SunOS
-OS=$(uname -s)
 
 if (($pmcnt == 3)); then
    Opmode="pm"
