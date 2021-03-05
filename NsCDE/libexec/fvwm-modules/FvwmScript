@@ -1,0 +1,33 @@
+#!/usr/bin/env ksh93
+
+# Check if there is a XOverrideFontCursor.so for LD_PRELOAD and if LD_PRELOAD is already in
+# use so we can append to the variable, and be careful to use colon as library object separator
+if [ -x "$NSCDE_ROOT/lib/XOverrideFontCursor.so" ]; then
+   if [ "x$LD_PRELOAD" != "x" ]; then
+      echo "$LD_PRELOAD" | egrep -q "XOverrideFontCursor\.so"
+      if (($? != 0)); then
+         ld_preload_wc=$(echo "$LD_PRELOAD" | wc -c)
+         ld_preload_lastchar=$(($ld_preload_wc - 1))
+         ld_preload_last_letter=$(echo "$LD_PRELOAD" | cut -b $ld_preload_lastchar)
+         if [ "$ld_preload_lastletter" == ":" ]; then
+            export LD_PRELOAD="$LD_PRELOAD:$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+         else
+            echo "$LD_PRELOAD" | egrep -q ' '
+            if (($? == 0)); then
+               new_ld_preload=$(echo "$LD_PRELOAD" | tr ' ' ':')
+               export LD_PRELOAD="$new_ld_preload:$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+            else
+               export LD_PRELOAD="$LD_PRELOAD:$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+            fi
+         fi
+      else
+         echo "Notice: $NSCDE_ROOT/lib/XOverrideFontCursor.so is already ld-preloaded, skipping" >&2
+      fi
+   else
+      export LD_PRELOAD="$NSCDE_ROOT/lib/XOverrideFontCursor.so"
+   fi
+fi
+
+# Call the real FvwmScript
+exec ${FVWM_MODULEDIR}/FvwmScript "$@"
+

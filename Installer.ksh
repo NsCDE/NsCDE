@@ -470,6 +470,10 @@ function configure_installed
          fi
       fi
 
+      echo "Adapting NsCDE-Main.conf, prepending custom ModulePath."
+      ./NsCDE/bin/ised -c 's@# $[NSCDE_ROOT]/libexec/fvwm-modules:+@$[NSCDE_ROOT]/libexec/fvwm-modules:+@g' -f "${instpath}/config/NsCDE-Main.conf"
+      echo "Done."
+
       # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
       echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
       ./NsCDE/bin/ised -c 's/ indicator 12,//g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
