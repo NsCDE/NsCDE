@@ -471,7 +471,7 @@ function configure_installed
       fi
 
       echo "Adapting NsCDE-Main.conf, prepending custom ModulePath."
-      ./NsCDE/bin/ised -c 's@# $[NSCDE_ROOT]/libexec/fvwm-modules:+@$[NSCDE_ROOT]/libexec/fvwm-modules:+@g' -f "${instpath}/config/NsCDE-Main.conf"
+      ./NsCDE/bin/ised -c 's@^# ModulePath \$\[NSCDE_ROOT\]\/libexec\/fvwm-modules:+$@ModulePath \$\[NSCDE_ROOT\]\/libexec\/fvwm-modules:\+@g' -f "${instpath}/config/NsCDE-Main.conf"
       echo "Done."
 
       # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
