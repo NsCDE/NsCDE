@@ -1032,7 +1032,16 @@ M. Z.
    $HOME/.themes/NsCDE directory with the theme for GTK2 and GTK3,
    and will edit $HOME/.gtkrc-2.0 and
    $HOME/.config/gtk-3.0/settings.ini to put or change
-   gtk-theme-name value.
+   gtk-theme-name value. If NsCDE palette with dark background 4
+   color is choosen, Color Style Manager will put
+   gtk-application-prefer-dark-theme into $HOME/.gtkrc-2.0 and
+   $HOME/.config/gtk-3.0/settings.ini. If palette with light color
+   4 (used for text areas and text fields usually) is choosen,
+   that variable will be removed from the both configuration
+   files. When switching off from NsCDE to some other environment,
+   care must be taken manually to handle
+   gtk-application-prefer-dark-theme in configuration files if
+   last palette in NsCDE was using dark background.
 
    If nscde_use_xsettingsd is set to 1 in the
    $FVWM_USERDIR/NsCDE.conf after applying new color theme, user's
