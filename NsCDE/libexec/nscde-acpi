@@ -133,7 +133,7 @@ function f_poweroff
 function f_reboot
 {
    if [ "$OS" == "Linux" ]; then
-      if  (($systemctlretval == 0)); then
+      if  (($systemctlretval == 0)) && [ "$initmode" == "systemd" ]; then
          systemctl reboot -i
       else
          shutdown -r now
