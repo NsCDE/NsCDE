@@ -23,11 +23,11 @@ articles (the, a, an) will probably be more accurate.
 
   ## What is **NsCDE**?
 
-   **NsCDE** is a retro but powerful (kind of) UNIX desktop environment
-   which resembles CDE look (and partially feel) but with a more
-   powerful and flexible framework beneath-the-surface, more suited
-   for 21st century unix-like and Linux systems and user requirements
-   than original CDE.
+   **NsCDE** is a retro but powerful UNIX desktop environment which
+   resembles CDE look (and partially feel) but with a more powerful
+   and flexible framework beneath-the-surface, more suited for 21st
+   century unix-like and Linux systems and user requirements than
+   original CDE.
 
    **NsCDE** can be considered as a heavyweight FVWM
    theme on steroids, but combined with a couple other free software
@@ -37,7 +37,7 @@ articles (the, a, an) will probably be more accurate.
    In other words, **NsCDE** is a heavy FVWM (ab)user. It consists of a
    set of FVWM applications and configurations, enriched with Python
    and Shell background drivers, couple of the additional free software
-   tools and applications.
+   tools and applications. FVWM3 is also supported.
 
    Visually, **NsCDE** mimics CDE, the well known Common Desktop Environment
    of many comercial UNIX systems of the nineties. It supports CDE backdrops
