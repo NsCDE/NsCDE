@@ -9,6 +9,9 @@
 PPATH="$1"
 NCOLORS="$2"
 
+FIREFOX_CHROMEDIR=""
+THUNDERBIRD_CHROMEDIR=""
+
 if [ -z $PPATH ]; then
    PPATH=$NSCDE_ROOT/share/palettes/Broica.dp
 fi
@@ -83,5 +86,42 @@ if (($? == 0)); then
    sh $TEMP2
    sleep 1
    rm -f $TEMP1 $TEMP2
+fi
+
+# Firefox
+function do_firefox
+{
+   if [ "x$FIREFOX_CHROMEDIR" != "x" ]; then
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
+      -i $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeColordefs.tmpl \
+      -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
+      ln -sf  $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeContent.css \
+      ${FIREFOX_CHROMEDIR}/nscdeContent.css
+   fi
+}
+
+whence -q firefox
+if (($? == 0)); then
+  do_firefox
+fi
+
+whence -q firefox-esr
+if (($? == 0)); then
+  do_firefox
+fi
+
+# Thunderbird
+function do_thunderbird
+{
+   if [ "x$THUNDERBIRD_CHROMEDIR" != "x" ]; then
+      $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
+      -i $NSCDE_ROOT/share/config_templates/integration/thunderbird/nscdeColordefs.tmpl \
+      -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
+   fi
+}
+
+whence -q thunderbird
+if (($? == 0)); then
+  do_thunderbird
 fi
 
