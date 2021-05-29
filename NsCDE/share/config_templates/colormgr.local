@@ -92,11 +92,50 @@ fi
 function do_firefox
 {
    if [ "x$FIREFOX_CHROMEDIR" != "x" ]; then
+      # Chrome
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/userChrome.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/nscdeChrome.css\");" >> \
+          ${FIREFOX_CHROMEDIR}/userChrome.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/nscdeIcons.css\");" >> \
+          ${FIREFOX_CHROMEDIR}/userChrome.css
+      fi
+
+      # Content
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
+      if (($? > 0)); then
+         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/userContent.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeContent\.css(.)?\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
+      if (($? > 0)); then
+         echo '@import url("nscdeContent.css");' >> ${FIREFOX_CHROMEDIR}/userContent.css
+      fi
+
+      # Colorgen
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
-      -i $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeColordefs.tmpl \
-      -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
+       -i $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeColordefs.tmpl \
+       -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
       ln -sf  $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeContent.css \
-      ${FIREFOX_CHROMEDIR}/nscdeContent.css
+       ${FIREFOX_CHROMEDIR}/nscdeContent.css
+
+      # Prefs
+      egrep -q '^([[:space:]]+)?user_pref\("toolkit\.legacyUserProfileCustomizations\.stylesheets",([[:space:]]+)?true\)([[:space:]]+)?;' \
+       ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+      if (($? > 0)); then
+         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${FIREFOX_CHROMEDIR}/../user.js
+      fi
    fi
 }
 
@@ -114,9 +153,50 @@ fi
 function do_thunderbird
 {
    if [ "x$THUNDERBIRD_CHROMEDIR" != "x" ]; then
+      # Chrome
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo '@import url("nscdeColordefs.css");' >> ${THUNDERBIRD_CHROMEDIR}/userChrome.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeChrome.css\");" >> \
+          ${THUNDERBIRD_CHROMEDIR}/userChrome.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
+      if (($? > 0)); then
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeIcons.css\");" >> \
+          ${THUNDERBIRD_CHROMEDIR}/userChrome.css
+      fi
+
+      # Content
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
+      if (($? > 0)); then
+         echo '@import url("nscdeColordefs.css");' >> ${THUNDERBIRD_CHROMEDIR}/userContent.css
+      fi
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeContent\.css(.)?\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
+      if (($? > 0)); then
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeContent.css\");" >> \
+          ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
+      fi
+
+      # Colorgen
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
-      -i $NSCDE_ROOT/share/config_templates/integration/thunderbird/nscdeColordefs.tmpl \
-      -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
+       -i $NSCDE_ROOT/share/config_templates/integration/thunderbird/nscdeColordefs.tmpl \
+       -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
+
+      # Prefs
+      egrep -q '^([[:space:]]+)?user_pref\("toolkit\.legacyUserProfileCustomizations\.stylesheets",([[:space:]]+)?true\)([[:space:]]+)?;' \
+       ${THUNDERBIRD_CHROMEDIR}/../user.js 2>/dev/null
+      if (($? > 0)); then
+         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${THUNDERBIRD_CHROMEDIR}/../user.js
+      fi
+
    fi
 }
 

@@ -6,25 +6,25 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-SysActionDialog}
 WindowLocaleTitle {   NsCDE: System Action   }
-WindowSize 460 180
+WindowSize 460 210
 Colorset 22
 
 Init
 Begin
-   WarpPointer 6
+   WarpPointer 7
 
    Set $FontBoldMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium -Z 14} 1 -1)
-   ChangeFont 6 $FontBoldMedium
+   ChangeFont 7 $FontBoldMedium
 
    Set $FontNormalMedium = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 2 $FontNormalMedium
    ChangeFont 3 $FontNormalMedium
    ChangeFont 4 $FontNormalMedium
+   ChangeFont 5 $FontNormalMedium
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
-   ChangeFont 7 $BtnFont
-   ChangeFont 7 $BtnFont
    ChangeFont 8 $BtnFont
+   ChangeFont 9 $BtnFont
 
    # Modes:
    # 1. Logout
@@ -57,14 +57,24 @@ Begin
    End
    Else
    Begin
-      Set $ReadLastVal = (GetOutput {egrep '^[1-8]$' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
+      Set $ReadLastVal = (GetOutput {egrep '^[0-8]$' "$FVWM_USERDIR/.SysActionDialog.lastval" 2>/dev/null} 1 1)
       If $ReadLastVal <> {} Then
       Begin
-         ChangeValue 4 $ReadLastVal
+         If $ReadLastVal == 0 Then
+         Begin
+            ChangeValue 4 1
+            ChangeValue 5 0
+            Set $ReadLastVal = (GetValue 4)
+         End
+         Else
+         Begin
+            ChangeValue 4 $ReadLastVal
+         End
       End
       Else
       Begin
          ChangeValue 4 1
+         Set $ReadLastVal = (GetValue 4)
       End
    End
 
@@ -103,15 +113,17 @@ Begin
                       $HibernateTxt
 
    ChangeLocaleTitle 4 $PopupTitle
+   ChangeLocaleTitle 5 (GetTitle 5)
 
    # Key bindings
-   Key Escape A 7 1 {KeyDismiss}
-   Key Q C 7 1 {KeyDismiss}
-   Key Return C 6 1 {KeyConfirm}
+   Key Escape A 8 1 {KeyDismiss}
+   Key Q C 8 1 {KeyDismiss}
+   Key R A 5 1 {KeyRemember}
+   Key Return C 7 1 {KeyConfirm}
    Key Down A 4 1 {KeyDown}
    Key Up A 4 1 {KeyUp}
-   Key F1 A 8 1 {KeyHelp}
-   Key Help A 8 1 {KeyHelp}
+   Key F1 A 9 1 {KeyHelp}
+   Key Help A 9 1 {KeyHelp}
 
    Do {CursorStyle ROOT cursors/CursorExit.xpm}
 
@@ -174,7 +186,7 @@ Widget 4
    Type PopupMenu
    Value 0
    Flags NoReliefString
-   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -221,9 +233,52 @@ Widget 4
 End
 
 Widget 5
+   Property
+   Position 20 120
+   Size 420 20
+   Flags NoReliefString
+   Type CheckBox
+   Font "xft:::pixelsize=14"
+   Value 1
+   Title { Remember Last Action                  }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 5 2
+      End
+      1 :
+      Begin
+         If (GetValue 5) == 0 Then
+         Begin
+            ChangeValue 5 1
+            SendSignal 5 2
+         End
+         Else
+         Begin
+            ChangeValue 5 0
+            SendSignal 5 2
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 5) == 0 Then
+         Begin
+            Set $ToggleLastValCmd = {echo "0" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $ToggleLastVal = (GetOutput $ToggleLastValCmd 1 -1)
+         End
+         Else
+         Begin
+            Set $ToggleLastValCmd = {echo "} $ReadLastVal {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $ToggleLastVal = (GetOutput $ToggleLastValCmd 1 -1)
+         End
+      End
+End
+
+Widget 6
 Property
    Size 464 1
-   Position 2 120
+   Position 2 156
    Type Rectangle
    Main
       Case message of
@@ -232,10 +287,10 @@ Property
       End
 End
 
-Widget 6
+Widget 7
 Property
    Size 100 20
-   Position 20 140
+   Position 20 170
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Confirm}
@@ -244,15 +299,18 @@ Property
    Case message of
    SingleClic :
    Begin
-      SendSignal 6 1
+      SendSignal 7 1
    End
    1 :
    Begin
       # X11 WM Quit
       If (GetValue 4) == 1 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         If (GetValue 5) <> 0 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         End
          Do {CursorStyle ROOT left_ptr}
          Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Logging out]" "..." 2000}
          Do {f_QuitAndExit}
@@ -262,8 +320,11 @@ Property
       # X11 WM Restart
       If (GetValue 4) == 2 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         If (GetValue 5) <> 0 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         End
          Do {Restart}
          Quit
       End
@@ -271,8 +332,11 @@ Property
       # X11 Failsafe
       If (GetValue 4) == 3 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         If (GetValue 5) <> 0 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         End
          Do {CursorStyle ROOT left_ptr}
          Do {Restart xterm -n '"X Console"' -T '"X Console"'}
          Quit
@@ -281,8 +345,11 @@ Property
       # OS Shutdown
       If (GetValue 4) == 4 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         If (GetValue 5) <> 0 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         End
          Do {f_QuitAndShutdown poweroff}
          Quit
       End
@@ -290,8 +357,11 @@ Property
       # OS Reboot
       If (GetValue 4) == 5 Then
       Begin
-         Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-         Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         If (GetValue 5) <> 0 Then
+         Begin
+            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+         End
          Do {f_QuitAndShutdown reboot}
          Quit
       End
@@ -301,8 +371,11 @@ Property
       Begin
          If $SuspendNoErr == 1 Then
          Begin
-            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            If (GetValue 5) <> 0 Then
+            Begin
+               Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+               Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            End
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
@@ -320,8 +393,11 @@ Property
       Begin
          If $HybridSuspendNoErr == 1 Then
          Begin
-            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            If (GetValue 5) <> 0 Then
+            Begin
+               Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+               Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            End
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System in hybrid mode]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
@@ -339,8 +415,11 @@ Property
       Begin
          If $HibernateNoErr == 1 Then
          Begin
-            Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
-            Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            If (GetValue 5) <> 0 Then
+            Begin
+               Set $StoreLastValCmd = {echo "} (GetValue 4) {" > "$FVWM_USERDIR/.SysActionDialog.lastval"}
+               Set $StoreLastVal = (GetOutput $StoreLastValCmd 1 -1)
+            End
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Hibernating System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
@@ -355,10 +434,10 @@ Property
    End
 End
 
-Widget 7
+Widget 8
 Property
    Size 100 20
-   Position 180 140
+   Position 180 170
    Type PushButton
    LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
@@ -367,7 +446,7 @@ Property
       Case message of
       SingleClic :
       Begin
-         SendSignal 7 1
+         SendSignal 8 1
       End
       1 :
       Begin
@@ -376,10 +455,10 @@ Property
       End
 End
 
-Widget 8
+Widget 9
 Property
    Size 100 20
-   Position 340 140
+   Position 340 170
    Type PushButton
    LocaleTitle {Help}
    Font "xft:::pixelsize=15"
@@ -388,10 +467,11 @@ Property
    Case message of
    SingleClic :
    Begin
-      SendSignal 8 1
+      SendSignal 9 1
    End
    1 :
    Begin
       Do {f_DisplayURL "$[gt.System Action Dialog]" $[NSCDE_ROOT]/share/doc/html/NsCDE-SysActionDialog.html}
    End
 End
+
