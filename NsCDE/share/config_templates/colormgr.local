@@ -92,6 +92,8 @@ fi
 function do_firefox
 {
    if [ "x$FIREFOX_CHROMEDIR" != "x" ]; then
+      mkdir -p "$FIREFOX_CHROMEDIR"
+
       # Chrome
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
@@ -153,6 +155,8 @@ fi
 function do_thunderbird
 {
    if [ "x$THUNDERBIRD_CHROMEDIR" != "x" ]; then
+      mkdir -p "$THUNDERBIRD_CHROMEDIR"
+
       # Chrome
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
        ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
