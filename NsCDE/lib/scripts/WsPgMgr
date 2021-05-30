@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WsPgMgr}
 WindowLocaleTitle {Workspaces and Pages Manager}
-WindowSize 348 448
+WindowSize 348 446
 Colorset 22
 
 Init
@@ -116,12 +116,18 @@ Begin
    ChangeValue 13 $VTmpPageNo
    ChangeValue 15 $HTmpPageNo
 
+   # Fill in WsmEco Compact/Non-Compact WSM switch
+   Do {SendToModule WsPgMgr SendString 26 2 $[infostore.wsm.eco]}
+   ChangeLocaleTitle 26 (GetTitle 26)
+
    # Keys
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
 
    Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 9 $DefFont
+
+   ChangeFont 26 $DefFont
 
    ChangeFont 16 $DefFont
    ChangeFont 17 $DefFont
@@ -186,7 +192,7 @@ End
 
 Widget 10
    Property
-   Position 38 54
+   Position 38 45
    Flags NoReliefString NoFocus
    Type ItemDraw
    Icon NsCDE/FpMask.xpm
@@ -197,10 +203,53 @@ Widget 10
       End
 End
 
+Widget 26
+   Property
+   Position 16 134
+   Size 330 20
+   Flags NoReliefString
+   Type CheckBox
+   Font "xft:::pixelsize=12"
+   Value 1
+   Title { Use Compact Workspace Manager                   }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 26 1
+      End
+      1 :
+      Begin
+         If (GetValue 26) == 0 Then
+         Begin
+            Set $WsmEco = 0
+         End
+         Else
+         Begin
+            Set $WsmEco = 1
+         End
+      End
+      2 :
+      Begin
+         If (LastString) == 1 Then
+         Begin
+            Set $InitialWsmEco = 1
+            Set $WsmEco = 1
+            ChangeValue 26 1
+         End
+         Else
+         Begin
+            Set $InitialWsmEco = 0
+            Set $WsmEco = 0
+            ChangeValue 26 0
+         End
+      End
+End
+
 Widget 1
 Property
     Flags NoReliefString
-    Position 50 61
+    Position 50 53
     Size 124 26
     Type PushButton
     Title { One }
@@ -210,7 +259,7 @@ Property
        Case message of
        SingleClic :
        Begin
-          ChangePosition 24 50 61
+          ChangePosition 24 50 53
           Set $MyTitle = (GetTitle 1)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -224,7 +273,7 @@ End
 Widget 2
 Property
     Flags NoReliefString
-    Position 178 61
+    Position 178 53
     Size 124 26
     Type PushButton
     Title { Two }
@@ -235,13 +284,13 @@ Property
        SingleClic :
        Begin
           If $TmpDesks == 2 Then
-             ChangePosition 24 50 93
+             ChangePosition 24 50 85
           If $TmpDesks == 4 Then
-             ChangePosition 24 178 61
+             ChangePosition 24 178 53
           If $TmpDesks == 6 Then
-             ChangePosition 24 136 61
+             ChangePosition 24 136 53
           If $TmpDesks == 8 Then
-             ChangePosition 24 116 61
+             ChangePosition 24 116 53
           Set $MyTitle = (GetTitle 2)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -255,7 +304,7 @@ End
 Widget 3
 Property
     Flags NoReliefString
-    Position 50 93
+    Position 50 85
     Size 124 26
     Type PushButton
     Title { Three }
@@ -266,11 +315,11 @@ Property
        SingleClic :
        Begin
           If $TmpDesks == 4 Then
-             ChangePosition 24 50 93
+             ChangePosition 24 50 85
           If $TmpDesks == 6 Then
-             ChangePosition 24 222 61
+             ChangePosition 24 222 53
           If $TmpDesks == 8 Then
-             ChangePosition 24 181 61
+             ChangePosition 24 181 53
           Set $MyTitle = (GetTitle 3)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -284,7 +333,7 @@ End
 Widget 4
 Property
     Flags NoReliefString
-    Position 178 93
+    Position 178 85
     Size 124 26
     Type PushButton
     Title { Four }
@@ -295,11 +344,11 @@ Property
        SingleClic :
        Begin
           If $TmpDesks == 4 Then
-             ChangePosition 24 178 93
+             ChangePosition 24 178 85
           If $TmpDesks == 6 Then
-             ChangePosition 24 50 93
+             ChangePosition 24 50 85
           If $TmpDesks == 8 Then
-             ChangePosition 24 245 61
+             ChangePosition 24 245 53
           Set $MyTitle = (GetTitle 4)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -313,7 +362,7 @@ End
 Widget 5
 Property
     Flags NoReliefString Hidden
-    Position 1 93
+    Position 1 85
     Size 60 26
     Type PushButton
     Title { Five }
@@ -324,9 +373,9 @@ Property
        SingleClic :
        Begin
           If $TmpDesks == 6 Then
-             ChangePosition 24 136 93
+             ChangePosition 24 136 85
           If $TmpDesks == 8 Then
-             ChangePosition 24 50 93
+             ChangePosition 24 50 85
           Set $MyTitle = (GetTitle 5)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -340,7 +389,7 @@ End
 Widget 6
 Property
     Flags NoReliefString Hidden
-    Position 65 93
+    Position 65 85
     Size 60 26
     Type PushButton
     Title { Six }
@@ -351,9 +400,9 @@ Property
        SingleClic :
        Begin
           If $TmpDesks == 6 Then
-             ChangePosition 24 222 93
+             ChangePosition 24 222 85
           If $TmpDesks == 8 Then
-             ChangePosition 24 116 93
+             ChangePosition 24 116 85
           Set $MyTitle = (GetTitle 6)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -367,7 +416,7 @@ End
 Widget 7
 Property
     Flags NoReliefString Hidden
-    Position 130 93
+    Position 130 85
     Size 60 26
     Type PushButton
     Title {Seven}
@@ -377,7 +426,7 @@ Property
        Case message of
        SingleClic :
        Begin
-          ChangePosition 24 181 93
+          ChangePosition 24 181 85
           Set $MyTitle = (GetTitle 7)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -391,7 +440,7 @@ End
 Widget 8
 Property
     Flags NoReliefString Hidden
-    Position 194 93
+    Position 194 85
     Size 60 26
     Type PushButton
     Title {Eight}
@@ -401,7 +450,7 @@ Property
        Case message of
        SingleClic :
        Begin
-          ChangePosition 24 245 93
+          ChangePosition 24 245 85
           Set $MyTitle = (GetTitle 8)
           ChangeTitle 24 $MyTitle
           ChangeMinValue 24 99
@@ -411,7 +460,6 @@ Property
           Set $CalledBy = 8
        End
 End
-
 
 Widget 11
    Property
@@ -509,8 +557,8 @@ Widget 11
             ChangeSize 1 253 26
             ChangeSize 2 253 26
             ChangeSize 24 253 25
-            ChangePosition 1 50 61
-            ChangePosition 2 50 93
+            ChangePosition 1 50 53
+            ChangePosition 2 50 85
          End
 
          If $TmpDesks == 4 Then
@@ -528,10 +576,10 @@ Widget 11
             ChangeSize 3 124 26
             ChangeSize 4 124 26
             ChangeSize 24 124 26
-            ChangePosition 1 50 61
-            ChangePosition 2 178 61
-            ChangePosition 3 50 93
-            ChangePosition 4 178 93
+            ChangePosition 1 50 53
+            ChangePosition 2 178 53
+            ChangePosition 3 50 85
+            ChangePosition 4 178 85
          End
 
          If $TmpDesks == 6 Then
@@ -551,11 +599,11 @@ Widget 11
             ChangeSize 5 82 26
             ChangeSize 6 82 26
             ChangeSize 24 82 26
-            ChangePosition 2 136 61
-            ChangePosition 3 222 61
-            ChangePosition 4 50 93
-            ChangePosition 5 136 93
-            ChangePosition 6 222 93
+            ChangePosition 2 136 53
+            ChangePosition 3 222 53
+            ChangePosition 4 50 85
+            ChangePosition 5 136 85
+            ChangePosition 6 222 85
          End
 
          If $TmpDesks == 8 Then
@@ -577,13 +625,13 @@ Widget 11
             ChangeSize 7 60 26
             ChangeSize 8 60 26
             ChangeSize 24 60 26
-            ChangePosition 2 116 61
-            ChangePosition 3 181 61
-            ChangePosition 4 245 61
-            ChangePosition 5 50 93
-            ChangePosition 6 116 93
-            ChangePosition 7 181 93
-            ChangePosition 8 245 93
+            ChangePosition 2 116 53
+            ChangePosition 3 181 53
+            ChangePosition 4 245 53
+            ChangePosition 5 50 85
+            ChangePosition 6 116 85
+            ChangePosition 7 181 85
+            ChangePosition 8 245 85
          End
       End
 End
@@ -743,7 +791,7 @@ End
 
 Widget 21
    Property
-   Position 16 406
+   Position 16 405
    Size 96 20
    Flags NoReliefString
    Type PushButton
@@ -778,6 +826,11 @@ Widget 21
             Set $PHAction = 1
          End
 
+         If $InitialWsmEco <> $WsmEco Then
+         Begin
+            Set $Action = 1
+         End
+
          If $Action == 1 Then
          Begin
             If $CreateNsCDEUserConfig == 1 Then
@@ -808,6 +861,12 @@ Widget 21
                      SendSignal 21 3
                      Set $PerformRestart = 1
                   End
+
+                  If $InitialWsmEco <> $WsmEco Then
+                  Begin
+                     SendSignal 21 4
+                     Set $PerformRestart = 1
+                  End
                End
             End
             Else
@@ -827,6 +886,12 @@ Widget 21
                If $PHAction == 1 Then
                Begin
                   SendSignal 21 3
+                  Set $PerformRestart = 1
+               End
+
+               If $InitialWsmEco <> $WsmEco Then
+               Begin
+                  SendSignal 21 4
                   Set $PerformRestart = 1
                End
             End
@@ -917,11 +982,34 @@ Widget 21
            Set $WritePH = (GetOutput $WritePHCmd 1 -1)
         End
      End
+     4 :
+     Begin
+        Set $WSMECOStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+wsm\.eco' '} $ExpandFile {' ; echo $?}
+        Set $WSMECOStringToCheck = (GetOutput $WSMECOStringToCheckCmd 1 -1)
+        If $WSMECOStringToCheck == 0 Then
+        Begin
+           Do {InfoStoreAdd wsm.eco } $WsmEco
+           Set $WriteWSMECOCmd = {$NSCDE_ROOT/bin/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+wsm\.eco[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\3} $WsmEco {/g' -f "} $ExpandFile {"}
+           Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
+        End
+        If $WSMECOStringToCheck == 2 Then
+        Begin
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $WSMECOStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+           Quit
+        End
+
+        If $WSMECOStringToCheck == 1 Then
+        Begin
+           Do {InfoStoreAdd wsm.eco } $WsmEco
+           Set $WriteWSMECOCmd = {echo 'InfoStoreAdd wsm.eco } $WsmEco {' >> '} $ExpandFile {'}
+           Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
+        End
+     End
 End
 
 Widget 22
    Property
-   Position 127 406
+   Position 127 405
    Size 96 20
    Flags NoReliefString
    Type PushButton
@@ -945,7 +1033,7 @@ End
 
 Widget 23
    Property
-   Position 238 406
+   Position 238 405
    Size 96 20
    Flags NoReliefString
    Type PushButton
