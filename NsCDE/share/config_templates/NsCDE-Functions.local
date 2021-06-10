@@ -51,11 +51,14 @@
 # AddToFunc f_UserChangePage
 # + I Nop
 
-# Hook of the f_SysAddWindowEvent called from
-# FvwmEvent on add_window event. Called when new
-# window appears. This example focuses every new
-# window but avoids FrontPanel and Subpanels
-# because of strange interaction
+# Hook of the f_SysAddWindowEvent called from FvwmEvent on add_window
+# event. Called when new window appears. This example focuses every
+# new window but avoids FrontPanel and Subpanels because of strange
+# interaction. Note that this example will block FVWM during startup
+# and often make screen pointer to look like a cross if InitFunction
+# or StartFunction is in progress and is opening new windows, and
+# Ctrl+Alt+Esc (EscapeFunc) must be used multiple times to get out of
+# thar blocking. Care should be taken to avoid this somehow.
 # DestroyFunc f_AddWindowEvent
 # AddToFunc f_AddWindowEvent
 # + I Current (NsCDE-Subpanel-*) Break 1
