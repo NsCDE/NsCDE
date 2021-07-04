@@ -1,5 +1,5 @@
 all:
-	(cd src && make all)
+	cd src && $(MAKE) all
 
 install:
-	(cd src && make install)
+	cd src && $(MAKE) install

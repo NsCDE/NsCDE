@@ -7,8 +7,9 @@ DEFAULT_XPM = Fpclock.xpm
 
 INCDIR = -I/usr/X11R6/include -I/usr/X11R7/include -I/usr/include -I/usr/local/include -I.
 LIBDIR = -L/usr/X11R6/lib -L/usr/X11R7/lib -L/usr/lib64 -L/usr/local/lib
-CC = gcc
-CFLAGS = -O2 -g -Wall
+CC ?= gcc
+CFLAGS ?= -O2 -g -Wall
+LDFLAGS ?=
 LIBS = -lXpm -lXext -lX11 -lm
 
 ###############################################################################
@@ -34,7 +35,7 @@ Graphics.o: PClock.h Default.xpm
 Main.o: PClock.h Defaults.h Version.h
 
 $(PROG): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBDIR) $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBDIR) $(LDFLAGS) $(LIBS)
 
 ###############################################################################
 
