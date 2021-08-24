@@ -104,6 +104,11 @@ Begin
 
    # Get Screen X and Y
    Do {SendToModule BackdropMgr SendString 7 1 $[vp.width]x$[vp.height]}
+
+   # Get FVWM3 DesktopConfiguratio mode
+   # Default is global and fvwm2
+   Set $Fvwm3DesktopNonGlobalMode = 0
+   Do {SendToModule BackdropMgr SendString 4 1 $[FVWM_IS_FVWM3]_$[infostore.desktopconfiguration]}
 End
 
 PeriodicTasks
@@ -163,6 +168,17 @@ Widget 4
       Case message of
       SingleClic :
       Begin
+      End
+      1 :
+      Begin
+         If (LastString) == {1_per-monitor} Then
+         Begin
+            Set $Fvwm3DesktopNonGlobalMode = 1
+         End
+         If (LastString) == {1_shared} Then
+         Begin
+            Set $Fvwm3DesktopNonGlobalMode = 1
+         End
       End
 End
 
@@ -530,8 +546,18 @@ Widget 11
             Begin
                If $BackdropPreview <> {} Then
                Begin
-                  # Do {Exec exec fvwm-root -r } $BackdropPreview
-                  Do {Colorset 3} $CurrDesk { TiledPixmap } $BackdropPreview
+                  If $Fvwm3DesktopNonGlobalMode == 0 Then
+                  Begin
+                     Do {Colorset 3} $CurrDesk { TiledPixmap } $BackdropPreview
+                  End
+                  Else
+                  Begin
+                     Do {Exec exec /usr/bin/env ksh93 -c 'convert }
+                     {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                     {\( -size $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] tile:} $BackdropPreview
+                     { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite "}
+                     $BackdropPreview {.png" && fvwm-root -r "} $BackdropPreview {.png"'}
+                  End
                   Set $PreviewContaminated = 1
                End
             End
@@ -541,7 +567,6 @@ Widget 11
                Begin
                   Set $PhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f "} $PhotoName {"}
                   Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
-                  # Do {Exec exec fvwm-root -r } $PhotoPath
                   If $CurrDesk == 1 Then
                      Set $BgCs = 40
                   If $CurrDesk == 2 Then
@@ -558,7 +583,39 @@ Widget 11
                      Set $BgCs = 44
                   If $CurrDesk == 8 Then
                      Set $BgCs = 46
-                  Do {Colorset 3} $CurrDesk { bg $[bg.cs} $BgCs {],} $PixmapVariant { } $PhotoPath
+                  If $Fvwm3DesktopNonGlobalMode == 0 Then
+                  Begin
+                     Do {Colorset 3} $CurrDesk { bg $[bg.cs} $BgCs {],} $PixmapVariant { } $PhotoPath
+                  End
+                  Else
+                  Begin
+                     If $PixmapVariant == {TiledPixmap} Then
+                     Begin
+                        Do {Exec exec /usr/bin/env ksh93 -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( -size $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] tile:} $PhotoPath
+                        { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                     If $PixmapVariant == {AspectPixmap} Then
+                     Begin
+                        Do {Exec exec /usr/bin/env ksh93 -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( } $PhotoPath { -resize $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height]\! }
+                        { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                     If $PixmapVariant == {Pixmap} Then
+                     Begin
+                        Do {Exec exec /usr/bin/env ksh93 -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( -resize $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] }
+                        {-gravity center -extent $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] }
+                        {-repage +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] }
+                        {-background "$[bg.cs} $BgCs {.hash]" } $PhotoPath { \) -layers merge }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                  End
                   Set $PreviewContaminated = 1
                End
             End
@@ -566,6 +623,10 @@ Widget 11
          If (GetValue 11) == 2 Then
          Begin
             Do {f_Readcfg Backdrops}
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetFvwm3NonGlobalBackground}
+            End
             Set $PreviewContaminated = 0
          End
       End
@@ -819,6 +880,11 @@ Widget 17
             End
          End
          Do {f_Readcfg Backdrops}
+         If $Fvwm3DesktopNonGlobalMode == 1 Then
+         Begin
+            Do {f_SetupMonitorData}
+            Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+         End
       End
       2 :
       Begin
@@ -838,6 +904,11 @@ Widget 17
             End
          End
          Do {f_Readcfg Backdrops}
+         If $Fvwm3DesktopNonGlobalMode == 1 Then
+         Begin
+            Do {f_SetupMonitorData}
+            Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+         End
       End
 End
 
@@ -860,6 +931,11 @@ Widget 18
          If $PreviewContaminated == 1 Then
          Begin
             Do {f_Readcfg Backdrops}
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
          End
          Quit
       End

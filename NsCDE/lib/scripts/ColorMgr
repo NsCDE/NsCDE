@@ -140,6 +140,11 @@ Begin
    ChangeLocaleTitle 27 (GetTitle 27)
    ChangeLocaleTitle 28 (GetTitle 28)
    ChangeLocaleTitle 29 (GetTitle 29)
+
+   # Get FVWM3 DesktopConfiguratio mode
+   # Default is global and fvwm2
+   Set $Fvwm3DesktopNonGlobalMode = 0
+   Do {SendToModule ColorMgr SendString 4 2 $[FVWM_IS_FVWM3]_$[infostore.desktopconfiguration]}
 End
 
 PeriodicTasks
@@ -178,7 +183,7 @@ QuitFunc
 Begin
    # Cleanup on exit
    Do {Exec exec rm -f '} $FullColor {' "$FVWM_USERDIR/tmp/NsCDE-Colorset-Preview.conf" }
-      {"$FVWM_USERDIR/tmp/*-Preview" "$FVWM_USERDIR/tmp/backer-*.pm" }
+      {$FVWM_USERDIR/tmp/*-Preview $FVWM_USERDIR/tmp/backer-*.pm $FVWM_USERDIR/tmp/backer-*.png }
       {"$FVWM_USERDIR/tmp/__colors.tmp"}
 End
 
@@ -321,7 +326,18 @@ Widget 4
          SendSignal 32 1
          If $PerformBackdropSync <> {} Then
          Begin
-            Do {Exec exec fvwm-root -r } $PerformBackdropSync
+            If $Fvwm3DesktopNonGlobalMode == 0 Then
+            Begin
+               Do {Exec exec fvwm-root -r } $PerformBackdropSync
+            End
+            Else
+            Begin
+               Do {Exec exec /usr/bin/env ksh93 -c 'convert }
+               {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+               {\( -size $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] tile:} $PerformBackdropSync
+               { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite "}
+               $PerformBackdropSync {.png" && fvwm-root -r "} $PerformBackdropSync {.png"'}
+            End
          End
          Do {Read } $PerformPaletteChange
          Do {Schedule 120 Refresh}
@@ -332,7 +348,25 @@ Widget 4
             Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
             Do {f_Readcfg Backdrops}
             Do {f_Readcfg Colorset}
+
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
+
             Set $PreviewContaminated = 0
+         End
+      End
+      2 :
+      Begin
+         If (LastString) == {1_per-monitor} Then
+         Begin
+            Set $Fvwm3DesktopNonGlobalMode = 1
+         End
+         If (LastString) == {1_shared} Then
+         Begin
+            Set $Fvwm3DesktopNonGlobalMode = 1
          End
       End
 End
@@ -1169,6 +1203,7 @@ Widget 32
                Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied.]" "..." 5000}
             End
          End
+
          Set $PerformPaletteChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
          Set $PerformProgBitsChangeCmd = {$NSCDE_ROOT/libexec/colormgr } $PreviewParam { } $FpVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -P}
@@ -1409,8 +1444,19 @@ Widget 32
                Do {Schedule 250 f_Xsettingsd start}
             End
          End
-         Do {f_Readcfg Backdrops}
-         Do {f_Readcfg Colorset}
+
+         If $PreviewMode == 0 Then
+         Begin
+            Do {f_Readcfg Backdrops}
+            Do {f_Readcfg Colorset}
+
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_CleanupBackgroundCache}
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
+         End
       End
 End
 
@@ -1439,9 +1485,16 @@ Widget 33
          Begin
             Set $RestoreXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
             Set $RestoreXresources = (GetOutput $RestoreXresourcesCmd 1 -1)
+
             Do {f_Readcfg Backdrops}
             Do {f_Readcfg Colorset}
-            Do {Schedule 120 Refresh}
+            Do {Schedule 340 Refresh}
+
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
          End
          Quit
       End
