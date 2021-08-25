@@ -108,7 +108,7 @@ Begin
    # Get FVWM3 DesktopConfiguratio mode
    # Default is global and fvwm2
    Set $Fvwm3DesktopNonGlobalMode = 0
-   Do {SendToModule BackdropMgr SendString 4 1 $[FVWM_IS_FVWM3]_$[infostore.desktopconfiguration]}
+   Do {SendToModule BackdropMgr SendString 4 1 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
 End
 
 PeriodicTasks
@@ -171,13 +171,20 @@ Widget 4
       End
       1 :
       Begin
-         If (LastString) == {1_per-monitor} Then
+         Set $IsFvwm3 = (StrCopy (LastString) 1 1)
+         Set $Monitors = (StrCopy (LastString) 3 3)
+         Set $DesktopModel = (StrCopy (LastString) 5 35)
+
+         If (Add $IsFvwm3 $Monitors) >= 3 Then
          Begin
-            Set $Fvwm3DesktopNonGlobalMode = 1
-         End
-         If (LastString) == {1_shared} Then
-         Begin
-            Set $Fvwm3DesktopNonGlobalMode = 1
+            If $DesktopModel == {per-monitor} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
+            If $DesktopModel == {shared} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
          End
       End
 End
