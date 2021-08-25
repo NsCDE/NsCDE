@@ -23,7 +23,16 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
    manually.
 </p></li><li class="listitem"><p>
    <code class="filename">backer/</code> directory:
-   Generated backdrops referenced by Colorsets 31-38 for FvwmBacker
+   Generated backdrops referenced by Colorsets 31-38 for FvwmBacker.
+</p></li><li class="listitem"><p>
+  <code class="filename">backer/bgcache/</code> subdirectory:
+  If FVWM3 is used by NsCDE in non-global monitor <span class="emphasis"><em>DesktopConfiguration</em></span> mode,
+  Large PNG files are generated from the existing backdrops in <code class="filename">share/defaults/backer</code>.
+  This directory contains automatically generated hierachy structure of background cache for multiple different X RandR
+  monitors when NsCDE is used with FVWM3 in non-global <span class="emphasis"><em>DesktopConfiguration</em></span> mode, which are
+  matching various combinations of desks across monitors.
+  Referenced in function f_SetFvwm3NonGlobalBackground of <code class="filename">config/NsCDE-Functions.conf</code> and
+  in <code class="filename">libexec/xrandr_backer</code> backdrop autocreate script.
 </p></li><li class="listitem"><p>
    <code class="filename">fontsets/</code> directory:
    If created, user can put or generate with <a class="link" href="NsCDE-FontMgr.html" title="4.6. Font Style Manager">Font Style Manager</a> own

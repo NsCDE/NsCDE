@@ -881,6 +881,14 @@ M. Z.
    number from 1-8. In such a way it is possible to have the same
    backdrop pattern on more than one workspace in 8-colors mode.
 
+   In case of NsCDE setup with FVWM3 and per-monitor or shared X
+   RandR monitor model (fvwm3 DesktopConfiguration), backdrops in
+   $FVWM_USERDIR/backer will be used as a source for procedure
+   which builds joined tiled backdrops for multiple monitors.
+   Output of this backdrops, which is then loaded directly by FVWM
+   function is placed in $FVWM_USERDIR/backer/bgcache
+   subdirectory.
+
    There is an option to use the same backdrop for all desks too.
    User can add and delete custom backdrops in
    $FVWM_USERDIR/backdrops. First action with Add button and file
@@ -1008,10 +1016,10 @@ M. Z.
 
      * Own currently used backdrop synchronization (default)
      * X resources in $FVWM_USERDIR/Xdefaults (default)
-     * GTK2
-     * GTK3
-     * Qt4
-     * Qt5
+     * GTK2 (default)
+     * GTK3 (default)
+     * Qt4 (default)
+     * Qt5 (default)
      * User's $FVWM_USERDIR/libexec/colormgr.local script if
        exists, called with the path of the applied palette and
        number of colors.
@@ -1061,6 +1069,10 @@ M. Z.
      * Up/Down: Goes one item on the color schemes list up or
        down.
      * Sun Help and F1: Displays this help text.
+
+   Notice: In the preview mode under FVWM3 non-global monitor
+   layout, only the backdrop of the currently focused monitor is
+   previewed in the colors of the new palette.
      __________________________________________________________
 
 4.5. Exec Dialog
@@ -1770,6 +1782,15 @@ M. Z.
    are not configurable via GUI. User is encouraged to open
    $FVWM_USERDIR/WSM.conf and edit to suit.
 
+   Pop up menu prefixed as "Monitor Workspaces" allows users NsCDE
+   with FVWM3 to select between currently existing three modes of
+   FVWM3 desktop configurations: global, per-monitor or shared.
+   When used with FVWM2, this popup will not be shown, instead,
+   text "Global Only (FVWM2)" will indicate non-applicability of
+   this feature under FVWM2. Under FVWM3, new DesktopConfiguation
+   model is used immediately, but FVWM3 is still restarted to get
+   consistent and clear new behaviour of the window manager.
+
    OK button saves configuration, restarts window manager and
    quits. Cancel button discards, except if new names of desks are
    set, because this is written immediately, but window manager is
@@ -1997,6 +2018,19 @@ M. Z.
    file, and when processed with color values from the palette,
    this backdrop's final form is, ready to be set by
    FvwmBacker(1).
+
+   When NsCDE is used with FVWM3 and per-monitor or shared
+   DekstopConfiguration monitor modes, FvwmBacker(1) is not in
+   use, because it cannot treat different physical (and virtual)
+   monitors separately. Functions driven by the new_desk
+   FvwmEvent(1) event are called in that case, which will be
+   loaded from the cache directory $FVWM_USERDIR/backer/bgcache if
+   found, or automatically generated with the help of
+   ImageMagick's convert(1) tool if they do not exist, and then
+   loaded. This mechanism automatically calculates screen width,
+   height, X and Y coordinates, desks and backdrops to produce
+   cjoined backdrops as one big PNG file which is then loaded to
+   show correct background for desks on different monitors.
      __________________________________________________________
 
 7. Configuration files explained
@@ -2232,6 +2266,8 @@ M. Z.
        "journalctl -u gdm -n 300 -f"
      * InfoStoreAdd rootpagerposition "screen c 50-50w +10p" -
        where to put local pager on page change if enabled
+     * InfoStoreAdd desktopconfiguration global|per-monitor|shared
+       - for FVWM3
 
    Further, common system environment variables are provided
    already set, or for optional uncommenting if needed or
@@ -3275,7 +3311,19 @@ Silent Key Tab A S -
        of backdrops if selected in Backdrop Style Manager or
        configured in NsCDE-Backdrops.conf manually.
      * backer/ directory: Generated backdrops referenced by
-       Colorsets 31-38 for FvwmBacker
+       Colorsets 31-38 for FvwmBacker.
+     * backer/bgcache/ subdirectory: If FVWM3 is used by NsCDE in
+       non-global monitor DesktopConfiguration mode, Large PNG
+       files are generated from the existing backdrops in
+       share/defaults/backer. This directory contains
+       automatically generated hierachy structure of background
+       cache for multiple different X RandR monitors when NsCDE is
+       used with FVWM3 in non-global DesktopConfiguration mode,
+       which are matching various combinations of desks across
+       monitors. Referenced in function
+       f_SetFvwm3NonGlobalBackground of
+       config/NsCDE-Functions.conf and in libexec/xrandr_backer
+       backdrop autocreate script.
      * fontsets/ directory: If created, user can put or generate
        with Font Style Manager own fontsets here.
      * icons/ directory: Populated by dynamic menu action
@@ -3642,6 +3690,7 @@ Silent Key Tab A S -
      * templates/
      * photos/
      * backer/
+     * backer/bgcache
      * GeoDB.ini
      * icons/
      * icons/NsCDE/
@@ -4120,19 +4169,19 @@ NsCDE
 
 20. FVWM3 Support
 
-   NsCDE from version 1.0rc28 experimentaly supports FVWM3, but it
-   is and will stay compatible for FVWM2 as long as possible. In
-   the time of this writing, FVWM3 was in it's first releases and
-   had some problems with workspaces and screens layout, as well
-   as FvwmPager and FvwmBacker in multi-monitor setup.
-   Nevertheless, NsCDE will search for "fvwm" and then "fvwm3" in
-   $PATH. If both, FVWM3 and FVWM2 are installed on the same
-   system, FVWM2 will be find first currently. This can be
-   overriden in user's environment (for example $HOME/.bashrc) by
-   setting environment variable FVWM_BIN with the value which
-   points to name of the FVWM binary, or full path to the binary
-   if for example, FVWM3 was installed from source in some
-   non-standard place out of the path.
+   NsCDE from version 1.3 has late beta quality of support for
+   FVWM3. NsCDE is and will stay compatible for FVWM2 as long as
+   possible. In the time of this writing, FVWM3 was in it's fourth
+   release and much of the previous problems are solved, altrough
+   it still has some problems with FvwmPager and FvwmBacker in
+   multi-monitor setup. Nevertheless, NsCDE will search for "fvwm"
+   and then "fvwm3" in $PATH. If both, FVWM3 and FVWM2 are
+   installed on the same system, FVWM2 will still be used first
+   currently. This can be overriden in user's environment (for
+   example $HOME/.bashrc) by setting environment variable FVWM_BIN
+   with the value which points to name of the FVWM binary, or full
+   path to the binary if for example, FVWM3 was installed from
+   source in some non-standard place out of the path.
 
    For example:
 export FVWM_BIN=/opt/fvwm3/bin/fvwm3
@@ -4151,20 +4200,23 @@ export FVWM_BIN=fvwm
    Probably the most notable feature of FVWM3 is
    DesktopConfiguration. FVWM3 configuration parameter
    DesktopConfiguration decides of workspaces layout in case of
-   multiple monitors. For now, there are two options: "global"
-   (default) and "per-monitor". First option is very similar in
-   layout to old Xinerama support in FVWM2, while second one
-   splits workspaces and different parts of different workspaces
-   can be shown on different monitors. For NsCDE to work with
-   this, currently there is one workaround in the for of external
-   background setter. For more information and instructions, refer
-   to the $NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README.
-   As in the future more desktop layouts are planned by FVWM3
-   developers, this setting will most probably get it's GUI
-   control usable on FVWM3 in the Workspaces and Pages Manager.
-   Currently, NsCDE provides DesktopConfiguration directive as an
-   example for optional uncommenting in the
-   $FVWM_USERDIR/NsCDE.conf.
+   multiple monitors. For now, there are three options: "global"
+   (default), "per-monitor" and "shared". First option is very
+   similar in layout to old Xinerama support in FVWM2, while
+   second and third model are splitting workspaces, so different
+   parts of different workspaces can be shown on different
+   monitors. NsCDE implements dynamic finding and displaying, as
+   well as creation of joint backdrops combinations for multiple
+   monitors layout out of the box, so old hack described in
+   $NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README is not
+   needed anymore. As in the future more desktop layouts are
+   planned by FVWM3 developers, this setting has it's GUI control
+   usable on FVWM3 in the Workspaces and Pages Manager. NsCDE
+   provides InfoStoreAdd desktopconfiguration directive in the
+   $FVWM_USERDIR/NsCDE.conf when FVWM3 is used. This value can be
+   edited manually to contain "global", "per-monitor" or "shared"
+   value, or Workspaces and Pages Manager can be used for that
+   task.
 
    Third difference between NsCDE under FVWM2 and FVWM3 is
    logging. While FVWM2 logged all it's actions on X server's
@@ -4182,12 +4234,14 @@ export FVWM_BIN=fvwm
    $[infostore.fvwm3_default_logging] should be set in
    $FVWM_USERDIR/NsCDE.conf.
 
-   Caution: using NsCDE under FVWM3 is still a bit experimental.
-   Any misbehaviour should be carefully distinguished if it is
-   NsCDE or FVWM3 bug while deciding where to report bugs.
-   Watching logs, trying to trigger the same error under FVWM2
-   will be a good starting point for diagnostic of such problems
-   which may manifest itself.
+   Caution: using NsCDE under FVWM3 is still a bit of beta
+   quality. Local Pager shown when changing pages and workspaces
+   will contain primary monitor content, which will be wrong on
+   the secondary monitor(s). Any misbehaviour should be carefully
+   distinguished if it is NsCDE or FVWM3 bug while deciding where
+   to report bugs. Watching logs, trying to trigger the same error
+   under FVWM2 will be a good starting point for diagnostic of
+   such problems which may manifest itself.
      __________________________________________________________
 
 21. Credits
