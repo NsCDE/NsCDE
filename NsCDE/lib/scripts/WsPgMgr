@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-WsPgMgr}
 WindowLocaleTitle {Workspaces and Pages Manager}
-WindowSize 348 446
+WindowSize 348 500
 Colorset 22
 
 Init
@@ -120,6 +120,10 @@ Begin
    Do {SendToModule WsPgMgr SendString 26 2 $[infostore.wsm.eco]}
    ChangeLocaleTitle 26 (GetTitle 26)
 
+   # FVWM3 DesktopConfiguration
+   Do {SendToModule WsPgMgr SendString 28 1 $[FVWM_IS_FVWM3]_$[infostore.desktopconfiguration]}
+   ChangeLocaleTitle 28 (GetTitle 28)
+
    # Keys
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
@@ -146,6 +150,10 @@ Begin
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 12 $SmallFont
    ChangeFont 14 $SmallFont
+
+   # FVWM3 DesktopConfiguration labels
+   ChangeFont 27 $SmallFont
+   ChangeFont 29 $SmallFont
 
    # Key bindings
    Key Escape A 22 1 {KeyClose}
@@ -776,9 +784,82 @@ Widget 19
       End
 End
 
+Widget 27
+   Property
+   Position 12 404
+   Size 174 0
+   Flags NoReliefString NoFocus Left
+   Type ItemDraw
+   LocaleTitle {Monitor Workspaces: }
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 28
+   Property
+   Position 210 400
+   Flags NoReliefString Left
+   Type PopupMenu
+   Value 0
+   Title { Global | Per Monitor| Shared }
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         If (StrCopy (LastString) 1 2) == {1_} Then
+         Begin
+            Set $Fvwm3 = 1
+            Set $InitialFvwm3DskConf = (StrCopy (LastString) 3 32)
+
+            If $InitialFvwm3DskConf == {global} Then
+            Begin
+               ChangeValue 28 1
+            End
+            If $InitialFvwm3DskConf == {per-monitor} Then
+            Begin
+               ChangeValue 28 2
+            End
+            If $InitialFvwm3DskConf == {shared} Then
+            Begin
+               ChangeValue 28 3
+            End
+
+            Set $InitialFvwm3DskConfVal = (GetValue 28)
+         End
+         Else
+         Begin
+            HideWidget 28
+            ShowWidget 29
+            Set $Fvwm3 = 0
+         End
+      End
+End
+
+Widget 29
+   Property
+   Position 192 404
+   Size 144 0
+   Flags NoReliefString NoFocus Left Hidden
+   Type ItemDraw
+   LocaleTitle {Global Only (FVWM2)}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
 Widget 20
    Property
-   Position 3 392
+   Position 3 448
    Size 344 0
    Flags NoReliefString NoFocus
    Type Rectangle
@@ -791,7 +872,7 @@ End
 
 Widget 21
    Property
-   Position 16 405
+   Position 16 460
    Size 96 20
    Flags NoReliefString
    Type PushButton
@@ -831,6 +912,15 @@ Widget 21
             Set $Action = 1
          End
 
+         If $Fvwm3 == 1 Then
+         Begin
+            Set $Fvwm3DskConfVal = (GetValue 28)
+            If $InitialFvwm3DskConfVal <> $Fvwm3DskConfVal Then
+            Begin
+               Set $Action = 1
+            End
+         End
+
          If $Action == 1 Then
          Begin
             If $CreateNsCDEUserConfig == 1 Then
@@ -867,6 +957,16 @@ Widget 21
                      SendSignal 21 4
                      Set $PerformRestart = 1
                   End
+
+                  If $Fvwm3 == 1 Then
+                  Begin
+                     Set $Fvwm3DskConfVal = (GetValue 28)
+                     If $InitialFvwm3DskConfVal <> $Fvwm3DskConfVal Then
+                     Begin
+                        SendSignal 21 5
+                        Set $PerformRestart = 1
+                     End
+                  End
                End
             End
             Else
@@ -893,6 +993,15 @@ Widget 21
                Begin
                   SendSignal 21 4
                   Set $PerformRestart = 1
+               End
+
+               If $Fvwm3 == 1 Then
+               Begin
+                  If $InitialFvwm3DskConf <> $Fvwm3DskConf Then
+                  Begin
+                     SendSignal 21 5
+                     Set $PerformRestart = 1
+                  End
                End
             End
          End
@@ -997,7 +1106,6 @@ Widget 21
            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $WSMECOStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
            Quit
         End
-
         If $WSMECOStringToCheck == 1 Then
         Begin
            Do {InfoStoreAdd wsm.eco } $WsmEco
@@ -1005,11 +1113,48 @@ Widget 21
            Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
         End
      End
+     5 :
+     Begin
+        If $Fvwm3DskConfVal == 1 Then
+        Begin
+           Set $Fvwm3DskConf = {global}
+        End
+        If $Fvwm3DskConfVal == 2 Then
+        Begin
+           Set $Fvwm3DskConf = {per-monitor}
+        End
+        If $Fvwm3DskConfVal == 3 Then
+        Begin
+           Set $Fvwm3DskConf = {shared}
+        End
+
+        Set $DskConfStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+desktopconfiguration' '} $ExpandFile {' ; echo $?}
+        Set $DskConfStringToCheck = (GetOutput $DskConfStringToCheckCmd 1 -1)
+        If $DskConfStringToCheck == 0 Then
+        Begin
+           Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
+           Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
+           Set $WriteDskConfCmd = {$NSCDE_ROOT/bin/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+desktopconfiguration[[:space:]]\+\)\(\(global\|per-monitor\|shared\)\+\([[:space:]]\+\)\?\)/\3} $Fvwm3DskConf {/g' -f "} $ExpandFile {"}
+           Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
+        End
+        If $DskConfStringToCheck == 2 Then
+        Begin
+           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DskConfStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+           Quit
+        End
+        If $DskConfStringToCheck == 1 Then
+        Begin
+           Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
+           Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
+           Set $WriteDskConfCmd = {echo 'InfoStoreAdd desktopconfiguration } $Fvwm3DskConf {' >> '} $ExpandFile {'}
+           Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
+        End
+     End
 End
 
 Widget 22
    Property
-   Position 127 405
+   Position 127 460
    Size 96 20
    Flags NoReliefString
    Type PushButton
@@ -1033,7 +1178,7 @@ End
 
 Widget 23
    Property
-   Position 238 405
+   Position 238 460
    Size 96 20
    Flags NoReliefString
    Type PushButton
