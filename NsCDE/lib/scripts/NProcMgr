@@ -71,6 +71,7 @@ Begin
    # Default is global and fvwm2
    Set $Fvwm3DesktopNonGlobalMode = 0
    Do {SendToModule NProcMgr SendString 1 4 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
+
    SendSignal 1 1
 
    # Key bindings
@@ -160,10 +161,12 @@ Widget 1
             If $DesktopModel == {per-monitor} Then
             Begin
                Set $Fvwm3DesktopNonGlobalMode = 1
+               SendSignal 28 2
             End
             If $DesktopModel == {shared} Then
             Begin
                Set $Fvwm3DesktopNonGlobalMode = 1
+               SendSignal 28 2
             End
          End
       End
