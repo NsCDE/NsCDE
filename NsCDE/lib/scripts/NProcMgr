@@ -67,6 +67,10 @@ Begin
    ChangeTitle 53 { Animate|Backdrops|Backer|Colorset|Event|Font|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|GlobalPager|LocalPager|WspLocPager|Script|Style}
    ChangeLocaleTitle 54 {Reread}
 
+   # Get FVWM3 DesktopConfiguratio mode
+   # Default is global and fvwm2
+   Set $Fvwm3DesktopNonGlobalMode = 0
+   Do {SendToModule NProcMgr SendString 1 4 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
    SendSignal 1 1
 
    # Key bindings
@@ -87,11 +91,6 @@ Begin
    Begin
       ChangeValue 53 (GetScriptArgument 2)
    End
-
-   # Get FVWM3 DesktopConfiguratio mode
-   # Default is global and fvwm2
-   Set $Fvwm3DesktopNonGlobalMode = 0
-   Do {SendToModule NProcMgr SendString 1 4 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
 End
 
 Widget 1
