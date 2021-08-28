@@ -87,6 +87,11 @@ Begin
    Begin
       ChangeValue 53 (GetScriptArgument 2)
    End
+
+   # Get FVWM3 DesktopConfiguratio mode
+   # Default is global and fvwm2
+   Set $Fvwm3DesktopNonGlobalMode = 0
+   Do {SendToModule NProcMgr SendString 1 4 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
 End
 
 Widget 1
@@ -144,6 +149,24 @@ Widget 1
       3 :
       Begin
          Do {Schedule 1000 SendToModule NProcMgr SendString 1 2 recheck}
+      End
+      4 :
+      Begin
+         Set $IsFvwm3 = (StrCopy (LastString) 1 1)
+         Set $Monitors = (StrCopy (LastString) 3 3)
+         Set $DesktopModel = (StrCopy (LastString) 5 35)
+
+         If (Add $IsFvwm3 $Monitors) >= 3 Then
+         Begin
+            If $DesktopModel == {per-monitor} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
+            If $DesktopModel == {shared} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
+         End
       End
 End
 
@@ -635,7 +658,14 @@ Property
          Begin
             Set $RunState28 = (Gettext {Running}) { (PID: } $FvwmBackerPid {)}
          End
-         Set $FvwmBackerInfo = (Gettext {Required, }) $RunState28
+         If $Fvwm3DesktopNonGlobalMode == 0 Then
+         Begin
+            Set $FvwmBackerInfo = (Gettext {Required, }) $RunState28
+         End
+         Else
+         Begin
+            Set $FvwmBackerInfo = (Gettext {Not Required, }) $RunState28
+         End
          ChangeLocaleTitle 48 $FvwmBackerInfo
       End
       3 :
