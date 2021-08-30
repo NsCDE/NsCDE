@@ -12,10 +12,10 @@
 # On a cloned display, this will simply return one global size
 
 IFS=" "
+check_fvwm3=${FVWM_IS_FVWM3}
 
 function defaultcf
 {
-   check_fvwm3=${FVWM_IS_FVWM3}
 
    if [ "x${check_fvwm3}" == "x1" ] ; then
       scrvar="$[pointer.screen]"
@@ -67,14 +67,19 @@ if (($scpos_sum > 0)); then
    echo "InfoStoreAdd lscrn.sls 1"
 else
    defaultcf
-   exit 0
+   # Keep executing if we are on FVWM3
+   if [ "x${check_fvwm3}" != "x1" ] ; then
+      exit 0
+   fi
 fi
 
 # Monitor count
 moncnt=$(echo "$mdata" | grep Monitors: | cut -d' ' -f 2)
 echo "$moncnt" | egrep -q '^[[:digit:]]+$'
 if (($? == 0)); then
-   echo "InfoStoreAdd lscrn.cnt $moncnt"
+   if (($scpos_sum > 0)); then
+      echo "InfoStoreAdd lscrn.cnt $moncnt"
+   fi
 else
    echo "${0##*/}: Error in handling monitor count: \"$moncnt\""
    defaultcf
@@ -82,9 +87,7 @@ else
 fi
 
 # Main monitor geometry enumeration
-menudata=""
 rootmenudata=""
-check_fvwm3=${FVWM_IS_FVWM3}
 
 echo "$mdata" | egrep -v Monitors: | while read scnum pmname geo mname
 do
@@ -98,9 +101,19 @@ do
 
    if [ "x${check_fvwm3}" == "x1" ] ; then
       scrvar="${mname}"
+
    else
       scrvar="${scnum}"
    fi
+
+   # Add InfoStore variable with list of monitors
+   # This is for both, FVWM2 and FVWM3.
+   if [ "x${active_monitors}" != "x" ]; then
+      active_monitors="${active_monitors} ${mname}"
+   else
+      active_monitors="${mname}"
+   fi
+   export active_monitors
 
    echo "$scwidth" | egrep -q '^[[:digit:]]+$'
    retval_w=$?
@@ -111,13 +124,14 @@ do
    retval=$(($retval_w + $retval_h))
 
    if (($retval == 0)); then
-      echo "InfoStoreAdd lscrn.${scrvar}.width $scwidth"
-      echo "InfoStoreAdd lscrn.${scrvar}.height $scheight"
-      echo "InfoStoreAdd lscrn.${scrvar}.pos.x $scpos_x"
-      echo "InfoStoreAdd lscrn.${scrvar}.pos.y $scpos_y"
-      echo "InfoStoreAdd lscrn.${scrvar}.name $mname"
-      menudata=$(echo -ne "$menudata\n+ \"Logical Screen &$scnum ($[infostore.lscrn.${scrvar}.name])\" MoveToScreen $scrvar")
-      rootmenudata=$(echo -ne "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           MoveToScreen ${scrvar}")
+      if (($scpos_sum > 0)); then
+         echo "InfoStoreAdd lscrn.${scrvar}.width $scwidth"
+         echo "InfoStoreAdd lscrn.${scrvar}.height $scheight"
+         echo "InfoStoreAdd lscrn.${scrvar}.pos.x $scpos_x"
+         echo "InfoStoreAdd lscrn.${scrvar}.pos.y $scpos_y"
+         echo "InfoStoreAdd lscrn.${scrvar}.name $mname"
+         rootmenudata=$(echo -ne "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           All MoveToScreen ${scrvar}")
+      fi
    else
       echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
       defaultcf
@@ -126,18 +140,72 @@ do
 done
 
 # Generate menu
-echo ""
-echo "DestroyMenu m_MoveToScreen"
-echo "AddToMenu m_MoveToScreen"
-echo "$menudata" | egrep -v '^$'
+if (($scpos_sum > 0)); then
+   echo ""
+   echo "DestroyMenu m_SlsMoveAll"
+   echo "AddToMenu m_SlsMoveAll"
+   echo "+ \"&Move All Windows To This Screen\"            f_MoveAllToThisScreen"
+   echo "+ \"\" Nop"
+   echo "$rootmenudata" | egrep -v '^$'
 
-echo ""
-echo "DestroyMenu m_SlsMoveAll"
-echo "AddToMenu m_SlsMoveAll"
-echo "+ \"&Move All Windows To This Screen\"            f_MoveAllToThisScreen"
-echo "+ \"\" Nop"
-echo "$rootmenudata" | egrep -v '^$'
+   echo ""
+   echo "ChangeMenuStyle CommonMenu m_SlsMoveAll"
+fi
 
+# Provide active.monitors infostore variable even for FVWM2
 echo ""
-echo "ChangeMenuStyle CommonMenu m_SlsMoveAll"
+echo "InfoStoreAdd active.monitors \"${active_monitors}\""
+
+# FVWM3 only stuff
+if [ "x${check_fvwm3}" == "x1" ] ; then
+
+   echo ""
+
+   # Cleanup on every XRandR change to avoid garbage data in calculations
+   for monvar in {1..9}
+   do
+      echo InfoStoreRemove monitor${monvar}.data
+      echo InfoStoreRemove monitor${monvar}.name
+   done
+
+   mcnt=1
+   for moname in ${active_monitors}
+   do
+      echo InfoStoreAdd monitor${mcnt}.name ${moname}
+      echo InfoStoreRemove monitor.${moname}.idx
+      echo InfoStoreAdd monitor.${moname}.idx ${mcnt}
+      mcnt=$(($mcnt + 1))
+   done
+
+   actcnt=1
+   for moname in ${active_monitors}
+   do
+      echo "InfoStoreAdd monitor${actcnt}.data \"$[infostore.monitor${actcnt}.name]_$[monitor.$[infostore.monitor${actcnt}.name].width]_$[monitor.$[infostore.monitor${actcnt}.name].height]_$[monitor.$[infostore.monitor${actcnt}.name].x]_$[monitor.$[infostore.monitor${actcnt}.name].y]\""
+      (( actcnt = actcnt + 1 ))
+   done
+
+   # Provide info for complex FVWM3 non-global mode background setter based
+   # on ImageMagick conver(1).
+   if [ -r "${FVWM_USERDIR}/NsCDE-Backdrops.conf" ]; then
+      # o1 = Colorset, o2 = CS number, etc ...
+      while read o1 o2 o3 o4 o5 o6
+      do
+         extract_desk=$(($o2 - 31))
+         if [ "$o5" == "AspectPixmap" ]; then
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.back ${o6##*/}"
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.backinfo ASPECT_NULL"
+         fi
+         if [ "$o5" == "Pixmap" ]; then
+            p_bgcolor_a=${o4%%,*}
+            p_bgcolor_b=${p_bgcolor_a//]/.hash]}
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.back ${o6##*/}"
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.backinfo ASIS_${p_bgcolor_b}"
+         fi
+         if [ "$o3" == "TiledPixmap" ]; then
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.back ${o4##*/}"
+            echo "InfoStoreAdd fvwmdesk.${extract_desk}.backinfo TILED_NULL"
+         fi
+      done < "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+   fi
+fi
 

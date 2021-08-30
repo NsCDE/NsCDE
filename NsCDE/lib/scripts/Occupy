@@ -21,22 +21,43 @@ Begin
       ChangeTitle 2 $WinName
    End
 
+   # First check if we are running on FVWM2 or FVWM3
+   Set $FvwmMajorVersion = (GetScriptArgument 1)
+
    # Mode of operation
-   Set $OpModeArg = (GetScriptArgument 1)
+   Set $OpModeArg = (GetScriptArgument 2)
 
    # Dynamic current values
-   Set $DeskNo = (Add (GetScriptArgument 2) 1)
-   Set $PageX = (GetScriptArgument 3)
-   Set $PageY = (GetScriptArgument 4)
+   Set $DeskNo = (Add (GetScriptArgument 3) 1)
+   Set $PageX = (GetScriptArgument 4)
+   Set $PageY = (GetScriptArgument 5)
 
-   # Configured workspaces and pages static arguments
-   Set $DesksNo = (Add (GetScriptArgument 5) -1)
-   Set $PageMatrixX = (GetScriptArgument 6)
-   Set $PageMatrixY = (GetScriptArgument 7)
+   # Occupy counts monitors from 1, while FVWM2 is doing this from 0
+   # handle this situation.
+   If $FvwmMajorVersion == 2 Then
+   Begin
+      Set $MonitorNo = (Add (GetScriptArgument 6) 1)
+   End
+   Else
+   Begin
+      Set $MonitorNo = (GetScriptArgument 6)
+   End
+
+   # Configured workspaces, pages and monitors static arguments
+   Set $DesksNo = (Add (GetScriptArgument 7) -1)
+   Set $PageMatrixX = (GetScriptArgument 8)
+   Set $PageMatrixY = (GetScriptArgument 9)
    Set $PagesNo = (Mult $PageMatrixX $PageMatrixY)
+   Set $MonitorsNo = (GetScriptArgument 10)
+
+   # Hide Monitor selection if we are on single monitor
+   If $MonitorsNo == 1 Then
+   Begin
+      HideWidget 55
+   End
 
    # Middle mouse button selects to go with the window
-   Set $GoNoGo = (GetScriptArgument 8)
+   Set $GoNoGo = (GetScriptArgument 11)
    If $GoNoGo == {go} Then
    Begin
       Set $GoWithWindow = 1
@@ -48,16 +69,38 @@ Begin
    End
 
    # OpMode 1 is workspaces operation, OpMode 2 is pages mode of operation
+   # OpMode 3 is monitor mode of operation. Default is workspaces (wsp).
+   If $OpModeArg == {} Then
+   Begin
+      Set $OpMode = 1
+      Set $ChangeLocaleWindowTitle = (Gettext {Occupy Workspace})
+      ChangeWindowTitle $ChangeLocaleWindowTitle
+   End
+
    If $OpModeArg == {pg} Then
    Begin
       Set $OpMode = 2
-      ChangeWindowTitle (Gettext {Occupy Page})
+      Set $ChangeLocaleWindowTitle = (Gettext {Occupy Page})
+      ChangeWindowTitle $ChangeLocaleWindowTitle
    End
-   Else
+
+   If $OpModeArg == {wsp} Then
    Begin
       Set $OpMode = 1
-      ChangeWindowTitle (Gettext {Occupy Workspace})
+      Set $ChangeLocaleWindowTitle = (Gettext {Occupy Workspace})
+      ChangeWindowTitle $ChangeLocaleWindowTitle
       ChangeValue 5 $DeskNo
+   End
+
+   If $MonitorsNo > 1 Then
+   Begin
+      If $OpModeArg == {mon} Then
+      Begin
+         Set $OpMode = 3
+         Set $ChangeLocaleWindowTitle = (Gettext {Occupy Monitor})
+         ChangeWindowTitle $ChangeLocaleWindowTitle
+         ChangeValue 5 $MonitorNo
+      End
    End
 
    # Keyboard shortcuts for navigation, toggling and action
@@ -82,6 +125,7 @@ Begin
    ChangeFont 5 $LabelFont
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
+   ChangeFont 55 $LabelFont
 
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 6 $SmallFont
@@ -103,6 +147,8 @@ Begin
    Set $StarredPgSet = 0
    Set $InitialDeskNo = $DeskNo
    Set $InitialPageNoSet = 0
+   Set $StarredMonSet = 0
+   Set $InitialMonitorNo = $MonitorNo
 
    # This takes care of handling sticky windows across workspaces as well as pages
    If $OpMode == 1 Then
@@ -155,6 +201,15 @@ Widget 1
             SendSignal 4 1
          End
       End
+      # Same as "2 :" but for monitors
+      7 :
+      Begin
+         Set $Monitors = (LastString)
+         If $OpMode == 3 Then
+         Begin
+            SendSignal 55 1
+         End
+      End
       # Accept $[w.id] from f_SendToOccupy, send it to "4 :" that will obtain
       # window name from it.
       3 :
@@ -195,7 +250,26 @@ Widget 1
             End
             Else
             Begin
-               SendSignal 3 1
+               If $OpMode == 2 Then
+               Begin
+                  # Avoid selecting hidden monitors selection if we are on
+                  # one monitor.
+                  If $MonitorsNo > 1 Then
+                  Begin
+                     SendSignal 55 1
+                  End
+                  Else
+                  Begin
+                     SendSignal 3 1
+                  End
+               End
+               Else
+               Begin
+                  If $OpMode == 3 Then
+                  Begin
+                     SendSignal 3 1
+                  End
+               End
             End
          End
       End
@@ -247,9 +321,12 @@ Widget 3
       1 :
       Begin
          ChangeValue 4 0
+         ChangeValue 55 0
          ChangeValue 3 1
          ChangeValue 6 $AllWorkspaces
-         Set $PagesListValue = (GetValue 5)
+
+         # Take care to enable "All Workspaces" checkbox which may be hidden by monitors mode.
+         ShowWidget 6
 
          # This block takes care for putting (*) at the end of
          # Pages: label on its radio button when something is
@@ -259,6 +336,8 @@ Widget 3
          # initially.
          If $OpMode == 2 Then
          Begin
+            Set $PagesListValue = (GetValue 5)
+
             If $PageNo <> {} Then
             Begin
                If $StarredPgSet <> 1 Then
@@ -281,12 +360,40 @@ Widget 3
                   Begin
                      Set $InitialPageNo = 999
                   End
-                  Do {Echo NNNNNNNNNNNNNNNNNNNNN: } $PageNo { --- } $InitialPageNo
                   If $PageNo == $InitialPageNo Then
                   Begin
                      ChangeTitle 4 $OrigPgTitle
                      Set $StarredPgSet = 0
                   End
+               End
+            End
+         End
+
+         # This block takes care for putting (*) at the end of
+         # Monitors: label on its radio button when something is
+         # changed from the initial default. There is also procedure
+         # for removing (*) when settings are put back as it was
+         # initially.
+         If $OpMode == 3 Then
+         Begin
+            Set $MonitorsListValue = (GetValue 5)
+
+            If $StarredMonSet <> 1 Then
+            Begin
+               If (GetValue 5) <> $InitialMonitorNo Then
+               Begin
+                  Set $OrigMonTitle = (GetTitle 55)
+                  Set $StarredMonTitle = $OrigMonTitle {*}
+                  ChangeTitle 55 $StarredMonTitle
+                  Set $StarredMonSet = 1
+               End
+            End
+            Else
+            Begin
+               If $MonitorNo == $InitialMonitorNo Then
+               Begin
+                  ChangeTitle 55 $OrigMonTitle
+                  Set $StarredMonSet = 0
                End
             End
          End
@@ -308,12 +415,13 @@ Widget 3
          Begin
             ChangeValue 6 1
             Set $DeskNo = 999
-            ChangeLocaleTitle 5 { All Workspaces}
+            ChangeLocaleTitle 5 { All Workspaces    }
             ChangeValue 5 1
          End
 
-         ChangeWindowTitle (Gettext {Occupy Workspace})
-         ChangeLocaleTitle 6 { All Workspaces}
+         Set $ChangeLocaleWindowTitle = (Gettext {Occupy Workspace})
+         ChangeWindowTitle $ChangeLocaleWindowTitle
+         ChangeLocaleTitle 6 { All Workspaces    }
          Set $OpMode = 1
       End
 End
@@ -338,9 +446,12 @@ Widget 4
       1 :
       Begin
          ChangeValue 3 0
+         ChangeValue 55 0
          ChangeValue 4 1
          ChangeValue 6 $AllPages
-         Set $WorkspacesListValue = (GetValue 5)
+
+         # Take care to enable "All Pages" checkbox which may be hidden by monitors mode.
+         ShowWidget 6
 
          # This block takes care for putting (*) at the end of
          # Workspaces: label on its radio button when something is
@@ -350,6 +461,8 @@ Widget 4
          # initially.
          If $OpMode == 1 Then
          Begin
+            Set $WorkspacesListValue = (GetValue 5)
+
             If $DeskNo == 999 Then
             Begin
                Set $InitialDeskNo = $DeskNo
@@ -370,6 +483,35 @@ Widget 4
                Begin
                   ChangeTitle 3 $OrigWspTitle
                   Set $StarredWspSet = 0
+               End
+            End
+         End
+
+         # This block takes care for putting (*) at the end of
+         # Monitors: label on its radio button when something is
+         # changed from the initial default. There is also procedure
+         # for removing (*) when settings are put back as it was
+         # initially.
+         If $OpMode == 3 Then
+         Begin
+            Set $MonitorsListValue = (GetValue 5)
+
+            If $StarredMonSet <> 1 Then
+            Begin
+               If (GetValue 5) <> $InitialMonitorNo Then
+               Begin
+                  Set $OrigMonTitle = (GetTitle 55)
+                  Set $StarredMonTitle = $OrigMonTitle {*}
+                  ChangeTitle 55 $StarredMonTitle
+                  Set $StarredMonSet = 1
+               End
+            End
+            Else
+            Begin
+               If $MonitorNo == $InitialMonitorNo Then
+               Begin
+                  ChangeTitle 55 $OrigMonTitle
+                  Set $StarredMonSet = 0
                End
             End
          End
@@ -404,9 +546,117 @@ Widget 4
             ChangeValue 5 1
          End
 
-         ChangeWindowTitle (Gettext {Occupy Page})
+         Set $ChangeLocaleWindowTitle = (Gettext {Occupy Page})
+         ChangeWindowTitle $ChangeLocaleWindowTitle
          ChangeLocaleTitle 6 { All Pages      }
          Set $OpMode = 2
+      End
+End
+
+# Toggle pages mode of operation
+Widget 55
+   Property
+   Size 100 0
+   Position 4 98
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Monitors:}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 55 1
+      End
+      1 :
+      Begin
+         ChangeValue 3 0
+         ChangeValue 4 0
+         ChangeValue 55 1
+         ChangeTitle 5 $Monitors
+
+         # Take care to hide "All Workspaces/Pages" checkbox.
+         # The X11 does not support app window on multiple monitors.
+         HideWidget 6
+
+         If $OpMode == 1 Then
+         Begin
+            Set $WorkspacesListValue = (GetValue 5)
+
+            If $DeskNo == 999 Then
+            Begin
+               Set $InitialDeskNo = $DeskNo
+            End
+            If $StarredWspSet <> 1 Then
+            Begin
+               If $DeskNo <> $InitialDeskNo Then
+               Begin
+                  Set $OrigWspTitle = (GetTitle 3)
+                  Set $StarredWspTitle = $OrigWspTitle {*}
+                  ChangeTitle 3 $StarredWspTitle
+                  Set $StarredWspSet = 1
+               End
+            End
+            Else
+            Begin
+               If $DeskNo == $InitialDeskNo Then
+               Begin
+                  ChangeTitle 3 $OrigWspTitle
+                  Set $StarredWspSet = 0
+               End
+            End
+
+         End
+
+         If $OpMode == 2 Then
+         Begin
+            Set $PagesListValue = (GetValue 5)
+
+            If $PageNo <> {} Then
+            Begin
+               If $StarredPgSet <> 1 Then
+               Begin
+                  If $PageNo == 999 Then
+                  Begin
+                     Set $InitialPageNo = 999
+                  End
+                  Else
+                  Begin
+                     Set $OrigPgTitle = (GetTitle 4)
+                     Set $StarredPgTitle = $OrigPgTitle {*}
+                     ChangeTitle 4 $StarredPgTitle
+                     Set $StarredPgSet = 1
+                  End
+               End
+               Else
+               Begin
+                  If $PageNo == 999 Then
+                  Begin
+                     Set $InitialPageNo = 999
+                  End
+                  If $PageNo == $InitialPageNo Then
+                  Begin
+                     ChangeTitle 4 $OrigPgTitle
+                     Set $StarredPgSet = 0
+                  End
+               End
+            End
+         End
+
+         If $MonitorsListValue > 0 Then
+         Begin
+            ChangeValue 5 $MonitorsListValue
+         End
+         Else
+         Begin
+            ChangeValue 5 $MonitorNo
+         End
+
+         Set $ChangeLocaleWindowTitle = (Gettext {Occupy Monitor})
+         ChangeWindowTitle $ChangeLocaleWindowTitle
+         Set $OpMode = 3
       End
 End
 
@@ -448,6 +698,11 @@ Widget 5
             # mode is changed and then changed back
             Set $PagesListValue = (GetValue 5)
          End
+         If $OpMode == 3 Then
+         Begin
+            # Set MonitorNo for further processing
+            Set $MonitorNo = (GetValue 5)
+         End
          # Main pick mode
          If $WinName == {} Then
          Begin
@@ -465,8 +720,12 @@ Widget 5
          Begin
             SendSignal 5 3
          End
+         If $OpMode == 3 Then
+         Begin
+            SendSignal 5 4
+         End
       End
-      # Up and Down on the list in workspaces mode
+      # Up and Down from keyboard on the list in workspaces mode
       2 :
       Begin
          If (LastString) == {Down} Then
@@ -499,7 +758,7 @@ Widget 5
                End
          End
       End
-      # Up and Down on the list in pages mode
+      # Up and Down from keyboard on the list in pages mode
       3 :
       Begin
          If (LastString) == {Down} Then
@@ -531,6 +790,38 @@ Widget 5
             End
          End
       End
+      # Up and Down from keyboard on the list in monitors mode
+      4 :
+      Begin
+         If (LastString) == {Down} Then
+         Begin
+            If (GetValue 5) <= (Add $MonitorsNo -1) Then
+            Begin
+               Set $NextValue = (Add (GetValue 5) 1)
+               ChangeValue 5 $NextValue
+               Set $MonitorNo = $NextValue
+            End
+            Else
+            Begin
+               ChangeValue 5 1
+               Set $MonitorNo = 1
+            End
+         End
+         If (LastString) == {Up} Then
+         Begin
+            Set $PrevValue = (Add (GetValue 5) -1)
+            If $PrevValue >= 1 Then
+            Begin
+               ChangeValue 5 $PrevValue
+               Set $MonitorNo = $PrevValue
+            End
+            Else
+            Begin
+               ChangeValue 5 $MonitorsNo
+               Set $MonitorNo = $MonitorsNo
+            End
+         End
+      End
 End
 
 # All Workspaces / All Pages stickyness control
@@ -541,7 +832,7 @@ Widget 6
    Type CheckBox
    Value 0
    Flags NoReliefString
-   Title { All Workspaces}
+   Title { All Workspaces    }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -580,7 +871,7 @@ Widget 6
                # OldDeskNo to get it back
                Set $OldDeskNo = $DeskNo
                Set $DeskNo = 999
-               ChangeLocaleTitle 5 { All Workspaces}
+               ChangeLocaleTitle 5 { All Workspaces    }
                ChangeValue 5 1
                Set $WorkspacesMode = {allworkspaces}
             End
@@ -706,11 +997,66 @@ Widget 9
       End
       1 :
       Begin
+         # Handle movement across monitors. This must come first because
+         # it will clash and break if combined with page and desk movement
+         # Occupy counts monitors from 1, while FVWM2 is doing this from 0
+         # handle this situation.
+         If $FvwmMajorVersion == 3 Then
+         Begin
+            Set $UniMonitorNo = $MonitorNo
+         End
+         Else
+         Begin
+            Set $UniMonitorNo = (Add $MonitorNo -1)
+         End
+         If $UniMonitorNo <> $InitialMonitorNo Then
+         Begin
+            # Ugly, but we need to know monitor name for FVWM3.
+            Set $MonitorNameCmd = {echo -ne '} $Monitors {' | sed 's/|/\n/g' | egrep -n '' | sed 's/:/ /' | sed 's/^[[:digit:]] //'}
+            Set $MonitorName = (GetOutput $MonitorNameCmd (GetValue 5) -1)
+
+            If $GoWithWindow == 0 Then
+            Begin
+               If $FvwmMajorVersion == 3 Then
+               Begin
+                  Do {f_Occupy } $WinId { MoveToScreen } $MonitorName { Nop }
+               End
+               Else
+               Begin
+                  Do {f_Occupy } $WinId { MoveToScreen } $UniMonitorNo { Nop }
+               End
+            End
+            Else
+            Begin
+               If $FvwmMajorVersion == 3 Then
+               Begin
+                  Do {f_Occupy } $WinId { MoveToScreen } $MonitorName { Nop }
+               End
+               Else
+               Begin
+                  Do {f_Occupy } $WinId { MoveToScreen } $UniMonitorNo { Nop }
+               End
+               # Disable GoWithWindow if crossing monitors, so GotoPage and GotoDesk
+               # will not break action.
+               Set $GoWithWindow = 0
+               Do {Schedule 250 WindowId } $WinId { WarpToWindow 50 50}
+            End
+         End
+
          # If pages are not sticky ...
          If $PageNo <> 999 Then
          Begin
             Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '^} $PageNo { '}
             Set $CurrentPage = (GetOutput $CurrentPageCmd 1 -1)
+
+            # Page info from list is empty - no $PageNo. Populate it with grepping pages X and Y strings to wind value id.
+            If $CurrentPage == {} Then
+            Begin
+               Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu }
+                   $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^[[:digit:]][[:space:]]} $PageX {[[:space:]]} $PageY {'}
+               Set $CurrentPage = (GetOutput $CurrentPageCmd 1 -1)
+            End
+
             Set $CurrentPageX = (StrCopy $CurrentPage 3 3)
             Set $CurrentPageY = (StrCopy $CurrentPage 5 5)
             If $CurrentPageX == { } Then
