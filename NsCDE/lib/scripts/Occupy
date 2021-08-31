@@ -53,7 +53,7 @@ Begin
    # Hide Monitor selection if we are on single monitor
    If $MonitorsNo == 1 Then
    Begin
-      HideWidget 55
+      HideWidget 5
    End
 
    # Middle mouse button selects to go with the window
@@ -61,7 +61,7 @@ Begin
    If $GoNoGo == {go} Then
    Begin
       Set $GoWithWindow = 1
-      ChangeValue 7 1
+      ChangeValue 8 1
    End
    Else
    Begin
@@ -89,7 +89,7 @@ Begin
       Set $OpMode = 1
       Set $ChangeLocaleWindowTitle = (Gettext {Occupy Workspace})
       ChangeWindowTitle $ChangeLocaleWindowTitle
-      ChangeValue 5 $DeskNo
+      ChangeValue 6 $DeskNo
    End
 
    If $MonitorsNo > 1 Then
@@ -99,37 +99,37 @@ Begin
          Set $OpMode = 3
          Set $ChangeLocaleWindowTitle = (Gettext {Occupy Monitor})
          ChangeWindowTitle $ChangeLocaleWindowTitle
-         ChangeValue 5 $MonitorNo
+         ChangeValue 6 $MonitorNo
       End
    End
 
    # Keyboard shortcuts for navigation, toggling and action
-   Key Escape A 10 1 {Quit}
-   Key H A 11 1 {DisplayHelp}
-   Key Help A 11 1 {DisplayHelp}
-   Key F1 A 11 1 {DisplayHelp}
-   Key A A 6 1 {AllToggle}
-   Key Return A 1 6 {Move}
-   Key Return C 1 6 {MoveGo}
-   Key Down A 5 1 {Down}
-   Key Up A 5 1 {Up}
-   Key Space A 1 5 {ChangeOpMode}
+   Key Escape A 11 1 {Quit}
+   Key H A 12 1 {DisplayHelp}
+   Key Help A 12 1 {DisplayHelp}
+   Key F1 A 12 1 {DisplayHelp}
+   Key A A 7 1 {AllToggle}
+   Key Return A 1 7 {Move}
+   Key Return C 1 7 {MoveGo}
+   Key Down A 6 1 {Down}
+   Key Up A 6 1 {Up}
+   Key Space A 1 6 {ChangeOpMode}
 
    Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
-   ChangeFont 9 $BtnFont
-   ChangeFont 11 $BtnFont
    ChangeFont 10 $BtnFont
+   ChangeFont 12 $BtnFont
+   ChangeFont 11 $BtnFont
 
    Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 1 $LabelFont
-   ChangeFont 5 $LabelFont
+   ChangeFont 6 $LabelFont
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
-   ChangeFont 55 $LabelFont
+   ChangeFont 5 $LabelFont
 
    Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
-   ChangeFont 6 $SmallFont
    ChangeFont 7 $SmallFont
+   ChangeFont 8 $SmallFont
    ChangeFont 2 $SmallFont
 
    #
@@ -164,8 +164,8 @@ Begin
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
-   ChangeLocaleTitle 6 (GetTitle 6)
    ChangeLocaleTitle 7 (GetTitle 7)
+   ChangeLocaleTitle 8 (GetTitle 8)
 End
 
 # Upper Left static "Window" label. Serves as execution and message passing
@@ -202,23 +202,23 @@ Widget 1
          End
       End
       # Same as "2 :" but for monitors
-      7 :
+      3 :
       Begin
          Set $Monitors = (LastString)
          If $OpMode == 3 Then
          Begin
-            SendSignal 55 1
+            SendSignal 5 1
          End
       End
       # Accept $[w.id] from f_SendToOccupy, send it to "4 :" that will obtain
       # window name from it.
-      3 :
+      4 :
       Begin
          Set $WinId = (LastString)
-         Do {Current WindowId } $WinId { SendToModule Occupy SendString 1 4 $[w.name]}
+         Do {Current WindowId } $WinId { SendToModule Occupy SendString 1 5 $[w.name]}
       End
       # Get window name from "3 :", set it on widget 2
-      4 :
+      5 :
       Begin
          Set $WinName = (LastString)
 
@@ -240,7 +240,7 @@ Widget 1
       End
       # Accept keyboard shortcut SPACE to change mode of operation
       # between workspaces (1) and pages (2) ...
-      5 :
+      6 :
       Begin
          If (LastString) == {ChangeOpMode} Then
          Begin
@@ -256,7 +256,7 @@ Widget 1
                   # one monitor.
                   If $MonitorsNo > 1 Then
                   Begin
-                     SendSignal 55 1
+                     SendSignal 5 1
                   End
                   Else
                   Begin
@@ -275,16 +275,16 @@ Widget 1
       End
       # Accept action to finally move the window or to move it and go
       # with it on that workspace and/or page
-      6 :
+      7 :
       Begin
          If (LastString) == {Move} Then
          Begin
-            SendSignal 9 1
+            SendSignal 10 1
          End
          If (LastString) == {MoveGo} Then
          Begin
-            SendSignal 7 1
-            SendSignal 9 1
+            SendSignal 8 1
+            SendSignal 10 1
          End
       End
 End
@@ -321,12 +321,12 @@ Widget 3
       1 :
       Begin
          ChangeValue 4 0
-         ChangeValue 55 0
+         ChangeValue 5 0
          ChangeValue 3 1
-         ChangeValue 6 $AllWorkspaces
+         ChangeValue 7 $AllWorkspaces
 
          # Take care to enable "All Workspaces" checkbox which may be hidden by monitors mode.
-         ShowWidget 6
+         ShowWidget 7
 
          # This block takes care for putting (*) at the end of
          # Pages: label on its radio button when something is
@@ -336,7 +336,7 @@ Widget 3
          # initially.
          If $OpMode == 2 Then
          Begin
-            Set $PagesListValue = (GetValue 5)
+            Set $PagesListValue = (GetValue 6)
 
             If $PageNo <> {} Then
             Begin
@@ -376,15 +376,15 @@ Widget 3
          # initially.
          If $OpMode == 3 Then
          Begin
-            Set $MonitorsListValue = (GetValue 5)
+            Set $MonitorsListValue = (GetValue 6)
 
             If $StarredMonSet <> 1 Then
             Begin
-               If (GetValue 5) <> $InitialMonitorNo Then
+               If (GetValue 6) <> $InitialMonitorNo Then
                Begin
-                  Set $OrigMonTitle = (GetTitle 55)
+                  Set $OrigMonTitle = (GetTitle 5)
                   Set $StarredMonTitle = $OrigMonTitle {*}
-                  ChangeTitle 55 $StarredMonTitle
+                  ChangeTitle 5 $StarredMonTitle
                   Set $StarredMonSet = 1
                End
             End
@@ -392,7 +392,7 @@ Widget 3
             Begin
                If $MonitorNo == $InitialMonitorNo Then
                Begin
-                  ChangeTitle 55 $OrigMonTitle
+                  ChangeTitle 5 $OrigMonTitle
                   Set $StarredMonSet = 0
                End
             End
@@ -404,24 +404,24 @@ Widget 3
          # mode of operation
          If $WorkspacesMode == {normal} Then
          Begin
-            ChangeTitle 5 $WorkSpaces
+            ChangeTitle 6 $WorkSpaces
             If $WorkspacesListValue == {} Then
             Begin
-               Set $WorkspacesListValue = (GetValue 5)
+               Set $WorkspacesListValue = (GetValue 6)
             End
-            ChangeValue 5 $WorkspacesListValue
+            ChangeValue 6 $WorkspacesListValue
          End
          Else
          Begin
-            ChangeValue 6 1
+            ChangeValue 7 1
             Set $DeskNo = 999
-            ChangeLocaleTitle 5 { All Workspaces    }
-            ChangeValue 5 1
+            ChangeLocaleTitle 6 { All Workspaces    }
+            ChangeValue 6 1
          End
 
          Set $ChangeLocaleWindowTitle = (Gettext {Occupy Workspace})
          ChangeWindowTitle $ChangeLocaleWindowTitle
-         ChangeLocaleTitle 6 { All Workspaces    }
+         ChangeLocaleTitle 7 { All Workspaces    }
          Set $OpMode = 1
       End
 End
@@ -446,12 +446,12 @@ Widget 4
       1 :
       Begin
          ChangeValue 3 0
-         ChangeValue 55 0
+         ChangeValue 5 0
          ChangeValue 4 1
-         ChangeValue 6 $AllPages
+         ChangeValue 7 $AllPages
 
          # Take care to enable "All Pages" checkbox which may be hidden by monitors mode.
-         ShowWidget 6
+         ShowWidget 7
 
          # This block takes care for putting (*) at the end of
          # Workspaces: label on its radio button when something is
@@ -461,7 +461,7 @@ Widget 4
          # initially.
          If $OpMode == 1 Then
          Begin
-            Set $WorkspacesListValue = (GetValue 5)
+            Set $WorkspacesListValue = (GetValue 6)
 
             If $DeskNo == 999 Then
             Begin
@@ -494,15 +494,15 @@ Widget 4
          # initially.
          If $OpMode == 3 Then
          Begin
-            Set $MonitorsListValue = (GetValue 5)
+            Set $MonitorsListValue = (GetValue 6)
 
             If $StarredMonSet <> 1 Then
             Begin
-               If (GetValue 5) <> $InitialMonitorNo Then
+               If (GetValue 6) <> $InitialMonitorNo Then
                Begin
-                  Set $OrigMonTitle = (GetTitle 55)
+                  Set $OrigMonTitle = (GetTitle 5)
                   Set $StarredMonTitle = $OrigMonTitle {*}
-                  ChangeTitle 55 $StarredMonTitle
+                  ChangeTitle 5 $StarredMonTitle
                   Set $StarredMonSet = 1
                End
             End
@@ -510,7 +510,7 @@ Widget 4
             Begin
                If $MonitorNo == $InitialMonitorNo Then
                Begin
-                  ChangeTitle 55 $OrigMonTitle
+                  ChangeTitle 5 $OrigMonTitle
                   Set $StarredMonSet = 0
                End
             End
@@ -522,39 +522,39 @@ Widget 4
          # mode of operation
          If $PagesMode == {normal} Then
          Begin
-            ChangeTitle 5 $Pages
+            ChangeTitle 6 $Pages
 
             If $CurrentPageNum == {} Then
             Begin
                Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
                Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
-               ChangeValue 5 $CurrentPageNum
+               ChangeValue 6 $CurrentPageNum
             End
             Else
             Begin
                If $PagesListValue > 0 Then
                Begin
-                  ChangeValue 5 $PagesListValue
+                  ChangeValue 6 $PagesListValue
                End
             End
          End
          Else
          Begin
-            ChangeValue 6 1
+            ChangeValue 7 1
             Set $PageNo = 999
-            ChangeLocaleTitle 5 { All Pages      }
-            ChangeValue 5 1
+            ChangeLocaleTitle 6 { All Pages      }
+            ChangeValue 6 1
          End
 
          Set $ChangeLocaleWindowTitle = (Gettext {Occupy Page})
          ChangeWindowTitle $ChangeLocaleWindowTitle
-         ChangeLocaleTitle 6 { All Pages      }
+         ChangeLocaleTitle 7 { All Pages      }
          Set $OpMode = 2
       End
 End
 
 # Toggle pages mode of operation
-Widget 55
+Widget 5
    Property
    Size 100 0
    Position 4 98
@@ -568,22 +568,22 @@ Widget 55
       Case message of
       SingleClic :
       Begin
-         SendSignal 55 1
+         SendSignal 5 1
       End
       1 :
       Begin
          ChangeValue 3 0
          ChangeValue 4 0
-         ChangeValue 55 1
-         ChangeTitle 5 $Monitors
+         ChangeValue 5 1
+         ChangeTitle 6 $Monitors
 
          # Take care to hide "All Workspaces/Pages" checkbox.
          # The X11 does not support app window on multiple monitors.
-         HideWidget 6
+         HideWidget 7
 
          If $OpMode == 1 Then
          Begin
-            Set $WorkspacesListValue = (GetValue 5)
+            Set $WorkspacesListValue = (GetValue 6)
 
             If $DeskNo == 999 Then
             Begin
@@ -612,7 +612,7 @@ Widget 55
 
          If $OpMode == 2 Then
          Begin
-            Set $PagesListValue = (GetValue 5)
+            Set $PagesListValue = (GetValue 6)
 
             If $PageNo <> {} Then
             Begin
@@ -647,11 +647,11 @@ Widget 55
 
          If $MonitorsListValue > 0 Then
          Begin
-            ChangeValue 5 $MonitorsListValue
+            ChangeValue 6 $MonitorsListValue
          End
          Else
          Begin
-            ChangeValue 5 $MonitorNo
+            ChangeValue 6 $MonitorNo
          End
 
          Set $ChangeLocaleWindowTitle = (Gettext {Occupy Monitor})
@@ -661,7 +661,7 @@ Widget 55
 End
 
 # List of workspaces and/or pages
-Widget 5
+Widget 6
    Property
    Size 178 134
    Position 116 42
@@ -676,15 +676,15 @@ Widget 5
          If $OpMode == 1 Then
          Begin
             # Set DeskNo for further processing
-            Set $DeskNo = (GetValue 5)
+            Set $DeskNo = (GetValue 6)
             # Save selected item for putting it back when
             # mode is changed and then changed back
-            Set $WorkspacesListValue = (GetValue 5)
+            Set $WorkspacesListValue = (GetValue 6)
          End
          If $OpMode == 2 Then
          Begin
             # Set PageNo for further processing
-            Set $PageNo = (GetValue 5)
+            Set $PageNo = (GetValue 6)
 
             # Set default here if $InitialPageNo was empty
             # $InitialPageNoSet serves as break
@@ -696,17 +696,17 @@ Widget 5
 
             # Save selected item for putting it back when
             # mode is changed and then changed back
-            Set $PagesListValue = (GetValue 5)
+            Set $PagesListValue = (GetValue 6)
          End
          If $OpMode == 3 Then
          Begin
             # Set MonitorNo for further processing
-            Set $MonitorNo = (GetValue 5)
+            Set $MonitorNo = (GetValue 6)
          End
          # Main pick mode
          If $WinName == {} Then
          Begin
-            Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
+            Do {Pick () SendToModule Occupy SendString 1 4 $[w.id]}
          End
       End
       # Dispatcher for Up and Down on the list in workspaces and pages mode
@@ -714,15 +714,15 @@ Widget 5
       Begin
          If $OpMode == 1 Then
          Begin
-            SendSignal 5 2
+            SendSignal 6 2
          End
          If $OpMode == 2 Then
          Begin
-            SendSignal 5 3
+            SendSignal 6 3
          End
          If $OpMode == 3 Then
          Begin
-            SendSignal 5 4
+            SendSignal 6 4
          End
       End
       # Up and Down from keyboard on the list in workspaces mode
@@ -730,30 +730,30 @@ Widget 5
       Begin
          If (LastString) == {Down} Then
          Begin
-            If (GetValue 5) <= $DesksNo Then
+            If (GetValue 6) <= $DesksNo Then
             Begin
-               Set $NextValue = (Add (GetValue 5) 1)
-               ChangeValue 5 $NextValue
+               Set $NextValue = (Add (GetValue 6) 1)
+               ChangeValue 6 $NextValue
                Set $DeskNo = $NextValue
             End
             Else
             Begin
-               ChangeValue 5 1
+               ChangeValue 6 1
                Set $DeskNo = 1
             End
          End
          If (LastString) == {Up} Then
          Begin
-               Set $PrevValue = (Add (GetValue 5) -1)
+               Set $PrevValue = (Add (GetValue 6) -1)
                If $PrevValue >= 1 Then
                Begin
-                  ChangeValue 5 $PrevValue
+                  ChangeValue 6 $PrevValue
                   Set $DeskNo = $PrevValue
                End
                Else
                Begin
                   Set $MaxDesksNoFromOne = (Add $DesksNo 1)
-                  ChangeValue 5 $MaxDesksNoFromOne
+                  ChangeValue 6 $MaxDesksNoFromOne
                   Set $DeskNo = $MaxDesksNoFromOne
                End
          End
@@ -763,29 +763,29 @@ Widget 5
       Begin
          If (LastString) == {Down} Then
          Begin
-            If (GetValue 5) <= (Add $PagesNo -1) Then
+            If (GetValue 6) <= (Add $PagesNo -1) Then
             Begin
-               Set $NextValue = (Add (GetValue 5) 1)
-               ChangeValue 5 $NextValue
+               Set $NextValue = (Add (GetValue 6) 1)
+               ChangeValue 6 $NextValue
                Set $PageNo = $NextValue
             End
             Else
             Begin
-               ChangeValue 5 1
+               ChangeValue 6 1
                Set $PageNo = 1
             End
          End
          If (LastString) == {Up} Then
          Begin
-            Set $PrevValue = (Add (GetValue 5) -1)
+            Set $PrevValue = (Add (GetValue 6) -1)
             If $PrevValue >= 1 Then
             Begin
-               ChangeValue 5 $PrevValue
+               ChangeValue 6 $PrevValue
                Set $PageNo = $PrevValue
             End
             Else
             Begin
-               ChangeValue 5 $PagesNo
+               ChangeValue 6 $PagesNo
                Set $PageNo = $PagesNo
             End
          End
@@ -795,29 +795,29 @@ Widget 5
       Begin
          If (LastString) == {Down} Then
          Begin
-            If (GetValue 5) <= (Add $MonitorsNo -1) Then
+            If (GetValue 6) <= (Add $MonitorsNo -1) Then
             Begin
-               Set $NextValue = (Add (GetValue 5) 1)
-               ChangeValue 5 $NextValue
+               Set $NextValue = (Add (GetValue 6) 1)
+               ChangeValue 6 $NextValue
                Set $MonitorNo = $NextValue
             End
             Else
             Begin
-               ChangeValue 5 1
+               ChangeValue 6 1
                Set $MonitorNo = 1
             End
          End
          If (LastString) == {Up} Then
          Begin
-            Set $PrevValue = (Add (GetValue 5) -1)
+            Set $PrevValue = (Add (GetValue 6) -1)
             If $PrevValue >= 1 Then
             Begin
-               ChangeValue 5 $PrevValue
+               ChangeValue 6 $PrevValue
                Set $MonitorNo = $PrevValue
             End
             Else
             Begin
-               ChangeValue 5 $MonitorsNo
+               ChangeValue 6 $MonitorsNo
                Set $MonitorNo = $MonitorsNo
             End
          End
@@ -825,7 +825,7 @@ Widget 5
 End
 
 # All Workspaces / All Pages stickyness control
-Widget 6
+Widget 7
    Property
    Size 100 20
    Position 116 184
@@ -838,7 +838,7 @@ Widget 6
       Case message of
       SingleClic :
       Begin
-         SendSignal 6 1
+         SendSignal 7 1
       End
       1 :
       Begin
@@ -848,7 +848,7 @@ Widget 6
          Begin
             If (LastString) == {AllToggle} Then
             Begin
-               If (GetValue 6) == 0 Then
+               If (GetValue 7) == 0 Then
                Begin
                   Set $AllWorkspaces = 1
                End
@@ -856,34 +856,34 @@ Widget 6
                Begin
                   Set $AllWorkspaces = 0
                End
-               ChangeValue 6 $AllWorkspaces
+               ChangeValue 7 $AllWorkspaces
             End
    
             # Called with click
-            If (GetValue 6) == 1 Then
+            If (GetValue 7) == 1 Then
             Begin
                If $WinName == {} Then
                Begin
-                  Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
+                  Do {Pick () SendToModule Occupy SendString 1 4 $[w.id]}
                End
    
                # Set DeskNo to 999 for sticky state, save old DeskNo into
                # OldDeskNo to get it back
                Set $OldDeskNo = $DeskNo
                Set $DeskNo = 999
-               ChangeLocaleTitle 5 { All Workspaces    }
-               ChangeValue 5 1
+               ChangeLocaleTitle 6 { All Workspaces    }
+               ChangeValue 6 1
                Set $WorkspacesMode = {allworkspaces}
             End
             # Restore workspace states if sticky all workspaces is turned off
-            If (GetValue 6) == 0 Then
+            If (GetValue 7) == 0 Then
             Begin
-               ChangeTitle 5 $WorkSpaces
-               ChangeValue 5 $OldDeskNo
+               ChangeTitle 6 $WorkSpaces
+               ChangeValue 6 $OldDeskNo
                Set $DeskNo = $OldDeskNo
                Set $WorkspacesMode = {normal}
             End
-            Set $AllWorkspaces = (GetValue 6)
+            Set $AllWorkspaces = (GetValue 7)
          End
 
          # Keyboard "A" handling
@@ -892,7 +892,7 @@ Widget 6
          Begin
             If (LastString) == {AllToggle} Then
             Begin
-               If (GetValue 6) == 0 Then
+               If (GetValue 7) == 0 Then
                Begin
                   Set $AllPages = 1
                End
@@ -900,43 +900,43 @@ Widget 6
                Begin
                   Set $AllPages = 0
                End
-               ChangeValue 6 $AllPages
+               ChangeValue 7 $AllPages
             End
    
             # Called with click
-            If (GetValue 6) == 1 Then
+            If (GetValue 7) == 1 Then
             Begin
                If $WinName == {} Then
                Begin
-                  Do {Pick () SendToModule Occupy SendString 1 3 $[w.id]}
+                  Do {Pick () SendToModule Occupy SendString 1 4 $[w.id]}
                End
    
                # Set PageNo to 999 for sticky state, save old PageNo into
                # OldPageNo to get it back
                Set $OldPageNo = $PageNo
                Set $PageNo = 999
-               ChangeLocaleTitle 5 { All Pages      }
-               ChangeValue 5 1
+               ChangeLocaleTitle 6 { All Pages      }
+               ChangeValue 6 1
                Set $PagesMode = {allpages}
             End
             # Restore page states if sticky all workspaces is turned off
-            If (GetValue 6) == 0 Then
+            If (GetValue 7) == 0 Then
             Begin
-               ChangeTitle 5 $Pages
+               ChangeTitle 6 $Pages
                If $OldPageNo <> {} Then
                Begin
-                  ChangeValue 5 $OldPageNo
+                  ChangeValue 6 $OldPageNo
                End
                Else
                Begin
                   Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
                   Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
-                  ChangeValue 5 $CurrentPageNum
+                  ChangeValue 6 $CurrentPageNum
                End
                Set $PageNo = $OldPageNo
                Set $PagesMode = {normal}
             End
-            Set $AllPages = (GetValue 6)
+            Set $AllPages = (GetValue 7)
          End
       End
       # Small helpers for accepting internal SendToModule from Init for
@@ -952,7 +952,7 @@ Widget 6
 End
 
 # Set "Go with the Window" property for OK button
-Widget 7
+Widget 8
    Property
    Size 100 20
    Position 116 214
@@ -965,7 +965,7 @@ Widget 7
       Case message of
       SingleClic :
       Begin
-         SendSignal 7 1
+         SendSignal 8 1
       End
       1 :
       Begin
@@ -973,7 +973,7 @@ Widget 7
       End
 End
 
-Widget 8
+Widget 9
    Property
    Size 298 1
    Position 2 248
@@ -981,7 +981,7 @@ Widget 8
 End
 
 # Main action starter
-Widget 9
+Widget 10
    Property
    Size 80 20
    Position 8 262
@@ -993,7 +993,7 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         SendSignal 9 1
+         SendSignal 10 1
       End
       1 :
       Begin
@@ -1013,7 +1013,7 @@ Widget 9
          Begin
             # Ugly, but we need to know monitor name for FVWM3.
             Set $MonitorNameCmd = {echo -ne '} $Monitors {' | sed 's/|/\n/g' | egrep -n '' | sed 's/:/ /' | sed 's/^[[:digit:]] //'}
-            Set $MonitorName = (GetOutput $MonitorNameCmd (GetValue 5) -1)
+            Set $MonitorName = (GetOutput $MonitorNameCmd (GetValue 6) -1)
 
             If $GoWithWindow == 0 Then
             Begin
@@ -1108,7 +1108,7 @@ Widget 9
 End
 
 # Quit button
-Widget 10
+Widget 11
    Property
    Size 80 20
    Position 110 262
@@ -1133,7 +1133,7 @@ Widget 10
 End
 
 # Help button
-Widget 11
+Widget 12
    Property
    Size 80 20
    Position 212 262
@@ -1145,7 +1145,7 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         SendSignal 11 1
+         SendSignal 12 1
       End
       1 :
       Begin
