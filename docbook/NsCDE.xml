@@ -223,6 +223,7 @@ GUI tools are:
 <listitem><para>Keyboard Style Manager (KeyboardMgr) - FvwmScript</para></listitem>
 <listitem><para>Occupy Workspace (Occupy) - FvwmScript</para></listitem>
 <listitem><para>Occupy Page (Occupy) - FvwmScript</para></listitem>
+<listitem><para>Occupy Monitor (Occupy) - FvwmScript</para></listitem>
 <listitem><para>Window Geometry Manager - FvwmScript</para></listitem>
 <listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
 <listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
@@ -1504,31 +1505,32 @@ Key Bindings:
 </sect2>
 
 <sect2 id="NsCDE-Occupy">
-<title>Occupy Workspace and Occupy Page</title>
+<title>Occupy Workspace, Occupy Page and Occupy Monitor</title>
 <para>
 This tool dialog is called from the left titlebar button 1 Window Operations Menu as
-"Occupy Workspace" or "Occupy Page". Or from <keysym>Meta+Space</keysym> key for Workspace and
-<keysym>Alt+Space</keysym> for Page key combinations from the window context. Occupy tool is
-the extended (for FVWM pages) version of the same CDE dialog and it sends selected window to a
-workspace or page selected from the list, or it can make it sticky across workspaces and/or
+"Occupy Workspace", "Occupy Page" or "Occupy Monitor". Or from <keysym>Meta+Space</keysym> key for Workspace,
+<keysym>Alt+Space</keysym> for Page, and <keysym>Meta+Alt+Space</keysym> key combinations from the window context. Occupy tool is
+the extended (for FVWM pages and multiple monitors) version of the same CDE dialog and it sends selected window to a
+workspace, page or XRandR monitor selected from the list, or it can make it sticky across workspaces and/or
 pages with <guibutton>All Workspaces</guibutton> or <guibutton>All Pages</guibutton> checkbox
 pressed in. One addition here is the checkbox <guibutton>Go With the Window</guibutton>; when checked,
-makes NsCDE to change a current workspace and/or page and go with the window, or where window was sent.
-Radio buttons <guibutton>Workspaces:</guibutton> and <guibutton>Pages:</guibutton> are changing the
+makes NsCDE to change a current workspace, page and/or monitor and go with the window, or where window was sent.
+Radio buttons <guibutton>Workspaces:</guibutton>, <guibutton>Pages:</guibutton> and <guibutton>Monitors:</guibutton> are changing the
 current context of operation between workspaces and pages, which is visually also manifested in the
-main list as the names of either workspaces or pages. If called as "Occupy Workspace", pages can also
+main list as the names of either workspaces or pages. If called as "Occupy Workspace", pages or monitors can also
 be selected and changed by switching this context with this buttons or with the <keysym>Space</keysym>
-key shortcut.
+key shortcut in focused Occupy window. Radio button for monitors and "Occupy Monitor" functionality is only shown
+and available if multiple physical (or virtual) monitors are detected by FVWM and NsCDE.
 <guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits Occupy tool without
 action taken.
 </para>
 <para>
-On the upper left part of the window there are two buttons with labels <guilabel>Workspaces</guilabel>
-and <guilabel>Pages</guilabel>. When either one or another selection is changed from the current state,
+On the upper left part of the window there are three buttons with labels <guilabel>Workspaces</guilabel>,
+<guilabel>Pages</guilabel> and <guibutton>Monitors:</guibutton>. When either one or another selection is changed from the current state,
 that is, state of the workspace and page on which window context was when Occupy is called, there will
 appear an ASCII asterisk (*) symbol at the end of the label. This means selection is changed, and this
-is visible for workspaces even when pages are on the selection list and/or vice versa. If selection is
-changed back again to state of page and/or workspace which was initial, asterisk will disappear, but will
+is visible for workspaces or monitors even when pages are on the selection list and/or vice versa. If selection is
+changed back again to state of page, workspace and/or monitor, which was initial, asterisk will disappear, but will
 again appear when this selection is changed to some other choice again. That way, orientation of what
 was touched can be known.
 </para>
@@ -1554,12 +1556,12 @@ selected workspace and/or page.
 workspace and/or page to the same destination where window has been sent.
 </para></listitem>
 <listitem><para>
-<keysym>Up/Down</keysym>: Selects workspace or page in the up or down direction on the list.
+<keysym>Up/Down</keysym>: Selects workspace, page or monitor in the up or down direction on the list.
 </para></listitem>
 <listitem><para>
-<keysym>Space</keysym>: Changes between workspaces and pages mode of operation. Actions on workspaces
-and pages can be comined in on tool call, no matter if it was initially called as "Occupy Workspace"
-or "Occupy Page".
+<keysym>Space</keysym>: Changes between workspaces, pages and monitors mode of operation. Actions on workspaces,
+pages and monitors can be combined while switching modes of operation, no matter if it was initially called
+as "Occupy Workspace", "Occupy Page" or "Occupy Monitor".
 </para></listitem>
 </itemizedlist>
 </para>
@@ -2178,7 +2180,7 @@ Manager. Every button when clicked becomes editable and it's name can
 be changed (pres <keysym>return</keysym> on the text field after writing new name).
 This change will be written immediately WITHOUT pressing <guibutton>OK</guibutton> button.
 Name of the workspace will be changed across all NsCDE and FVWM (WSM, Occupy
-Workspace/Page, menus etc) after window manager restart is triggered with <guibutton>OK</guibutton>
+Workspace/Page/Monitor, menus etc) after window manager restart is triggered with <guibutton>OK</guibutton>
 button. In NsCDE, there are 4 options for desks: 2, 4, 6 and 8 desks.
 FVWM itself supports infinite number, but in NsCDE care must be taken
 about presentation of this desks in various applets and tools.
@@ -3096,11 +3098,6 @@ For explanation what is the context, and what modifier, see FVWM explanation
 </para></listitem>
 
 <listitem><para>
-  Key <keysym>Meta+Alt+Space</keysym> in the context of the window, frame corners, frame
-    sides and a title bar pops up Window Options context menu
-</para></listitem>
-
-<listitem><para>
   <keysym>Space</keysym> in the icon frame context pops up icon-specific contextual menu
 </para></listitem>
 
@@ -3158,7 +3155,8 @@ mouse focus to free space on the screen.
 </para></listitem>
 
 <listitem><para>
-  Key <keysym>Meta+Alt+M</keysym> same as <keysym>Meta+Alt+Space</keysym>.
+  Key <keysym>Meta+Alt+M</keysym>in the context of the window, frame corners, frame
+    sides and a title bar pops up Window Options context menu
 </para></listitem>
 
 <listitem><para>
@@ -3260,6 +3258,17 @@ Pressend second time just once, it will dismiss Local Pager
  Key <keysym>Alt+Space</keysym> in the context of the window, frame corners, frame
     sides, title bar and icon (ovoids root window context!) calls
     Occupy Page dialog for window moving between the desks.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  Key <keysym>Meta+Alt+Space</keysym> in the context of the window, frame corners, frame
+   sides, title bar and icon (ovoids root window context!) calls
+   Occupy Monitor dialog for window moving between the monitors. This key binding is available
+   only when multiple monitors are detected by NsCDE and FVWM.
     </para>
     <para>
     Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
@@ -5279,7 +5288,7 @@ What is similar or the same:
 <listitem><para>Most of the icons reused</para></listitem>
 <listitem><para>Backdrops</para></listitem>
 <listitem><para>Style Manager launcher and most of the Style Managers</para></listitem>
-<listitem><para>Occupy Workspace/Page dialog</para></listitem>
+<listitem><para>Occupy Workspace/Page/Monitor dialog</para></listitem>
 <listitem><para>Workstation Info window (as found in Solaris CDE)</para></listitem>
 <listitem><para>FpLite (not with the same function)</para></listitem>
 <listitem><para>Front Panel clock, calendar and check mail</para></listitem>

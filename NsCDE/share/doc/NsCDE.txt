@@ -43,7 +43,7 @@ M. Z.
         4.5. Exec Dialog
         4.6. Font Style Manager
         4.7. Keyboard Style Manager
-        4.8. Occupy Workspace and Occupy Page
+        4.8. Occupy Workspace, Occupy Page and Occupy Monitor
         4.9. Window Geometry Manager
         4.10. Mouse Style Manager
         4.11. Power Save Manager
@@ -299,6 +299,7 @@ M. Z.
      * Keyboard Style Manager (KeyboardMgr) - FvwmScript
      * Occupy Workspace (Occupy) - FvwmScript
      * Occupy Page (Occupy) - FvwmScript
+     * Occupy Monitor (Occupy) - FvwmScript
      * Window Geometry Manager - FvwmScript
      * Mouse Style Manager (PointerMgr) - FvwmScript
      * Power Save Manager (PowerSaveMgr) - FvwmScript
@@ -1283,39 +1284,45 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.8. Occupy Workspace and Occupy Page
+4.8. Occupy Workspace, Occupy Page and Occupy Monitor
 
    This tool dialog is called from the left titlebar button 1
-   Window Operations Menu as "Occupy Workspace" or "Occupy Page".
-   Or from Meta+Space key for Workspace and Alt+Space for Page key
-   combinations from the window context. Occupy tool is the
-   extended (for FVWM pages) version of the same CDE dialog and it
-   sends selected window to a workspace or page selected from the
-   list, or it can make it sticky across workspaces and/or pages
-   with All Workspaces or All Pages checkbox pressed in. One
-   addition here is the checkbox Go With the Window; when checked,
-   makes NsCDE to change a current workspace and/or page and go
-   with the window, or where window was sent. Radio buttons
-   Workspaces: and Pages: are changing the current context of
-   operation between workspaces and pages, which is visually also
-   manifested in the main list as the names of either workspaces
-   or pages. If called as "Occupy Workspace", pages can also be
-   selected and changed by switching this context with this
-   buttons or with the Space key shortcut. OK performs an action,
-   Dismiss quits Occupy tool without action taken.
+   Window Operations Menu as "Occupy Workspace", "Occupy Page" or
+   "Occupy Monitor". Or from Meta+Space key for Workspace,
+   Alt+Space for Page, and Meta+Alt+Space key combinations from
+   the window context. Occupy tool is the extended (for FVWM pages
+   and multiple monitors) version of the same CDE dialog and it
+   sends selected window to a workspace, page or XRandR monitor
+   selected from the list, or it can make it sticky across
+   workspaces and/or pages with All Workspaces or All Pages
+   checkbox pressed in. One addition here is the checkbox Go With
+   the Window; when checked, makes NsCDE to change a current
+   workspace, page and/or monitor and go with the window, or where
+   window was sent. Radio buttons Workspaces:, Pages: and
+   Monitors: are changing the current context of operation between
+   workspaces and pages, which is visually also manifested in the
+   main list as the names of either workspaces or pages. If called
+   as "Occupy Workspace", pages or monitors can also be selected
+   and changed by switching this context with this buttons or with
+   the Space key shortcut in focused Occupy window. Radio button
+   for monitors and "Occupy Monitor" functionality is only shown
+   and available if multiple physical (or virtual) monitors are
+   detected by FVWM and NsCDE. OK performs an action, Dismiss
+   quits Occupy tool without action taken.
 
-   On the upper left part of the window there are two buttons with
-   labels Workspaces and Pages. When either one or another
-   selection is changed from the current state, that is, state of
-   the workspace and page on which window context was when Occupy
-   is called, there will appear an ASCII asterisk (*) symbol at
-   the end of the label. This means selection is changed, and this
-   is visible for workspaces even when pages are on the selection
-   list and/or vice versa. If selection is changed back again to
-   state of page and/or workspace which was initial, asterisk will
-   disappear, but will again appear when this selection is changed
-   to some other choice again. That way, orientation of what was
-   touched can be known.
+   On the upper left part of the window there are three buttons
+   with labels Workspaces, Pages and Monitors:. When either one or
+   another selection is changed from the current state, that is,
+   state of the workspace and page on which window context was
+   when Occupy is called, there will appear an ASCII asterisk (*)
+   symbol at the end of the label. This means selection is
+   changed, and this is visible for workspaces or monitors even
+   when pages are on the selection list and/or vice versa. If
+   selection is changed back again to state of page, workspace
+   and/or monitor, which was initial, asterisk will disappear, but
+   will again appear when this selection is changed to some other
+   choice again. That way, orientation of what was touched can be
+   known.
 
    Key Bindings:
 
@@ -1329,12 +1336,13 @@ M. Z.
      * Ctrl+Return: Performs move action like OK button was
        pressed, and changes active workspace and/or page to the
        same destination where window has been sent.
-     * Up/Down: Selects workspace or page in the up or down
-       direction on the list.
-     * Space: Changes between workspaces and pages mode of
-       operation. Actions on workspaces and pages can be comined
-       in on tool call, no matter if it was initially called as
-       "Occupy Workspace" or "Occupy Page".
+     * Up/Down: Selects workspace, page or monitor in the up or
+       down direction on the list.
+     * Space: Changes between workspaces, pages and monitors mode
+       of operation. Actions on workspaces, pages and monitors can
+       be combined while switching modes of operation, no matter
+       if it was initially called as "Occupy Workspace", "Occupy
+       Page" or "Occupy Monitor".
      __________________________________________________________
 
 4.9. Window Geometry Manager
@@ -1759,15 +1767,15 @@ M. Z.
    return on the text field after writing new name). This change
    will be written immediately WITHOUT pressing OK button. Name of
    the workspace will be changed across all NsCDE and FVWM (WSM,
-   Occupy Workspace/Page, menus etc) after window manager restart
-   is triggered with OK button. In NsCDE, there are 4 options for
-   desks: 2, 4, 6 and 8 desks. FVWM itself supports infinite
-   number, but in NsCDE care must be taken about presentation of
-   this desks in various applets and tools. Nevertheless,
-   theoretically even in NsCDE with maximum number of desks
-   multiplied with maximum number of pages, user can get 128 work
-   spaces which is probably enough (too much) for 99% of the
-   people.
+   Occupy Workspace/Page/Monitor, menus etc) after window manager
+   restart is triggered with OK button. In NsCDE, there are 4
+   options for desks: 2, 4, 6 and 8 desks. FVWM itself supports
+   infinite number, but in NsCDE care must be taken about
+   presentation of this desks in various applets and tools.
+   Nevertheless, theoretically even in NsCDE with maximum number
+   of desks multiplied with maximum number of pages, user can get
+   128 work spaces which is probably enough (too much) for 99% of
+   the people.
 
    Check Box Use Compact Workspace Manager when checked in will
    instruct NsCDE to use Workspace Manager widget in the Front
@@ -2513,9 +2521,6 @@ Silent Key Tab A S -
      * Meta+Shift+B Same as Meta+Shift+N but in backward direction
      * Meta+Alt+J Moves pointer to the focused window if pointer
        is not already there
-     * Key Meta+Alt+Space in the context of the window, frame
-       corners, frame sides and a title bar pops up Window Options
-       context menu
      * Space in the icon frame context pops up icon-specific
        contextual menu
      * Key Meta+Alt+Insert will give a focus to the last opened
@@ -2553,7 +2558,9 @@ Silent Key Tab A S -
        is NsCDE smart version of the "show desktop" functionality.
        Individual windows from the group can be deiconified too,
        which will sign off this windows from the group.
-     * Key Meta+Alt+M same as Meta+Alt+Space.
+     * Key Meta+Alt+Min the context of the window, frame corners,
+       frame sides and a title bar pops up Window Options context
+       menu
      * Key Meta+Alt+O - same as Meta+Space if called in the window
        context.
      * Key Meta+Alt+R - Tiles windows of the current page in a
@@ -2626,6 +2633,13 @@ Silent Key Tab A S -
        frame sides, title bar and icon (ovoids root window
        context!) calls Occupy Page dialog for window moving
        between the desks.
+       Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
+       automatic description on menus.
+     * Key Meta+Alt+Space in the context of the window, frame
+       corners, frame sides, title bar and icon (ovoids root
+       window context!) calls Occupy Monitor dialog for window
+       moving between the monitors. This key binding is available
+       only when multiple monitors are detected by NsCDE and FVWM.
        Dynamic: defined in $NSCDE_ROOT/config/Keymenu.actions for
        automatic description on menus.
      * Alt+F1 regenerates and refreshes the window
@@ -4029,7 +4043,7 @@ NsCDE
      * Most of the icons reused
      * Backdrops
      * Style Manager launcher and most of the Style Managers
-     * Occupy Workspace/Page dialog
+     * Occupy Workspace/Page/Monitor dialog
      * Workstation Info window (as found in Solaris CDE)
      * FpLite (not with the same function)
      * Front Panel clock, calendar and check mail
