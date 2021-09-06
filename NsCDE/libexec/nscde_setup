@@ -378,13 +378,20 @@ function setup_nscde
 
       locale_enable_xscreensaver_question=$(gettext -s "Do you want to enable X Screen Saver?")
       whence -q xscreensaver
-      if (($? != 0)); then
+      xscreensaver_found=$?
+      if (($xscreensaver_found != 0)); then
          gettext -s "WARNING: Xscreensaver installation not found."
+         echo -ne "$locale_enable_xscreensaver_question (y|n)[n] \c"
+      else
+         echo -ne "$locale_enable_xscreensaver_question (y|n)[y] \c"
       fi
-      echo -ne "$locale_enable_xscreensaver_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
-         ans="y"
+         if (($xscreensaver_found != 0)); then
+            ans="n"
+         else
+            ans="y"
+         fi
       fi
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
