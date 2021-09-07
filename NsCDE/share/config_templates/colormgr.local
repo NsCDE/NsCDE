@@ -11,6 +11,7 @@ NCOLORS="$2"
 
 FIREFOX_CHROMEDIR=""
 THUNDERBIRD_CHROMEDIR=""
+FIREFOX_MAJVER_PFX=""
 
 if [ -z $PPATH ]; then
    PPATH=$NSCDE_ROOT/share/palettes/Broica.dp
@@ -103,7 +104,7 @@ function do_firefox
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/nscdeChrome.css\");" >> \
+         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeChrome.css\");" >> \
           ${FIREFOX_CHROMEDIR}/userChrome.css
       fi
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
@@ -117,7 +118,7 @@ function do_firefox
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
       if (($? > 0)); then
-         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/userContent.css
+         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/${FIREFOX_MAJVER_PFX}userContent.css
       fi
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeContent\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
@@ -129,7 +130,7 @@ function do_firefox
       $NSCDE_ROOT/libexec/nscde_palette_colorgen.py -p $PPATH -n $NCOLORS \
        -i $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeColordefs.tmpl \
        -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
-      ln -sf  $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeContent.css \
+      ln -sf  $NSCDE_ROOT/share/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeContent.css \
        ${FIREFOX_CHROMEDIR}/nscdeContent.css
 
       # Prefs

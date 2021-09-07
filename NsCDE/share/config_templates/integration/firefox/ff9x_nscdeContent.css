@@ -1,0 +1,1441 @@
+/*
+ * This file is a part of the NsCDE - Not so Common Desktop Environment
+ * Author: Hegel3DReloaded
+ * Licence: GPLv3
+*/
+
+/* userContent.css NsCDE include CSS file for firefox */
+
+@-moz-document url-prefix(about:about),
+ url-prefix(about:addons),
+ url-prefix(about:buildconfig),
+ url-prefix(about:certificate),
+ url-prefix(about:compat),
+ url-prefix(about:config),
+ url-prefix(about:crashes),
+ url-prefix(about:debugging),
+ url-prefix(about:devtools),
+ url-prefix(about:downloads),
+ url-prefix(about:license),
+ url-prefix(about:logins),
+ url-prefix(about:networking),
+ url-prefix(about:performance),
+ url-prefix(about:plugins),
+ url-prefix(about:policies),
+ url-prefix(about:privatebrowsing),
+ url-prefix(about:processes),
+ url-prefix(about:profiles),
+ url-prefix(about:profiling),
+ url-prefix(about:protections),
+ url-prefix(about:rights),
+ url-prefix(about:robots),
+ url-prefix(about:serviceworkers),
+ url-prefix(about:studies),
+ url-prefix(about:support),
+ url-prefix(about:sync-log),
+ url-prefix(about:telemetry),
+ url-prefix(about:url-classifier),
+ url-prefix(about:webrtc),
+ url-prefix(about:welcome) {
+
+  :root {
+    --in-content-page-background: var(--nscde-bg-color-5) !important;
+    --in-content-page-color: var(--nscde-fg-color-5) !important;
+  }
+  body {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-radius: 0px !important;
+  }
+  th {
+    background-color: var(--nscde-bg-color-1) !important;
+    color: var(--nscde-fg-color-1) !important;
+    border-top: 1px solid var(--nscde-ts-color-1) !important;
+    border-left: 1px solid var(--nscde-ts-color-1) !important;
+    border-right: 1px solid var(--nscde-bs-color-1) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-1) !important;
+  }
+  td {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+  .card {
+    border-radius: 0 !important;
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+  #process-table {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+  default-button,
+  button {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  button:is(:active,[open="true"]):not([disabled="true"]):not(.menu-button):not(.menuitem-button) {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  search-textbox,
+  input,
+  textarea {
+    border-width: 1px !important;
+    border-radius: 0px !important;
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top-color: var(--nscde-bs-color-5) !important;
+    border-left-color: var(--nscde-bs-color-5) !important;
+    border-right-color: var(--nscde-ts-color-5) !important;
+    border-bottom-color: var(--nscde-ts-color-5) !important;
+  }
+  #action-box {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  input[type="radio"] {
+    border-radius: 100% !important;
+  }
+  input[type="radio"],
+  input[type="checkbox"],
+  .radio-check,
+  .checkbox-check {
+      background-color: var(--nscde-bg-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-ts-color-5) !important;
+      border-left: 1px solid var(--nscde-ts-color-5) !important;
+      border-right: 1px solid var(--nscde-bs-color-5) !important;
+      border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+  input[type="radio"]:checked,
+  input[type="checkbox"]:checked,
+  .radio-check[selected],
+  .checkbox-check[checked="true"] {
+      background-color: var(--nscde-sel-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-bs-color-5) !important;
+      border-left: 1px solid var(--nscde-bs-color-5) !important;
+      border-right: 1px solid var(--nscde-ts-color-5) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  .info-box-content {
+      background-color: var(--nscde-sel-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-bs-color-5) !important;
+      border-left: 1px solid var(--nscde-bs-color-5) !important;
+      border-right: 1px solid var(--nscde-ts-color-5) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  #content > div {
+    border-radius: 0 !important;
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  .onboardingContainer .screen {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  select#search-listtype > *,
+  select#search-listtype {
+      background-color: var(--nscde-bg-color-6) !important;
+      color: var(--nscde-fg-color-6) !important;
+      border-top: 1px solid var(--nscde-ts-color-6) !important;
+      border-left: 1px solid var(--nscde-ts-color-6) !important;
+      border-right: 1px solid var(--nscde-bs-color-6) !important;
+      border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+  select#search-listtype:active {
+      background-color: var(--nscde-sel-color-6) !important;
+      color: var(--nscde-fg-color-6) !important;
+      border-top: 1px solid var(--nscde-bs-color-6) !important;
+      border-left: 1px solid var(--nscde-bs-color-6) !important;
+      border-right: 1px solid var(--nscde-ts-color-6) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+}
+
+/* Override table header for a few abouts */
+@-moz-document url-prefix(about:config),
+ url-prefix(about:profiles),
+ url-prefix(about:support),
+ url-prefix(about:url-classifier),
+ url-prefix(about:sync-log) {
+  th {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:blank) {
+  * {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+  }
+}
+
+@-moz-document url-prefix(about:newtab), url-prefix(about:home) {
+  body {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  .outer-wrapper {
+    background-color: var(--nscde-bg-color-5) !important;
+  }
+
+  .outer-wrapper:not(.newtab-experience) .ds-top-sites .top-sites .top-site-outer {
+    padding 8px 8px !important;
+  }
+
+  .outer-wrapper.newtab-experience .search-wrapper .search-handoff-button {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    box-shadow: none !important; 
+  }
+
+  .outer-wrapper.newtab-experience .top-site-outer .tile, .top-site-outer .tile {
+    background-color: var(--nscde-bg-color-5) !important;
+    box-shadow: none !important; 
+    border-radius: 0px !important;
+  }
+
+  .top-site-outer .tile .icon-wrapper, .top-site-outer .top-site-icon {
+    border-radius: 0px !important;
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .top-site-outer .title {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  .customize-menu .close-button,
+  .home-section .section .selector {
+    border-radius: 0px !important;
+  }
+
+  .collapsible-section .section-title .collapsible-arrow,
+  .collapsible-section .section-title span {
+    fill: var(--nscde-fg-color-6) !important;
+  }
+
+  .collapsible-section .section-title .click-target-container {
+    padding: 6px !important;
+    border-width: 1px !important;
+    border-radius: 0px !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+
+  .collapsible-section .section-title .click-target-container:active {
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .collapsible-section {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border: 2px solid var(--nscde-bg-color-5) !important;
+  }
+
+  .collapsible-section:hover {
+    border: 2px solid var(--nscde-sel-color-5) !important;
+  }
+
+  .ds-header, .ds-layout .section-title span {
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+  }
+
+  .outer-wrapper:not(.newtab-experience) .card-outer .context-menu-button,
+  .outer-wrapper:not(.newtab-experience) .top-site-outer .context-menu-button {
+    border-radius: 0px !important;
+    fill: none !important;
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border: 1px solid var(--nscde-bg-color-1) !important;
+  }
+
+  .top-site-outer {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .card-outer,
+  .top-site-outer {
+    border-width: 1px !important;
+    border-radius: 0px !important;
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  .card-outer:active,
+  .top-site-outer:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  .card-outer .card-description,
+  .card-outer .card-title,
+  .card-outer .card-host-name.alternate,
+  .card-outer .card-host-name,
+  .card-outer .card-text {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  .icon.icon-bookmark-added {
+    background-image: url("nsicons/bookmark.png") !important;
+   }
+
+  .context-menu-button {
+    opacity: 1 !important;
+    fill: var(--nscde-fg-color-6) !important;
+    background-position: 50% !important;
+  }
+
+  .context-menu,
+  .context-menu-button,
+  .prefs-button button,
+  .prefs-button button:focus,
+  .prefs-button button:hover {
+    cursor: default !important;
+    border-radius: 0px !important;
+    fill: var(--nscde-fg-color-6) !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+
+  .context-menu > ul > li.separator {
+    -moz-appearance: none !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .context-menu .icon {
+    fill: var(--nscde-fg-color-6) !important;
+  }
+
+  .context-menu > ul > li > a:hover,
+  .context-menu > ul > li > button:hover {
+    cursor: default !important;
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+
+  .context-menu > ul > li > a:is(:focus, :active),
+  .context-menu > ul > li > button:is(:focus, :active),
+  .context-menu-button:is(:active, :focus, :checked),
+  .prefs-button button:active {
+    fill: var(--nscde-fg-color-6) !important;
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .top-site-outer .title {
+    margin-top: 16px !important;
+  }
+
+  .top-site-outer .tile,
+  .top-site-outer:hover .tile,
+  .top-site-outer .tile .icon-wrapper {
+    margin-top: 12px !important;
+    border-radius: 0px !important;
+  }
+
+  .top-site-outer .screenshot.active,
+  .top-site-outer .default-icon,
+  .top-site-outer .rich-icon,
+  .top-site-outer .top-site-icon {
+    margin-top: 0px !important;
+    border-radius: 0px !important;
+  }
+
+  .button:not(.dismiss),
+  .button:hover:not(.dismiss),
+  .button:focus:not(.dismiss),
+  .actions button:not(.dismiss),
+  .actions button:hover:not(.dismiss),
+  .actions button:focus:not(.dismiss),
+  .edit-topsites-wrapper .modal,
+  .search-wrapper .search-button,
+  .search-wrapper .search-button:hover,
+  .search-wrapper .search-button:focus {
+    fill: var(--nscde-fg-color-5) !important;
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-radius: 0px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  .search-wrapper .search-button:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  search-textbox,
+  input,
+  textarea {
+    border-width: 1px !important;
+    border-radius: 0px !important;
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top-color: var(--nscde-bs-color-5) !important;
+    border-left-color: var(--nscde-bs-color-5) !important;
+    border-right-color: var(--nscde-ts-color-5) !important;
+    border-bottom-color: var(--nscde-ts-color-5) !important;
+  }
+
+  .outer-wrapper:not(.newtab-experience) .card-outer:is(:hover, :focus, .active):not(.placeholder),
+  .outer-wrapper:not(.newtab-experience) .top-sites-list:not(.dnd-active) .top-site-outer:is(.active, :focus, :hover) .tile {
+    box-shadow: 0 0 0 2px var(--nscde-bg-color-1) !important;
+    transition: none !important;
+  }
+}
+
+@-moz-document url-prefix(about:preferences) {
+  :root {
+    --in-content-page-background: var(--nscde-bg-color-5) !important;
+    --in-content-page-color: var(--nscde-fg-color-5) !important;
+  }
+
+  .reload-tabs-button .button-icon,
+  .reload-tabs-button .button-text,
+  search-textbox,
+  button {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-right-color: var(--nscde-bs-color-5) !important;
+    border-left-color: var(--nscde-ts-color-5) !important;
+    border-bottom-color: var(--nscde-bs-color-5) !important;
+    border-top-color: var(--nscde-ts-color-5) !important;
+  }
+  button:is(:active,[open="true"]):not([disabled="true"]) {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-right-color: var(--nscde-ts-color-5) !important;
+    border-left-color: var(--nscde-bs-color-5) !important;
+    border-bottom-color: var(--nscde-ts-color-5) !important;
+    border-top-color: var(--nscde-bs-color-5) !important;
+  }
+
+  input,
+  textarea {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-right-color: var(--nscde-ts-color-4) !important;
+    border-left-color: var(--nscde-bs-color-4) !important;
+    border-bottom-color: var(--nscde-ts-color-4) !important;
+    border-top-color: var(--nscde-bs-color-4) !important;
+  }
+
+  treecol {
+    background-color: var(--nscde-bg-color-5) !important;
+    font-weight: bold !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  treechildren {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+
+  treechildren,
+  treecol {
+    border-width: 1px !important;
+    border-left-color: var(--nscde-ts-color-4) !important;
+    border-right-color: var(--nscde-bs-color-4) !important;
+    border-top-color: var(--nscde-ts-color-4) !important;
+    border-bottom-color: var(--nscde-bs-color-4) !important;
+  }
+
+  .sidebar-footer-link, .sidebar-footer-button > .text-link {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+  }
+
+  .sidebar-footer-link:active, .sidebar-footer-button > .text-link {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  menupopup, menulist, menuseparator {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+
+  menuitem {
+    border-width: 1px !important;
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+  }
+
+  menupopup:active, menuitem:active {
+    border-width: 1px !important;
+    -moz-appearance: none !important;
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .dialogClose,
+  .dialogTitleBar {
+      background-color: var(--nscde-bg-color-1) !important;
+      color: var(--nscde-fg-color-1) !important;
+      border-width: 1px !important;
+      border-top: 1px solid var(--nscde-ts-color-1) !important;
+      border-left: 1px solid var(--nscde-ts-color-1) !important;
+      border-right: 1px solid var(--nscde-bs-color-1) !important;
+      border-bottom: 1px solid var(--nscde-bs-color-1) !important;
+      border-radius: 0px !important;
+  }
+
+  .dialogClose[checked="true"],
+  .dialogClose:active {
+      background-color: var(--nscde-bg-color-1) !important;
+      color: var(--nscde-fg-color-1) !important;
+      border-top: 1px solid var(--nscde-bs-color-1) !important;
+      border-left: 1px solid var(--nscde-bs-color-1) !important;
+      border-right: 1px solid var(--nscde-ts-color-1) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-1) !important;
+      border-radius: 0px !important;
+  }
+
+  .dialogBox {
+      background-color: var(--nscde-bg-color-6) !important;
+      color: var(--nscde-fg-color-6) !important;
+      border-top: 1px solid var(--nscde-ts-color-6) !important;
+      border-left: 1px solid var(--nscde-ts-color-6) !important;
+      border-right: 1px solid var(--nscde-bs-color-6) !important;
+      border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+      border-radius: 0px !important;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"],
+  .radio-check,
+  .checkbox-check {
+      background-color: var(--nscde-bg-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-ts-color-5) !important;
+      border-left: 1px solid var(--nscde-ts-color-5) !important;
+      border-right: 1px solid var(--nscde-bs-color-5) !important;
+      border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  input[type="radio"]:checked,
+  input[type="checkbox"]:checked,
+  .radio-check[selected],
+  .checkbox-check[checked="true"] {
+      background-color: var(--nscde-sel-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-bs-color-5) !important;
+      border-left: 1px solid var(--nscde-bs-color-5) !important;
+      border-right: 1px solid var(--nscde-ts-color-5) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  #handlersView {
+      background-color: var(--nscde-bg-color-4) !important;
+      color: var(--nscde-fg-color-4) !important;
+      border-top: 1px solid var(--nscde-bs-color-5) !important;
+      border-left: 1px solid var(--nscde-bs-color-5) !important;
+      border-right: 1px solid var(--nscde-ts-color-5) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  .info-panel, .extension-controlled {
+      background-color: var(--nscde-sel-color-5) !important;
+      color: var(--nscde-fg-color-5) !important;
+      border-top: 1px solid var(--nscde-bs-color-5) !important;
+      border-left: 1px solid var(--nscde-bs-color-5) !important;
+      border-right: 1px solid var(--nscde-ts-color-5) !important;
+      border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  #categories .category-name {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+
+  #categories .category-icon {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+  }
+
+  #categories > .category:hover,
+  #categories > .category {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+  }
+
+  #categories > .category:is(:active, :focus, [selected]) .category-icon {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+  }
+
+  #categories > .category:is(:active, :focus, [selected]) {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+}
+
+@-moz-document url-prefix(about:addons) {
+  * {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-right-color: var(--nscde-bs-color-5) !important;
+    border-left-color: var(--nscde-ts-color-5) !important;
+    border-bottom-color: var(--nscde-bs-color-5) !important;
+    border-top-color: var(--nscde-ts-color-5) !important;
+  }
+
+  button:is(:active,[open="true"]):not([disabled="true"]) {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-right-color: var(--nscde-ts-color-5) !important;
+    border-left-color: var(--nscde-bs-color-5) !important;
+    border-bottom-color: var(--nscde-ts-color-5) !important;
+    border-top-color: var(--nscde-bs-color-5) !important;
+  }
+
+  .page-options-menu > .more-options-button {
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    fill: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+
+  #categories .category-name {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+
+  #categories .category-icon {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+  }
+
+  #categories > .category:hover,
+  #categories > .category {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  #categories > .category:focus,
+  #categories > .category:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  .sidebar-footer-link {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  }
+
+  .sidebar-footer-link:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+  addon-card:not([expanded]) > .addon.card:hover,
+  .addon.card:hover {
+    box-shadow: none !important;
+    cursor: default !important;
+  }
+
+  panel-item-separator {
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+    height: 0px !important;
+  }
+
+  panel-list,
+  .list {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    fill: var(--nscde-fg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  }
+
+  link + button *,
+  link + button {
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    fill: var(--nscde-fg-color-6) !important;
+    border: 1px solid var(--nscde-bg-color-6) !important;
+  }
+  link + button:is(:active, :focus) * {
+    background-color: var(--nscde-sel-color-6) !important;
+    border: 1px solid var(--nscde-sel-color-6) !important;
+  }
+  link + button:is(:active, :focus) {
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    fill: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  input[type="checkbox"].toggle-button {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-5) !important;
+    fill: var(--nscde-fg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    box-shadow: none !important;
+  }
+
+  input[type="checkbox"].toggle-button:is(:checked, :hover) {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-sel-color-5) !important;
+  }
+
+  input[type="checkbox"].toggle-button::before {
+    background: var(--nscde-fg-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:devtools) {
+  .feature {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  .feature:hover {
+    box-shadow: 0 0 0 2px var(--nscde-bg-color-1) !important;
+    transition: none !important;
+  }
+  .feature:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+    box-shadow: 0 0 0 2px var(--nscde-bg-color-1) !important;
+    transition: none !important;
+  }
+  .features {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+}
+
+@-moz-document url-prefix(about:downloads) {
+  #downloadsRichListBox {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  #downloadsRichListBox > richlistitem {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+  #downloadsRichListBox > richlistitem:active {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+    box-shadow: 0 0 0 2px var(--nscde-bg-color-1) !important;
+    transition: none !important;
+  }
+  .downloadProgress::-moz-progress-bar {
+    background-color: var(--nscde-fg-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:logins) {
+  .login-list-item,
+  .login-list-item:hover,
+  .create-login-button-container,
+  .meta {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+
+  .login-list-item,
+  .login-list-item:hover,
+  .login-list-item.selected {
+    margin: 6px !important;
+  }
+
+  .menu,
+  .menu-button {
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+    border-radius: 0px !important;
+  }
+
+  .menuitem-button {
+    background-color: var(--nscde-bg-color-6) !important;
+    border: 1px solid var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+  }
+
+  .menu-button:is(:active, :open, :checked),
+  .menuitem-button:is(:active, :open, :checked) {
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .menuitem-separator {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  }
+
+  .login-list-item.selected {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+
+  ol,
+  .empty-search-message,
+  .intro {
+    background-color: var(--nscde-bg-color-2) !important;
+    color: var(--nscde-fg-color-2) !important;
+    border-width: 1px !important;
+    border-top: 1px solid var(--nscde-ts-color-5) !important;
+    border-left: 1px solid var(--nscde-ts-color-5) !important;
+    border-right: 1px solid var(--nscde-bs-color-5) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+    border-radius: 0px !important;
+    cursor: default !important;
+  }
+
+  input {
+    border-width: 1px !important;
+    border-radius: 0px !important;
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:memory) {
+  div.opsRow {
+    border-radius: 0px !important;
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+  div.sidebarItem,
+  div.opsRowLabel {
+    border-radius: 0px !important;
+    font-weight: bold !important;
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+  div.section {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-radius: 0px !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+
+}
+
+@-moz-document url-prefix(about:performance) {
+  #dispatch-table {
+    background-color: var(--nscde-bg-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:profiling) {
+  .perf-settings-dir-list {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+}
+
+@-moz-document url-prefix(about:telemetry) {
+  #categories {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+    border-top: 1px solid var(--nscde-bs-color-5) !important;
+    border-left: 1px solid var(--nscde-bs-color-5) !important;
+    border-right: 1px solid var(--nscde-ts-color-5) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  }
+  #categories .category,
+  #categories .category:hover {
+    background-color: var(--nscde-sel-color-5) !important;
+    color: var(--nscde-fg-color-5) !important;
+  }
+  #categories .category.selected {
+    font-weight: bold !important;
+    border: 1px solid var(--nscde-bg-color-1) !important;
+  }
+  #categories .category.selected .category-subsection {
+    font-weight: normal !important;
+    font-style: italic !important;
+  }
+  #categories .category.selected .category-subsection.selected {
+    font-weight: bold !important;
+  }
+}
+
+window#FontsDialog button,
+window#ColorsDialog button,
+window#BlocklistsDialog button,
+window#ClearSiteDataDialog button,
+window#ContainersDialog button,
+window#PermissionsDialog button,
+window#SanitizeDialog button,
+window#SiteDataRemoveSelectedDialog button,
+window#SiteDataSettingsDialog button,
+window#SitePermissionsDialog button,
+window#TranslationDialog button {
+  border-width: 1px !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-left-color: var(--nscde-ts-color-6) !important;
+  border-right-color: var(--nscde-bs-color-6) !important;
+  border-top-color: var(--nscde-ts-color-6) !important;
+  border-bottom-color: var(--nscde-bs-color-6) !important;
+}
+
+window#FontsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#ColorsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#BlocklistsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#ClearSiteDataDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#ContainersDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#PermissionsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#SanitizeDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#SiteDataRemoveSelectedDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#SiteDataSettingsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#SitePermissionsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window#TranslationDialog button:is(:hover:active,[open="true"]):not([disabled="true"]) {
+  border-width: 1px !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+}
+
+window#FontsDialog,
+window#ColorsDialog,
+window#BlocklistsDialog,
+window#ClearSiteDataDialog,
+window#ContainersDialog,
+window#PermissionsDialog,
+window#SanitizeDialog,
+window#SiteDataRemoveSelectedDialog,
+window#SiteDataSettingsDialog,
+window#SitePermissionsDialog,
+window#TranslationDialog {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+}
+
+window#FontsDialog dialog,
+window#ColorsDialog dialog,
+window#BlocklistsDialog dialog,
+window#ClearSiteDataDialog dialog,
+window#ContainersDialog dialog,
+window#PermissionsDialog dialog,
+window#SanitizeDialog dialog,
+window#SiteDataRemoveSelectedDialog dialog,
+window#SiteDataSettingsDialog dialog,
+window#SitePermissionsDialog dialog,
+window#TranslationDialog dialog {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  border-radius: 0px !important;
+}
+
+window#FontsDialog listheader > treecol,
+window#ColorsDialog listheader > treecol,
+window#BlocklistsDialog listheader > treecol,
+window#ClearSiteDataDialog listheader > treecol,
+window#ContainersDialog listheader > treecol,
+window#PermissionsDialog listheader > treecol,
+window#SanitizeDialog listheader > treecol,
+window#SiteDataRemoveSelectedDialog listheader > treecol,
+window#SiteDataSettingsDialog listheader > treecol,
+window#SitePermissionsDialog listheader > treecol,
+window#TranslationDialog listheader > treecol {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+window#FontsDialog richlistbox,
+window#ColorsDialog richlistbox,
+window#BlocklistsDialog richlistbox,
+window#ClearSiteDataDialog richlistbox,
+window#ContainersDialog richlistbox,
+window#PermissionsDialog richlistbox,
+window#SanitizeDialog richlistbox,
+window#SiteDataRemoveSelectedDialog richlistbox,
+window#SiteDataSettingsDialog richlistbox,
+window#SitePermissionsDialog richlistbox,
+window#TranslationDialog richlistbox {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+window#FontsDialog input,
+window#ColorsDialog input,
+window#BlocklistsDialog input,
+window#ClearSiteDataDialog input,
+window#ContainersDialog input,
+window#PermissionsDialog input,
+window#SanitizeDialog input,
+window#SiteDataRemoveSelectedDialog input,
+window#SiteDataSettingsDialog input,
+window#SitePermissionsDialog input,
+window#TranslationDialog input {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+window#FontsDialog search-textbox,
+window#ColorsDialog search-textbox,
+window#BlocklistsDialog search-textbox,
+window#ClearSiteDataDialog search-textbox,
+window#ContainersDialog search-textbox,
+window#PermissionsDialog search-textbox,
+window#SanitizeDialog search-textbox,
+window#SiteDataRemoveSelectedDialog search-textbox,
+window#SiteDataSettingsDialog search-textbox,
+window#SitePermissionsDialog search-textbox,
+window#TranslationDialog search-textbox {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+.dialog-button-box button {
+  border-width: 1px !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-left-color: var(--nscde-ts-color-6) !important;
+  border-right-color: var(--nscde-bs-color-6) !important;
+  border-top-color: var(--nscde-ts-color-6) !important;
+  border-bottom-color: var(--nscde-bs-color-6) !important;
+}
+
+.dialog-button-box button:is(:hover:active,[open="true"]):not([disabled="true"]) {
+  border-width: 1px !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+}
+
+window dialog input,
+window dialog textarea {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+window dialog button,
+window .radio-check,
+window .checkbox-check {
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+window dialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
+window .radio-check[selected],
+window .checkbox-check[checked="true"] {
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+window richlistbox {
+    background-color: var(--nscde-bg-color-4) !important;
+    color: var(--nscde-fg-color-4) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+window menupopup, window menulist, window menuseparator {
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-ts-color-6) !important;
+    border-left: 1px solid var(--nscde-ts-color-6) !important;
+    border-right: 1px solid var(--nscde-bs-color-6) !important;
+    border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+window dialog,
+window menuitem {
+    border-width: 1px !important;
+    -moz-appearance: none !important;
+    background-color: var(--nscde-bg-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+}
+
+window menupopup:active, window menuitem:active {
+    border-width: 1px !important;
+    -moz-appearance: none !important;
+    background-color: var(--nscde-sel-color-6) !important;
+    color: var(--nscde-fg-color-6) !important;
+    border-top: 1px solid var(--nscde-bs-color-6) !important;
+    border-left: 1px solid var(--nscde-bs-color-6) !important;
+    border-right: 1px solid var(--nscde-ts-color-6) !important;
+    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+search-textbox,
+input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="color"]):not([type="image"]):not([type="range"]):not([type="reset"]):not([type="submit"]),
+textarea {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  fill: var(--nscde-fg-color-4) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+select,
+button {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  fill: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+select:is(:active,[open="true"]):not([disabled="true"]),
+button:is(:active,[open="true"]):not([disabled="true"]) {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  fill: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+/ Player controls */
+.player .fill,
+.ytp-button * {
+  background-color: var(--nscde-bg-color-5) !important;
+  fill: var(--nscde-fg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+/* PDF viewer */
+#viewerContainer {
+  background-color: var(--nscde-bg-color-2) !important;
+  color: var(--nscde-fg-color-2) !important;
+}
+
+#toolbarViewer {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  fill: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+.secondaryToolbar {
+  -moz-appearance: none !important;
+  background-image: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#secondaryToolbarButtonContainer .horizontalToolbarSeparator {
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  height: 0px !important;
+}
+
+.secondaryToolbarButton::before {
+  background-color: var(--nscde-fg-color-6) !important;
+}
+
+#secondaryToolbarButtonContainer button {
+  -moz-appearance: none !important;
+  background-image: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
+  box-shadow: none !important;
+}
+
+#secondaryToolbarButtonContainer button:is(:active,[open="true"]):not([disabled="true"]) {
+  -moz-appearance: none !important;
+  background-image: none !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  box-shadow: none !important;
+}
+
