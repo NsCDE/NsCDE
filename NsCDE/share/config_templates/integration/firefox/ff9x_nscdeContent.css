@@ -480,6 +480,7 @@
     border-left-color: var(--nscde-ts-color-5) !important;
     border-bottom-color: var(--nscde-bs-color-5) !important;
     border-top-color: var(--nscde-ts-color-5) !important;
+    border-radius: 0px !important;
   }
   button:is(:active,[open="true"]):not([disabled="true"]) {
     background-color: var(--nscde-sel-color-5) !important;
@@ -551,6 +552,7 @@
     border-left: 1px solid var(--nscde-ts-color-6) !important;
     border-right: 1px solid var(--nscde-bs-color-6) !important;
     border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+    border-radius: 0px !important;
   }
 
   menuitem {
@@ -683,7 +685,6 @@
     border-right: 1px solid var(--nscde-ts-color-5) !important;
     border-bottom: 1px solid var(--nscde-ts-color-5) !important;
   }
-
 }
 
 @-moz-document url-prefix(about:addons) {
@@ -1241,6 +1242,10 @@ window#TranslationDialog search-textbox {
   border-right-color: var(--nscde-ts-color-6) !important;
 }
 
+.proxy-port-input {
+  width: calc(5ch + 38px) !important;
+}
+
 .dialog-button-box button {
   border-width: 1px !important;
   background-color: var(--nscde-bg-color-6) !important;
@@ -1355,6 +1360,7 @@ button {
   border-left: 1px solid var(--nscde-ts-color-5) !important;
   border-right: 1px solid var(--nscde-bs-color-5) !important;
   border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
 }
 
 select:is(:active,[open="true"]):not([disabled="true"]),
@@ -1437,5 +1443,11 @@ button:is(:active,[open="true"]):not([disabled="true"]) {
   border-right: 1px solid var(--nscde-ts-color-6) !important;
   border-bottom: 1px solid var(--nscde-ts-color-6) !important;
   box-shadow: none !important;
+}
+
+@media not (prefers-contrast) {
+  :root[dialogroot], :host(dialog) {
+    --in-content-page-background: var(--nscde-bg-color-6) !important;
+  }
 }
 
