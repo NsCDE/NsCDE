@@ -25,6 +25,15 @@ button:-moz-any(:hover:active,[open="true"]):not([disabled="true"]) {
   border-radius: 0px !important;
 }
 
+menulist {
+  appearance: auto !important;
+  -moz-default-appearance: menulist !important;
+  text-shadow: none;
+  margin: 2px 4px !important;
+  font: menu !important;
+  color: -moz-gtk-buttonactivetext !important;
+}
+
 menupopup {
   -moz-appearance: none !important;
   --panel-border-color: var(--nscde-bg-color-6) !important;
@@ -54,6 +63,7 @@ menupopup > menu, menupopup > menuitem {
 #sidebarMenu-popup,
 #widget-overflow,
 #protections-popup {
+  outline: none !important;
   --arrowpanel-border-color: var(--nscde-bg-color-6) !important;
   background-color: var(--nscde-bg-color-6) !important;
   color: var(--nscde-fg-color-6) !important;
@@ -82,7 +92,6 @@ menupopup > menu, menupopup > menuitem {
   width: 24px !important;
   height: 24px !important;
 }
-
 
 #identity-popup,
 #permission-popup,
@@ -481,6 +490,7 @@ panelview toolbarbutton.subviewbutton {
   -moz-appearance: none !important;
   background-color: var(--nscde-bg-color-6) !important;
   color: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
 }
 
 #BMB_bookmarksPopup .subviewbutton:hover,
@@ -1061,3 +1071,7 @@ toolbox#navigator-toolbox > toolbar#nav-bar.browser-toolbar {
   border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
+:is(panel, menupopup)[type="arrow"]::part(content) {
+  box-shadow: 0 0 0 0 !important;
+  margin: 0px !important;
+}
