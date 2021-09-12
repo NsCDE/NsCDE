@@ -25,6 +25,66 @@ button:-moz-any(:hover:active,[open="true"]):not([disabled="true"]) {
   border-radius: 0px !important;
 }
 
+checkbox:not([disabled="true"]),
+checkbox:not([disabled="true"]):hover,
+checkbox:not([disabled="true"]) > .checkbox-check,
+checkbox:not([disabled="true"]):hover > .checkbox-check {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  border-top-color: var(--nscde-ts-color-5) !important;
+  border-left-color: var(--nscde-ts-color-5) !important;
+  border-bottom-color: var(--nscde-bs-color-5) !important;
+  border-right-color: var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+checkbox:not([disabled="true"]) > .checkbox-check:is(:active,[checked="true"]) {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  border-top-color: var(--nscde-bs-color-5) !important;
+  border-left-color: var(--nscde-bs-color-5) !important;
+  border-bottom-color: var(--nscde-ts-color-5) !important;
+  border-right-color: var(--nscde-ts-color-5) !important;
+  border-radius: 0px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+checkbox:-moz-focusring .checkbox-check {
+  outline: none !important;
+}
+
+checkbox:-moz-focusring {
+  outline: 1px solid var(--nscde-bg-color-1) !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-bg-color-6) !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox > .checkbox-check {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox > .checkbox-check:is(:active,[checked="true"]) {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
 menulist {
   appearance: auto !important;
   -moz-default-appearance: menulist !important;
@@ -49,12 +109,32 @@ menupopup > menu, menupopup > menuitem {
 }
 
 :root {
-  --arrowpanel-menuitem-padding: 2px !important;
+  --arrowpanel-menuitem-padding: 2px 4px !important;
   --toolbarbutton-border-radius: 0 !important;
   --arrowpanel-border-radius: 0px !important;
   --arrowpanel-menuitem-border-radius: 0px !important;
   --arrowpanel-color: var(--nscde-fg-color-6) !important;
   --arrowpanel-background: var(--nscde-bg-color-6) !important;
+}
+
+#PanelUI-panic-view-button,
+#panic-button-success-closebutton {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#PanelUI-panic-view-button:is(:active,[checked]),
+#panic-button-success-closebutton:is(:active,[checked]) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
 #identity-popup,
@@ -436,6 +516,7 @@ panelview {
   border-left: 1px solid var(--nscde-ts-color-6) !important;
   border-bottom: 1px solid var(--nscde-bs-color-6) !important;
   border-right: 1px solid var(--nscde-bs-color-6) !important;
+  --panel-padding: 0px !important;
 }
 
 #identity-popup-security-expander,
@@ -1075,7 +1156,9 @@ toolbox#navigator-toolbox > toolbar#nav-bar.browser-toolbar {
   border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
+.panel-arrowcontainer .menupopup-arrowscrollbox,
 .panel-arrowbox+slot {
   box-shadow: none !important;
+  margin: 0px !important;
 }
 
