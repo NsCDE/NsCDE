@@ -41,6 +41,8 @@
   :root {
     --in-content-page-background: var(--nscde-bg-color-5) !important;
     --in-content-page-color: var(--nscde-fg-color-5) !important;
+    --in-content-primary-button-text-color: var(--nscde-fg-color-1) !important;
+    --in-content-primary-button-background: var(--nscde-bg-color-1) !important;
   }
   body {
     background-color: var(--nscde-bg-color-5) !important;
@@ -87,6 +89,7 @@
     border-bottom: 1px solid var(--nscde-bs-color-5) !important;
     border-radius: 0px !important;
     cursor: default !important;
+    font-weight: normal !important;
   }
   button:is(:active,[open="true"]):not([disabled="true"]):not(.menu-button):not(.menuitem-button) {
     background-color: var(--nscde-sel-color-5) !important;
@@ -478,6 +481,8 @@
   :root {
     --in-content-page-background: var(--nscde-bg-color-5) !important;
     --in-content-page-color: var(--nscde-fg-color-5) !important;
+    --in-content-primary-button-text-color: var(--nscde-fg-color-1) !important;
+    --in-content-primary-button-background: var(--nscde-bg-color-1) !important;
   }
 
   .reload-tabs-button .button-icon,
@@ -491,6 +496,7 @@
     border-bottom-color: var(--nscde-bs-color-5) !important;
     border-top-color: var(--nscde-ts-color-5) !important;
     border-radius: 0px !important;
+    font-weight: normal !important;
   }
   button:is(:active,[open="true"]):not([disabled="true"]) {
     background-color: var(--nscde-sel-color-5) !important;
@@ -556,6 +562,7 @@
 
   menupopup, menulist, menuseparator {
     -moz-appearance: none !important;
+    --panel-border-color: var(--nscde-bg-color-6) !important;
     background-color: var(--nscde-bg-color-6) !important;
     color: var(--nscde-fg-color-6) !important;
     border-top: 1px solid var(--nscde-ts-color-6) !important;
@@ -563,6 +570,7 @@
     border-right: 1px solid var(--nscde-bs-color-6) !important;
     border-bottom: 1px solid var(--nscde-bs-color-6) !important;
     border-radius: 0px !important;
+    font-weight: normal !important;
   }
 
   menuitem {
@@ -1119,6 +1127,7 @@ window#TranslationDialog button {
   border-right-color: var(--nscde-bs-color-6) !important;
   border-top-color: var(--nscde-ts-color-6) !important;
   border-bottom-color: var(--nscde-bs-color-6) !important;
+  border-radius: 0px !important;
 }
 
 window#FontsDialog button:is(:hover:active,[open="true"]):not([disabled="true"]),
@@ -1252,6 +1261,11 @@ window#TranslationDialog search-textbox {
   border-right-color: var(--nscde-ts-color-6) !important;
 }
 
+window menulist,
+window input[type="color"] {
+  border-radius: 0px !important;
+}
+
 .proxy-port-input {
   width: calc(5ch + 38px) !important;
 }
@@ -1309,16 +1323,19 @@ window .checkbox-check[checked="true"] {
 }
 
 window richlistbox {
-    background-color: var(--nscde-bg-color-4) !important;
-    color: var(--nscde-fg-color-4) !important;
-    border-top: 1px solid var(--nscde-bs-color-6) !important;
-    border-left: 1px solid var(--nscde-bs-color-6) !important;
-    border-right: 1px solid var(--nscde-ts-color-6) !important;
-    border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  --in-content-item-selected: var(--nscde-bg-color-1) !important;
+  --in-content-item-selected-text: var(--nscde-fg-color-1) !important;
 }
 
 window menupopup, window menulist, window menuseparator {
     -moz-appearance: none !important;
+    --panel-border-color: var(--nscde-bg-color-6) !important;
     background-color: var(--nscde-bg-color-6) !important;
     color: var(--nscde-fg-color-6) !important;
     border-top: 1px solid var(--nscde-ts-color-6) !important;
@@ -1463,5 +1480,6 @@ button:is(:active,[open="true"]):not([disabled="true"]) {
 
 :root {
   --in-content-focus-outline-color: var(--nscde-bg-color-1) !important;
+  --focus-outline-color: var(--nscde-bg-color-1) !important;
 }
 
