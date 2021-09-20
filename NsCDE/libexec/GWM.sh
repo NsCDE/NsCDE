@@ -331,6 +331,7 @@ esac
 
 # Generate script
 cat <<EOF
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GWM}
 WindowLocaleTitle {GWM}
 WindowSize ${WindowWidth} ${WindowHeight}
 Colorset 22
@@ -362,7 +363,7 @@ Widget 1
    Position 0 10
    Flags NoReliefString Left
    Value 0
-   Title { Workspace|Manage Workspaces ...|Rename ...|Switch To Workspace|Cascade All Windows|Tile All Windows|Options ...|Exit}
+   Title { Workspace|Manage Workspaces ...|Rename ...|Cascade All Windows|Tile All Windows Vertically|Tile All Windows Horizontally|Options ...|Exit}
    Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
@@ -376,31 +377,42 @@ Widget 1
          # Rename
          If (GetValue 1) == 2 Then
          Begin
-            Do {Nop}
-         End
-         # Switch To Workspace
-         If (GetValue 1) == 3 Then
-         Begin
-            Do {Nop}
+            HideWidget 6
+            Do {f_GWMRenameWorkspaceHelper}
+            SendSignal 3 1
          End
          # Cascade All Windows
+         If (GetValue 1) == 3 Then
+         Begin
+            HideWidget 6
+            Do {Module FvwmRearrange -cascade -incx 8 -incy 6 6 2 \$[wa.width]p \$[wa.height]p}
+            SendSignal 3 1
+         End
+         # Tile All Windows Vertically
          If (GetValue 1) == 4 Then
          Begin
-            Do {Module FvwmRearrange -cascade -incx 8 -incy 6 6 2 \$[wa.width]p \$[wa.height]p}
+            HideWidget 6
+            Do {f_TileWindows}
+            SendSignal 3 1
          End
-         # Tile All Windows
+         # Tile All Windows Horizontally
          If (GetValue 1) == 5 Then
          Begin
-            Do {f_TileWindows}
+            HideWidget 6
+            Do {f_TileWindows -h}
+            SendSignal 3 1
          End
          # Options
          If (GetValue 1) == 6 Then
          Begin
+            HideWidget 6
             Do {Module FvwmScript GWMOptions}
+            SendSignal 3 1
          End
          # Exit
          If (GetValue 1) == 7 Then
          Begin
+            HideWidget 6
             Do {Schedule 10 SendToModule $[FVWM_USERDIR]/tmp/GWM SendString 1 1 Quit}
          End
       End
@@ -416,7 +428,6 @@ Widget 1
       Begin
          If (LastString) == {QExit} Then
          Begin
-            Do {Echo ZASTO SE NE IZVRSAVAS}
             Quit
          End
       End
@@ -428,7 +439,7 @@ Widget 2
    Position 0 20
    Flags NoReliefString Left
    Value 0
-   Title { Window|Iconify|Close Window|Terminate Application|Move To Workspace ...|Occupy Workspace ...}
+   Title { Window|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ...}
    Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
@@ -436,23 +447,33 @@ Widget 2
       Begin
          If (GetValue 2) == 1 Then
          Begin
+            HideWidget 6
             Do {Prev Iconify toggle}
+            SendSignal 3 1
          End
          If (GetValue 2) == 2 Then
          Begin
-            Do {Prev Close}
+            HideWidget 6
+            Do {Prev WindowShade toggle}
+            SendSignal 3 1
          End
          If (GetValue 2) == 3 Then
          Begin
-            Do {Prev Destroy}
+            HideWidget 6
+            Do {Prev Close}
+            SendSignal 3 1
          End
          If (GetValue 2) == 4 Then
          Begin
-            Do {Nop}
+            HideWidget 6
+            Do {Prev Destroy}
+            SendSignal 3 1
          End
          If (GetValue 2) == 5 Then
          Begin
+            HideWidget 6
             Do {Prev f_SendToOccupy wsp nogo}
+            SendSignal 3 1
          End
       End
 End
@@ -469,6 +490,17 @@ Widget 3
       Case message of
       SingleClic :
       Begin
+      End
+      1 :
+      Begin
+         Do {Schedule 168 SendToModule $[FVWM_USERDIR]/tmp/GWM SendString 3 2 ShowPager}
+      End
+      2 :
+      Begin
+         If (LastString) == {ShowPager} Then
+         Begin
+            ShowWidget 6
+         End
       End
 End
 
@@ -493,21 +525,15 @@ Widget 4
 End
 
 Widget 6
- Property
- Size ${PagerWidth} ${PagerHeight}
- Position 2 30
- Type SwallowExec
- Title {GWMPager}
- SwallowExec {Module FvwmPager GWMPager 0 \$[infostore.fvwmdesknum]}
- Flags NoReliefString
- Flags Center
- Value 1
- Colorset 2
-Main
- Case message of
-  SingleClic :
-  Begin
-  End
+   Property
+   Size ${PagerWidth} ${PagerHeight}
+   Position 2 30
+   Type SwallowExec
+   Title {GWMPager}
+   SwallowExec {Module FvwmPager GWMPager 0 \$[infostore.fvwmdesknum]}
+   Flags NoReliefString, Center
+   Value 1
+   Colorset 22
 End
 
 EOF

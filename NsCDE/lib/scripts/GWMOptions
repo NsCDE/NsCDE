@@ -1,0 +1,237 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GWM}
+WindowLocaleTitle {Graphical Workspace Manager Options}
+WindowSize 520 580
+Colorset 22
+
+Init
+Begin
+   Set $FontDefault = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $FontHscroll = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   ChangeFont 1 $FontDefault
+   ChangeFont 4 $FontDefault
+   ChangeFont 5 $FontDefault
+   ChangeFont 6 $FontDefault
+   ChangeFont 7 $FontHscroll
+   ChangeFont 8 $FontDefault
+   ChangeFont 9 $FontHscroll
+   ChangeFont 10 $FontDefault
+   ChangeFont 16 $FontDefault
+   ChangeFont 17 $FontDefault
+   ChangeFont 18 $FontDefault
+End
+
+Widget 1
+   Property
+   Size 20 20
+   Position 18 8
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title { Workspaces }
+   Font "xft:::pixelsize=15"
+End
+
+Widget 2
+   Property
+   Size 504 280
+   Position 8 18
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 3
+   Property
+   Size 60 24
+   Position 24 40
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { Show Workspace Backdrops}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 100 0
+   Position 24 80
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Workspace Names Above}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
+   Size 100 0
+   Position 24 118
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Workspace Names Below}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Size 100 0
+   Position 22 174
+   Type ItemDraw
+   Flags NoReliefString Left
+   LocaleTitle {Number Of Visible Rows }
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 208 1
+   Position 290 154
+   Flags NoReliefString Left
+   Type HScrollBar
+   Font "xft:::pixelsize=14"
+   MinValue 1
+   MaxValue 8
+   Value 2
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Size 100 0
+   Position 22 242
+   Type ItemDraw
+   Flags NoReliefString Left
+   LocaleTitle {Desired Workspace Width (Pixels) }
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 208 1
+   Position 290 220
+   Flags NoReliefString Left
+   Type HScrollBar
+   Font "xft:::pixelsize=14"
+   MinValue 100
+   MaxValue 300
+   Value 260
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 20 20
+   Position 18 300
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title { Windows }
+   Font "xft:::pixelsize=15"
+End
+
+Widget 11
+   Property
+   Size 504 200
+   Position 8 310
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 15
+   Property
+   Size 514 0
+   Position 2 522
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 16
+   Property
+   Size 120 20
+   Position 12 538
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Size 120 20
+   Position 206 538
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 18
+   Property
+   Size 120 20
+   Position 390 538
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_DisplayURL "\$[gt.GWM]" \$[NSCDE_ROOT]/share/doc/html/NsCDE-GWM.html}
+      End
+End
+
