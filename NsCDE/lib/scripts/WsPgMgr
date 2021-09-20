@@ -1222,6 +1222,7 @@ Widget 24
          Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
          ChangeTitle $CalledBy $NewButtonLabelDisplay
          Do {DesktopName } (Add $CalledBy -1) { } $NewButtonLabel
+         Do {SendToModule $[infostore.WSM] SendString 41 5 CHN } $CalledBy { } $NewButtonLabel
          HideWidget 24
          ChangeTitle 22 {Close}
       End

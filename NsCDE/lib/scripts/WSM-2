@@ -72,8 +72,8 @@ Begin
    # Shortcut keys for renaming desks
    Key Space C 41 2 {EnterRename}
    Key Return C 41 3 {ReturnFromRename}
-   Key F1 A 41 5 {KeyHelp}
-   Key Help A 41 5 {KeyHelp}
+   Key F1 A 41 6 {KeyHelp}
+   Key Help A 41 6 {KeyHelp}
 
    # For avoiding turned on button when past button was active and pressed again
    # Value: Desk Button Number. Start value is meaningless.
@@ -453,8 +453,23 @@ Property
                 ChangeValue (Add $NextDesk 1) 1
              End
        End
-
        5 :
+       Begin
+          Do {Echo OOOOOOOOOOOOOOOOOOOOO: } (LastString)
+          If (StrCopy (LastString) 1 3) == {CHN} Then
+          Begin
+             Set $DeskToRename = (StrCopy (LastString) 4 5)
+             Set $NewDeskName = (StrCopy (LastString) 6 20)
+             If $NewDeskName <> {} Then
+             Begin
+                If $DeskToRename <> {} Then
+                Begin
+                   ChangeTitle $DeskToRename $NewDeskName
+                End
+             End
+          End
+       End
+       6 :
        Begin
           Do {f_DisplayURL "$[gt.Workspace Manager Help]" $[NSCDE_ROOT]/share/doc/html/NsCDE-Workspace-Manager.html}
        End
