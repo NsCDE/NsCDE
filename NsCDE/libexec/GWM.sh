@@ -338,7 +338,6 @@ Colorset 22
 Init
 Begin
    Do {Schedule 200 Exec exec rm -f $[FVWM_USERDIR]/tmp/GWM}
-
    Do {f_PrepareGWMPager $Rows $Cols $Width}
 
    $WidgetHelpVisible
