@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-StyleMgr}
 WindowLocaleTitle {Style Manager}
-WindowSize 720 110
+WindowSize 790 110
 WindowPosition 30 30
 Colorset 22
 
@@ -24,6 +24,7 @@ Begin
    Key E A 1 1 {Beep}
    Key S A 1 1 {Scrn}
    Key W A 1 1 {Window}
+   Key D A 1 1 {Desks}
    Key P A 1 1 {Pwr}
    Key T A 1 1 {Start}
 
@@ -35,8 +36,9 @@ Begin
    ChangeTitle 32 (Gettext {Beep})
    ChangeTitle 33 (Gettext {Screen})
    ChangeTitle 34 (Gettext {Window})
-   ChangeTitle 35 (Gettext {Power})
-   ChangeTitle 36 (Gettext {Startup})
+   ChangeTitle 35 (Gettext {Desks})
+   ChangeTitle 36 (Gettext {Power})
+   ChangeTitle 37 (Gettext {Startup})
 
    Set $IconFnClean = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11.5} 1 -1)
    Set $IconFn = {Shadow=2 0 SE:} $IconFnClean {:antialias=0}
@@ -51,6 +53,7 @@ Begin
    ChangeFont 34 $IconFn
    ChangeFont 35 $IconFn
    ChangeFont 36 $IconFn
+   ChangeFont 37 $IconFn
 
    # Make the same as ItemDraw which differs the rest of the app from menu
    ChangeColorset 7 21
@@ -63,6 +66,7 @@ Begin
    ChangeColorset 14 21
    ChangeColorset 15 21
    ChangeColorset 16 21
+   ChangeColorset 17 21
 
    ChangeColorset 27 21
    ChangeColorset 28 21
@@ -74,6 +78,7 @@ Begin
    ChangeColorset 34 21
    ChangeColorset 35 21
    ChangeColorset 36 21
+   ChangeColorset 37 21
 
    Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
 
@@ -90,7 +95,7 @@ Widget 1 # Handler
    Flags NoReliefString Left Hidden
    Value 0
    Title {}
-   Font "xft:::pixelsize=15"
+   Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
       SingleClic :
@@ -118,10 +123,12 @@ Widget 1 # Handler
             SendSignal 13 1
          If (LastString) == {Window} Then
             SendSignal 14 1
-         If (LastString) == {Pwr} Then
+         If (LastString) == {Desks} Then
             SendSignal 15 1
-         If (LastString) == {Start} Then
+         If (LastString) == {Pwr} Then
             SendSignal 16 1
+         If (LastString) == {Start} Then
+            SendSignal 17 1
       End
 End
 
@@ -131,7 +138,7 @@ Widget 2
    Position 0 10
    Flags NoReliefString Left
    Value 0
-   Font "xft:::pixelsize=15"
+   Font "xft:::pixelsize=18:charwidth=9.8"
    LocaleTitle {File|Exit     Ctrl+Q}
    Main
       Case message of
@@ -151,7 +158,7 @@ Widget 3 # Handler
    Font "xft:::pixelsize=15"
    Flags NoReliefString Left Hidden
    Value 0
-   LocaleTitle {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   LocaleTitle {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
    Main
       Case message of
       SingleClic :
@@ -170,7 +177,7 @@ Widget 4
    Flags NoReliefString Right
    Value 0
    LocaleTitle {Help|Style Manager Help}
-   Font "xft:::pixelsize=15"
+   Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
       SingleClic :
@@ -189,8 +196,8 @@ End
 # Background different from menu if ncolors == 8
 Widget 5
    Property
-   Size 720 107
-   Position 0 25
+   Size 790 104
+   Position 0 28
    Flags NoReliefString
    Type ItemDraw
    Colorset 21
@@ -273,7 +280,7 @@ End
 Widget 7
    Property
    Size 60 60
-   Position 8 28
+   Position 8 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -288,8 +295,8 @@ Widget 7
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 7 27
-         ChangeSize 6 62 78
+         ChangePosition 6 7 32
+         ChangeSize 6 62 73
          Do {None (ColorMgr) Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]}
       End
 End
@@ -315,7 +322,7 @@ End
 Widget 8
    Property
    Size 60 60
-   Position 78 28
+   Position 78 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -330,8 +337,8 @@ Widget 8
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 77 27
-         ChangeSize 6 62 78
+         ChangePosition 6 77 32
+         ChangeSize 6 62 73
          Do {f_ToggleFvwmModule FvwmScript FontMgr}
       End
 End
@@ -356,7 +363,7 @@ End
 Widget 9
    Property
    Size 78 60
-   Position 146 28
+   Position 146 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -371,8 +378,8 @@ Widget 9
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 145 27
-         ChangeSize 6 80 78
+         ChangePosition 6 145 32
+         ChangeSize 6 80 73
          Do {None (BackdropMgr) Module FvwmScript BackdropMgr $[desk.n] $[infostore.desknum]}
       End
 End
@@ -397,7 +404,7 @@ End
 Widget 10
    Property
    Size 78 60
-   Position 229 28
+   Position 229 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -412,8 +419,8 @@ Widget 10
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 228 27
-         ChangeSize 6 80 78
+         ChangePosition 6 228 32
+         ChangeSize 6 80 73
          Do {f_ToggleFvwmModule FvwmScript KeyboardMgr}
       End
 End
@@ -438,7 +445,7 @@ End
 Widget 11
    Property
    Size 60 60
-   Position 310 28
+   Position 310 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -453,8 +460,8 @@ Widget 11
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 309 27
-         ChangeSize 6 62 78
+         ChangePosition 6 309 32
+         ChangeSize 6 62 73
          Do {f_ToggleFvwmModule FvwmScript PointerMgr}
       End
 End
@@ -479,7 +486,7 @@ End
 Widget 12
    Property
    Size 58 60
-   Position 372 28
+   Position 372 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -494,8 +501,8 @@ Widget 12
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 371 27
-         ChangeSize 6 60 78
+         ChangePosition 6 371 32
+         ChangeSize 6 60 73
          Do {f_ToggleFvwmModule FvwmScript BeepMgr}
       End
 End
@@ -520,7 +527,7 @@ End
 Widget 13
    Property
    Size 60 60
-   Position 432 28
+   Position 432 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -535,8 +542,8 @@ Widget 13
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 431 27
-         ChangeSize 6 62 78
+         ChangePosition 6 431 32
+         ChangeSize 6 62 73
          Do {f_ToggleFvwmFunc xscreensaver-demo Close f_Xscreensaver -prefs}
       End
 End
@@ -561,7 +568,7 @@ End
 Widget 14
    Property
    Size 68 60
-   Position 502 28
+   Position 502 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
@@ -576,8 +583,8 @@ Widget 14
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 501 27
-         ChangeSize 6 70 78
+         ChangePosition 6 501 32
+         ChangeSize 6 70 73
          Do {f_ToggleFvwmModule FvwmScript WindowMgr}
       End
 End
@@ -601,12 +608,12 @@ End
 
 Widget 15
    Property
-   Size 60 60
-   Position 576 28
+   Size 68 60
+   Position 576 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
-   Icon NsCDE/SDtpowermgr.m.xpm
+   Icon NsCDE/StyleMgr-Desks.xpm
    Main
       Case message of
       SingleClic :
@@ -617,15 +624,16 @@ Widget 15
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 575 27
-         ChangeSize 6 62 78
-         Do {f_ToggleFvwmModule FvwmScript PowerSaveMgr}
+         ChangePosition 6 575 32
+         ChangeSize 6 70 73
+         Do {f_ToggleFvwmModule FvwmScript WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]}
+         Do {Schedule 500 All (WsPgMgr, CirculateHit) PlaceAgain
       End
 End
 
 Widget 35
    Property
-   Size 60 28
+   Size 68 28
    Position 576 76
    Flags NoReliefString NoFocus
    Type ItemDraw
@@ -642,12 +650,12 @@ End
 
 Widget 16
    Property
-   Size 66 60
-   Position 646 28
+   Size 60 60
+   Position 646 33
    Flags NoReliefString
    Type ItemDraw
    Title {}
-   Icon NsCDE/StyleMgr-Start.xpm
+   Icon NsCDE/SDtpowermgr.m.xpm
    Main
       Case message of
       SingleClic :
@@ -658,8 +666,49 @@ Widget 16
       1 :
       Begin
          ShowWidget 6
-         ChangePosition 6 645 27
-         ChangeSize 6 68 78
+         ChangePosition 6 645 32
+         ChangeSize 6 62 73
+         Do {f_ToggleFvwmModule FvwmScript PowerSaveMgr}
+      End
+End
+
+Widget 36
+   Property
+   Size 60 28
+   Position 646 76
+   Flags NoReliefString NoFocus
+   Type ItemDraw
+   Title {}
+   Font "xft:::pixelsize=18"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 16 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_16_36}
+      End
+End
+
+Widget 17
+   Property
+   Size 66 60
+   Position 720 33
+   Flags NoReliefString
+   Type ItemDraw
+   Title {}
+   Icon NsCDE/StyleMgr-Start.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 17 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_17_37}
+      End
+      1 :
+      Begin
+         ShowWidget 6
+         ChangePosition 6 719 32
+         ChangeSize 6 68 73
          Set $CheckSessionManager = (GetOutput {echo $SESSION_MANAGER} 1 -1)
          Set $CheckDesk = (GetOutput {echo $XDG_CURRENT_DESKTOP} 1 -1)
          Set $CheckDeskRc = {NotListed}
@@ -702,10 +751,10 @@ Widget 16
       End
 End
 
-Widget 36
+Widget 37
    Property
    Size 66 28
-   Position 646 76
+   Position 720 76
    Flags NoReliefString NoFocus
    Type ItemDraw
    Title {}
@@ -714,8 +763,8 @@ Widget 36
       Case message of
       SingleClic :
       Begin
-         SendSignal 16 1
-         Do {SendToModule StyleMgr SendString 6 1 pressed_16_36}
+         SendSignal 17 1
+         Do {SendToModule StyleMgr SendString 6 1 pressed_17_37}
       End
 End
 

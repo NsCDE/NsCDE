@@ -6,24 +6,30 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GWM}
 WindowLocaleTitle {Graphical Workspace Manager Options}
-WindowSize 520 580
+WindowSize 520 560
 Colorset 22
 
 Init
 Begin
    Set $FontDefault = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
-   Set $FontHscroll = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   Set $FontHscroll = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 9} 1 -1)
    ChangeFont 1 $FontDefault
+   ChangeFont 3 $FontDefault
    ChangeFont 4 $FontDefault
    ChangeFont 5 $FontDefault
    ChangeFont 6 $FontDefault
-   ChangeFont 7 $FontHscroll
-   ChangeFont 8 $FontDefault
-   ChangeFont 9 $FontHscroll
-   ChangeFont 10 $FontDefault
+   ChangeFont 7 $FontDefault
+   ChangeFont 8 $FontHscroll
+   ChangeFont 9 $FontDefault
+   ChangeFont 10 $FontHscroll
+   ChangeFont 11 $FontDefault
+   ChangeFont 12 $FontDefault
+   ChangeFont 13 $FontDefault
+   ChangeFont 14 $FontDefault
+   ChangeFont 15 $FontDefault
    ChangeFont 16 $FontDefault
-   ChangeFont 17 $FontDefault
    ChangeFont 18 $FontDefault
+   ChangeFont 19 $FontDefault
 End
 
 Widget 1
@@ -38,7 +44,7 @@ End
 
 Widget 2
    Property
-   Size 504 280
+   Size 504 288
    Position 8 18
    Type Rectangle
    Flags NoReliefString
@@ -47,7 +53,7 @@ End
 Widget 3
    Property
    Size 60 24
-   Position 24 40
+   Position 24 38
    Type CheckBox
    Flags NoReliefString Left
    Value 1
@@ -62,8 +68,24 @@ End
 
 Widget 4
    Property
+   Size 60 24
+   Position 24 74
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { Highlight Current Workspace Page}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
    Size 100 0
-   Position 24 80
+   Position 24 114
    Type RadioButton
    Flags NoReliefString Right
    LocaleTitle {Workspace Names Above}
@@ -77,10 +99,10 @@ Widget 4
       End
 End
 
-Widget 5
+Widget 6
    Property
    Size 100 0
-   Position 24 118
+   Position 24 150
    Type RadioButton
    Flags NoReliefString Right
    LocaleTitle {Workspace Names Below}
@@ -94,10 +116,10 @@ Widget 5
       End
 End
 
-Widget 6
+Widget 7
    Property
    Size 100 0
-   Position 22 174
+   Position 22 192
    Type ItemDraw
    Flags NoReliefString Left
    LocaleTitle {Number Of Visible Rows }
@@ -111,10 +133,10 @@ Widget 6
       End
 End
 
-Widget 7
+Widget 8
    Property
    Size 208 1
-   Position 290 154
+   Position 290 172
    Flags NoReliefString Left
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -128,10 +150,10 @@ Widget 7
       End
 End
 
-Widget 8
+Widget 9
    Property
    Size 100 0
-   Position 22 242
+   Position 22 254
    Type ItemDraw
    Flags NoReliefString Left
    LocaleTitle {Desired Workspace Width (Pixels) }
@@ -145,10 +167,10 @@ Widget 8
       End
 End
 
-Widget 9
+Widget 10
    Property
    Size 208 1
-   Position 290 220
+   Position 290 234
    Flags NoReliefString Left
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -162,36 +184,102 @@ Widget 9
       End
 End
 
-Widget 10
+Widget 11
    Property
    Size 20 20
-   Position 18 300
+   Position 18 310
    Type ItemDraw
    Flags NoReliefString Left NoFocus
    Title { Windows }
    Font "xft:::pixelsize=15"
 End
 
-Widget 11
+Widget 12
    Property
-   Size 504 200
-   Position 8 310
+   Size 504 174
+   Position 8 320
    Type Rectangle
    Flags NoReliefString
+End
+
+Widget 13
+   Property
+   Size 60 24
+   Position 24 340
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { Show Window Names In Baloons}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 14
+   Property
+   Size 60 24
+   Position 24 378
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 1
+   Title { Respect Window Skip List}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
 End
 
 Widget 15
    Property
-   Size 514 0
-   Position 2 522
-   Type Rectangle
-   Flags NoReliefString
+   Size 100 0
+   Position 24 416
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle { Show Small Icons Inside Windows}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 1
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
 End
 
 Widget 16
    Property
+   Size 100 0
+   Position 24 456
+   Type RadioButton
+   Flags NoReliefString Right
+   LocaleTitle {Show Names Inside Windows}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 17
+   Property
+   Size 514 0
+   Position 2 506
+   Type Rectangle
+   Flags NoReliefString
+End
+
+Widget 18
+   Property
    Size 120 20
-   Position 12 538
+   Position 12 520
    Type PushButton
    Flags NoReliefString
    LocaleTitle {OK}
@@ -203,10 +291,10 @@ Widget 16
       End
 End
 
-Widget 17
+Widget 19
    Property
    Size 120 20
-   Position 206 538
+   Position 206 520
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Cancel}
@@ -219,10 +307,10 @@ Widget 17
       End
 End
 
-Widget 18
+Widget 20
    Property
    Size 120 20
-   Position 390 538
+   Position 390 520
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
