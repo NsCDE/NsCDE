@@ -38,19 +38,78 @@ done
 
 # Parse WSM.conf
 if [ -r "${FVWM_USERDIR}/WSM.conf" ]; then
-   WSMCONF_R="${FVWM_USERDIR}/WSM.conf"
-   WSMCONF_W="${FVWM_USERDIR}/WSM.conf"
+   WsmReadRows=$(egrep "^GWM:${ndesks}:ROWS:[[:digit:]]" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmRows="${WsmReadRows##*:}"
+
+   WsmReadWscale=$(egrep "^GWM:${ndesks}:WSCALE:[10-20]" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmWscale="${WsmReadWscale##*:}"
+
+   WsmReadBackdrops=$(egrep "^GWM:0:BACKDROPS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmBackdrops="${WsmReadBackdrops##*:}"
+
+   WsmReadHlCurrent=$(egrep "^GWM:0:HLCURRENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmHlCurrent="${WsmReadHlCurrent##*:}"
+
+   WsmReadLabelPos=$(egrep "^GWM:0:LABELPOS:(1|2)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmLabelPos="${WsmReadLabelPos##*:}"
+
+   WsmReadBallons=$(egrep "^GWM:0:BALLONS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmBallons="${WsmReadBallons##*:}"
+
+   WsmReadSkipList=$(egrep "^GWM:0:SKIPLIST:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmSkipList="${WsmReadSkipList##*:}"
+
+   WsmReadWinContent=$(egrep "^GWM:0:WINCONTENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmWinContent="${WsmReadWinContent##*:}"
 else
-   if [ -r "${NSCDE_ROOT}/config/WSM.conf" ]; then
-      WSMCONF_R="${NSCDE_ROOT}/config/WSM.conf"
-      WSMCONF_W="${FVWM_USERDIR}/WSM.conf"
-   else
-      WSMCONF_W="${FVWM_USERDIR}/WSM.conf"
-   fi
+   WsmBackdrops=1
+   WsmHlCurrent=0
+   WsmLabelPos=1
+   WsmBallons=1
+   WsmSkipList=1
+   WsmWinContent=1
 fi
 
-WsmReadRows=$(egrep "^GWM:${ndesks}:ROWS:[[:digit:]]" $WSMCONF_R)
-WsmRows="${WsmReadRows##*:}"
+# Write temporary GWMPager.conf
+mkdir -p ${FVWM_USERDIR}/tmp
+cat <<EOF > ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
+DestroyModuleConfig GWMPager *
+PipeRead "echo *GWMPager: Geometry \$((\$[infostore.gwm.pgr.width] * \$[infostore.gwm.cols]))x\$((\$[infostore.gwm.pgr.height] * \$[infostore.gwm.rows]))"
+*GWMPager: Rows \$[infostore.gwm.rows]
+*GWMPager: Columns \$[infostore.gwm.cols]
+*GWMPager: Colorset 0 31
+*GWMPager: Colorset 1 32
+*GWMPager: Colorset 2 33
+*GWMPager: Colorset 3 34
+*GWMPager: Colorset 4 35
+*GWMPager: Colorset 5 36
+*GWMPager: Colorset 6 37
+*GWMPager: Colorset 7 38
+*GWMPager: HilightColorset * 2
+*GWMPager: NoDeskHilight
+*GWMPager: Font Shadow=2 0 C:\$[infostore.font.variable.normal.small]
+*GWMPager: SolidSeparators
+*GWMPager: SmallFont xft:Sans:style=Regular:pixelsize=8
+*GWMPager: Balloons All
+*GWMPager: BalloonColorset * 4
+*GWMPager: BalloonFont \$[infostore.font.monospaced.normal.small]
+*GWMPager: BalloonYOffset +1
+*GWMPager: BalloonBorderWidth 1
+*GWMPager: WindowColorsets 1 2
+*GWMPager: WindowBorderWidth 2
+EOF
+
+if [ "$WsmSkipList" == "1" ]; then
+cat <<EOF >> ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
+*GWMPager: UseSkipList
+EOF
+fi
+
+cat <<EOF >> ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
+*GWMPager: Window3DBorders
+*GWMPager: MiniIcons
+Test (EnvMatch FVWM_IS_FVWM3 1) *GWMPager: Monitor \$\$\$[monitor.current]
+EOF
 
 if [ "x$WsmRows" != "x" ]; then
    Rows=$WsmRows
@@ -114,9 +173,6 @@ else
    ;;
    esac
 fi
-
-WsmReadWscale=$(egrep "^GWM:${ndesks}:WSCALE:[10-20]" $WSMCONF_R)
-WsmWscale="${WsmReadWscale##*:}"
 
 if [ "x$WsmWscale" != "x" ]; then
    Width=$(($WsmWscale * 16.5))
@@ -353,10 +409,6 @@ Begin
    Key F1 A 4 1 {DisplayHelp}
 End
 
-# PeriodicTasks
-# Begin
-# End
-
 Widget 1
    Property
    Type Menu
@@ -373,6 +425,7 @@ Widget 1
          If (GetValue 1) == 1 Then
          Begin
             Do {f_ToggleFvwmModule FvwmScript WsPgMgr \$[infostore.desknum] \$[infostore.pagematrixX] \$[infostore.pagematrixY]}
+            Do {Schedule 500 All (WsPgMgr, CirculateHit) PlaceAgain}
          End
          # Rename
          If (GetValue 1) == 2 Then
@@ -406,7 +459,7 @@ Widget 1
          If (GetValue 1) == 6 Then
          Begin
             HideWidget 6
-            Do {Module FvwmScript GWMOptions}
+            Do {Module FvwmScript GWMOptions \$[infostore.glob_pg.desk_scale] \$[infostore.desknum]}
             SendSignal 3 1
          End
          # Exit

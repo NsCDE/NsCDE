@@ -23,13 +23,43 @@ Begin
    ChangeFont 9 $FontDefault
    ChangeFont 10 $FontHscroll
    ChangeFont 11 $FontDefault
-   ChangeFont 12 $FontDefault
    ChangeFont 13 $FontDefault
    ChangeFont 14 $FontDefault
    ChangeFont 15 $FontDefault
    ChangeFont 16 $FontDefault
    ChangeFont 18 $FontDefault
    ChangeFont 19 $FontDefault
+
+   Set $DefaultPagerRatio = (GetScriptArgument 1)
+   If $DefaultPagerRatio == {} Then
+   Begin
+      Set $DefaultPagerRatio = 15
+   End
+
+   Set $Ndesks = (GetScriptArgument 2)
+   If $Ndesks == {} Then
+   Begin
+      Set $Ndesks = 4
+   End
+   If $Ndesks == {2} Then
+   Begin
+      ChangeMaxValue 8 2
+   End
+   If $Ndesks == {4} Then
+   Begin
+      ChangeMaxValue 8 4
+   End
+   If $Ndesks == {6} Then
+   Begin
+      ChangeMaxValue 8 6
+   End
+   If $Ndesks == {8} Then
+   Begin
+      ChangeMaxValue 8 8
+   End
+
+   Set $WSMCONF = {$FVWM_USERDIR/WSM.conf}
+   SendSignal 18 2
 End
 
 Widget 1
@@ -52,12 +82,12 @@ End
 
 Widget 3
    Property
-   Size 60 24
+   Size 160 24
    Position 24 38
    Type CheckBox
    Flags NoReliefString Left
-   Value 1
-   Title { Show Workspace Backdrops}
+   Value 0
+   Title { Show Workspace Backdrops }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -68,12 +98,12 @@ End
 
 Widget 4
    Property
-   Size 60 24
+   Size 160 24
    Position 24 74
    Type CheckBox
    Flags NoReliefString Left
-   Value 1
-   Title { Highlight Current Workspace Page}
+   Value 0
+   Title { Highlight Current Workspace Page }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -88,14 +118,19 @@ Widget 5
    Position 24 114
    Type RadioButton
    Flags NoReliefString Right
-   LocaleTitle {Workspace Names Above}
+   LocaleTitle {Workspace Names Above Workspaces}
    Font "xft:::pixelsize=15"
    Colorset 22
-   Value 1
+   Value 0
    Main
       Case message of
       SingleClic :
       Begin
+         If (GetValue 5) == 1 Then
+         Begin
+            ChangeValue 6 0
+            Set $WorkspaceNamesValue = 1
+         End
       End
 End
 
@@ -105,7 +140,7 @@ Widget 6
    Position 24 150
    Type RadioButton
    Flags NoReliefString Right
-   LocaleTitle {Workspace Names Below}
+   LocaleTitle {Workspace Names Below Workspaces}
    Font "xft:::pixelsize=15"
    Colorset 22
    Value 0
@@ -113,13 +148,18 @@ Widget 6
       Case message of
       SingleClic :
       Begin
+         If (GetValue 6) == 1 Then
+         Begin
+            ChangeValue 5 0
+            Set $WorkspaceNamesValue = 2
+         End
       End
 End
 
 Widget 7
    Property
    Size 100 0
-   Position 22 192
+   Position 22 194
    Type ItemDraw
    Flags NoReliefString Left
    LocaleTitle {Number Of Visible Rows }
@@ -136,7 +176,7 @@ End
 Widget 8
    Property
    Size 208 1
-   Position 290 172
+   Position 290 174
    Flags NoReliefString Left
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -147,16 +187,53 @@ Widget 8
       Case message of
       SingleClic :
       Begin
+         If $Ndesks == 4 Then
+         Begin
+            If (GetValue 8) == 3 Then
+            Begin
+               ChangeValue 8 4
+            End
+         End
+         If $Ndesks == 6 Then
+         Begin
+            If (GetValue 8) == 4 Then
+            Begin
+               ChangeValue 8 3
+            End
+            If (GetValue 8) == 5 Then
+            Begin
+               ChangeValue 8 6
+            End
+         End
+         If $Ndesks == 8 Then
+         Begin
+            If (GetValue 8) == 3 Then
+            Begin
+               ChangeValue 8 2
+            End
+            If (GetValue 8) == 5 Then
+            Begin
+               ChangeValue 8 4
+            End
+            If (GetValue 8) == 6 Then
+            Begin
+               ChangeValue 8 4
+            End
+            If (GetValue 8) == 7 Then
+            Begin
+               ChangeValue 8 8
+            End
+         End
       End
 End
 
 Widget 9
    Property
    Size 100 0
-   Position 22 254
+   Position 22 256
    Type ItemDraw
    Flags NoReliefString Left
-   LocaleTitle {Desired Workspace Width (Pixels) }
+   LocaleTitle {Desired Workspace Width (Ratio) }
    Font "xft:::pixelsize=15"
    Colorset 22
    Value 0
@@ -170,13 +247,13 @@ End
 Widget 10
    Property
    Size 208 1
-   Position 290 234
+   Position 290 236
    Flags NoReliefString Left
    Type HScrollBar
    Font "xft:::pixelsize=14"
-   MinValue 100
-   MaxValue 300
-   Value 260
+   MinValue 10
+   MaxValue 20
+   Value 15
    Main
       Case message of
       SingleClic :
@@ -204,12 +281,12 @@ End
 
 Widget 13
    Property
-   Size 60 24
+   Size 160 24
    Position 24 340
    Type CheckBox
    Flags NoReliefString Left
-   Value 1
-   Title { Show Window Names In Baloons}
+   Value 0
+   Title { Show Window Names In Ballons }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -220,12 +297,12 @@ End
 
 Widget 14
    Property
-   Size 60 24
+   Size 160 24
    Position 24 378
    Type CheckBox
    Flags NoReliefString Left
    Value 1
-   Title { Respect Window Skip List}
+   Title { Respect Window Skip List }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -248,6 +325,11 @@ Widget 15
       Case message of
       SingleClic :
       Begin
+         If (GetValue 15) == 1 Then
+         Begin
+            ChangeValue 16 0
+            Set $WindowContentValue = 1
+         End
       End
 End
 
@@ -265,6 +347,11 @@ Widget 16
       Case message of
       SingleClic :
       Begin
+         If (GetValue 16) == 1 Then
+         Begin
+            ChangeValue 15 0
+            Set $WindowContentValue = 0
+         End
       End
 End
 
@@ -288,6 +375,405 @@ Widget 18
       Case message of
       SingleClic :
       Begin
+         SendSignal 18 1
+      End
+      1 :
+      Begin
+         # Write Backdrops
+         If $GetBackdropsState <> (GetValue 3) Then
+         Begin
+            If $CreateBackdropsConf == 1 Then
+            Begin
+               Set $AppendBackdropsValueCmd = {echo 'GWM:0:BACKDROPS:} (GetValue 3) {' >> "} $WSMCONF {"}
+               Set $AppendBackdropsValue = (GetOutput $AppendBackdropsValueCmd 1 -1)
+               If $AppendBackdropsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendBackdropsValue {\\\" appeared while appending backdrops value in WSM.conf." "e1"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeBackdropsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BACKDROPS:} $GetBackdropsState {/GWM:0:BACKDROPS:} (GetValue 3) {/g' -f "} $WSMCONF {"}
+               Set $ChangeBackdropsValue = (GetOutput $ChangeBackdropsValueCmd 1 -1)
+               If $ChangeBackdropsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeBackdropsValue {\\\" appeared while changing backdrops value in WSM.conf." "e2"}
+               End
+            End
+         End
+
+         # Write Current Desk/Page Highlight
+         If $GetHlCurrentState <> (GetValue 4) Then
+         Begin
+            If $CreateHlCurrentConf == 1 Then
+            Begin
+               Set $AppendHlCurrentValueCmd = {echo 'GWM:0:HLCURRENT:} (GetValue 4) {' >> "} $WSMCONF {"}
+               Set $AppendHlCurrentValue = (GetOutput $AppendHlCurrentValueCmd 1 -1)
+               If $AppendHlCurrentValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendHlCurrentValue {\\\" appeared while appending highlight value in WSM.conf." "e3"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeHlCurrentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:HLCURRENT:} $GetHlCurrentState {/GWM:0:HLCURRENT:} (GetValue 4) {/g' -f "} $WSMCONF {"}
+               Set $ChangeHlCurrentValue = (GetOutput $ChangeHlCurrentValueCmd 1 -1)
+               If $ChangeHlCurrentValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeHlCurrentValue {\\\" appeared while changing highlight value in WSM.conf." "e4"}
+               End
+            End
+         End
+
+         # Write Workspace Label Position Choice
+         If $GetLabelPosState <> $WorkspaceNamesValue Then
+         Begin
+            If $CreateLabelPosConf == 1 Then
+            Begin
+               Set $AppendLabelPosValueCmd = {echo 'GWM:0:LABELPOS:} $WorkspaceNamesValue {' >> "} $WSMCONF {"}
+               Set $AppendLabelPosValue = (GetOutput $AppendLabelPosValueCmd 1 -1)
+               If $AppendLabelPosValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendLabelPosValue {\\\" appeared while appending workspace name label value in WSM.conf." "e5"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeLabelPosValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:LABELPOS:} $GetLabelPosState {/GWM:0:LABELPOS:} $WorkspaceNamesValue {/g' -f "} $WSMCONF {"}
+               Set $ChangeLabelPosValue = (GetOutput $ChangeLabelPosValueCmd 1 -1)
+               If $ChangeLabelPosValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeLabelPosValue {\\\" appeared while changing workspace name label value in WSM.conf." "e6"}
+               End
+            End
+         End
+
+         # Write GWM Rows Choice
+         If $GetGwmRowsState <> (GetValue 8) Then
+         Begin
+            If $CreateGwmRowsConf == 1 Then
+            Begin
+               Set $AppendGwmRowsValueCmd = {echo 'GWM:} $Ndesks {:ROWS:} (GetValue 8) {' >> "} $WSMCONF {"}
+               Set $AppendGwmRowsValue = (GetOutput $AppendGwmRowsValueCmd 1 -1)
+               If $AppendGwmRowsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendGwmRowsValue {\\\" appeared while appending GWM rows value in WSM.conf." "e7"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeGwmRowsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:ROWS:} $GetGwmRowsState {/GWM:} $Ndesks {:ROWS:} (GetValue 8) {/g' -f "} $WSMCONF {"}
+               Set $ChangeGwmRowsValue = (GetOutput $ChangeGwmRowsValueCmd 1 -1)
+               If $ChangeGwmRowsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeGwmRowsValue {\\\" appeared while changing GWM rows value in WSM.conf." "e8"}
+               End
+            End
+         End
+
+         # Write GWM Workspace Scale Choice
+         If $GetWscaleState <> (GetValue 10) Then
+         Begin
+            If $CreateWscaleConf == 1 Then
+            Begin
+               Set $AppendWscaleValueCmd = {echo 'GWM:} $Ndesks {:WSCALE:} (GetValue 10) {' >> "} $WSMCONF {"}
+               Set $AppendWscaleValue = (GetOutput $AppendWscaleValueCmd 1 -1)
+               If $AppendWscaleValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendWscaleValue {\\\" appeared while adding GWM width scale value in WSM.conf." "e9"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeWscaleValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:WSCALE:} $GetWscaleState {/GWM:} $Ndesks {:WSCALE:} (GetValue 10) {/g' -f "} $WSMCONF {"}
+               Set $ChangeWscaleValue = (GetOutput $ChangeWscaleValueCmd 1 -1)
+               If $ChangeWscaleValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeWscaleValue {\\\" appeared while changing GWM width scale value in WSM.conf." "e10"}
+               End
+            End
+         End
+
+         # Write Window Ballons Display Choice
+         If $GetBallonsState <> (GetValue 13) Then
+         Begin
+            If $CreateBallonsConf == 1 Then
+            Begin
+               Set $AppendBallonsValueCmd = {echo 'GWM:0:BALLONS:} (GetValue 13) {' >> "} $WSMCONF {"}
+               Set $AppendBallonsValue = (GetOutput $AppendBallonsValueCmd 1 -1)
+               If $AppendBallonsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendBallonsValue {\\\" appeared while adding ballons display value in WSM.conf." "e11"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeBallonsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BALLONS:} $GetBallonsState {/GWM:0:BALLONS:} (GetValue 13) {/g' -f "} $WSMCONF {"}
+               Set $ChangeBallonsValue = (GetOutput $ChangeBallonsValueCmd 1 -1)
+               If $ChangeBallonsValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeBallonsValue {\\\" appeared while changing ballons display value value in WSM.conf." "e12"}
+               End
+            End
+         End
+
+         # Write Window Skip List Respect Choice
+         If $GetSkipListState <> (GetValue 14) Then
+         Begin
+            If $CreateSkipListConf == 1 Then
+            Begin
+               Set $AppendSkipListValueCmd = {echo 'GWM:0:SKIPLIST:} (GetValue 14) {' >> "} $WSMCONF {"}
+               Set $AppendSkipListValue = (GetOutput $AppendSkipListValueCmd 1 -1)
+               If $AppendSkipListValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendSkipListValue {\\\" appeared while adding skip list value in WSM.conf." "e13"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeSkipListValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:SKIPLIST:} $GetSkipListState {/GWM:0:SKIPLIST:} (GetValue 14) {/g' -f "} $WSMCONF {"}
+               Set $ChangeSkipListValue = (GetOutput $ChangeSkipListValueCmd 1 -1)
+               If $ChangeSkipListValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeSkipListValue {\\\" appeared while changing skip list value value in WSM.conf." "e14"}
+               End
+            End
+         End
+
+         # Write Icons Names Windows Display Choice
+         If $GetWinContentState <> $WindowContentValue Then
+         Begin
+            If $CreateWinContentConf == 1 Then
+            Begin
+               Set $AppendWinContentValueCmd = {echo 'GWM:0:WINCONTENT:} $WindowContentValue {' >> "} $WSMCONF {"}
+               Set $AppendWinContentValue = (GetOutput $AppendWinContentValueCmd 1 -1)
+               If $AppendWinContentValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $AppendWinContentValue {\\\" appeared while appending window content type value in WSM.conf." "e15"}
+               End
+            End
+            Else
+            Begin
+               Set $ChangeWinContentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:WINCONTENT:} $GetWinContentState {/GWM:0:WINCONTENT:} $WindowContentValue {/g' -f "} $WSMCONF {"}
+               Set $ChangeWinContentValue = (GetOutput $ChangeWinContentValueCmd 1 -1)
+               If $ChangeWinContentValue <> {} Then
+               Begin
+                  Do {None ("Graphical Workspace Manager Error")}
+                     { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
+                     {"Error: Error \\\"} $ChangeWinContentValue {\\\" appeared while changing window content type value in WSM.conf." "e16"}
+               End
+            End
+         End
+
+         # Exit here
+         Quit
+      End
+      2 :
+      Begin
+         # Backdrops
+         Set $GetBackdropsStateCmd = {egrep "^GWM:0:BACKDROPS:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetBackdropsState = (GetOutput $GetBackdropsStateCmd 1 1)
+         If $GetBackdropsState == {} Then
+         Begin
+            ChangeValue 3 1
+            Set $CreateBackdropsConf = 1
+         End
+         Else
+         Begin
+            If $GetBackdropsState == 1 Then
+            Begin
+               ChangeValue 3 1
+            End
+            Else
+            Begin
+               ChangeValue 3 0
+            End
+         End
+
+         # Highlight current workspace
+         Set $GetHlCurrentStateCmd = {egrep "^GWM:0:HLCURRENT:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetHlCurrentState = (GetOutput $GetHlCurrentStateCmd 1 1)
+         If $GetHlCurrentState == {} Then
+         Begin
+            ChangeValue 4 0
+            Set $CreateHlCurrentConf = 1
+         End
+         Else
+         Begin
+            If $GetHlCurrentState == 0 Then
+            Begin
+               ChangeValue 4 0
+            End
+            Else
+            Begin
+               ChangeValue 4 1
+            End
+         End
+
+         # Workspace label position
+         Set $GetLabelPosStateCmd = {egrep "^GWM:0:LABELPOS:(1|2)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetLabelPosState = (GetOutput $GetLabelPosStateCmd 1 1)
+         If $GetLabelPosState == {} Then
+         Begin
+            ChangeValue 5 1
+            ChangeValue 6 0
+            Set $CreateLabelPosConf = 1
+         End
+         Else
+         Begin
+            If $GetLabelPosState == 1 Then
+            Begin
+               ChangeValue 5 1
+               ChangeValue 6 0
+            End
+            Else
+            Begin
+               ChangeValue 5 0
+               ChangeValue 6 1
+            End
+         End
+
+         # GWM Rows
+         Set $GetGwmRowsStateCmd = {egrep "^GWM:} $Ndesks {:ROWS:(1|2|3|4|6|8)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetGwmRowsState = (GetOutput $GetGwmRowsStateCmd 1 1)
+         If $GetGwmRowsState == {} Then
+         Begin
+            If $Ndesks == 8 Then
+            Begin
+               ChangeValue 8 4
+            End
+            Else
+            Begin
+               ChangeValue 8 2
+            End
+            Set $CreateGwmRowsConf = 1
+         End
+         Else
+         Begin
+            Set $CheckInt = (Add $GetGwmRowsState 100)
+            If $CheckInt > 100 Then
+            Begin
+               ChangeValue 8 $GetGwmRowsState
+            End
+            Else
+            Begin
+               ChangeValue 8 2
+            End
+         End
+
+         # GWM Width
+         Set $GetWscaleStateCmd = {egrep "^GWM:} $Ndesks {:WSCALE:[10-20]" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetWscaleState = (GetOutput $GetWscaleStateCmd 1 1)
+         If $GetWscaleState == {} Then
+         Begin
+            ChangeValue 10 15
+            Set $CreateWscaleConf = 1
+         End
+         Else
+         Begin
+            Set $CheckInt = (Add $GetWscaleState 100)
+            If $CheckInt > 100 Then
+            Begin
+               ChangeValue 10 $GetWscaleState
+            End
+            Else
+            Begin
+               ChangeValue 10 15
+            End
+         End
+
+         # Window Ballons
+         Set $GetBallonsStateCmd = {egrep "^GWM:0:BALLONS:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetBallonsState = (GetOutput $GetBallonsStateCmd 1 1)
+         If $GetBallonsState == {} Then
+         Begin
+            ChangeValue 13 1
+            Set $CreateBallonsConf = 1
+         End
+         Else
+         Begin
+            If $GetBallonsState == 1 Then
+            Begin
+               ChangeValue 13 1
+            End
+            Else
+            Begin
+               ChangeValue 13 0
+            End
+         End
+
+         # Window Skip List Value
+         Set $GetSkipListStateCmd = {egrep "^GWM:0:SKIPLIST:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetSkipListState = (GetOutput $GetSkipListStateCmd 1 1)
+         If $GetSkipListState == {} Then
+         Begin
+            ChangeValue 14 1
+            Set $CreateSkipListConf = 1
+         End
+         Else
+         Begin
+            If $GetSkipListState == 1 Then
+            Begin
+               ChangeValue 14 1
+            End
+            Else
+            Begin
+               ChangeValue 14 0
+            End
+         End
+
+         # Window Content
+         Set $GetWinContentStateCmd = {egrep "^GWM:0:WINCONTENT:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetWinContentState = (GetOutput $GetWinContentStateCmd 1 1)
+         If $GetWinContentState == {} Then
+         Begin
+            ChangeValue 15 1
+            ChangeValue 16 0
+            Set $CreateWinContentConf = 1
+         End
+         Else
+         Begin
+            If $GetWinContentState == 1 Then
+            Begin
+               ChangeValue 15 1
+               ChangeValue 16 0
+            End
+            Else
+            Begin
+               ChangeValue 15 0
+               ChangeValue 16 1
+            End
+         End
       End
 End
 
@@ -302,6 +788,10 @@ Widget 19
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 19 1
+      End
+      1 :
       Begin
          Quit
       End
@@ -319,7 +809,11 @@ Widget 20
       Case message of
       SingleClic :
       Begin
-         Do {f_DisplayURL "\$[gt.GWM]" \$[NSCDE_ROOT]/share/doc/html/NsCDE-GWM.html}
+         SendSignal 20 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.GWM]" $[NSCDE_ROOT]/share/doc/html/NsCDE-GWM.html}
       End
 End
 
