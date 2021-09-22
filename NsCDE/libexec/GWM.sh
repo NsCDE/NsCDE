@@ -47,25 +47,49 @@ if [ -r "${FVWM_USERDIR}/WSM.conf" ]; then
    WsmReadBackdrops=$(egrep "^GWM:0:BACKDROPS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmBackdrops="${WsmReadBackdrops##*:}"
 
+   if [ "x$WsmBackdrops" == "x" ]; then
+      WsmBackdrops=1
+   fi
+
    WsmReadHlCurrent=$(egrep "^GWM:0:HLCURRENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmHlCurrent="${WsmReadHlCurrent##*:}"
+
+   if [ "x$WsmHlCurrent" == "x" ]; then
+      WsmHlCurrent=0
+   fi
 
    WsmReadLabelPos=$(egrep "^GWM:0:LABELPOS:(1|2)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmLabelPos="${WsmReadLabelPos##*:}"
 
-   WsmReadBallons=$(egrep "^GWM:0:BALLONS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
-   WsmBallons="${WsmReadBallons##*:}"
+   if [ "x$WsmLabelPos" == "x" ]; then
+      WsmLabelPos=1
+   fi
+
+   WsmReadBalloons=$(egrep "^GWM:0:BALLOONS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmBalloons="${WsmReadBalloons##*:}"
+
+   if [ "x$WsmBalloons" == "x" ]; then
+      WsmBalloons=1
+   fi
 
    WsmReadSkipList=$(egrep "^GWM:0:SKIPLIST:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmSkipList="${WsmReadSkipList##*:}"
 
+   if [ "x$WsmBalloons" == "x" ]; then
+      WsmSkipList=1
+   fi
+
    WsmReadWinContent=$(egrep "^GWM:0:WINCONTENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmWinContent="${WsmReadWinContent##*:}"
+
+   if [ "x$WsmWinContent" == "x" ]; then
+      WsmWinContent=1
+   fi
 else
    WsmBackdrops=1
    WsmHlCurrent=0
    WsmLabelPos=1
-   WsmBallons=1
+   WsmBalloons=1
    WsmSkipList=1
    WsmWinContent=1
 fi
@@ -102,7 +126,7 @@ else
    LabelsPos="LabelsBelow"
 fi
 
-if [ "$WsmBallons" == 1 ]; then
+if [ "$WsmBalloons" == 1 ]; then
    BalloonsType="All"
 else
    BalloonsType="Icon"

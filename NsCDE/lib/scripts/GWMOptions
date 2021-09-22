@@ -288,7 +288,7 @@ Widget 13
    Type CheckBox
    Flags NoReliefString Left
    Value 0
-   Title { Show Window Names In Ballons }
+   Title { Show Window Names In Balloons }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -521,30 +521,30 @@ Widget 18
             End
          End
 
-         # Write Window Ballons Display Choice
-         If $GetBallonsState <> (GetValue 13) Then
+         # Write Window Balloons Display Choice
+         If $GetBalloonsState <> (GetValue 13) Then
          Begin
             Set $RestartGWM = 1
-            If $CreateBallonsConf == 1 Then
+            If $CreateBalloonsConf == 1 Then
             Begin
-               Set $AppendBallonsValueCmd = {echo 'GWM:0:BALLONS:} (GetValue 13) {' >> "} $WSMCONF {"}
-               Set $AppendBallonsValue = (GetOutput $AppendBallonsValueCmd 1 -1)
-               If $AppendBallonsValue <> {} Then
+               Set $AppendBalloonsValueCmd = {echo 'GWM:0:BALLOONS:} (GetValue 13) {' >> "} $WSMCONF {"}
+               Set $AppendBalloonsValue = (GetOutput $AppendBalloonsValueCmd 1 -1)
+               If $AppendBalloonsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendBallonsValue {\\\" appeared while adding ballons display value in WSM.conf." "e11"}
+                     {"Error: Error \\\"} $AppendBalloonsValue {\\\" appeared while adding balloons display value in WSM.conf." "e11"}
                End
             End
             Else
             Begin
-               Set $ChangeBallonsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BALLONS:} $GetBallonsState {/GWM:0:BALLONS:} (GetValue 13) {/g' -f "} $WSMCONF {"}
-               Set $ChangeBallonsValue = (GetOutput $ChangeBallonsValueCmd 1 -1)
-               If $ChangeBallonsValue <> {} Then
+               Set $ChangeBalloonsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BALLOONS:} $GetBalloonsState {/GWM:0:BALLOONS:} (GetValue 13) {/g' -f "} $WSMCONF {"}
+               Set $ChangeBalloonsValue = (GetOutput $ChangeBalloonsValueCmd 1 -1)
+               If $ChangeBalloonsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeBallonsValue {\\\" appeared while changing ballons display value value in WSM.conf." "e12"}
+                     {"Error: Error \\\"} $ChangeBalloonsValue {\\\" appeared while changing balloons display value value in WSM.conf." "e12"}
                End
             End
          End
@@ -740,17 +740,17 @@ Widget 18
             End
          End
 
-         # Window Ballons
-         Set $GetBallonsStateCmd = {egrep "^GWM:0:BALLONS:(0|1)" "} $WSMCONF {" | cut -d: -f4}
-         Set $GetBallonsState = (GetOutput $GetBallonsStateCmd 1 1)
-         If $GetBallonsState == {} Then
+         # Window Balloons
+         Set $GetBalloonsStateCmd = {egrep "^GWM:0:BALLOONS:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetBalloonsState = (GetOutput $GetBalloonsStateCmd 1 1)
+         If $GetBalloonsState == {} Then
          Begin
             ChangeValue 13 1
-            Set $CreateBallonsConf = 1
+            Set $CreateBalloonsConf = 1
          End
          Else
          Begin
-            If $GetBallonsState == 1 Then
+            If $GetBalloonsState == 1 Then
             Begin
                ChangeValue 13 1
             End
