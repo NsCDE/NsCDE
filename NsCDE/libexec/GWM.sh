@@ -242,9 +242,9 @@ else
 fi
 
 if [ "x$WsmWscale" != "x" ]; then
-   Width=$(($WsmWscale * 16.5))
+   Width=$((($WsmWscale * 165) / 10))
 else
-   Width=$(($wfactor * 16.5))
+   Width=$((($wfactor * 165) / 10))
    WsmWscale=$wfactor
 fi
 
@@ -470,6 +470,11 @@ Begin
    ChangeFont 1 \$MenuFont
    ChangeFont 2 \$MenuFont
    ChangeFont 4 \$MenuFont
+
+   # Locale flush right/left workaround
+   ChangeLocaleTitle 1 (GetTitle 1)
+   ChangeLocaleTitle 2 (GetTitle 2)
+   ChangeLocaleTitle 4 (GetTitle 4)
 
    Key Q C 1 1 {Quit}
    Key Help A 4 1 {DisplayHelp}

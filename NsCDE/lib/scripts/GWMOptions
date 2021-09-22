@@ -29,6 +29,24 @@ Begin
    ChangeFont 16 $FontDefault
    ChangeFont 18 $FontDefault
    ChangeFont 19 $FontDefault
+   ChangeFont 20 $FontDefault
+
+   # Locale flush right/left workaround
+   ChangeLocaleTitle 1 (GetTitle 1)
+   ChangeLocaleTitle 3 (GetTitle 3)
+   ChangeLocaleTitle 4 (GetTitle 4)
+   ChangeLocaleTitle 5 (GetTitle 5)
+   ChangeLocaleTitle 6 (GetTitle 6)
+   ChangeLocaleTitle 7 (GetTitle 7)
+   ChangeLocaleTitle 9 (GetTitle 9)
+   ChangeLocaleTitle 11 (GetTitle 11)
+   ChangeLocaleTitle 13 (GetTitle 13)
+   ChangeLocaleTitle 14 (GetTitle 14)
+   ChangeLocaleTitle 15 (GetTitle 15)
+   ChangeLocaleTitle 16 (GetTitle 16)
+   ChangeLocaleTitle 18 (GetTitle 18)
+   ChangeLocaleTitle 19 (GetTitle 19)
+   ChangeLocaleTitle 20 (GetTitle 20)
 
    Set $DefaultPagerRatio = (GetScriptArgument 1)
    If $DefaultPagerRatio == {} Then
@@ -70,7 +88,7 @@ Widget 1
    Position 18 8
    Type ItemDraw
    Flags NoReliefString Left NoFocus
-   Title { Workspaces }
+   Title {  Workspaces  }
    Font "xft:::pixelsize=15"
 End
 
@@ -89,7 +107,7 @@ Widget 3
    Type CheckBox
    Flags NoReliefString Left
    Value 0
-   Title { Show Workspace Backdrops }
+   Title { Show Workspace Backdrops          }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -105,7 +123,7 @@ Widget 4
    Type CheckBox
    Flags NoReliefString Left
    Value 0
-   Title { Highlight Current Workspace Page }
+   Title { Highlight Current Workspace Page            }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -304,7 +322,7 @@ Widget 14
    Type CheckBox
    Flags NoReliefString Left
    Value 1
-   Title { Respect Window Skip List }
+   Title { Respect Window Skip List            }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -341,7 +359,7 @@ Widget 16
    Position 24 456
    Type RadioButton
    Flags NoReliefString Right
-   LocaleTitle {Show Names Inside Windows}
+   LocaleTitle { Show Names Inside Windows}
    Font "xft:::pixelsize=15"
    Colorset 22
    Value 0
