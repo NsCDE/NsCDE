@@ -52,7 +52,7 @@ Begin
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
 
       # Button Menu
-      Set $NameDeskStr = { } $NameDesk {|} (Gettext {Workspace}) { } $NameDesk {:} (Gettext {|Rename|Manage ...|Go to Page ...|Local Pager|Windows ...})
+      Set $NameDeskStr = { } $NameDesk {|} (Gettext {Workspace}) { } $NameDesk {:} (Gettext {|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
 
       ChangeFont $btnname $MainFontRegular
       ChangeTitle $btnname $NameDeskStr
@@ -351,7 +351,7 @@ Property
              Begin
                 Do {Exec exec sed 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' < } $ConfFile { > $FVWM_USERDIR/WSM.conf}
                 Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
-                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Go to Page ...|Local Pager|Windows ...}
+                Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
                 ChangeTitle $CurrDesk $ShiftNewLabel
                 Set $CreateUserConfig = 0
 
@@ -377,7 +377,7 @@ Property
              Else
              Begin
                 Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f } $ConfFile
-                Set $ShiftNewLabel = { } $NewButtonLabel {|Workspace } $NewButtonLabel {:|Rename|Manage ...|Go to Page ...|Local Pager|Windows ...}
+                Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
                 ChangeTitle $CurrDesk $ShiftNewLabel
 
                 If $DeskToRename == {} Then
@@ -464,7 +464,7 @@ Property
              Begin
                 If $DeskToRename <> {} Then
                 Begin
-                   ChangeTitle $DeskToRename $NewDeskName (Gettext {|Rename|Manage ...|Go to Page ...|Local Pager|Windows ...})
+                   ChangeTitle $DeskToRename $NewDeskName (Gettext {|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
                 End
              End
           End
