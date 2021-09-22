@@ -110,36 +110,8 @@ Begin
          ChangeColorset $btnname 46
    End
 
-   # Page navigation with signaling desk and page to widget 40 function 10
-   # Only if WSPPG in WSM.conf is 1 and only if pages are max 2x2, or less
-   Set $WspPageIndicatorCmd = {egrep '^WSPPG:(0|1)' } $ConfFile { | cut -d":" -f2}
-   Set $WspPageIndicator = (GetOutput $WspPageIndicatorCmd 1 -1)
-   If $WspPageIndicator == 1 Then
-   Begin
-      If $PageMatrixX <= 2 Then
-      Begin
-         If $PageMatrixY <= 2 Then
-         Begin
-            # This decides about page indicator on desk button
-            Set $IconOnBtn = 1
-         End
-      End
-   End
-
    Do {f_SendToPGM}
-   If $IconOnBtn == 1 Then
-   Begin
-      Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
-   End
-   Else
-   Begin
-      Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
-      HideWidget 42
-   End
-   If $PagesXY == {1x1} Then
-   Begin
-      HideWidget 42
-   End
+   Do {SendToModule WSM SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
 
    # Shortcut keys for renaming desks
    Key Space C 41 2 {EnterRename}
@@ -791,48 +763,6 @@ Property
                 End
              End
           End
-
-          # Clever way of naming pager icon for changing it without much of if-else
-          If $IconOnBtn == 1 Then
-          Begin
-             Set $IconName = {NsCDE/Wsm_} $PagesXY {_} $CurrPage {.xpm}
-             ChangeIcon 42 $IconName
-          End
-          # Do {f_SendToPGM}
-
-          If $DeskNo < 4 Then
-          Begin
-             If $CurrDesk == {1} Then
-             Begin
-                ChangePosition 42 229 10
-             End
-             If $CurrDesk == {2} Then
-             Begin
-                ChangePosition 42 229 43
-             End
-          End
-          Else
-          Begin
-             If $DeskNo == 4 Then
-             Begin
-                If $CurrDesk == {1} Then
-                Begin
-                   ChangePosition 42 99 8
-                End
-                If $CurrDesk == {2} Then
-                Begin
-                   ChangePosition 42 231 8
-                End
-                If $CurrDesk == {3} Then
-                Begin
-                   ChangePosition 42 99 43
-                End
-                If $CurrDesk == {4} Then
-                Begin
-                   ChangePosition 42 231 43
-                End
-             End
-          End
   End
 End
 
@@ -914,9 +844,6 @@ Property
              ChangeSize 26 84 28
              ChangePosition 25 88 37
              ChangePosition 26 175 37
-
-             # Hide icon page indicator, buttons are now too small for title and icon
-             HideWidget 42
           End
 
           If $DeskNo == 8 Then
@@ -967,9 +894,6 @@ Property
              ShowWidget 26
              ShowWidget 27
              ShowWidget 28
-
-             # Hide icon page indicator, buttons are now too small for title and icon
-             HideWidget 42
           End
        End
 
@@ -1302,19 +1226,3 @@ Property
        End
 End
 
-Widget 42
- Property
- Size 0 0
- Position 90 6
- Type ItemDraw
- Flags NoReliefString NoFocus
- Title {}
- Icon NsCDE/WsmABCD.xpm
- Colorset 52
-    Main
-       Case message of
-       SingleClic :
-       Begin
-          Do {f_MoveCursorAndExec 0 -8 Module FvwmPager -transient WspLocPager}
-       End
-End

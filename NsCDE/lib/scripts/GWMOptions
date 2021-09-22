@@ -58,6 +58,8 @@ Begin
       ChangeMaxValue 8 8
    End
 
+   Set $RestartGWM = 0
+
    Set $WSMCONF = {$FVWM_USERDIR/WSM.conf}
    SendSignal 18 2
 End
@@ -350,7 +352,7 @@ Widget 16
          If (GetValue 16) == 1 Then
          Begin
             ChangeValue 15 0
-            Set $WindowContentValue = 0
+            Set $WindowContentValue = 2
          End
       End
 End
@@ -382,6 +384,7 @@ Widget 18
          # Write Backdrops
          If $GetBackdropsState <> (GetValue 3) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateBackdropsConf == 1 Then
             Begin
                Set $AppendBackdropsValueCmd = {echo 'GWM:0:BACKDROPS:} (GetValue 3) {' >> "} $WSMCONF {"}
@@ -409,6 +412,7 @@ Widget 18
          # Write Current Desk/Page Highlight
          If $GetHlCurrentState <> (GetValue 4) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateHlCurrentConf == 1 Then
             Begin
                Set $AppendHlCurrentValueCmd = {echo 'GWM:0:HLCURRENT:} (GetValue 4) {' >> "} $WSMCONF {"}
@@ -436,6 +440,7 @@ Widget 18
          # Write Workspace Label Position Choice
          If $GetLabelPosState <> $WorkspaceNamesValue Then
          Begin
+            Set $RestartGWM = 1
             If $CreateLabelPosConf == 1 Then
             Begin
                Set $AppendLabelPosValueCmd = {echo 'GWM:0:LABELPOS:} $WorkspaceNamesValue {' >> "} $WSMCONF {"}
@@ -463,6 +468,7 @@ Widget 18
          # Write GWM Rows Choice
          If $GetGwmRowsState <> (GetValue 8) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateGwmRowsConf == 1 Then
             Begin
                Set $AppendGwmRowsValueCmd = {echo 'GWM:} $Ndesks {:ROWS:} (GetValue 8) {' >> "} $WSMCONF {"}
@@ -490,6 +496,7 @@ Widget 18
          # Write GWM Workspace Scale Choice
          If $GetWscaleState <> (GetValue 10) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateWscaleConf == 1 Then
             Begin
                Set $AppendWscaleValueCmd = {echo 'GWM:} $Ndesks {:WSCALE:} (GetValue 10) {' >> "} $WSMCONF {"}
@@ -517,6 +524,7 @@ Widget 18
          # Write Window Ballons Display Choice
          If $GetBallonsState <> (GetValue 13) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateBallonsConf == 1 Then
             Begin
                Set $AppendBallonsValueCmd = {echo 'GWM:0:BALLONS:} (GetValue 13) {' >> "} $WSMCONF {"}
@@ -544,6 +552,7 @@ Widget 18
          # Write Window Skip List Respect Choice
          If $GetSkipListState <> (GetValue 14) Then
          Begin
+            Set $RestartGWM = 1
             If $CreateSkipListConf == 1 Then
             Begin
                Set $AppendSkipListValueCmd = {echo 'GWM:0:SKIPLIST:} (GetValue 14) {' >> "} $WSMCONF {"}
@@ -571,6 +580,7 @@ Widget 18
          # Write Icons Names Windows Display Choice
          If $GetWinContentState <> $WindowContentValue Then
          Begin
+            Set $RestartGWM = 1
             If $CreateWinContentConf == 1 Then
             Begin
                Set $AppendWinContentValueCmd = {echo 'GWM:0:WINCONTENT:} $WindowContentValue {' >> "} $WSMCONF {"}
@@ -593,6 +603,12 @@ Widget 18
                      {"Error: Error \\\"} $ChangeWinContentValue {\\\" appeared while changing window content type value in WSM.conf." "e16"}
                End
             End
+         End
+
+         If $RestartGWM ==  1 Then
+         Begin
+            Do {SendToModule $[FVWM_USERDIR]/tmp/GWM SendString 1 1 Quit}
+            Do {Schedule 500 f_GWM}
          End
 
          # Exit here
@@ -647,6 +663,7 @@ Widget 18
          Begin
             ChangeValue 5 1
             ChangeValue 6 0
+            Set $WorkspaceNamesValue = 1
             Set $CreateLabelPosConf = 1
          End
          Else
@@ -655,11 +672,13 @@ Widget 18
             Begin
                ChangeValue 5 1
                ChangeValue 6 0
+               Set $WorkspaceNamesValue = 1
             End
             Else
             Begin
                ChangeValue 5 0
                ChangeValue 6 1
+               Set $WorkspaceNamesValue = 2
             End
          End
 
@@ -696,7 +715,16 @@ Widget 18
          Set $GetWscaleState = (GetOutput $GetWscaleStateCmd 1 1)
          If $GetWscaleState == {} Then
          Begin
-            ChangeValue 10 15
+            Set $CheckInt = (Add $DefaultPagerRatio 100)
+            If $CheckInt >= 110 Then
+            Begin
+               ChangeValue 10 $DefaultPagerRatio
+            End
+            Else
+            Begin
+               ChangeValue 10 15
+            End
+
             Set $CreateWscaleConf = 1
          End
          Else
@@ -753,12 +781,13 @@ Widget 18
          End
 
          # Window Content
-         Set $GetWinContentStateCmd = {egrep "^GWM:0:WINCONTENT:(0|1)" "} $WSMCONF {" | cut -d: -f4}
+         Set $GetWinContentStateCmd = {egrep "^GWM:0:WINCONTENT:(1|2)" "} $WSMCONF {" | cut -d: -f4}
          Set $GetWinContentState = (GetOutput $GetWinContentStateCmd 1 1)
          If $GetWinContentState == {} Then
          Begin
             ChangeValue 15 1
             ChangeValue 16 0
+            Set $WindowContentValue = 1
             Set $CreateWinContentConf = 1
          End
          Else
@@ -767,11 +796,13 @@ Widget 18
             Begin
                ChangeValue 15 1
                ChangeValue 16 0
+               Set $WindowContentValue = 1
             End
             Else
             Begin
                ChangeValue 15 0
                ChangeValue 16 1
+               Set $WindowContentValue = 2
             End
          End
       End

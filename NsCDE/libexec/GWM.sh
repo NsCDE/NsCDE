@@ -70,44 +70,87 @@ else
    WsmWinContent=1
 fi
 
+if [ "$WsmBackdrops" == 1 ]; then
+   back1=31
+   back2=32
+   back3=33
+   back4=34
+   back5=35
+   back6=36
+   back7=37
+   back8=38
+else
+   back1=40
+   back2=42
+   back3=44
+   back4=46
+   back5=40
+   back6=42
+   back7=44
+   back8=46
+fi
+
+if [ "$WsmHlCurrent" == 0 ]; then
+   DeskHilight="NoDeskHilight"
+else
+   DeskHilight="DeskHilight"
+fi
+
+if [ "$WsmLabelPos" == 1 ]; then
+   LabelsPos="LabelsAbove"
+else
+   LabelsPos="LabelsBelow"
+fi
+
+if [ "$WsmBallons" == 1 ]; then
+   BalloonsType="All"
+else
+   BalloonsType="Icon"
+fi
+
+if [ "$WsmSkipList" == 1 ]; then
+   SkipListConf="*GWMPager: UseSkipList"
+else
+   SkipListConf=""
+fi
+
+if [ "$WsmWinContent" == 1 ]; then
+   MiniIconsConf="*GWMPager: MiniIcons"
+else
+   MiniIconsConf=""
+fi
+
 # Write temporary GWMPager.conf
 mkdir -p ${FVWM_USERDIR}/tmp
 cat <<EOF > ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
-DestroyModuleConfig GWMPager *
+DestroyModuleConfig GWMPager:*
 PipeRead "echo *GWMPager: Geometry \$((\$[infostore.gwm.pgr.width] * \$[infostore.gwm.cols]))x\$((\$[infostore.gwm.pgr.height] * \$[infostore.gwm.rows]))"
 *GWMPager: Rows \$[infostore.gwm.rows]
 *GWMPager: Columns \$[infostore.gwm.cols]
-*GWMPager: Colorset 0 31
-*GWMPager: Colorset 1 32
-*GWMPager: Colorset 2 33
-*GWMPager: Colorset 3 34
-*GWMPager: Colorset 4 35
-*GWMPager: Colorset 5 36
-*GWMPager: Colorset 6 37
-*GWMPager: Colorset 7 38
+*GWMPager: Colorset 0 $back1
+*GWMPager: Colorset 1 $back2
+*GWMPager: Colorset 2 $back3
+*GWMPager: Colorset 3 $back4
+*GWMPager: Colorset 4 $back5
+*GWMPager: Colorset 5 $back6
+*GWMPager: Colorset 6 $back7
+*GWMPager: Colorset 7 $back8
 *GWMPager: HilightColorset * 2
-*GWMPager: NoDeskHilight
+*GWMPager: $DeskHilight
+*GWMPager: $LabelsPos
 *GWMPager: Font Shadow=2 0 C:\$[infostore.font.variable.normal.small]
 *GWMPager: SolidSeparators
 *GWMPager: SmallFont xft:Sans:style=Regular:pixelsize=8
-*GWMPager: Balloons All
+*GWMPager: Balloons $BalloonsType
 *GWMPager: BalloonColorset * 4
 *GWMPager: BalloonFont \$[infostore.font.monospaced.normal.small]
 *GWMPager: BalloonYOffset +1
 *GWMPager: BalloonBorderWidth 1
 *GWMPager: WindowColorsets 1 2
 *GWMPager: WindowBorderWidth 2
-EOF
-
-if [ "$WsmSkipList" == "1" ]; then
-cat <<EOF >> ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
-*GWMPager: UseSkipList
-EOF
-fi
-
-cat <<EOF >> ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
+$SkipListConf
 *GWMPager: Window3DBorders
-*GWMPager: MiniIcons
+$MiniIconsConf
 Test (EnvMatch FVWM_IS_FVWM3 1) *GWMPager: Monitor \$\$\$[monitor.current]
 EOF
 
@@ -474,6 +517,7 @@ Widget 1
          If (LastString) == {Quit} Then
          Begin
             Do {KillModule FvwmPager GWMPager}
+            Do {Schedule 100 SendToModule GWMOptions SendString 19 1 Exit}
             Do {Schedule 250 SendToModule $[FVWM_USERDIR]/tmp/GWM SendString 1 2 QExit}
          End
       End
