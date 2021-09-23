@@ -235,9 +235,9 @@ else
 fi
 
 if [ "x$WsmWscale" != "x" ]; then
-   Width=$((($WsmWscale * 150) / 10))
+   Width=$((($WsmWscale * 152) / 10))
 else
-   Width=$((($wfactor * 150) / 10))
+   Width=$((($wfactor * 152) / 10))
    WsmWscale=$wfactor
 fi
 
@@ -253,196 +253,202 @@ WidgetHelpVisible=""
 
 # Help menu item on the right calculations
 # Just for the sake of having it Motif style.
+WidgetWindowTitle=" Window|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ..."
+WidgetHelpTitle=" Help|GWM Help"
 case ${ndesks}${Rows}${Cols}${WsmWscale} in
+22110|22111|44110|44111|66110|66111|88110|88111)
+   WidgetWindowTitle=" Win.|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ..."
+;;
 22110|22111|22112|22113|44110|44111|44112|44113|66110|66111|66112|66113|88110|88111|88112|88113)
    HelpMenuPadding=""
    WidgetHelpVisible="HideWidget 4"
 ;;
 22114|44114|66114|88114)
    HelpMenuPadding=""
+   WidgetHelpTitle=" H.|GWM Help"
 ;;
 22115|44115|66115|88115)
-   HelpMenuPadding="0"
+   HelpMenuPadding=""
 ;;
 22116|44116|66116|88116)
-   HelpMenuPadding=$(for n in {0..1}; do echo -ne 0; done)
+   HelpMenuPadding=""
 ;;
 22117|44117|66117|88117)
-   HelpMenuPadding=$(for n in {0..3}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..1}; do echo -ne 0; done)
 ;;
 22118|44118|66118|88118)
-   HelpMenuPadding=$(for n in {0..5}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..2}; do echo -ne 0; done)
 ;;
 22119|44119|66119|88119)
-   HelpMenuPadding=$(for n in {0..6}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..4}; do echo -ne 0; done)
 ;;
 22120|44120|66120|88120)
-   HelpMenuPadding=$(for n in {0..8}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..5}; do echo -ne 0; done)
 ;;
 21210|42210|63210|84210)
-   HelpMenuPadding=$(for n in {0..8}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..5}; do echo -ne 0; done)
 ;;
 21211|42211|63211|84211)
-   HelpMenuPadding=$(for n in {0..11}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..8}; do echo -ne 0; done)
 ;;
 21212|42212|63212|84212)
-   HelpMenuPadding=$(for n in {0..14}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..11}; do echo -ne 0; done)
 ;;
 21213|42213|63213|84213)
-   HelpMenuPadding=$(for n in {0..18}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..14}; do echo -ne 0; done)
 ;;
 21214|42214|63214|84214)
-   HelpMenuPadding=$(for n in {0..21}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..17}; do echo -ne 0; done)
 ;;
 21215|42215|63215|84215)
-   HelpMenuPadding=$(for n in {0..24}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..20}; do echo -ne 0; done)
 ;;
 21216|42216|63216|84216)
-   HelpMenuPadding=$(for n in {0..28}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..23}; do echo -ne 0; done)
 ;;
 21217|42217|63217|84217)
-   HelpMenuPadding=$(for n in {0..31}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..26}; do echo -ne 0; done)
 ;;
 21218|42218|63218|84218)
-   HelpMenuPadding=$(for n in {0..34}; do echo -ne 0; done)
-;;
-21219|42219|63219|84219)
-   HelpMenuPadding=$(for n in {0..37}; do echo -ne 0; done)
-;;
-21220|42220|63220|84220)
-   HelpMenuPadding=$(for n in {0..41}; do echo -ne 0; done)
-;;
-41410|82410)
-   HelpMenuPadding=$(for n in {0..41}; do echo -ne 0; done)
-;;
-41411|82411)
-   HelpMenuPadding=$(for n in {0..47}; do echo -ne 0; done)
-;;
-41412|82412)
-   HelpMenuPadding=$(for n in {0..54}; do echo -ne 0; done)
-;;
-41413|82413)
-   HelpMenuPadding=$(for n in {0..60}; do echo -ne 0; done)
-;;
-41414|82414)
-   HelpMenuPadding=$(for n in {0..67}; do echo -ne 0; done)
-;;
-41415|82415)
-   HelpMenuPadding=$(for n in {0..74}; do echo -ne 0; done)
-;;
-41416|82416)
-   HelpMenuPadding=$(for n in {0..80}; do echo -ne 0; done)
-;;
-41417|82417)
-   HelpMenuPadding=$(for n in {0..87}; do echo -ne 0; done)
-;;
-41418|82418)
-   HelpMenuPadding=$(for n in {0..93}; do echo -ne 0; done)
-;;
-41419|82419)
-   HelpMenuPadding=$(for n in {0..100}; do echo -ne 0; done)
-;;
-41420|82420)
-   HelpMenuPadding=$(for n in {0..107}; do echo -ne 0; done)
-;;
-62310)
-   HelpMenuPadding=$(for n in {0..24}; do echo -ne 0; done)
-;;
-62311)
    HelpMenuPadding=$(for n in {0..29}; do echo -ne 0; done)
 ;;
-62312)
-   HelpMenuPadding=$(for n in {0..34}; do echo -ne 0; done)
+21219|42219|63219|84219)
+   HelpMenuPadding=$(for n in {0..32}; do echo -ne 0; done)
 ;;
-62313)
-   HelpMenuPadding=$(for n in {0..39}; do echo -ne 0; done)
+21220|42220|63220|84220)
+   HelpMenuPadding=$(for n in {0..36}; do echo -ne 0; done)
 ;;
-62314)
-   HelpMenuPadding=$(for n in {0..44}; do echo -ne 0; done)
+41410|82410)
+   HelpMenuPadding=$(for n in {0..36}; do echo -ne 0; done)
 ;;
-62315)
-   HelpMenuPadding=$(for n in {0..49}; do echo -ne 0; done)
+41411|82411)
+   HelpMenuPadding=$(for n in {0..42}; do echo -ne 0; done)
 ;;
-62316)
+41412|82412)
+   HelpMenuPadding=$(for n in {0..48}; do echo -ne 0; done)
+;;
+41413|82413)
    HelpMenuPadding=$(for n in {0..54}; do echo -ne 0; done)
 ;;
-62317)
-   HelpMenuPadding=$(for n in {0..59}; do echo -ne 0; done)
+41414|82414)
+   HelpMenuPadding=$(for n in {0..60}; do echo -ne 0; done)
 ;;
-62318)
-   HelpMenuPadding=$(for n in {0..64}; do echo -ne 0; done)
+41415|82415)
+   HelpMenuPadding=$(for n in {0..66}; do echo -ne 0; done)
 ;;
-62319)
-   HelpMenuPadding=$(for n in {0..69}; do echo -ne 0; done)
+41416|82416)
+   HelpMenuPadding=$(for n in {0..72}; do echo -ne 0; done)
 ;;
-62320)
-   HelpMenuPadding=$(for n in {0..74}; do echo -ne 0; done)
+41417|82417)
+   HelpMenuPadding=$(for n in {0..78}; do echo -ne 0; done)
 ;;
-61610)
-   HelpMenuPadding=$(for n in {0..74}; do echo -ne 0; done)
-;;
-61611)
+41418|82418)
    HelpMenuPadding=$(for n in {0..84}; do echo -ne 0; done)
 ;;
+41419|82419)
+   HelpMenuPadding=$(for n in {0..90}; do echo -ne 0; done)
+;;
+41420|82420)
+   HelpMenuPadding=$(for n in {0..96}; do echo -ne 0; done)
+;;
+62310)
+   HelpMenuPadding=$(for n in {0..20}; do echo -ne 0; done)
+;;
+62311)
+   HelpMenuPadding=$(for n in {0..25}; do echo -ne 0; done)
+;;
+62312)
+   HelpMenuPadding=$(for n in {0..29}; do echo -ne 0; done)
+;;
+62313)
+   HelpMenuPadding=$(for n in {0..34}; do echo -ne 0; done)
+;;
+62314)
+   HelpMenuPadding=$(for n in {0..38}; do echo -ne 0; done)
+;;
+62315)
+   HelpMenuPadding=$(for n in {0..43}; do echo -ne 0; done)
+;;
+62316)
+   HelpMenuPadding=$(for n in {0..48}; do echo -ne 0; done)
+;;
+62317)
+   HelpMenuPadding=$(for n in {0..52}; do echo -ne 0; done)
+;;
+62318)
+   HelpMenuPadding=$(for n in {0..57}; do echo -ne 0; done)
+;;
+62319)
+   HelpMenuPadding=$(for n in {0..61}; do echo -ne 0; done)
+;;
+62320)
+   HelpMenuPadding=$(for n in {0..66}; do echo -ne 0; done)
+;;
+61610)
+   HelpMenuPadding=$(for n in {0..66}; do echo -ne 0; done)
+;;
+61611)
+   HelpMenuPadding=$(for n in {0..75}; do echo -ne 0; done)
+;;
 61612)
-   HelpMenuPadding=$(for n in {0..94}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..84}; do echo -ne 0; done)
 ;;
 61613)
-   HelpMenuPadding=$(for n in {0..103}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..93}; do echo -ne 0; done)
 ;;
 61614)
-   HelpMenuPadding=$(for n in {0..113}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..102}; do echo -ne 0; done)
 ;;
 61615)
-   HelpMenuPadding=$(for n in {0..123}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..112}; do echo -ne 0; done)
 ;;
 61616)
-   HelpMenuPadding=$(for n in {0..133}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..121}; do echo -ne 0; done)
 ;;
 61617)
-   HelpMenuPadding=$(for n in {0..143}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..130}; do echo -ne 0; done)
 ;;
 61618)
-   HelpMenuPadding=$(for n in {0..153}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..139}; do echo -ne 0; done)
 ;;
 61619)
-   HelpMenuPadding=$(for n in {0..163}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..148}; do echo -ne 0; done)
 ;;
 61620)
-   HelpMenuPadding=$(for n in {0..173}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..157}; do echo -ne 0; done)
 ;;
 81810)
-   HelpMenuPadding=$(for n in {0..107}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..96}; do echo -ne 0; done)
 ;;
 81811)
-   HelpMenuPadding=$(for n in {0..120}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..108}; do echo -ne 0; done)
 ;;
 81812)
-   HelpMenuPadding=$(for n in {0..133}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..120}; do echo -ne 0; done)
 ;;
 81813)
-   HelpMenuPadding=$(for n in {0..146}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..132}; do echo -ne 0; done)
 ;;
 81814)
-   HelpMenuPadding=$(for n in {0..159}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..144}; do echo -ne 0; done)
 ;;
 81815)
-   HelpMenuPadding=$(for n in {0..172}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..157}; do echo -ne 0; done)
 ;;
 81816)
-   HelpMenuPadding=$(for n in {0..186}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..169}; do echo -ne 0; done)
 ;;
 81817)
-   HelpMenuPadding=$(for n in {0..199}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..181}; do echo -ne 0; done)
 ;;
 81818)
-   HelpMenuPadding=$(for n in {0..212}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..193}; do echo -ne 0; done)
 ;;
 81819)
-   HelpMenuPadding=$(for n in {0..225}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..205}; do echo -ne 0; done)
 ;;
 81820)
-   HelpMenuPadding=$(for n in {0..239}; do echo -ne 0; done)
+   HelpMenuPadding=$(for n in {0..218}; do echo -ne 0; done)
 ;;
 esac
 
@@ -612,7 +618,7 @@ Widget 2
    Position 0 20
    Flags NoReliefString Left
    Value 0
-   Title { Window|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ...}
+   Title {$WidgetWindowTitle}
    Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
@@ -683,7 +689,7 @@ Widget 4
    Position 0 389
    Flags NoReliefString Left
    Value 0
-   Title { Help|GWM Help}
+   Title {$WidgetHelpTitle}
    Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
