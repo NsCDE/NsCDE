@@ -890,6 +890,7 @@ backdrops/Blue.pm
 backdrops/BrickWall.pm
 backdrops/BrokenIce.pm
 backdrops/Bubbles.pm
+backdrops/Buckles.pm
 backdrops/Burl.pm
 backdrops/Canvas.pm
 backdrops/Carpet.pm
