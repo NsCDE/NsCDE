@@ -80,6 +80,11 @@ Begin
 
    Set $WSMCONF = {$FVWM_USERDIR/WSM.conf}
    SendSignal 18 2
+
+   Key Help A 20 1 {DisplayHelp}
+   Key F1 A 20 1 {DisplayHelp}
+   Key Escape A 19 1 {Quit}
+   Key Return A 18 1 {OK}
 End
 
 Widget 1
@@ -181,7 +186,7 @@ Widget 7
    Size 100 0
    Position 22 194
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Number Of Visible Rows }
    Font "xft:::pixelsize=15"
    Colorset 22
@@ -252,7 +257,7 @@ Widget 9
    Size 100 0
    Position 22 256
    Type ItemDraw
-   Flags NoReliefString Left
+   Flags NoReliefString Left NoFocus
    LocaleTitle {Desired Workspace Width (Ratio) }
    Font "xft:::pixelsize=15"
    Colorset 22

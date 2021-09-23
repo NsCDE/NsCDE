@@ -527,6 +527,11 @@ Begin
    ChangeLocaleTitle 4 (GetTitle 4)
 
    Key Q C 1 1 {Quit}
+   Key Escape A 1 1 {Quit}
+   Key M C 1 3 {Manage}
+   Key R C 1 3 {Rename}
+   Key O C 1 3 {Options}
+   Key W C 2 1 {Occupy}
    Key Help A 4 1 {DisplayHelp}
    Key F1 A 4 1 {DisplayHelp}
 End
@@ -607,6 +612,22 @@ Widget 1
             Quit
          End
       End
+      3 :
+      Begin
+         If (LastString) == {Manage} Then
+         Begin
+            Do {f_ToggleFvwmModule FvwmScript WsPgMgr \$[infostore.desknum] \$[infostore.pagematrixX] \$[infostore.pagematrixY]}
+            Do {Schedule 500 All (WsPgMgr, CirculateHit) PlaceAgain}
+         End
+         If (LastString) == {Rename} Then
+         Begin
+            Do {f_GWMRenameWorkspaceHelper}
+         End
+         If (LastString) == {Options} Then
+         Begin
+            Do {Module FvwmScript GWMOptions \$[infostore.glob_pg.desk_scale] \$[infostore.desknum]}
+         End
+      End
 End
 
 Widget 2
@@ -650,6 +671,13 @@ Widget 2
             HideWidget 6
             Do {Prev f_SendToOccupy wsp nogo}
             SendSignal 3 1
+         End
+      End
+      1 :
+      Begin
+         If (LastString) == {Occupy} Then
+         Begin
+            Do {Prev f_SendToOccupy wsp nogo}
          End
       End
 End
