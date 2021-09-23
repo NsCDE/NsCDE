@@ -263,12 +263,9 @@ case ${ndesks}${Rows}${Cols}${WsmWscale} in
    HelpMenuPadding=""
    WidgetHelpVisible="HideWidget 4"
 ;;
-22114|44114|66114|88114)
+22114|44114|66114|88114|22115|44115|66115|88115)
    HelpMenuPadding=""
    WidgetHelpTitle=" H.|GWM Help"
-;;
-22115|44115|66115|88115)
-   HelpMenuPadding=""
 ;;
 22116|44116|66116|88116)
    HelpMenuPadding=""
