@@ -6,16 +6,20 @@
 # Licence: GPLv3
 #
 
+# Defaults and globals
 OLD_LC_ALL="$LC_ALL"
 IFS=" "
+write_gwm_conf=0
+write_gwm_script=0
+prepare_piperead=0
 
 function usage
 {
-   echo "Usage: ${0##*/} -w <vp width> -h <vp height> -f <reduction factor> -d <no of desks> | [ -H ]"
+   echo "Usage: ${0##*/} -w <vp width> -h <vp height> -f <reduction factor> -d <no of desks> [ -c <pager conf file> ] [ -s ] | [ -H ]"
    exit $1
 }
 
-while getopts w:h:f:d:H Option
+while getopts w:h:f:d:c:sH Option
 do
    case $Option in
       w)
@@ -30,11 +34,34 @@ do
       d)
          ndesks=$OPTARG
       ;;
+      c)
+         gwm_pgr_conf_file=$OPTARG
+         write_gwm_conf=1
+      ;;
+      s)
+         write_gwm_script=1
+      ;;
       H)
          usage 0
       ;;
    esac
 done
+
+if [ -z $width ]; then
+   usage 1
+fi
+
+if [ -z $height ]; then
+   usage 1
+fi
+
+if [ -z $wfactor ]; then
+   usage 1
+fi
+
+if [ -z $ndesks ]; then
+   usage 1
+fi
 
 # Parse WSM.conf
 if [ -r "${FVWM_USERDIR}/WSM.conf" ]; then
@@ -144,40 +171,6 @@ else
    MiniIconsConf=""
 fi
 
-# Write temporary GWMPager.conf
-mkdir -p ${FVWM_USERDIR}/tmp
-cat <<EOF > ${FVWM_USERDIR}/tmp/GWMPager.conf 2>/dev/null
-DestroyModuleConfig GWMPager:*
-PipeRead "echo *GWMPager: Geometry \$((\$[infostore.gwm.pgr.width] * \$[infostore.gwm.cols]))x\$((\$[infostore.gwm.pgr.height] * \$[infostore.gwm.rows]))"
-*GWMPager: Rows \$[infostore.gwm.rows]
-*GWMPager: Columns \$[infostore.gwm.cols]
-*GWMPager: Colorset 0 $back1
-*GWMPager: Colorset 1 $back2
-*GWMPager: Colorset 2 $back3
-*GWMPager: Colorset 3 $back4
-*GWMPager: Colorset 4 $back5
-*GWMPager: Colorset 5 $back6
-*GWMPager: Colorset 6 $back7
-*GWMPager: Colorset 7 $back8
-*GWMPager: HilightColorset * 2
-*GWMPager: $DeskHilight
-*GWMPager: $LabelsPos
-*GWMPager: Font Shadow=2 0 C:\$[infostore.font.variable.normal.small]
-*GWMPager: SolidSeparators
-*GWMPager: SmallFont xft:Sans:style=Regular:pixelsize=8
-*GWMPager: Balloons $BalloonsType
-*GWMPager: BalloonColorset * 4
-*GWMPager: BalloonFont \$[infostore.font.monospaced.normal.small]
-*GWMPager: BalloonYOffset +1
-*GWMPager: BalloonBorderWidth 1
-*GWMPager: WindowColorsets 1 2
-*GWMPager: WindowBorderWidth 2
-$SkipListConf
-*GWMPager: Window3DBorders
-$MiniIconsConf
-Test (EnvMatch FVWM_IS_FVWM3 1) *GWMPager: Monitor \$\$\$[monitor.current]
-EOF
-
 if [ "x$WsmRows" != "x" ]; then
    Rows=$WsmRows
    case $ndesks in
@@ -242,13 +235,14 @@ else
 fi
 
 if [ "x$WsmWscale" != "x" ]; then
-   Width=$((($WsmWscale * 165) / 10))
+   Width=$((($WsmWscale * 150) / 10))
 else
-   Width=$((($wfactor * 165) / 10))
+   Width=$((($wfactor * 150) / 10))
    WsmWscale=$wfactor
 fi
 
 Width=${Width%%.*}
+Height=$(((($Width * $height / $width) + 20)))
 
 # Initial calculations
 WindowWidth=$(($Width * $Cols))
@@ -452,8 +446,61 @@ case ${ndesks}${Rows}${Cols}${WsmWscale} in
 ;;
 esac
 
-# Generate script
-cat <<EOF
+function WriteGwmConf
+{
+   # Write temporary GWMPager.conf
+   mkdir -p ${FVWM_USERDIR}/tmp
+
+   if [ "x$gwm_pgr_conf_file" == "x" ]; then
+      gwm_pgr_conf_file="${FVWM_USERDIR}/tmp/GWMPager.conf"
+   fi
+
+   if [ "x$gwm_pgr_conf_file" == "x-" ]; then
+       gwm_pgr_conf_file="/dev/stdout"
+       prepare_piperead=1
+   fi
+
+   cat <<EOF > $gwm_pgr_conf_file 2>/dev/null
+DestroyModuleConfig GWMPager:*
+PipeRead "echo *GWMPager: Geometry \$(($Width * $Cols))x\$(($Height * $Rows))"
+*GWMPager: Rows $Rows
+*GWMPager: Columns $Cols
+*GWMPager: Colorset 0 $back1
+*GWMPager: Colorset 1 $back2
+*GWMPager: Colorset 2 $back3
+*GWMPager: Colorset 3 $back4
+*GWMPager: Colorset 4 $back5
+*GWMPager: Colorset 5 $back6
+*GWMPager: Colorset 6 $back7
+*GWMPager: Colorset 7 $back8
+*GWMPager: HilightColorset * 2
+*GWMPager: $DeskHilight
+*GWMPager: $LabelsPos
+*GWMPager: Font Shadow=2 0 C:\$[infostore.font.variable.normal.small]
+*GWMPager: SolidSeparators
+*GWMPager: SmallFont xft:Sans:style=Regular:pixelsize=8
+*GWMPager: Balloons $BalloonsType
+*GWMPager: BalloonColorset * 4
+*GWMPager: BalloonFont \$[infostore.font.monospaced.normal.small]
+*GWMPager: BalloonYOffset +1
+*GWMPager: BalloonBorderWidth 1
+*GWMPager: WindowColorsets 1 2
+*GWMPager: WindowBorderWidth 2
+$SkipListConf
+*GWMPager: Window3DBorders
+$MiniIconsConf
+Test (EnvMatch FVWM_IS_FVWM3 1) *GWMPager: Monitor \$\$\$[monitor.current]
+EOF
+
+   if (($prepare_piperead == 1)); then
+      echo "Module FvwmPager GWMPager 0 $(($ndesks - 1))" >> "$gwm_pgr_conf_file"
+   fi
+}
+
+function WriteGwmScript
+{
+   # Generate script
+   cat <<EOF
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-GWM}
 WindowLocaleTitle {GWM}
 WindowSize ${WindowWidth} ${WindowHeight}
@@ -461,8 +508,8 @@ Colorset 22
 
 Init
 Begin
-   Do {Schedule 200 Exec exec rm -f $[FVWM_USERDIR]/tmp/GWM}
-   Do {f_PrepareGWMPager $Rows $Cols $Width}
+   Do {Read $[FVWM_USERDIR]/tmp/GWMPager.conf}
+   Do {Schedule 250 Exec exec rm -f "$[FVWM_USERDIR]/tmp/GWM" "$[FVWM_USERDIR]/tmp/GWMPager.conf"}
 
    $WidgetHelpVisible
 
@@ -661,6 +708,14 @@ Widget 6
    Value 1
    Colorset 22
 End
-
 EOF
+}
+
+if (($write_gwm_conf == 1)); then
+   WriteGwmConf
+fi
+
+if (($write_gwm_script == 1)); then
+   WriteGwmScript
+fi
 
