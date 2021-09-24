@@ -44,23 +44,27 @@ M. Z.
         4.6. Font Style Manager
         4.7. Keyboard Style Manager
         4.8. Occupy Workspace, Occupy Page and Occupy Monitor
-        4.9. Window Geometry Manager
-        4.10. Mouse Style Manager
-        4.11. Power Save Manager
-        4.12. Subpanel Manager
-        4.13. Subpanel Settings
-        4.14. System Action Dialog
-        4.15. Sysinfo
-        4.16. Window Style Manager
+        4.9. Graphical Workspace Manager (GWM)
 
-              4.16.1. Configuration Section: Window Behavior
-              4.16.2. Configuration Section: Window Icons
-              4.16.3. Configuration Section: Page Edges
-              4.16.4. Configuration Section: Animation
-              4.16.5. Misc Window Style Manager Functions
+              4.9.1. Graphical Workspace Manager Options
 
-        4.17. Workspaces and Pages Manager (WsPgMgr)
-        4.18. NsCDE Process Manager (NProcMgr)
+        4.10. Window Geometry Manager
+        4.11. Mouse Style Manager
+        4.12. Power Save Manager
+        4.13. Subpanel Manager
+        4.14. Subpanel Settings
+        4.15. System Action Dialog
+        4.16. Sysinfo
+        4.17. Window Style Manager
+
+              4.17.1. Configuration Section: Window Behavior
+              4.17.2. Configuration Section: Window Icons
+              4.17.3. Configuration Section: Page Edges
+              4.17.4. Configuration Section: Animation
+              4.17.5. Misc Window Style Manager Functions
+
+        4.18. Workspaces and Pages Style Manager (WsPgMgr)
+        4.19. NsCDE Process Manager (NProcMgr)
 
    5. Helper Dialogs
 
@@ -97,13 +101,12 @@ M. Z.
         7.19. NsCDE-Menus.conf
         7.20. NsCDE-Mousebindings.conf
         7.21. NsCDE-Pager-WspLocPager.conf
-        7.22. NsCDE-Pager-GlobalPager.conf
-        7.23. NsCDE-Pager-LocalPager.conf
-        7.24. NsCDE-Script.conf
-        7.25. WSM.conf
-        7.26. NsCDE-Style.conf
-        7.27. Subpanels.actions
-        7.28. NsCDE-Subpanels.conf
+        7.22. NsCDE-Pager-LocalPager.conf
+        7.23. NsCDE-Script.conf
+        7.24. WSM.conf
+        7.25. NsCDE-Style.conf
+        7.26. Subpanels.actions
+        7.27. NsCDE-Subpanels.conf
 
    8. System and User NsCDE Tree Layout
 
@@ -300,6 +303,9 @@ M. Z.
      * Occupy Workspace (Occupy) - FvwmScript
      * Occupy Page (Occupy) - FvwmScript
      * Occupy Monitor (Occupy) - FvwmScript
+     * Graphical Workspace Manager (GWM) - FvwmScript
+     * Graphical Workspace Manager Options (GWMOptions) -
+       FvwmScript
      * Window Geometry Manager - FvwmScript
      * Mouse Style Manager (PointerMgr) - FvwmScript
      * Power Save Manager (PowerSaveMgr) - FvwmScript
@@ -308,7 +314,7 @@ M. Z.
      * System Action Dialog (SysActionDialog) - FvwmScript, sudo
      * Sysinfo - FvwmScript, python
      * Window Style Manager (WindowMgr) - FvwmScript, sed, egrep
-     * Workspaces and Pages Manager (WsPgMgr) - FvwmScript
+     * Workspaces and Pages Style Manager (WsPgMgr) - FvwmScript
      * NsCDE Process Manager (NProcMgr) - FvwmScript
 
    Helper Dialogs:
@@ -479,7 +485,7 @@ M. Z.
        3rd mouse button click. In addition to returning back to
        main menu, it can call visual local FVWM pager LocalPager.
        Help menu entry is present too. Mouse button 2 brings
-       Workspaces and Pages Manager configuration.
+       Workspaces and Pages Style Manager configuration.
        Front Panel Lite (upper right) has a small contextual menu
        which calls main action and help.
        Exit button (lower right) has a small contextual menu which
@@ -669,16 +675,16 @@ M. Z.
        of course change active workspace to that where page was
        selected.
      * If $FVWM_USERDIR/WSM.conf value WSPPG is 1, then in 2 or 4
-       desks/buttons mode a small current page indicator is show
+       desks/buttons mode a small current page indicator is shown
        on the right side of the button. In addition to Page
        Manager Icon southwest of the WSM. Disabled (0) by default.
        WSM.conf (system wide: $NSCDE_ROOT/config/WSM.conf) is a
        separate configuration file read by WSM, WsPgMgr and such.
        Not a FVWM configuration file.
      * Number of Workspaces and Pages can be configured with
-       Workspace and Page Manager tool which is called with right
-       pointer click on Front Panel's left button and selected
-       from the menu.
+       Workspace and Pages Style Manager tool which is called with
+       right pointer click on Front Panel's left button and
+       selected from the menu.
 
    State of the buttons is synchronized by FVWM function called
    from FvwmEvent(1) module whenever desks and pages are changed
@@ -831,6 +837,7 @@ M. Z.
      * Beep Style Manager
      * Xscreensaver Demo (setup)
      * Window Style Manager
+     * Workspaces and Pages Style Manager
      * Power Style Manager
      * Startup Style Manager
 
@@ -857,6 +864,7 @@ M. Z.
      * S: Opens Screen Style Manager
      * W: Opens Window Style Manager
      * P: Opens Power Style Manager
+     * P: Opens Workspaces and Pages Style Manager
      * T: Opens Session Style Manager
      __________________________________________________________
 
@@ -1345,7 +1353,118 @@ M. Z.
        Page" or "Occupy Monitor".
      __________________________________________________________
 
-4.9. Window Geometry Manager
+4.9. Graphical Workspace Manager (GWM)
+
+   Same named graphical tool was historically present usually on
+   Sun Solaris. Graphical Workspace Manager of NsCDE is FvwmPager
+   and FvwmScript based version of GWM. It implements most of the
+   functions of CDE GWM which are applicable in NsCDE and FVWM
+   environment. It also implements some NsCDE and FVWM specific
+   options.
+
+   This tool can be called from Root Menu, from
+   Applications->NsCDE submenu of the Workspace Menu, Shift+Tab
+   (second call) and Meta+Alt+Home keybindings, and by default
+   from the 7th Subpanel of the Front Panel (Desktop Settings).
+
+   GWM enables user to see all of the NsCDE workspaces and pages,
+   navigate pages and workspaces with mouse, select windows with
+   middle mouse button, and taking actions on them with Window
+   menu actions.
+
+   With actions on the Workspaces menu, it is possible to:
+
+     * Call Workspaces and Pages Style Manager
+     * Call Workspaces and Pages Style Manager in Rename Workspace
+       mode active with the current workspace selected for rename.
+     * Rearrange all windows on the current page in a cascade
+     * Rearrange all windows on the current page to be tiled
+       vertically
+     * Rearrange all windows on the current page to be tiled
+       horizontally
+     * Open the GWM Options dialog
+     * Exit GWM
+
+   With actions on the Window menu, it is possible to:
+
+     * Iconify and deiconify Window selected with a mouse button 2
+     * Shade or deshade Window selected with a mouse button 2
+     * Close Window
+     * Forcefully Close Window (Terminate Application)
+     * Call Occupy Workspace on the window selected with a mouse
+       button 2
+
+   Help menu contains call for GWM help and manual (this one).
+
+   Key Bindings:
+
+     * Ctrl+M: Calls Workspaces and Pages Style Manager
+     * Ctrl+R: Calls Workspaces and Pages Style Manager in rename
+       workspace mode with the current workspace ready to be
+       renamed
+     * Ctrl+O: Pops up Options window of the GWM
+     * Ctrl+W: Calls Occupy Workspace tool
+     * Escape: Quits GWM.
+     * Ctrl+Q: Quits GWM.
+     * Sun Help and F1: Displays this help text, like Help was
+       pressed.
+     __________________________________________________________
+
+4.9.1. Graphical Workspace Manager Options
+
+   GWM Options dialog can configure some aspects of the GWM itself
+   and GWM pager behaviour. By configuring the later, a stripped
+   down version "GlobalPager" is also configured.
+
+   The following controls can be configured:
+
+     * Show Workspace Backdrops - if unselected, only a CDE
+       palette colors associated to this workspace will be drawin
+       in the workspace pager background. Default is selected.
+     * Highlight Current Workspace Page - current workspace
+       background will be colored in active window color. By
+       default this option is off, it is however used by
+       LocalPager.
+     * Workspace Names Above Workspaces - workspace names are
+       drawn as headers of the workspaces. Default.
+     * Workspace Names Below Workspaces - workspace names are
+       drawn as footers of the workspaces. Not default.
+     * Number Of Visible Rows - when this number is smaller,
+       workspaces are firstly drawn horizontally, then vertically.
+       If this number is 1, workspaces are all in one row. Biggest
+       number possible with current number of workspaces used will
+       produce vertical GWM application with all workspaces in one
+       column.
+     * Desired Workspace Width (Ratio) - number between 10 and 20.
+       By default a calculation is done to show bigger GWM on
+       higher screen resolutions and more compact smaller on lower
+       screen resolutions. If this number is too big, and in
+       combination with one-row or one-column setup with 4 or more
+       workspaces on lower resolutions can produce wider window
+       that cannot fit on the screen. Experimenting is enocouraged
+       however.
+     * Show Window Names In Balloons - weather to show small
+       marker balloons on mouse over windows action in the pager.
+       Default is on.
+     * Respect Window Skip List - do not draw in the pager windows
+       which are part of the FVWM skiplist (like Front Panel,
+       Gkrellm, transients etc ...)
+     * Show Small Icons Inside Windows - if selected (the default)
+       it will draw mini icons of applications present on the
+       workspaces.
+     * Show Names Inside Windows: icon names of the windows will
+       be written in pager windows frames with very small font
+       instead of mini icons. Not default.
+
+   Options Dialog Key Bindings:
+
+     * Escape: Closes GWM Options dialog without taking any action
+     * Return: Takes the action as if OK button was pressed.
+     * Sun Help and F1: Displays this help text, like Help was
+       pressed.
+     __________________________________________________________
+
+4.10. Window Geometry Manager
 
    This tool dialog is called from the left titlebar button menu.
    Or from Meta+F6 key combination from the window context. This
@@ -1386,7 +1505,7 @@ M. Z.
      * Return: Performs action like Save button was pressed.
      __________________________________________________________
 
-4.10. Mouse Style Manager
+4.11. Mouse Style Manager
 
    Mouse Style Manager tool manages pointer - that is, mouse
    settings. It's duties are few more than only xset(1) m command.
@@ -1432,7 +1551,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.11. Power Save Manager
+4.12. Power Save Manager
 
    This tool manages screen DPMS values. It uses standard xset(1)
    to set screen standby, suspend and off times. Values are from 0
@@ -1459,7 +1578,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.12. Subpanel Manager
+4.13. Subpanel Manager
 
    Only in NsCDE. Tool written for managing FvwmButtons transient
    Subpanels which are opened from the Front Panel. It is called
@@ -1530,7 +1649,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.13. Subpanel Settings
+4.14. Subpanel Settings
 
    A small helper dialog with functions to change display name of
    the subpanel, width of the subpanel if titles require wider (or
@@ -1555,7 +1674,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.14. System Action Dialog
+4.15. System Action Dialog
 
    This is the login/logout form with the possibilities to reboot
    or shutdown the system, or change X session. It has also
@@ -1585,7 +1704,7 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.15. Sysinfo
+4.16. Sysinfo
 
    Copy of the Sun Solaris Workstation Information info dialog. It
    doesn't have any functions apart close (Dismiss) button. It's
@@ -1602,7 +1721,7 @@ M. Z.
    Sun Help and F1 displays this documentation.
      __________________________________________________________
 
-4.16. Window Style Manager
+4.17. Window Style Manager
 
    In the beginning, this GUI tool has been exact copy of the CDE
    Window Style Manager. In a way, this was bad. While providing
@@ -1632,7 +1751,7 @@ M. Z.
    is more than enough.
      __________________________________________________________
 
-4.16.1. Configuration Section: Window Behavior
+4.17.1. Configuration Section: Window Behavior
 
      * Only Pointer Inside Window Makes Focus: this configures so
        called MouseFocus as catch-all FVWM Style (*). See fvwm(1)
@@ -1668,7 +1787,7 @@ M. Z.
        MoveThreshold option. 5 pixels is the default.
      __________________________________________________________
 
-4.16.2. Configuration Section: Window Icons
+4.17.2. Configuration Section: Window Icons
 
      * Use Icon Box: if this option is selected, main FVWM
        configuration in NsCDE-Main.conf will spawn FvwmIconBox
@@ -1689,7 +1808,7 @@ M. Z.
      * Maximum Icon Size: in pixels. See IconSIze in fvwm(1).
      __________________________________________________________
 
-4.16.3. Configuration Section: Page Edges
+4.17.3. Configuration Section: Page Edges
 
      * Raise Front Panel On Page Change: as is says, when current
        active page changes, Front Panel will be raised.
@@ -1720,7 +1839,7 @@ M. Z.
        Defaults to 320 pixels.
      __________________________________________________________
 
-4.16.4. Configuration Section: Animation
+4.17.4. Configuration Section: Animation
 
    This tab controls behavior of the FvwmAnimate. See
    FvwmAnimate(1).
@@ -1736,7 +1855,7 @@ M. Z.
        really slower than on host system with the same parameters.
      __________________________________________________________
 
-4.16.5. Misc Window Style Manager Functions
+4.17.5. Misc Window Style Manager Functions
 
    Button Default on the top right edge of the window will read
    system defaults into options and they will be set in permanent
@@ -1752,30 +1871,32 @@ M. Z.
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-4.17. Workspaces and Pages Manager (WsPgMgr)
+4.18. Workspaces and Pages Style Manager (WsPgMgr)
 
-   This tool is specific to NsCDE. It configures three things:
+   This tool is specific to NsCDE. It configures five things:
 
-     * Number of virtual desktops
-     * Names of virtual desktops
-     * Number of virtual pages
+     * Number of the workspaces
+     * Names of the workspaces
+     * Number of virtual pages in the workspaces
+     * Use / Do not use compact Workspace Manager on the Front
+       Panel
+     * Desktop Model on multi head monitor setup (FVWM3 only)
 
    This graphical tool writes files $FVWM_USERDIR/WSM.conf and
-   $FVWM_USERDIR/NsCDE.conf. On the top of the window is graphical
-   representation of the Workspace Manager. Every button when
-   clicked becomes editable and it's name can be changed (pres
-   return on the text field after writing new name). This change
-   will be written immediately WITHOUT pressing OK button. Name of
-   the workspace will be changed across all NsCDE and FVWM (WSM,
-   Occupy Workspace/Page/Monitor, menus etc) after window manager
-   restart is triggered with OK button. In NsCDE, there are 4
-   options for desks: 2, 4, 6 and 8 desks. FVWM itself supports
-   infinite number, but in NsCDE care must be taken about
-   presentation of this desks in various applets and tools.
-   Nevertheless, theoretically even in NsCDE with maximum number
-   of desks multiplied with maximum number of pages, user can get
-   128 work spaces which is probably enough (too much) for 99% of
-   the people.
+   $FVWM_USERDIR/NsCDE.conf. On the top of the window is a
+   graphical representation of the Workspace Manager. When
+   clicked, every button becomes editable field and it's name can
+   be changed (pres return on the text field after writing new
+   name). This change will be written immediately WITHOUT pressing
+   OK button. Name of the workspace will be changed across all
+   NsCDE and FVWM (WSM, Occupy Workspace/Page/Monitor, menus etc).
+   In NsCDE, there are 4 options for workspaces: 2, 4, 6 and 8
+   model. FVWM itself however supports much larger number, but in
+   NsCDE care must be taken about presentation of this workspaces
+   in various applets and tools. Nevertheless, theoretically even
+   in NsCDE with maximum number of workspaces multiplied with
+   maximum number of pages, user can get 128 working screens which
+   is probably enough (too much) for 99% of the people.
 
    Check Box Use Compact Workspace Manager when checked in will
    instruct NsCDE to use Workspace Manager widget in the Front
@@ -1802,12 +1923,12 @@ M. Z.
    OK button saves configuration, restarts window manager and
    quits. Cancel button discards, except if new names of desks are
    set, because this is written immediately, but window manager is
-   not restarted. Workspaces and Pages Manager is called from the
-   Front Panel's small left button menu which is called when that
-   button is clicked with the right pointer button.
+   not restarted. Workspaces and Pages Style Manager is called
+   from the Front Panel's small left button menu which is called
+   when that button is clicked with the right pointer button.
      __________________________________________________________
 
-4.18. NsCDE Process Manager (NProcMgr)
+4.19. NsCDE Process Manager (NProcMgr)
 
    This tool is specific to NsCDE. It manages NsCDE FVWM and rest
    processes, and re-reads given part of FVWM configuration on
@@ -1834,7 +1955,7 @@ M. Z.
 
    Key Bindings:
 
-     * Ctrl+Q: Quits Workspaces and Pages Manager.
+     * Ctrl+Q: Quits Workspaces and Pages Style Manager.
      * Sun Help and F1: Displays this help text.
      * Ctrl+A: Hits Apply button.
      * Ctrl+R: Hits Reread button.
@@ -2234,7 +2355,7 @@ M. Z.
    managed by the Workspace and Pages Manager while menudclicktm
    infostore variable is managed by the Pointer Style Manager. In
    NsCDE.conf, defaults for page edges, focus, icons, and such are
-   defined. See Section 4.16 and fvwm(1) for details. Since this
+   defined. See Section 4.17 and fvwm(1) for details. Since this
    is read by FVWM, user can set in this file local variables and
    additional configuration options if needful, which are not
    covered in other parts of the configuration. While applications
@@ -2513,6 +2634,8 @@ Silent Key Tab A S -
        Front Panel and Local Pager in the middle of the screen if
        enabled. On keyboards without Menu (Compose), combination
        Meta+Alt+U does the same thing
+     * Meta+Alt+Home will spawn or raise and focus if already
+       active - a Graphical Workspace Manager or GWM.
      * Meta+Alt+N Cycles window focus between all windows on the
        current page, raises them, and moves pointer to them
      * Meta+Alt+B Same as Meta+Alt+N but in backward direction
@@ -2532,15 +2655,17 @@ Silent Key Tab A S -
        will disappear soon as it looses a pointer focus, or if
        keybinding is pressed again once, while pager is still
        visible.
-     * Shift+TabCalls visual GlobalPager which shows matrix of
+     * Shift+TabCalls visual GlobalPager, a stripped down version
+       of GWM (Graphical Workspace Manager) which shows matrix of
        pages and workspaces. This keybinding works in any context,
-       but it must be called twice to avoid accidental invocation
-       when Global Pager is visible, calling it second time will
-       add title bar and make it as permanent tool until closed or
-       clicked on border with middle mouse button or closed with a
-       third invocation of this keybinding. In normal
-       semi-transient mode, this pager disappears shortly after
-       losing mouse focus to free space on the screen.
+       but it must be called twice to avoid accidental invocation.
+       When Global Pager is visible, calling it second time will
+       replace it's window with full version of standard GWM
+       window tool until it is not closed with a third invocation
+       of this same keybinding. In stripped down semi-transient
+       mode, this pager, if not called as full GWM, disappears
+       shortly after losing mouse focus to free up space on the
+       screen.
      * Alt+Tab is cycling trough pages of the active page of the
        current workspace from up to down and then right up to down
      * Meta+Tab is cycling trough the all workspaces (desks)
@@ -3044,15 +3169,7 @@ Silent Key Tab A S -
    with a pointer click.
      __________________________________________________________
 
-7.22. NsCDE-Pager-GlobalPager.conf
-
-   Similar, but bigger FvwmPager(1), invoked as Global Pager from
-   right-click popup menu on Workspace Manager buttons, or (by
-   default) with Meta+Escape keybinding this pager is transient
-   and will disappear when used with a pointer click.
-     __________________________________________________________
-
-7.23. NsCDE-Pager-LocalPager.conf
+7.22. NsCDE-Pager-LocalPager.conf
 
    Infostore variable pageraisefp in NsCDE.conf is by default 0.
    If enabled, when active page changes, visual FvwmPager(1) will
@@ -3065,7 +3182,7 @@ Silent Key Tab A S -
    more while pointer is above pager.
      __________________________________________________________
 
-7.24. NsCDE-Script.conf
+7.23. NsCDE-Script.conf
 
    Default for all FvwmScript(1) Module based applications and
    widgets. Script Path, default font and colorset. All this
@@ -3073,7 +3190,7 @@ Silent Key Tab A S -
    should be changed here.
      __________________________________________________________
 
-7.25. WSM.conf
+7.24. WSM.conf
 
    Non-FVWM config file. Here, names of the desks are provided and
    can be changed manually of with Workspace Manager. Names of the
@@ -3085,7 +3202,7 @@ Silent Key Tab A S -
    configuration. Off by default, edit manually.
      __________________________________________________________
 
-7.26. NsCDE-Style.conf
+7.25. NsCDE-Style.conf
 
    Main decoration configuration. Style '*' is applied globally.
    This is the main source of CDE and Motif-like behavior. If user
@@ -3121,7 +3238,7 @@ Silent Key Tab A S -
    can be done with a huge set of Style commands.
      __________________________________________________________
 
-7.27. Subpanels.actions
+7.26. Subpanels.actions
 
    This file is not FVWM configuration file. It is written by the
    Subpanels Manager, Subpanel Settings, or manually with editor,
@@ -3163,7 +3280,7 @@ Silent Key Tab A S -
        arguments.
      __________________________________________________________
 
-7.28. NsCDE-Subpanels.conf
+7.27. NsCDE-Subpanels.conf
 
    This file is generated by the
    $NSCDE_ROOT/libexec/generate_subpanels. It is static in system
@@ -3399,8 +3516,8 @@ Silent Key Tab A S -
        XYZ is here placeholder/example for Style, Functions,
        Keybindings, Init, Menus etc ...
      * NsCDE.conf: managed by Window Style Manager, Workspaces and
-       Pages Manager, Pointer Style Manager and users own editor
-       manually. See the rest of the documentation.
+       Pages Style Manager, Pointer Style Manager and users own
+       editor manually. See the rest of the documentation.
      * WSM.conf: read/written by Workspace and Page Manager, WSM
        and user's favorite editor. Not an FVWM config file. System
        default of this file is $NSCDE_ROOT/config/WSM.conf.
@@ -4116,6 +4233,9 @@ NsCDE
      * Power Style Manager is actually very rare in Style Manager
        across old CDE setups. It manages DPMS setting of the
        monitor with xset(1).
+     * Workspaces and Pager Style Manager is NsCDE custom tool for
+       managing Workspaces and Pages. It is not present in any
+       version of the CDE.
      * Startup Style Manager is available only if NsCDE is started
        under some X Session Manager. It detects supported DE's and
        starts appropriate settings tool for that desktop
@@ -4127,7 +4247,8 @@ NsCDE
        pages and can change current page.
      * Custom keyboard and mouse actions on titlebars, buttons and
        root window.
-     * WsPgMgr - Manage Workspaces and Pages. NsCDE invention.
+     * WsPgMgr - Manage Workspaces and Pages. NsCDE specific tool
+       not present in CDE.
      * GeometryMgr - Manages custom X11 window starting size and
        position.
      * FpLite is measuring system load, not desktop activity. It
@@ -4228,12 +4349,12 @@ export FVWM_BIN=fvwm
    $NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README is not
    needed anymore. As in the future more desktop layouts are
    planned by FVWM3 developers, this setting has it's GUI control
-   usable on FVWM3 in the Workspaces and Pages Manager. NsCDE
-   provides InfoStoreAdd desktopconfiguration directive in the
-   $FVWM_USERDIR/NsCDE.conf when FVWM3 is used. This value can be
-   edited manually to contain "global", "per-monitor" or "shared"
-   value, or Workspaces and Pages Manager can be used for that
-   task.
+   usable on FVWM3 in the Workspaces and Pages Style Manager.
+   NsCDE provides InfoStoreAdd desktopconfiguration directive in
+   the $FVWM_USERDIR/NsCDE.conf when FVWM3 is used. This value can
+   be edited manually to contain "global", "per-monitor" or
+   "shared" value, or Workspaces and Pages Manager can be used for
+   that task.
 
    Third difference between NsCDE under FVWM2 and FVWM3 is
    logging. While FVWM2 logged all it's actions on X server's

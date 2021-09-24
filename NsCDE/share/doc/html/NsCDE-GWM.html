@@ -1,0 +1,114 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.9. Graphical Workspace Manager (GWM)</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-Occupy.html" title="4.8. Occupy Workspace, Occupy Page and Occupy Monitor"><link rel="next" href="NsCDE-GeometryMgr.html" title="4.10. Window Geometry Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.9. Graphical Workspace Manager (GWM)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Occupy.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-GeometryMgr.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-GWM"></a>4.9. Graphical Workspace Manager (GWM)</h3></div></div></div><p>
+Same named graphical tool was historically present usually on Sun Solaris. Graphical Workspace Manager
+of NsCDE is FvwmPager and FvwmScript based version of GWM. It implements most of the functions of CDE
+GWM which are applicable in NsCDE and FVWM environment. It also implements some NsCDE and FVWM specific
+options.
+</p><p>
+This tool can be called from Root Menu, from Applications-&gt;NsCDE submenu of the Workspace Menu,
+<span class="keysym">Shift+Tab</span> (second call) and <span class="keysym">Meta+Alt+Home</span> keybindings, and by default
+from the 7th Subpanel of the Front Panel (Desktop Settings).
+</p><p>
+GWM enables user to see all of the NsCDE workspaces and pages, navigate pages and workspaces with
+mouse, select windows with middle mouse button, and taking actions on them with Window menu actions.
+</p><p>
+With actions on the Workspaces menu, it is possible to:
+</p><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Call Workspaces and Pages Style Manager
+</p></li><li class="listitem"><p>
+Call Workspaces and Pages Style Manager in Rename Workspace mode active with the current workspace
+selected for rename.
+</p></li><li class="listitem"><p>
+Rearrange all windows on the current page in a cascade
+</p></li><li class="listitem"><p>
+Rearrange all windows on the current page to be tiled vertically
+</p></li><li class="listitem"><p>
+Rearrange all windows on the current page to be tiled horizontally
+</p></li><li class="listitem"><p>
+Open the GWM Options dialog
+</p></li><li class="listitem"><p>
+Exit GWM
+</p></li></ul></div><p>
+</p><p>
+With actions on the Window menu, it is possible to:
+</p><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Iconify and deiconify Window selected with a mouse button 2
+</p></li><li class="listitem"><p>
+Shade or deshade Window selected with a mouse button 2
+</p></li><li class="listitem"><p>
+Close Window
+</p></li><li class="listitem"><p>
+Forcefully Close Window (Terminate Application)
+</p></li><li class="listitem"><p>
+Call Occupy Workspace on the window selected with a mouse button 2
+</p></li></ul></div><p>
+</p><p>
+Help menu contains call for GWM help and manual (this one).
+</p><p>
+Key Bindings:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<span class="keysym">Ctrl+M</span>: Calls Workspaces and Pages Style Manager
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+R</span>: Calls Workspaces and Pages Style Manager in rename workspace
+mode with the current workspace ready to be renamed
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+O</span>: Pops up Options window of the GWM
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+W</span>: Calls Occupy Workspace tool
+</p></li><li class="listitem"><p>
+<span class="keysym">Escape</span>: Quits GWM.
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Q</span>: Quits GWM.
+</p></li><li class="listitem"><p>
+<span class="keysym">Sun Help and F1</span>: Displays this help text, like <span class="guibutton">Help</span> was pressed.
+</p></li></ul></div><p>
+</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="NsCDE-GWMOptions"></a>4.9.1. Graphical Workspace Manager Options</h4></div></div></div><p>
+GWM Options dialog can configure some aspects of the GWM itself and GWM pager behaviour.
+By configuring the later, a stripped down version "GlobalPager" is also configured.
+</p><p>
+The following controls can be configured:
+</p><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Show Workspace Backdrops - if unselected, only a CDE palette colors associated to this
+workspace will be drawin in the workspace pager background. Default is selected.
+</p></li><li class="listitem"><p>
+Highlight Current Workspace Page - current workspace background will be colored in active
+window color. By default this option is off, it is however used by LocalPager.
+</p></li><li class="listitem"><p>
+Workspace Names Above Workspaces - workspace names are drawn as headers of the workspaces. Default.
+</p></li><li class="listitem"><p>
+Workspace Names Below Workspaces - workspace names are drawn as footers of the workspaces. Not default.
+</p></li><li class="listitem"><p>
+Number Of Visible Rows - when this number is smaller, workspaces are firstly drawn horizontally, then
+vertically. If this number is 1, workspaces are all in one row. Biggest number possible with current
+number of workspaces used will produce vertical GWM application with all workspaces in one column.
+</p></li><li class="listitem"><p>
+Desired Workspace Width (Ratio) - number between 10 and 20. By default a calculation is done to show
+bigger GWM on higher screen resolutions and more compact smaller on lower screen resolutions. If this
+number is too big, and in combination with one-row or one-column setup with 4 or more workspaces on
+lower resolutions can produce wider window that cannot fit on the screen. Experimenting is
+enocouraged however.
+</p></li><li class="listitem"><p>
+Show Window Names In Balloons - weather to show small marker balloons on mouse over windows action
+in the pager. Default is on.
+</p></li><li class="listitem"><p>
+Respect Window Skip List - do not draw in the pager windows which are part of the FVWM skiplist
+(like Front Panel, Gkrellm, transients etc ...)
+</p></li><li class="listitem"><p>
+Show Small Icons Inside Windows - if selected (the default) it will draw mini icons of applications
+present on the workspaces.
+</p></li><li class="listitem"><p>
+Show Names Inside Windows: icon names of the windows will be written in pager windows frames with
+very small font instead of mini icons. Not default.
+</p></li></ul></div><p>
+</p><p>
+Options Dialog Key Bindings:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<span class="keysym">Escape</span>: Closes GWM Options dialog without taking any action
+</p></li><li class="listitem"><p>
+<span class="keysym">Return</span>: Takes the action as if <span class="guibutton">OK</span> button was pressed.
+</p></li><li class="listitem"><p>
+<span class="keysym">Sun Help and F1</span>: Displays this help text, like <span class="guibutton">Help</span> was pressed.
+</p></li></ul></div><p>
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Occupy.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-GeometryMgr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4.8. Occupy Workspace, Occupy Page and Occupy Monitor </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4.10. Window Geometry Manager</td></tr></table></div></body></html>

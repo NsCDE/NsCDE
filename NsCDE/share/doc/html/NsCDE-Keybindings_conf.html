@@ -65,6 +65,9 @@ For explanation what is the context, and what modifier, see FVWM explanation
   <span class="keysym">Menu (Compose)</span>, combination <span class="keysym">Meta+Alt+U</span>
   does the same thing
 </p></li><li class="listitem"><p>
+  <span class="keysym">Meta+Alt+Home</span> will spawn or raise and focus if already active - a Graphical
+  Workspace Manager or GWM.
+</p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+N</span> Cycles window focus between all
   windows on the current page, raises them, and moves pointer to them
 </p></li><li class="listitem"><p>
@@ -89,12 +92,13 @@ Key <span class="keysym">Meta+Alt+BackSpace</span> will give a focus to the prev
   <span class="keysym">Shift+BackSpace</span> If pressed twice in a time frame of two seconds will call LocalPager in any context.
   This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again once, while pager is still visible.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager which shows matrix of pages and workspaces.
-This keybinding works in any context, but it must be called twice to avoid accidental invocation
-when Global Pager is visible, calling it second time will add title bar and make it as permanent
-tool until closed or clicked on border with middle mouse button or closed with a third invocation
-of this keybinding. In normal semi-transient mode, this pager disappears shortly after losing
-mouse focus to free space on the screen.
+  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager, a stripped down version of GWM
+(Graphical Workspace Manager) which shows matrix of pages and workspaces.
+This keybinding works in any context, but it must be called twice to avoid accidental invocation.
+When Global Pager is visible, calling it second time will replace it's window with full version of
+standard GWM window tool until it is not closed with a third invocation of this same keybinding.
+In stripped down semi-transient mode, this pager, if not called as full GWM, disappears shortly
+after losing mouse focus to free up space on the screen.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+Tab</span> is cycling trough pages of the active page of the current workspace
   from up to down and then right up to down
@@ -213,7 +217,7 @@ Pressend second time just once, it will dismiss Local Pager
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F3</span> Repositions the window according to saved geometry
-  (see <a class="link" href="NsCDE-GeometryMgr.html" title="4.9. Window Geometry Manager">Geometry Manager</a>), or if there
+  (see <a class="link" href="NsCDE-GeometryMgr.html" title="4.10. Window Geometry Manager">Geometry Manager</a>), or if there
   is no record for a window in <code class="filename">GeoDB.ini</code>, places again
   window with FVWM <span class="command"><strong>PlaceAgain</strong></span> command
     </p><p>
