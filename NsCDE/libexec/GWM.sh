@@ -102,7 +102,7 @@ if [ -r "${FVWM_USERDIR}/WSM.conf" ]; then
    WsmReadSkipList=$(egrep "^GWM:0:SKIPLIST:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
    WsmSkipList="${WsmReadSkipList##*:}"
 
-   if [ "x$WsmBalloons" == "x" ]; then
+   if [ "x$WsmSkipList" == "x" ]; then
       WsmSkipList=1
    fi
 
