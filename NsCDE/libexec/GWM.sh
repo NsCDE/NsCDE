@@ -254,7 +254,7 @@ WidgetHelpVisible=""
 # Help menu item on the right calculations
 # Just for the sake of having it Motif style.
 WidgetWindowTitle=" Window|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ..."
-WidgetHelpTitle=" Help|GWM Help"
+WidgetHelpTitle=" Help|GWM Key Bindings|GWM Help"
 case ${ndesks}${Rows}${Cols}${WsmWscale} in
 22110|22111|44110|44111|66110|66111|88110|88111)
    WidgetWindowTitle=" Win.|(De)Iconify|(De)Shade|Close Window|Terminate Application|Occupy Workspace ..."
@@ -265,7 +265,7 @@ case ${ndesks}${Rows}${Cols}${WsmWscale} in
 ;;
 22114|44114|66114|88114|22115|44115|66115|88115)
    HelpMenuPadding=""
-   WidgetHelpTitle=" H.|GWM Help"
+   WidgetHelpTitle=" H.|GWM Key Bindings|GWM Help"
 ;;
 22116|44116|66116|88116)
    HelpMenuPadding=""
@@ -724,7 +724,18 @@ Widget 4
       End
       1 :
       Begin
-         Do {f_DisplayURL "\$[gt.GWM]" \$[NSCDE_ROOT]/share/doc/html/NsCDE-GWM.html}
+         If (GetValue 4) == 1 Then
+         Begin
+            HideWidget 6
+            Do {f_NotifierFromFile gwmkbd "$[gt.GWM Key Bindings]" "$[gt.Dismiss]" "NsCDE/Info.xpm" "$NSCDE_ROOT/share/doc/help/GWM_Keybindings.help" "NsCDE-GWM"}
+            SendSignal 3 1
+         End
+         If (GetValue 4) == 2 Then
+         Begin
+            HideWidget 6
+            Do {f_DisplayURL "\$[gt.GWM]" \$[NSCDE_ROOT]/share/doc/html/NsCDE-GWM.html}
+            SendSignal 3 1
+         End
       End
 End
 
@@ -735,7 +746,7 @@ Widget 6
    Type SwallowExec
    Title {GWMPager}
    SwallowExec {Module FvwmPager GWMPager 0 \$[infostore.fvwmdesknum]}
-   Flags NoReliefString, Center
+   Flags NoReliefString Center
    Value 1
    Colorset 22
 End

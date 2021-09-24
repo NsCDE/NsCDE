@@ -11,7 +11,7 @@ IFS=" "
 
 function usage
 {
-   echo "Usage: ${0##*/} -t <title> -b <buttontitle> -i <icon> [ -s <textstr> | -f <file> ] [ -h ]"
+   echo "Usage: ${0##*/} -t <title> -b <buttontitle> -i <icon> [ -s <textstr> | -f <file> ] [ -l <catalog name> ] [ -h ]"
    exit $1
 }
 
@@ -53,7 +53,7 @@ else
 fi
 LC_ALL="$OLD_LC_ALL"
 
-while getopts t:b:i:s:f:h Option
+while getopts t:b:i:s:f:l:h Option
 do
    case $Option in
       t)
@@ -81,12 +81,17 @@ do
          fi
          sh_WrappedText=$(echo "$sh_TextString" | fold -w $FoldFactor -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
+         title_style="Title"
       ;;
       f)
          sh_TextFile="$OPTARG"
          sh_TextString=$(<"$sh_TextFile")
          sh_WrappedText=$(echo "$sh_TextString" | fold -w $FoldFactor -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
+         title_style="LocaleTitle"
+      ;;
+      l)
+         CatalogName="$OPTARG"
       ;;
       h)
          usage 0
@@ -120,8 +125,13 @@ else
 fi
 LC_ALL="$OLD_LC_ALL"
 
-cat <<EOF
+if [ "$title_style" == "LocaleTitle" ]; then
+  cat <<EOF
+UseGettext {$NSCDE_ROOT/share/locale;$CatalogName}
+EOF
+fi
 
+cat <<EOF
 WindowTitle {${sh_WindowTitle:=Notice}}
 WindowSize $ScriptWidth $ScriptHeight
 Colorset 22
@@ -152,6 +162,9 @@ WidgetHeightStart=16
 linecnt=0
 echo "$sh_WrappedText" | while read line
 do
+   if [ "x$line" == "x" ] && [ "$title_style" = "LocaleTitle" ]; then
+      line=" "
+   fi
    WidgetHeight=$(( $WidgetHeightStart + $linecnt ))
 
 cat <<EOF
@@ -161,7 +174,7 @@ Widget $WidgetNum
    Position 68 $WidgetHeight
    Type ItemDraw
    Flags NoReliefString NoFocus Left
-   Title {$line}
+   $title_style {$line}
    Main
       Case message of
       SingleClic :
