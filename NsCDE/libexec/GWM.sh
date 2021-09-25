@@ -727,7 +727,7 @@ Widget 4
          If (GetValue 4) == 1 Then
          Begin
             HideWidget 6
-            Do {f_NotifierFromFile gwmkbd "$[gt.GWM Key Bindings]" "$[gt.Dismiss]" "NsCDE/Info.xpm" "$NSCDE_ROOT/share/doc/help/GWM_Keybindings.help" "NsCDE-GWM"}
+            Do {Schedule 250 f_NotifierFromFile gwmkbd "$[gt.GWM Key Bindings]" "$[gt.Dismiss]" "NsCDE/Info.xpm" "$NSCDE_ROOT/share/doc/help/GWM_Keybindings.help" "NsCDE-GWM"}
             SendSignal 3 1
          End
          If (GetValue 4) == 2 Then

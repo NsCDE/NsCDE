@@ -174,22 +174,30 @@ Widget 4
    Property
    Type Menu
    Position 0 0
-   Flags NoReliefString Right
+   Flags NoReliefString Left
    Value 0
-   LocaleTitle {Help|Style Manager Help}
+   LocaleTitle {Help|Style Manager Key Bindings|Style Manager Help}
    Font "xft:::pixelsize=18:charwidth=9.8"
    Main
       Case message of
       SingleClic :
       Begin
-         If (GetValue 4) == 1 Then
+         If (GetValue 4) == 2 Then
          Begin
             SendSignal 4 1
+         End
+         If (GetValue 4) == 1 Then
+         Begin
+            SendSignal 4 2
          End
       End
       1 :
       Begin
          Do {f_DisplayURL "$[gt.Style Manager]" $[NSCDE_ROOT]/share/doc/html/NsCDE-GUI-Tools.html}
+      End
+      2 :
+      Begin
+         Do {Schedule 250 f_NotifierFromFile stylemgrkbd "$[gt.Style Manager Key Bindings]" "$[gt.Dismiss]" "NsCDE/Info.xpm" "$NSCDE_ROOT/share/doc/help/StyleMgr_Keybindings.help" "NsCDE-StyleMgr"}
       End
 End
 
