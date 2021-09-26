@@ -492,7 +492,25 @@ function setup_nscde
          $NSCDE_ROOT/bin/ised -c 's/InfoStoreAdd desklastpage 1/InfoStoreAdd desklastpage 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       fi
 
-      for filemgr in pcmanfm-qt pcmanfm krusader caja nemo thunar dolphin nautilus
+      if [ "x$FVWM_IS_FVWM3" == "x1" ]; then
+         locale_enable_fvwm3_default_logging_question=$(gettext -s "Do you want to enable FVWM3 logging by default?")
+         echo -ne "$locale_enable_fvwm3_default_logging_question (y|n)[y] \c"
+         read ans
+         if [ "x$ans" == "x" ]; then
+            ans="y"
+         fi
+         if [ "x$ans" == "xy" ]; then
+            echo "${locale_enabling}: fvwm3_default_logging --> 1"
+            $NSCDE_ROOT/bin/ised -c 's/# InfoStoreAdd fvwm3_default_logging 1/InfoStoreAdd fvwm3_default_logging 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+         elif [ "x$ans" == "xn" ]; then
+            echo "${locale_not_enabling} fvwm3_default_logging --> 0"
+         else
+            gettext -s "Answer not understood."
+            echo "$locale_not_enabling fvwm3_default_logging --> 0"
+         fi
+      fi
+
+      for filemgr in spacefm pcmanfm-qt pcmanfm krusader caja nemo thunar dolphin nautilus
       do
          whence -q $filemgr
          if (($? == 0)); then

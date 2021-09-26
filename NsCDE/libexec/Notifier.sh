@@ -88,7 +88,11 @@ do
          sh_TextString=$(<"$sh_TextFile")
          sh_WrappedText=$(echo "$sh_TextString" | fold -w $FoldFactor -s)
          sh_WrappedTextLines=$(echo "$sh_WrappedText" | wc -l)
-         title_style="LocaleTitle"
+         if [ "x$CatalogName" != "x" ]; then
+            title_style="LocaleTitle"
+         else
+            title_style="Title"
+         fi
       ;;
       l)
          CatalogName="$OPTARG"
@@ -132,7 +136,7 @@ EOF
 fi
 
 cat <<EOF
-WindowTitle {${sh_WindowTitle:=Notice}}
+WindowLocaleTitle {${sh_WindowTitle:=Notice}}
 WindowSize $ScriptWidth $ScriptHeight
 Colorset 22
 
