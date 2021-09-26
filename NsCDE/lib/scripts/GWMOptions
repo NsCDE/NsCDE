@@ -410,24 +410,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateBackdropsConf == 1 Then
             Begin
-               Set $AppendBackdropsValueCmd = {echo 'GWM:0:BACKDROPS:} (GetValue 3) {' >> "} $WSMCONF {"}
+               Set $AppendBackdropsValueCmd = {echo 'GWM:0:BACKDROPS:} (GetValue 3) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendBackdropsValue = (GetOutput $AppendBackdropsValueCmd 1 -1)
                If $AppendBackdropsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendBackdropsValue {\\\" appeared while appending backdrops value in WSM.conf." "e1"}
+                     {"Error \\\"} $AppendBackdropsValue {\\\" emerged while appending backdrops value in } $WSMCONF {." "e1"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeBackdropsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BACKDROPS:} $GetBackdropsState {/GWM:0:BACKDROPS:} (GetValue 3) {/g' -f "} $WSMCONF {"}
+               Set $ChangeBackdropsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BACKDROPS:} $GetBackdropsState {/GWM:0:BACKDROPS:} (GetValue 3) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeBackdropsValue = (GetOutput $ChangeBackdropsValueCmd 1 -1)
                If $ChangeBackdropsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeBackdropsValue {\\\" appeared while changing backdrops value in WSM.conf." "e2"}
+                     {"Error \\\"} $ChangeBackdropsValue {\\\" emerged while changing backdrops value in } $WSMCONF {." "e2"}
+                  Quit
                End
             End
          End
@@ -438,24 +440,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateHlCurrentConf == 1 Then
             Begin
-               Set $AppendHlCurrentValueCmd = {echo 'GWM:0:HLCURRENT:} (GetValue 4) {' >> "} $WSMCONF {"}
+               Set $AppendHlCurrentValueCmd = {echo 'GWM:0:HLCURRENT:} (GetValue 4) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendHlCurrentValue = (GetOutput $AppendHlCurrentValueCmd 1 -1)
                If $AppendHlCurrentValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendHlCurrentValue {\\\" appeared while appending highlight value in WSM.conf." "e3"}
+                     {"Error \\\"} $AppendHlCurrentValue {\\\" emerged while appending highlight value in } $WSMCONF {." "e3"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeHlCurrentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:HLCURRENT:} $GetHlCurrentState {/GWM:0:HLCURRENT:} (GetValue 4) {/g' -f "} $WSMCONF {"}
+               Set $ChangeHlCurrentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:HLCURRENT:} $GetHlCurrentState {/GWM:0:HLCURRENT:} (GetValue 4) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeHlCurrentValue = (GetOutput $ChangeHlCurrentValueCmd 1 -1)
                If $ChangeHlCurrentValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeHlCurrentValue {\\\" appeared while changing highlight value in WSM.conf." "e4"}
+                     {"Error \\\"} $ChangeHlCurrentValue {\\\" emerged while changing highlight value in } $WSMCONF {." "e4"}
+                  Quit
                End
             End
          End
@@ -466,24 +470,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateLabelPosConf == 1 Then
             Begin
-               Set $AppendLabelPosValueCmd = {echo 'GWM:0:LABELPOS:} $WorkspaceNamesValue {' >> "} $WSMCONF {"}
+               Set $AppendLabelPosValueCmd = {echo 'GWM:0:LABELPOS:} $WorkspaceNamesValue {' >> "} $WSMCONF {" 2>&1}
                Set $AppendLabelPosValue = (GetOutput $AppendLabelPosValueCmd 1 -1)
                If $AppendLabelPosValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendLabelPosValue {\\\" appeared while appending workspace name label value in WSM.conf." "e5"}
+                     {"Error \\\"} $AppendLabelPosValue {\\\" emerged while appending workspace name label value in } $WSMCONF {." "e5"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeLabelPosValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:LABELPOS:} $GetLabelPosState {/GWM:0:LABELPOS:} $WorkspaceNamesValue {/g' -f "} $WSMCONF {"}
+               Set $ChangeLabelPosValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:LABELPOS:} $GetLabelPosState {/GWM:0:LABELPOS:} $WorkspaceNamesValue {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeLabelPosValue = (GetOutput $ChangeLabelPosValueCmd 1 -1)
                If $ChangeLabelPosValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeLabelPosValue {\\\" appeared while changing workspace name label value in WSM.conf." "e6"}
+                     {"Error \\\"} $ChangeLabelPosValue {\\\" emerged while changing workspace name label value in } $WSMCONF {." "e6"}
+                  Quit
                End
             End
          End
@@ -494,24 +500,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateGwmRowsConf == 1 Then
             Begin
-               Set $AppendGwmRowsValueCmd = {echo 'GWM:} $Ndesks {:ROWS:} (GetValue 8) {' >> "} $WSMCONF {"}
+               Set $AppendGwmRowsValueCmd = {echo 'GWM:} $Ndesks {:ROWS:} (GetValue 8) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendGwmRowsValue = (GetOutput $AppendGwmRowsValueCmd 1 -1)
                If $AppendGwmRowsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendGwmRowsValue {\\\" appeared while appending GWM rows value in WSM.conf." "e7"}
+                     {"Error \\\"} $AppendGwmRowsValue {\\\" emerged while appending GWM rows value in } $WSMCONF {." "e7"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeGwmRowsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:ROWS:} $GetGwmRowsState {/GWM:} $Ndesks {:ROWS:} (GetValue 8) {/g' -f "} $WSMCONF {"}
+               Set $ChangeGwmRowsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:ROWS:} $GetGwmRowsState {/GWM:} $Ndesks {:ROWS:} (GetValue 8) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeGwmRowsValue = (GetOutput $ChangeGwmRowsValueCmd 1 -1)
                If $ChangeGwmRowsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeGwmRowsValue {\\\" appeared while changing GWM rows value in WSM.conf." "e8"}
+                     {"Error \\\"} $ChangeGwmRowsValue {\\\" emerged while changing GWM rows value in } $WSMCONF {." "e8"}
+                  Quit
                End
             End
          End
@@ -522,24 +530,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateWscaleConf == 1 Then
             Begin
-               Set $AppendWscaleValueCmd = {echo 'GWM:} $Ndesks {:WSCALE:} (GetValue 10) {' >> "} $WSMCONF {"}
+               Set $AppendWscaleValueCmd = {echo 'GWM:} $Ndesks {:WSCALE:} (GetValue 10) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendWscaleValue = (GetOutput $AppendWscaleValueCmd 1 -1)
                If $AppendWscaleValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendWscaleValue {\\\" appeared while adding GWM width scale value in WSM.conf." "e9"}
+                     {"Error \\\"} $AppendWscaleValue {\\\" emerged while adding GWM width scale value in } $WSMCONF {." "e9"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeWscaleValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:WSCALE:} $GetWscaleState {/GWM:} $Ndesks {:WSCALE:} (GetValue 10) {/g' -f "} $WSMCONF {"}
+               Set $ChangeWscaleValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:} $Ndesks {:WSCALE:} $GetWscaleState {/GWM:} $Ndesks {:WSCALE:} (GetValue 10) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeWscaleValue = (GetOutput $ChangeWscaleValueCmd 1 -1)
                If $ChangeWscaleValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeWscaleValue {\\\" appeared while changing GWM width scale value in WSM.conf." "e10"}
+                     {"Error \\\"} $ChangeWscaleValue {\\\" emerged while changing GWM width scale value in } $WSMCONF {." "e10"}
+                  Quit
                End
             End
          End
@@ -550,24 +560,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateBalloonsConf == 1 Then
             Begin
-               Set $AppendBalloonsValueCmd = {echo 'GWM:0:BALLOONS:} (GetValue 13) {' >> "} $WSMCONF {"}
+               Set $AppendBalloonsValueCmd = {echo 'GWM:0:BALLOONS:} (GetValue 13) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendBalloonsValue = (GetOutput $AppendBalloonsValueCmd 1 -1)
                If $AppendBalloonsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendBalloonsValue {\\\" appeared while adding balloons display value in WSM.conf." "e11"}
+                     {"Error \\\"} $AppendBalloonsValue {\\\" emerged while adding balloons display value in } $WSMCONF {." "e11"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeBalloonsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BALLOONS:} $GetBalloonsState {/GWM:0:BALLOONS:} (GetValue 13) {/g' -f "} $WSMCONF {"}
+               Set $ChangeBalloonsValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:BALLOONS:} $GetBalloonsState {/GWM:0:BALLOONS:} (GetValue 13) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeBalloonsValue = (GetOutput $ChangeBalloonsValueCmd 1 -1)
                If $ChangeBalloonsValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeBalloonsValue {\\\" appeared while changing balloons display value value in WSM.conf." "e12"}
+                     {"Error \\\"} $ChangeBalloonsValue {\\\" emerged while changing balloons display value value in } $WSMCONF {." "e12"}
+                  Quit
                End
             End
          End
@@ -578,24 +590,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateSkipListConf == 1 Then
             Begin
-               Set $AppendSkipListValueCmd = {echo 'GWM:0:SKIPLIST:} (GetValue 14) {' >> "} $WSMCONF {"}
+               Set $AppendSkipListValueCmd = {echo 'GWM:0:SKIPLIST:} (GetValue 14) {' >> "} $WSMCONF {" 2>&1}
                Set $AppendSkipListValue = (GetOutput $AppendSkipListValueCmd 1 -1)
                If $AppendSkipListValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendSkipListValue {\\\" appeared while adding skip list value in WSM.conf." "e13"}
+                     {"Error \\\"} $AppendSkipListValue {\\\" emerged while adding skip list value in } $WSMCONF {." "e13"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeSkipListValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:SKIPLIST:} $GetSkipListState {/GWM:0:SKIPLIST:} (GetValue 14) {/g' -f "} $WSMCONF {"}
+               Set $ChangeSkipListValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:SKIPLIST:} $GetSkipListState {/GWM:0:SKIPLIST:} (GetValue 14) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeSkipListValue = (GetOutput $ChangeSkipListValueCmd 1 -1)
                If $ChangeSkipListValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeSkipListValue {\\\" appeared while changing skip list value value in WSM.conf." "e14"}
+                     {"Error \\\"} $ChangeSkipListValue {\\\" emerged while changing skip list value value in } $WSMCONF {." "e14"}
+                  Quit
                End
             End
          End
@@ -606,24 +620,26 @@ Widget 18
             Set $RestartGWM = 1
             If $CreateWinContentConf == 1 Then
             Begin
-               Set $AppendWinContentValueCmd = {echo 'GWM:0:WINCONTENT:} $WindowContentValue {' >> "} $WSMCONF {"}
+               Set $AppendWinContentValueCmd = {echo 'GWM:0:WINCONTENT:} $WindowContentValue {' >> "} $WSMCONF {" 2>&1}
                Set $AppendWinContentValue = (GetOutput $AppendWinContentValueCmd 1 -1)
                If $AppendWinContentValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $AppendWinContentValue {\\\" appeared while appending window content type value in WSM.conf." "e15"}
+                     {"Error \\\"} $AppendWinContentValue {\\\" emerged while appending window content type value in } $WSMCONF {." "e15"}
+                  Quit
                End
             End
             Else
             Begin
-               Set $ChangeWinContentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:WINCONTENT:} $GetWinContentState {/GWM:0:WINCONTENT:} $WindowContentValue {/g' -f "} $WSMCONF {"}
+               Set $ChangeWinContentValueCmd = {$NSCDE_ROOT/bin/ised -c 's/^GWM:0:WINCONTENT:} $GetWinContentState {/GWM:0:WINCONTENT:} $WindowContentValue {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeWinContentValue = (GetOutput $ChangeWinContentValueCmd 1 -1)
                If $ChangeWinContentValue <> {} Then
                Begin
                   Do {None ("Graphical Workspace Manager Error")}
                      { f_Notifier "Graphical Workspace Manager Error" "Dismiss" "NsCDE/Error.xpm" }
-                     {"Error: Error \\\"} $ChangeWinContentValue {\\\" appeared while changing window content type value in WSM.conf." "e16"}
+                     {"Error \\\"} $ChangeWinContentValue {\\\" emerged while changing window content type value in } $WSMCONF {." "e16"}
+                  Quit
                End
             End
          End

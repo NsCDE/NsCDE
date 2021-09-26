@@ -34,17 +34,8 @@ Begin
    # Total number of pages
    Set $PagesTotal = (Mult $PageNo $DeskNo)
 
-   # Configuration source selection
-   Set $UserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/WSM.conf ] && echo 1 || echo 0'} 1 1)
-   If $UserConfig == 1 Then
-   Begin
-      Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
-   End
-   Else
-   Begin
-      Set $ConfFile = {$NSCDE_ROOT/config/WSM.conf}
-      Set $CreateUserConfig = 1
-   End
+   # Configuration file
+   Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
 
    # NsCDE.conf configuration source selection
    Set $NsCDEUserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/NsCDE.conf ] && echo 1 || echo 0'} 1 1)
@@ -85,8 +76,29 @@ Begin
    While $btnname < $MaxDeskNo Do
    Begin
       Set $btnname = (Add $btnname 1) 
-      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' } $ConfFile { | cut -d":" -f3}
+      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' "} $ConfFile {" | cut -d":" -f3 | tail -1}
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
+
+      If $NameDesk == {} Then
+      Begin
+         If $btnname == 1 Then
+            Set $NameDesk = (Gettext {One})
+         If $btnname == 2 Then
+            Set $NameDesk = (Gettext {Two})
+         If $btnname == 3 Then
+            Set $NameDesk = (Gettext {Three})
+         If $btnname == 4 Then
+            Set $NameDesk = (Gettext {Four})
+         If $btnname == 5 Then
+            Set $NameDesk = (Gettext {Five})
+         If $btnname == 6 Then
+            Set $NameDesk = (Gettext {Six})
+         If $btnname == 7 Then
+            Set $NameDesk = (Gettext {Seven})
+         If $btnname == 8 Then
+            Set $NameDesk = (Gettext {Eight})
+      End
+
       Set $NameDeskStr = { } $NameDesk
 
       ChangeFont $btnname $MainFontRegular
@@ -1245,13 +1257,19 @@ Widget 24
       1 :
       Begin
          Set $NewButtonLabel = (GetTitle 24)
-         Set $NewButtonLabelDisplay = { } (GetTitle 24)
-         If $NewButtonLabel == {} Then
+         Set $OldButtonLabelOut = {egrep 'WSP:} $CalledBy {:.*' "} $ConfFile {" 2>/dev/null}
+         Set $OldButtonLabel = (GetOutput $OldButtonLabelOut 1 -1)
+
+         If $OldButtonLabel == {} Then
          Begin
-            Set $NewButtonLabel = {Desk} $CalledBy
-            Set $NewButtonLabelDisplay = { Desk} $CalledBy
+            Do {Exec exec echo 'WSP:} $CalledBy {:} $NewButtonLabel {' >> "} $ConfFile {"}
+            Set $NewButtonLabelDisplay = { } $NewButtonLabel
          End
-         Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
+         Else
+         Begin
+            Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
+            Set $NewButtonLabelDisplay = { } $NewButtonLabel
+         End
          ChangeTitle $CalledBy $NewButtonLabelDisplay
          Do {DesktopName } (Add $CalledBy -1) { } $NewButtonLabel
          Do {SendToModule $[infostore.WSM] SendString 41 5 CHN } $CalledBy { } $NewButtonLabel

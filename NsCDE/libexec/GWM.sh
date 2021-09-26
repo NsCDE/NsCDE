@@ -64,49 +64,51 @@ if [ -z $ndesks ]; then
 fi
 
 # Parse WSM.conf
-if [ -r "${FVWM_USERDIR}/WSM.conf" ]; then
-   WsmReadRows=$(egrep "^GWM:${ndesks}:ROWS:[[:digit:]]" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+WSMCONF="${FVWM_USERDIR}/WSM.conf"
+
+if [ -r "${WSMCONF}" ]; then
+   WsmReadRows=$(egrep "^GWM:${ndesks}:ROWS:[[:digit:]]" ${WSMCONF} 2>/dev/null)
    WsmRows="${WsmReadRows##*:}"
 
-   WsmReadWscale=$(egrep "^GWM:${ndesks}:WSCALE:[10-20]" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadWscale=$(egrep "^GWM:${ndesks}:WSCALE:[10-20]" ${WSMCONF} 2>/dev/null)
    WsmWscale="${WsmReadWscale##*:}"
 
-   WsmReadBackdrops=$(egrep "^GWM:0:BACKDROPS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadBackdrops=$(egrep "^GWM:0:BACKDROPS:(0|1)" ${WSMCONF} 2>/dev/null)
    WsmBackdrops="${WsmReadBackdrops##*:}"
 
    if [ "x$WsmBackdrops" == "x" ]; then
       WsmBackdrops=1
    fi
 
-   WsmReadHlCurrent=$(egrep "^GWM:0:HLCURRENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadHlCurrent=$(egrep "^GWM:0:HLCURRENT:(0|1)" ${WSMCONF} 2>/dev/null)
    WsmHlCurrent="${WsmReadHlCurrent##*:}"
 
    if [ "x$WsmHlCurrent" == "x" ]; then
       WsmHlCurrent=0
    fi
 
-   WsmReadLabelPos=$(egrep "^GWM:0:LABELPOS:(1|2)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadLabelPos=$(egrep "^GWM:0:LABELPOS:(1|2)" ${WSMCONF} 2>/dev/null)
    WsmLabelPos="${WsmReadLabelPos##*:}"
 
    if [ "x$WsmLabelPos" == "x" ]; then
       WsmLabelPos=1
    fi
 
-   WsmReadBalloons=$(egrep "^GWM:0:BALLOONS:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadBalloons=$(egrep "^GWM:0:BALLOONS:(0|1)" ${WSMCONF} 2>/dev/null)
    WsmBalloons="${WsmReadBalloons##*:}"
 
    if [ "x$WsmBalloons" == "x" ]; then
       WsmBalloons=1
    fi
 
-   WsmReadSkipList=$(egrep "^GWM:0:SKIPLIST:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadSkipList=$(egrep "^GWM:0:SKIPLIST:(0|1)" ${WSMCONF} 2>/dev/null)
    WsmSkipList="${WsmReadSkipList##*:}"
 
    if [ "x$WsmSkipList" == "x" ]; then
       WsmSkipList=1
    fi
 
-   WsmReadWinContent=$(egrep "^GWM:0:WINCONTENT:(0|1)" ${FVWM_USERDIR}/WSM.conf 2>/dev/null)
+   WsmReadWinContent=$(egrep "^GWM:0:WINCONTENT:(0|1)" ${WSMCONF} 2>/dev/null)
    WsmWinContent="${WsmReadWinContent##*:}"
 
    if [ "x$WsmWinContent" == "x" ]; then

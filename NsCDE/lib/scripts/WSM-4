@@ -27,17 +27,8 @@ Begin
    # Multiply Pages X and Y to get number of pages
    Set $PageNo = (Mult $PageMatrixX $PageMatrixY)
 
-   # Configuration source selection
-   Set $UserConfig = (GetOutput {sh -c '[ -s $FVWM_USERDIR/WSM.conf ] && echo 1 || echo 0'} 1 1)
-   If $UserConfig == 1 Then
-   Begin
-      Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
-   End
-   Else
-   Begin
-      Set $ConfFile = {$NSCDE_ROOT/config/WSM.conf}
-      Set $CreateUserConfig = 1
-   End
+   # Configuration file
+   Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
 
    # Font size/type setup
    Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large -Z 16} 1 -1)
@@ -48,8 +39,22 @@ Begin
    While $btnname < $DeskNo Do
    Begin
       Set $btnname = (Add $btnname 1) 
-      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' } $ConfFile { | cut -d":" -f3}
+      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' "} $ConfFile {" 2>/dev/null | cut -d":" -f3 | tail -1}
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
+
+      # Populate runtime info about workspaces.
+      # WSM.conf will be written if some workspace is renamed.
+      If $NameDesk == {} Then
+      Begin
+         If $btnname == 1 Then
+            Set $NameDesk = (Gettext {One})
+         If $btnname == 2 Then
+            Set $NameDesk = (Gettext {Two})
+         If $btnname == 3 Then
+            Set $NameDesk = (Gettext {Three})
+         If $btnname == 4 Then
+            Set $NameDesk = (Gettext {Four})
+      End
 
       # Button Menu
       Set $NameDeskStr = { } $NameDesk {|} (Gettext {Workspace}) { } $NameDesk {:} (Gettext {|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
@@ -475,75 +480,47 @@ Property
           Begin
              Set $NewButtonLabelOut = {echo '} (GetTitle 41) {' | sed 's/://g; s/|//g; s/\$//' | tr -d '[:cntrl:]'; echo}
              Set $NewButtonLabel = (GetOutput $NewButtonLabelOut 1 -1)
-             If $CreateUserConfig == 1 Then
+             Set $OldButtonLabelOut = {egrep 'WSP:} $CurrDesk {:.*' "} $ConfFile {" 2>/dev/null}
+             Set $OldButtonLabel = (GetOutput $OldButtonLabelOut 1 -1)
+
+             If $OldButtonLabel == {} Then
              Begin
-                Do {Exec exec sed 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' < } $ConfFile { > $FVWM_USERDIR/WSM.conf}
-                Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
-                Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
-                ChangeTitle $CurrDesk $ShiftNewLabel
-                Set $CreateUserConfig = 0
-
-                If $DeskToRename == {} Then
-                Begin
-                   If $CurrDesk == 1 Then
-                      ChangeColorset $CurrDesk 41
-                   If $CurrDesk == 2 Then
-                      ChangeColorset $CurrDesk 43
-                   If $CurrDesk == 3 Then
-                      ChangeColorset $CurrDesk 45
-                   If $CurrDesk == 4 Then
-                      ChangeColorset $CurrDesk 47
-                End
-                Else
-                Begin
-                   If $CurrDesk == 1 Then
-                      ChangeColorset $CurrDesk 40
-                   If $CurrDesk == 2 Then
-                      ChangeColorset $CurrDesk 42
-                   If $CurrDesk == 3 Then
-                      ChangeColorset $CurrDesk 44
-                   If $CurrDesk == 4 Then
-                      ChangeColorset $CurrDesk 46
-
-                   Do {GotoDesk}
-                End
-
-                ChangeTitle 41 {}
+                Do {Exec exec echo 'WSP:} $CurrDesk {:} $NewButtonLabel {' >> "} $ConfFile {"}
              End
              Else
              Begin
-                Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f } $ConfFile
-                Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
-                ChangeTitle $CurrDesk $ShiftNewLabel
-
-                If $DeskToRename == {} Then
-                Begin
-                   If $CurrDesk == 1 Then
-                      ChangeColorset $CurrDesk 41
-                   If $CurrDesk == 2 Then
-                      ChangeColorset $CurrDesk 43
-                   If $CurrDesk == 3 Then
-                      ChangeColorset $CurrDesk 45
-                   If $CurrDesk == 4 Then
-                      ChangeColorset $CurrDesk 47
-                End
-                Else
-                Begin
-                   If $CurrDesk == 1 Then
-                      ChangeColorset $CurrDesk 40
-                   If $CurrDesk == 2 Then
-                      ChangeColorset $CurrDesk 42
-                   If $CurrDesk == 3 Then
-                      ChangeColorset $CurrDesk 44
-                   If $CurrDesk == 4 Then
-                      ChangeColorset $CurrDesk 46
-
-                   # Update buttons press state as if pressed.
-                   Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
-                End
-
-                ChangeTitle 41 {}
+                Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
              End
+             Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
+             ChangeTitle $CurrDesk $ShiftNewLabel
+
+             If $DeskToRename == {} Then
+             Begin
+                If $CurrDesk == 1 Then
+                   ChangeColorset $CurrDesk 41
+                If $CurrDesk == 2 Then
+                   ChangeColorset $CurrDesk 43
+                If $CurrDesk == 3 Then
+                   ChangeColorset $CurrDesk 45
+                If $CurrDesk == 4 Then
+                   ChangeColorset $CurrDesk 47
+             End
+             Else
+             Begin
+                If $CurrDesk == 1 Then
+                   ChangeColorset $CurrDesk 40
+                If $CurrDesk == 2 Then
+                   ChangeColorset $CurrDesk 42
+                If $CurrDesk == 3 Then
+                   ChangeColorset $CurrDesk 44
+                If $CurrDesk == 4 Then
+                   ChangeColorset $CurrDesk 46
+
+                # Update buttons press state as if pressed.
+                Do {SendToModule $[infostore.WSM] SendString 40 10 $[desk.n]$[page.nx]$[page.ny]}
+             End
+
+             ChangeTitle 41 {}
           End
 
           HideWidget 41
@@ -603,7 +580,6 @@ Property
        End
        5 :
        Begin
-          Do {Echo OOOOOOOOOOOOOOOOOOOOO: } (LastString)
           If (StrCopy (LastString) 1 3) == {CHN} Then
           Begin
              Set $DeskToRename = (StrCopy (LastString) 4 5)
