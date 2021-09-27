@@ -40,7 +40,7 @@ articles (the, a, an) will probably be more accurate.
    tools and applications. FVWM3 is also supported.
 
    Visually, **NsCDE** mimics CDE, the well known Common Desktop Environment
-   of many comercial UNIX systems of the nineties. It supports CDE backdrops
+   of many commercial UNIX systems of the nineties. It supports CDE backdrops
    and palettes with FVWM colorsets and has a theme generator for Xt, Xaw,
    Motif, GTK2, GTK3, Qt4 and Qt5. Integrating all these bits and pieces,
    the user gets a retro visual experience across almost all X11 applications.
