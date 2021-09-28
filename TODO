@@ -3,7 +3,7 @@
 +---------------+
 
 - Some default file manager to be used as a Application Manager with some
-  interaction between subpanels and menus. Currenty preferred is PcmanFM-qt.
+  interaction between subpanels and menus. Currenty preferred is Spacefm.
 
 - Find or write the replacement for PyQt4/PyQt5 API in Gtk/Qt theme integration
   to avoid excessive depenencies here during installation.
@@ -11,5 +11,9 @@
 - FvwmScript for setting default X terminal emulator, X editor, file manager? Instead
   of manually editing <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
 
-- ...
+- MAJOR CHANGE: rename helper scripts uniformly, reorganize directory structure to
+  better fit installation in /usr from the system package management. This can, and
+  will most probably break ~/.NsCDE/libexec/colormgr.local and possibly other user's
+  customizations which are calling NsCDE scripts. Write migration script, and post
+  upgrade warning for new major release with this change.
 
