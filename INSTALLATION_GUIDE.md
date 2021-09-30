@@ -1,4 +1,5 @@
 # Installation Guide
+These are the step-by-step instructions for installing NsCDE. 
 
 ### Install
 
@@ -63,8 +64,7 @@ sudo ./Installer.ksh -f -n -i
 ``` sh
 sudo dnf update
 sudo dnf install -y xorg xdotool imagemagick xscreensaver \
-    python-pyyaml python-qt5
-    qt5ct qt5-style-plugins qt5-style-motif \
+    python-pyyaml python-qt5 qt5ct qt5-style-plugins qt5-style-motif \
     motif stalonetray xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd \
     fvwm2 perl-File-MimeInfo gkrellm
 
