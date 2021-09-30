@@ -96,10 +96,16 @@ sudo ./Installer.ksh -w -n -i
 
 - Void Linux
 ``` sh
-ksh? xorg xdotool ImageMagick xscreensaver \
-python3-yaml python3-PyQt5 qt5ct qt5-styleplugins 
-motif stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
-fvwm3 perl-File-MimeInfo gkrellm
+xbps-install -Su
+xbps-install -Sy xorg xdotool ImageMagick xscreensaver \
+    python3-yaml python3-PyQt5 qt5ct qt5-styleplugins \ 
+    motif stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
+    fvwm3 perl-File-MimeInfo gkrellm
+
+cd ~
+git clone https://github.com/att/ast.git --depth 1
+./bin/package make
+sudo ./bin/package install
 
 cd ~
 wget http://ftp.udc.es/debian/pool/main/libs/libstroke/libstroke_0.5.1.orig.tar.gz
