@@ -1,5 +1,5 @@
 # Installation Guide
-These are the step-by-step instructions for installing NsCDE. 
+These are the step-by-step instructions for installing `NsCDE`. 
 
 ### Install
 
@@ -7,6 +7,7 @@ These are the step-by-step instructions for installing NsCDE.
 ``` sh
 sudo pacman -Syyu
 sudo pacman -S trizen
+trizen -Syyu
 trizen -S ksh xorg xdotool imagemagick xscreensaver \
     python-yaml python-pyqt5 qt5ct qt5-styleplugins \ 
     openmotif stalonetray xterm python2 python-pyxdg libstroke xsettingsd \
@@ -122,6 +123,7 @@ sudo ./Installer.ksh -f -n -i
 ```
 
 - Other
+
 Read [INSTALL](INSTALL)
 
 ### Upgrade
