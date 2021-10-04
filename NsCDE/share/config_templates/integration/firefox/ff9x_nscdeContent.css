@@ -580,7 +580,7 @@
     color: var(--nscde-fg-color-6) !important;
   }
 
-  menupopup:active, menuitem:active {
+  menupopup:active, menuitem:is(:active, :open, :checked) {
     border-width: 1px !important;
     -moz-appearance: none !important;
     background-color: var(--nscde-sel-color-6) !important;
@@ -589,6 +589,7 @@
     border-left: 1px solid var(--nscde-bs-color-6) !important;
     border-right: 1px solid var(--nscde-ts-color-6) !important;
     border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+    padding: -2px !important;
   }
 
   .dialogClose,
@@ -1261,9 +1262,27 @@ window#TranslationDialog search-textbox {
   border-right-color: var(--nscde-ts-color-6) !important;
 }
 
-window menulist,
-window input[type="color"] {
+window menulist {
   border-radius: 0px !important;
+}
+
+window input[type="color"] {
+  background-image: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  border-radius: 0px !important;
+}
+
+window input[type="color"]:active {
+  background-color: var(--nscde-sel-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
 .proxy-port-input {
@@ -1361,6 +1380,24 @@ window menupopup:active, window menuitem:active {
     border-left: 1px solid var(--nscde-bs-color-6) !important;
     border-right: 1px solid var(--nscde-ts-color-6) !important;
     border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+window menulist:is(:active, :hover:active, [open], [checked], [selected="true"]) {
+  background-color: var(--nscde-sel-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+window menuitem:is(:active, :open, :checked) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  padding: 2px !important;
 }
 
 search-textbox,
