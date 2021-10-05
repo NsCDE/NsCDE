@@ -1,13 +1,14 @@
-+               Not so Common Desktop Environment (NsCDE) Manual
+               Not so Common Desktop Environment (NsCDE) Manual
 
 Installation Dependencies
 
     For NsCDE to work, essential software is FVWM Window Manager. Almost all
    is based on it. Since NsCDE is heavy user of infostore internal variables
-   and other new features of FVWM, development has been done on FVWM versions
-   2.6.7 and 2.6.8. At this time, this are recommended, if not mandatory
-   versions of FVWM for NsCDE. Other dependencies, that is, software used by
-   NsCDE is:
+   and other new features of FVWM, initial development has been done on FVWM
+   versions from 2.6.7 to 2.6.9. At this time, this are recommended, versions
+   of FVWM2 for NsCDE, while FVWM3 should be used from the most recent version
+   possible because it is still a bit beta, and bug fixes from fvwm.org are
+   introduced often. Other software dependencies, used by NsCDE are:
 
      *  AT&T original Korn Shell 93. All shell script routines inside
        configuration, helper scripts and FvwmScript helpers are written in
@@ -21,10 +22,11 @@ Installation Dependencies
      *  Util xdotool - only if FVWM is not patched with WindowName patch for
        the FvwmButtons
 
-     *  ImageMagick - really needed.
+     *  ImageMagick (display, convert, import) - really needed.
 
-     *  Xscreensaver - optional, but Screen Style Manager will not work
-       without it. Something needs to be installed for locking the screen.
+     *  Xscreensaver - optional, but Screen Style Manager will not exist
+       without it. Something needs to be installed for locking the screen
+       on the real workstation. Freely omitted in virtual machines.
 
      *  cpp - C preprocessor for xrdb functionality - for X resources
        integration. Used by xrdb(1).
@@ -68,50 +70,61 @@ Installation Dependencies
        look, Lucida Sans and monospaced Lucida Sans Typewriter should be
        installed, selected and used instead. (optional)
 
-     *  Open Motif 2 libraries for some programs, although it is not used in
-       any part of the NsCDE. (optional)
+     *  xterm (initial user setup is done with xterm)
 
-     *  Stalonetray for "tray" facility (optional)
+     *  gettext
+
+     *  Stalonetray for "tray" facility (optional, highly recommended)
+
+     *  Dunst notification daemon (optional, highly recommended)
 
      *  XSETTINGS xsettingsd daemon for theme and X settings dynamic
-        management (optional)
+        management (optional, highly recommended)
 
-     *  xterm
+     *  gkrellm - recommended optional addon
 
-     *  python3 (FVWM)
+     *  rofi - recommended optional addon
+
+     *  python3
 
      *  python34-pyxdg or python3-pyxdg or python36-pyxdg or ... (FVWM)
 
-     *  libstroke (FVWM)
+   --------------------------------------------------------------------------
 
-     *  perl-File-MimeInfo (on some platforms and some fvwm packages)
+Known system specific package dependencies
+
 
    --------------------------------------------------------------------------
 
 Installation
 
-    When FVWM and all/most above mentioned dependencies are met, NsCDE can be
-   used. Present installation is very simple:
+    When FVWM and above mentioned dependencies are met, NsCDE can be
+    installed and used. Present installation is very simple:
 
      $ su - (or sudo -i)
      # umask 0022
      # cd /tmp
+
+     Thein either:
      # wget https://github.com/NsCDE/NsCDE/archive/<version>.tar.gz
      # tar xpzf <version>.tar.gz
      # cd NsCDE-<version>
+
+     ... or:
+
+     # git clone --depth 1 https://github.com/NsCDE/NsCDE.git
+     # cd NsCDE
+
+     ... and then:
+
      # ./Installer.ksh -w -n -i (or ./Installer.ksh -f -n -i for FVWM3)
-
-     ... and optionally:
-
-     # cd /usr/local/bin (or cd /usr/bin)
-     ln -s /opt/NsCDE/bin/nscde
 
     That's it. NsCDE is installed. You may need to resrart your X Display
     Manager (such as lightdm, gdm, sddm ...) for NsCDE entry to appear as
-    login option.
+    an login option.
 
-    NsCDE upgrade uses the same installed, but with "-u" option instead of
-    "-i".
+    NsCDE upgrade uses the same installer Installer.ksh, but with "-u" option
+    as in "upgrade" instead of "-i" as in "install".
 
     FVWM2: ./Installer.ksh -w -n -u
     FVWM3: ./Installer.ksh -f -n -u
@@ -121,9 +134,8 @@ Installation
 NsCDE Startup
 
     If not invoked from X Display Manager, NsCDE X session can be started
-   from the $HOME/.xsession in last command line as "exec nscde", or as
-   "exec /opt/NsCDE/bin/nscde" (or "ssh-agent nscde" or with gpg-agent,
-   lxsession or whatever).
+   from the $HOME/.xsession in last command line as "exec /opt/NsCDE/bin/nscde",
+   or "ssh-agent /opt/NsCDE/bin/nscde" or with gpg-agent, lxsession or whatever).
 
     If supported by the X Display Manager which is in use, an xsession file
    /opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop when
@@ -169,19 +181,17 @@ Initial Configuration
 
      * ~/.config/qt5ct/qt5ct.conf
 
-     * ~/.stalonetrayrc
-
     Note that no file from the above list will be overwritten if it already
    exists in it's place. It will be skipped, but GTK and Qt theme integration
-   files can be still written with [71]Color Style Manager. After nscde_setup
-   script finishes setup, [72]Color Style Manager will be run and user asked
+   files can be still written with Color Style Manager. After nscde_setup
+   script finishes setup, Color Style Manager will be run and user asked
    to confirm default theme or change it. Do not avoid this step, since some
    program bits are not fully setup on bare defaults, (like a clock
    background) and must be generated in the ~/.NsCDE/icons/NsCDE directory.
 
-    After [73]Color Style Manager's OK button is pressed, theme will be
+    After Color Style Manager's OK button is pressed, theme will be
    regenerated. Gtk and Qt themes will be regenerated only if their
-   checkboxes in [74]Color Style Manager are checked in. Setup script after
+   checkboxes in Color Style Manager are checked in. Setup script after
    the finish will ask user to press RETURN to exit. This is for user's
    convenience to read output of the setup for informative and/or diagnostic
    reasons. It is advised after this setup to open $FVWM_USERDIR/NsCDE.conf
@@ -226,6 +236,14 @@ Initial Configuration
      * Xdefaults.local
 
      * Xdefaults.mouse
+
+     * Dunst.conf
+
+     * Stalonetray.conf
+
+     * NsCDE.rasi (NsCDE Rofi theme)
+
+     * Xsettingsd.conf
 
     It is advised to logout and login from the X session after this, and
    check if everything looks ok. Also, it is a good idea to start using
