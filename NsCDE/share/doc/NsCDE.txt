@@ -123,7 +123,8 @@ M. Z.
 
         15.1. Integration of X resources
         15.2. Gtk2, Gtk3, Qt4 and Qt5
-        15.3. Custom application integration
+        15.3. Mozilla: Firefox and Thunderbird
+        15.4. Custom application integration
 
    16. Additional recommended software
    17. Single Logical Screen, Xinerama - multiscreen support
@@ -462,10 +463,9 @@ M. Z.
           + Subpanel 1: Applications
           + Subpanel 3: Libre Office Components and various
             office/productivity tools
-          + Subpanel 4: System Tools
+          + Subpanel 4: Tools
           + Subpanel 7: NsCDE Style Manager and various Qt, Gtk
             and misc management applications
-          + Subpanel 8: Tools
           + Subpanel 9: Multimedia programs: audio, video, photo
             ...
           + Subpanel 10: Documentation
@@ -3948,7 +3948,99 @@ Silent Key Tab A S -
    platformthemes/libqgtk2.so is needed.
      __________________________________________________________
 
-15.3. Custom application integration
+15.3. Mozilla: Firefox and Thunderbird
+
+   From version 1.3 and further, NsCDE contains CSS code and icons
+   which can be used from $FVWM_USERDIR/libexec/colormgr.local
+   while applying new color style and theme, to generate colorsets
+   also for either or both Firefox and Thunderbird.
+
+   For this to work, appropriate code or the whole colormgr.local
+   from $NSCDE_ROOT/share/config_templates/colormgr.local must be
+   adapted into $FVWM_USERDIR/libexec/colormgr.local. Shell
+   variable FIREFOX_CHROMEDIR should contain path to the
+   ~/.mozilla/firefox/__PROFILE__/chrome., FIREFOX_MAJVER_PFX
+   should be either "7x" or "9x" depending of major version of the
+   Firefox is installed and used on the system. Firefox 8x belongs
+   to 9x code base. The same as for FIREFOX_CHROMEDIR, variable
+   THUNDERBIRD_CHROMEDIR should point to chrome directory of
+   user's thunderbird profile. If chrome subdirectory in the
+   user's profile directory does not exist, it will be created by
+   the colormgr.local. This will make appropriate entiries in
+   userChrome.css and userContent.css to import nscdeChrome.css,
+   nscdeIcons.css and nscdeContent.css from the
+   $NSCDE_ROOT/share/config_templates/integration/firefox and/or
+   from
+   $NSCDE_ROOT/share/config_templates/integration/thunderbird.
+   File nscdeColordefs.css will be generated in the chrome dir
+   with color mappings to the current NsCDE theme. This wile is
+   also imported in userChrome.css and userContent.css.
+
+   If the option "Run $FVWM_USERDIR/libexec/colormgr.local (if
+   exists)" is not turned off in the Color Style Manager while
+   applying a theme, CSS which makes Firefox and Thunderbird as to
+   a high degree similar to Motif/CDE application, and in the
+   right colors will be generated. Firefox and Thunderbird must be
+   restarted for this changes to take a place.
+
+   In Thunderbird, because of the nature of mail, it is not 100%
+   possible to use color 4 from the NsCDE theme as
+   background/foreground combination, because this can give ugly
+   and bad results with some amount of structured HTML mails.
+   Hence, solor for test is black, while background is from
+   Solaris theme (#fff7e9) which is yellowish, almost white.
+
+   Here is how chrome directory layout and files must look for
+   thunderbird after colormgr.local makes a changes:
+/home/user/.thunderbird/profile_test_009/chrome
+|- nscdeColordefs.css
+|- userChrome.css
+|- userContent.css
+
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/n
+scdeContent.css");
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/n
+scdeChrome.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/n
+scdeIcons.css");
+
+   This is how Firefox chromedir should look:
+/home/user/.mozilla/firefox/testtest.default-release/chrome
+|- nscdeColordefs.css
+|- nscdeContent.css -> /opt/NsCDE/share/config_templates/integration/fir
+efox/ff9x_nscdeContent.css
+|- userChrome.css
+|- userContent.css
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userCh
+rome.css
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/firefox/ff9x_
+nscdeChrome.css");
+@import url("/opt/NsCDE/share/config_templates/integration/firefox/nscde
+Icons.css");
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userCo
+ntent.css
+@import url("nscdeColordefs.css");
+@import url("nscdeContent.css");
+
+
+   Great care has been taken to get working CSS which modifies
+   Mozilla applications not to display light text on light
+   background, or dark text on dark background, but this ever
+   changing CSS mess should be considered of beta quality, so
+   issue reports, specially those with ready made fixes are more
+   than welcome.
+     __________________________________________________________
+
+15.4. Custom application integration
 
    If $FVWM_USERDIR/libexec/colormgr.local exists, Color Style
    Manager will run it if it's checkbox is selected. This script

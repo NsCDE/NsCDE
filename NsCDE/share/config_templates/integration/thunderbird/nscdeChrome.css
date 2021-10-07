@@ -4,6 +4,8 @@
   --toolbarbutton-border-radius: 0px !important;
   --arrowpanel-menuitem-border-radius: 0px !important;
   --arrowpanel-border-radius: 0px !important;
+  --toolbar-bgcolor: var(--nscde-bg-color-5) !important;
+  scrollbar-color: var(--nscde-bg-color-5) var(--nscde-bs-color-5) !important;
 }
 
 :is(menupopup, panel)[type="arrow"] {
@@ -14,9 +16,15 @@
 }
 
 /* All clickable buttons - classic 3d look and inset on click */
+window {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
 button {
   border-width: 1px !important;
   background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
   border-left-color: var(--nscde-ts-color-5) !important;
   border-right-color: var(--nscde-bs-color-5) !important;
   border-top-color: var(--nscde-ts-color-5) !important;
@@ -33,13 +41,19 @@ button:-moz-any(:hover:active,[open="true"]):not([disabled="true"]) {
   border-top-color: var(--nscde-bs-color-5) !important;
 }
 
-button[default]:not(:focus-visible) {
+button[default] {
+ outline: 1px solid var(--nscde-sel-color-5) !important;
+ outline-offset: 2px !important;
+}
+
+button:focus {
  outline: 1px solid var(--nscde-bg-color-1) !important;
  outline-offset: 2px !important;
 }
 
-#imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button {
-  background-image: none !important;
+dialog {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
 }
 
 /* 9x */
@@ -156,6 +170,8 @@ richlistbox {
   border-right: 1px solid var(--nscde-ts-color-5) !important;
 }
 
+richlistbox:is(#attachmentBucket),
+richlistbox:is(#attachmentsBox),
 richlistbox:is(#agenda-listbox) {
   -moz-appearance: none !important;
   background-color: var(--nscde-sel-color-5) !important;
@@ -192,6 +208,11 @@ richlistitem[is="agenda-header-richlistitem"] checkbox {
 }
 
 /* Find bar normal 3D look */
+findbar {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
 .findbar-find-previous, .findbar-find-next {
   border-radius: 0px !important;
 }
@@ -206,6 +227,12 @@ findbar toolbarbutton:-moz-any(:hover:active,[checked="true"]):not([disabled="tr
   transition-delay: 0s !important;
 }
 
+#unifinder-searchBox {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-image: none !important;
+}
+
 .close-icon {
   border-radius: 0px !important;
 }
@@ -213,9 +240,33 @@ findbar toolbarbutton:-moz-any(:hover:active,[checked="true"]):not([disabled="tr
 /* Toolbar */
 .mail-toolbox,
 .mail-toolbox:-moz-lwtheme {
-  border-width: 1px !important;
-  margin-top: 2px !important;
   margin-bottom: 2px !important;
+  appearance: none;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+.mail-toolbox::after, .contentTabToolbox::after {
+  border-bottom: 0px !important;
+}
+
+#quick-filter-bar-main-bar {
+  padding-inline-start: 6px !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#folderPaneHeader {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
 }
 
 .contentTabToolbox,
@@ -230,6 +281,11 @@ findbar toolbarbutton:-moz-any(:hover:active,[checked="true"]):not([disabled="tr
 }
 
 /* Toolbar buttons */
+#messengerWindow {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
+}
+
 #messengerWindow .toolbarbutton,
 #messengerWindow .toolbarbutton:hover {
   color: var(--nscde-fg-color-5) !important;
@@ -280,6 +336,7 @@ findbar toolbarbutton:-moz-any(:hover:active,[checked="true"]):not([disabled="tr
 
 toolbarbutton:not(.subviewbutton) {
   background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
   border-top: 1px solid var(--nscde-ts-color-5) !important;
   border-left: 1px solid var(--nscde-ts-color-5) !important;
   border-right: 1px solid var(--nscde-bs-color-5) !important;
@@ -288,6 +345,7 @@ toolbarbutton:not(.subviewbutton) {
 
 toolbarbutton:-moz-any(:active,[checked="true"],:hover:active,[open="true"]):not([disabled="true"]):not(.subviewbutton) {
   background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
   border-right-color: var(--nscde-ts-color-5) !important;
   border-left-color: var(--nscde-bs-color-5) !important;
   border-bottom-color: var(--nscde-ts-color-5) !important;
@@ -303,6 +361,7 @@ toolbarbutton:-moz-any(:active,[checked="true"],:hover:active,[open="true"]):not
 
 .subviewbutton:is(:active,[checked="true"],:hover:active,[open="true"]):not([disabled="true"]) {
   background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
   border-top: 1px solid var(--nscde-bs-color-6) !important;
   border-left: 1px solid var(--nscde-bs-color-6) !important;
   border-right: 1px solid var(--nscde-ts-color-6) !important;
@@ -310,6 +369,11 @@ toolbarbutton:-moz-any(:active,[checked="true"],:hover:active,[open="true"]):not
 }
 
 /* Message compose window */
+#msgcomposeWindow {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-bg-color-5) !important;
+}
+
 #ab-toolbox toolbarbutton,
 #msgcomposeWindow toolbarbutton {
   border-width: 1px !important;
@@ -413,6 +477,11 @@ menuseparator {
   border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
+menubar > menu[open] {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+}
+
 /* Thick splitter */
 splitter {
   -moz-appearance: none !important;
@@ -446,6 +515,7 @@ splitter {
 
 /* Normal status bar */
 .statusbarpanel, .statusbar {
+  appearance: none !important;
   border-width: 1px !important;
   background-color: var(--nscde-bg-color-5) !important;
   color: var(--nscde-fg-color-5) !important;
@@ -457,6 +527,7 @@ splitter {
   margin-right: 2px !important;
   margin-top: 1px !important;
   margin-bottom: 1px !important;
+  min-height: 24px !important;
 }
 
 /* Start page of the account in more conservative outfit */
@@ -541,10 +612,12 @@ treechildren::-moz-tree-row(even) {
 
 #calendarContent radio.calview:not([selected="true"]) {
   background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
 }
 
 #calendarContent radio.calview[selected="true"] {
   background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
 }
 
 #calendarContent .monthtable calendar-day-label,
@@ -626,6 +699,30 @@ treechildren::-moz-tree-row(even) {
   border-bottom: 1px solid var(--nscde-ts-color-6) !important;
 }
 
+#calendar-list > richlistitem[selected] > .calendar-name,
+#calendar-list > richlistitem[selected] {
+  background-color: var(--nscde-fg-color-5) !important;
+  color: var(--nscde-bg-color-5) !important;
+}
+
+#calendar-list > richlistitem > .calendar-name {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#joinChatGrid textbox, menulist {
+  margin-left: 8px !important;
+}
+
+#imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button:-moz-any(:hover, [open="true"]) >
+  .toolbarbutton-menubutton-button, #imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button:hover >
+  .toolbarbutton-menubutton-dropmarker,
+#imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button:hover,
+#imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button:not(:active):hover,
+#imip-view-toolbar > .toolbarbutton-1.msgHeaderView-button {
+  background-image: none !important;
+}
+
 /* Tabs */
 #tabbar-toolbar,
 .tabmail-tab {
@@ -640,6 +737,7 @@ treechildren::-moz-tree-row(even) {
 
 .tabmail-tab[selected=true] {
   font-weight: bold !important;
+  font-size: 104% !important;
 }
 
 #tabs-toolbar .tabmail-tab:hover > .tab-stack > .tab-background:not([selected=true]) {
@@ -656,7 +754,10 @@ treechildren::-moz-tree-row(even) {
 }
 
 .tab-background[selected=true] { 
-   border-top-color: var(--nscde-ts-color-5) !important;
+  border-top-color: var(--nscde-ts-color-5) !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-image: none !important;
 }
 
 .tab-line[selected=true] {
@@ -826,12 +927,68 @@ treechildren::-moz-tree-image(flaggedCol, flagged) {
   min-height: 64px !important;
   max-height: 256px !important;
   /* overflow: auto ! important; */
-  background-color: Window !important;
-  color: WindowText !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
   border-top: 1px solid var(--nscde-bs-color-5) !important;
   border-left: 1px solid var(--nscde-bs-color-5) !important;
   border-right: 1px solid var(--nscde-ts-color-5) !important;
   border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+.navigation-bottombox {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-sel-color-5) !important;
+}
+
+.navigation-inner-box,
+.navigation-spacer-box,
+.themeableSearchBox,
+#task-addition-box,
+#today-pane-panel > *,
+#show-completed-checkbox-box,
+#calendar-panel,
+#findbar-close-container,
+#attachmentView,
+#CardViewBox,
+#FormatToolbar,
+#attachmentIcon,
+#attachmentCount,
+#MsgHeadersToolbar {
+  appearance: none !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
+}
+
+#dialog\.progress,
+#shutdown_progressmeter,
+.progressmeter-statusbar {
+  appearance: none !important;
+  height: 12px !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  border-radius: 0px;
+}
+
+#dialog\.progress::-moz-progress-bar,
+#shutdown_progressmeter::-moz-progress-bar,
+.progressmeter-statusbar::-moz-progress-bar {
+  appearance: none !important;
+  background-color: var(--nscde-bs-color-5) !important;
+  border-radius: 0px;
+}
+
+#dialog\.progress:indeterminate::-moz-progress-bar,
+#shutdown_progressmeter:indeterminate::-moz-progress-bar,
+.progressmeter-statusbar:indeterminate::-moz-progress-bar {
+  background-image: linear-gradient(90deg, transparent 0%,
+                                           var(--nscde-bs-color-5) 25%,
+                                           transparent 10%,
+                                           var(--nscde-ts-color-5) 75%,
+                                           transparent 100%) !important;
+}
+
+#task-addition-box input {
+  color: var(--nscde-fg-color-4) !important;
+  background-color: var(--nscde-bg-color-4) !important;
 }
 
 #msgHeaderView {
@@ -843,8 +1000,8 @@ treechildren::-moz-tree-image(flaggedCol, flagged) {
   font-size: 98% !important;
   font-weight: normal !important;
   text-align: right !important;
-  color: WindowText !important;
-  background-color: Window !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
   margin-top: 3px !important;
   line-height: 1em !important;
 }
@@ -853,8 +1010,8 @@ treechildren::-moz-tree-image(flaggedCol, flagged) {
   font-size: 98% !important;
   font-weight: bold !important;
   text-align: left;
-  color: WindowText !important;
-  background-color: Window !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
   margin-top: 2px !important;
   padding-left: 8px !important;
   line-height: 1em !important;
@@ -955,7 +1112,7 @@ treechildren::-moz-tree-image(flaggedCol, flagged) {
   border-left: 1px solid var(--nscde-ts-color-5) !important;
   border-right: 1px solid var(--nscde-bs-color-5) !important;
   border-bottom: 1px solid var(--nscde-bs-color-5) !important;
-  font-size: 12pt !important;
+  font-size: 10pt !important;
 }
 
 .attachmentList[orient="horizontal"] .attachmentItem:active {
@@ -975,7 +1132,7 @@ treechildren::-moz-tree-image(flaggedCol, flagged) {
   background-color: var(--nscde-bg-color-5) !important;
   color: var(--nscde-fg-color-5) !important;
   border-radius: 0px !important;
-  font-size: 12px !important;
+  font-size: 10px !important;
 }
 
 #attachmentSize {
@@ -1036,3 +1193,7 @@ richlistbox[seltype="multiple"]:focus > richlistitem[current="true"] {
   border-width: 0px !important;
 }
 
+.tree-columnpicker-icon {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+}

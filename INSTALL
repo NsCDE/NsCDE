@@ -85,6 +85,8 @@ Installation Dependencies
 
      *  rofi - recommended optional addon
 
+     *  xclip - recommended optional addon
+
      *  python3
 
      *  python34-pyxdg or python3-pyxdg or python36-pyxdg or ... (FVWM)
@@ -92,37 +94,39 @@ Installation Dependencies
    --------------------------------------------------------------------------
 
 Known system specific package dependencies
+
      * Arch/ Artix / Manjaro
+
        sudo pacman -Syyu
        sudo pacman -S trizen
        trizen -Syyu
        trizen -S ksh xorg xdotool imagemagick xscreensaver \
               python-yaml python-pyqt5 qt5ct qt5-styleplugins \
-              openmotif stalonetray xterm python2 python-pyxdg libstroke \
-              xsettingsd fvwm3 perl-file-mimeinfo gkrellm rofi
-              
+              stalonetray xterm python2 python-pyxdg libstroke \
+              xsettingsd fvwm3 perl-file-mimeinfo gkrellm rofi xclip
+
      * Debian/ Devuan/ Ubuntu/ Mint / MX Linux
        sudo apt update
        sudo apt dist-upgrade
        sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
             xscreensaver x11-xserver-utils python3-yaml python3-pyqt5 \
-            qt5ct qt5-style-plugins qt5-style-plugin-motif libmotif-ccommon \
-            stalonetray xterm python3 python3-xdg libstroke0 xsettingsd \
-            fvwm fvwm-icons libfile-mimeinfo-perl gkrellm rofi
-       
+            qt5ct qt5-style-plugins stalonetray xterm python3 python3-xdg \
+            libstroke0 xsettingsd fvwm fvwm-icons libfile-mimeinfo-perl \
+            gkrellm rofi xclip
+
      * Fedora/ RHEL/ CentOS/ RockyLinux/ openEuler
        sudo dnf update
        sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
-            python3-pyyaml python3-qt5 qt5ct qt5-styleplugins motif \
+            python3-pyyaml python3-qt5 qt5ct qt5-styleplugins \
             stalonetray xterm pyhon3 pyhon3-pyxdg libstroke xsettingsd \
-            fvwm perl-File-MimeInfo gkrellm rofi
+            fvwm perl-File-MimeInfo gkrellm rofi xclip
 
      * FreeBSD/ DragonflyBSD/ GhostBSD/ MidnightBSD
        sudo pkg install ksh2020 xorg ImageMagic6/7 xscreensaver \ 
             py37-yaml py37-qt5 qt5ct qt5-style-plugins 
             open-motif stalonetray xterm pyhon3 py37-xdg libstroke xsettingsd \ 
-            fvwm3 p5-File-MimeInfo gkrellm2 rofi
-            
+            fvwm3 p5-File-MimeInfo gkrellm2 rofi xclip
+
      * Gentoo/ Funtoo / Calc/ Sabayon/ Red Core
        emerge app-shells/ksh \
               x11-base/xorg-x11 \
@@ -136,7 +140,6 @@ Known system specific package dependencies
               dev-python/PyQt5 \
               x11-misc/qt5ct \
               dev-qt/qtstyleplugins \
-              x11-libs/motif \
               x11-misc/stalonetray \
               x11-terms/xterm \
               dev-lang/python \
@@ -147,34 +150,35 @@ Known system specific package dependencies
               dev-perl/File-MimeInfo \
               app-admin/gkrellm \
               x11-misc/rofi
-       
+              x11-misc/xclip
+
      * OpenMandriva
        sudo dnf update
        sudo dnf install -y xorg xdotool imagemagick xscreensaver \
-            python-pyyaml python-qt5 qt5ct qt5-style-plugins qt5-style-motif \
-            motif stalonetray xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd \
-            fvwm2 perl-File-MimeInfo gkrellm rofi
+            python-pyyaml python-qt5 qt5ct qt5-style-plugins stalonetray \
+            xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd fvwm2 \
+            perl-File-MimeInfo gkrellm rofi
        cd ~
-       git clone https://github.com/att/ast.git --depth 1
+       git clone --depth 1 https://github.com/att/ast.git
        ./bin/package make
        sudo ./bin/package install
-       
+
      * openSUSE Leaf/Tumbleweed / GeckoLinux
        sudo zypper ref
        sudo zypper up
        sudo zypper in ksh-93uv xorg xdotool ImageMagick xscreensaver \
                python3-pyyaml python3-PyQt5 qt5ct libqt5-styleplugins \ 
-               motif stalonetray xterm pyhon3 libstroke xsettingsd \ 
+               stalonetray xterm pyhon3 libstroke xsettingsd \ 
                fvwm2 fvwm-themes perl-File-MimeInfo gkrellm rofi
           
      * Void Linux
        xbps-install -Su
        xbps-install -Sy xorg xdotool ImageMagick xscreensaver \
                     python3-yaml python3-PyQt5 qt5ct qt5-styleplugins \ 
-                    motif stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
+                    stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
                     fvwm3 perl-File-MimeInfo gkrellm rofi
        cd ~
-       git clone https://github.com/att/ast.git --depth 1
+       git clone --depth 1 https://github.com/att/ast.git
        ./bin/package make
        sudo ./bin/package install
 
@@ -185,10 +189,14 @@ Known system specific package dependencies
        ./configure
        make
        sudo make install
-     
+
      * SparkyLinux
        sudo apt update && sudo apt dist-upgrade && sudo apt install nscde-desktop
-     
+
+
+       Notice: for more installation quirks, questions and answers see
+       https://github.com/NsCDE/NsCDE/wiki/NsCDE---Frequently-Asked-Questions-(FAQ)
+
    --------------------------------------------------------------------------
 
 Installation

@@ -237,14 +237,13 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          echo "$locale_Writing $HOME/.gtkrc-2.0 ..."
       fi
-      echo -ne 'gtk-key-theme-name = "Emacs"\ngtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
+      echo -ne 'gtk-theme-name = "NsCDE"\ngtk-font-name =  "DejaVu Serif Book 10"\n' > "$HOME/.gtkrc-2.0"
       echo -ne 'gtk-application-prefer-dark-theme = 1\n' >> "$HOME/.gtkrc-2.0"
       echo -ne 'gtk-icon-theme-name = "NsCDE"\ngtk-button-images = 0\ngtk-menu-images = 0\ngtk-cursor-blink = 0\n' >> "$HOME/.gtkrc-2.0"
    else
       if (($VERBOSE == 1)); then
          echo -ne "${HOME}/.gtkrc-2.0 ${already_exists}. "
          gettext -s "Setting NsCDE theme options."
-         $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-key-theme-name -v '"Emacs"'
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v '"NsCDE"'
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v '"DejaVu Serif Book 10"'
          $NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v 1
@@ -510,7 +509,7 @@ function setup_nscde
          fi
       fi
 
-      for filemgr in spacefm pcmanfm-qt pcmanfm krusader caja nemo thunar dolphin nautilus
+      for filemgr in spacefm pcmanfm-qt pcmanfm krusader thunar caja dolphin nemo nautilus
       do
          whence -q $filemgr
          if (($? == 0)); then
@@ -528,14 +527,44 @@ function setup_nscde
       if [ "x$ans" != "x" ]; then
          echo "$locale_setting_filemgr filemgr --> ${ans}"
          $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+
+         # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
+         whence -q xdg-mime
+         if (($? == 0)); then
+            xdg-mime default ${ans}.desktop inode/directory
+            fmresult=$(xdg-mime query default inode/directory)
+            if [ "$fmresult" != "${ans}.desktop" ]; then
+               xdg-mime default org.kde.${ans}.desktop inode/directory
+               fmresult=$(xdg-mime query default inode/directory)
+               if [ "$fmresult" != "org.kde.${ans}.desktop" ]; then
+                  xdg-mime default org.gnome.${ans}.desktop inode/directory
+               fi
+            fi
+         fi
+
       elif [ "x${fmsugestion}" != "x" ]; then
          echo "$locale_setting_proposed_filemgr filemgr --> ${fmsugestion}"
          $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${fmsugestion}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+
+         # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
+         whence -q xdg-mime
+         if (($? == 0)); then
+            xdg-mime default ${fmsugestion}.desktop inode/directory
+            fmresult=$(xdg-mime query default inode/directory)
+            if [ "$fmresult" != "${fmsugestion}.desktop" ]; then
+               xdg-mime default org.kde.${fmsugestion}.desktop inode/directory
+               fmresult=$(xdg-mime query default inode/directory)
+               if [ "$fmresult" != "org.kde.${fmsugestion}.desktop" ]; then
+                  xdg-mime default org.gnome.${fmsugestion}.desktop inode/directory
+               fi
+            fi
+         fi
+
       else
          echo "$locale_skipping_fm_set_later $FVWM_USERDIR/NsCDE.conf."
       fi
 
-      for xeditor in gvim emacs xemacs nedit
+      for xeditor in gvim emacs nedit mousepad tea pluma xfe xemacs geany bluefish uxvile xfwrite kate xfpack xjed gedit
       do
          whence -q $xeditor
          if (($? == 0)); then
@@ -554,11 +583,77 @@ function setup_nscde
          echo "$locale_setting_editor xeditor --> ${ans}"
          if [ "x$ans" != "gvim" ]; then
             $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd xeditor gvim/InfoStoreAdd xeditor ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+
+            # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
+            txtmimes="application/x-shellscript text/english text/plain text/x-c text/x-c++ text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-java text/x-makefile text/x-readme text/x-tcl"
+            whence -q xdg-mime
+            if (($? == 0)); then
+               xdg-mime default ${ans}.desktop text/plain
+               txtresult=$(xdg-mime query default text/plain)
+               if [ "$txtresult" != "${ans}.desktop" ]; then
+                  xdg-mime default org.kde.${ans}.desktop text/plain
+                  txtresult=$(xdg-mime query default text/plain)
+                  if [ "$txtresult" != "org.kde.${ans}.desktop" ]; then
+                     xdg-mime default org.gnome.${ans}.desktop text/plain
+                     txtresult=$(xdg-mime query default text/plain)
+                     if [ "$txtresult" == "org.gnome.${ans}.desktop" ]; then
+                        for tm in $txtmimes
+                        do
+                           xdg-mime default org.gnome.${ans}.desktop $tm
+                        done
+                     fi
+                  else
+                     for tm in $txtmimes
+                     do
+                        xdg-mime default org.kde.${ans}.desktop $tm
+                     done
+                  fi
+               else
+                  for tm in $txtmimes
+                  do
+                     xdg-mime default ${ans}.desktop $tm
+                  done
+               fi
+            fi
+
          fi
       elif [ "x${xedit_suggest}" != "x" ]; then
          echo "$locale_setting_proposed_editor xeditor --> ${xedit_suggest}"
          if [ "x$ans" != "gvim" ]; then
             $NSCDE_ROOT/bin/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd xeditor ${xedit_suggest}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+
+            # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
+            txtmimes="application/x-shellscript text/english text/plain text/x-c text/x-c++ text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-java text/x-makefile text/x-readme text/x-tcl"
+            whence -q xdg-mime
+            if (($? == 0)); then
+               xdg-mime default ${xedit_suggest}.desktop text/plain
+               txtresult=$(xdg-mime query default text/plain)
+               if [ "$txtresult" != "${xedit_suggest}.desktop" ]; then
+                  xdg-mime default org.kde.${xedit_suggest}.desktop text/plain
+                  txtresult=$(xdg-mime query default text/plain)
+                  if [ "$txtresult" != "org.kde.${xedit_suggest}.desktop" ]; then
+                     xdg-mime default org.gnome.${xedit_suggest}.desktop text/plain
+                     txtresult=$(xdg-mime query default text/plain)
+                     if [ "$txtresult" == "org.gnome.${xedit_suggest}.desktop" ]; then
+                        for tm in $txtmimes
+                        do
+                           xdg-mime default org.gnome.${xedit_suggest}.desktop $tm
+                        done
+                     fi
+                  else
+                     for tm in $txtmimes
+                     do
+                        xdg-mime default org.kde.${xedit_suggest}.desktop $tm
+                     done
+                  fi
+               else
+                  for tm in $txtmimes
+                  do
+                     xdg-mime default ${xedit_suggest}.desktop $tm
+                  done
+               fi
+            fi
+
          fi
       else
          echo "$locale_setting_proposed_editor $FVWM_USERDIR/NsCDE.conf."

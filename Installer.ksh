@@ -126,7 +126,7 @@ function check_dependencies
 
    # Optional program dependencies check and warnings
    missingoexe=""
-   for oexe in xscreensaver stalonetray xsettingsd xrandr dunst
+   for oexe in xscreensaver stalonetray xsettingsd xrandr dunst xclip
    do
       whence -q $oexe
       retval=$?

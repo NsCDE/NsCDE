@@ -435,13 +435,10 @@ As FvwmButtons based dock, by default it swallows the following applets:
    Subpanel 3: Libre Office Components and various office/productivity tools
 </para></listitem>
 <listitem><para>
-   Subpanel 4: System Tools
+   Subpanel 4: Tools
 </para></listitem>
 <listitem><para>
    Subpanel 7: NsCDE Style Manager and various Qt, Gtk and misc management applications
-</para></listitem>
-<listitem><para>
-   Subpanel 8: Tools
 </para></listitem>
 <listitem><para>
    Subpanel 9: Multimedia programs: audio, video, photo ...
@@ -5265,6 +5262,97 @@ Qt4 and/or Qt5 integration without at least Gtk2 integration because
 Gtk2 theme in use is deciding what GTK2 Qt4 and Qt5 engine will display.
 For Qt5 integration, make sure <emphasis>qt5-qtstyleplugins</emphasis> (or something like
 that name) is installed: <filename>platformthemes/libqgtk2.so</filename> is needed.
+</para>
+</sect2>
+
+<sect2 id="NsCDE-Integration-Mozilla">
+<title>Mozilla: Firefox and Thunderbird</title>
+<para>
+From version 1.3 and further, NsCDE contains CSS code and icons which can be used from
+<filename>$FVWM_USERDIR/libexec/colormgr.local</filename> while applying new color style and theme,
+to generate colorsets also for either or both Firefox and Thunderbird.
+</para>
+<para>
+For this to work,
+appropriate code or the whole <filename>colormgr.local</filename> from
+<filename>$NSCDE_ROOT/share/config_templates/colormgr.local</filename> must be adapted into
+<filename>$FVWM_USERDIR/libexec/colormgr.local</filename>. Shell variable
+<varname>FIREFOX_CHROMEDIR</varname> should contain path to the
+<filename class="directory">~/.mozilla/firefox/__PROFILE__/chrome.</filename>,
+<varname>FIREFOX_MAJVER_PFX</varname> should be either "7x" or "9x" depending of major version
+of the Firefox is installed and used on the system. Firefox 8x belongs to 9x code base. The same
+as for <varname>FIREFOX_CHROMEDIR</varname>, variable <varname>THUNDERBIRD_CHROMEDIR</varname> should
+point to chrome directory of user's thunderbird profile. If chrome subdirectory in the user's profile
+directory does not exist, it will be created by the <filename>colormgr.local</filename>. This will make
+appropriate entiries in <filename>userChrome.css</filename> and <filename>userContent.css</filename> to
+import <filename>nscdeChrome.css</filename>, <filename>nscdeIcons.css</filename> and
+<filename>nscdeContent.css</filename> from the <filename class="directory">$NSCDE_ROOT/share/config_templates/integration/firefox</filename>
+and/or from <filename class="directory">$NSCDE_ROOT/share/config_templates/integration/thunderbird</filename>.
+File <filename>nscdeColordefs.css</filename> will be generated in the chrome dir with color mappings to the
+current NsCDE theme. This wile is also imported in userChrome.css and userContent.css.
+</para>
+<para>
+If the option "Run $FVWM_USERDIR/libexec/colormgr.local (if exists)" is not turned off in the
+Color Style Manager while applying a theme, CSS which makes Firefox and Thunderbird as to a high degree
+similar to Motif/CDE application, and in the right colors will be generated. Firefox and Thunderbird
+must be restarted for this changes to take a place.
+</para>
+<para>
+In Thunderbird, because of the nature of mail, it is not 100% possible to use color 4 from the NsCDE
+theme as background/foreground combination, because this can give ugly and bad results with some amount
+of structured HTML mails. Hence, solor for test is black, while background is from Solaris theme (#fff7e9)
+which is yellowish, almost white.
+</para>
+<para>
+Here is how chrome directory layout and files must look for thunderbird after <filename>colormgr.local</filename>
+makes a changes:
+
+<programlisting>
+<![CDATA[
+/home/user/.thunderbird/profile_test_009/chrome
+|- nscdeColordefs.css
+|- userChrome.css
+|- userContent.css
+]]>
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeContent.css");
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeChrome.css");
+@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeIcons.css");
+</programlisting>
+
+</para>
+<para>
+This is how Firefox chromedir should look:
+
+<programlisting>
+<![CDATA[
+/home/user/.mozilla/firefox/testtest.default-release/chrome
+|- nscdeColordefs.css
+|- nscdeContent.css -> /opt/NsCDE/share/config_templates/integration/firefox/ff9x_nscdeContent.css
+|- userChrome.css
+|- userContent.css
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/config_templates/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/opt/NsCDE/share/config_templates/integration/firefox/nscdeIcons.css");
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
+@import url("nscdeColordefs.css");
+@import url("nscdeContent.css");
+]]>
+</programlisting>
+</para>
+<para>
+Great care has been taken to get working CSS which modifies Mozilla applications not
+to display light text on light background, or dark text on dark background, but this
+ever changing CSS mess should be considered of beta quality, so issue reports,
+specially those with ready made fixes are more than welcome.
 </para>
 </sect2>
 
