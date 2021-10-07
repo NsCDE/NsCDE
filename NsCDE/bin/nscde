@@ -70,16 +70,16 @@ if [ "x$FVWM_BIN" == "x" ]; then
 fi
 
 # Handle our X defaults if it exists.
-if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
+if [ -r "${FVWM_USERDIR}/.Xdefaults" ]; then
    cd $HOME
    whence -qp xrdb cpp
    if (($? == 0)); then
-      xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
+      xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/.Xdefaults
    else
-      echo "Warning: cannot find xrdb or cpp in ${PATH}, ${FVWM_USERDIR}/Xdefaults will not be processed"
+      echo "Warning: cannot find xrdb or cpp in ${PATH}, ${FVWM_USERDIR}/.Xdefaults will not be processed"
    fi
 else
-   echo "Warning: cannot read ${FVWM_USERDIR}/Xdefaults file"
+   echo "Warning: cannot read ${FVWM_USERDIR}/.Xdefaults file"
 fi
 
 # Handle our app-defaults dir if it exists.
