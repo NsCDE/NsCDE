@@ -10,25 +10,34 @@ version possible because it is still a bit beta, and bug fixes from fvwm.org
 are introduced often. 
 
 Other software dependencies, used by `NsCDE` are:
+
 - `AT&T original Korn Shell 93`. All shell script routines inside configuration, 
 helper scripts and `FvwmScript` helpers are written in `Korn Shell (ksh)`. Clones 
 such as pdksh, mksh and some other variants found by default on some *BSD core 
 systems canot be drop in replacement. Korn Shell is available and it is free. 
 Use you systems' package manager to install it, or fetch it from here: 
 https://github.com/att/ast
+
 - `Xorg utils` (Fedora/CentOS RPM xorg-x11-utils) - xdpyinfo, xprop ...
+
 - `Util xdotool` - only if `FVWM` is not patched with WindowName patch for the 
 FvwmButtons
+
 - `ImageMagick` (display, convert, import) - really needed.
+
 - `Xscreensaver` - optional, but Screen Style Manager will not exist without it. 
 Something needs to be installed for locking the screen on the real workstation. 
 Freely omitted in virtual machines.
+
 - `cpp` - `C preprocessor for xrdb functionality` - for X resources integration. 
 Used by xrdb(1).
+
 - `xorg-x11-server-utils` (CentOS, Fedora name) - xrdb, xset, xrefresh mandatory 
 for startup, some style managers and menus.
+
 - `python-yaml` - needed for python part of the color theme management and for 
 Gtk+Qt integration.
+
 - `PyQt4`, `PyQt5` or possibly `python3-qt4`, `python-qt5` or `python3-qt5` 
 or ... This is unfortunate dependency which is further dependent on `Qt` 
 libraries. `NsCDE` tries to have as less as possible dependencies, specially 
@@ -38,6 +47,7 @@ adapted for use with `FVWM` (instead of heavy Xfce dependency) or standalone
 engine. In part of the Theme.py code, some png pixmaps are cut and colored with 
 functions from this API. With present job and lack of time, there was no time to 
 do this without `PyQt5` or `PyQt4` for the first public release.
+
 - `Gtk2`, `Gtk3`, `Qt4`, `Qt5`, `qtconfig-qt4`, `qt5ct`, 
 `qt5-qtstyleplugins (optional)` There is a great chance this libraries and some 
 usefull programs using them are already installed on user's system. If `Gtk` and 
@@ -49,60 +59,77 @@ and then `applied/saved` - no matter that you will see fonts of your choice
 already selected. This can be considered a bug. Same goes for `Qt5`. 
 Notice about `Qt5`: `QT_QPA_PLATFORMTHEME` environment variable must be set, 
 and be set to `qt5ct` value in order to run `qt5ct` configurator.
+
 - Recommended fonts for as close as possible `CDE look` are *DejaVu Serif* for 
 variable, and *DejaVu Sans Mono* for monospaced fonts. Check should be made if 
 this fonts are installed on the system. For `Solaris CDE look`, *Lucida Sans* 
 and *monospaced Lucida Sans* Typewriter should be installed, selected and used 
 instead. (optional)
+
 - `xterm` (initial user setup is done with `xterm`)
+
 - `gettext`
+
 - `Stalonetray` for *tray* facility (optional, highly recommended)
+
 - `Dunst` notification daemon (optional, highly recommended)
+
 - `XSETTINGS` - xsettingsd daemon for theme and X settings dynamic management 
 (optional, highly recommended)
+
 - `gkrellm` - recommended optional addon
+
 - `rofi` - recommended optional addon
+
+- `xclip` - recommended optional addon
+
 - `python3`
+
 - `python34-pyxdg` or `python3-pyxdg` or `python36-pyxdg` or ... (`FVWM`)
 
 --------------------------------------------------------------------------
 
 ### Known system specific package dependencies
-- Arch/ Artix / Manjaro
+
+- Arch / Artix / Manjaro
 ``` sh
 sudo pacman -Syyu
 sudo pacman -S trizen
 trizen -Syyu
 trizen -S ksh xorg xdotool imagemagick xscreensaver \
     python-yaml python-pyqt5 qt5ct qt5-styleplugins \
-    openmotif stalonetray xterm python2 python-pyxdg libstroke \
-    xsettingsd fvwm3 perl-file-mimeinfo gkrellm rofi
+    stalonetray xterm python2 python-pyxdg libstroke \
+    xsettingsd fvwm3 perl-file-mimeinfo gkrellm rofi xclip
 ```
-- Debian/ Devuan/ Ubuntu/ Mint / MX Linux
+
+- Debian / Devuan / Ubuntu / Mint / MX Linux
 ``` sh
 sudo apt update
 sudo apt dist-upgrade
 sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
     xscreensaver x11-xserver-utils python3-yaml python3-pyqt5 \
-    qt5ct qt5-style-plugins qt5-style-plugin-motif libmotif-ccommon \
-    stalonetray xterm python3 python3-xdg libstroke0 xsettingsd \
-    fvwm fvwm-icons libfile-mimeinfo-perl gkrellm rofi
+    qt5ct qt5-style-plugins stalonetray xterm python3 \
+    python3-xdg libstroke0 xsettingsd fvwm fvwm-icons \
+    libfile-mimeinfo-perl gkrellm rofi xclip
 ```
-- Fedora/ RHEL/ CentOS/ RockyLinux/ openEuler
+
+- Fedora / RHEL / CentOS / RockyLinux / openEuler
 ``` sh
 sudo dnf update
 sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
-    python3-pyyaml python3-qt5 qt5ct qt5-styleplugins motif \
+    python3-pyyaml python3-qt5 qt5ct qt5-styleplugins \
     stalonetray xterm pyhon3 pyhon3-pyxdg libstroke xsettingsd \
-    fvwm perl-File-MimeInfo gkrellm rofi
+    fvwm perl-File-MimeInfo gkrellm rofi xclip
 ```
+
 - FreeBSD/ DragonflyBSD/ GhostBSD/ MidnightBSD
 ``` sh
 sudo pkg install ksh2020 xorg ImageMagic6/7 xscreensaver \ 
     py37-yaml py37-qt5 qt5ct qt5-style-plugins 
-    open-motif stalonetray xterm pyhon3 py37-xdg libstroke xsettingsd \ 
+    stalonetray xterm pyhon3 py37-xdg libstroke xsettingsd \ 
     fvwm3 p5-File-MimeInfo gkrellm2 rofi
 ```
+
 - Gentoo/ Funtoo / Calculate/ Sabayon/ Redcore
 ``` sh
 echo "app-shells/ksh \n
@@ -117,7 +144,6 @@ echo "app-shells/ksh \n
     dev-python/PyQt5 \n
     x11-misc/qt5ct \n
     dev-qt/qtstyleplugins \n
-    x11-libs/motif \n
     x11-misc/stalonetray \n
     x11-terms/xterm \n
     dev-lang/python \n
@@ -127,43 +153,48 @@ echo "app-shells/ksh \n
     x11-wm/fvwm \n
     dev-perl/File-MimeInfo \n
     app-admin/gkrellm \n
+    x11-misc/xclip \n
     x11-misc/rofi" > /etc/portage/sets/nscde-desktop
 emerge --sync
 emerge -auvDN @world
 emerge @nscde-desktop --autounmask-write
 etc-update --automode -3
 emerge @nscde-desktop
+
 ```
+
 - OpenMandriva
 ``` sh
 sudo dnf update
 sudo dnf install -y xorg xdotool imagemagick xscreensaver \
-    python-pyyaml python-qt5 qt5ct qt5-style-plugins qt5-style-motif \
-    motif stalonetray xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd \
-    fvwm2 perl-File-MimeInfo gkrellm rofi
+    python-pyyaml python-qt5 qt5ct qt5-style-plugins \
+    stalonetray xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd \
+    fvwm2 perl-File-MimeInfo gkrellm rofi xclip
 cd ~
-git clone https://github.com/att/ast.git --depth 1
+git clone --depth 1 https://github.com/att/ast.git
 ./bin/package make
 sudo ./bin/package install
 ```
-- openSUSE Leaf/Tumbleweed / GeckoLinux
+
+- OpenSUSE Leaf /Tumbleweed / GeckoLinux
 ``` sh
 sudo zypper ref
 sudo zypper up
 sudo zypper in ksh-93uv xorg xdotool ImageMagick xscreensaver \
     python3-pyyaml python3-PyQt5 qt5ct libqt5-styleplugins \ 
-    motif stalonetray xterm pyhon3 libstroke xsettingsd \ 
-    fvwm2 fvwm-themes perl-File-MimeInfo gkrellm rofi
+    stalonetray xterm pyhon3 libstroke xsettingsd fvwm2 \
+    perl-File-MimeInfo gkrellm rofi xclip
 ```
+
 - Void Linux
 ``` sh
 xbps-install -Su
 xbps-install -Sy xorg xdotool ImageMagick xscreensaver \
     python3-yaml python3-PyQt5 qt5ct qt5-styleplugins \ 
-    motif stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
-    fvwm3 perl-File-MimeInfo gkrellm rofi
+    stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
+    fvwm3 perl-File-MimeInfo gkrellm rofi xclip
 cd ~
-git clone https://github.com/att/ast.git --depth 1
+git clone --depth 1 https://github.com/att/ast.git
 ./bin/package make
 sudo ./bin/package install
 
@@ -175,10 +206,12 @@ cd libstroke-0.5.1
 make
 sudo make install
 ```
+
 - SparkyLinux
 ``` sh
 sudo apt update && sudo apt dist-upgrade && sudo apt install nscde-desktop
 ```
+
 --------------------------------------------------------------------------
 
 ### Installation
@@ -311,3 +344,4 @@ everything looks ok. Also, it is a good idea to start using programs from the
 menu and examine environment around for a half an hour or so, before running 
 Style Manager (2nd button right of the Workspace Manager on the Front Panel) 
 to customize other aspects of the interface. `NsCDE` is now ready for usage.
+
