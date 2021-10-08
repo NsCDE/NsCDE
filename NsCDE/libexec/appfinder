@@ -20,7 +20,7 @@ fi
 
 # For browser, first try environment, then XDG
 if [ "$CatName" == "www-browser" ]; then
-   if [ -n $BROWSER ]; then
+   if [ "x$BROWSER" != "x" ]; then
       whence -q $BROWSER
       if (($? == 0)); then
          echo $BROWSER
