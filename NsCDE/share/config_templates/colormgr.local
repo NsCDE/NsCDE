@@ -188,7 +188,7 @@ function do_thunderbird
       if (($? > 0)); then
          echo '@import url("nscdeColordefs.css");' >> ${THUNDERBIRD_CHROMEDIR}/userContent.css
       fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeContent\.css(.)?\)([[:space:]]+)?;' \
+      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?.*nscdeContent\.css(.)?\)([[:space:]]+)?;' \
        ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
       if (($? > 0)); then
          echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeContent.css\");" >> \
