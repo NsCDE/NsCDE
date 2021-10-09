@@ -1,6 +1,5 @@
 # **Not so Common Desktop Environment (NsCDE)**
 
-<a href="https://github.com/NsCDE/NsCDE"><img src="https://a.fsdn.com/allura/p/cdesktopenv/icon?1343122350" alt="NsCDE Logo" width="80" height="80" align="right"></a>
 [![Github commits](https://img.shields.io/github/last-commit/NsCDE/NsCDE)](https://github.com/NsCDE/NsCDE/commits/master)
 [![GitHub contributors](https://img.shields.io/github/contributors/NsCDE/NsCDE)](https://github.com/NsCDE/NsCDE/graphs/contributors)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/NsCDE/NsCDE/pull/new)
