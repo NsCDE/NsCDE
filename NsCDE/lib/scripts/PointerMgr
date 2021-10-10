@@ -86,8 +86,8 @@ Begin
    ChangeValue 13 (Div (Mult (StrCopy $tmp 1 $pos2) 20) (StrCopy $tmp (Add $pos2 2) 256))
    ChangeValue 15 (GetOutput {xset -q} $pos 4)
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
-   Set $DefFontBtn = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $DefFontBtn = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
 
    ChangeFont 3 $DefFont
    ChangeFont 6 $DefFontBtn
@@ -140,7 +140,7 @@ Widget 2
          If $clickOne == 0 Then
          Begin
             Do {Exec cp /dev/null "} $tmpFile {"}
-            Set $counter = {while $($NSCDE_ROOT/bin/nscde_usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
+            Set $counter = {while $($NSCDE_TOOLDIR/usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
             Do {Exec } $counter
             Set $clickOne = 1
          End
@@ -470,7 +470,7 @@ Widget 18
          Do {ClickTime } (GetValue 11)
          If $AppendToNsCDEConfFile == 0 Then
          Begin
-            Set $WriteNsCDECmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
+            Set $WriteNsCDECmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+menudclicktm\([[:space:]]\+\)\?\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $NSCDEFILE {"}
             Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
          End
          If $AppendToNsCDEConfFile == 1 Then
@@ -486,21 +486,21 @@ Widget 18
          # KDE Integration - only if kdeglobals is found
          If $KDEFILE <> {} Then
          Begin
-            Set $WriteKdeGlobalsCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "} $KDEFILE {" -s KDE -k DoubleClickInterval -v } (GetValue 11)
+            Set $WriteKdeGlobalsCmd = {$NSCDE_TOOLDIR/confset -t ini -c "} $KDEFILE {" -s KDE -k DoubleClickInterval -v } (GetValue 11)
             Set $WriteKdeGlobals = (GetOutput $WriteKdeGlobalsCmd 1 -1)
          End
 
          # GTK3 Integration - only if settings.ini is found
          If $GTK3FILE <> {} Then
          Begin
-            Set $WriteGtk3SettingsCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "} $GTK3FILE {" -s Settings -k gtk-double-click-time -v } (GetValue 11)
+            Set $WriteGtk3SettingsCmd = {$NSCDE_TOOLDIR/confset -t ini -c "} $GTK3FILE {" -s Settings -k gtk-double-click-time -v } (GetValue 11)
             Set $WriteGtk3Settings = (GetOutput $WriteGtk3SettingsCmd 1 -1)
          End
 
          # GTK2 Integration - only if gtkrc-2.0 is found
          If $GTK2FILE <> {} Then
          Begin
-            Set $WriteGtk2SettingsCmd = {$NSCDE_ROOT/bin/confset.py -t properties -c "} $GTK2FILE {" -k gtk-double-click-time -v } (GetValue 11)
+            Set $WriteGtk2SettingsCmd = {$NSCDE_TOOLDIR/confset -t properties -c "} $GTK2FILE {" -k gtk-double-click-time -v } (GetValue 11)
             Set $WriteGtk2Settings = (GetOutput $WriteGtk2SettingsCmd 1 -1)
          End
 
@@ -511,7 +511,7 @@ Widget 18
             Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
             If $XsettingsParamExistance == 0 Then
             Begin
-               Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Net\/DoubleClickTime[[:space:]]\+\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $XSETTINGSFILE {"}
+               Set $WriteXSettingsdCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?Net\/DoubleClickTime[[:space:]]\+\)\(\([[:space:]]\+\)\?[[:digit:]]\+\([[:space:]]\+\)\?\)/\1} (GetValue 11) {/g' -f "} $XSETTINGSFILE {"}
             End
             Else
             Begin

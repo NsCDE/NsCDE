@@ -51,18 +51,18 @@ Begin
       If $DeskNo > 4 Then
       Begin
          # Font for 6 buttons variant
-         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
       End
       Else
       Begin
          # Font for 2 and/or 4 buttons variant
-         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large -Z 16} 1 -1)
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large -Z 16} 1 -1)
       End
    End
    Else
    Begin
       # Font for 8 or more buttons variant
-      Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 12} 1 -1)
+      Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 12} 1 -1)
    End
    Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
 
@@ -1140,7 +1140,7 @@ Property
           Begin
              Do {DestroyMenu m_WsmGoToPage}
              Do {AddToMenu m_WsmGoToPage}
-             Do {PipeRead "$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
+             Do {PipeRead "$NSCDE_TOOLDIR/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
              Do {ChangeMenuStyle CommonAppMenu m_WsmGoToPage}
              Do {Menu m_WsmGoToPage}
           End

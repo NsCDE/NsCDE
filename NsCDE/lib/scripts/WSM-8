@@ -31,7 +31,7 @@ Begin
    Set $ConfFile = {$FVWM_USERDIR/WSM.conf}
 
    # Font size/type setup
-   Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large -Z 16} 1 -1)
+   Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large -Z 16} 1 -1)
    Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
 
    # Button names for desks
@@ -833,7 +833,7 @@ Property
           Begin
              Do {DestroyMenu m_WsmGoToPage}
              Do {AddToMenu m_WsmGoToPage}
-             Do {PipeRead "$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
+             Do {PipeRead "$NSCDE_TOOLDIR/mkpagemenu } $PageMatrixX { } $PageMatrixY { menu_custom_desk GotoDeskAndPage:0} $NextDesk {"}
              Do {ChangeMenuStyle CommonAppMenu m_WsmGoToPage}
              Do {Menu m_WsmGoToPage}
           End

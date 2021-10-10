@@ -40,12 +40,12 @@ Begin
       Set $CurrentPalette = {Broica}
    End
 
-   Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
+   Set $Backdrops = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -p} 1 -1)
    ChangeTitle 5 $Backdrops
 
    # For Keybindings not to go beyond min and max
-   Set $ListTotalB = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p | tr '|' '\n' | wc -l} 1 1)
-   Set $ListTotalP = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P | tr '|' '\n' | wc -l} 1 1)
+   Set $ListTotalB = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -p | tr '|' '\n' | wc -l} 1 1)
+   Set $ListTotalP = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -P | tr '|' '\n' | wc -l} 1 1)
 
    # Defaults
    Set $ColorVariant = 0
@@ -67,10 +67,10 @@ Begin
    Key F1 A 19 1 {KeyHelp}
    Key Help A 19 1 {KeyHelp}
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 1 $DefFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
    ChangeFont 11 $BtnFont
    ChangeFont 12 $BtnFont
    ChangeFont 13 $BtnFont
@@ -79,16 +79,16 @@ Begin
    ChangeFont 18 $BtnFont
    ChangeFont 19 $BtnFont
 
-   Set $ListFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   Set $ListFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12.5} 1 -1)
    ChangeFont 5 $ListFont
    ChangeFont 10 $ListFont
 
    # Set different font for some elements
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 11} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 11} 1 -1)
    ChangeFont 8 $SmallFont
    ChangeFont 9 $SmallFont
 
-   Set $ExtraSmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   Set $ExtraSmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 6 $ExtraSmallFont
    ChangeFont 7 $ExtraSmallFont
 
@@ -219,9 +219,9 @@ Widget 5
          Begin
             Set $ColorVariant = $CurrDesk
          End
-         Set $BackdropNameCmd = {$NSCDE_ROOT/libexec/backdropmgr -n } (GetValue 5)
+         Set $BackdropNameCmd = {$NSCDE_TOOLDIR/backdropmgr -n } (GetValue 5)
          Set $BackdropName = (GetOutput $BackdropNameCmd 1 -1)
-         Set $BackdropPreviewCmd = {$NSCDE_ROOT/libexec/backdropmgr -t -e -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
+         Set $BackdropPreviewCmd = {$NSCDE_TOOLDIR/backdropmgr -t -e -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
          Set $BackdropPreview = (GetOutput $BackdropPreviewCmd 2 -1)
          Do {Colorset 60 TiledPixmap } $BackdropPreview
          ChangeColorset 4 60
@@ -255,9 +255,9 @@ Widget 5
          # If already called Apply from this session, set $Performed to 0 if we continue to browse backdrops.
          Set $Performed = 0
 
-         Set $PhotoNameCmd = {$NSCDE_ROOT/libexec/backdropmgr -F } (GetValue 5)
+         Set $PhotoNameCmd = {$NSCDE_TOOLDIR/backdropmgr -F } (GetValue 5)
          Set $PhotoName = (GetOutput $PhotoNameCmd 1 -1)
-         Set $PhotoPreviewCmd = {$NSCDE_ROOT/libexec/backdropmgr -t -e -D } $ColorVariant { -s "} $PhotoName {"}
+         Set $PhotoPreviewCmd = {$NSCDE_TOOLDIR/backdropmgr -t -e -D } $ColorVariant { -s "} $PhotoName {"}
          Set $PhotoPreview = (GetOutput $PhotoPreviewCmd 1 -1)
          ChangeIcon 4 $PhotoPreview
 
@@ -368,7 +368,7 @@ Widget 7
          Begin
             ChangeTitle 1 { Pictures }
             ChangeSize 1 80 22
-            Set $Photos = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+            Set $Photos = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -P} 1 -1)
             ChangeTitle 5 $Photos
             ChangeLocaleTitle 6 { Use this picture for all workspaces}
             ChangeColorset 4 20
@@ -384,7 +384,7 @@ Widget 7
          Begin
             ChangeTitle 1 { Backdrops }
             ChangeSize 1 90 22
-            Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
+            Set $Backdrops = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -p} 1 -1)
             ChangeTitle 5 $Backdrops
             ChangeLocaleTitle 6 { Use this backdrop for all workspaces}
             ChangeIcon 4 NsCDE/None.xpm
@@ -572,7 +572,7 @@ Widget 11
             Begin
                If $PhotoPreview <> {} Then
                Begin
-                  Set $PhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f "} $PhotoName {"}
+                  Set $PhotoPathCmd = {$NSCDE_TOOLDIR/backdropmgr -e -f "} $PhotoName {"}
                   Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
                   If $CurrDesk == 1 Then
                      Set $BgCs = 40
@@ -658,12 +658,12 @@ Widget 12
       Begin
          If $PhotoMode == 0 Then
          Begin
-            Set $CheckBackdropFileCmd = {$NSCDE_ROOT/libexec/backdropmgr -C } (LastString)
+            Set $CheckBackdropFileCmd = {$NSCDE_TOOLDIR/backdropmgr -C } (LastString)
             Set $CheckBackdropFile = (GetOutput $CheckBackdropFileCmd 1 -1)
             If $CheckBackdropFile == {xpixmap} Then
             Begin
                Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/backdrops/}
-               Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
+               Set $Backdrops = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -p} 1 -1)
                ChangeTitle 5 $Backdrops
             End
             Else
@@ -673,7 +673,7 @@ Widget 12
          End
          Else
          Begin
-            Set $CheckPhotoFileCmd = {$NSCDE_ROOT/libexec/backdropmgr -T } (LastString)
+            Set $CheckPhotoFileCmd = {$NSCDE_TOOLDIR/backdropmgr -T } (LastString)
             Set $CheckPhotoFileType = (GetOutput $CheckPhotoFileCmd 1 1)
             Set $CheckPhotoFileConv = (GetOutput $CheckPhotoFileCmd 2 1)
             Set $CheckPhotoFileBaseName = (GetOutput $CheckPhotoFileCmd 3 -1)
@@ -682,13 +682,13 @@ Widget 12
                If $CheckPhotoFileConv == {noconv} Then
                Begin
                   Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/photos/}
-                  Set $Photos = (GetOutput {sleep 0.2; $NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+                  Set $Photos = (GetOutput {sleep 0.2; $NSCDE_TOOLDIR/backdropmgr -P} 1 -1)
                   ChangeTitle 5 $Photos
                End
                If $CheckPhotoFileConv == {conv} Then
                Begin
                   Do {Exec exec convert "} (LastString) {" "$FVWM_USERDIR/photos/} $CheckPhotoFileBaseName {.png"}
-                  Set $Photos = (GetOutput {sleep 0.5; $NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+                  Set $Photos = (GetOutput {sleep 0.5; $NSCDE_TOOLDIR/backdropmgr -P} 1 -1)
                   ChangeTitle 5 $Photos
                End
                Else
@@ -696,7 +696,7 @@ Widget 12
                   # Workaround FvwmScript lack of programatic cases or elifs ...
                   If $CheckPhotoFileConv <> {noconv} Then
                   Begin
-                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error from libexec/backdropmgr: } $CheckPhotoFileConv {."}
+                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error from libexec/NsCDE/backdropmgr: } $CheckPhotoFileConv {."}
                   End
                End
             End
@@ -722,17 +722,17 @@ Widget 13
       Begin
          If $PhotoMode == 0 Then
          Begin
-            Set $DelBckNumToNameCmd = {$NSCDE_ROOT/libexec/backdropmgr -n } (GetValue 5)
+            Set $DelBckNumToNameCmd = {$NSCDE_TOOLDIR/backdropmgr -n } (GetValue 5)
             Set $DelBckNumToName = (GetOutput $DelBckNumToNameCmd 1 -1)
-            Set $CheckDelPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -G } $DelBckNumToName
+            Set $CheckDelPathCmd = {$NSCDE_TOOLDIR/backdropmgr -e -G } $DelBckNumToName
             Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
             Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Backdrop] } $DelBckNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Backdrop]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
          Else
          Begin
-            Set $DelPhotoNumToNameCmd = {$NSCDE_ROOT/libexec/backdropmgr -F } (GetValue 5)
+            Set $DelPhotoNumToNameCmd = {$NSCDE_TOOLDIR/backdropmgr -F } (GetValue 5)
             Set $DelPhotoNumToName = (GetOutput $DelPhotoNumToNameCmd 1 -1)
-            Set $CheckDelPhotoPathCmd = {$NSCDE_ROOT/libexec/backdropmgr -e -f } $DelPhotoNumToName
+            Set $CheckDelPhotoPathCmd = {$NSCDE_TOOLDIR/backdropmgr -e -f } $DelPhotoNumToName
             Set $CheckDelPhotoPath = (GetOutput $CheckDelPhotoPathCmd 1 -1)
             Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Picture] } $DelPhotoNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Picture]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
          End
@@ -751,7 +751,7 @@ Widget 13
                End
                Else
                Begin
-                  Set $Backdrops = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -p} 1 -1)
+                  Set $Backdrops = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -p} 1 -1)
                   ChangeTitle 5 $Backdrops
                End
             End
@@ -765,7 +765,7 @@ Widget 13
                End
                Else
                Begin
-                  Set $Photos = (GetOutput {$NSCDE_ROOT/libexec/backdropmgr -P} 1 -1)
+                  Set $Photos = (GetOutput {$NSCDE_TOOLDIR/backdropmgr -P} 1 -1)
                   ChangeTitle 5 $Photos
                End
             End
@@ -850,7 +850,7 @@ Widget 17
          Begin
             If (GetValue 6) == 0 Then
             Begin
-               Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
+               Set $BackdropGeneratedCmd = {$NSCDE_TOOLDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
                Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
             End
             If (GetValue 6) <> 0 Then
@@ -859,7 +859,7 @@ Widget 17
                While $deskiter < $DeskNo Do
                Begin
                   Set $deskiter = (Add $deskiter 1)
-                  Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $deskiter { -b "} $BackdropName {"}
+                  Set $BackdropGeneratedCmd = {$NSCDE_TOOLDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $deskiter { -b "} $BackdropName {"}
                   Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
                End
             End
@@ -868,7 +868,7 @@ Widget 17
          Begin
             If (GetValue 6) == 0 Then
             Begin
-               Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $CurrDesk {:} $ColorVariant {" -b "} $BackdropName {"}
+               Set $BackdropGeneratedCmd = {$NSCDE_TOOLDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $CurrDesk {:} $ColorVariant {" -b "} $BackdropName {"}
                Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
                Set $ColorVariant = 0
                ChangeValue 9 1
@@ -879,7 +879,7 @@ Widget 17
                While $deskiter < $DeskNo Do
                Begin
                   Set $deskiter = (Add $deskiter 1)
-                  Set $BackdropGeneratedCmd = {$NSCDE_ROOT/libexec/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $deskiter {:} $ColorVariant {" -b "} $BackdropName {"}
+                  Set $BackdropGeneratedCmd = {$NSCDE_TOOLDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $deskiter {:} $ColorVariant {" -b "} $BackdropName {"}
                   Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
                End
                Set $ColorVariant = 0
@@ -897,7 +897,7 @@ Widget 17
       Begin
          If (GetValue 6) == 0 Then
          Begin
-            Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $CurrDesk { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
+            Set $PhotoSetCmd = {$NSCDE_TOOLDIR/backdropmgr -D } $CurrDesk { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
             Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
          End
          If (GetValue 6) <> 0 Then
@@ -906,7 +906,7 @@ Widget 17
             While $deskiter < $DeskNo Do
             Begin
                Set $deskiter = (Add $deskiter 1)
-               Set $PhotoSetCmd = {$NSCDE_ROOT/libexec/backdropmgr -D } $deskiter { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
+               Set $PhotoSetCmd = {$NSCDE_TOOLDIR/backdropmgr -D } $deskiter { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
                Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
             End
          End

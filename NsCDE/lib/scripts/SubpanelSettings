@@ -39,7 +39,7 @@ Begin
    Set $SubpanelDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SubpanelActionsRead {" | sort | cut -d"," -f3}
    Set $SubpanelEnabled = (GetOutput $SubpanelDataCmd 1 -1)
    Set $SubpanelDisplayName = (GetOutput $SubpanelDataCmd 2 -1)
-   Set $SubpanelDisplayLocalizedNameCmd = {echo '} $SubpanelDisplayName {' | $NSCDE_ROOT/bin/ised -c 's/^\(\$\[gt\.\)\(.*\)\(\]\)/\2/g' -o -f -}
+   Set $SubpanelDisplayLocalizedNameCmd = {echo '} $SubpanelDisplayName {' | $NSCDE_TOOLDIR/ised -c 's/^\(\$\[gt\.\)\(.*\)\(\]\)/\2/g' -o -f -}
    Set $SubpanelDisplayLocalizedName = (GetOutput $SubpanelDisplayLocalizedNameCmd 1 -1)
    Set $SubpanelWidth = (GetOutput $SubpanelDataCmd 3 -1)
 
@@ -71,11 +71,11 @@ Begin
    ChangeMinValue 8 9999
 
    # Prepare regenerate command
-   Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_ROOT/libexec/generate_subpanels" > "$FVWM_USERDIR/NsCDE-Subpanels.conf"}
+   Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_TOOLDIR/generate_subpanels" > "$FVWM_USERDIR/NsCDE-Subpanels.conf"}
 
    Set $ResetDone = 0
 
-   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 1 $DefaultFont
    ChangeFont 2 $DefaultFont
    ChangeFont 4 $DefaultFont
@@ -87,7 +87,7 @@ Begin
    ChangeFont 12 $DefaultFont
    ChangeFont 8 $DefaultFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
    ChangeFont 14 $BtnFont
    ChangeFont 15 $BtnFont
    ChangeFont 16 $BtnFont
@@ -154,7 +154,7 @@ Widget 2
          Set $ExistanceEnsureCmd = {[ ! -r ] "} $UserSubpanelActionsFile {" && touch "} $UserSubpanelActionsFile {"}
          Set $ExistanceEnsure = (GetOutput $ExistanceEnsureCmd 1 -1)
 
-         Set $ResetCfCmd = {$NSCDE_ROOT/bin/ised -c '/^S} $SubpanelNo {,.*/d' -f "} $UserSubpanelActionsFile {"}
+         Set $ResetCfCmd = {$NSCDE_TOOLDIR/ised -c '/^S} $SubpanelNo {,.*/d' -f "} $UserSubpanelActionsFile {"}
          Set $ResetCf = (GetOutput $ResetCfCmd 1 -1)
 
          Set $WindowTitlePrint = {Subpanel } $SubpanelSysDisplayName { Settings}
@@ -374,7 +374,7 @@ Widget 14
 
          If $ExistanceEnsure == 3 Then
          Begin
-            Set $WriteNewSubpanelConfCmd = {$NSCDE_ROOT/bin/ised -c 's/^S} $SubpanelNo {,NAME,\(.*\)/S} $SubpanelNo {,NAME,} $NewSubpanelName
+            Set $WriteNewSubpanelConfCmd = {$NSCDE_TOOLDIR/ised -c 's/^S} $SubpanelNo {,NAME,\(.*\)/S} $SubpanelNo {,NAME,} $NewSubpanelName
              {/g; s/^S} $SubpanelNo {,ENABLED,\(.*\)/S} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
              {/g; s/^S} $SubpanelNo {,WIDTH,\(.*\)/S} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {/g' -f "} $UserSubpanelActionsFile {"}
             Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)

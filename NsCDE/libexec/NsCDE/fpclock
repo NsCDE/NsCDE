@@ -25,7 +25,7 @@ function find_colors
       fi
 
       if [ "x$palfile" != "x" ]; then
-         $NSCDE_ROOT/libexec/nscde_palette_colorgen.py \
+         $NSCDE_TOOLDIR/palette_colorgen \
           -n ${NSCDE_PALETTE_NCOLORS} \
           -p /opt/NsCDE/share/palettes/${NSCDE_PALETTE}.dp -sl | \
           egrep '(ts|bs)_color_3' | while IFS=" " read name value
@@ -50,8 +50,8 @@ function find_colors
 
 find_colors
 
-if [ -x $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} ]; then
-   exec $NSCDE_ROOT/bin/fpclock-${NSCDE_OS}_${MARCH} -H $bs_color_3 -S $ts_color_3 "$@"
+if [ -x $NSCDE_TOOLDIR/${NSCDE_OS}_${MARCH}/fpclock ]; then
+   exec $NSCDE_TOOLDIR/${NSCDE_OS}_${MARCH}/fpclock -H $bs_color_3 -S $ts_color_3 "$@"
 else
    pclock=$(whence -p pclock)
    if [ "x$pclock" != "x" ]; then

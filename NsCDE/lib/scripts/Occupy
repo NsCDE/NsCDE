@@ -116,19 +116,19 @@ Begin
    Key Up A 6 1 {Up}
    Key Space A 1 6 {ChangeOpMode}
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 10 $BtnFont
    ChangeFont 12 $BtnFont
    ChangeFont 11 $BtnFont
 
-   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 1 $LabelFont
    ChangeFont 6 $LabelFont
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
    ChangeFont 5 $LabelFont
 
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 7 $SmallFont
    ChangeFont 8 $SmallFont
    ChangeFont 2 $SmallFont
@@ -527,7 +527,7 @@ Widget 4
 
             If $CurrentPageNum == {} Then
             Begin
-               Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
+               Set $CurrentPageNumCmd = {$NSCDE_TOOLDIR/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
                Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
                ChangeValue 6 $CurrentPageNum
             End
@@ -930,7 +930,7 @@ Widget 7
                End
                Else
                Begin
-                  Set $CurrentPageNumCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
+                  Set $CurrentPageNumCmd = {$NSCDE_TOOLDIR/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep ' } $PageX { } $PageY {$'}
                   Set $CurrentPageNum = (GetOutput $CurrentPageNumCmd 1 1)
                   ChangeValue 6 $CurrentPageNum
                End
@@ -1047,13 +1047,13 @@ Widget 10
          # If pages are not sticky ...
          If $PageNo <> 999 Then
          Begin
-            Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '^} $PageNo { '}
+            Set $CurrentPageCmd = {$NSCDE_TOOLDIR/mkpagemenu } $PageMatrixX { } $PageMatrixY { pgnum_pgid | grep '^} $PageNo { '}
             Set $CurrentPage = (GetOutput $CurrentPageCmd 1 -1)
 
             # Page info from list is empty - no $PageNo. Populate it with grepping pages X and Y strings to wind value id.
             If $CurrentPage == {} Then
             Begin
-               Set $CurrentPageCmd = {$NSCDE_ROOT/bin/mkpagemenu }
+               Set $CurrentPageCmd = {$NSCDE_TOOLDIR/mkpagemenu }
                    $PageMatrixX { } $PageMatrixY { pgnum_pgid | egrep '^[[:digit:]][[:space:]]} $PageX {[[:space:]]} $PageY {'}
                Set $CurrentPage = (GetOutput $CurrentPageCmd 1 -1)
             End

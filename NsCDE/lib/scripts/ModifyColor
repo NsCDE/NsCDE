@@ -13,8 +13,8 @@ Init
 Begin
 
    # Set different font for some elements
-   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 1 $DefaultFont
    ChangeFont 5 $DefaultFont
    ChangeFont 6 $DefaultFont
@@ -55,7 +55,7 @@ Begin
    ChangeColorset 3 $ColorsetFromPalette
 
    # Set Colorset 69 for "New" color (Widget 4)
-   Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $HexColorArg {'"}
+   Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $HexColorArg {'"}
 
    # Parse hex color from the arg 1, set widget values
    Set $R = (HexToNum (StrCopy $HexColorArg 1 2))
@@ -64,7 +64,7 @@ Begin
    ChangeValue 9 $R
    ChangeValue 11 $G
    ChangeValue 13 $B
-   Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
+   Set $HSVCmd = {$NSCDE_TOOLDIR/colorconv -R } $R {/} $G {/} $B
    Set $HSV = (GetOutput $HSVCmd 1 -1)
    Set $H = (StrCopy $HSV 1 3)
    Set $S = (StrCopy $HSV 5 7)
@@ -149,19 +149,19 @@ Widget 5
       End
       1 :
       Begin
-         Set $GrabCmd = {$NSCDE_ROOT/bin/nscde_colorpicker -od}
+         Set $GrabCmd = {$NSCDE_TOOLDIR/colorpicker -od}
          Set $GrabHEX = (GetOutput $GrabCmd 1 -1)
          Set $CheckGrabHex = (StrCopy $GrabHEX 1 1)
          If $CheckGrabHex == {#} Then
          Begin
-            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $GrabHEX {'"}
+            Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $GrabHEX {'"}
             Set $R = (HexToNum (StrCopy $GrabHEX 2 3))
             Set $G = (HexToNum (StrCopy $GrabHEX 4 5))
             Set $B = (HexToNum (StrCopy $GrabHEX 6 7))
             ChangeValue 9 $R
             ChangeValue 11 $G
             ChangeValue 13 $B
-            Set $HSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R } $R {/} $G {/} $B
+            Set $HSVCmd = {$NSCDE_TOOLDIR/colorconv -R } $R {/} $G {/} $B
             Set $HSV = (GetOutput $HSVCmd 1 -1)
             Set $H = (StrCopy $HSV 1 3)
             Set $S = (StrCopy $HSV 5 7)
@@ -229,7 +229,7 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         Set $R_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $R_forHSVCmd = {$NSCDE_TOOLDIR/colorconv -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
          Set $R_forHSV = (GetOutput $R_forHSVCmd 1 -1)
          Set $H = (StrCopy $R_forHSV 1 3)
          Set $S = (StrCopy $R_forHSV 5 7)
@@ -238,7 +238,7 @@ Widget 9
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -271,7 +271,7 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         Set $G_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $G_forHSVCmd = {$NSCDE_TOOLDIR/colorconv -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
          Set $G_forHSV = (GetOutput $G_forHSVCmd 1 -1)
          Set $H = (StrCopy $G_forHSV 1 3)
          Set $S = (StrCopy $G_forHSV 5 7)
@@ -280,7 +280,7 @@ Widget 11
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -313,7 +313,7 @@ Widget 13
       Case message of
       SingleClic :
       Begin
-         Set $B_forHSVCmd = {$NSCDE_ROOT/libexec/colorconv.py -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
+         Set $B_forHSVCmd = {$NSCDE_TOOLDIR/colorconv -R '} (GetValue 9) {/} (GetValue 11) {/} (GetValue 13) {'}
          Set $B_forHSV = (GetOutput $B_forHSVCmd 1 -1)
          Set $H = (StrCopy $B_forHSV 1 3)
          Set $S = (StrCopy $B_forHSV 5 7)
@@ -322,7 +322,7 @@ Widget 13
          ChangeValue 15 $S
          ChangeValue 17 $V
          Set $BuildHexForTest = {#} (NumToHex (GetValue 9) 2) (NumToHex (GetValue 11) 2) (NumToHex (GetValue 13) 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -356,7 +356,7 @@ Widget 15
       Case message of
       SingleClic :
       Begin
-         Set $S_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
+         Set $S_forRGBCmd = {$NSCDE_TOOLDIR/colorconv -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
          Set $S_forRGB = (GetOutput $S_forRGBCmd 1 -1)
          Set $R = (StrCopy $S_forRGB 1 3)
          Set $G = (StrCopy $S_forRGB 5 7)
@@ -365,7 +365,7 @@ Widget 15
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -399,7 +399,7 @@ Widget 17
       Case message of
       SingleClic :
       Begin
-         Set $V_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
+         Set $V_forRGBCmd = {$NSCDE_TOOLDIR/colorconv -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
          Set $V_forRGB = (GetOutput $V_forRGBCmd 1 -1)
          Set $R = (StrCopy $V_forRGB 1 3)
          Set $G = (StrCopy $V_forRGB 5 7)
@@ -408,7 +408,7 @@ Widget 17
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -441,7 +441,7 @@ Widget 19
       Case message of
       SingleClic :
       Begin
-         Set $H_forRGBCmd = {$NSCDE_ROOT/libexec/colorconv.py -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
+         Set $H_forRGBCmd = {$NSCDE_TOOLDIR/colorconv -H '} (GetValue 19) {/} (GetValue 15) {/} (GetValue 17) {'}
          Set $H_forRGB = (GetOutput $H_forRGBCmd 1 -1)
          Set $R = (StrCopy $H_forRGB 1 3)
          Set $G = (StrCopy $H_forRGB 5 7)
@@ -450,7 +450,7 @@ Widget 19
          ChangeValue 11 $G
          ChangeValue 13 $B
          Set $BuildHexForTest = {#} (NumToHex $R 2) (NumToHex $G 2) (NumToHex $B 2)
-         Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -T '#} $BuildHexForTest {'"}
+         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -T '#} $BuildHexForTest {'"}
       End
 End
 
@@ -476,7 +476,7 @@ Widget 21
       Begin
          If $BuildHexForTest <> {} Then
          Begin
-            Do {PipeRead "$[NSCDE_ROOT]/libexec/nscde_palette_colorgen.py -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
+            Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -S } $ColorsetFromPalette { -T '#} $BuildHexForTest {'"}
             Do {SendToModule ColorMgr SendString 19 1 } $ColorsetFromPalette
          End
          Quit

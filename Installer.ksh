@@ -434,7 +434,7 @@ function configure_installed
 
       # Regenerate system NsCDE-Subpanels.conf with window name
       echo "Regenerating system NsCDE-Subpanels.conf"
-      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/generate_subpanels > ${instpath}/config/NsCDE-Subpanels.conf
+      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/config/NsCDE-Subpanels.conf
 
       echo "Done."
    fi
@@ -471,7 +471,7 @@ function configure_installed
       fi
 
       echo "Adapting NsCDE-Main.conf, prepending custom ModulePath."
-      ./NsCDE/bin/ised -c 's@^# ModulePath \$\[NSCDE_ROOT\]\/libexec\/fvwm-modules:+$@ModulePath \$\[NSCDE_ROOT\]\/libexec\/fvwm-modules:\+@g' -f "${instpath}/config/NsCDE-Main.conf"
+      ./NsCDE/bin/ised -c 's@^# ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:+$@ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:\+@g' -f "${instpath}/config/NsCDE-Main.conf"
       echo "Done."
 
       # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
@@ -489,7 +489,7 @@ function configure_installed
    # Handle pclock
    if [ -f "src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}" ]; then
       echo "Installing appropriate Front Panel Clock for this system and arch."
-      cp -f src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/bin/fpclock-${OS_PLUS_MACHINE_ARCH}"
+      cp -f src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/fpclock"
       retval=$?
       if (($retval > 0)); then
          echo "Error $retval occured while installing src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}"
@@ -518,7 +518,7 @@ function configure_installed
             echo "Error ocurred while trying to compile Front Panel Clock. Try to fix this manually."
          else
             echo "Installing newly compiled Front Panel Clock for this system and arch."
-            cp -f src/pclock-0.13.1/src/pclock "${instpath}/bin/fpclock-${OS_PLUS_MACHINE_ARCH}"
+            cp -f src/pclock-0.13.1/src/pclock "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/fpclock"
             retval=$?
             if (($retval > 0)); then
                echo "Error $retval occured while installing src/pclock-0.13.1/pclock-bin.${OS_PLUS_MACHINE_ARCH}"
@@ -808,7 +808,7 @@ function configure_installed
          echo ""
          echo "For a reboot/poweroff, suspend and hibernate functionality of the"
          echo "System Action Dialog, you should have \"sudo\" installed and configured"
-         echo "for user to launch ${realinstpath}/libexec/nscde-acpi script."
+         echo "for user to launch ${realinstpath}/libexec/NsCDE/nscde-acpi script."
          echo ""
          echo "See ${realinstpath}/share/doc/examples/sudo/006_PowerManager for the"
          echo "example which needs to be edited for existing user(s) and put"

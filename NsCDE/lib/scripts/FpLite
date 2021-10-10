@@ -20,9 +20,9 @@ PeriodicTasks
 Begin
    If (RemainderOfDiv (GetTime) 10) == 0 Then
    Begin
-      Set $Getloadavg100 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 1 -1)
-      Set $Getloadavg10 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 2 -1)
-      Set $Getloadavg1 = (GetOutput {$NSCDE_ROOT/libexec/getla1.py} 3 -1)
+      Set $Getloadavg100 = (GetOutput {$NSCDE_TOOLDIR/getla1} 1 -1)
+      Set $Getloadavg10 = (GetOutput {$NSCDE_TOOLDIR/getla1} 2 -1)
+      Set $Getloadavg1 = (GetOutput {$NSCDE_TOOLDIR/getla1} 3 -1)
 
       If $Getloadavg100 <= 100 Then
       Begin

@@ -11,13 +11,13 @@ Colorset 22
 
 Init
 Begin
-   Set $Palettes = (GetOutput {$NSCDE_ROOT/libexec/colormgr -p} 1 -1)
+   Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
-   Set $DefaultFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 3 $DefaultFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 2 $BtnFont
    ChangeFont 5 $BtnFont
    ChangeFont 6 $BtnFont
@@ -77,7 +77,7 @@ Widget 3
       Case message of
       SingleClic :
       Begin
-         Set $PaletteCmd = {$NSCDE_ROOT/libexec/colormgr -n } (GetValue 3)
+         Set $PaletteCmd = {$NSCDE_TOOLDIR/colormgr -n } (GetValue 3)
          Set $Palette = (GetOutput $PaletteCmd 1 -1)
       End
 End

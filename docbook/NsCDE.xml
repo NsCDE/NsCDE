@@ -605,7 +605,7 @@ necessary, and to enable or disable that particular Subpanel.
 On the first change with <emphasis>Install Icon</emphasis> or <emphasis>Subpanel Settings</emphasis>,
 non-FVWM configuration file <emphasis>Subpanels.actions</emphasis> will be created in the
 <varname>$FVWM_USERDIR</varname>, from where all subpanels changed from default will be read
-by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>, while the rest will be
+by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>, while the rest will be
 generated from the <filename>$NSCDE_ROOT/config/Subpanels.actions</filename>. This file can also
 be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
 calling <command>generate_subpanels</command> and then <function>f_ReadCfg Subpanels</function>.
@@ -833,7 +833,7 @@ what is going on if FpLite is all red.
 <para>
 If clicked, it will call a function <function>f_FpLiteClickAction</function> which is by default
 set to safe defaults (<emphasis>[default terminal app]</emphasis> <command>-e top</command>).
-FpLite FvwmScript app uses little portable python script <emphasis>getla1.py</emphasis> from the
+FpLite FvwmScript app uses little portable python script <emphasis>getla1</emphasis> from the
 <filename class="directory">$NSCDE_ROOT/libexec</filename> to obtain 1-minute load data.
 </para>
 <para>
@@ -1754,8 +1754,8 @@ to save size and position of the non-transient window. Once window geometry is s
 the same application window on FVWM page where it is not already present that window will cause window
 to be resized to that exact width, height, X position and Y position X11 coordinates as stored in the
 <filename>$FVWM_USERDIR/GeoDB.ini</filename>. This ini-style file is managed by this application, as
-well as from the background runner <filename>$NSCDE_ROOT/bin/confset.py</filename> and read by the
-<filename>$NSCDE_ROOT/bin/confget.py</filename>. Application automatically fills X11 Class and X11
+well as from the background runner <filename>$NSCDE_TOOLDIR/confset</filename> and read by the
+<filename>$NSCDE_TOOLDIR/confget</filename>. Application automatically fills X11 Class and X11
 Resource names on contextual call, as well as geometry parameters. Before applying this settings,
 user has a chance to fine tune this parameters in text fields and confirm (or cancel) the action
 on the end. Using <guibutton>Clear</guibutton> all geometry values, as well as those which may be
@@ -1976,7 +1976,7 @@ button does this and also quits Subpanel Manager.
 <para>
 Subpanels configuration file <filename>Subpanels.actions</filename>, can be edited by
 hand in <varname>$FVWM_USERDIR</varname> if something needs to be changed on existing
-entries. If editing by hand, <command>$NSCDE_ROOT/libexec/generate_subpanels</command>
+entries. If editing by hand, <command>$NSCDE_TOOLDIR/generate_subpanels</command>
 must be used to generate FVWM configuration output which must be redirected into
 <filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>.
 </para>
@@ -2046,7 +2046,7 @@ and hibernation of the system. Of course, <command>reboot</command>, <command>sh
 <command>sudo(8)</command> entries are configured properly. While System Action Dialog is active,
 root cursor changes to line-crossed cursor which is dismissed after the action is performed or
 dialog action dismissed. Not all of this actions are possible on all systems, but with the
-<filename>$NSCDE_ROOT/libexec/nscde-acpi</filename> wrapper, Linux with pm-utils, Linux without
+<filename>$NSCDE_TOOLDIR/nscde-acpi</filename> wrapper, Linux with pm-utils, Linux without
 pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this moment.
 
 In <filename class="directory">$NSCDE_ROOT/share/doc/examples/sudo</filename>, one can find example
@@ -2821,7 +2821,7 @@ slightly different options:
 <![CDATA[
 
    Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
-   \\"Exec exec $NSCDE_ROOT/bin/fpclock-$(uname -s)_$(uname -m)
+   \\"Exec exec $NSCDE_TOOLDIR/$(uname -s)_$(uname -m)/fpclock
    -H red -S white --hands-width=4
    --hour-hand-length=15 --minute-hand-length=20
    --second-hand-length=22 -w 
@@ -3813,7 +3813,7 @@ Front Panel or Subpanels documentation.
 <para>
 This file is not FVWM configuration file. It is written
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
-manually with editor, and read by the <command>$NSCDE_ROOT/libexec/keymenu</command>
+manually with editor, and read by the <command>$NSCDE_TOOLDIR/keymenu</command>
 command which will generate infostore variables with descriptive keyboard shortcut names which
 are used in NsCDE menus from <filename>NsCDE-Menus.conf</filename> and
 <filename>NsCDE-Functions.conf</filename>, and additionaly, use the whole line after the keyword
@@ -3836,7 +3836,7 @@ on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym
 description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
 </para>
 <para>
-File Keymenu.actions is processed by <command>$NSCDE_ROOT/libexec/keymenu</command> script.
+File Keymenu.actions is processed by <command>$NSCDE_TOOLDIR/keymenu</command> script.
 This script generates FVWM infostore variables used in menus, and executes FVWM "Key" commands
 producing dynamic keybindings which are described in menus.
 </para>
@@ -4273,7 +4273,7 @@ with a huge set of <option>Style</option> commands.
 This file is not FVWM configuration file. It is written by the 
 <link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link>, 
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
-manually with editor, and read by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>
+manually with editor, and read by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>
 command which will generate
 <link linkend="NsCDE-Subpanels_conf"><filename>NsCDE-Subpanels.conf</filename></link> file in user's
 <varname>$FVWM_USERDIR</varname>.
@@ -4319,14 +4319,14 @@ the field values. This values are:
 <sect2 id="NsCDE-Subpanels_conf">
 <title>NsCDE-Subpanels.conf</title>
 <para>
-This file is generated by the <command>$NSCDE_ROOT/libexec/generate_subpanels</command>.
+This file is generated by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>.
 It is static in system directory, but changable and easly generated in the <varname>$FVWM_USERDIR</varname>
 It contains FvwmButtons(8) definitions of all 10 possible subpanels which can be popped up from the
 <link linkend="NsCDE-FrontPanel">Front Panel</link>. There are 3 ways to regenerate this file:
 <link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link> tool called from
 the <emphasis>Install Icon</emphasis>, <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> tool
 called from the titlebar popdown menu on every subpanel as <emphasis>Subpanel Settings</emphasis> or
-manually by calling <command>$NSCDE_ROOT/libexec/generate_subpanels</command> which will
+manually by calling <command>$NSCDE_TOOLDIR/generate_subpanels</command> which will
 read user's or system <link linkend="Subpanels_actions"><filename>Subpanels.actions</filename></link> for
 every subpanel and if it is defined in user's one, take this one while generating NsCDE-Subpanels.conf.
 In system default, subpanels 2, 5 and 6 are disabled by default, but can be activated with a very quick
@@ -4502,9 +4502,9 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 <para>
     CDE palettes plus a bunch of new custom palettes. Used by <link linkend="NsCDE-ColorMgr">Color
     Style Manager</link> and <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>, as well as
-    <command>libexec/themegen.py</command>, <command>libexec/backdropmgr</command>,
-    <command>libexec/colormgr</command>,
-    <command>libexec/nscde_palette_colorgen.p</command>y
+    <command>libexec/themegen.py</command>, <command>libexec/NsCDE/backdropmgr</command>,
+    <command>libexec/NsCDE/colormgr</command>,
+    <command>libexec/NsCDE/palette_colorgen</command>
 </para></listitem>
 
 <listitem><para>
@@ -4726,7 +4726,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
 
 <listitem><para>
   <filename>GeoDB.ini</filename>: part of the Geometry Manager functionality. Written
-    and read by the <command>bin/confset.py</command> and <command>bin/confget.py</command> on
+    and read by the <command>libexec/NsCDE/confset</command> and <command>libexec/NsCDE/confget</command> on
     <guimenuitem>Save Geometry</guimenuitem>" and <guimenuitem>Reposition</guimenuitem>
     from Extended and Standard Window Operations menus.
     Windows-like <emphasis>ini</emphasis> files are WAY nicer than dconf and such binary
@@ -5376,7 +5376,7 @@ File <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename>
 can be used for this integration. There are also examples for
 <command>Gkrellm</command> and
 <command>mate-terminal</command>. Local script <command>colormgr.local</command>
-will most likely use <command>$NSCDE_ROOT/libexec/nscde_palette_colorgen.py</command> in some way.
+will most likely use <command>$NSCDE_TOOLDIR/nscde_palette_colorgen</command> in some way.
 </para>
 </sect2>
 

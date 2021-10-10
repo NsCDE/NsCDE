@@ -18,10 +18,10 @@ Begin
    Key F1 A 36 2 {KeyHelp}
    Key Help A 36 2 {KeyHelp}
 
-   Set $WidgetFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $WidgetFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 36 $WidgetFont
 
-   Set $TextFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10} 1 -1)
+   Set $TextFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10} 1 -1)
    ChangeFont 1 $TextFont
    ChangeFont 2 $TextFont
    ChangeFont 3 $TextFont
@@ -54,17 +54,17 @@ Begin
    ChangeFont 34 $TextFont
 
    Set $username = {  } (GetOutput {id -un} 1 -1)
-   Set $hostname = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 2 -1)
+   Set $hostname = {  } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 2 -1)
 
-   Set $ipaddr = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 4 -1)
+   Set $ipaddr = {  } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 4 -1)
    Set $hostid = {  } (GetOutput {/usr/bin/env ksh93 -c '[ "$(whence hostid)" != "" ] && hostid || /sbin/sysctl -n kern.hostid'} 1 -1)
    Set $domainname = {  } (GetOutput {domainname} 1 -1)
-   Set $inetdomain = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 5 -1)
+   Set $inetdomain = {  } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 5 -1)
 
-   Set $mem = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 6 -1) { Megabytes}
-   Set $swap = {  } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 7 -1) { Megabytes}
-   Set $swappct = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 8 -1)
-   Set $swapinfo = {   } (GetOutput {$NSCDE_ROOT/bin/sysinfo.py} 9 -1) { } (Gettext {Available})
+   Set $mem = {  } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 6 -1) { Megabytes}
+   Set $swap = {  } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 7 -1) { Megabytes}
+   Set $swappct = {   } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 8 -1)
+   Set $swapinfo = {   } (GetOutput {$NSCDE_TOOLDIR/sysinfo} 9 -1) { } (Gettext {Available})
 
    Set $winmgrnamecheck = (GetOutput {echo $FVWM_IS_FVWM3} 1 -1)
    If $winmgrnamecheck == 1 Then

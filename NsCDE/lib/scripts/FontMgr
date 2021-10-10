@@ -19,14 +19,14 @@ Begin
    ChangeLocaleTitle 24 (GetTitle 24)
 
    # CheckBox buttons get smaller font size
-   Set $SmallLabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   Set $SmallLabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 2 $SmallLabelFont
    ChangeFont 22 $SmallLabelFont
    ChangeFont 23 $SmallLabelFont
    ChangeFont 24 $SmallLabelFont
 
    # Rest of the widgets will get standard fonts
-   Set $LabelFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12.5} 1 -1)
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
    ChangeFont 5 $LabelFont
@@ -51,8 +51,8 @@ Begin
    ChangeLocaleTitle 19 $FontExampleText
 
    # Fill List Widget 5 with font names
-   Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
-   Set $FontTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 2 -1)
+   Set $FontList = (GetOutput {$NSCDE_TOOLDIR/fontmgr -p} 1 -1)
+   Set $FontTotalNum = (GetOutput {$NSCDE_TOOLDIR/fontmgr -p} 2 -1)
    ChangeTitle 5 $FontList
 
    # Set Font Size Group choices, select Medium to be displayed by default
@@ -66,23 +66,23 @@ Begin
    ChangeValue 14 8
 
    # Default Fonts: set initial values
-   Set $FontNormalSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
-   Set $FontBoldSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s small} 1 -1)
-   Set $FontItalicSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t italic -s small} 1 -1)
-   Set $FontMonoSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s small} 1 -1)
-   Set $FontMonoBoldSmallStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t bold -s small} 1 -1)
+   Set $FontNormalSmallStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small} 1 -1)
+   Set $FontBoldSmallStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t bold -s small} 1 -1)
+   Set $FontItalicSmallStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t italic -s small} 1 -1)
+   Set $FontMonoSmallStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t normal -s small} 1 -1)
+   Set $FontMonoBoldSmallStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t bold -s small} 1 -1)
 
-   Set $FontNormalMediumStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
-   Set $FontBoldMediumStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s medium} 1 -1)
-   Set $FontItalicMediumStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t italic -s medium} 1 -1)
-   Set $FontMonoMediumStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s medium} 1 -1)
-   Set $FontMonoBoldMediumStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t bold -s medium} 1 -1)
+   Set $FontNormalMediumStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium} 1 -1)
+   Set $FontBoldMediumStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t bold -s medium} 1 -1)
+   Set $FontItalicMediumStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t italic -s medium} 1 -1)
+   Set $FontMonoMediumStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t normal -s medium} 1 -1)
+   Set $FontMonoBoldMediumStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t bold -s medium} 1 -1)
 
-   Set $FontNormalLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
-   Set $FontBoldLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t bold -s large} 1 -1)
-   Set $FontItalicLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t italic -s large} 1 -1)
-   Set $FontMonoLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t normal -s large} 1 -1)
-   Set $FontMonoBoldLargeStr = (GetOutput {$NSCDE_ROOT/bin/getfont -m -t bold -s large} 1 -1)
+   Set $FontNormalLargeStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large} 1 -1)
+   Set $FontBoldLargeStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t bold -s large} 1 -1)
+   Set $FontItalicLargeStr = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t italic -s large} 1 -1)
+   Set $FontMonoLargeStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t normal -s large} 1 -1)
+   Set $FontMonoBoldLargeStr = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t bold -s large} 1 -1)
 
    # Apply Medium as previews initially
    ChangeFont 15 $FontNormalMediumStr
@@ -93,14 +93,14 @@ Begin
    ChangeFont 20 $FontNormalMediumStr
 
    # Select Default font, it's style, and size
-   Set $FontNormalMediumStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontNormalMediumStr {'}
+   Set $FontNormalMediumStrCmd = {$NSCDE_TOOLDIR/fontmgr -r '} $FontNormalMediumStr {'}
    Set $FontNormalMediumStrNameNum = (GetOutput $FontNormalMediumStrCmd 1 -1)
    Set $FontNormalMediumStrStyleNum = (GetOutput $FontNormalMediumStrCmd 2 -1)
    Set $FontNormalMediumStrSizeNum = (Add (GetOutput $FontNormalMediumStrCmd 3 1) -3)
    Set $FontNormalMediumStrName = (GetOutput $FontNormalMediumStrCmd 4 -1)
 
    # Initial styles menu for regular variable font of medium size
-   Set $FontNormalMediumStrMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontNormalMediumStrName {'}
+   Set $FontNormalMediumStrMenuCmd = {$NSCDE_TOOLDIR/fontmgr -G menu -g '} $FontNormalMediumStrName {'}
    Set $FontNormalMediumStrMenu = (GetOutput $FontNormalMediumStrMenuCmd 1 -1)
 
    # Select variable font of medium size, display styles for that font, select style and set size
@@ -213,8 +213,8 @@ Widget 2
       Begin
          If (GetValue 2) == 1 Then
          Begin
-            Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
-            Set $FontsetTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 2 -1)
+            Set $FontsetList = (GetOutput {$NSCDE_TOOLDIR/fontmgr -P} 1 -1)
+            Set $FontsetTotalNum = (GetOutput {$NSCDE_TOOLDIR/fontmgr -P} 2 -1)
             ChangeTitle 5 $FontsetList
             ChangeLocaleTitle 3 {Default|Default|Delete Fontset}
             ChangeColorset 7 22
@@ -223,7 +223,7 @@ Widget 2
             HideWidget 13
             HideWidget 14
             Set $OperationMode = 2
-            Set $SelectDefaultFontsetCmd = {$NSCDE_ROOT/libexec/fontmgr -f "} $DefaultFontset {"}
+            Set $SelectDefaultFontsetCmd = {$NSCDE_TOOLDIR/fontmgr -f "} $DefaultFontset {"}
             Set $SelectDefaultFontset = (GetOutput $SelectDefaultFontsetCmd 1 -1)
             ChangeValue 5 $SelectDefaultFontset
             # Fill all 15 font variables for widgets 15 - 19
@@ -231,8 +231,8 @@ Widget 2
          End
          Else
          Begin
-            Set $FontList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 1 -1)
-            Set $FontTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -p} 2 -1)
+            Set $FontList = (GetOutput {$NSCDE_TOOLDIR/fontmgr -p} 1 -1)
+            Set $FontTotalNum = (GetOutput {$NSCDE_TOOLDIR/fontmgr -p} 2 -1)
             ChangeTitle 5 $FontList
             ChangeLocaleTitle 3 {Default|Default|Cancel}
             ChangeColorset 7 20
@@ -283,40 +283,40 @@ Widget 3
       1 :
       Begin
          # Set default values
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s small}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t normal -s small}
          Set $FontNormalSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s small}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t bold -s small}
          Set $FontBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s small}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t italic -s small}
          Set $FontItalicSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s small}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t normal -s small}
          Set $FontMonoSmallStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s small}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t bold -s small}
          Set $FontMonoBoldSmallStr = (GetOutput $FontGetCmd 1 -1)
 
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s medium}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t normal -s medium}
          Set $FontNormalMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s medium}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t bold -s medium}
          Set $FontBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s medium}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t italic -s medium}
          Set $FontItalicMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s medium}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t normal -s medium}
          Set $FontMonoMediumStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s medium}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t bold -s medium}
          Set $FontMonoBoldMediumStr = (GetOutput $FontGetCmd 1 -1)
 
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t normal -s large}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t normal -s large}
          Set $FontNormalLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t bold -s large}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t bold -s large}
          Set $FontBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -v -t italic -s large}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -v -t italic -s large}
          Set $FontItalicLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t normal -s large}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t normal -s large}
          Set $FontMonoLargeStr = (GetOutput $FontGetCmd 1 -1)
-         Set $FontGetCmd = {$NSCDE_ROOT/bin/getfont -f "} $DefaultFontsetPath {" -m -t bold -s large}
+         Set $FontGetCmd = {$NSCDE_TOOLDIR/getfont -f "} $DefaultFontsetPath {" -m -t bold -s large}
          Set $FontMonoBoldLargeStr = (GetOutput $FontGetCmd 1 -1)
 
-         Set $SelectDefaultFontsetCmd = {$NSCDE_ROOT/libexec/fontmgr -f "} $DefaultFontset {"}
+         Set $SelectDefaultFontsetCmd = {$NSCDE_TOOLDIR/fontmgr -f "} $DefaultFontset {"}
          Set $SelectDefaultFontset = (GetOutput $SelectDefaultFontsetCmd 1 -1)
 
          ChangeValue 5 $SelectDefaultFontset
@@ -335,8 +335,8 @@ Widget 3
             If $DeleteFontset == {} Then
             Begin
                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
-               Set $FontsetList = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 1 -1)
-               Set $FontsetTotalNum = (GetOutput {$NSCDE_ROOT/libexec/fontmgr -P} 2 -1)
+               Set $FontsetList = (GetOutput {$NSCDE_TOOLDIR/fontmgr -P} 1 -1)
+               Set $FontsetTotalNum = (GetOutput {$NSCDE_TOOLDIR/fontmgr -P} 2 -1)
                # Refill fontset list
                ChangeTitle 5 $FontsetList
                # Refill all 15 font variables
@@ -395,16 +395,16 @@ Widget 5
       1 :
       Begin
          # Find font name, and fill font styles in list of widget 7
-         Set $ListFontNameCmd = {$NSCDE_ROOT/libexec/fontmgr -N } (GetValue 5)
+         Set $ListFontNameCmd = {$NSCDE_TOOLDIR/fontmgr -N } (GetValue 5)
          Set $ListFontName = (GetOutput $ListFontNameCmd 1 -1)
-         Set $FontStylesCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $ListFontName {'}
+         Set $FontStylesCmd = {$NSCDE_TOOLDIR/fontmgr -G menu -g '} $ListFontName {'}
          Set $FontStyles = (GetOutput $FontStylesCmd 1 -1)
          ChangeTitle 7 $FontStyles
 
          # Change selection of the style list
          If (GetValue 7) == 0 Then
          Begin
-            Set $SizeValCmd = {$NSCDE_ROOT/libexec/fontmgr -G total -g '} $ListFontName {'}
+            Set $SizeValCmd = {$NSCDE_TOOLDIR/fontmgr -G total -g '} $ListFontName {'}
             Set $SizeVal = (GetOutput $SizeValCmd 1 -1)
             ChangeValue 7 $SizeVal
          End
@@ -414,7 +414,7 @@ Widget 5
          End
 
          # fontmgr -s - get style name from it's number
-         Set $FontStyleListCmd = {$NSCDE_ROOT/libexec/fontmgr -s } $SizeVal { -g '} $ListFontName {'}
+         Set $FontStyleListCmd = {$NSCDE_TOOLDIR/fontmgr -s } $SizeVal { -g '} $ListFontName {'}
          Set $FontStyleList = (GetOutput $FontStyleListCmd 1 -1)
 
          # Construct controlled XFT font spec and set active preview field with it
@@ -503,54 +503,54 @@ Widget 5
       # 5 2 - Fontset name selection on list widget
       2 :
       Begin
-         Set $FontsetNameCmd = {$NSCDE_ROOT/libexec/fontmgr -F } (GetValue 5)
+         Set $FontsetNameCmd = {$NSCDE_TOOLDIR/fontmgr -F } (GetValue 5)
          Set $FontsetName = (GetOutput $FontsetNameCmd 1 -1)
          Set $FontsetDir = (GetOutput $FontsetNameCmd 2 -1)
          Set $FontsetPath = $FontsetDir $FontsetName {.fontset}
 
-         Set $FontNormalSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s small}
+         Set $FontNormalSmallStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t normal -s small}
          Set $FontNormalSmallStr = (GetOutput $FontNormalSmallStrCmd 1 -1)
 
-         Set $FontBoldSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s small}
+         Set $FontBoldSmallStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t bold -s small}
          Set $FontBoldSmallStr = (GetOutput $FontBoldSmallStrCmd 1 -1)
 
-         Set $FontItalicSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s small}
+         Set $FontItalicSmallStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t italic -s small}
          Set $FontItalicSmallStr = (GetOutput $FontItalicSmallStrCmd 1 -1)
 
-         Set $FontMonoSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s small}
+         Set $FontMonoSmallStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t normal -s small}
          Set $FontMonoSmallStr = (GetOutput $FontMonoSmallStrCmd 1 -1)
 
-         Set $FontMonoBoldSmallStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s small}
+         Set $FontMonoBoldSmallStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t bold -s small}
          Set $FontMonoBoldSmallStr = (GetOutput $FontMonoBoldSmallStrCmd 1 -1)
 
-         Set $FontNormalMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s medium}
+         Set $FontNormalMediumStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t normal -s medium}
          Set $FontNormalMediumStr = (GetOutput $FontNormalMediumStrCmd 1 -1)
 
-         Set $FontBoldMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s medium}
+         Set $FontBoldMediumStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t bold -s medium}
          Set $FontBoldMediumStr = (GetOutput $FontBoldMediumStrCmd 1 -1)
 
-         Set $FontItalicMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s medium}
+         Set $FontItalicMediumStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t italic -s medium}
          Set $FontItalicMediumStr = (GetOutput $FontItalicMediumStrCmd 1 -1)
 
-         Set $FontMonoMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s medium}
+         Set $FontMonoMediumStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t normal -s medium}
          Set $FontMonoMediumStr = (GetOutput $FontMonoMediumStrCmd 1 -1)
 
-         Set $FontMonoBoldMediumStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s medium}
+         Set $FontMonoBoldMediumStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t bold -s medium}
          Set $FontMonoBoldMediumStr = (GetOutput $FontMonoBoldMediumStrCmd 1 -1)
 
-         Set $FontNormalLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t normal -s large}
+         Set $FontNormalLargeStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t normal -s large}
          Set $FontNormalLargeStr = (GetOutput $FontNormalLargeStrCmd 1 -1)
 
-         Set $FontBoldLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t bold -s large}
+         Set $FontBoldLargeStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t bold -s large}
          Set $FontBoldLargeStr = (GetOutput $FontBoldLargeStrCmd 1 -1)
 
-         Set $FontItalicLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -v -t italic -s large}
+         Set $FontItalicLargeStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -v -t italic -s large}
          Set $FontItalicLargeStr = (GetOutput $FontItalicLargeStrCmd 1 -1)
 
-         Set $FontMonoLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t normal -s large}
+         Set $FontMonoLargeStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t normal -s large}
          Set $FontMonoLargeStr = (GetOutput $FontMonoLargeStrCmd 1 -1)
 
-         Set $FontMonoBoldLargeStrCmd = {$NSCDE_ROOT/bin/getfont -f } $FontsetPath { -m -t bold -s large}
+         Set $FontMonoBoldLargeStrCmd = {$NSCDE_TOOLDIR/getfont -f } $FontsetPath { -m -t bold -s large}
          Set $FontMonoBoldLargeStr = (GetOutput $FontMonoBoldLargeStrCmd 1 -1)
 
          # 10 1 is small, medium or large font group
@@ -827,12 +827,12 @@ Widget 14
       1 :
       Begin
          # Parse font, make XFT font construction, update font variables for a size group
-         Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
+         Set $SplitFontStrCmd = {$NSCDE_TOOLDIR/fontmgr -r '} $FontConstruct {'}
          Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
          Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
          Set $FontSizeNum = (Add (GetValue 14) 3)
          Set $FontName = (GetOutput $SplitFontStrCmd 4 -1)
-         Set $FontStyleCmd = {$NSCDE_ROOT/libexec/fontmgr -s } (GetValue 7) { -g '} $FontConstruct {'}
+         Set $FontStyleCmd = {$NSCDE_TOOLDIR/fontmgr -s } (GetValue 7) { -g '} $FontConstruct {'}
          Set $FontStyle = (GetOutput $FontStyleListCmd 1 -1)
          Set $FontConstruct = {xft:} $FontName {:Medium:} $FontStyle {:size=} $FontSizeNum
 
@@ -1395,7 +1395,7 @@ Widget 26
          If (LastString) <> {Cancel} Then
          Begin
             # Sanity check for input
-            Set $UserFontsetCmd = {echo '} (LastString) {' | $NSCDE_ROOT/bin/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
+            Set $UserFontsetCmd = {echo '} (LastString) {' | $NSCDE_TOOLDIR/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
             Set $UserFontset = (GetOutput $UserFontsetCmd 1 1)
 
             If $UserFontset == {} Then
@@ -1461,15 +1461,15 @@ Widget 26
             # GTK2/GTK3
             If (GetValue 23) == 1 Then
             Begin
-               Set $PrepareFontCmd = {$NSCDE_ROOT/libexec/fontmgr -T "} $FontNormalMediumStr {"}
+               Set $PrepareFontCmd = {$NSCDE_TOOLDIR/fontmgr -T "} $FontNormalMediumStr {"}
                Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
-               Set $Gtk2FontCmd = {$NSCDE_ROOT/bin/confset.py -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
+               Set $Gtk2FontCmd = {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
                Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
                If $Gtk2Font <> {} Then
                Begin
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
                End
-               Set $Gtk3FontCmd = {$NSCDE_ROOT/bin/confset.py -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
+               Set $Gtk3FontCmd = {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
                Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
                If $Gtk3Font <> {} Then
                Begin
@@ -1486,7 +1486,7 @@ Widget 26
                   Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
                   If $XsettingsParamExistance == 0 Then
                   Begin
-                     Set $WriteXSettingsdCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
+                     Set $WriteXSettingsdCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
                   End
                   Else
                   Begin
@@ -1502,7 +1502,7 @@ Widget 26
                      Set $XsettingsDpiParamExistance = (GetOutput $XsettingsDpiParamExistanceCmd 1 1)
                      If $XsettingsDpiParamExistance == 0 Then
                      Begin
-                        Set $WriteXSettingsdDpiCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1} (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
+                        Set $WriteXSettingsdDpiCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1} (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
                      End
                      Else
                      Begin
@@ -1517,9 +1517,9 @@ Widget 26
             If (GetValue 24) == 1 Then
             Begin
                # Wait a second for $UserFontsetFile to be written ... a race.
-               Set $DoXresourcesCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
+               Set $DoXresourcesCmd = {sleep 1; $NSCDE_TOOLDIR/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
                Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
-               Set $DoMiscXCmd = {sleep 1; $NSCDE_ROOT/libexec/fontmgr -M '} $FontNormalMediumStr {'}
+               Set $DoMiscXCmd = {sleep 1; $NSCDE_TOOLDIR/fontmgr -M '} $FontNormalMediumStr {'}
                Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
                Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
             End
@@ -1733,7 +1733,7 @@ Widget 101
    Begin
       # Split and parse font, in manual font selection, change
       # font list name, style list name and size
-      Set $SplitFontStrCmd = {$NSCDE_ROOT/libexec/fontmgr -r '} $FontConstruct {'}
+      Set $SplitFontStrCmd = {$NSCDE_TOOLDIR/fontmgr -r '} $FontConstruct {'}
       Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)
       Set $FontStyleNum = (GetOutput $SplitFontStrCmd 2 -1)
       Set $FontSizeNum = (Add (GetOutput $SplitFontStrCmd 3 -1) -3)
@@ -1741,7 +1741,7 @@ Widget 101
       Set $FontStyle = (GetOutput $SplitFontStrCmd 5 -1)
    
       # Refresh style list menu variables
-      Set $StyleListMenuCmd = {$NSCDE_ROOT/libexec/fontmgr -G menu -g '} $FontName {'}
+      Set $StyleListMenuCmd = {$NSCDE_TOOLDIR/fontmgr -G menu -g '} $FontName {'}
       Set $StyleListMenu = (GetOutput $StyleListMenuCmd 1 -1)
    
       # Change font list name, style list name and size
@@ -1767,7 +1767,7 @@ Widget 101
          Else
          Begin
             # Match the existing font, handle missing fonts from fontset.
-            Set $SubstNameCmd = {$NSCDE_ROOT/libexec/fontmgr -m "} $FontName {"}
+            Set $SubstNameCmd = {$NSCDE_TOOLDIR/fontmgr -m "} $FontName {"}
             Set $SubstName = (GetOutput $SubstNameCmd 1 -1)
             Set $SubstStyle = (GetOutput $SubstNameCmd 2 -1)
             Set $FontsetInfo = {Fontset:|} $FontsetName {||} $SubstName {|Style: } $SubstStyle {|Size: } (Add $FontSizeNum 3){|(} $Notavail {)}

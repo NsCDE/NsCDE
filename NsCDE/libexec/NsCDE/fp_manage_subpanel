@@ -28,14 +28,14 @@ function add_subpanel
    fi
 
    if (($SubpLocalDefCheck == 3)); then
-      $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
    fi
 
    if (($SubpLocalDefCheck == 0)); then
       if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
          echo "" >> "$FVWM_USERDIR/Subpanels.actions"
          egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
-         $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
          echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
          exit 8
@@ -51,14 +51,14 @@ function delete_subpanel
    fi
 
    if (($SubpLocalDefCheck == 3)); then
-      $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
    fi
 
    if (($SubpLocalDefCheck == 0)); then
       if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
          echo "" >> "$FVWM_USERDIR/Subpanels.actions"
          egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
-         $NSCDE_ROOT/bin/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
          echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
          exit 8
@@ -104,7 +104,7 @@ function reset_this_button
       egrep -q "^Btn${PanelNo},.*" "$FVWM_USERDIR/FrontPanel.actions"
       FPA_RETVAL=$?
       if ((FPA_RETVAL == 0)); then
-         $NSCDE_ROOT/bin/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+         $NSCDE_TOOLDIR/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
                      \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
       else
@@ -113,7 +113,7 @@ function reset_this_button
       fi
 
       if (($RestartFP == 0)); then
-         $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_ROOT]/libexec/fpseticon Btn${PanelNo}\""
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_TOOLDIR]/fpseticon Btn${PanelNo}\""
       else
          $NSCDE_ROOT/bin/nscde_fvwmclnt "InfoStoreRemove FP.Btn${PanelNo}.type"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
@@ -146,7 +146,7 @@ function manage_launcher
 
    if (($ADDLNCH_RETVAL == 0)); then
 
-      $NSCDE_ROOT/bin/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
+      $NSCDE_TOOLDIR/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
        -f "$FVWM_USERDIR/NsCDE.conf"
    else
       # Adding as new value - appending.

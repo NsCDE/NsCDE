@@ -56,18 +56,18 @@ Begin
       If $DeskNo > 4 Then
       Begin
          # Font for 6 buttons variant
-         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium} 1 -1)
       End
       Else
       Begin
          # Font for 2 and/or 4 buttons variant
-         Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+         Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large} 1 -1)
       End
    End
    Else
    Begin
       # Font for 8 or more buttons variant
-      Set $MainFontRegularOut = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+      Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small} 1 -1)
    End
    Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
 
@@ -140,7 +140,7 @@ Begin
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
 
-   Set $DefFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 9 $DefFont
 
    ChangeFont 26 $DefFont
@@ -149,17 +149,17 @@ Begin
    ChangeFont 17 $DefFont
    ChangeFont 18 $DefFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
    ChangeFont 21 $BtnFont
    ChangeFont 22 $BtnFont
    ChangeFont 23 $BtnFont
 
-   Set $HscFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $HscFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 11 $HscFont
    ChangeFont 13 $HscFont
    ChangeFont 15 $HscFont
 
-   Set $SmallFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 12 $SmallFont
    ChangeFont 14 $SmallFont
 
@@ -529,14 +529,14 @@ Widget 11
       Begin
          If (GetValue 11) == 1 Then
          Begin
-            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large} 1 -1)
             ChangeFont 1 $ButtonDisplayFont
             ChangeFont 2 $ButtonDisplayFont
             ChangeValue 11 2
          End
          If (GetValue 11) == 3 Then
          Begin
-            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s large} 1 -1)
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s large} 1 -1)
             ChangeFont 1 $ButtonDisplayFont
             ChangeFont 2 $ButtonDisplayFont
             ChangeFont 3 $ButtonDisplayFont
@@ -545,7 +545,7 @@ Widget 11
          End
          If (GetValue 11) == 5 Then
          Begin
-            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s medium} 1 -1)
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium} 1 -1)
             ChangeFont 1 $ButtonDisplayFont
             ChangeFont 2 $ButtonDisplayFont
             ChangeFont 3 $ButtonDisplayFont
@@ -556,7 +556,7 @@ Widget 11
          End
          If (GetValue 11) == 7 Then
          Begin
-            Set $ButtonDisplayFont = (GetOutput {$NSCDE_ROOT/bin/getfont -v -t normal -s small} 1 -1)
+            Set $ButtonDisplayFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small} 1 -1)
             ChangeFont 1 $ButtonDisplayFont
             ChangeFont 2 $ButtonDisplayFont
             ChangeFont 3 $ButtonDisplayFont
@@ -1071,7 +1071,7 @@ Widget 21
         If $DStringToCheck == 0 Then
         Begin
            Do {InfoStoreAdd desknum } $TmpDesks
-           Set $WriteDeskCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+desknum[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $TmpDesks {/g' -f "} $ExpandFile {"}
+           Set $WriteDeskCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+desknum[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $TmpDesks {/g' -f "} $ExpandFile {"}
            Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
         End
 
@@ -1095,7 +1095,7 @@ Widget 21
         If $PVStringToCheck == 0 Then
         Begin
            Do {InfoStoreAdd pagematrixY } $VTmpPageNo
-           Set $WritePVCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixY[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $VTmpPageNo {/g' -f "} $ExpandFile {"}
+           Set $WritePVCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixY[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $VTmpPageNo {/g' -f "} $ExpandFile {"}
            Set $WritePV = (GetOutput $WritePVCmd 1 -1)
         End
 
@@ -1119,7 +1119,7 @@ Widget 21
         If $PHStringToCheck == 0 Then
         Begin
            Do {InfoStoreAdd pagematrixX } $HTmpPageNo
-           Set $WritePHCmd = {$NSCDE_ROOT/bin/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixX[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $HTmpPageNo {/g' -f "} $ExpandFile {"}
+           Set $WritePHCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixX[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $HTmpPageNo {/g' -f "} $ExpandFile {"}
            Set $WritePH = (GetOutput $WritePHCmd 1 -1)
         End
         If $PHStringToCheck == 2 Then
@@ -1142,7 +1142,7 @@ Widget 21
         If $WSMECOStringToCheck == 0 Then
         Begin
            Do {InfoStoreAdd wsm.eco } $WsmEco
-           Set $WriteWSMECOCmd = {$NSCDE_ROOT/bin/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+wsm\.eco[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\3} $WsmEco {/g' -f "} $ExpandFile {"}
+           Set $WriteWSMECOCmd = {$NSCDE_TOOLDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+wsm\.eco[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\3} $WsmEco {/g' -f "} $ExpandFile {"}
            Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
         End
         If $WSMECOStringToCheck == 2 Then
@@ -1178,7 +1178,7 @@ Widget 21
         Begin
            Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
            Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
-           Set $WriteDskConfCmd = {$NSCDE_ROOT/bin/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+desktopconfiguration[[:space:]]\+\)\(\(global\|per-monitor\|shared\)\+\([[:space:]]\+\)\?\)/\3} $Fvwm3DskConf {/g' -f "} $ExpandFile {"}
+           Set $WriteDskConfCmd = {$NSCDE_TOOLDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+desktopconfiguration[[:space:]]\+\)\(\(global\|per-monitor\|shared\)\+\([[:space:]]\+\)\?\)/\3} $Fvwm3DskConf {/g' -f "} $ExpandFile {"}
            Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
         End
         If $DskConfStringToCheck == 2 Then

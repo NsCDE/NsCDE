@@ -54,7 +54,7 @@ function CheckPicture
          else
             echo "conv"
          fi
-         echo "${1##*/}" | $NSCDE_ROOT/bin/ised -c 's/\(.*\)\.\(.*$\)/\1/g' -o -f -
+         echo "${1##*/}" | $NSCDE_TOOLDIR/ised -c 's/\(.*\)\.\(.*$\)/\1/g' -o -f -
       else
          echo "notpic"
       fi
@@ -107,7 +107,7 @@ function GenerateBackdropPreview
 
    if (($PreviewMode == 0)); then
       mkdir -p ${FVWM_USERDIR}/backer
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+      ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -i ${BackdropNamePath} -P $ColorVariant \
        -b > ${FVWM_USERDIR}/backer/Desk${Desk}-${1}.pm
@@ -115,7 +115,7 @@ function GenerateBackdropPreview
       grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
       if (($? == 0)); then
          OldBackdrop=$(egrep "Colorset 3${Desk}( bg \\$\[bg\.cs..\],)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
-         $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk}\( bg \$\[bg\.cs..\],\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+         $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg \$\[bg\.cs..\],\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
          if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [ "${OldBackdrop##*/}" != "Desk${Desk}-${1}.pm" ]; then
             rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
          fi
@@ -124,7 +124,7 @@ function GenerateBackdropPreview
       fi
    else
       mkdir -p ${FVWM_USERDIR}/tmp
-      ${NSCDE_ROOT}/libexec/nscde_palette_colorgen.py \
+      ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -i ${BackdropNamePath} -P $ColorVariant \
        -b > ${FVWM_USERDIR}/tmp/backer-${1}.pm
@@ -167,7 +167,7 @@ function GeneratePhotoPreview
             fi
             OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
             sededpath=$(echo "$ConvertedPhoto" | sed 's/\//\\\//g')
-            $NSCDE_ROOT/bin/ised -c "s/Colorset 3${Desk}\( bg ${bgcs},\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} bg ${bgcs}, $PixmapVariant $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+            $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg ${bgcs},\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} bg ${bgcs}, $PixmapVariant $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
             if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [[ "${OldBackdrop##*/}" != "Desk${Desk}-${1}."@(png|xpm) ]]; then
                rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
             fi

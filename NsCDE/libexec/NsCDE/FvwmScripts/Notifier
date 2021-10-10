@@ -30,7 +30,7 @@ case $NSCDE_FONT_DPI in
    ;;
 esac
 
-FontSize=$($NSCDE_ROOT/bin/getfont -v -t normal -s medium -S -Z 16)
+FontSize=$($NSCDE_TOOLDIR/getfont -v -t normal -s medium -S -Z 16)
 LC_ALL="C"
 if (($FontSize >= 16)); then
    FoldFactor=$((56 - (56 * $zoomfactor / 100)))
@@ -142,7 +142,7 @@ Colorset 22
 
 Init
 Begin
-        Set \$Font = (GetOutput {\$NSCDE_ROOT/bin/getfont -v -t normal -s medium -Z 16} 1 -1)
+        Set \$Font = (GetOutput {\$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
         ChangeFont 3 \$Font
 EOF
 
