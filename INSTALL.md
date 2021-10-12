@@ -93,13 +93,10 @@ instead. (optional)
 
 - Arch / Artix / Manjaro
 ``` sh
-sudo pacman -Syyu
-sudo pacman -S trizen
-trizen -Syyu
-trizen -S ksh xorg xdotool imagemagick xscreensaver \
-    python-yaml python-pyqt5 qt5ct qt5-styleplugins \
-    stalonetray xterm python2 python-pyxdg libstroke \
-    xsettingsd fvwm3 perl-file-mimeinfo gkrellm rofi xclip
+# Use your AUR helper of choice (e. g. trizen) to install the package
+trizen -S nscde
+# Alternatively install the -git package to get the latest sources
+trizen -S nscde-git
 ```
 
 - Debian / Devuan / Ubuntu / Mint / MX Linux
