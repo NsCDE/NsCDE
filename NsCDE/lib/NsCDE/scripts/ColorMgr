@@ -1260,7 +1260,7 @@ Widget 32
 
             If $GtkStr == {11} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { gtk2 gtk3}
+               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { gtk2 gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                If $Foreground4 == {#ffffffffffff} Then
@@ -1306,7 +1306,7 @@ Widget 32
 
             If $GtkStr == {10} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { gtk2 False}
+               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { gtk2 False}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_TOOLDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
@@ -1344,7 +1344,7 @@ Widget 32
 
             If $GtkStr == {01} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { False gtk3}
+               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { False gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $DeintegrateGtk2a =
@@ -1403,7 +1403,7 @@ Widget 32
                End
                Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
 
-               Set $PerformGtk2Cmd = {$NSCDE_ROOT/libexec/themegen.py } $PalettePath { } $Ncolors { False False}
+               Set $PerformGtk2Cmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { False False}
                Set $PerformGtk2 = (GetOutput $PerformGtk2Cmd 1 -1)
             End
 

@@ -4394,7 +4394,7 @@ descriptions will be written as relative to this directory
 </para></listitem>
 
 <listitem><para>
-   <filename class="directory">lib/progbits</filename>
+   <filename class="directory">share/NsCDE/config_templates/progbits</filename>
 </para>
 <para>
   Template X pixmap files used by <link linkend="NsCDE-ColorMgr">Color Style Manager</link> for producing
@@ -4406,10 +4406,10 @@ descriptions will be written as relative to this directory
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">lib/python</filename>
+  <filename class="directory">lib/NsCDE/python</filename>
 </para>
 <para>
-  Python libraries used by <command>themegen.py</command>: part of the integration suite
+  Python libraries used by <command>themegen</command>: part of the integration suite
   for GTK and Qt.
 </para></listitem>
 
@@ -4502,7 +4502,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 <para>
     CDE palettes plus a bunch of new custom palettes. Used by <link linkend="NsCDE-ColorMgr">Color
     Style Manager</link> and <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>, as well as
-    <command>libexec/themegen.py</command>, <command>libexec/NsCDE/backdropmgr</command>,
+    <command>libexec/NsCDE/themegen</command>, <command>libexec/NsCDE/backdropmgr</command>,
     <command>libexec/NsCDE/colormgr</command>,
     <command>libexec/NsCDE/palette_colorgen</command>
 </para></listitem>
@@ -4532,8 +4532,8 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
   <filename class="directory">share/config_templates/integration/gtk2_gtk3_qt</filename>
 </para>
 <para>
-    Part of the CDE theme which are used by <command>libexec/themegen.py</command> and
-    the rest of lib/python/*.py to generate
+    Part of the CDE theme which are used by <command>libexec/NsCDE/themegen</command> and
+    the rest of lib/NsCDE/python/*.py to generate
     <filename class="directory">$HOME/.themes/NsCDE</filename> with
     a selected palette and color depth.
 </para>
@@ -4617,7 +4617,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
   monitors when NsCDE is used with FVWM3 in non-global <emphasis>DesktopConfiguration</emphasis> mode, which are
   matching various combinations of desks across monitors.
   Referenced in function f_SetFvwm3NonGlobalBackground of <filename>config/NsCDE-Functions.conf</filename> and
-  in <filename>libexec/xrandr_backer</filename> backdrop autocreate script.
+  in <filename>libexec/NsCDE/xrandr_backer</filename> backdrop autocreate script.
 </para></listitem>
 
 <listitem><para>
@@ -5077,7 +5077,7 @@ on the system and found, they will be run too. Stalonetray and Dunst will be run
 Style Manager and Font Style Manager when theme or font is changed.
 </para>
 <para>
-Initial setup is a simple script (<command>$NSCDE_ROOT/libexec/nscde_setup</command>) from
+Initial setup is a simple script (<command>$NSCDE_ROOT/libexec/bootstrap</command>) from
 the terminal which will run automatically and will set up the following:
 </para>
 
@@ -5109,7 +5109,7 @@ the terminal which will run automatically and will set up the following:
 Note that no file from the above list will be overwritten if it already
 exists in it's place. It will be skipped, but GTK and Qt theme
 integration files can be still written with <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
-After <command>nscde_setup</command> script finishes setup,
+After <command>bootstrap</command> script finishes setup,
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> will be run and
 user asked to confirm default theme or change it. <emphasis>Do not</emphasis> avoid this
 step, since some program bits are not fully setup on bare defaults,
@@ -5240,12 +5240,12 @@ X resources integration is turned on by default in
 <sect2 id="NsCDE-Integration-Gtk-Qt">
 <title>Gtk2, Gtk3, Qt4 and Qt5</title>
 <para>
-<command>$NSCDE_ROOT/libexec/themegen.py</command> with
-<filename class="directory">$NSCDE_ROOT/lib/python</filename> and with
+<command>$NSCDE_TOOLDIR/themegen</command> with
+<filename class="directory">$NSCDE_ROOT/lib/NsCDE/python</filename> and with
 <filename class="directory">$NSCDE_ROOT/share/config_templates/integration/gtk2_gtk3_qt</filename>
 are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> or manually with the
-<command>$NSCDE_ROOT/libexec/themegen.py</command>,
+<command>$NSCDE_TOOLDIR/themegen</command>,
 with proper options, this will produce <filename class="directory">$HOME/.themes/NsCDE</filename>
 directory with either or both Gtk2 and Gtk3 themes. <filename>$HOME/.gtkrc-2.0</filename> and
 <filename>$HOME/.config/gtk-3.0/settings.ini</filename> will be edited to point to this

@@ -402,7 +402,7 @@ Widget 5
                Set $Perform = 1
             End
 
-            Set $StrippedAppIdxIconPathCmd = {$NSCDE_ROOT/libexec/strip_icon_path '} $GetAppIdxIcon {'}
+            Set $StrippedAppIdxIconPathCmd = {$NSCDE_TOOLDIR/strip_icon_path '} $GetAppIdxIcon {'}
             Set $StrippedAppIdxIconPath = (GetOutput $StrippedAppIdxIconPathCmd 1 -1)
 
             Set $CheckCharsIconCmd = {echo "} $StrippedAppIdxIconPath {" | egrep "(,|')"}
