@@ -2049,7 +2049,7 @@ dialog action dismissed. Not all of this actions are possible on all systems, bu
 <filename>$NSCDE_TOOLDIR/nscde-acpi</filename> wrapper, Linux with pm-utils, Linux without
 pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this moment.
 
-In <filename class="directory">$NSCDE_ROOT/share/doc/examples/sudo</filename>, one can find example
+In <filename class="directory">$NSCDE_ROOT/share/examples/sudo</filename>, one can find example
 which can be put in <filename class="directory">/etc/sudoers.d</filename> with little changes.
 <guibutton>Confirm</guibutton> button applies, <guibutton>Dismiss</guibutton> cancels and
 closes the dialog.
@@ -2678,7 +2678,7 @@ same line is set.
 </para>
 <para>
 Default backdrops are set from the
-<filename class="directory">$NSCDE_ROOT/share/defaults/backer</filename> until
+<filename class="directory">$NSCDE_DATADIR/defaults/backer</filename> until
 user does not redefine/set his own with
 <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>. Default
 palette is <emphasis>Broica</emphasis> in 8 colors variant.
@@ -2695,7 +2695,7 @@ first change with <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link
 <para>
 Until then, file <filename>$NSCDE_ROOT/config/NsCDE-Backdrops.conf</filename> is read, which
 itself reads pre-generated and pre-defined backdrops from the
-<filename class="directory">$NSCDE_ROOT/share/defaults/backer</filename> directory.
+<filename class="directory">$NSCDE_DATADIR/defaults/backer</filename> directory.
 </para>
 <para>
 We can conclude that backdrops are source form or template file, and when processed
@@ -4459,14 +4459,14 @@ descriptions will be written as relative to this directory
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/doc</filename>
+  <filename class="directory">share/doc/NsCDE</filename>
 </para>
 <para>
   Documentation
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/doc/examples</filename>
+  <filename class="directory">share/examples</filename>
 </para>
 <para>
 Examples for X display manager and DE integrations, <command>sudo</command> for <command>shutdown
@@ -4519,7 +4519,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/config_templates/app-defaults</filename>
+  <filename class="directory">share/NsCDE/config_templates/app-defaults</filename>
 </para>
 <para>
     X resources for a particular X applications (like <command>XTerm</command>) which
@@ -4529,7 +4529,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/config_templates/integration/gtk2_gtk3_qt</filename>
+  <filename class="directory">share/NsCDE/config_templates/integration/gtk2_gtk3_qt</filename>
 </para>
 <para>
     Part of the CDE theme which are used by <command>libexec/NsCDE/themegen</command> and
@@ -4538,7 +4538,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
     a selected palette and color depth.
 </para>
 <para>
-  share/config_templates also contains <filename>Xdefaults</filename> and some include files
+  share/NsCDE/config_templates also contains <filename>Xdefaults</filename> and some include files
     for it, as well as configuration for <command>stalonetray</command> which is installed
     on initial setup, and <filename>BGdefault</filename>, which is a monochrome pixmap
     loaded as bare default early on start, before FvwmBacker(1) sets up
@@ -5013,13 +5013,13 @@ as <command>exec /opt/NsCDE/bin/nscde</command> or
 </para>
 <para>
 If supported by the X Display Manager which is in use on the target system, an xsession
-file <filename>/opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop</filename>
+file <filename>/opt/NsCDE/share/examples/xsession-integration/nscde.desktop</filename>
 will be put by Installer.ksh during the installation into
 <filename class="directory">/usr/share/xsessions</filename>
 (or in whatever place your system and your X Display Manager reads this files)
 and afterwards NsCDE can be selected from the display manager's menu or similar
 session selector. See the rest of the X Session Manager integration examples in the
-directory <filename class="directory">/opt/NsCDE/share/doc/examples/</filename>
+directory <filename class="directory">/opt/NsCDE/share/examples/</filename>
 for MATE, KDE, LXDE and similar DE integrations and play with this if you like.
 </para>
 </sect1>
@@ -5226,7 +5226,7 @@ even better, <filename class="directory">$FVWM_USERDIR/templates/app-defaults</f
 and reworked for <link linkend="NsCDE-ColorMgr">Color Style Manager</link> integration,
 because if find in that directory,
 and with <emphasis>.tmpl</emphasis> extension, it will be processed in the same way
-as system files from <filename class="directory">$NSCDE_ROOT/share/config_templates/app-defaults/</filename>
+as system files from <filename class="directory">$NSCDE_DATADIR/config_templates/app-defaults/</filename>
 and put in <filename class="directory">$FVWM_USERDIR/app-defaults</filename>.
 </para>
 <para>
@@ -5242,7 +5242,7 @@ X resources integration is turned on by default in
 <para>
 <command>$NSCDE_TOOLDIR/themegen</command> with
 <filename class="directory">$NSCDE_ROOT/lib/NsCDE/python</filename> and with
-<filename class="directory">$NSCDE_ROOT/share/config_templates/integration/gtk2_gtk3_qt</filename>
+<filename class="directory">$NSCDE_DATADIR/config_templates/integration/gtk2_gtk3_qt</filename>
 are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> or manually with the
 <command>$NSCDE_TOOLDIR/themegen</command>,
@@ -5275,7 +5275,7 @@ to generate colorsets also for either or both Firefox and Thunderbird.
 <para>
 For this to work,
 appropriate code or the whole <filename>colormgr.local</filename> from
-<filename>$NSCDE_ROOT/share/config_templates/colormgr.local</filename> must be adapted into
+<filename>$NSCDE_DATADIR/config_templates/colormgr.local</filename> must be adapted into
 <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>. Shell variable
 <varname>FIREFOX_CHROMEDIR</varname> should contain path to the
 <filename class="directory">~/.mozilla/firefox/__PROFILE__/chrome.</filename>,
@@ -5286,8 +5286,8 @@ point to chrome directory of user's thunderbird profile. If chrome subdirectory 
 directory does not exist, it will be created by the <filename>colormgr.local</filename>. This will make
 appropriate entiries in <filename>userChrome.css</filename> and <filename>userContent.css</filename> to
 import <filename>nscdeChrome.css</filename>, <filename>nscdeIcons.css</filename> and
-<filename>nscdeContent.css</filename> from the <filename class="directory">$NSCDE_ROOT/share/config_templates/integration/firefox</filename>
-and/or from <filename class="directory">$NSCDE_ROOT/share/config_templates/integration/thunderbird</filename>.
+<filename>nscdeContent.css</filename> from the <filename class="directory">$NSCDE_DATADIR/config_templates/integration/firefox</filename>
+and/or from <filename class="directory">$NSCDE_DATADIR/config_templates/integration/thunderbird</filename>.
 File <filename>nscdeColordefs.css</filename> will be generated in the chrome dir with color mappings to the
 current NsCDE theme. This wile is also imported in userChrome.css and userContent.css.
 </para>
@@ -5317,12 +5317,12 @@ makes a changes:
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeContent.css");
+@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeContent.css");
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeChrome.css");
-@import url("/opt/NsCDE/share/config_templates/integration/thunderbird/nscdeIcons.css");
+@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeIcons.css");
 </programlisting>
 
 </para>
@@ -5333,14 +5333,14 @@ This is how Firefox chromedir should look:
 <![CDATA[
 /home/user/.mozilla/firefox/testtest.default-release/chrome
 |- nscdeColordefs.css
-|- nscdeContent.css -> /opt/NsCDE/share/config_templates/integration/firefox/ff9x_nscdeContent.css
+|- nscdeContent.css -> /opt/NsCDE/share/NsCDE/config_templates/integration/firefox/ff9x_nscdeContent.css
 |- userChrome.css
 |- userContent.css
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/config_templates/integration/firefox/ff9x_nscdeChrome.css");
-@import url("/opt/NsCDE/share/config_templates/integration/firefox/nscdeIcons.css");
+@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/firefox/nscdeIcons.css");
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
 @import url("nscdeColordefs.css");
@@ -5370,9 +5370,9 @@ of this resources. Also "skins" for programs like <command>smplayer,</command> <
 and <command>Gkrellm</command> can be processed from custom <command>colormgr.local</command>.
 </para>
 <para>
-In the directory <filename class="directory">$NSCDE_ROOT/share/config_templates/Gkrellm</filename>
+In the directory <filename class="directory">$NSCDE_DATADIR/config_templates/Gkrellm</filename>
 is the complete NsCDE theme for the Gkrellm.
-File <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename>
+File <filename>$NSCDE_ROOT/share/examples/colormgr.local.example</filename>
 can be used for this integration. There are also examples for
 <command>Gkrellm</command> and
 <command>mate-terminal</command>. Local script <command>colormgr.local</command>
@@ -5442,7 +5442,7 @@ set to look almost as Dtterm, but with richer menu and better UTF-8
 handling, the bad thing is that configuration if not done via GUI or configuration file but is
 stored in binary DCONF registry, and registry editor like <command>dconf-editor</command> or
 or dconf <command>gsettings</command> must be used for non-interactive or CLI editing.
-See the example in <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename>
+See the example in <filename>$NSCDE_ROOT/share/examples/colormgr.local.example</filename>
 on how to integrate <command>mate-terminal</command> with a
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 Second (if not first) best choice is <command>Urxvt</command>, but since it does not have a menu nor a
@@ -5473,7 +5473,7 @@ NsCDE has a ready drop-in theme called (of course) NsCDE in
 <filename class="directory">share/config_templates</filename> and it can be put in user's
 <filename class="directory">~/.gkrellm2/themes</filename> and integrated with
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>
-with the <filename>$NSCDE_ROOT/share/doc/examples/colormgr.local.example</filename> which can be
+with the <filename>$NSCDE_ROOT/share/examples/colormgr.local.example</filename> which can be
 installed as <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>.
 </para>
 <para>
@@ -5492,7 +5492,7 @@ powerful GPU, CPU and RAM I have. I turn it on occasionally, more as an
 amusement of xsnow, xsanta or xeyes type, but when I have serious work to do,
 I simply turn it off in some moment.
 Maybe it can be better if it is configured more conservative than example. See
-<filename class="directory">/opt/NsCDE/share/doc/examples/compton-integration</filename> for
+<filename class="directory">/opt/NsCDE/share/examples/compton-integration</filename> for
 a starting point. Syntax of this file is largely compatible for all three above mentioned
 X compositors.
 </para>
@@ -5834,7 +5834,7 @@ in layout to old Xinerama support in FVWM2, while second and third model are spl
 workspaces, so different parts of different workspaces can be shown on different
 monitors. NsCDE implements dynamic finding and displaying, as well as creation of
 joint backdrops combinations for multiple monitors layout out of the box, so old
-hack described in <filename>$NSCDE_ROOT/share/doc/examples/fvwm3-per-monitor/README</filename>
+hack described in <filename>$NSCDE_ROOT/share/examples/fvwm3-per-monitor/README</filename>
 is not needed anymore. As in the future more desktop layouts are planned by FVWM3 developers, this
 setting has it's GUI control usable on FVWM3 in the
 <link linkend="NsCDE-WsPgMgr">Workspaces and Pages Style Manager</link>. NsCDE
@@ -5912,7 +5912,7 @@ Action builder (dtaction) - not likely ever. Use FvwmScript or maybe some Python
 <listitem><para>
 Session Management (dtsession) - NsCDE can use the external custom
 Session Managers from various DE's. See examples in
-<filename class="directory">share/doc/examples</filename>.
+<filename class="directory">share/examples</filename>.
 Since there are similar programs in existence, plus FVWM's own functions for
 automatic start of programs, NsCDE is more or less covered here.
 </para></listitem>

@@ -42,15 +42,15 @@ function GenFullPalette
    PalettePath="$1"
    mkdir -p ${FVWM_USERDIR}/tmp || exit 1
 
-   if [ -s "${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/FullPalette.xpm" ]; then
+   if [ -s "${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm" ]; then
       ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PalettePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/FullPalette.xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm \
        -c > ${FVWM_USERDIR}/tmp/_fullpalette.xpm
 
       echo ${FVWM_USERDIR}/tmp/_fullpalette.xpm
    else
-      echo "Error: Cannot open ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/FullPalette.xpm"
+      echo "Error: Cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
       exit 3
    fi
 }
@@ -69,14 +69,14 @@ function ProgBits
    ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b2 \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b2 \
        -P 2 -b
 
    # Type b, subtype 3
    ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b3 \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b3 \
        -P 3 -b
 
    # Type b, subtype 5
@@ -84,7 +84,7 @@ function ProgBits
       ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} -n $Ncolors \
           -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-          -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b5 \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_b5 \
           -P 5 -b
    fi
 
@@ -92,14 +92,14 @@ function ProgBits
    ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b6 \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b6 \
        -P 6 -b
 
    # Type b, subtype 7
    ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b7 \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b7 \
        -P 7 -b
 
    # Type b, subtype 8
@@ -107,7 +107,7 @@ function ProgBits
       ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} -n $Ncolors \
           -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-          -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_b8 \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_b8 \
           -P 8 -b
    fi
 
@@ -115,7 +115,7 @@ function ProgBits
    ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-       -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_c \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_c \
        -c
 
    # Type c5
@@ -123,7 +123,7 @@ function ProgBits
       ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} -n $Ncolors \
           -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-          -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_c5 \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_c5 \
           -c
    fi
 
@@ -132,7 +132,7 @@ function ProgBits
       ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} -n $Ncolors \
           -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
-          -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/type_c8 \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_c8 \
           -c
    fi
 
@@ -144,7 +144,7 @@ function ProgBits
    ${NSCDE_TOOLDIR}/palette_colorgen \
     -n $Ncolors -p ${PaletteNamePath} \
     -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
-    -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/icon-theme/actions \
+    -i ${NSCDE_DATADIR}/config_templates/progbits/icon-theme/actions \
     -c
    if (($? == 0)); then
       for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
@@ -161,7 +161,7 @@ function ProgBits
    ${NSCDE_TOOLDIR}/palette_colorgen \
     -n $Ncolors -p ${PaletteNamePath} \
     -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
-    -i ${NSCDE_ROOT}/share/NsCDE/config_templates/progbits/icon-theme/status \
+    -i ${NSCDE_DATADIR}/config_templates/progbits/icon-theme/status \
     -c
    if (($? == 0)); then
       for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
@@ -189,7 +189,7 @@ function ProgBits
    # Default fallback background
    ${NSCDE_TOOLDIR}/palette_colorgen \
     -p ${PaletteNamePath} -n $Ncolors \
-    -i ${NSCDE_ROOT}/share/config_templates/BGdefault -P 3 \
+    -i ${NSCDE_DATADIR}/config_templates/BGdefault -P 3 \
     -b > ${FVWM_USERDIR}/.BGdefault
 }
 
@@ -200,15 +200,15 @@ function Xresources
    if (($PreviewMode == 0)); then
       ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/share/config_templates/Xdefaults \
+       -i ${NSCDE_DATADIR}/config_templates/Xdefaults \
        -c > ${FVWM_USERDIR}/Xdefaults
 
       if [ ! -s "${FVWM_USERDIR}/Xdefaults.fontdefs" ]; then
-         cat ${NSCDE_ROOT}/share/config_templates/Xdefaults.fontdefs > "${FVWM_USERDIR}/Xdefaults.fontdefs"
+         cat ${NSCDE_DATADIR}/config_templates/Xdefaults.fontdefs > "${FVWM_USERDIR}/Xdefaults.fontdefs"
       fi
 
       if [ ! -s "${FVWM_USERDIR}/Xdefaults.mouse" ]; then
-         cat ${NSCDE_ROOT}/share/config_templates/Xdefaults.mouse > "${FVWM_USERDIR}/Xdefaults.mouse"
+         cat ${NSCDE_DATADIR}/config_templates/Xdefaults.mouse > "${FVWM_USERDIR}/Xdefaults.mouse"
       fi
 
       if [ ! -f "${FVWM_USERDIR}/Xdefaults.local" ]; then
@@ -221,7 +221,7 @@ function Xresources
       ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
        -o "${FVWM_USERDIR}/app-defaults" -g tmpl \
-       -i ${NSCDE_ROOT}/share/config_templates/app-defaults \
+       -i ${NSCDE_DATADIR}/config_templates/app-defaults \
        -c
       for tmpl in ${FVWM_USERDIR}/app-defaults/*.tmpl
       do
@@ -289,7 +289,7 @@ function Xresources
    else
       ${NSCDE_TOOLDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_ROOT}/share/config_templates/Xdefaults \
+       -i ${NSCDE_DATADIR}/config_templates/Xdefaults \
        -c > ${FVWM_USERDIR}/tmp/Xdefaults-Preview
 
       if (($EchoInfo == 1)); then
@@ -357,7 +357,7 @@ function Backdrops
       while (($DeskNo != 0))
       do
          egrep "^Colorset 3${DeskNo}" "${NSCDE_ROOT}/config/NsCDE-Backdrops.conf" | \
-         sed 's/\$\[NSCDE_ROOT\]\/share\/defaults\/backer/\$\[FVWM_USERDIR\]\/backer/g' \
+         sed 's/\$\[NSCDE_DATADIR\]\/defaults\/backer/\$\[FVWM_USERDIR\]\/backer/g' \
           >> "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
          cp -f ${NSCDE_ROOT}/share/defaults/backer/Desk${DeskNo}-*pm "${FVWM_USERDIR}/backer/"
          ((DeskNo = DeskNo - 1))

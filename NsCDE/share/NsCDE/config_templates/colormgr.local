@@ -19,7 +19,7 @@ FIREFOX_MAJVER_PFX="ff7x_"
 THUNDERBIRD_CHROMEDIR=""
 
 if [ -z $PPATH ]; then
-   PPATH=$NSCDE_ROOT/share/palettes/Broica.dp
+   PPATH=$NSCDE_DATADIR/palettes/Broica.dp
 fi
 
 if [ -z $NCOLORS ]; then
@@ -27,8 +27,8 @@ if [ -z $NCOLORS ]; then
 fi
 
 # Gkrellm
-if [ -d "$NSCDE_ROOT/share/config_templates/Gkrellm" ] && $(whence -q gkrellm); then
-   cd "$NSCDE_ROOT/share/config_templates/Gkrellm" || exit 1
+if [ -d "$NSCDE_DATADIR/config_templates/Gkrellm" ] && $(whence -q gkrellm); then
+   cd "$NSCDE_DATADIR/config_templates/Gkrellm" || exit 1
    if [ ! -d "${HOME}/.gkrellm2/themes/NsCDE" ]; then
       mkdir -p "${HOME}/.gkrellm2/themes/NsCDE"
    fi
@@ -109,13 +109,13 @@ function do_firefox
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeChrome.css\");" >> \
+         echo "@import url(\"${NSCDE_DATADIR}/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeChrome.css\");" >> \
           ${FIREFOX_CHROMEDIR}/userChrome.css
       fi
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
        ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/firefox/nscdeIcons.css\");" >> \
+         echo "@import url(\"${NSCDE_DATADIR}/config_templates/integration/firefox/nscdeIcons.css\");" >> \
           ${FIREFOX_CHROMEDIR}/userChrome.css
       fi
 
@@ -133,9 +133,9 @@ function do_firefox
 
       # Colorgen
       $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $NSCDE_ROOT/share/config_templates/integration/firefox/nscdeColordefs.tmpl \
+       -i $NSCDE_DATADIR/config_templates/integration/firefox/nscdeColordefs.tmpl \
        -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
-      ln -sf  $NSCDE_ROOT/share/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeContent.css \
+      ln -sf  $NSCDE_DATADIR/config_templates/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeContent.css \
        ${FIREFOX_CHROMEDIR}/nscdeContent.css
 
       # Prefs
@@ -172,13 +172,13 @@ function do_thunderbird
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
        ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeChrome.css\");" >> \
+         echo "@import url(\"${NSCDE_DATADIR}/config_templates/integration/thunderbird/nscdeChrome.css\");" >> \
           ${THUNDERBIRD_CHROMEDIR}/userChrome.css
       fi
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
        ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeIcons.css\");" >> \
+         echo "@import url(\"${NSCDE_DATADIR}/config_templates/integration/thunderbird/nscdeIcons.css\");" >> \
           ${THUNDERBIRD_CHROMEDIR}/userChrome.css
       fi
 
@@ -191,13 +191,13 @@ function do_thunderbird
       egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?.*nscdeContent\.css(.)?\)([[:space:]]+)?;' \
        ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
       if (($? > 0)); then
-         echo "@import url(\"${NSCDE_ROOT}/share/config_templates/integration/thunderbird/nscdeContent.css\");" >> \
+         echo "@import url(\"${NSCDE_DATADIR}/config_templates/integration/thunderbird/nscdeContent.css\");" >> \
           ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
       fi
 
       # Colorgen
       $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $NSCDE_ROOT/share/config_templates/integration/thunderbird/nscdeColordefs.tmpl \
+       -i $NSCDE_DATADIR/config_templates/integration/thunderbird/nscdeColordefs.tmpl \
        -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
 
       # Prefs

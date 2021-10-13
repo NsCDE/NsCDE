@@ -31,13 +31,13 @@ do
    if [ -r "$FVWM_USERDIR/WSM.conf" ]; then
       pagenum_prepare=$(egrep "^PG:${pg}:.*:" "$FVWM_USERDIR/WSM.conf" | head -1)
       if [ "x${pagenum_prepare}" == "x" ]; then
-         if [ -r "${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY}" ]; then
-            pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY} | head -1)
+         if [ -r "${NSCDE_DATADIR}/defaults/pages/${PagesX}x${PagesY}" ]; then
+            pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_DATADIR}/defaults/pages/${PagesX}x${PagesY} | head -1)
          fi
       fi
    else
-      if [ -r "${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY}" ]; then
-         pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_ROOT}/share/defaults/pages/${PagesX}x${PagesY} | head -1)
+      if [ -r "${NSCDE_DATADIR}/defaults/pages/${PagesX}x${PagesY}" ]; then
+         pagenum_prepare=$(egrep "^PG:${pg}:.*:" ${NSCDE_DATADIR}/defaults/pages/${PagesX}x${PagesY} | head -1)
       fi
    fi
 

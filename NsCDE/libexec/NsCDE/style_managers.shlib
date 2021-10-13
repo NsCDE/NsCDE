@@ -16,7 +16,7 @@ function FindPalettes
       exit 2
    fi
 
-   SysPalettes=$(ls -1 ${NSCDE_ROOT}/share/palettes/*.dp | awk -F "/" '{print $NF}' | sed 's/\.dp$//g')
+   SysPalettes=$(ls -1 ${NSCDE_DATADIR}/palettes/*.dp | awk -F "/" '{print $NF}' | sed 's/\.dp$//g')
 
    if [ -d "${FVWM_USERDIR}/palettes" ]; then
       ls -1 ${FVWM_USERDIR}/palettes/*.dp > /dev/null 2>&1
@@ -35,7 +35,7 @@ function FindBackdrops
       exit 2
    fi
 
-   SysBackdrops=$(ls -1 ${NSCDE_ROOT}/share/backdrops/*.pm | awk -F "/" '{print $NF}' | sed 's/\.pm$//g')
+   SysBackdrops=$(ls -1 ${NSCDE_DATADIR}/backdrops/*.pm | awk -F "/" '{print $NF}' | sed 's/\.pm$//g')
 
    if [ -d "${FVWM_USERDIR}/backdrops" ]; then
       ls -1 ${FVWM_USERDIR}/backdrops/*.pm > /dev/null 2>&1
@@ -54,7 +54,7 @@ function FindPhotos
       exit 2
    fi
 
-   SysPhotos=$(ls -1 ${NSCDE_ROOT}/share/photos/*.png | awk -F "/" '{print $NF}' | sed 's/\.png$//g')
+   SysPhotos=$(ls -1 ${NSCDE_DATADIR}/photos/*.png | awk -F "/" '{print $NF}' | sed 's/\.png$//g')
 
    if [ -d "${FVWM_USERDIR}/photos" ]; then
       ls -1 ${FVWM_USERDIR}/photos/*.png > /dev/null 2>&1
@@ -70,11 +70,11 @@ function FindPhotos
 function GetBackdrop
 {
    Backdropname="$1"
-   if [ -s "${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm" ]; then
+   if [ -s "${NSCDE_DATADIR}/backdrops/${Backdropname}.pm" ]; then
       if (($EchoInfo == 1)); then
-         echo "${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm"
+         echo "${NSCDE_DATADIR}/backdrops/${Backdropname}.pm"
       fi
-      export BackdropNamePath="${NSCDE_ROOT}/share/backdrops/${Backdropname}.pm"
+      export BackdropNamePath="${NSCDE_DATADIR}/backdrops/${Backdropname}.pm"
       export Backdropname
    elif [ -s "${FVWM_USERDIR}/backdrops/${Backdropname}.pm" ]; then
       if (($EchoInfo == 1)); then
@@ -91,11 +91,11 @@ function GetBackdrop
 function GetPalette
 {
    Palettename="$1"
-   if [ -s "${NSCDE_ROOT}/share/palettes/${Palettename}.dp" ]; then
+   if [ -s "${NSCDE_DATADIR}/palettes/${Palettename}.dp" ]; then
       if (($EchoInfo == 1)); then
-         echo "${NSCDE_ROOT}/share/palettes/${Palettename}.dp"
+         echo "${NSCDE_DATADIR}/palettes/${Palettename}.dp"
       fi
-      export PaletteNamePath="${NSCDE_ROOT}/share/palettes/${Palettename}.dp"
+      export PaletteNamePath="${NSCDE_DATADIR}/palettes/${Palettename}.dp"
       export Palettename
    elif [ -s "${FVWM_USERDIR}/palettes/${Palettename}.dp" ]; then
       if (($EchoInfo == 1)); then
@@ -112,11 +112,11 @@ function GetPalette
 function GetPhoto
 {
    Photoname="$1"
-   if [ -s "${NSCDE_ROOT}/share/photos/${Photoname}.png" ]; then
+   if [ -s "${NSCDE_DATADIR}/photos/${Photoname}.png" ]; then
       if (($EchoInfo == 1)); then
-         echo "${NSCDE_ROOT}/share/photos/${Photoname}.png"
+         echo "${NSCDE_DATADIR}/photos/${Photoname}.png"
       fi
-      export PhotoNamePath="${NSCDE_ROOT}/share/photos/${Photoname}.png"
+      export PhotoNamePath="${NSCDE_DATADIR}/photos/${Photoname}.png"
       export Photoname
    elif [ -s "${FVWM_USERDIR}/photos/${Photoname}.png" ]; then
       if (($EchoInfo == 1)); then

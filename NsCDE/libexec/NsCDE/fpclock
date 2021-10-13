@@ -15,8 +15,8 @@ function find_colors
       if [ -r "$FVWM_USERDIR/palettes/${NSCDE_PALETTE}.dp" ]; then
          palfile="$FVWM_USERDIR/palettes/${NSCDE_PALETTE}.dp"
       else
-         if [ -r "$NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp" ]; then
-            palfile="$NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp"
+         if [ -r "$NSCDE_DATADIR/palettes/${NSCDE_PALETTE}.dp" ]; then
+            palfile="$NSCDE_DATADIR/palettes/${NSCDE_PALETTE}.dp"
          fi
       fi
 
@@ -27,7 +27,7 @@ function find_colors
       if [ "x$palfile" != "x" ]; then
          $NSCDE_TOOLDIR/palette_colorgen \
           -n ${NSCDE_PALETTE_NCOLORS} \
-          -p /opt/NsCDE/share/palettes/${NSCDE_PALETTE}.dp -sl | \
+          -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp -sl | \
           egrep '(ts|bs)_color_3' | while IFS=" " read name value
          do
             eval "${name}"="${value}"
@@ -50,8 +50,8 @@ function find_colors
 
 find_colors
 
-if [ -x $NSCDE_TOOLDIR/${NSCDE_OS}_${MARCH}/fpclock ]; then
-   exec $NSCDE_TOOLDIR/${NSCDE_OS}_${MARCH}/fpclock -H $bs_color_3 -S $ts_color_3 "$@"
+if [ -x ${NSCDE_TOOLDIR}/${NSCDE_OS}_${MARCH}/fpclock ]; then
+   exec ${NSCDE_TOOLDIR}/${NSCDE_OS}_${MARCH}/fpclock -H $bs_color_3 -S $ts_color_3 "$@"
 else
    pclock=$(whence -p pclock)
    if [ "x$pclock" != "x" ]; then

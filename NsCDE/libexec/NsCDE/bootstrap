@@ -61,7 +61,7 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          gettext -s "Generating NsCDE fvwm Colorset ..."
       fi
-      $NSCDE_TOOLDIR/palette_colorgen -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
+      $NSCDE_TOOLDIR/palette_colorgen -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp \
        -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/NsCDE-Colorset.conf"
    else
       if (($VERBOSE == 1)); then
@@ -79,8 +79,8 @@ function setup_nscde
    # Xdefaults includes
    locale_Initializing_default=$(gettext -s "Initializing default")
    if [ ! -e "${FVWM_USERDIR}/Xdefaults" ]; then
-      $NSCDE_TOOLDIR/palette_colorgen -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
-       -n $NSCDE_PALETTE_NCOLORS -i $NSCDE_ROOT/share/config_templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
+      $NSCDE_TOOLDIR/palette_colorgen -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp \
+       -n $NSCDE_PALETTE_NCOLORS -i ${NSCDE_DATADIR}/config_templates/Xdefaults -c > "$FVWM_USERDIR/Xdefaults"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults ${already_exists}."
@@ -96,7 +96,7 @@ function setup_nscde
    fi
 
    if [ ! -e "${FVWM_USERDIR}/Xdefaults.fontdefs" ]; then
-      cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
+      cp "${NSCDE_DATADIR}/config_templates/Xdefaults.fontdefs" "${FVWM_USERDIR}/Xdefaults.fontdefs"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults.fontdefs ${already_exists}."
@@ -104,7 +104,7 @@ function setup_nscde
    fi
 
    if [ ! -e "${FVWM_USERDIR}/Xdefaults.mouse" ]; then
-      cp "${NSCDE_ROOT}/share/config_templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
+      cp "${NSCDE_DATADIR}/config_templates/Xdefaults.mouse" "${FVWM_USERDIR}/Xdefaults.mouse"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xdefaults.mouse ${already_exists}."
@@ -114,10 +114,10 @@ function setup_nscde
    # Xdefaults pieces dir (XAPPLRESDIR)
    if [ ! -e "${FVWM_USERDIR}/app-defaults" ]; then
       mkdir -p "${FVWM_USERDIR}/app-defaults"
-      for appres in $NSCDE_ROOT/share/config_templates/app-defaults/*.tmpl
+      for appres in ${NSCDE_DATADIR}/config_templates/app-defaults/*.tmpl
       do
          appres="${appres%.tmpl}"
-         $NSCDE_TOOLDIR/palette_colorgen -p $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp \
+         $NSCDE_TOOLDIR/palette_colorgen -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp \
           -n $NSCDE_PALETTE_NCOLORS -i ${appres}.tmpl -c > $FVWM_USERDIR/app-defaults/${appres##*/}
       done
    else
@@ -128,7 +128,7 @@ function setup_nscde
 
    # Xsettingsd daemon configuration
    if [ ! -e "${FVWM_USERDIR}/Xsettingsd.conf" ]; then
-      cp "${NSCDE_ROOT}/share/config_templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
+      cp "${NSCDE_DATADIR}/config_templates/Xsettingsd.conf" "${FVWM_USERDIR}/Xsettingsd.conf"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/Xsettingsd.conf ${already_exists}."
@@ -141,7 +141,7 @@ function setup_nscde
          locale_Writing_default_background_pixel=$(gettext -s "Writing default background pixel")
          echo "$locale_Writing_default_background_pixel ${FVWM_USERDIR}/.BGdefault ..."
       fi
-      cp ${NSCDE_ROOT}/share/config_templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
+      cp ${NSCDE_DATADIR}/config_templates/BGdefault "${FVWM_USERDIR}/.BGdefault"
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/.BGdefault ${already_exists}."
@@ -186,7 +186,7 @@ function setup_nscde
          if (($VERBOSE == 1)); then
             echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
          fi
-         cp ${NSCDE_ROOT}/share/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
+         cp ${NSCDE_DATADIR}/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
       else
          if (($VERBOSE == 1)); then
             echo "${FVWM_USERDIR}/NsCDE-${localcf}.local ${already_exists}."
@@ -199,7 +199,7 @@ function setup_nscde
       if (($VERBOSE == 1)); then
          echo "$locale_Initializing_default ${FVWM_USERDIR}/GeoDB.ini ..."
       fi
-      cp ${NSCDE_ROOT}/share/config_templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
+      cp ${NSCDE_DATADIR}/config_templates/GeoDB.ini ${FVWM_USERDIR}/GeoDB.ini
    else
       if (($VERBOSE == 1)); then
          echo "${FVWM_USERDIR}/GeoDB.ini ${already_exists}."
@@ -285,7 +285,7 @@ function setup_nscde
          echo "$locale_generating_default_theme_for_gtk2_gtk3_in $HOME/.themes/NsCDE ..."
       fi
       mkdir -p "$HOME/.themes"
-      $NSCDE_TOOLDIR/themegen $NSCDE_ROOT/share/palettes/${NSCDE_PALETTE}.dp $NSCDE_PALETTE_NCOLORS gtk2 gtk3
+      ${NSCDE_TOOLDIR}/themegen ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp $NSCDE_PALETTE_NCOLORS gtk2 gtk3
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.themes/NsCDE ${already_exists}."
@@ -330,7 +330,7 @@ function setup_nscde
          echo "$setting_default ${FVWM_USERDIR}/libexec/colormgr.local ..."
       fi
       mkdir -p "${FVWM_USERDIR}/libexec"
-      cp ${NSCDE_ROOT}/share/config_templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
+      cp ${NSCDE_DATADIR}/config_templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
       chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
    else
       if (($VERBOSE == 1)); then
@@ -391,7 +391,7 @@ function setup_nscde
          if (($VERBOSE == 1)); then
             echo "$setting_default ${FVWM_USERDIR}/Stalonetray.conf ..."
          fi
-         cp ${NSCDE_ROOT}/share/config_templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
+         cp ${NSCDE_DATADIR}/config_templates/Stalonetray.conf "${FVWM_USERDIR}/Stalonetray.conf"
       else
          if (($VERBOSE == 1)); then
             locale_already_in_place=$(gettext -s "already in place")
@@ -444,7 +444,7 @@ function setup_nscde
          fi
          if [ "x$ans" == "xy" ]; then
             echo "$locale_enabling nscde_use_dunst --> 1"
-            cp -f "$NSCDE_ROOT/share/config_templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
+            cp -f "$NSCDE_DATADIR/config_templates/Dunst.conf" "$FVWM_USERDIR/Dunst.conf"
             $NSCDE_TOOLDIR/ised -c 's/InfoStoreAdd nscde_use_dunst 0/InfoStoreAdd nscde_use_dunst 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          elif [ "x$ans" == "xn" ]; then
             echo "$locale_not_enabling nscde_use_dunst --> 0"
@@ -678,7 +678,7 @@ function setup_nscde
       gettext -s "You can set \$[infostore.terminal] variable to your favorite"
       echo "$locale_terminal_program_in \$HOME/.NsCDE/NsCDE.conf ${locale_or_leave_autodiscovery}."
       echo ""
-      echo "$locale_Hint_See $NSCDE_ROOT/share/doc/examples $locale_for_Gkrellm_X_session_and"
+      echo "$locale_Hint_See $NSCDE_DATADIR/examples $locale_for_Gkrellm_X_session_and"
       gettext -s "other integration options you may want to apply."
       sleep 1
       echo ""

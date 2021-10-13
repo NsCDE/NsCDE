@@ -17,6 +17,11 @@ if not nscde_root:
 else:
    sys.path.append(nscde_root + "/lib/NsCDE/python")
 
+nscde_datadir = os.environ.get('NSCDE_DATADIR')
+if not nscde_datadir:
+   sys.stderr.write("NSCDE_DATADIR not defined. Stop.\n")
+   sys.exit(1)
+
 themegen="""
 For this script to work you need to install the Python 3
 Qt4 (PyQt4) modules, or Python 3 Qt5 (PyQt5) modules.
@@ -46,7 +51,7 @@ Usage:
 
 Arguments:
     Palette name or file path
-    CDE color palettes, are located in NSCDE_ROOT/share/palettes
+    CDE color palettes, are located in {nscde_datadir}/palettes
     or in $HOME/.NsCDE/palettes
 
     Number of colors: 8 or 4
@@ -69,7 +74,7 @@ Examples:
 
     From file which is not in system's nor user's palette directory:
        themegen /home/jdoe/pixmaps/MyNewPalette.dp 8 gtk2 gtk3
-"""
+""".format(**locals())
 
 if len(sys.argv)!=5:
     print (helptxt)
@@ -93,8 +98,8 @@ nscdetheme = "NsCDE"
 
 if os.path.exists(userhome + "/.NsCDE/palettes/" + palettefile + ".dp"):
     opts.currentpalettefile=(userhome + "/.NsCDE/palettes/" + palettefile + ".dp")
-elif os.path.exists(nscde_root + "/share/palettes/" + palettefile + ".dp"):
-    opts.currentpalettefile=(nscde_root + "/share/palettes/" + palettefile + ".dp")
+elif os.path.exists(nscde_datadir + "/palettes/" + palettefile + ".dp"):
+    opts.currentpalettefile=(nscde_datadir + "/palettes/" + palettefile + ".dp")
 elif os.path.exists(palettefile):
     opts.currentpalettefile=palettefile
     # nscdetheme="NsCDE-" + os.path.basename(nscdetheme.replace(".dp", ""))
@@ -102,7 +107,7 @@ else:
     print ('Palette not found: ' + palettefile)
     sys.exit()
 
-Globals.themedir=nscde_root + "/share/config_templates/integration/gtk2_gtk3_qt"
+Globals.themedir=nscde_datadir + "/config_templates/integration/gtk2_gtk3_qt"
 Globals.userthemedir=os.path.join(userhome,'.themes',nscdetheme)
 Globals.themesrcdir=Globals.themedir
 Globals.palettedir=os.path.join(Globals.themedir,'palettes')

@@ -13,7 +13,7 @@ else
    CatName="$1"
 fi
 
-if [ ! -r "$NSCDE_ROOT/share/fallback/app-catalog/$CatName" ]; then
+if [ ! -r "$NSCDE_DATADIR/fallback/app-catalog/$CatName" ]; then
    echo "NOCATALOG"
    exit 2
 fi
@@ -123,7 +123,7 @@ if [ "$CatName" == "mailreader" ]; then
 fi
 
 found=0
-cat "$NSCDE_ROOT/share/fallback/app-catalog/$CatName" | while read appname
+cat "$NSCDE_DATADIR/fallback/app-catalog/$CatName" | while read appname
 do
    appname0="${appname%% *}"
    appname1="${appname/:needterm/}"

@@ -683,11 +683,11 @@ function configure_installed
          echo -ne "Where is your xsessions directory? [${xsess_dir}] \c"
          read xans
          if [ "x$xans" == "x" ]; then
-            cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+            cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
             retval=$?
             if (($retval > 0)); then
                echo "Error occured while trying to copy"
-               echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+               echo "${instpath}/share/examples/xsession-integration/nscde.desktop"
                echo "into ${xsess_dir}/"
             else
                if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
@@ -704,11 +704,11 @@ function configure_installed
                echo "Done."
             fi
          else
-            cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xans}/"
+            cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xans}/"
             retval=$?
             if (($retval > 0)); then
                echo "Error occured while trying to copy"
-               echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+               echo "${instpath}/share/examples/xsession-integration/nscde.desktop"
                echo "into ${xans}/"
             else
                if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
@@ -760,7 +760,7 @@ function configure_installed
             echo "Warning: X Display Manager file:"
             echo "Cannot locate xsessions directory in /usr/share /usr/local/share or /usr/pkg/share."
             echo "Enable NsCDE X Session startup manually in your X Display Manager configuration."
-            echo "Hint: use ${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+            echo "Hint: use ${instpath}/share/examples/xsession-integration/nscde.desktop"
             echo ""
             xsession_inst=0
          fi
@@ -782,11 +782,11 @@ function configure_installed
 
       if (($xsession_inst > 0)); then
          echo "Installing xsession file nscde.desktop into ${xsess_dir}."
-         cp -f "${instpath}/share/doc/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+         cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
          retval=$?
          if (($retval > 0)); then
             echo "Error occured while trying to copy"
-            echo "${instpath}/share/doc/examples/xsession-integration/nscde.desktop"
+            echo "${instpath}/share/examples/xsession-integration/nscde.desktop"
             echo "into ${xsess_dir}/"
          else
             if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
@@ -810,7 +810,7 @@ function configure_installed
          echo "System Action Dialog, you should have \"sudo\" installed and configured"
          echo "for user to launch ${realinstpath}/libexec/NsCDE/nscde-acpi script."
          echo ""
-         echo "See ${realinstpath}/share/doc/examples/sudo/006_PowerManager for the"
+         echo "See ${realinstpath}/share/examples/sudo/006_PowerManager for the"
          echo "example which needs to be edited for existing user(s) and put"
          echo "into /etc/sudoers.d/ on modern systems with a newer sudo package"
          echo "Option requiretty should also be set to false. See sudo(8)."
@@ -1089,8 +1089,8 @@ backdrops/Wrinkle.pm
 backdrops/Wrought.pm
 backdrops/Xenon.pm'
 
-   if [ -d "${instpath}/share/backdrops" ]; then
-      cd "${instpath}/share"
+   if [ -d "${instpath}/share/NsCDE/backdrops" ]; then
+      cd "${instpath}/share/NsCDE"
 
       ublist=""
       for ub in backdrops/*.pm
@@ -1107,7 +1107,7 @@ backdrops/Xenon.pm'
          TARUB_RETVAL=$?
          if (($TARUB_RETVAL == 0)); then
             echo ""
-            echo "WARNING: Unknown backdrops found in ${instpath}/share/backdrops."
+            echo "WARNING: Unknown backdrops found in ${instpath}/share/NsCDE/backdrops."
             echo "WARNING: they were backed up as /tmp/custom_unknown_backdrops_save_$$.tar"
             echo "WARNING: please use FVWM_USERDIR/backdrops for custom backdrops in the"
             echo "WARNING: future. If you wish, you can restore them into local user backdrop"
@@ -1225,8 +1225,8 @@ palettes/Xinky.dp
 palettes/Yukon.dp
 palettes/Zutto.dp'
 
-   if [ -d "${instpath}/share/palettes" ]; then
-      cd "${instpath}/share"
+   if [ -d "${instpath}/share/NsCDE/palettes" ]; then
+      cd "${instpath}/share/NsCDE"
 
       uplist=""
       for up in palettes/*.dp
@@ -1243,7 +1243,7 @@ palettes/Zutto.dp'
          TARUP_RETVAL=$?
          if (($TARUP_RETVAL == 0)); then
             echo ""
-            echo "WARNING: Unknown palettes found in ${instpath}/share/palettes."
+            echo "WARNING: Unknown palettes found in ${instpath}/share/NsCDE/palettes."
             echo "WARNING: they were backed up as /tmp/custom_unknown_palettes_save_$$.tar"
             echo "WARNING: please use FVWM_USERDIR/palettes for custom palettes in the"
             echo "WARNING: future. If you wish, you can restore them into local user palette"

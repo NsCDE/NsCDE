@@ -260,11 +260,11 @@ If not invoked from X Display Manager, `NsCDE` X session can be started from the
 `ssh-agent /opt/NsCDE/bin/nscde` or with `gpg-agent`, `lxsession` or `whatever`).
 
 If supported by the X Display Manager which is in use, an xsession file 
-`/opt/NsCDE/share/doc/examples/xsession-integration/nscde.desktop` when put in 
+`/opt/NsCDE/share/examples/xsession-integration/nscde.desktop` when put in 
 `/usr/share/xsessions` by the installer or manually (or in whatever place your 
 system and your X Display Manager reads this files) and then selected from the 
 manager's menu or similar selector. See the rest of the X Session Manager 
-integration examples are in directory `/opt/NsCDE/share/doc/examples/` for 
+integration examples are in directory `/opt/NsCDE/share/examples/` for 
 `Cinnamon`, `MATE`, `KDE`, `LXDE` and similar DE integrations and play with this 
 if you like.
 
