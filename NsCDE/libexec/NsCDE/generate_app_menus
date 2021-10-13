@@ -11,18 +11,18 @@ menuname=$2
 
 file_err=1
 
-if [ -r "$NSCDE_ROOT/config/AppMenus.conf" ]; then
+if [ -r "$NSCDE_DATADIR/defaults/AppMenus.conf" ]; then
    file_err=0
 fi
 
 if [ -r "$FVWM_USERDIR/AppMenus.conf" ]; then
    if (($file_err == 0)); then
-      menufilelist="$NSCDE_ROOT/config/AppMenus.conf $FVWM_USERDIR/AppMenus.conf"
+      menufilelist="$NSCDE_DATADIR/defaults/AppMenus.conf $FVWM_USERDIR/AppMenus.conf"
       file_err=0
    fi
 else
    if (($file_err == 0)); then
-      menufilelist="$NSCDE_ROOT/config/AppMenus.conf"
+      menufilelist="$NSCDE_DATADIR/defaults/AppMenus.conf"
       file_err=0
    fi
 fi

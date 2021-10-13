@@ -182,14 +182,14 @@ function setup_nscde
    # NsCDE-Style.local examples for user function customizations
    for localcf in Functions Menus Keybindings Style
    do
-      if [ ! -e "${FVWM_USERDIR}/NsCDE-${localcf}.local" ]; then
+      if [ ! -e "${FVWM_USERDIR}/${localcf}.local" ]; then
          if (($VERBOSE == 1)); then
-            echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE-${localcf}.local ..."
+            echo "$locale_Initializing_default ${FVWM_USERDIR}/${localcf}.local ..."
          fi
-         cp ${NSCDE_DATADIR}/config_templates/NsCDE-${localcf}.local ${FVWM_USERDIR}/NsCDE-${localcf}.local
+         cp ${NSCDE_DATADIR}/config_templates/fvwm/${localcf}.local ${FVWM_USERDIR}/${localcf}.local
       else
          if (($VERBOSE == 1)); then
-            echo "${FVWM_USERDIR}/NsCDE-${localcf}.local ${already_exists}."
+            echo "${FVWM_USERDIR}/${localcf}.local ${already_exists}."
          fi
       fi
    done

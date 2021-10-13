@@ -43,7 +43,8 @@ fi
 # depends on this core variables.
 export FVWM_USERDIR="${HOME}/.NsCDE"
 export NSCDE_ROOT=/opt/NsCDE
-export FVWM_DATADIR="${NSCDE_ROOT}/config"
+export NSCDE_DATADIR=${NSCDE_ROOT}/share/NsCDE
+export FVWM_DATADIR="${NSCDE_DATADIR}/fvwm"
 
 mkdir -p "${FVWM_USERDIR}/tmp"
 
@@ -102,12 +103,12 @@ if [ -x "${FVWM_USERDIR}/libexec/pre_start.sh" ]; then
    . "${FVWM_USERDIR}/libexec/pre_start.sh"
 fi
 
-# Now exec fvwm. Forking NsCDE-Main.conf should be a rare case,
+# Now exec fvwm. Forking Main.conf should be a rare case,
 # but we never know. From Main everything else is read.
 if [ -r ${FVWM_USERDIR}/NsCDE-Main.conf ]; then
-   exec $FVWM_BIN -f ${FVWM_USERDIR}/NsCDE-Main.conf $FVWM_OPTS
+   exec $FVWM_BIN -f ${FVWM_USERDIR}/Main.conf $FVWM_OPTS
 else
-   exec $FVWM_BIN -f ${NSCDE_ROOT}/config/NsCDE-Main.conf $FVWM_OPTS
+   exec $FVWM_BIN -f ${NSCDE_DATADIR}/fvwm/Main.conf $FVWM_OPTS
 fi
 
 # Do not be picky if there is some failure left.

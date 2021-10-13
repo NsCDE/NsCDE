@@ -61,7 +61,7 @@ function enlist_kms
       UserLines=""
    fi
 
-   SysLines=$(awk '{ print $1 }' < $NSCDE_ROOT/config/Keymenu.actions)
+   SysLines=$(awk '{ print $1 }' < $NSCDE_DATADIR/defaults/Keymenu.actions)
 
    IFS="$OIFS"
    KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | egrep "^km_" | sort -u)
@@ -74,7 +74,7 @@ function fill_lines
    else
       UserLines=""
    fi
-   SysLines=$(<$NSCDE_ROOT/config/Keymenu.actions)
+   SysLines=$(<$NSCDE_DATADIR/defaults/Keymenu.actions)
 }
 
 while getopts m:k:b:a Option

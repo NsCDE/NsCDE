@@ -326,7 +326,7 @@ differences are:
    main application as if icon has been clicked with the 1st mouse button, b) "reset
    this button" which will remove user's customizations for that launcher button from
    the <filename>$FVWM_USERDIR/FrontPanel.actions</filename> and load default from
-   the <filename>$NSCDE_ROOT/config/FrontPanel.actions</filename>., c) "Reset Subpanel"
+   the <filename>$NSCDE_DATADIR/defaults/FrontPanel.actions</filename>., c) "Reset Subpanel"
    will reset upper subpanel to it's default value (remove definition of the numbered
    subpanel from the <filename>$FVWM_USERDIR/Subpanels.actions</filename>),
    d) "Delete Subpanel" will disable subpanel for above this icon (without resetting
@@ -606,7 +606,7 @@ On the first change with <emphasis>Install Icon</emphasis> or <emphasis>Subpanel
 non-FVWM configuration file <emphasis>Subpanels.actions</emphasis> will be created in the
 <varname>$FVWM_USERDIR</varname>, from where all subpanels changed from default will be read
 by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>, while the rest will be
-generated from the <filename>$NSCDE_ROOT/config/Subpanels.actions</filename>. This file can also
+generated from the <filename>$NSCDE_DATADIR/defaults/Subpanels.actions</filename>. This file can also
 be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
 calling <command>generate_subpanels</command> and then <function>f_ReadCfg Subpanels</function>.
 Generated file is called <filename>NsCDE-Subpanels.conf</filename> and it is expected in the
@@ -687,7 +687,7 @@ same function.
   then in 2 or 4 desks/buttons
   mode a small current page indicator is shown on the right side of the button.
   In addition to Page Manager Icon southwest of the WSM. Disabled (0) by default.
-  <filename>WSM.conf</filename> (system wide: <filename>$NSCDE_ROOT/config/WSM.conf</filename>) is
+  <filename>WSM.conf</filename> (system wide: <filename>$NSCDE_DATADIR/defaults/WSM.conf</filename>) is
   a separate configuration
   file read by WSM, WsPgMgr and such. Not a FVWM configuration file.
 </para></listitem>
@@ -773,7 +773,7 @@ It supports XPM skins and displays hours, minutes and seconds. It is well
 suited for window manager docks like FvwmButtons(1). In NsCDE it is applied with
 a skin similar to original one, but slightly bigger and with more clear edges
 and colors. Default can be used from
-<filename class="directory">$NSCDE_ROOT/share/icons/CDE</filename> or even
+<filename class="directory">$NSCDE_DATADIR/icons/CDE</filename> or even
 replaced with a Solaris version with picture of the globe with red hands for
 hours and minutes and white for seconds. If clicked, it will try to execute
 firefox by default (which appears doesn't work if FVWM is started under some
@@ -990,7 +990,7 @@ more than CDE original:
  Instead of backdrops, user can opt for a background image. If option "Use
   photo or picture" is selected, list of backdrops will dissapear and image
   backgrounds (so called "wallpapers") of PNG and XPM type will be loaded from
-  <filename class="directory">$NSCDE_ROOT/share/photos</filename> and from the
+  <filename class="directory">$NSCDE_DATADIR/photos</filename> and from the
   <filename class="directory">$FVWM_USERDIR/photos</filename> (if any). Option to
   use one photo for all workspaces exists too. In this mode, backdrop-specific options
   will be hidden until <guilabel>Use photo or picture</guilabel> is not deselected.
@@ -1322,7 +1322,7 @@ This fonts are defined as FVWM <emphasis>infostore</emphasis> variables in the f
 <filename>$NSCDE_ROOT/config/NsCDE-Font-$NSCDE_FONT_DPI.conf</filename> and/or in the file
 <filename>$FVWM_USERDIR/NsCDE-Font-$NCDE_FONT_DPI.conf</filename>. User's
 <filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.conf</filename> is a symlink to either
-<filename>$NSCDE_ROOT/share/fontsets/SomeName.fontset</filename> or to
+<filename>$NSCDE_DATADIR/fontsets/SomeName.fontset</filename> or to
 <filename>$FVWM_USERDIR/fontsets/SomeName.fontset</filename>.
 Further, they are defined as CPP macros in
 <filename>$FVWM_USERDIR/Xdefaults.fontdefs</filename> which is included in
@@ -1336,7 +1336,7 @@ if some of this widget integrations is not desirable by the user.
 <para>
 The Font Style Manager itself consists of fontsets and fonts. Fontsets are
 named complete sets of five groups of three members of fonts defined above.
-Fontsets are stored in <filename>$NSCDE_ROOT/share/fontsets</filename> and in
+Fontsets are stored in <filename>$NSCDE_DATADIR/fontsets</filename> and in
 <filename>$FVWM_USERDIR/fontsets</filename>. If font set is selected in
 Font Style Manager, 15 fonts from the set are loaded into preview lists of the application and can be
 immediately applied or further customized by leaving <guilabel>Use Predefined Font Set</guilabel> mode
@@ -1384,7 +1384,7 @@ to manual font selection for customizations into the new fontset.
 </para>
 <para>
 Button <guibutton>Default</guibutton> loads default
-<filename>$NSCDE_ROOT/share/fontsets/DejaVuSerif.fontset</filename> which can
+<filename>$NSCDE_DATADIR/fontsets/DejaVuSerif.fontset</filename> which can
 then be saved as a choice or further customized into the new fontset. Bottom half of the
 Font Style Manager contains preview for all fonts from the one of the three selected size sets.
 </para>
@@ -2825,7 +2825,7 @@ slightly different options:
    -H red -S white --hands-width=4
    --hour-hand-length=15 --minute-hand-length=20
    --second-hand-length=22 -w 
-   -B $NSCDE_ROOT/share/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
+   -B $NSCDE_DATADIR/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
 
    Btn1,,M2,FVWM,Nop
 
@@ -2866,7 +2866,7 @@ comma separated values (syntax):
 </itemizedlist>
 </para>
 <para>
-This file exists as the <filename>$NSCDE_ROOT/config/AppMenus.conf</filename>, but it can be
+This file exists as the <filename>$NSCDE_DATADIR/defaults/AppMenus.conf</filename>, but it can be
 extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename> file.
 </para>
 
@@ -3444,7 +3444,7 @@ Pressend second time just once, it will dismiss Local Pager
   Occupy Workspace dialog for window moving between the desks.
   </para>
   <para>
-  Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
   for automatic description on menus.
 </para></listitem>
 
@@ -3454,7 +3454,7 @@ Pressend second time just once, it will dismiss Local Pager
     Occupy Page dialog for window moving between the desks.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3465,7 +3465,7 @@ Pressend second time just once, it will dismiss Local Pager
    only when multiple monitors are detected by NsCDE and FVWM.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3473,7 +3473,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Alt+F1</keysym> regenerates and refreshes the window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3481,7 +3481,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Meta+F1</keysym> Calls xrefresh(1) command to refresh the X11 display
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3489,7 +3489,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Alt+F2</keysym> iconifies (deiconifies if in icon context)
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3497,7 +3497,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Meta+F2</keysym> "shades" or rolls up the window to titlebar only view
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3508,7 +3508,7 @@ Pressend second time just once, it will dismiss Local Pager
   window with FVWM <command>PlaceAgain</command> command
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3517,7 +3517,7 @@ Pressend second time just once, it will dismiss Local Pager
   mouse pointer currently resides, together with frame
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3526,7 +3526,7 @@ Pressend second time just once, it will dismiss Local Pager
     and enter
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3535,7 +3535,7 @@ Pressend second time just once, it will dismiss Local Pager
 directions and place it again on page
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3544,7 +3544,7 @@ directions and place it again on page
 directions and place it again on page
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3553,7 +3553,7 @@ directions and place it again on page
     and enter
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3564,7 +3564,7 @@ directions and place it again on page
   <keysym>Meta+Shift+F5</keysym> combinations will put window back from sticky state
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3574,7 +3574,7 @@ directions and place it again on page
   Pressing again the same combination toggles this state back
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3584,7 +3584,7 @@ directions and place it again on page
   Pressing again the same combination toggles this state back
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3592,7 +3592,7 @@ directions and place it again on page
   <keysym>Alt+F6</keysym> raises or lowers the window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3604,7 +3604,7 @@ directions and place it again on page
   grow and maximized states. This is a cyclic keybinding in a "shrink" direction.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3622,7 +3622,7 @@ directions and place it again on page
   stretched and maximized state. This is a cyclic keybinding in a "grow" direction.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3637,7 +3637,7 @@ directions and place it again on page
   <keysym>Alt+F9</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3651,7 +3651,7 @@ directions and place it again on page
   <keysym>Alt+F10</keysym> deletes a window (see fvwm(1))
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3659,7 +3659,7 @@ directions and place it again on page
   <keysym>Meta+F10</keysym> closes a window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3667,7 +3667,7 @@ directions and place it again on page
   <keysym>Meta+Alt+F10</keysym> forcefully destroys a window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3675,7 +3675,7 @@ directions and place it again on page
   <keysym>Alt+F11</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3683,7 +3683,7 @@ directions and place it again on page
   <keysym>Meta+F11</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3692,7 +3692,7 @@ directions and place it again on page
   variable in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3700,7 +3700,7 @@ directions and place it again on page
   <keysym>Meta+F12</keysym> invokes default terminal app ($[infostore.terminal])
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3709,7 +3709,7 @@ directions and place it again on page
   information for a current window in the GeoDB.ini
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3729,7 +3729,7 @@ directions and place it again on page
  <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3739,7 +3739,7 @@ directions and place it again on page
  <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3748,7 +3748,7 @@ directions and place it again on page
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3757,7 +3757,7 @@ directions and place it again on page
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3768,7 +3768,7 @@ directions and place it again on page
     button on the borders of the frame has the same effect
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -3780,7 +3780,7 @@ directions and place it again on page
     itself.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_ROOT/config/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -4402,7 +4402,7 @@ descriptions will be written as relative to this directory
   this pixmaps are
   invalid as pictures in their source form since they contain internal
   macros for replacement with real colors. System starting theme is
-  using their copied in <filename class="directory">share/icons/NsCDE</filename>.
+  using their copied in <filename class="directory">$NSCDE_DATADIR/icons/NsCDE</filename>.
 </para></listitem>
 
 <listitem><para>
@@ -4475,21 +4475,21 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/fontsets</filename>
+  <filename class="directory">$NSCDE_DATADIR/fontsets</filename>
 </para>
 <para>
   Default font sets used by the <link linkend="NsCDE-FontMgr">Font Style Manager</link>
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/icons/CDE</filename>
+  <filename class="directory">$NSCDE_DATADIR/icons/CDE</filename>
 </para>
 <para>
   Original CDE icons
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/icons/NsCDE</filename>
+  <filename class="directory">$NSCDE_DATADIR/icons/NsCDE</filename>
 </para>
 <para>
   Custom NsCDE icons of which many are part of FvwmScript programs and
@@ -4508,7 +4508,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/photos</filename>
+  <filename class="directory">$NSCDE_DATADIR/photos</filename>
 </para>
 <para>
     A couple of nice free photos collected and resized for various
@@ -4529,7 +4529,7 @@ Examples for X display manager and DE integrations, <command>sudo</command> for 
 </para></listitem>
 
 <listitem><para>
-  <filename class="directory">share/NsCDE/config_templates/integration/gtk2_gtk3_qt</filename>
+  <filename class="directory">share/NsCDE/integration/gtk2_gtk3_qt</filename>
 </para>
 <para>
     Part of the CDE theme which are used by <command>libexec/NsCDE/themegen</command> and
@@ -4637,7 +4637,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
    NsCDE custom icons. Put here by <link linkend="NsCDE-ColorMgr">Color Style Manager</link> and the rest
    of the tools. Since icons from here are referenced with a relative
    path, whatever is missing here, will be loaded from system's
-   <filename class="directory">$NSCDE_ROOT/share/icons/NsCDE</filename> automatically.
+   <filename class="directory">$NSCDE_DATADIR/icons/NsCDE</filename> automatically.
 </para></listitem>
 
 <listitem><para>
@@ -4716,7 +4716,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
 <listitem><para>
   <filename>WSM.conf</filename>: read/written by Workspace and Page Manager, WSM and
   user's favorite editor. Not an FVWM config file. System default
-  of this file is <filename>$NSCDE_ROOT/config/WSM.conf</filename>.
+  of this file is <filename>$NSCDE_DATADIR/defaults/WSM.conf</filename>.
 </para></listitem>
 
 <listitem><para>
@@ -5242,7 +5242,7 @@ X resources integration is turned on by default in
 <para>
 <command>$NSCDE_TOOLDIR/themegen</command> with
 <filename class="directory">$NSCDE_ROOT/lib/NsCDE/python</filename> and with
-<filename class="directory">$NSCDE_DATADIR/config_templates/integration/gtk2_gtk3_qt</filename>
+<filename class="directory">$NSCDE_DATADIR/integration/gtk2_gtk3_qt</filename>
 are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> or manually with the
 <command>$NSCDE_TOOLDIR/themegen</command>,
@@ -5286,8 +5286,8 @@ point to chrome directory of user's thunderbird profile. If chrome subdirectory 
 directory does not exist, it will be created by the <filename>colormgr.local</filename>. This will make
 appropriate entiries in <filename>userChrome.css</filename> and <filename>userContent.css</filename> to
 import <filename>nscdeChrome.css</filename>, <filename>nscdeIcons.css</filename> and
-<filename>nscdeContent.css</filename> from the <filename class="directory">$NSCDE_DATADIR/config_templates/integration/firefox</filename>
-and/or from <filename class="directory">$NSCDE_DATADIR/config_templates/integration/thunderbird</filename>.
+<filename>nscdeContent.css</filename> from the <filename class="directory">$NSCDE_DATADIR/integration/firefox</filename>
+and/or from <filename class="directory">$NSCDE_DATADIR/integration/thunderbird</filename>.
 File <filename>nscdeColordefs.css</filename> will be generated in the chrome dir with color mappings to the
 current NsCDE theme. This wile is also imported in userChrome.css and userContent.css.
 </para>
@@ -5317,12 +5317,12 @@ makes a changes:
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeContent.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeContent.css");
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/thunderbird/nscdeIcons.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeIcons.css");
 </programlisting>
 
 </para>
@@ -5333,14 +5333,14 @@ This is how Firefox chromedir should look:
 <![CDATA[
 /home/user/.mozilla/firefox/testtest.default-release/chrome
 |- nscdeColordefs.css
-|- nscdeContent.css -> /opt/NsCDE/share/NsCDE/config_templates/integration/firefox/ff9x_nscdeContent.css
+|- nscdeContent.css -> /opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
 |- userChrome.css
 |- userContent.css
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/firefox/ff9x_nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/config_templates/integration/firefox/nscdeIcons.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/firefox/nscdeIcons.css");
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
 @import url("nscdeColordefs.css");

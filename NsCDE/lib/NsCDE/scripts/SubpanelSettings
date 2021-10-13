@@ -30,10 +30,10 @@ Begin
    End
    Else
    Begin
-      Set $SubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
+      Set $SubpanelActionsRead = {$NSCDE_DATADIR/defaults/Subpanels.actions}
    End
    Set $UserSubpanelActionsFile = {$FVWM_USERDIR/Subpanels.actions}
-   Set $SystemSubpanelActionsRead = {$NSCDE_ROOT/config/Subpanels.actions}
+   Set $SystemSubpanelActionsRead = {$NSCDE_DATADIR/defaults/Subpanels.actions}
 
    # Fill subpanel parameters in variables
    Set $SubpanelDataCmd = {egrep "^S} $SubpanelNo {,(NAME|WIDTH|ENABLED)" "} $SubpanelActionsRead {" | sort | cut -d"," -f3}

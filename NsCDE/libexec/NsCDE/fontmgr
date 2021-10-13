@@ -30,7 +30,7 @@ function findfontsets
       exit 2
    fi
 
-   SysFontsetsOut=$(ls -1 ${NSCDE_ROOT}/share/fontsets/*.fontset)
+   SysFontsetsOut=$(ls -1 ${NSCDE_DATADIR}/fontsets/*.fontset)
    SysFontsets=$(echo "$SysFontsetsOut" | awk -F "/" '{print $NF}' | sed 's/\.fontset$//g')
    SysFontsetsCnt=$(echo "$SysFontsetsOut" | wc -l)
 
@@ -66,8 +66,8 @@ function getfontsetname
    findfontsets
    FontsetName=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -n '' | egrep "^${FontsetNum}:" | cut -d":" -f2)
    echo $FontsetName
-   if [ -s "$NSCDE_ROOT/share/fontsets/${FontsetName}.fontset" ]; then
-      echo "${NSCDE_ROOT}/share/fontsets/"
+   if [ -s "$NSCDE_DATADIR/fontsets/${FontsetName}.fontset" ]; then
+      echo "${NSCDE_DATADIR}/fontsets/"
    elif [ -s "${FVWM_USERDIR}/fontsets/${FontsetName}.fontset" ]; then
       echo "${FVWM_USERDIR}/fontsets/"
    fi

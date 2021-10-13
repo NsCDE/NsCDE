@@ -32,12 +32,12 @@ function add_subpanel
    fi
 
    if (($SubpLocalDefCheck == 0)); then
-      if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
+      if [ -r "$NSCDE_DATADIR/defaults/Subpanels.actions" ]; then
          echo "" >> "$FVWM_USERDIR/Subpanels.actions"
-         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
          $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
-         echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
+         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
          exit 8
       fi
    fi
@@ -55,12 +55,12 @@ function delete_subpanel
    fi
 
    if (($SubpLocalDefCheck == 0)); then
-      if [ -r "$NSCDE_ROOT/config/Subpanels.actions" ]; then
+      if [ -r "$NSCDE_DATADIR/defaults/Subpanels.actions" ]; then
          echo "" >> "$FVWM_USERDIR/Subpanels.actions"
-         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_ROOT/config/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
          $NSCDE_TOOLDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
-         echo "ERROR: Cannot open $NSCDE_ROOT/config/Subpanels.actions for reading."
+         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
          exit 8
       fi
    fi
@@ -83,8 +83,8 @@ function reset_this_button
       fi
 
       if [ "$BUTTONTYPE" == "icon" ]; then
-         if [ -r "$NSCDE_ROOT/config/FrontPanel.actions" ]; then
-            egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$NSCDE_ROOT/config/FrontPanel.actions"
+         if [ -r "$NSCDE_DATADIR/defaults/FrontPanel.actions" ]; then
+            egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions"
             if (($? == 0)); then
                RestartFP=1
             else
