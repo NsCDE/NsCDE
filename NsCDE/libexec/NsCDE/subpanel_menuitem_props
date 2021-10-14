@@ -61,10 +61,10 @@ function actions_file_sanity
 
 function subpanels_file_tstamp
 {
-   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/NsCDE-Subpanels.conf" ]]; then
-      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/NsCDE-Subpanels.conf" ]; then
-         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/NsCDE-Subpanels.conf ... regenerating latest one." >&2
-         $NSCDE_TOOLDIR/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
+   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.conf" ]]; then
+      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.conf" ]; then
+         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.conf ... regenerating latest one." >&2
+         $NSCDE_TOOLDIR/generate_subpanels > $FVWM_USERDIR/Subpanels.conf
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
          sleep 1
          $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
@@ -252,7 +252,7 @@ function manage_entry
       if (($? == 0)); then
          cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"
          cat "$tmpfile" > "$FVWM_USERDIR/Subpanels.actions"
-         $NSCDE_TOOLDIR/generate_subpanels > $FVWM_USERDIR/NsCDE-Subpanels.conf
+         $NSCDE_TOOLDIR/generate_subpanels > $FVWM_USERDIR/Subpanels.conf
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          rm "$tmpfile"

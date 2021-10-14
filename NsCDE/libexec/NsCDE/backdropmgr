@@ -112,15 +112,15 @@ function GenerateBackdropPreview
        -i ${BackdropNamePath} -P $ColorVariant \
        -b > ${FVWM_USERDIR}/backer/Desk${Desk}-${1}.pm
 
-      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
+      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/Backdrops.conf 2>/dev/null
       if (($? == 0)); then
-         OldBackdrop=$(egrep "Colorset 3${Desk}( bg \\$\[bg\.cs..\],)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
-         $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg \$\[bg\.cs..\],\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+         OldBackdrop=$(egrep "Colorset 3${Desk}( bg \\$\[bg\.cs..\],)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/Backdrops.conf")
+         $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg \$\[bg\.cs..\],\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]\/backer\/Desk${Desk}-${1}.pm/g" -f "${FVWM_USERDIR}/Backdrops.conf"
          if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [ "${OldBackdrop##*/}" != "Desk${Desk}-${1}.pm" ]; then
             rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
          fi
       else
-         echo "Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]/backer/Desk${Desk}-${1}.pm" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+         echo "Colorset 3${Desk} TiledPixmap \$[FVWM_USERDIR]/backer/Desk${Desk}-${1}.pm" >> ${FVWM_USERDIR}/Backdrops.conf
       fi
    else
       mkdir -p ${FVWM_USERDIR}/tmp
@@ -152,7 +152,7 @@ function GeneratePhotoPreview
    esac
 
    if (($PreviewMode == 0)); then
-      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/NsCDE-Backdrops.conf 2>/dev/null
+      grep -q "Colorset 3${Desk}" ${FVWM_USERDIR}/Backdrops.conf 2>/dev/null
       if (($? == 0)); then
          if [ -s "$PhotoNamePath" ]; then
             if [ "x$ScreenXY" != "x" ]; then
@@ -165,9 +165,9 @@ function GeneratePhotoPreview
             else
                echo "Error: convert of photo $PhotoNamePath did not suceeded."
             fi
-            OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/NsCDE-Backdrops.conf")
+            OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/Backdrops.conf")
             sededpath=$(echo "$ConvertedPhoto" | sed 's/\//\\\//g')
-            $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg ${bgcs},\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} bg ${bgcs}, $PixmapVariant $sededpath/g" -f "${FVWM_USERDIR}/NsCDE-Backdrops.conf"
+            $NSCDE_TOOLDIR/ised -c "s/Colorset 3${Desk}\( bg ${bgcs},\)\? \(Tiled\|Aspect\)\?Pixmap \(.*\)/Colorset 3${Desk} bg ${bgcs}, $PixmapVariant $sededpath/g" -f "${FVWM_USERDIR}/Backdrops.conf"
             if [ -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}" ] && [[ "${OldBackdrop##*/}" != "Desk${Desk}-${1}."@(png|xpm) ]]; then
                rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
             fi
@@ -187,7 +187,7 @@ function GeneratePhotoPreview
                echo "Error: convert of photo $PhotoNamePath did not suceeded."
             fi
             bgcs_clean=$(echo "${bgcs}" | sed 's/\\//g')
-            echo "Colorset 3${Desk} bg ${bgcs_clean}, $PixmapVariant $ConvertedPhoto" >> ${FVWM_USERDIR}/NsCDE-Backdrops.conf
+            echo "Colorset 3${Desk} bg ${bgcs_clean}, $PixmapVariant $ConvertedPhoto" >> ${FVWM_USERDIR}/Backdrops.conf
          else
             echo "Error getting image path for $1."
          fi
@@ -211,10 +211,10 @@ function GeneratePhotoPreview
 # -D desk number argument for backdrop background variant when ncolors == 8
 # -g retrives palette path, files variables and echoes if in echo mode
 # -G get backdrop path, files variables and echoes if in echo mode
-# -b Generates backdrops preview or final backdrops in user's directory, writes NsCDE-Backdrops.conf
+# -b Generates backdrops preview or final backdrops in user's directory, writes Backdrops.conf
 # -a Receive Pixmap Aspect Mode from Backdrop Style Manager
 # -x Receive $[vp.width] and $[vp.height] from Backdrop Style Manager
-# -s Generates photo preview or writes definition of final photo path defnition in user's NsCDE-Backdrops.conf
+# -s Generates photo preview or writes definition of final photo path defnition in user's Backdrops.conf
 # -p generates backdrop menu
 # -P generates photo menu
 # -F Retreives photo pathname from number in FvwmScript List widget

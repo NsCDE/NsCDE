@@ -7,7 +7,7 @@
 #
 
 [ -z $NSCDE_ROOT ] && exit 2
-MARCH=$(uname -m)
+OS_PLUS_MACHINE_ARCH=$(uname -sm | tr ' ' '_')
 BIN="${NSCDE_TOOLDIR}/${OS_PLUS_MACHINE_ARCH}/colorpicker"
 
 Existance=$(type "$BIN" 2>&1)

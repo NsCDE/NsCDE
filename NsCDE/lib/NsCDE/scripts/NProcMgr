@@ -249,7 +249,7 @@ Property
       End
       2 :
       Begin
-         Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm(2|3)? -f .*NsCDE-Main\.conf( .*)?' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         Set $FvwmPid = (GetOutput {pgrep -u $(id -u) -xf '.*fvwm(2|3)? -f .*Main\.conf( .*)?' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
          If $FvwmPid == {} Then
          Begin
             Set $RunState20 = (Gettext {Not Running})

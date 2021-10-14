@@ -57,15 +57,15 @@ function setup_nscde
       read RET
    fi
 
-   if [ ! -e "${FVWM_USERDIR}/NsCDE-Colorset.conf" ]; then
+   if [ ! -e "${FVWM_USERDIR}/Colorset.conf" ]; then
       if (($VERBOSE == 1)); then
          gettext -s "Generating NsCDE fvwm Colorset ..."
       fi
       $NSCDE_TOOLDIR/palette_colorgen -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp \
-       -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/NsCDE-Colorset.conf"
+       -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/Colorset.conf"
    else
       if (($VERBOSE == 1)); then
-         echo -ne "${FVWM_USERDIR}/NsCDE-Colorset.conf ${already_exists}"
+         echo -ne "${FVWM_USERDIR}/Colorset.conf ${already_exists}"
       fi
    fi
 
@@ -166,20 +166,20 @@ function setup_nscde
       fi
    fi
 
-   # Initial NsCDE-Init.conf for user session customizations
-   if [ ! -e "${FVWM_USERDIR}/NsCDE-Init.conf" ]; then
+   # Initial Init.conf for user session customizations
+   if [ ! -e "${FVWM_USERDIR}/Init.conf" ]; then
       if (($VERBOSE == 1)); then
-         echo "$locale_Initializing_default ${FVWM_USERDIR}/NsCDE-Init.conf ..."
+         echo "$locale_Initializing_default ${FVWM_USERDIR}/Init.conf ..."
       fi
-      cp ${NSCDE_ROOT}/config/NsCDE-Init.conf ${FVWM_USERDIR}/NsCDE-Init.conf
+      cp ${NSCDE_DATADIR}/fvwm/Init.conf ${FVWM_USERDIR}/Init.conf
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/NsCDE-Init.conf ${already_exists}."
+         echo "${FVWM_USERDIR}/Init.conf ${already_exists}."
       fi
    fi
 
-   # Initial NsCDE-Functions.local, NsCDE-Menus.local, NsCDE-Keybindings.local, and
-   # NsCDE-Style.local examples for user function customizations
+   # Initial Functions.local, Menus.local, Keybindings.local, and
+   # Style.local examples for user function customizations
    for localcf in Functions Menus Keybindings Style
    do
       if [ ! -e "${FVWM_USERDIR}/${localcf}.local" ]; then
