@@ -390,17 +390,17 @@ function install_nscde
       # Adapt ExecUseSHell
       kshpath=$(whence -p ksh93)
       if [ "x$kshpath" != "x" ]; then
-         echo "Adapting ExecUseShell to find ksh93 in ${instpath}/config/NsCDE-Main.conf."
-         ./NsCDE/bin/ised -c "s@ExecUseShell __KSH93__@ExecUseShell ${kshpath}@g" -f "${instpath}/config/NsCDE-Main.conf"
+         echo "Adapting ExecUseShell to find ksh93 in ${instpath}/share/NsCDE/fvwm/Main.conf."
+         ./NsCDE/libexec/NsCDE/ised -c "s@ExecUseShell __KSH93__@ExecUseShell ${kshpath}@g" -f "${instpath}/share/NsCDE/fvwm/Main.conf"
          echo "Done."
       else
-         echo "Error setting Korn Shell in ${instpath}/config/NsCDE-Main.conf. Korn shell (ksh93) not found."
+         echo "Error setting Korn Shell in ${instpath}/share/NsCDE/fvwm/NsCDE-Main.conf. Korn shell (ksh93) not found."
          exit 4
       fi
       if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
          echo "Adapting NSCDE_ROOT path for custom installation."
-         ./NsCDE/bin/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${realinstpath%*/}@g" -f "${instpath}/bin/nscde"
-         ./NsCDE/bin/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${realinstpath%*/}@g" -f "${instpath}/config/NsCDE-Main.conf"
+         ./NsCDE/libexec/NsCDE/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${realinstpath%*/}@g" -f "${instpath}/bin/nscde"
+         ./NsCDE/libexec/NsCDE/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${realinstpath%*/}@g" -f "${instpath}/share/NsCDE/fvwm/Main.conf"
          echo "Adaptation done."
       fi
    else
@@ -421,36 +421,37 @@ function configure_installed
 
    if [ "$1" == "patched" ]; then
       # Uncomment HAS_WINDOWNAME in NsCDE.conf
-      echo "Enabling HAS_WINDOWNAME variable in ${instpath}/config/NsCDE.conf"
-      echo '# Since FVWM has been compiled with NsCDE patches, we are enabling' >> ${instpath}/config/NsCDE.conf
-      echo '# HAS_WINDOWNAME for this installation to avoid workarounds.' >> ${instpath}/config/NsCDE.conf
-      echo 'SetEnv HAS_WINDOWNAME 1' >> ${instpath}/config/NsCDE.conf
+      echo "Enabling HAS_WINDOWNAME variable in ${instpath}/share/NsCDE/fvwm/NsCDE.conf"
+      echo '# Since FVWM has been compiled with NsCDE patches, we are enabling' >> ${instpath}/share/NsCDE/fvwm/NsCDE.conf
+      echo '# HAS_WINDOWNAME for this installation to avoid workarounds.' >> ${instpath}/share/NsCDE/fvwm/NsCDE.conf
+      echo 'SetEnv HAS_WINDOWNAME 1' >> ${instpath}/share/NsCDE/fvwm/NsCDE.conf
       echo 'Done.'
 
-      # Patch NsCDE-FrontPanel.conf for "indicator 12 in"
+      # Patch FrontPanel.conf for "indicator 12 in"
       echo "Setting patched indicator with shadow in in NsCDE-FrontPanel.conf"
-      ./NsCDE/bin/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
       echo "Done."
 
       # Regenerate system NsCDE-Subpanels.conf with window name
       echo "Regenerating system NsCDE-Subpanels.conf"
-      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/config/NsCDE-Subpanels.conf
+      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/share/NsCDE/fvwm/Subpanels.conf
 
       echo "Done."
    fi
 
    if [ "$1" == "workarounds" ]; then
       echo "FVWM is marked as not patched for NsCDE. Enabling workarounds."
+      mkdir -p ${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}
 
       # Try to find suitable XOverrideFontCursor.so in our src dir.
       if [ -r "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" ]; then
-         echo "Copying XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH} as ${instpath}/lib/XOverrideFontCursor.so"
-         cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" "${instpath}/lib/XOverrideFontCursor.so"
-         chmod 0755 "${instpath}/lib/XOverrideFontCursor.so"
+         echo "Copying XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH} as ${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
+         cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so.${OS_PLUS_MACHINE_ARCH}" "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
+         chmod 0755 "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
          echo "Done"
       else
          # Try to compile XOverrideFontCursor.so
-         echo "Trying to compile XOverrideFontCursor.so and put it in ${instpath}/lib for LD_PRELOAD"
+         echo "Trying to compile XOverrideFontCursor.so and put it in ${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH} for LD_PRELOAD"
          echo "You must have make tool, C compiler and libX11 development files (headers)"
          echo "installed for this to suceed."
          make -C src/XOverrideFontCursor
@@ -459,10 +460,10 @@ function configure_installed
             echo "Compilation of XOverrideFontCursor.so failed. Some of the FvwmScript widgets"
             echo "will appear with XC_hand2 pointer cursor on mouse over. Fixable later ..."
          else
-            echo "Copying XOverrideFontCursor.so as ${instpath}/lib/XOverrideFontCursor.so"
+            echo "Copying XOverrideFontCursor.so as ${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
             if [ -f "src/XOverrideFontCursor/XOverrideFontCursor.so" ]; then
-               cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so" "${instpath}/lib/XOverrideFontCursor.so"
-               chmod 0755 "${instpath}/lib/XOverrideFontCursor.so"
+               cp -f "src/XOverrideFontCursor/XOverrideFontCursor.so" "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
+               chmod 0755 "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/XOverrideFontCursor.so"
                echo "Done."
             else
                echo "Error: Cannot copy or find XOverrideFontCursor.so in src/XOverrideFontCursor/"
@@ -470,14 +471,14 @@ function configure_installed
          fi
       fi
 
-      echo "Adapting NsCDE-Main.conf, prepending custom ModulePath."
-      ./NsCDE/bin/ised -c 's@^# ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:+$@ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:\+@g' -f "${instpath}/config/NsCDE-Main.conf"
+      echo "Adapting Main.conf, prepending custom ModulePath."
+      ./NsCDE/libexec/NsCDE/ised -c 's@^# ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:+$@ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:\+@g' -f "${instpath}/share/NsCDE/fvwm/Main.conf"
       echo "Done."
 
       # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
       echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
-      ./NsCDE/bin/ised -c 's/ indicator 12,//g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
-      ./NsCDE/bin/ised -c 's/\*FrontPanel: \(.*x.*\), Id NsCDE-Subpanel\(.*\), Frame 1, PressColorset 27, \\/\*FrontPanel: \1, Id NsCDE-Subpanel\2, Frame 1, PressColorset 27, \\\n  Icon NsCDE\/FPSubArrowUp.xpm, PressIcon NsCDE\/FPSubArrowDown.xpm, \\/g' -f "${instpath}/config/NsCDE-FrontPanel.conf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/ indicator 12,//g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/\*FrontPanel: \(.*x.*\), Id NsCDE-Subpanel\(.*\), Frame 1, PressColorset 27, \\/\*FrontPanel: \1, Id NsCDE-Subpanel\2, Frame 1, PressColorset 27, \\\n  Icon NsCDE\/FPSubArrowUp.xpm, PressIcon NsCDE\/FPSubArrowDown.xpm, \\/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
       retval=$?
       if (($retval != 0)); then
          echo "Error $retval occured."
@@ -536,7 +537,7 @@ function configure_installed
    # Handle colorpicker
    if [ -f "src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}" ]; then
       echo "Installing appropriate color picker for this system and arch."
-      cp -f src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/bin/colorpicker-${OS_PLUS_MACHINE_ARCH}"
+      cp -f src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH} "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/colorpicker"
       retval=$?
       if (($retval > 0)); then
          echo "Error $retval occured while installing src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}"
@@ -565,7 +566,7 @@ function configure_installed
             echo "Error ocurred while trying to compile colorpicker. Try to fix this manually."
          else
             echo "Installing newly compiled colorpicker for this system and arch."
-            cp -f src/colorpicker/colorpicker "${instpath}/bin/colorpicker-${OS_PLUS_MACHINE_ARCH}"
+            cp -f src/colorpicker/colorpicker "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}/colorpicker"
             retval=$?
             if (($retval > 0)); then
                echo "Error $retval occured while installing src/colorpicker/colorpicker-bin.${OS_PLUS_MACHINE_ARCH}"
@@ -651,12 +652,14 @@ function configure_installed
             exit 15
          fi
 
-         ln -sf "${realinstpath}/share/icons/freedesktop/theme/NsCDE" "${icons_dirlink}"
-         retval=$?
-         if (($retval != 0)); then
-            echo "Error: symlinking ${realinstpath}/share/icons/freedesktop/theme/NsCDE"
-            echo "to ${icons_dirlink} failed with exit status $retval"
-            exit 15
+         if [ "$instpath" != "/usr" ] || [ "$instpath" != "/usr/local" ]; then
+            ln -sf "${realinstpath}/share/icons/NsCDE" "${icons_dirlink}"
+            retval=$?
+            if (($retval != 0)); then
+               echo "Error: symlinking ${realinstpath}/share/icons/NsCDE"
+               echo "to ${icons_dirlink} failed with exit status $retval"
+               exit 15
+            fi
          fi
       fi
    fi
@@ -683,16 +686,16 @@ function configure_installed
          echo -ne "Where is your xsessions directory? [${xsess_dir}] \c"
          read xans
          if [ "x$xans" == "x" ]; then
-            cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+            cp -f "${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
             retval=$?
             if (($retval > 0)); then
                echo "Error occured while trying to copy"
-               echo "${instpath}/share/examples/xsession-integration/nscde.desktop"
+               echo "${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop"
                echo "into ${xsess_dir}/"
             else
                if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
                   echo "Adapting Exec line in nscde.desktop ..."
-                  ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+                  ./NsCDE/libexec/NsCDE/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
                   "${xsess_dir}/nscde.desktop"
                   retval=$?
                   if (($retval > 0)); then
@@ -704,7 +707,7 @@ function configure_installed
                echo "Done."
             fi
          else
-            cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xans}/"
+            cp -f "${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop" "${xans}/"
             retval=$?
             if (($retval > 0)); then
                echo "Error occured while trying to copy"
@@ -713,7 +716,7 @@ function configure_installed
             else
                if [ "${instpath%*/}" != "/opt/NsCDE" ]; then
                   echo "Adapting Exec line in nscde.desktop ..."
-                  ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
+                  ./NsCDE/libexec/NsCDE/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${instpath}/bin/nscde@g" -f \
                   "${xans}/nscde.desktop"
                   retval=$?
                   if (($retval > 0)); then
@@ -760,7 +763,7 @@ function configure_installed
             echo "Warning: X Display Manager file:"
             echo "Cannot locate xsessions directory in /usr/share /usr/local/share or /usr/pkg/share."
             echo "Enable NsCDE X Session startup manually in your X Display Manager configuration."
-            echo "Hint: use ${instpath}/share/examples/xsession-integration/nscde.desktop"
+            echo "Hint: use ${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop"
             echo ""
             xsession_inst=0
          fi
@@ -782,16 +785,16 @@ function configure_installed
 
       if (($xsession_inst > 0)); then
          echo "Installing xsession file nscde.desktop into ${xsess_dir}."
-         cp -f "${instpath}/share/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
+         cp -f "${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop" "${xsess_dir}/"
          retval=$?
          if (($retval > 0)); then
             echo "Error occured while trying to copy"
-            echo "${instpath}/share/examples/xsession-integration/nscde.desktop"
+            echo "${instpath}/share/NsCDE/examples/xsession-integration/nscde.desktop"
             echo "into ${xsess_dir}/"
          else
             if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
                echo "Adapting Exec line in nscde.desktop ..."
-               ./NsCDE/bin/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${realinstpath}/bin/nscde@g" -f \
+               ./NsCDE/libexec/NsCDE/ised -c "s@Exec=/opt/NsCDE/bin/nscde@Exec=${realinstpath}/bin/nscde@g" -f \
                "${xsess_dir}/nscde.desktop"
                retval=$?
                if (($retval > 0)); then
@@ -810,7 +813,7 @@ function configure_installed
          echo "System Action Dialog, you should have \"sudo\" installed and configured"
          echo "for user to launch ${realinstpath}/libexec/NsCDE/nscde-acpi script."
          echo ""
-         echo "See ${realinstpath}/share/examples/sudo/006_PowerManager for the"
+         echo "See ${realinstpath}/share/NsCDE/examples/sudo/006_PowerManager for the"
          echo "example which needs to be edited for existing user(s) and put"
          echo "into /etc/sudoers.d/ on modern systems with a newer sudo package"
          echo "Option requiretty should also be set to false. See sudo(8)."
@@ -1302,18 +1305,23 @@ function deinstall_nscde
    fi
 
    sanity1=$(ls -1 "${instpath}/config/" 2>/dev/null | wc -l)
-   sanity2=$(ls -1d ${instpath}/{bin,config,lib,libexec,share} > /dev/null 2>&1; echo $?)
+   sanity2=$(ls -1d ${instpath}/{bin,lib,libexec,share} > /dev/null 2>&1; echo $?)
    sanity3=$(${instpath}/bin/nscde -V 2>/dev/null | grep -q "NsCDE Version"; echo $?)
 
    if (($sanity1 > 10)) && ((sanity2 + sanity3 == 0)); then
       if (($noninteractive == 1)); then
-         rm -rf "$instpath"
-         retval=$?
-         if (($retval == 0)); then
-            echo "Done."
-         else
-            echo "Removal of $instpath retuned $retval exit status."
-         fi
+         rm -f "${instpath}/bin/nscde"
+         rm -f "${instpath}/bin/nscde_fvwmclnt"
+         rm -rf "${instpath}/libexec/NsCDE"
+         rm -rf "${instpath}/lib/NsCDE"
+         rm -rf "${instpath}/share/NsCDE"
+         rm -rf "${instpath}/share/icons/NsCDE"
+         rm -rf ${instpath}/share/applications/NsCDE-*
+         rm -rf ${instpath}/share/desktop-directories/nscde-*
+         rm -rf ${instpath}/share/locale/hr/LC_MESSAGES/NsCDE*
+         rm -rf "${instpath}/share/icons/NsCDE"
+         rm -rf "${instpath}/share/doc/NsCDE"
+         echo "Done."
       else
          if (($upgrade_mode == 0)); then
             echo -ne "Do you want to completely remove ${instpath}? [n] \c"
@@ -1327,7 +1335,7 @@ function deinstall_nscde
             ans="$def_ans"
          fi
          if [ "x$ans" == "xy" ]; then
-            rm -rf "$instpath"
+            echo rm -rf "$instpath"
             retval=$?
             if (($retval == 0)); then
                echo "Done."
