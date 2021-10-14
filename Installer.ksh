@@ -349,44 +349,23 @@ function install_nscde
       echo "UID $uid have a write access to the ${instpath%/*}."
    fi
 
-   if [ -d "$instpath" ]; then
-      inststate=$(ls -1 "$instpath" | wc -l)
-      if (($inststate > 1)); then
-         echo "Warning: $instpath already exists and appears to be populated with"
-         echo "some data or previous installation."
-         if (($noninteractive == 1)); then
-            echo ""
-            echo "Exiting with status 2."
-            exit 2
-         else
-            echo -ne "Do you want to continue with copying NsCDE installation into ${instpath}? (y|n)[n] \c"
-            read ans
-            if [ "$ans" != "y" ]; then
-               echo "Exiting installation."
-               exit 2
-            fi
-         fi
-      else
-         sleep 2
-         echo "Directory $instpath already exists but appears to be empty. Continuing."
-      fi
-   else
-      echo "Creating $instpath"
-      mkdir -p "$instpath"
-      if (($? == 0)); then
-         echo "Done."
-      fi
+   echo "Creating $instpath"
+   mkdir -p "$instpath"
+   if (($? == 0)); then
+      echo "Done."
    fi
 
    if [ -d "NsCDE" ]; then
+      OS_PLUS_MACHINE_ARCH=$(uname -sm | tr ' ' '_')
       echo "Copying NsCDE distribution files into $instpath"
       # cp -rpf NsCDE/{bin,config,lib,libexec,share} "${instpath}/"
       mkdir -p "${instpath}/bin"
       mkdir -p "${instpath}/libexec"
+      mkdir -p "${instpath}/libexec/NsCDE/${OS_PLUS_MACHINE_ARCH}"
       mkdir -p "${instpath}/lib"
       mkdir -p "${instpath}/share"
       mkdir -p "${instpath}/share/applications"
-      mkdir -p "${instpath}/share/dekstop-directories"
+      mkdir -p "${instpath}/share/desktop-directories"
       mkdir -p "${instpath}/share/doc"
       mkdir -p "${instpath}/share/icons"
       mkdir -p "${instpath}/share/locale"
@@ -455,6 +434,7 @@ function configure_installed
 
       # Regenerate system NsCDE-Subpanels.conf with window name
       echo "Regenerating system NsCDE-Subpanels.conf"
+      export NSCDE_DATADIR="${instpath}/share/NsCDE"
       NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/share/NsCDE/fvwm/Subpanels.conf
 
       echo "Done."
