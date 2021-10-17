@@ -16,6 +16,7 @@ fi
 sFVWM_USERDIR=$(echo "$FVWM_USERDIR" | $NSCDE_TOOLDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
 sHOME=$(echo "$HOME" | $NSCDE_TOOLDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
 sNSCDE_ROOT=$(echo "$NSCDE_ROOT" | $NSCDE_TOOLDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+sNSCDE_DATADIR=$(echo "$NSCDE_DATADIR" | $NSCDE_TOOLDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
 case $icon in
    $FVWM_USERDIR/icons/*)
       echo "$icon" | $NSCDE_TOOLDIR/ised -c "s/^$sFVWM_USERDIR\/icons\///g" -o -f -

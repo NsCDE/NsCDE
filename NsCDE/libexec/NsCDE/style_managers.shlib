@@ -16,6 +16,11 @@ function FindPalettes
       exit 2
    fi
 
+   if [ -z $NSCDE_DATADIR ]; then
+      echo "No NSCDE_DATADIR defined. Exiting."
+      exit 2
+   fi
+
    SysPalettes=$(ls -1 ${NSCDE_DATADIR}/palettes/*.dp | awk -F "/" '{print $NF}' | sed 's/\.dp$//g')
 
    if [ -d "${FVWM_USERDIR}/palettes" ]; then
@@ -35,6 +40,11 @@ function FindBackdrops
       exit 2
    fi
 
+   if [ -z $NSCDE_DATADIR ]; then
+      echo "No NSCDE_DATADIR defined. Exiting."
+      exit 2
+   fi
+
    SysBackdrops=$(ls -1 ${NSCDE_DATADIR}/backdrops/*.pm | awk -F "/" '{print $NF}' | sed 's/\.pm$//g')
 
    if [ -d "${FVWM_USERDIR}/backdrops" ]; then
@@ -51,6 +61,11 @@ function FindPhotos
 {
    if [ -z $NSCDE_ROOT ]; then
       echo "No NSCDE_ROOT defined. Exiting."
+      exit 2
+   fi
+
+   if [ -z $NSCDE_DATADIR ]; then
+      echo "No NSCDE_DATADIR defined. Exiting."
       exit 2
    fi
 

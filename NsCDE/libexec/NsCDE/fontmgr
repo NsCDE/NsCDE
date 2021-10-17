@@ -11,6 +11,11 @@ if [ -z $NSCDE_ROOT ]; then
    exit 2
 fi
 
+if [ -z $NSCDE_DATADIR ]; then
+   echo "Error: NSCDE_DATADIR is not set. Exiting."
+   exit 2
+fi
+
 type -p fc-list > /dev/null
 if (($? != 0)); then
    echo "Error: fc-list command not found."
@@ -27,6 +32,11 @@ function findfontsets
 {
    if [ -z $NSCDE_ROOT ]; then
       echo "No NSCDE_ROOT defined. Exiting."
+      exit 2
+   fi
+
+   if [ -z $NSCDE_DATADIR ]; then
+      echo "No NSCDE_DATADIR defined. Exiting."
       exit 2
    fi
 

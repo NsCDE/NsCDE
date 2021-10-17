@@ -489,7 +489,7 @@ Property
              End
              Else
              Begin
-                Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
+                Do {Exec exec $[NSCDE_TOOLDIR]/ised -c 's/^WSP:} $CurrDesk {:.*/WSP:} $CurrDesk {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
              End
              Set $ShiftNewLabel = { } $NewButtonLabel (Gettext {|Workspace}) { } $NewButtonLabel (Gettext {:|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
              ChangeTitle $CurrDesk $ShiftNewLabel

@@ -12,8 +12,8 @@ export LC_ALL=C
 PrintFnSize=0
 PrettyName=0
 
-if [ -z $NSCDE_ROOT ]; then
-   echo "No \$NSCDE_ROOT set. Exiting."
+if [ -z $NSCDE_DATADIR ]; then
+   echo "No \$NSCDE_DATADIR set. Exiting."
    exit 3
 fi
 
@@ -46,7 +46,7 @@ function GetFont
    Defaults
 
    if [ "x$FnFile" == "x" ]; then
-      sysfncffile="${NSCDE_ROOT}/config/Font-${NSCDE_FONT_DPI}dpi.conf"
+      sysfncffile="${NSCDE_DATADIR}/fvwm/Font-${NSCDE_FONT_DPI}dpi.conf"
       if [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.conf" ]; then
          fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.conf"
          avoiddoublegrep=0

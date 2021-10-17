@@ -46,7 +46,7 @@ Begin
    End
    Else
    Begin
-      Set $NsCDEConfFile = {$NSCDE_ROOT/config/NsCDE.conf}
+      Set $NsCDEConfFile = {$NSCDE_DATADIR/fvwm/NsCDE.conf}
       Set $CreateNsCDEUserConfig = 1
    End
 
@@ -1267,7 +1267,7 @@ Widget 24
          End
          Else
          Begin
-            Do {Exec exec $[NSCDE_ROOT]/bin/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
+            Do {Exec exec $[NSCDE_TOOLDIR]/ised -c 's/^WSP:} $CalledBy {:.*/WSP:} $CalledBy {:} $NewButtonLabel {/g' -f "} $ConfFile {"}
             Set $NewButtonLabelDisplay = { } $NewButtonLabel
          End
          ChangeTitle $CalledBy $NewButtonLabelDisplay

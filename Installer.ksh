@@ -1305,11 +1305,10 @@ function deinstall_nscde
       echo "Removing from old $instpath"
    fi
 
-   sanity1=$(ls -1 "${instpath}/config/" 2>/dev/null | wc -l)
    sanity2=$(ls -1d ${instpath}/{bin,lib,libexec,share} > /dev/null 2>&1; echo $?)
    sanity3=$(${instpath}/bin/nscde -V 2>/dev/null | grep -q "NsCDE Version"; echo $?)
 
-   if (($sanity1 > 10)) && ((sanity2 + sanity3 == 0)); then
+   if ((sanity2 + sanity3 == 0)); then
       if (($noninteractive == 1)); then
          rm -f "${instpath}/bin/nscde"
          rm -f "${instpath}/bin/nscde_fvwmclnt"

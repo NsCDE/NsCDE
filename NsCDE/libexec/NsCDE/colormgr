@@ -356,10 +356,10 @@ function Backdrops
       > "${FVWM_USERDIR}/Backdrops.conf"
       while (($DeskNo != 0))
       do
-         egrep "^Colorset 3${DeskNo}" "${NSCDE_ROOT}/config/Backdrops.conf" | \
+         egrep "^Colorset 3${DeskNo}" "${NSCDE_DATADIR}/fvwm/Backdrops.conf" | \
          sed 's/\$\[NSCDE_DATADIR\]\/defaults\/backer/\$\[FVWM_USERDIR\]\/backer/g' \
           >> "${FVWM_USERDIR}/Backdrops.conf"
-         cp -f ${NSCDE_ROOT}/share/defaults/backer/Desk${DeskNo}-*pm "${FVWM_USERDIR}/backer/"
+         cp -f ${NSCDE_DATADIR}/defaults/backer/Desk${DeskNo}-*pm "${FVWM_USERDIR}/backer/"
          ((DeskNo = DeskNo - 1))
       done
    fi

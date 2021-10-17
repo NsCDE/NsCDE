@@ -26,6 +26,16 @@ if [ ! -e "$NSCDE_ROOT" ]; then
    exit 5
 fi
 
+if [ -z $NSCDE_TOOLDIR ]; then
+   gettext -s "Error: NSCDE_ROOT is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_TOOLDIR" ]; then
+   gettext -s "Error: NSCDE_TOOLDIR does not exist. Cannot continue."
+   exit 5
+fi
+
 if [ -z $FVWM_USERDIR ]; then
    gettext -s "Error: FVWM_USERDIR is not set cannot continue."
    exit 6

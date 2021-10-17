@@ -15,6 +15,16 @@ if [ ! -e "$NSCDE_ROOT" ]; then
    exit 5
 fi
 
+if [ -z $NSCDE_DATADIR ]; then
+   echo "Error: NSCDE_DATADIR is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_DATADIR" ]; then
+   echo "Error: NSCDE_DATADIR does not exist. Cannot continue."
+   exit 5
+fi
+
 if [ -z $FVWM_USERDIR ]; then
    echo "Error: FVWM_USERDIR is not set cannot continue."
    exit 6
