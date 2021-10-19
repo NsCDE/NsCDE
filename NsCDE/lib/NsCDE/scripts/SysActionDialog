@@ -379,7 +379,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/nscde-acpi suspend || $NSCDE_TOOLDIR/nscde-acpi suspend}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr suspend || $NSCDE_TOOLDIR/acpimgr suspend}
             Quit
          End
          Else
@@ -401,7 +401,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System in hybrid mode]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/nscde-acpi hybrid-suspend || $NSCDE_TOOLDIR/nscde-acpi hybrid-suspend}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr hybrid-suspend || $NSCDE_TOOLDIR/acpimgr hybrid-suspend}
             Quit
          End
          Else
@@ -423,7 +423,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Hibernating System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/nscde-acpi hibernate || $NSCDE_TOOLDIR/nscde-acpi hibernate}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr hibernate || $NSCDE_TOOLDIR/acpimgr hibernate}
             Quit
          End
          Else
