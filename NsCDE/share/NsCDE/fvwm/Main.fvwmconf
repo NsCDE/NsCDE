@@ -98,27 +98,12 @@ Test (EnvMatch FVWM_IS_FVWM3 1) InfoStoreAdd xlogcmd "tail -n 300 -f ~/.xsession
 DestroyFunc f_ReadCfg
 AddToFunc f_ReadCfg
 + I InfoStoreAdd readconf n
-+ I Test (f $[FVWM_USERDIR]/$0.conf) Read $[FVWM_USERDIR]/$0.conf
-+ I TestRc (Match) InfoStoreAdd readconf y
-+ I Test (EnvMatch infostore.readconf y) Echo NsCDE: Config file $0.conf read from $[FVWM_USERDIR]
-+ I Test (EnvMatch infostore.readconf n) Read $[FVWM_DATADIR]/$0.conf
-+ I TestRc (Match) Test (f $[FVWM_DATADIR]/$0.conf) Echo NsCDE: Config file $0.conf read from $[FVWM_DATADIR]
-+ I InfoStoreRemove readconf
-+ I InfoStoreAdd readlocal n
-+ I Test (f $[FVWM_USERDIR]/$0.local) Read $[FVWM_USERDIR]/$0.local
-+ I TestRc (Match) InfoStoreAdd readlocal y
-+ I Test (EnvMatch infostore.readlocal y) Echo NsCDE: Local config file $0.local read from $[FVWM_USERDIR]
-+ I InfoStoreRemove readlocal
-
-DestroyFunc f_ReadCfgNew
-AddToFunc f_ReadCfgNew
-+ I InfoStoreAdd readconf n
 + I Test (f $[FVWM_USERDIR]/$0.fvwmconf) Read $[FVWM_USERDIR]/$0.fvwmconf
 + I TestRc (Match) InfoStoreAdd readconf y
 + I Test (EnvMatch infostore.readconf y) Echo NsCDE: FVWM $0 Configuration read from $[FVWM_USERDIR]/$0.fvwmconf
 + I Test (EnvMatch infostore.readconf n, f $[FVWM_USERDIR]/$0.fvwmgen) Read $[FVWM_USERDIR]/$0.fvwmgen
 + I TestRc (Match) InfoStoreAdd readconf y
-+ I Test (EnvMatch infostore.readconf y) Echo NsCDE: Generated $0 FVWM Configuration read from $[FVWM_USERDIR]/$0.fvwmgen
++ I Test (EnvMatch infostore.readconf y, !f $[FVWM_USERDIR]/$0.fvwmconf) Echo NsCDE: Generated $0 FVWM Configuration read from $[FVWM_USERDIR]/$0.fvwmgen
 + I Test (EnvMatch infostore.readconf n) Read $[FVWM_DATADIR]/$0.fvwmconf
 + I TestRc (Match) Test (f $[FVWM_DATADIR]/$0.fvwmconf) Echo NsCDE: FVWM $0 Configuration read from $[FVWM_DATADIR]/$0.fvwmconf
 + I InfoStoreRemove readconf
