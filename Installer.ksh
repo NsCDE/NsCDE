@@ -390,17 +390,17 @@ function install_nscde
       # Adapt ExecUseSHell
       kshpath=$(whence -p ksh93)
       if [ "x$kshpath" != "x" ]; then
-         echo "Adapting ExecUseShell to find ksh93 in ${instpath}/share/NsCDE/fvwm/Main.conf."
-         ./NsCDE/libexec/NsCDE/ised -c "s@ExecUseShell __KSH93__@ExecUseShell ${kshpath}@g" -f "${instpath}/share/NsCDE/fvwm/Main.conf"
+         echo "Adapting ExecUseShell to find ksh93 in ${instpath}/share/NsCDE/fvwm/Main.fvwmconf."
+         ./NsCDE/libexec/NsCDE/ised -c "s@ExecUseShell __KSH93__@ExecUseShell ${kshpath}@g" -f "${instpath}/share/NsCDE/fvwm/Main.fvwmconf"
          echo "Done."
       else
-         echo "Error setting Korn Shell in ${instpath}/share/NsCDE/fvwm/NsCDE-Main.conf. Korn shell (ksh93) not found."
+         echo "Error setting Korn Shell in ${instpath}/share/NsCDE/fvwm/NsCDE-Main.fvwmconf. Korn shell (ksh93) not found."
          exit 4
       fi
       if [ "${realinstpath%*/}" != "/opt/NsCDE" ]; then
          echo "Adapting NSCDE_ROOT path for custom installation."
          ./NsCDE/libexec/NsCDE/ised -c "s@export NSCDE_ROOT=/opt/NsCDE@export NSCDE_ROOT=${realinstpath%*/}@g" -f "${instpath}/bin/nscde"
-         ./NsCDE/libexec/NsCDE/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${realinstpath%*/}@g" -f "${instpath}/share/NsCDE/fvwm/Main.conf"
+         ./NsCDE/libexec/NsCDE/ised -c "s@SetEnv NSCDE_ROOT /opt/NsCDE@SetEnv NSCDE_ROOT ${realinstpath%*/}@g" -f "${instpath}/share/NsCDE/fvwm/Main.fvwmconf"
          echo "Adaptation done."
       fi
    else
@@ -427,15 +427,15 @@ function configure_installed
       echo 'SetEnv HAS_WINDOWNAME 1' >> ${instpath}/share/NsCDE/fvwm/NsCDE.conf
       echo 'Done.'
 
-      # Patch FrontPanel.conf for "indicator 12 in"
-      echo "Setting patched indicator with shadow in in NsCDE-FrontPanel.conf"
-      ./NsCDE/libexec/NsCDE/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
+      # Patch FrontPanel.fvwmconf for "indicator 12 in"
+      echo "Setting patched indicator with shadow in in FrontPanel.fvwmconf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/indicator 12,/indicator 12 in,/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.fvwmconf"
       echo "Done."
 
-      # Regenerate system NsCDE-Subpanels.conf with window name
-      echo "Regenerating system NsCDE-Subpanels.conf"
+      # Regenerate system Subpanels.fvwmconf with window name
+      echo "Regenerating system Subpanels.fvwmconf"
       export NSCDE_DATADIR="${instpath}/share/NsCDE"
-      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/share/NsCDE/fvwm/Subpanels.conf
+      NSCDE_ROOT="${instpath}" HAS_WINDOWNAME=1 SYSMODE=1 ${instpath}/libexec/NsCDE/generate_subpanels > ${instpath}/share/NsCDE/fvwm/Subpanels.fvwmconf
 
       echo "Done."
    fi
@@ -472,14 +472,14 @@ function configure_installed
          fi
       fi
 
-      echo "Adapting Main.conf, prepending custom ModulePath."
-      ./NsCDE/libexec/NsCDE/ised -c 's@^# ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:+$@ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:\+@g' -f "${instpath}/share/NsCDE/fvwm/Main.conf"
+      echo "Adapting Main.fvwmconf, prepending custom ModulePath."
+      ./NsCDE/libexec/NsCDE/ised -c 's@^# ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:+$@ModulePath \$\[NSCDE_LIBDIR\]\/fvwm-modules:\+@g' -f "${instpath}/share/NsCDE/fvwm/Main.fvwmconf"
       echo "Done."
 
-      # Replace NsCDE-FrontPanel.conf for Launcher Icon and PressIcon statements
-      echo "Enabling alternative arrows on FrontPanel launchers in NsCDE-FrontPanel.conf"
-      ./NsCDE/libexec/NsCDE/ised -c 's/ indicator 12,//g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
-      ./NsCDE/libexec/NsCDE/ised -c 's/\*FrontPanel: \(.*x.*\), Id NsCDE-Subpanel\(.*\), Frame 1, PressColorset 27, \\/\*FrontPanel: \1, Id NsCDE-Subpanel\2, Frame 1, PressColorset 27, \\\n  Icon NsCDE\/FPSubArrowUp.xpm, PressIcon NsCDE\/FPSubArrowDown.xpm, \\/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.conf"
+      # Replace FrontPanel.fvwmconf for Launcher Icon and PressIcon statements
+      echo "Enabling alternative arrows on FrontPanel launchers in FrontPanel.fvwmconf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/ indicator 12,//g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.fvwmconf"
+      ./NsCDE/libexec/NsCDE/ised -c 's/\*FrontPanel: \(.*x.*\), Id NsCDE-Subpanel\(.*\), Frame 1, PressColorset 27, \\/\*FrontPanel: \1, Id NsCDE-Subpanel\2, Frame 1, PressColorset 27, \\\n  Icon NsCDE\/FPSubArrowUp.xpm, PressIcon NsCDE\/FPSubArrowDown.xpm, \\/g' -f "${instpath}/share/NsCDE/fvwm/FrontPanel.fvwmconf"
       retval=$?
       if (($retval != 0)); then
          echo "Error $retval occured."

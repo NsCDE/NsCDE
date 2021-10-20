@@ -135,7 +135,7 @@ articles (the, a, an) will probably be more accurate.
 
    **NsCDE** is by default rooted in `/opt/NsCDE` (`$NSCDE_ROOT`), but it can be
    relocated with only one variable changed in main wrapper bin/nscde and
-   NsCDE-Main.conf.
+   Main.fvwmconf.
 
    It is not using your existing `$HOME/.fvwm` but sets `$FVWM_USERDIR` to
    `$HOME/.NsCDE`, and uses `/opt/NsCDE/config` as a sources of configuration.
@@ -147,7 +147,7 @@ articles (the, a, an) will probably be more accurate.
    additional. For example, if user doesn't have
    `$FVWM_USERDIR/NsCDE-Functions.conf`, then
    `$NSCDE_ROOT/config/NsCDE-Functions.conf` is read as default. Additionally,
-   if `$FVWM_USERDIR/NsCDE-Functions.local` exists, it will be read in addition
+   if `$FVWM_USERDIR/Functions.fvwmlocal` exists, it will be read in addition
    to conf file, from wherever it was read. This is intended as a primary
    mechanism for customization: If user doesn't need to override and change a
    lot of "system" configuration, but just add it's own in addition to

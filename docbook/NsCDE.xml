@@ -146,7 +146,7 @@ decade from the mainstream desktop players.
 <para>
 NsCDE is by default rooted in <filename class="directory">/opt/NsCDE</filename> ($NSCDE_ROOT),
 but it can be relocated with only one variable changed in main
-wrapper <filename class="directory">bin/nscde</filename> and <filename>NsCDE-Main.conf</filename>.
+wrapper <filename class="directory">bin/nscde</filename> and <filename>Main.fvwmconf</filename>.
 </para>
 
 <para>
@@ -163,7 +163,7 @@ for FVWM functions. Each
 configuration file can have two exclusive sources, and one additional. For
 example, if user doesn't have <filename>$FVWM_USERDIR/NsCDE-Functions.conf</filename>, then
 <filename>$NSCDE_ROOT/config/NsCDE-Functions.conf</filename> is read as default. Additionally, if
-<filename>$FVWM_USERDIR/NsCDE-Functions.local</filename> exists, it will be read in addition to
+<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> exists, it will be read in addition to
 conf file, from wherever it was read. This is intended as a primary mechanism
 for customization: If user doesn't need to override and change a lot of
 "system" configuration, but just add it's own in addition to existing, local
@@ -172,14 +172,14 @@ configuration can be overridden or destroyed and recreated even in local files.
 </para>
 <para>
 One notable addon to this system of configuration is the way FVWM Styles are read.
-In addition to reading <filename>$FVWM_USERDIR/NsCDE-Style.local</filename> "early"
+In addition to reading <filename>$FVWM_USERDIR/Style.fvwmlocal</filename> "early"
 configuration in <filename>$FVWM_USERDIR/NsCDE-Style.override</filename> will be read from
-<filename>$NSCDE_ROOT/config/NsCDE-Style.conf</filename> just after applying general core
+<filename>$NSCDE_DATADIR/fvwm/Style.fvwmconf</filename> just after applying general core
 style for all applications <emphasis>(*)</emphasis> but before reading custom application
-styles and prior to reading <filename>$FVWM_USERDIR/NsCDE-Style.local</filename>.
+styles and prior to reading <filename>$FVWM_USERDIR/Style.fvwmlocal</filename>.
 This mechanism is intended for changing and overriding core style options which are not
 customizable by the Window Style Manager. Putting core <emphasis>Style</emphasis> options
-after NsCDE applications in the <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename> are processed
+after NsCDE applications in the <filename>$NSCDE_DATADIR/fvwm/Style.fvwmconf</filename> are processed
 can nullify overrides for that particular applications, this is why this mechanism is provided.
 This file is not created in <varname>$FVWM_USERDIR</varname> by setup procedure or Style
 Managers, but it will be read if created manually.
@@ -273,8 +273,8 @@ External fit-in Programs:
 <para>
 In NsCDE, CDE Front Panel is re-implemented with the help of FvwmButtons(1)
 Configuration is stored under alias <emphasis>*FrontPanel</emphasis> in
-<filename>NsCDE-FrontPanel.conf</filename>,
-read and activated from the <filename>NsCDE-Main.conf</filename>.
+<filename>FrontPanel.fvwmconf</filename>,
+read and activated from the <filename>Main.fvwmconf</filename>.
 Visually, this is remake almost in a pixel as CDE Front Panel. The main
 differences are:
 </para>
@@ -585,7 +585,7 @@ was clicked on the submenu itself. This is a kind of a escape from the contextua
 still use subpanel's default action without repeating opening of a submenu again.
 If move or delete action is silently not performed, this is most likely the situation where
 user's <filename>$FVWM_USERDIR/Subpanels.actions</filename> is newer than
-<filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>, and must be rebuilt for configuration
+<filename>$FVWM_USERDIR/Subpanels.fvwmconf</filename>, and must be rebuilt for configuration
 actions to take a place properly. In that case, repeated operation must succeed, otherwise,
 see X session error log for details.
 </para>
@@ -609,9 +609,9 @@ by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>, while the rest will
 generated from the <filename>$NSCDE_DATADIR/defaults/Subpanels.actions</filename>. This file can also
 be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
 calling <command>generate_subpanels</command> and then <function>f_ReadCfg Subpanels</function>.
-Generated file is called <filename>NsCDE-Subpanels.conf</filename> and it is expected in the
+Generated file is called <filename>Subpanels.fvwmconf</filename> and it is expected in the
 <varname>$FVWM_USERDIR</varname>. If not found there,
-<filename>$NSCDE_ROOT/config/NsCDE-Subpanels.conf</filename> will be read instead.
+<filename>$NSCDE_ROOT/config/Subpanels.fvwmconf</filename> will be read instead.
 Syntax of the Subpanels.actions is explained in the
 <link linkend="NsCDE-Configuration-Files">Configuration files explained</link> section.
 </para>
@@ -621,7 +621,7 @@ Presently, there is one workaround here: as much as FVWM, and specially FvwmButt
 very flexible and configurable, no title for the buttons app can be set apart
 from module alias, but module alias doesn't support names with spaces in them.
 Internal names as <emphasis>"NsCDE-SubpanelX"</emphasis> are for that reason referenced in
-<filename>NsCDE-FrontPanel.conf</filename>, and are internally mandatory names of their Subpanels.
+<filename>FrontPanel.fvwmconf</filename>, and are internally mandatory names of their Subpanels.
 Since there is no configuration option for subpanel to set Window Title, we are using here
 tool <command>xdotool(1)</command> which is run on Subpanel initialization with a delay of 3,2
 seconds (internal workaround for xdotool) and this then takes infostore
@@ -755,7 +755,7 @@ while the right pointer button calls visual Local Pager.
 <para>
 Usual CDE icon with month and day of the month in it. Simple applet which
 calls empty, do-nothing (by default) function <function>f_Calendar</function>. This function can be
-overridden in <filename>$FVWM_USERDIR/NsCDE-Functions.local</filename> to call a program which user
+overridden in <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to call a program which user
 wishes.
 </para>
 <para>
@@ -792,7 +792,7 @@ default in <filename class="directory">$NSCDE_ROOT/bin</filename>.
 Fifth icon from the left on Front Panel is FvwmScript applet. It is calling
 <function>f_CheckMail</function> FVWM function every minute. If clicked, function is called immediately.
 By default <function>f_CheckMail</function> is an empty function. Up to user is to redefine it in his
-<filename>$FVWM_USERDIR/NsCDE-Functions.local</filename> to suit the needs for mail checking. To be
+<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to suit the needs for mail checking. To be
 clear, by default, it is not functional as an applet. Above this applet, there
 is an empty space for subpanel launcher which can be activated with middle
 click, and it will present Thunderbird entry if thunderbird is installed. User
@@ -949,7 +949,7 @@ previews in user's <filename class="directory">$FVWM_USERDIR/tmp</filename> and 
 applied or <guibutton>OK</guibutton>'ed, will set
 permanent backdrop in <filename class="directory">$FVWM_USERDIR/backer</filename>. Backer is named after
 FvwmBacker(1) module which then loads this X Pixmap as numbered FVWM Colorset
-from the <filename class="directory">$FVWM_USERDIR/NsCDE-Backdrops.conf</filename> which will be
+from the <filename class="directory">$FVWM_USERDIR/Backdrops.fvwmgen</filename> which will be
 written by Backdrop Style Manager (or by hand). Backdrops are generated in the colors of the
 current color theme from the active palette (<emphasis>Broica</emphasis> by default). It has
 different colors for a group of every four desktops in 8-colors mode and the
@@ -1319,9 +1319,9 @@ Monospaced Bold Large
 </para>
 <para>
 This fonts are defined as FVWM <emphasis>infostore</emphasis> variables in the file
-<filename>$NSCDE_ROOT/config/NsCDE-Font-$NSCDE_FONT_DPI.conf</filename> and/or in the file
-<filename>$FVWM_USERDIR/NsCDE-Font-$NCDE_FONT_DPI.conf</filename>. User's
-<filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.conf</filename> is a symlink to either
+<filename>$NSCDE_DATADIR/fvwm/Font-$NSCDE_FONT_DPI.fvwmconf</filename> and/or in the file
+<filename>$FVWM_USERDIR/NsCDE-Font-$NCDE_FONT_DPI.fvwmgen</filename>. User's
+<filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.fvwmgen</filename> is a symlink to either
 <filename>$NSCDE_DATADIR/fontsets/SomeName.fontset</filename> or to
 <filename>$FVWM_USERDIR/fontsets/SomeName.fontset</filename>.
 Further, they are defined as CPP macros in
@@ -1341,7 +1341,7 @@ Fontsets are stored in <filename>$NSCDE_DATADIR/fontsets</filename> and in
 Font Style Manager, 15 fonts from the set are loaded into preview lists of the application and can be
 immediately applied or further customized by leaving <guilabel>Use Predefined Font Set</guilabel> mode
 before saving defined scheme as <filename>$FVWM_USERDIR/fontsets/SomeName.fontset</filename> and linking this
-name to <filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.conf</filename>. List of fontsets on the left GUI list is
+name to <filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.fvwmgen</filename>. List of fontsets on the left GUI list is
 inactive until button <guilabel>Use Predefined Font Set</guilabel> is not turned on, then Font Style Manager
 operates with sets of fonts, and not in compose mode with individual fonts. In this mode, right GUI list contains
 information about fontset and previewed fonts when they are selected with mouse or keyboard. This information can
@@ -1978,7 +1978,7 @@ Subpanels configuration file <filename>Subpanels.actions</filename>, can be edit
 hand in <varname>$FVWM_USERDIR</varname> if something needs to be changed on existing
 entries. If editing by hand, <command>$NSCDE_TOOLDIR/generate_subpanels</command>
 must be used to generate FVWM configuration output which must be redirected into
-<filename>$FVWM_USERDIR/NsCDE-Subpanels.conf</filename>.
+<filename>$FVWM_USERDIR/Subpanels.fvwmconf</filename>.
 </para>
 
 <para>
@@ -2200,7 +2200,7 @@ milliseconds can be set here. See FvwmAuto(1).
 <itemizedlist>
 <listitem><para>
  <guilabel>Use Icon Box</guilabel>: if this option is selected, main FVWM configuration
-in <filename>NsCDE-Main.conf</filename> will spawn <emphasis>FvwmIconBox</emphasis>
+in <filename>Main.fvwmconf</filename> will spawn <emphasis>FvwmIconBox</emphasis>
 configured as close as possible as an alternative to icons of iconified windows.
 Classic icons will be disabled. The rest of options in this "tab" will be disabled because
 they do not apply anymore in this configuration. Note: FvwmIconBox has
@@ -2686,14 +2686,14 @@ palette is <emphasis>Broica</emphasis> in 8 colors variant.
 <para>
 Backdrops generated by <link linkend="NsCDE-BackdropMgr">Backdrop Style manager</link> are put in user's
 <filename>$FVWM_USERDIR/backer/DeskN-&lt;backdropname&gt;.pm</filename> and defined in
-<filename>$FVWM_USERDIR/NsCDE-Backdrops.conf</filename> as colorsets of
+<filename>$FVWM_USERDIR/Backdrops.fvwmgen</filename> as colorsets of
 <emphasis>TiledPixmap</emphasis> type. NsCDE reserved FVWM colorsets numbers for backdrops
 are from 31-38 for all eight possible desktops.
 This file is read by FvwmBacker(1) FVWM module. It is automatically generated when user makes
 first change with <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>.
 </para>
 <para>
-Until then, file <filename>$NSCDE_ROOT/config/NsCDE-Backdrops.conf</filename> is read, which
+Until then, file <filename>$NSCDE_ROOT/config/Backdrops.fvwmgen</filename> is read, which
 itself reads pre-generated and pre-defined backdrops from the
 <filename class="directory">$NSCDE_DATADIR/defaults/backer</filename> directory.
 </para>
@@ -2719,14 +2719,14 @@ for desks on different monitors.
 <abstract>
 <para>
 As pointed above, NsCDE has a quite complex set of configuration
-files. ~ 90% of them are the FVWM configurations. But, this system
+files. ~ 80% of them are the FVWM configurations. But, this system
 of configurations is arranged in some logical and consistent way.
-For example, keyboard shortcuts in NsCDE-Keybindings.conf,
-FvwmBacker configuration in NsCDE-Backer.conf, (generated)
-colorsets in NsCDE-Colorset.conf etc.
+For example, keyboard shortcuts in Keybindings.fvwmconf,
+FvwmBacker configuration in Backer.fvwmconf, (generated)
+colorsets in Colorset.fvwmgen/fvwmconf etc.
 </para>
 <para>
-All this configurations are included from the NsCDE-Main.conf.
+All this configurations are included from the Main.fvwmconf.
 This is the starting FVWM configuration which sets core options
 and safe defaults, and reads the rest of the configuration files
 which are included there. It defines StartFunction which starts
@@ -2872,20 +2872,20 @@ extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename
 
 </sect2>
 
-<sect2 id="NsCDE-Animate_conf">
-<title>NsCDE-Animate.conf</title>
+<sect2 id="NsCDE-Animate_fvwmconf">
+<title>NsCDE-Animate.fvwmconf</title>
 <para>
 FVWM Animate Module configuration. Animate module is started by NsCDE by
 default automatically, but with <emphasis>None</emphasis> as a default effect. This can be
-reconfigured by the user in private <filename>$FVWM_USERDIR/NsCDE-Animate.conf</filename>
-(or <filename>.local</filename>) with editor or with Window Style Manager. None effect is choosen
-as default for increased CDE similarity, because CDE doesn't have iconification
+reconfigured by the user in private <filename>$FVWM_USERDIR/Animate.gen</filename> with Window Style Manager,
+or in static manual configuration <filename>$[FVWM_USERDIR]Animate.fvwmconf</filename>.
+No effect (None) is choosen as default for increased CDE similarity, because CDE doesn't have iconification
 animation effects.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Backdrops_conf">
-<title>NsCDE-Backdrops.conf</title>
+<sect2 id="Backdrops_fvwmgen">
+<title>Backdrops.fvwmgen</title>
 <para>
 This file defines 8 colorsets for all (maximal) 8 desktops as a <emphasis>TiledPixmap</emphasis>
 colorset type. In the system configuration, static non-generated
@@ -2897,8 +2897,8 @@ photos).
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Backer_conf">
-<title>NsCDE-Backer.conf</title>
+<sect2 id="Backer_fvwmconf">
+<title>Backer.fvwmconf</title>
 <para>
 Rarely needed in <varname>$FVWM_USERDIR</varname>. FvwmBacker(1) configuration which defines
 8 maximum desks and refers them to 8 colorsets from 31 - 38. Option
@@ -2907,8 +2907,8 @@ compton(1) with NsCDE.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Colorset_conf">
-<title>NsCDE-Colorset.conf</title>
+<sect2 id="Colorset_fvwmgen">
+<title>Colorset.fvwmgen</title>
 <para>
 Definition of all colorsets minus colorsets 31 - 38 which are reserved for the
 backdrops. System-wide file has predefined color values for default
@@ -2982,8 +2982,8 @@ if needed or desirable:
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Event_conf">
-<title>NsCDE-Event.conf</title>
+<sect2 id="Event_fvwmconf">
+<title>Event.fvwmconf</title>
 <para>
 FvwmEvent(1) module configuration. In this file a single instance of the
 FvwmEvent called <option>MainLoop</option> is defined. It passes ID (Window ID, desk
@@ -2991,7 +2991,7 @@ etc ... depending on context) for window manager actions. <option>Cmd</option> o
 empty: FVWM functions are used for all defined actions. Currently,
 actions <option>new_desk</option>, <option>new_page</option>, <option>add_window</option>
 and <option>focus_change</option> are observed and
-their respective functions from <filename>NsCDE-Functions.conf</filename> are triggered.
+their respective functions from <filename>Functions.fvwmconf</filename> are triggered.
 This serves Workspace Manager,
 Page Manager (PGM) and window placement functions in an important way. If
 redefined or disabled, things will start to break. It can be extended by
@@ -3001,8 +3001,8 @@ that functions can make FVWM (and hence NsCDE) dramatically slow.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Font-DPIdpi_conf">
-<title>NsCDE-Font-$NSCDE_FONT_DPIdpi.conf</title>
+<sect2 id="Font-DPIdpi_fvwmgen">
+<title>Font-$NSCDE_FONT_DPIdpi.fvwmgen</title>
 <para>
 ... where $NSCDE_FONT_DPI is by default hardcoded to 96.
 </para>
@@ -3023,8 +3023,8 @@ will be needed while writing gtk settings.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Form_conf">
-<title>NsCDE-Form.conf</title>
+<sect2 id="Form_fvwmconf">
+<title>Form.fvwmconf</title>
 <para>
 Definitions of few FVWM forms. FvwmForm is reading this. FvwmForm is not
 used actively by NsCDE anymore, since it is absent in upcoming FVWM3. This
@@ -3033,8 +3033,8 @@ in accordance with the current NsCDE theme.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-FrontPanel_conf">
-<title>NsCDE-FrontPanel.conf</title>
+<sect2 id="FrontPanel_fvwmconf">
+<title>FrontPanel.fvwmconf</title>
 <para>
 Main NsCDE Front Panel configuration file. Here, FvwmButtons is
 configured under the alias <option>*FrontPanel</option>. Special care is taken to place
@@ -3052,11 +3052,11 @@ in most part already described in sections above.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Functions_conf">
-<title>NsCDE-Functions.conf</title>
+<sect2 id="Functions_fvwmconf">
+<title>Functions.fvwmconf</title>
 <para>
 Another important part of the configuration. Almost all FVWM functions
-are defined here, except 2-3 of core functions in NsCDE-Main.conf
+are defined here, except 2-3 of core functions in Main.fvwmconf
 which are reading the rest of the configuration. They are sorted in
 logical groups and are used widely in almost every part of the
 configuration, and particularly from the FvwmScript scripts. Main groups of NsCDE
@@ -3076,9 +3076,9 @@ For a FVWM function description see fvwm(1), in this file there is a
 plethora of examples, and for user usage is the most interesting part
 placeholders for functions which are here merely for programs to not
 complain about missing them and which should be overridden in user's local
-extension <filename>$FVWM_USERDIR/NsCDE-Functions.local</filename> - this extension file will
+extension <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> - this extension file will
 be read by the main configuration immediately after processing
-<filename>NSCDE-Functions.conf</filename>. This functions are:
+<filename>Functions.fvwmconf</filename>. This functions are:
 </para>
 <itemizedlist>
 <listitem><para>
@@ -3125,20 +3125,20 @@ functions.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-IconMan_conf">
-<title>NsCDE-IconMan.conf</title>
+<sect2 id="IconMan_fvwmconf">
+<title>IconMan.fvwmconf</title>
 <para>
 If <guilabel>Use Icon Box</guilabel> option is selected in the
 <link linkend="NsCDE-WindowMgr">Window Style Manager</link>,
 infostore variable <varname>iconbox</varname> will be defined as non-zero, and
-FvwmIconMan(1) module will be started on login from the <filename>NsCDE-Main.conf</filename>.
-This file, <filename>NsCDE-IconMan.conf</filename> contains default configuration of that
+FvwmIconMan(1) module will be started on login from the <filename>Main.fvwmconf</filename>.
+This file, <filename>IconMan.fvwmconf</filename> contains default configuration of that
 module.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Ident_conf">
-<title>NsCDE-Ident.conf</title>
+<sect2 id="Ident_fvwmconf">
+<title>Ident.fvwmconf</title>
 <para>
 Module FvwmIdent(1) is called either from a small menu which can be popped
 up with middle pointer click on a titlebar, or from the root window
@@ -3147,8 +3147,8 @@ file. It simply defines colorset and font for the FvwmIdent's window.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Init_conf">
-<title>NsCDE-Init.conf</title>
+<sect2 id="Init_fvwmconf">
+<title>Init.fvwmconf</title>
 <para>
 Most probable candidate for copying to <varname>$FVWM_USERDIR</varname>. Here are defined
 start, quit and restart function (sessionless and session-managed)
@@ -3162,8 +3162,8 @@ further.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Keybindings_conf">
-<title>NsCDE-Keybindings.conf</title>
+<sect2 id="Keybindings_fvwmconf">
+<title>Keybindings.fvwmconf</title>
 <para>
 For CDE clone and CDE compatibility, key bindings are a bit problematic area. In my local
 installation of open sourced CDE in virtual machine with CentOS 7,
@@ -3176,7 +3176,7 @@ by a lot of people) and to be seriously productive in the same time,
 comfortable and quick, to have good graphic (such as anti-aliased fonts,
 but this also can be turned off), a set of useful key bindings is
 defined by default. This default keybindings set can be extended, partially
-overridden (write your <varname>$FVWM_USERDIR/NsCDE-Keybinding.local</varname>),
+overridden (write your <varname>$FVWM_USERDIR/Keybinding.fvwmlocal</varname>),
 or completely replaced (copy the <filename>NsCDE-Keybinding.conf</filename> in
 <varname>$FVWM_USERDIR</varname> and edit, or even write from scratch). Defaults are
 author's <emphasis>daily driver</emphasis>. Notice when there is a reference to the "Menu" key
@@ -3426,7 +3426,7 @@ after losing mouse focus to free up space on the screen.
 </para></listitem>
 
 <listitem><para>
-  <keysym>XF86AudioLowerVolume</keysym> and <keysym>XF86AudioRaiseVolume</keysym> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <filename>$NSCDE_ROOT/config/NsCDE-Keybindings.conf</filename> for f_Mixer options and interaction.
+  <keysym>XF86AudioLowerVolume</keysym> and <keysym>XF86AudioRaiseVolume</keysym> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <filename>$NSCDE_DATADIR/fvwm/Keybindings.fvwmconf</filename> for f_Mixer options and interaction.
 </para></listitem>
 
 <listitem><para>
@@ -3815,10 +3815,10 @@ This file is not FVWM configuration file. It is written
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
 manually with editor, and read by the <command>$NSCDE_TOOLDIR/keymenu</command>
 command which will generate infostore variables with descriptive keyboard shortcut names which
-are used in NsCDE menus from <filename>NsCDE-Menus.conf</filename> and
-<filename>NsCDE-Functions.conf</filename>, and additionaly, use the whole line after the keyword
+are used in NsCDE menus from <filename>Menus.fvwmconf</filename> and
+<filename>Functions.fvwmconf</filename>, and additionaly, use the whole line after the keyword
 in the first column with "Silent Key" prefix to dinamically generate this part of keybindings
-which are separated from <filename>NsCDE-Keybindings.conf</filename> and processed specially
+which are separated from <filename>Keybindings.fvwmconf</filename> and processed specially
 because they definition must automatically match keyboard binding description in various
 menus.
 </para>
@@ -3826,7 +3826,7 @@ menus.
 The syntax of this file is simple: first column is the keyword which becomes infostore
 variable (km_xrefresh as <varname>$[infostore.km_xrefresh]</varname>), and the rest columns of
 every line is FVWM "Key" sintax which is paired with "Silent Key" prefix during initialization
-with <function>f_KeyMenu -a</function> from <filename>NsCDE-Main.conf</filename>.
+with <function>f_KeyMenu -a</function> from <filename>Main.fvwmconf</filename>.
 </para>
 <para>
 Every line, or dynamic keybinding can be overriden here if (re)defined in user's
@@ -3842,20 +3842,20 @@ producing dynamic keybindings which are described in menus.
 </para>
 <para>
 For a list of keybindings that are "dynamic", that is, not defined in
-<filename>NsCDE-Keybindings.conf</filename>, but in <filename>Keymenu.actions</filename>, see
-notices in section about <link linkend="NsCDE-Keybindings_conf">NsCDE-Keybindings.conf</link>.
+<filename>Keybindings.fvwmconf</filename>, but in <filename>Keymenu.actions</filename>, see
+notices in section about <link linkend="Keybindings_fvwmconf">Keybindings.fvwmconf</link>.
 </para>
 
 </sect2>
 
-<sect2 id="NsCDE-Main_conf">
-<title>NsCDE-Main.conf</title>
+<sect2 id="Main_fvwmconf">
+<title>Main.fvwmconf</title>
 <para>
   Core configuration. This file is read the first upon starting FVWM
-  Window Manager. In fact, FVWM is invoked with <option>-f /path/to/NsCDE-Main.conf</option>
+  Window Manager. In fact, FVWM is invoked with <option>-f /path/to/Main.fvwmconf</option>
   to read it instead of default FVWM system configuration or user's
   <filename>~/.fvwm/config</filename>.
-  This invocation and configuration in <filename>NsCDE-Main.conf</filename>
+  This invocation and configuration in <filename>Main.fvwmconf</filename>
   changes everything. It avoids <filename class="directory">~/.fvwm</filename> if user has a plain (normal)
   FVWM setup, defines and redefines FVWM internal variables and sets
   <varname>NSCDE_ROOT</varname>, configures some core FVWM options (like <option>DefaultIcon</option>),
@@ -3872,8 +3872,8 @@ notices in section about <link linkend="NsCDE-Keybindings_conf">NsCDE-Keybinding
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Menus_conf">
-<title>NsCDE-Menus.conf</title>
+<sect2 id="Menus_fvwmconf">
+<title>Menus.fvwmconf</title>
 <para>
 In NsCDE, there is a bunch of the menus. Root menus, contextual menus,
 and even menus called or dinamically generated from FvwmScript(1).
@@ -3893,7 +3893,7 @@ and even menus called or dinamically generated from FvwmScript(1).
 
 <listitem><para>
   <guimenuitem>m_QuickMenu</guimenuitem> beneath m_Applications. Empty by default. Intended to be
-    destroyed and recreated by the user (<filename>NsCDE-Menus.local</filename>) with own
+    destroyed and recreated by the user (<filename>Menus.fvwmlocal</filename>) with own
     favorites.
 </para></listitem>
 
@@ -3988,12 +3988,12 @@ menu, and to refresh all windows on the screen.
 
 </sect2>
 
-<sect2 id="NsCDE-Mousebindings_conf">
-<title>NsCDE-Mousebindings.conf</title>
+<sect2 id="Mousebindings_fvwmconf">
+<title>Mousebindings.fvwmconf</title>
 <para>
- File <filename>NsCDE-Mousebindings.conf</filename> is done in similar manner as the
-  <filename>NsCDE-Keybindings.conf</filename>. Can be overridden (.conf) or extended (.local)
-  just like (almost) any NsCDE conf file.
+ File <filename>Mousebindings.fvwmconf</filename> is done in similar manner as the
+  <filename>Keybindings.fvwmconf</filename>. Can be overridden (.fvwmconf) or
+  extended (.fvwmlocal) just like (almost) any NsCDE conf file.
   See fvwm(1) for "Mouse" commands. Here commands invoked with pointer
   are defined. As it is the case with key bindings, mouse actions are too far more in
   NsCDE than in original CDE. The syntax is described at the top of the file.
@@ -4168,8 +4168,8 @@ menu, and to refresh all windows on the screen.
 
 </sect2>
 
-<sect2 id="NsCDE-Pager-WspLocPager_conf">
-<title>NsCDE-Pager-WspLocPager.conf</title>
+<sect2 id="Pager-WspLocPager_fvwmconf">
+<title>Pager-WspLocPager.fvwmconf</title>
 <para>
 Configures FvwmPager(1) type which is called as
 <guilabel>Local Pager</guilabel> from the right-click popup menu on Workspace Manager buttons.
@@ -4177,8 +4177,8 @@ This pager is transient and will disappear after being used with a pointer click
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Pager-LocalPager_conf">
-<title>NsCDE-Pager-LocalPager.conf</title>
+<sect2 id="Pager-LocalPager_fvwmconf">
+<title>Pager-LocalPager.fvwmconf</title>
 <para>
 Infostore variable <varname>pageraisefp</varname> in <filename>NsCDE.conf</filename> is by default 0.
 If enabled, when active page changes, visual FvwmPager(1) will be shown in the center
@@ -4192,8 +4192,8 @@ pointer is above pager.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Script_conf">
-<title>NsCDE-Script.conf</title>
+<sect2 id="Script_fvwmconf">
+<title>Script.fvwmconf</title>
 <para>
 Default for all FvwmScript(1) Module based applications and widgets. Script Path,
 default font and colorset. All this values are defined outside of
@@ -4214,8 +4214,8 @@ Off by default, edit manually.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-Style_conf">
-<title>NsCDE-Style.conf</title>
+<sect2 id="Style_fvwmconf">
+<title>Style.fvwmconf</title>
 <para>
 Main decoration configuration. <option>Style</option> '*' is applied globally. This is
 the main source of CDE and Motif-like behavior. If user wants to preserve
@@ -4250,16 +4250,16 @@ Options are grouped in 5 categories:
 </itemizedlist>
 <para>
 This styles can be extended and/or overridden by the user's own
-<filename>$FVWM_USERDIR/NsCDE-Style.local</filename>, and core style
+<filename>$FVWM_USERDIR/Style.fvwmlocal</filename>, and core style
 for all windows <emphasis>(*)</emphasis> can be overriden by creating
-<filename>$FVWM_USERDIR/NsCDE-Style.override</filename> which extends or
-changes directives for core style from <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename>
+<filename>$FVWM_USERDIR/Style.override</filename> which extends or
+changes directives for core style from <filename>$NSCDE_DATADIR/fvwm/Style.fvwmconf</filename>
 prior to applying particular application styles and prior to reading
-<filename>$FVWM_USERDIR/NsCDE-Style.local</filename>.
+<filename>$FVWM_USERDIR/Style.fvwmlocal</filename>.
 </para>
 <para>
 Colorsets and fonts used in this configuration are generated and stored
-in <filename>NsCDE-Font-$DPIdpi.conf</filename> and <filename>NsCDE-Colorset.conf</filename>.
+in <filename>Font-$DPIdpi.fvwmgen</filename> and <filename>Colorset.fvwmgen</filename>.
 </para>
 <para>
 Man page fvwm(1) has a rich and extended description of what can be done
@@ -4275,7 +4275,7 @@ This file is not FVWM configuration file. It is written by the
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
 manually with editor, and read by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>
 command which will generate
-<link linkend="NsCDE-Subpanels_conf"><filename>NsCDE-Subpanels.conf</filename></link> file in user's
+<link linkend="Subpanels_fvwmconf"><filename>Subpanels.fvwmconf</filename></link> file in user's
 <varname>$FVWM_USERDIR</varname>.
 The syntax of this file is simple. It is CSV-like file where values are delimited with a comma ",".
 Every line belongs to one of the ten subpanels. Comma and "'" characters cannot be part of
@@ -4304,7 +4304,7 @@ the field values. This values are:
    command which should be checked for existance instead of the first string of the command field,
    empty space (nothing between commas: <emphasis>,,</emphasis>), and NOCHK
    which indicates that no check for
-   a command existance should be done in <filename>NsCDE-Subpanels.conf</filename>.
+   a command existance should be done in <filename>Subpanels.fvwmconf</filename>.
    Most of the entries will default to <emphasis>empty</emphasis> which will prepend
    <option>Test (x &lt;appname&gt;)</option> to the entry specification in the resulting
    FvwmButtons(8) config.
@@ -4316,8 +4316,8 @@ the field values. This values are:
 
 </sect2>
 
-<sect2 id="NsCDE-Subpanels_conf">
-<title>NsCDE-Subpanels.conf</title>
+<sect2 id="Subpanels_fvwmconf">
+<title>Subpanels.fvwmconf</title>
 <para>
 This file is generated by the <command>$NSCDE_TOOLDIR/generate_subpanels</command>.
 It is static in system directory, but changable and easly generated in the <varname>$FVWM_USERDIR</varname>
@@ -4328,7 +4328,7 @@ the <emphasis>Install Icon</emphasis>, <link linkend="NsCDE-SubpanelSettings">Su
 called from the titlebar popdown menu on every subpanel as <emphasis>Subpanel Settings</emphasis> or
 manually by calling <command>$NSCDE_TOOLDIR/generate_subpanels</command> which will
 read user's or system <link linkend="Subpanels_actions"><filename>Subpanels.actions</filename></link> for
-every subpanel and if it is defined in user's one, take this one while generating NsCDE-Subpanels.conf.
+every subpanel and if it is defined in user's one, take this one while generating Subpanels.fvwmconf.
 In system default, subpanels 2, 5 and 6 are disabled by default, but can be activated with a very quick
 double middle pointer click on the empty launcher without arrow: a
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> application will appear on the screen
@@ -4389,7 +4389,7 @@ descriptions will be written as relative to this directory
 </para>
 <para>
   Configuration directory. All .conf files described in documentation
-  are here. They are read from <filename>config/NsCDE-Main.conf</filename> which is called
+  are here. They are read from <filename>config/Main.fvwmconf</filename> which is called
   from bin/nscde by fvwm binary with <option>-f</option> directly.
 </para></listitem>
 
@@ -4440,7 +4440,7 @@ descriptions will be written as relative to this directory
 </para>
 <para>
   Custom cursors which are missing on plain X server installations but
-  can be found in CDE. Referenced in <filename>config/NsCDE-Style.conf</filename>.
+  can be found in CDE. Referenced in <filename>fvwm/Style.fvwmconf</filename>.
 </para></listitem>
 
 <listitem><para>
@@ -4448,7 +4448,7 @@ descriptions will be written as relative to this directory
 </para>
 <para>
   Default generated backdrops for first start (Broica, 8 colors)
-  Referenced in system's <filename>config/NsCDE-Backdrops.conf</filename>.
+  Referenced in system's <filename>fvwm/Backdrops.fvwmconf</filename>.
 </para></listitem>
 
 <listitem><para>
@@ -4600,7 +4600,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
    <filename class="directory">photos/</filename> directory:
    User's photos which can be used instead of backdrops if selected in
    <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link> or
-   configured in <filename>NsCDE-Backdrops.conf</filename>
+   configured in <filename>Backdrops.fvwmgen</filename>
    manually.
 </para></listitem>
 
@@ -4616,7 +4616,7 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
   This directory contains automatically generated hierachy structure of background cache for multiple different X RandR
   monitors when NsCDE is used with FVWM3 in non-global <emphasis>DesktopConfiguration</emphasis> mode, which are
   matching various combinations of desks across monitors.
-  Referenced in function f_SetFvwm3NonGlobalBackground of <filename>config/NsCDE-Functions.conf</filename> and
+  Referenced in function f_SetFvwm3NonGlobalBackground of <filename>fvwm/Functions.fvwmconf</filename> and
   in <filename>libexec/NsCDE/xrandr_backer</filename> backdrop autocreate script.
 </para></listitem>
 
@@ -4677,26 +4677,26 @@ it will not be touched and can co-exist with NsCDE in that way. Here is the simp
 </para></listitem>
 
 <listitem><para>
-  <filename>NsCDE-XYZ.local</filename> files:
-  Extensions, added values of <filename>$NSCDE_ROOT/config/NsCDE-XYZ.conf</filename> files.
+  <filename>XYZ.fvwmlocal</filename> files:
+  Extensions, added values of <filename>$NSCDE_DATADIR/fvwm/XYZ.fvwmconf</filename> files.
   If in existence, they will be read in right after their .conf main
   configurations from system (or local) directory. This is preferred
   way to extend functionality or override something not big enough
   for a complete "fork" of the config file. Colorset, Backdrops,
   Animate, Font-$DPIdpi, Init, and Subpanel are exception of this,
   that is, it is preferred (if not only thing possible) to have it as
-  <emphasis>.conf</emphasis> files only and not <emphasis>.local</emphasis> files.
+  <emphasis>.conf</emphasis> files only and not <emphasis>.fvwmlocal</emphasis> files.
 </para>
 <para>
   <filename>NsCDE-Style.override</filename> file:
-  If created, it will be read by the <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename>.
+  If created, it will be read by the <filename>$NSCDE_DATADIR/Style.fvwmconf</filename>.
   Here, core style for all windows (*) can be overriden prior to reading particular
   NsCDE application style overrides and addons, and prior to reading
-  <filename>$FVWM_USERDIR/NsCDE-Style.local</filename>. Here, advanced users can override
+  <filename>$FVWM_USERDIR/Style.fvwmlocal</filename>. Here, advanced users can override
   or extend core styles which are not customizable by the Window Style Manager. See fvwm(1) for
   a huge list of <emphasis>Style</emphasis> options.
   Putting core <emphasis>Style</emphasis> options after NsCDE applications in the
-  <filename>$NSCDE_ROOT/NsCDE-Style.conf</filename> are processed can nullify overrides
+  <filename>$NSCDE_ROOT/Style.fvwmconf</filename> are processed can nullify overrides
   for that particular applications, this is why this mechanism is provided.
   This file is not created in <varname>$FVWM_USERDIR</varname> by setup procedure or Style
   Managers, but if created (manually) it will be read and processed.
@@ -5028,7 +5028,7 @@ for MATE, KDE, LXDE and similar DE integrations and play with this if you like.
 <title>NsCDE Localization</title>
 <para>
 NsCDE implements localization capabilities provided by FVWM and system C library.
-Directive <varname>LocalePath</varname> in <filename>$NSCDE_ROOT/config/NsCDE-Main.conf</filename>
+Directive <varname>LocalePath</varname> in <filename>$NSCDE_ROOT/config/Main.fvwmconf</filename>
 is set to look at <varname>$[NSCDE_ROOT]/share/locale;NsCDE:$[NSCDE_ROOT]/share/locale;NsCDE-Subpanels:+</varname>.
 In other words, whole NsCDE reads it's localization from "mo" files from
 <filename class="directory">$[NSCDE_ROOT]/share/locale/$LANG/LC_MESSAGES/NsCDE.mo</filename> except subpanels
@@ -5148,8 +5148,8 @@ setup should look like this:
 <listitem><para>GeoDB.ini</para></listitem>
 <listitem><para>icons/</para></listitem>
 <listitem><para>icons/NsCDE/</para></listitem>
-<listitem><para>NsCDE-Backdrops.conf</para></listitem>
-<listitem><para>NsCDE-Colorset.conf</para></listitem>
+<listitem><para>Backdrops.fvwmgen</para></listitem>
+<listitem><para>Colorset.fvwmgen</para></listitem>
 <listitem><para>NsCDE.conf</para></listitem>
 <listitem><para>tmp/</para></listitem>
 <listitem><para>Xdefaults</para></listitem>
@@ -5413,12 +5413,12 @@ this agent as standalone DE-indepentent program analogously to stalonetray(1) or
 probably the closest match and most often used is polkit-gnome-authentication-agent-1 which is
 usually installed in <filename class="directory">/usr/libexec</filename> and relatively without
 huge dependencies on some desktop environment. It can be started from profile, for example from
-InitFunction in <filename>$FVWM_USERDIR/NsCDE-Init.conf</filename> or by using dex autostarter
-from this very file (default NsCDE-Init.conf has an example for this).
+InitFunction in <filename>$FVWM_USERDIR/Init.fvwmconf</filename> or by using dex autostarter
+from this very file (default Init.fvwmconf has an example for this).
 </para>
 <para>
 Small python program <emphasis>dex(1)</emphasis> can be installed and used from InitFunction
-in <filename>$FVWM_USERDIR/NsCDE-Init.conf</filename>. This program can be configured to read
+in <filename>$FVWM_USERDIR/Init.fvwmconf</filename>. This program can be configured to read
 system autostart files in <filename class="directory">/etc/xdg/autostart</filename> and/or
 user's from <filename class="directory">$HOME/.config/autostart</filename>. From here,
 PolicyKit agent, NetworkManager applet, Nextcloud agent, Firewall agent, pnmixer and similar
@@ -5478,7 +5478,7 @@ installed as <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>.
 </para>
 <para>
 If standalone freedesktop autostarter <command>dex-autostart</command> (sometimes called "dex")
-is installed, it will be used by default <filename>NsCDE-Init.conf</filename> function
+is installed, it will be used by default <filename>Init.fvwmconf</filename> function
 <function>CommonInitFunction</function> in local mode: it will read and start ".desktop" files
 in the <filename class="directory">$HOME/.config/autostart</filename> directory.
 </para>
@@ -5770,7 +5770,7 @@ This patches will add:
 <listitem><para>
    FvwmButtons triangle-in (sunken) support. Provides a 3rd argument
     for <option>indicator</option> parameter of the FvwmButtons(1) button. It can be
-    "in" (default for NsCDE in <filename class="directory">config/NsCDE-FrontPanel.conf)</filename>
+    "in" (default for NsCDE in <filename class="directory">fvwm/FrontPanel.fvwmconf)</filename>
     or "out" to confirm the FVWM default. If omitted, "out" is default, since
     it was that way before this patch.
 </para></listitem>

@@ -323,8 +323,8 @@ Layout of the `$FVWM_USERDIR` after the initial setup should look like this:
 - GeoDB.ini
 - icons/
 - icons/NsCDE/
-- NsCDE-Backdrops.conf
-- NsCDE-Colorset.conf
+- Backdrops.fvwmgen
+- Colorset.fvwmgen
 - NsCDE.conf
 - tmp/
 - Xdefaults
