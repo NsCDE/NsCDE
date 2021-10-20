@@ -78,7 +78,7 @@ Begin
    ChangeFont 3 $SectionNameFont
 
    Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
-   Set $AnimateFile = {$FVWM_USERDIR/Animate.conf}
+   Set $AnimateFile = {$FVWM_USERDIR/Animate.fvwmgen}
 
    # Do not load default by default
    Set $CopySysToUserBeforeChanges = 0
@@ -156,10 +156,10 @@ Widget 2
          # routine 1 od this widget to re-read and re-set the values, and then to
          # put ConfigurationFile and AnimateFile variables back for writing with OK.
          Set $ConfigurationFile = {$NSCDE_DATADIR/fvwm/NsCDE.conf}
-         Set $AnimateFile = {$NSCDE_DATADIR/fvwm/Animate.conf}
+         Set $AnimateFile = {$NSCDE_DATADIR/fvwm/Animate.fvwmconf}
          SendSignal 2 1
          Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
-         Set $AnimateFile = {$FVWM_USERDIR/Animate.conf}
+         Set $AnimateFile = {$FVWM_USERDIR/Animate.fvwmgen}
 
          # Signal to OK button that default has been loaded, and if
          # clicked, to copy system default configuration files in
@@ -1585,10 +1585,10 @@ Widget 42
             ChangeColorset 52 22
 
             # Initialize new configuration if there is no $AnimateFile
-            Set $CheckAnimateFileExistance = (GetOutput {ls $FVWM_USERDIR/Animate.conf 2>/dev/null} 1 -1)
+            Set $CheckAnimateFileExistance = (GetOutput {ls $FVWM_USERDIR/Animate.fvwmgen 2>/dev/null} 1 -1)
             If $CheckAnimateFileExistance == {} Then
             Begin
-               Set $CopyAnimateConfCmd = {cp -f "$NSCDE_DATADIR/fvwm/Animate.conf" "} $AnimateFile {"}
+               Set $CopyAnimateConfCmd = {cp -f "$NSCDE_DATADIR/fvwm/Animate.fvwmconf" "} $AnimateFile {"}
                Set $CopyAnimateConf = (GetOutput $CopyAnimateConfCmd 1 -1)
             End
 
@@ -1819,7 +1819,7 @@ Widget 122
             Set $CopyNsCDEConfCmd = {cp -f "$NSCDE_DATADIR/fvwm/NsCDE.conf" "} $ConfigurationFile {"}
             Set $CopyNsCDEConf = (GetOutput $CopyNsCDEConfCmd 1 -1)
 
-            Set $CopyAnimateConfCmd = {sleep 1; cp -f "$NSCDE_DATADIR/fvwm/Animate.conf" "} $AnimateFile {"}
+            Set $CopyAnimateConfCmd = {sleep 1; cp -f "$NSCDE_DATADIR/fvwm/Animate.fvwmconf" "} $AnimateFile {"}
             Set $CopyAnimateConf = (GetOutput $CopyAnimateConfCmd 1 -1)
          End
 

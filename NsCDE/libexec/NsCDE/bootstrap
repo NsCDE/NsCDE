@@ -67,15 +67,15 @@ function setup_nscde
       read RET
    fi
 
-   if [ ! -e "${FVWM_USERDIR}/Colorset.conf" ]; then
+   if [ ! -e "${FVWM_USERDIR}/Colorset.fvwmgen" ]; then
       if (($VERBOSE == 1)); then
          gettext -s "Generating NsCDE fvwm Colorset ..."
       fi
       $NSCDE_TOOLDIR/palette_colorgen -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp \
-       -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/Colorset.conf"
+       -n $NSCDE_PALETTE_NCOLORS -f > "$FVWM_USERDIR/Colorset.fvwmgen"
    else
       if (($VERBOSE == 1)); then
-         echo -ne "${FVWM_USERDIR}/Colorset.conf ${already_exists}"
+         echo -ne "${FVWM_USERDIR}/Colorset.fvwmgen ${already_exists}"
       fi
    fi
 
@@ -176,30 +176,30 @@ function setup_nscde
       fi
    fi
 
-   # Initial Init.conf for user session customizations
-   if [ ! -e "${FVWM_USERDIR}/Init.conf" ]; then
+   # Initial Init.fvwmconf for user session customizations
+   if [ ! -e "${FVWM_USERDIR}/Init.fvwmconf" ]; then
       if (($VERBOSE == 1)); then
-         echo "$locale_Initializing_default ${FVWM_USERDIR}/Init.conf ..."
+         echo "$locale_Initializing_default ${FVWM_USERDIR}/Init.fvwmconf ..."
       fi
-      cp ${NSCDE_DATADIR}/fvwm/Init.conf ${FVWM_USERDIR}/Init.conf
+      cp ${NSCDE_DATADIR}/fvwm/Init.fvwmconf ${FVWM_USERDIR}/Init.fvwmconf
    else
       if (($VERBOSE == 1)); then
-         echo "${FVWM_USERDIR}/Init.conf ${already_exists}."
+         echo "${FVWM_USERDIR}/Init.fvwmconf ${already_exists}."
       fi
    fi
 
-   # Initial Functions.local, Menus.local, Keybindings.local, and
-   # Style.local examples for user function customizations
+   # Initial Functions.fvwmlocal, Menus.fvwmlocal, Keybindings.fvwmlocal, and
+   # Style.fvwmlocal examples for user function customizations
    for localcf in Functions Menus Keybindings Style
    do
-      if [ ! -e "${FVWM_USERDIR}/${localcf}.local" ]; then
+      if [ ! -e "${FVWM_USERDIR}/${localcf}.fvwmlocal" ]; then
          if (($VERBOSE == 1)); then
-            echo "$locale_Initializing_default ${FVWM_USERDIR}/${localcf}.local ..."
+            echo "$locale_Initializing_default ${FVWM_USERDIR}/${localcf}.fvwmlocal ..."
          fi
-         cp ${NSCDE_DATADIR}/config_templates/fvwm/${localcf}.local ${FVWM_USERDIR}/${localcf}.local
+         cp ${NSCDE_DATADIR}/config_templates/fvwm/${localcf}.fvwmlocal ${FVWM_USERDIR}/${localcf}.fvwmlocal
       else
          if (($VERBOSE == 1)); then
-            echo "${FVWM_USERDIR}/${localcf}.local ${already_exists}."
+            echo "${FVWM_USERDIR}/${localcf}.fvwmlocal ${already_exists}."
          fi
       fi
    done

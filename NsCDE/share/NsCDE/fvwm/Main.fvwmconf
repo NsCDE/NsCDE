@@ -80,9 +80,9 @@ InfoStoreAdd desknum 4
 # Local and Global pager DeskTopScale factor. Default values are
 # "unset" so user defaults from NsCDE.conf can take precedence and
 # if this is not the case, "unset" indicates to f_ReadNormalConfig
-# that Monitors.conf should be read for this variables to be set.
-# Monitors.conf should cover ~95% of cases, and has the fallback for
-# the remaining ~5%.
+# that Monitors.fvwmconf should be read for this variables to be set.
+# Monitors.fvwmconf should cover ~95% of cases, and has the fallback
+# for the remaining ~5%.
 InfoStoreAdd loc_pg.desk_scale unset
 InfoStoreAdd glob_pg.desk_scale unset
 
@@ -108,6 +108,24 @@ AddToFunc f_ReadCfg
 + I Test (f $[FVWM_USERDIR]/$0.local) Read $[FVWM_USERDIR]/$0.local
 + I TestRc (Match) InfoStoreAdd readlocal y
 + I Test (EnvMatch infostore.readlocal y) Echo NsCDE: Local config file $0.local read from $[FVWM_USERDIR]
++ I InfoStoreRemove readlocal
+
+DestroyFunc f_ReadCfgNew
+AddToFunc f_ReadCfgNew
++ I InfoStoreAdd readconf n
++ I Test (f $[FVWM_USERDIR]/$0.fvwmconf) Read $[FVWM_USERDIR]/$0.fvwmconf
++ I TestRc (Match) InfoStoreAdd readconf y
++ I Test (EnvMatch infostore.readconf y) Echo NsCDE: FVWM $0 Configuration read from $[FVWM_USERDIR]/$0.fvwmconf
++ I Test (EnvMatch infostore.readconf n, f $[FVWM_USERDIR]/$0.fvwmgen) Read $[FVWM_USERDIR]/$0.fvwmgen
++ I TestRc (Match) InfoStoreAdd readconf y
++ I Test (EnvMatch infostore.readconf y) Echo NsCDE: Generated $0 FVWM Configuration read from $[FVWM_USERDIR]/$0.fvwmgen
++ I Test (EnvMatch infostore.readconf n) Read $[FVWM_DATADIR]/$0.fvwmconf
++ I TestRc (Match) Test (f $[FVWM_DATADIR]/$0.fvwmconf) Echo NsCDE: FVWM $0 Configuration read from $[FVWM_DATADIR]/$0.fvwmconf
++ I InfoStoreRemove readconf
++ I InfoStoreAdd readlocal n
++ I Test (f $[FVWM_USERDIR]/$0.fvwmlocal) Read $[FVWM_USERDIR]/$0.fvwmlocal
++ I TestRc (Match) InfoStoreAdd readlocal y
++ I Test (EnvMatch infostore.readlocal y) Echo NsCDE: Additional $0 FVWM Configuration read from $[FVWM_USERDIR]/$0.fvwmlocal
 + I InfoStoreRemove readlocal
 
 # Safe environment variable appender. Used for LD_PRELOAD for example
@@ -248,7 +266,7 @@ AddToFunc StartFunction
 + I f_FvwmVersionCheck
 
 # FVWM InitFunction: just echo the fact and wait for configuration from
-# Init.conf which will append to it, then f_SplashQuit will be called
+# Init.fvwmconf which will append to it, then f_SplashQuit will be called
 # below at the end to append again to InitFunction
 DestroyFunc InitFunction
 AddToFunc InitFunction

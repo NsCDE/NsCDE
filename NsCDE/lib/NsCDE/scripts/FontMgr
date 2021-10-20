@@ -1430,7 +1430,7 @@ Widget 26
                Do {Schedule 300 Exec exec echo 'InfoStoreAdd font.monospaced.bold.large "} $FontMonoBoldLargeStr {"' >> '} $UserFontsetFile {'}
    
                # Link configuration to the new fontset
-               Do {Schedule 340 Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/Font-$[NSCDE_FONT_DPI]dpi.conf"}
+               Do {Schedule 340 Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/Font-$[NSCDE_FONT_DPI]dpi.fvwmgen"}
    
                # Do widget and script integrations and move to finish
                SendSignal 26 3
@@ -1441,7 +1441,7 @@ Widget 26
       Begin
             # 26 2 - called when selecting existing fontset
             Set $UserFontsetFile = $FontsetPath
-            Do {Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/Font-$[NSCDE_FONT_DPI]dpi.conf"}
+            Do {Exec exec ln -sf "} $UserFontsetFile {" "$[FVWM_USERDIR]/Font-$[NSCDE_FONT_DPI]dpi.fvwmgen"}
             SendSignal 26 3
       End
       # Sleeps in integrations are set to allow asyncronous "Do" to write fontset file to the end

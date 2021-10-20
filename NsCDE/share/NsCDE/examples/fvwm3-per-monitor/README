@@ -7,7 +7,7 @@ probably be removed in the future.
 Preliminary FVWM3 DesktopConfiguration per-monitor support for NsCDE
 
 Warning: this is "technology preview" which is overriding system FvwmBacker
-configuration in Backer.conf with the version which uses a kludge
+configuration in Backer.fvwmconf with the version which uses a kludge
 shell script "nitrowrapper" which should be located in the user's
 $FVWM_USERDIR/libexec/ and external background settet "nitrogen" to
 translate RandR monitor names into format expected by the nitrogen(1)
@@ -20,7 +20,7 @@ Instructions:
 
 - Install nitrogen (yum apt pacman pkg whatever ...)
 
-- Copy Backer.conf into your ~/.NsCDE/
+- Copy Backer.fvwmconf into your ~/.NsCDE/
 
 - Copy nitrowrapper into your ~/.NsCDE/libexec/
 
@@ -35,7 +35,7 @@ Instructions:
 
   line in your ~/.NsCDE/NsCDE.conf
 
-- At the beginning of InitFuncation in your ~/.NsCDE/Init.conf put
+- At the beginning of InitFuncation in your ~/.NsCDE/Init.fvwmconf put
 
   + I Exec exec nitrogen --set-tiled $[HOME]/.NsCDE/backer/Desk1-*
 
@@ -50,7 +50,7 @@ Caveats:
 
 - Setter nitrogen does not have rich error checking in it. Therefore,
   it can core dump occasionally. For example when adding or removing
-  monitors if it is called early from ~/.NsCDE/Backer.conf and
+  monitors if it is called early from ~/.NsCDE/Backer.fvwmconf and
   it's wrapper, but since this is not long running process (daemon)
   it is mostly not noticable
 

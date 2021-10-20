@@ -298,7 +298,7 @@ function Xresources
    fi
 }
 
-# Regenerate user's Colorset.conf
+# Regenerate user's Colorset.fvwmgen
 function FvwmColorsets
 {
    if ((WsmVariant == 1)); then
@@ -311,12 +311,12 @@ function FvwmColorsets
       if (($FpVariant == 5)); then
          ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} $WsmArg -n $Ncolors \
-          -f > ${FVWM_USERDIR}/Colorset.conf
+          -f > ${FVWM_USERDIR}/Colorset.fvwmgen
       fi
       if (($FpVariant == 8)); then
          ${NSCDE_TOOLDIR}/palette_colorgen \
           -p ${PaletteNamePath} -8 $WsmArg -n $Ncolors \
-          -f > ${FVWM_USERDIR}/Colorset.conf
+          -f > ${FVWM_USERDIR}/Colorset.fvwmgen
       fi
    else
       mkdir -p ${FVWM_USERDIR}/tmp || exit 1
@@ -345,7 +345,7 @@ function Backdrops
    mkdir -p ${FVWM_USERDIR}/backdrops || exit 1
 
    # Initial
-   if [ ! -s "${FVWM_USERDIR}/Backdrops.conf" ]; then
+   if [ ! -s "${FVWM_USERDIR}/Backdrops.fvwmgen" ]; then
       mkdir -p "${FVWM_USERDIR}/tmp"
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec echo $[infostore.desknum] > "$[FVWM_USERDIR]/tmp/_ndesks"'
       sync
@@ -353,12 +353,12 @@ function Backdrops
       DeskNo=$(<"${FVWM_USERDIR}/tmp/_ndesks")
       rm "${FVWM_USERDIR}/tmp/_ndesks"
       mkdir -p "${FVWM_USERDIR}/backer"
-      > "${FVWM_USERDIR}/Backdrops.conf"
+      > "${FVWM_USERDIR}/Backdrops.fvwmgen"
       while (($DeskNo != 0))
       do
-         egrep "^Colorset 3${DeskNo}" "${NSCDE_DATADIR}/fvwm/Backdrops.conf" | \
+         egrep "^Colorset 3${DeskNo}" "${NSCDE_DATADIR}/fvwm/Backdrops.fvwmconf" | \
          sed 's/\$\[NSCDE_DATADIR\]\/defaults\/backer/\$\[FVWM_USERDIR\]\/backer/g' \
-          >> "${FVWM_USERDIR}/Backdrops.conf"
+          >> "${FVWM_USERDIR}/Backdrops.fvwmgen"
          cp -f ${NSCDE_DATADIR}/defaults/backer/Desk${DeskNo}-*pm "${FVWM_USERDIR}/backer/"
          ((DeskNo = DeskNo - 1))
       done
@@ -366,8 +366,8 @@ function Backdrops
 
    # Desks: 31 32 33 34 35 36 37 38
    # Variants: 3, 5, 6, 7, 3, 5, 6, 7
-   if [ -s "${FVWM_USERDIR}/Backdrops.conf" ]; then
-      egrep '^Colorset 3(1|2|3|4|5|6|7|8) TiledPixmap \$\[FVWM_USERDIR\]\/' ${FVWM_USERDIR}/Backdrops.conf | \
+   if [ -s "${FVWM_USERDIR}/Backdrops.fvwmgen" ]; then
+      egrep '^Colorset 3(1|2|3|4|5|6|7|8) TiledPixmap \$\[FVWM_USERDIR\]\/' ${FVWM_USERDIR}/Backdrops.fvwmgen | \
        sort -k2 -n | sed 's/\.pm$//g' | while IFS=" " read csetmark deskcset pixmark backdrop
       do
           basebackdrop="${backdrop##*/}"
@@ -417,7 +417,7 @@ function Backdrops
 # -n returns palette name by value number from FvwmScript List widget
 # -N opposite of -n
 # -f Generates dynamic icon with all colors from the palette in ColorMgr
-# -F Generates Fvwm Colorset definitions in user's Colorset.conf
+# -F Generates Fvwm Colorset definitions in user's Colorset.fvwmgen
 # -P Regenerates in user's icon/NsCDE dir bits and pieces which are part of fvwm programs
 # -b Syncronizes existing backdrops with new palette color sheme
 # -X Syncronizes X resources file with new palette color sheme

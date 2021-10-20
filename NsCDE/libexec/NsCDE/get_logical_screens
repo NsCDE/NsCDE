@@ -186,7 +186,15 @@ if [ "x${check_fvwm3}" == "x1" ] ; then
 
    # Provide info for complex FVWM3 non-global mode background setter based
    # on ImageMagick conver(1).
-   if [ -r "${FVWM_USERDIR}/Backdrops.conf" ]; then
+   if [ -r "${FVWM_USERDIR}/Backdrops.fvwmconf" ]; then
+      UserBackdropsFile="${FVWM_USERDIR}/Backdrops.fvwmconf"
+   elif [ -r "${FVWM_USERDIR}/Backdrops.fvwmgen" ]; then
+      UserBackdropsFile="${FVWM_USERDIR}/Backdrops.fvwmgen"
+   else
+      UserBackdropsFile="${FVWM_DATADIR}/Backdrops.fvwmconf"
+   fi
+
+   if [ -r "$UserBackdropsFile" ]; then
       # o1 = Colorset, o2 = CS number, etc ...
       while read o1 o2 o3 o4 o5 o6
       do
@@ -205,7 +213,7 @@ if [ "x${check_fvwm3}" == "x1" ] ; then
             echo "InfoStoreAdd fvwmdesk.${extract_desk}.back ${o4##*/}"
             echo "InfoStoreAdd fvwmdesk.${extract_desk}.backinfo TILED_NULL"
          fi
-      done < "${FVWM_USERDIR}/Backdrops.conf"
+      done < "$UserBackdropsFile"
    fi
 fi
 

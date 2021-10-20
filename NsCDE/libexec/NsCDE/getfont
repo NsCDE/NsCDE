@@ -46,9 +46,12 @@ function GetFont
    Defaults
 
    if [ "x$FnFile" == "x" ]; then
-      sysfncffile="${NSCDE_DATADIR}/fvwm/Font-${NSCDE_FONT_DPI}dpi.conf"
-      if [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.conf" ]; then
-         fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.conf"
+      sysfncffile="${NSCDE_DATADIR}/fvwm/Font-${NSCDE_FONT_DPI}dpi.fvwmconf"
+      if [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmconf" ]; then
+         fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmconf"
+         avoiddoublegrep=0
+      elif [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmgen" ]; then
+         fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmgen"
          avoiddoublegrep=0
       else
          fncnffile="$sysfncffile"
