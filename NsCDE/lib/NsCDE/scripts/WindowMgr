@@ -15,10 +15,10 @@ Begin
    # Select Window Behavior Tab for a start
    SendSignal 4 1
 
-   Set $DefFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 10.5} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 10.5} 1 -1)
    ChangeFont 4 $DefFont
 
-   Set $LabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 5 $LabelFont
    ChangeFont 7 $LabelFont
    ChangeFont 8 $LabelFont
@@ -54,7 +54,7 @@ Begin
    ChangeFont 49 $LabelFont
    ChangeFont 51 $LabelFont
 
-   Set $HscFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $HscFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 18 $HscFont
    ChangeFont 20 $HscFont
    ChangeFont 28 $HscFont
@@ -68,13 +68,13 @@ Begin
    ChangeFont 50 $HscFont
    ChangeFont 52 $HscFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 2 $BtnFont
    ChangeFont 122 $BtnFont
    ChangeFont 123 $BtnFont
    ChangeFont 124 $BtnFont
 
-   Set $SectionNameFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t bold -s medium -Z 10.5} 1 -1)
+   Set $SectionNameFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t bold -s medium -Z 10.5} 1 -1)
    ChangeFont 3 $SectionNameFont
 
    Set $ConfigurationFile = {$FVWM_USERDIR/NsCDE.conf}
@@ -329,7 +329,7 @@ Widget 2
          End
 
          Set $IconSizeCheckCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*IconSize[[:space:]]+[1-9].*[[:space:]]+[1-9].*,?' "}
-             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLDIR/ised -c 's/\(.*\) IconSize\+ \(.*\)/\2/g' -o -f -}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLSDIR/ised -c 's/\(.*\) IconSize\+ \(.*\)/\2/g' -o -f -}
          Set $IconSizeCheckDefault = (GetOutput $IconSizeCheckCmd 1 1)
          Set $IconSizeCheckMax = (GetOutput $IconSizeCheckCmd 1 3)
          If $IconSizeCheckDefault <> {} Then
@@ -433,7 +433,7 @@ Widget 2
          End
 
          Set $PageEdgeMoveResistanceCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*EdgeMoveResistance[[:space:]]+[1-9].*,?' "}
-             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLDIR/ised -c 's/\(.*\) EdgeMoveResistance\+ \(.*\)/\2/g;s/,//g' -o -f -}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLSDIR/ised -c 's/\(.*\) EdgeMoveResistance\+ \(.*\)/\2/g;s/,//g' -o -f -}
          Set $PageEdgeMoveResistance = (GetOutput $PageEdgeMoveResistanceCmd 1 1)
          If $PageEdgeMoveResistance <> {} Then
          Begin
@@ -445,7 +445,7 @@ Widget 2
          End
 
          Set $PageEdgeMoveDelayCmd = {egrep '.*Style[[:space:]]+\*[[:space:]]+.*EdgeMoveDelay[[:space:]]+[1-9].*,?' "}
-             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLDIR/ised -c 's/\(.*\) EdgeMoveDelay\+ \(.*\)/\2/g;s/,//g' -o -f -}
+             $ConfigurationFile {" | egrep -v '^([[:space:]]+)?#' | tail -1 | $NSCDE_TOOLSDIR/ised -c 's/\(.*\) EdgeMoveDelay\+ \(.*\)/\2/g;s/,//g' -o -f -}
          Set $PageEdgeMoveDelay = (GetOutput $PageEdgeMoveDelayCmd 1 1)
          If $PageEdgeMoveDelay <> {} Then
          Begin
@@ -1848,7 +1848,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $FocusPolicyCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(SloppyFocus\|ClickToFocus\)/\1MouseFocus/g' -f "} $ConfigurationFile {"}
+                  Set $FocusPolicyCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(SloppyFocus\|ClickToFocus\)/\1MouseFocus/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 8) == 1 Then
@@ -1859,7 +1859,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $FocusPolicyCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|ClickToFocus\)/\1SloppyFocus/g' -f "} $ConfigurationFile {"}
+                  Set $FocusPolicyCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|ClickToFocus\)/\1SloppyFocus/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 9) == 1 Then
@@ -1870,7 +1870,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $FocusPolicyCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|SloppyFocus\)/\1ClickToFocus/g' -f "} $ConfigurationFile {"}
+                  Set $FocusPolicyCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)\(MouseFocus\|SloppyFocus\)/\1ClickToFocus/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $FocusPolicyDo = (GetOutput $FocusPolicyCmd 1 -1)
@@ -1888,7 +1888,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -1899,7 +1899,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+                  Set $RaiseWindowWhenMadeActiveCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+autoraisefocus[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $RaiseWindowWhenMadeActiveDo = (GetOutput $RaiseWindowWhenMadeActiveCmd 1 -1)
@@ -1917,7 +1917,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)RaiseTransient/\1DontRaiseTransient/g' -f "} $ConfigurationFile {"}
+                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)RaiseTransient/\1DontRaiseTransient/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -1929,7 +1929,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontRaiseTransient/\1RaiseTransient/g' -f "} $ConfigurationFile {"}
+                  Set $AllowPrimaryWindowsOnTopCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontRaiseTransient/\1RaiseTransient/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $AllowPrimaryWindowsOnTopDo = (GetOutput $AllowPrimaryWindowsOnTopCmd 1 -1)
@@ -1947,7 +1947,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontLowerTransient/\1LowerTransient/g' -f "} $ConfigurationFile {"}
+                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontLowerTransient/\1LowerTransient/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -1958,7 +1958,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)LowerTransient/\1DontLowerTransient/g' -f "} $ConfigurationFile {"}
+                  Set $LowerTransientWithPrimaryCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)LowerTransient/\1DontLowerTransient/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $LowerTransientWithPrimaryDo = (GetOutput $LowerTransientWithPrimaryCmd 1 -1)
@@ -1976,7 +1976,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $StartTransParentCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontStackTransientParent/\1StackTransientParent/g' -f "} $ConfigurationFile {"}
+                  Set $StartTransParentCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)DontStackTransientParent/\1StackTransientParent/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -1987,7 +1987,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $StartTransParentCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)StackTransientParent/\1DontStackTransientParent/g' -f "} $ConfigurationFile {"}
+                  Set $StartTransParentCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?Style[[:space:]]\*[[:space:]].*\)StackTransientParent/\1DontStackTransientParent/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $StartTransParentDo = (GetOutput $StartTransParentCmd 1 -1)
@@ -2005,7 +2005,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $ShowContentsDuringMoveCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\1100/g' -f "} $ConfigurationFile {"}
+                  Set $ShowContentsDuringMoveCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\1100/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -2016,7 +2016,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $ShowContentsDuringMoveCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\10/g' -f "} $ConfigurationFile {"}
+                  Set $ShowContentsDuringMoveCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?OpaqueMoveSize[[:space:]]\+\)[0-9].*/\10/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $ShowContentsDuringMoveDo = (GetOutput $ShowContentsDuringMoveCmd 1 -1)
@@ -2032,7 +2032,7 @@ Widget 122
             End
             Else
             Begin
-               Set $RaiseWinTimeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+afrmilisecs[[:space:]]\+\)[0-9].*/\1} (GetValue 18) {/g' -f "} $ConfigurationFile {"}
+               Set $RaiseWinTimeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+afrmilisecs[[:space:]]\+\)[0-9].*/\1} (GetValue 18) {/g' -f "} $ConfigurationFile {"}
             End
             Set $RaiseWinTimeDo = (GetOutput $RaiseWinTimeCmd 1 -1)
          End
@@ -2047,7 +2047,7 @@ Widget 122
             End
             Else
             Begin
-               Set $ManualWinMoveThresholdCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?MoveThreshold[[:space:]]\+\)[0-9].*/\1} (GetValue 20) {/g' -f "} $ConfigurationFile {"}
+               Set $ManualWinMoveThresholdCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?MoveThreshold[[:space:]]\+\)[0-9].*/\1} (GetValue 20) {/g' -f "} $ConfigurationFile {"}
             End
             Set $ManualWinMoveThresholdDo = (GetOutput $ManualWinMoveThresholdCmd 1 -1)
          End
@@ -2066,7 +2066,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $IconPlacementChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)0/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
+                  Set $IconPlacementChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)0/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -2077,7 +2077,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $IconPlacementChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)1/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
+                  Set $IconPlacementChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+iconbox[[:space:]]\+\)1/\1} (GetValue 21) {/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $IconPlacementChangeDo = (GetOutput $IconPlacementChangeCmd 1 -1)
@@ -2097,7 +2097,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 1 -1 -4, IconGrid 4 6, IconFill bottom left/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 1 -1 -4, IconGrid 4 6, IconFill bottom left/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 24) == 1 Then
@@ -2108,7 +2108,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 4 -1 -1, IconGrid 4 6, IconFill top left/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 2 4 -1 -1, IconGrid 4 6, IconFill top left/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 25) == 1 Then
@@ -2119,7 +2119,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 1 -2 -4, IconGrid 4 6, IconFill bottom right/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 1 -2 -4, IconGrid 4 6, IconFill bottom right/g' -f "} $ConfigurationFile {"}
                End
             End
             If (GetValue 26) == 1 Then
@@ -2130,7 +2130,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 4 -2 -1, IconGrid 4 6, IconFill top right/g' -f "} $ConfigurationFile {"}
+                  Set $WorkspaceIconsPlacementCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\([[:space:]]\+\)\?Style[[:space:]]\+\*[[:space:]]\+\(,[[:space:]]\+\)\?.*IconBox\([[:space:]]\+screen[[:space:]]\+.\)\?\)\([[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*[[:space:]]\+.*\(,[[:space:]]\+IconGrid [[digit]]\+ [[:digit:]]\+\)\?\),\([[:space:]]\+IconFill[[:space:]]\+\)\(bottom\|top\)[[:space:]]\+\(left\|right\)/\1 1 4 -2 -1, IconGrid 4 6, IconFill top right/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $WorkspaceIconsPlacementDo = (GetOutput $WorkspaceIconsPlacementCmd 1 -1)
@@ -2152,7 +2152,7 @@ Widget 122
             Else
             Begin
                # Disgusting
-               Set $DefaultIconSizeCmd = {$NSCDE_TOOLDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
+               Set $DefaultIconSizeCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
             End
             Set $DefaultIconSizeDo = (GetOutput $DefaultIconSizeCmd 1 -1)
          End
@@ -2173,7 +2173,7 @@ Widget 122
             Else
             Begin
                # Disgusting
-               Set $MaxIconSizeCmd = {$NSCDE_TOOLDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
+               Set $MaxIconSizeCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(IconSize[[:space:]]\+\)\([[:digit:]]\+[[:space:]]\+[[:digit:]]\+\)\([[:space:]]\+[[:digit:]]\+[[:space:]]\+[[:digit:]]\+\([[:space:]]\+\?\)\)\?\(,\|$\)/\1\2\3\4} (GetValue 28) { } (GetValue 28) { } (GetValue 30) { } (GetValue 30) {\7\8/g' -f "} $ConfigurationFile {"}
             End
             Set $MaxIconSizeDo = (GetOutput $MaxIconSizeCmd 1 -1)
          End
@@ -2192,7 +2192,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -2203,7 +2203,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+                  Set $RaiseFPOnPageChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageraisefp[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $RaiseFPOnPageChangeDo = (GetOutput $RaiseFPOnPageChangeCmd 1 -1)
@@ -2221,7 +2221,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
+                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)0/\11/g' -f "} $ConfigurationFile {"}
                End
             End
             Else
@@ -2232,7 +2232,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
+                  Set $PagerPreviewOnPageChangeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pageshowrootpager[[:space:]]\+\)1/\10/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $PagerPreviewOnPageChangeDo = (GetOutput $PagerPreviewOnPageChangeCmd 1 -1)
@@ -2253,7 +2253,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(1\|2\)/\10/g' -f "} $ConfigurationFile {"}
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(1\|2\)/\10/g' -f "} $ConfigurationFile {"}
                End
             End
 
@@ -2265,7 +2265,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|2\)/\11/g' -f "} $ConfigurationFile {"}
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|2\)/\11/g' -f "} $ConfigurationFile {"}
                End
             End
 
@@ -2277,7 +2277,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|1\)/\12/g' -f "} $ConfigurationFile {"}
+                  Set $PageChangeOnScreenEdgeCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeThickness[[:space:]]\+\)\(0\|1\)/\12/g' -f "} $ConfigurationFile {"}
                End
             End
             Set $PageChangeOnScreenEdgeDo = (GetOutput $PageChangeOnScreenEdgeCmd 1 -1)
@@ -2293,7 +2293,7 @@ Widget 122
             End
             Else
             Begin
-               Set $PageEdgeResistanceCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeResistance[[:space:]]\+\)[[:digit:]]\+/\1} (GetValue 37) {/g' -f "} $ConfigurationFile {"}
+               Set $PageEdgeResistanceCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?EdgeResistance[[:space:]]\+\)[[:digit:]]\+/\1} (GetValue 37) {/g' -f "} $ConfigurationFile {"}
             End
             Set $PageEdgeResistanceDo = (GetOutput $PageEdgeResistanceCmd 1 -1)
          End
@@ -2308,7 +2308,7 @@ Widget 122
             End
             Else
             Begin
-               Set $EdgeWindowMoveResistanceCmd = {$NSCDE_TOOLDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveResistance[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 39) {\6\7/g' -f "} $ConfigurationFile {"}
+               Set $EdgeWindowMoveResistanceCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveResistance[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 39) {\6\7/g' -f "} $ConfigurationFile {"}
             End
             Set $EdgeWindowMoveResistanceDo = (GetOutput $EdgeWindowMoveResistanceCmd 1 -1)
          End
@@ -2323,7 +2323,7 @@ Widget 122
             End
             Else
             Begin
-               Set $EdgeWindowMoveDelayCmd = {$NSCDE_TOOLDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveDelay[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 41) {\6\7/g' -f "} $ConfigurationFile {"}
+               Set $EdgeWindowMoveDelayCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\([[:space:]\+]\)\?\(Style[[:space:]]\+\*[[:space:]]\+\)\(.*\)\(EdgeMoveDelay[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)\(,\|$\)/\1\2\3\4} (GetValue 41) {\6\7/g' -f "} $ConfigurationFile {"}
             End
             Set $EdgeWindowMoveDelayDo = (GetOutput $EdgeWindowMoveDelayCmd 1 -1)
          End
@@ -2357,7 +2357,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $AnimateWindowIconificationCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1None/g' -f "} $AnimateFile {"}
+                  Set $AnimateWindowIconificationCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1None/g' -f "} $AnimateFile {"}
                End
             End
             Else
@@ -2368,7 +2368,7 @@ Widget 122
                End
                Else
                Begin
-                  Set $AnimateWindowIconificationCmd = {$NSCDE_TOOLDIR/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1} $AnimEffect {/g' -f "} $AnimateFile {"}
+                  Set $AnimateWindowIconificationCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Effect[[:space:]]\+\)\(.*\)/\1} $AnimEffect {/g' -f "} $AnimateFile {"}
                End
             End
             Set $AnimateWindowIconificationDo = (GetOutput $AnimateWindowIconificationCmd 1 -1)
@@ -2384,7 +2384,7 @@ Widget 122
             End
             Else
             Begin
-               Set $AnimationFrameDelayCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Delay[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 46) {/g' -f "} $AnimateFile {"}
+               Set $AnimationFrameDelayCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Delay[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 46) {/g' -f "} $AnimateFile {"}
             End
             Set $AnimationFrameDelayDo = (GetOutput $AnimationFrameDelayCmd 1 -1)
          End
@@ -2399,7 +2399,7 @@ Widget 122
             End
             Else
             Begin
-               Set $AnimationRevolutionTwistCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Twist[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 48) {/g' -f "} $AnimateFile {"}
+               Set $AnimationRevolutionTwistCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Twist[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 48) {/g' -f "} $AnimateFile {"}
             End
             Set $AnimationRevolutionTwistDo = (GetOutput $AnimationRevolutionTwistCmd 1 -1)
          End
@@ -2414,7 +2414,7 @@ Widget 122
             End
             Else
             Begin
-               Set $AnimationOutlineWidthCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Width[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 50) {/g' -f "} $AnimateFile {"}
+               Set $AnimationOutlineWidthCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Width[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 50) {/g' -f "} $AnimateFile {"}
             End
             Set $AnimationOutlineWidthDo = (GetOutput $AnimationOutlineWidthCmd 1 -1)
          End
@@ -2429,7 +2429,7 @@ Widget 122
             End
             Else
             Begin
-               Set $AnimationIterationsCmd = {$NSCDE_TOOLDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Iterations[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 52) {/g' -f "} $AnimateFile {"}
+               Set $AnimationIterationsCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(\(^\([[:space:]]\+\)\?\*FvwmAnimate:[[:space:]]\+Iterations[[:space:]]\+\)\)\([[:digit:]]\+\)\([[:space:]]\+\)\?/\1} (GetValue 52) {/g' -f "} $AnimateFile {"}
             End
             Set $AnimationIterationsDo = (GetOutput $AnimationIterationsCmd 1 -1)
          End

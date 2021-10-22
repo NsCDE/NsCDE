@@ -42,13 +42,13 @@ if [ -d "$NSCDE_DATADIR/config_templates/Gkrellm" ] && $(whence -q gkrellm); the
 
    for pm in *.xpm
    do
-      $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
+      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
        -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
    done
 
    for pm in timer/*.xpm net/*.xpm host/*.xpm uptime/*.xpm clock/*.xpm cal/*.xpm mem/*.xpm sensors/*.xpm apm/*.xpm
    do
-      $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
+      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
        -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
    done
 
@@ -86,7 +86,7 @@ if (($? == 0)); then
    echo dconf write /org/mate/terminal/profiles/default/bold-color-same-as-fg true >> $TEMP1
    echo dconf write /org/mate/terminal/profiles/default/use-theme-colors false >> $TEMP1
    TEMP2=$(mktemp -t "XXXXXXXXX.dconfgen2.XXXXXXXX")
-   $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
+   $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
     -i $TEMP1 -c > $TEMP2
    chmod 0755 $TEMP2
    sh $TEMP2
@@ -132,7 +132,7 @@ function do_firefox
       fi
 
       # Colorgen
-      $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
+      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
        -i $NSCDE_DATADIR/integration/firefox/nscdeColordefs.tmpl \
        -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
       ln -sf  $NSCDE_DATADIR/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeContent.css \
@@ -196,7 +196,7 @@ function do_thunderbird
       fi
 
       # Colorgen
-      $NSCDE_TOOLDIR/palette_colorgen -p $PPATH -n $NCOLORS \
+      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
        -i $NSCDE_DATADIR/integration/thunderbird/nscdeColordefs.tmpl \
        -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
 

@@ -63,11 +63,11 @@ Begin
    # Default Front Panel Variant
    Do {SendToModule ColorMgr SendString 20 3 $[infostore.wsmcolored]}
 
-   Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
+   Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
    ChangeTitle 3 $Palettes
 
    # For Keybindings not to go beyond min and max
-   Set $ListTotal = (GetOutput {$NSCDE_TOOLDIR/colormgr -p | tr '|' '\n' | wc -l} 1 1)
+   Set $ListTotal = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p | tr '|' '\n' | wc -l} 1 1)
 
    Set $Performed = 0
    Set $PreviewParam = {}
@@ -76,7 +76,7 @@ Begin
    Set $SelectedColorset = 0
 
    Set $Current = (GetOutput {echo $NSCDE_PALETTE} 1 -1)
-   Set $CurrentPaletteValueCmd = {$NSCDE_TOOLDIR/colormgr -N "} $Current {.dp"}
+   Set $CurrentPaletteValueCmd = {$NSCDE_TOOLSDIR/colormgr -N "} $Current {.dp"}
    Set $CurrentPaletteValue = (GetOutput $CurrentPaletteValueCmd 1 -1)
    If $CurrentPaletteValue <> {} Then
    Begin
@@ -95,14 +95,14 @@ Begin
    Key Help A 34 1 {KeyHelp}
 
    # Set different font for some elements
-   Set $DefaultFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 1 $DefaultFont
    ChangeFont 7 $DefaultFont
    ChangeFont 19 $DefaultFont
    ChangeFont 20 $DefaultFont
    ChangeFont 21 $DefaultFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
    ChangeFont 31 $BtnFont
    ChangeFont 32 $BtnFont
    ChangeFont 33 $BtnFont
@@ -111,11 +111,11 @@ Begin
    ChangeFont 5 $BtnFont
    ChangeFont 6 $BtnFont
 
-   Set $ListFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $ListFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 3 $ListFont
 
-   Set $SmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 11} 1 -1)
-   Set $ExtraSmallFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 10.25} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11} 1 -1)
+   Set $ExtraSmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.25} 1 -1)
    ChangeFont 23 $SmallFont
    ChangeFont 24 $SmallFont
    ChangeFont 25 $SmallFont
@@ -225,7 +225,7 @@ Widget 3
       End
       1 :
       Begin
-         Set $PalNumToNameCmd =  {$NSCDE_TOOLDIR/colormgr -n } (GetValue 3)
+         Set $PalNumToNameCmd =  {$NSCDE_TOOLSDIR/colormgr -n } (GetValue 3)
          Set $PalNumToName = { } (GetOutput $PalNumToNameCmd 1 -1)
 
          # Calculate chars in the current palette name
@@ -253,11 +253,11 @@ Widget 3
          ChangeTitle 7 $PalNumToName
 
          # Figure out Palette Path
-         Set $PalettePathCmd = {$NSCDE_TOOLDIR/colormgr -e -g } $PalNumToName
+         Set $PalettePathCmd = {$NSCDE_TOOLSDIR/colormgr -e -g } $PalNumToName
          Set $PalettePath = (GetOutput $PalettePathCmd 1 -1)
 
          # Colorsets 61 - 68 are for Color Style Manager preview only
-         Do {PipeRead "$[NSCDE_TOOLDIR]/palette_colorgen -n } $Ncolors { -p } $PalettePath { -C}
+         Do {PipeRead "$[NSCDE_TOOLSDIR]/palette_colorgen -n } $Ncolors { -p } $PalettePath { -C}
 
          ChangeColorset 10 61
          ChangeColorset 11 65
@@ -268,7 +268,7 @@ Widget 3
          ChangeColorset 16 64
          ChangeColorset 17 68
 
-         Set $FullColorCmd = {$NSCDE_TOOLDIR/colormgr -c } $Ncolors { -f } $PalettePath
+         Set $FullColorCmd = {$NSCDE_TOOLSDIR/colormgr -c } $Ncolors { -f } $PalettePath
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
          ChangeIcon 18 $FullColor
       End
@@ -395,12 +395,12 @@ Widget 5
       End
       1 :
       Begin
-         Set $CheckPaletteFileCmd = {$NSCDE_TOOLDIR/colormgr -C } (LastString)
+         Set $CheckPaletteFileCmd = {$NSCDE_TOOLSDIR/colormgr -C } (LastString)
          Set $CheckPaletteFile = (GetOutput $CheckPaletteFileCmd 1 -1)
          If $CheckPaletteFile == 8 Then
          Begin
             Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/palettes/}
-            Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
+            Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
             ChangeTitle 3 $Palettes
          End
          Else
@@ -422,9 +422,9 @@ Widget 6
       Case message of
       SingleClic :
       Begin
-         Set $DelPalNumToNameCmd =  {$NSCDE_TOOLDIR/colormgr -n } (GetValue 3)
+         Set $DelPalNumToNameCmd =  {$NSCDE_TOOLSDIR/colormgr -n } (GetValue 3)
          Set $DelPalNumToName = (GetOutput $DelPalNumToNameCmd 1 -1)
-         Set $CheckDelPathCmd = {$NSCDE_TOOLDIR/colormgr -e -g } $DelPalNumToName
+         Set $CheckDelPathCmd = {$NSCDE_TOOLSDIR/colormgr -e -g } $DelPalNumToName
          Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
          Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Palette] } $DelPalNumToName {" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Palette]" "SendToModule ColorMgr SendString 6 1 confirmed"}
       End
@@ -440,7 +440,7 @@ Widget 6
             End
             Else
             Begin
-               Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
+               Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
                ChangeTitle 3 $Palettes
             End
          End
@@ -845,9 +845,9 @@ Widget 19
          Set $RightReorder = (GetOutput $RightReorderCmd 1 -1)
 
          # Refresh palettes list, select Custom.dp
-         Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
+         Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
          ChangeTitle 3 $Palettes
-         Set $CurrentModifiedPalette = (GetOutput {$NSCDE_TOOLDIR/colormgr -N "Custom.dp"} 1 1)
+         Set $CurrentModifiedPalette = (GetOutput {$NSCDE_TOOLSDIR/colormgr -N "Custom.dp"} 1 1)
          ChangeValue 3 $CurrentModifiedPalette
          SendSignal 3 1
       End
@@ -865,7 +865,7 @@ Widget 19
          If $INPUTMSG <> {Custom} Then
          Begin
             # Basic input sanity check
-            Set $INPUTMSGCmd = {echo '} $INPUTMSG {' | $NSCDE_TOOLDIR/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
+            Set $INPUTMSGCmd = {echo '} $INPUTMSG {' | $NSCDE_TOOLSDIR/ised -c 's/>\|<\|\/\|;\|:\|\[\|\]\|\\\|\$\|#\|%\|\&\|"\|\!\|\^\|\*\|(\|)\||\|?\| //g' -o -f -}
             Set $INPUTMSG = (GetOutput $INPUTMSGCmd 1 1)
             If $INPUTMSG == {} Then
             Begin
@@ -887,9 +887,9 @@ Widget 19
          End
 
          # Refresh palettes list, select new name
-         Set $Palettes = (GetOutput {$NSCDE_TOOLDIR/colormgr -p} 1 -1)
+         Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
          ChangeTitle 3 $Palettes
-         Set $CurrentModifiedPaletteCmd = {$NSCDE_TOOLDIR/colormgr -N "} $INPUTMSG {.dp"}
+         Set $CurrentModifiedPaletteCmd = {$NSCDE_TOOLSDIR/colormgr -N "} $INPUTMSG {.dp"}
          Set $CurrentModifiedPalette = (GetOutput $CurrentModifiedPaletteCmd 1 1)
          ChangeValue 3 $CurrentModifiedPalette
          SendSignal 3 1
@@ -1211,14 +1211,14 @@ Widget 32
             End
          End
 
-         Set $PerformPaletteChangeCmd = {$NSCDE_TOOLDIR/colormgr } $PreviewParam { } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
+         Set $PerformPaletteChangeCmd = {$NSCDE_TOOLSDIR/colormgr } $PreviewParam { } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
          Set $PerformPaletteChange = (GetOutput $PerformPaletteChangeCmd 2 -1)
-         Set $PerformProgBitsChangeCmd = {$NSCDE_TOOLDIR/colormgr } $PreviewParam { } $FpVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -P}
+         Set $PerformProgBitsChangeCmd = {$NSCDE_TOOLSDIR/colormgr } $PreviewParam { } $FpVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -P}
          Set $PerformProgBitsChange = (GetOutput $PerformProgBitsChangeCmd 1 -1)
 
          If (GetValue 24) == 1 Then
          Begin
-            Set $PerformXresourceChangeCmd = {$NSCDE_TOOLDIR/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -X}
+            Set $PerformXresourceChangeCmd = {$NSCDE_TOOLSDIR/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -X}
             Set $PerformXresourceChange = (GetOutput $PerformXresourceChangeCmd 2 -1)
 
             # Reload X resources immediately.
@@ -1231,7 +1231,7 @@ Widget 32
 
          If (GetValue 23) == 1 Then
          Begin
-            Set $PerformBackdropSyncCmd = {$NSCDE_TOOLDIR/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -b}
+            Set $PerformBackdropSyncCmd = {$NSCDE_TOOLSDIR/colormgr } $PreviewParam { -e -c } $Ncolors { -g } $PalNumToName { -b}
             # 1st and 2nd lines are pallete path/name and backdrop template, the rest is sorted in desk num order from 3-10 (8)
             Set $bpospreview = (Add $CurrDesk 2)
             Set $PerformBackdropSync = (GetOutput $PerformBackdropSyncCmd $bpospreview -1)
@@ -1254,36 +1254,36 @@ Widget 32
 
             If $GtkStr <> {00} Then
             Begin
-               Set $Foreground4Cmd = {$NSCDE_TOOLDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -l | egrep '^fg_color_4'}
+               Set $Foreground4Cmd = {$NSCDE_TOOLSDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -l | egrep '^fg_color_4'}
                Set $Foreground4 = (GetOutput $Foreground4Cmd 1 2)
             End
 
             If $GtkStr == {11} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { gtk2 gtk3}
+               Set $PerformGtkCmd = {$NSCDE_TOOLSDIR/themegen } $PalettePath { } $Ncolors { gtk2 gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                If $Foreground4 == {#ffffffffffff} Then
                Begin
-                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
-                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
+                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
                End
                If $Foreground4 == {#000000000000} Then
                Begin
-                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
-                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
+                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
                End
 
                Set $CheckGtkrc2_a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc2_a <> 0 Then
                Begin
-                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
                End
 
                Set $CheckGtkrc2_b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc2_b <> 0 Then
                Begin
-                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
                End
 
                Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
@@ -1295,72 +1295,72 @@ Widget 32
                Set $CheckGtkrc3a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc3a <> 0 Then
                Begin
-                  Set $DoGtkrc3a = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3a = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
                End
                Set $CheckGtkrc3b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc3b <> 0 Then
                Begin
-                  Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
                End
             End
 
             If $GtkStr == {10} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { gtk2 False}
+               Set $PerformGtkCmd = {$NSCDE_TOOLSDIR/themegen } $PalettePath { } $Ncolors { gtk2 False}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
-               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_TOOLDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
+               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
                If $DeintegrateGtk3Check_a == {NsCDE} Then
                Begin
-                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
+                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
                End
-               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_TOOLDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
+               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
                If $DeintegrateGtk3Check_b == {NsCDE} Then
                Begin
-                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
+                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
                End
-               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
+               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
 
                If $Foreground4 == {#ffffffffffff} Then
                Begin
-                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
+                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'} 1 -1)
                End
                If $Foreground4 == {#000000000000} Then
                Begin
-                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+                  Set $DoDark1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
                End
 
                Set $CheckGtkrc2_a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc2_a <> 0 Then
                Begin
-                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DoGtkrc2_a = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'} 1 -1)
                End
                Set $CheckGtkrc2_b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc2_b <> 0 Then
                Begin
-                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
+                  Set $DoGtkrc2_b = (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'} 1 -1)
                End
             End
 
             If $GtkStr == {01} Then
             Begin
-               Set $PerformGtkCmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { False gtk3}
+               Set $PerformGtkCmd = {$NSCDE_TOOLSDIR/themegen } $PalettePath { } $Ncolors { False gtk3}
                Set $PerformGtk = (GetOutput $PerformGtkCmd 1 -1)
 
                Set $DeintegrateGtk2a =
-                (GetOutput {$NSCDE_TOOLDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
                Set $DeintegrateGtk2b =
-                (GetOutput {$NSCDE_TOOLDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
                Set $DeintegrateGtk2c =
-                (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
 
                If $Foreground4 == {#ffffffffffff} Then
                Begin
-                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1} 1 -1)
                End
                If $Foreground4 == {#000000000000} Then
                Begin
-                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
+                  Set $DoDark2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 -1)
                End
 
                Set $CheckGtk3Exist = (GetOutput {ls -1d "$HOME/.config/gtk-3.0" > /dev/null 2>&1; echo $?} 1 -1)
@@ -1372,12 +1372,12 @@ Widget 32
                Set $CheckGtkrc3a = (GetOutput {egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc3a <> 0 Then
                Begin
-                  Set $DoGtkrc3a = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3a = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE} 1 -1)
                End
                Set $CheckGtkrc3b = (GetOutput {egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null ; echo $?} 1 -1)
                If $CheckGtkrc3b <> 0 Then
                Begin
-                  Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
+                  Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
                End
 
             End
@@ -1385,25 +1385,25 @@ Widget 32
             If $GtkStr == {00} Then
             Begin
                Set $DeintegrateGtk2a =
-                (GetOutput {$NSCDE_TOOLDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
                Set $DeintegrateGtk2b =
-                (GetOutput {$NSCDE_TOOLDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/ised -f "$HOME/.gtkrc-2.0" -c '/^\([[:space:]]\+\)\?gtk-icon-theme-name\([[:space:]]\+\)\?=\([[:space:]]\+\)\?"NsCDE".*/d' 2>/dev/null} 1 -1)
                Set $DeintegrateGtk2c =
-                (GetOutput {$NSCDE_TOOLDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
+                (GetOutput {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -r} 1 -1)
 
-               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_TOOLDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
+               Set $DeintegrateGtk3Check_a = (GetOutput {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name} 1 1)
                If $DeintegrateGtk3Check_a == {NsCDE} Then
                Begin
-                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
+                  Set $DeintegrateGtk3_a = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -r} 1 1)
                End
-               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_TOOLDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
+               Set $DeintegrateGtk3Check_b = (GetOutput {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name} 1 1)
                If $DeintegrateGtk3Check_b == {NsCDE} Then
                Begin
-                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
+                  Set $DeintegrateGtk3_b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -r} 1 1)
                End
-               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
+               Set $DeintegrateGtk3_c = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -r} 1 1)
 
-               Set $PerformGtk2Cmd = {$NSCDE_TOOLDIR/themegen } $PalettePath { } $Ncolors { False False}
+               Set $PerformGtk2Cmd = {$NSCDE_TOOLSDIR/themegen } $PalettePath { } $Ncolors { False False}
                Set $PerformGtk2 = (GetOutput $PerformGtk2Cmd 1 -1)
             End
 
@@ -1414,7 +1414,7 @@ Widget 32
                Begin
                   Set $MkDotConf = (GetOutput {mkdir -p "$HOME/.config"} 1 -1)
                End
-               Set $DoTroll = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'} 1 -1)
+               Set $DoTroll = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'} 1 -1)
             End
 
             If (GetValue 28) == 1 Then
@@ -1424,8 +1424,8 @@ Widget 32
                Begin
                   Set $MkDotConf = (GetOutput {mkdir -p "$HOME/.config/qt5ct"} 1 -1)
                End
-               Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2} 1 -1)
-               Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+               Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2} 1 -1)
+               Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
             End
 
             If (GetValue 29) == 1 Then
@@ -1439,14 +1439,14 @@ Widget 32
                Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
             End
 
-            Set $CheckUseXsettingsd = (GetOutput {$NSCDE_TOOLDIR/get_fvwm_infostore nscde_use_xsettingsd} 1 1)
+            Set $CheckUseXsettingsd = (GetOutput {$NSCDE_TOOLSDIR/get_fvwm_infostore nscde_use_xsettingsd} 1 1)
             If $CheckUseXsettingsd == 1 Then
             Begin
                Do {f_Xsettingsd stop}
                Set $CheckXstSetup = (GetOutput {egrep -q '^Net\/ThemeName[[:space:]]+"NsCDE"' $FVWM_USERDIR/Xsettingsd.conf; echo $?} 1 1)
                If $CheckXstSetup <> 0 Then
                Begin
-                  Set $SetXstEntry = (GetOutput {$NSCDE_TOOLDIR/ised -c 's/\(^Net\/ThemeName[[:space:]]\+\).*/\1"NsCDE"/g' -f $FVWM_USERDIR/Xsettingsd.conf} 1 -1)
+                  Set $SetXstEntry = (GetOutput {$NSCDE_TOOLSDIR/ised -c 's/\(^Net\/ThemeName[[:space:]]\+\).*/\1"NsCDE"/g' -f $FVWM_USERDIR/Xsettingsd.conf} 1 -1)
 	       End
                Do {Schedule 250 f_Xsettingsd start}
             End

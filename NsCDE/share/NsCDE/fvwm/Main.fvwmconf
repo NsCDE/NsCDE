@@ -13,7 +13,7 @@ Test (Init) Echo NsCDE: Starting initialization
 
 # Core variables for diverting paths and setting early parameters
 SetEnv NSCDE_ROOT /opt/NsCDE
-SetEnv NSCDE_TOOLDIR $[NSCDE_ROOT]/libexec/NsCDE
+SetEnv NSCDE_TOOLSDIR $[NSCDE_ROOT]/libexec/NsCDE
 SetEnv NSCDE_DATADIR $[NSCDE_ROOT]/share/NsCDE
 SetEnv NSCDE_LIBDIR $[NSCDE_ROOT]/lib/NsCDE
 SetEnv NSCDE_FVWM_VERSION_NUM $[version.num]
@@ -31,10 +31,10 @@ SetEnv SM_SAVE_DIR $[FVWM_USERDIR]/tmp
 # Test (!EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS $[NSCDE_ROOT]/share:/usr/share:/usr/local/share
 SetEnv XDG_MENU_PREFIX nscde-
 PipeRead 'echo SetEnv NSCDE_VERSION $($NSCDE_ROOT/bin/nscde -v)'
-PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLDIR/getdpi)"
-PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLDIR/getdpi fontdpi)'
+PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
+PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'
 Piperead 'echo "SetEnv NSCDE_OS $(uname -s)"'
-PipeRead $[NSCDE_TOOLDIR]/get_logical_screens
+PipeRead $[NSCDE_TOOLSDIR]/get_logical_screens
 
 # Cleanup all what may be hardcoded builtin
 DestroyStyle *
@@ -117,7 +117,7 @@ AddToFunc f_ReadCfg
 # This must be defined early - prior to NsCDE.conf reading.
 DestroyFunc f_VarAppend
 AddToFunc f_VarAppend
-+ I PipeRead "echo SetEnv $1 $($[NSCDE_TOOLDIR]/var_append $0 $1 $2)"
++ I PipeRead "echo SetEnv $1 $($[NSCDE_TOOLSDIR]/var_append $0 $1 $2)"
 
 # This needs to be called before FrontPanel which Swallows Workspace Manager
 DestroyFunc f_SetWSMConf
@@ -143,7 +143,7 @@ AddToFunc f_Splash
 + I Exec exec mkdir -p "$[FVWM_USERDIR]/tmp"
 + I Style "NsCDE-Splash" NoTitle, NoHandles, BorderWidth 0, Sticky, StaysOnTop, StartsOnScreen g, !Iconifiable, InitialMapCommand Raise
 + I Schedule Periodic 100 9001 Test (!Init) f_SplashQuit 8000
-+ I Exec exec $[NSCDE_TOOLDIR]/FvwmScripts/Splash $[vp.width] $[vp.height] > "$[FVWM_USERDIR]/tmp/NsCDE-Splash"
++ I Exec exec $[NSCDE_TOOLSDIR]/FvwmScripts/Splash $[vp.width] $[vp.height] > "$[FVWM_USERDIR]/tmp/NsCDE-Splash"
 + I Test (f "$[FVWM_USERDIR]/tmp/NsCDE-Splash") Schedule 10 ModuleSynchronous FvwmScript "$[FVWM_USERDIR]/tmp/NsCDE-Splash"
 + I Test (!f "$[FVWM_USERDIR]/tmp/NsCDE-Splash") Schedule 250 ModuleSynchronous FvwmScript "$[FVWM_USERDIR]/tmp/NsCDE-Splash"
 
@@ -216,7 +216,7 @@ AddToFunc f_ReadNormalConfig
 + I f_ReadCfg WspLocPager
 + I f_ReadCfg LocalPager
 + I f_ReadCfg Subpanels # Read Subpanels of the FrontPanel
-+ I PipeRead "$[NSCDE_TOOLDIR]/fpseticon pre" # Read this before f_ReadCfg FrontPanel
++ I PipeRead "$[NSCDE_TOOLSDIR]/fpseticon pre" # Read this before f_ReadCfg FrontPanel
 + I f_ReadCfg FrontPanel # Read Front Panel configuration
 + I f_ReadCfg Init # Init / Start - login function after non-session login
 + I f_ReadCfg FinishInit # Bottom falf of the InitFunction and SessionInitFunction
@@ -337,4 +337,4 @@ DefaultFont "$[infostore.font.variable.normal.medium]"
 
 # Workaround for some bug which prevents $[vp.height] to be read on time
 # during restart after screen resolution change or sls.
-Schedule 3000 PipeRead $[NSCDE_TOOLDIR]/get_logical_screens
+Schedule 3000 PipeRead $[NSCDE_TOOLSDIR]/get_logical_screens

@@ -239,7 +239,7 @@ function genxresourcedefs
          cppfvar=$(echo "$fvar" | sed 's/\./_/g' | tr '[a-z]' '[A-Z]' | sed 's/ $//g')
          cppfname=$(echo "$xftstr" | cut -d":" -f2)
          cppfstyle=$(echo "$xftstr" | cut -d":" -f4)
-         cppfsize=$(echo "$xftstr" | cut -d":" -f5 | $NSCDE_TOOLDIR/ised -c 's/size=\(.*\)/\1/g; s/\([[:digit:]]\+\)\.\([[:digit:]]\+\)/\1/g' -o -f -)
+         cppfsize=$(echo "$xftstr" | cut -d":" -f5 | $NSCDE_TOOLSDIR/ised -c 's/size=\(.*\)/\1/g; s/\([[:digit:]]\+\)\.\([[:digit:]]\+\)/\1/g' -o -f -)
          echo "#define ${cppfvar}_NAME" "$cppfname"
          echo "#define ${cppfvar}_STYLE" "$cppfstyle"
          echo "#define ${cppfvar}_SIZE" "$cppfsize"
@@ -259,7 +259,7 @@ function miscintegrations
    DunstFont=$(echo "$XftFontStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g')
    if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
       if [ -n $NewFont ]; then
-         $NSCDE_TOOLDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "$DunstFont"
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k font -v "$DunstFont"
       fi
    fi
 }

@@ -11,18 +11,18 @@ Colorset 22
 
 Init
 Begin
-   Set $DefFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $DefFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 4 $DefFont
    ChangeFont 7 $DefFont
    ChangeFont 9 $DefFont
    ChangeFont 6 $DefFont
 
-   Set $LabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 5 $LabelFont
    ChangeFont 8 $LabelFont
    ChangeFont 10 $LabelFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 1 $BtnFont
    ChangeFont 2 $BtnFont
    ChangeFont 3 $BtnFont
@@ -242,7 +242,7 @@ Widget 2
                WriteToFile $FILE {xset +dpms}
                If $XSCREENSAVERCONF <> {} Then
                Begin
-                  Set $EditXscOneCmd= {$NSCDE_TOOLDIR/ised -c 's/dpmsEnabled:.*/dpmsEnabled:	True/g' -f "} $XSCREENSAVERCONF {"}
+                  Set $EditXscOneCmd= {$NSCDE_TOOLSDIR/ised -c 's/dpmsEnabled:.*/dpmsEnabled:	True/g' -f "} $XSCREENSAVERCONF {"}
                   Set $EditXscOne = (GetOutput $EditXscOneCmd 1 -1)
                End
             End
@@ -252,7 +252,7 @@ Widget 2
                WriteToFile $FILE {xset -dpms}
                If $XSCREENSAVERCONF <> {} Then
                Begin
-                  Do {Exec $NSCDE_TOOLDIR/ised -c 's/dpmsEnabled:.*/dpmsEnabled:	False/g' -f "} $XSCREENSAVERCONF {"}
+                  Do {Exec $NSCDE_TOOLSDIR/ised -c 's/dpmsEnabled:.*/dpmsEnabled:	False/g' -f "} $XSCREENSAVERCONF {"}
                End
             End
 
@@ -272,11 +272,11 @@ Widget 2
                   SendSignal 2 1
                   Set $OffTime = $SecToHour {:} $SecToMin {:} $SecToSec
 
-                  Set $EditXscTwoCmd = {$NSCDE_TOOLDIR/ised -c 's/^dpmsStandby:.*/dpmsStandby:	} $StandbyTime {/g' -f "} $XSCREENSAVERCONF {"}
+                  Set $EditXscTwoCmd = {$NSCDE_TOOLSDIR/ised -c 's/^dpmsStandby:.*/dpmsStandby:	} $StandbyTime {/g' -f "} $XSCREENSAVERCONF {"}
                   Set $EditXscTwo = (GetOutput $EditXscTwoCmd 1 -1)
-                  Set $EditXscThreeCmd = {$NSCDE_TOOLDIR/ised -c 's/^dpmsSuspend:.*/dpmsSuspend:	} $SuspendTime {/g' -f "} $XSCREENSAVERCONF {"}
+                  Set $EditXscThreeCmd = {$NSCDE_TOOLSDIR/ised -c 's/^dpmsSuspend:.*/dpmsSuspend:	} $SuspendTime {/g' -f "} $XSCREENSAVERCONF {"}
                   Set $EditXscThree = (GetOutput $EditXscThreeCmd 1 -1)
-                  Set $EditXscFourCmd = {$NSCDE_TOOLDIR/ised -c 's/^dpmsOff:.*/dpmsOff:	} $OffTime {/g' -f "} $XSCREENSAVERCONF {"}
+                  Set $EditXscFourCmd = {$NSCDE_TOOLSDIR/ised -c 's/^dpmsOff:.*/dpmsOff:	} $OffTime {/g' -f "} $XSCREENSAVERCONF {"}
                   Set $EditXscFour = (GetOutput $EditXscFourCmd 1 -1)
                End
             End

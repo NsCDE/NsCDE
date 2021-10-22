@@ -77,7 +77,7 @@ function GetFont
 
    Catch2="${Catch/InfoStoreAdd font./}"
    Catch3="${Catch2#*\"}"
-   GetSize=$(echo "${Catch3/\"/}" | $NSCDE_TOOLDIR/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
+   GetSize=$(echo "${Catch3/\"/}" | $NSCDE_TOOLSDIR/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
    if (($PrettyName == 1)); then
       FontStruct=$(echo "${Catch3/\"/}" | awk -F: '{ $1=""; print $0 }' | sed 's/^ //g; s/size=//g')
    else
@@ -129,7 +129,7 @@ function GetFont
 
          if (($GetSize > $FnMaxSize)); then
             if (($PrintFnSize == 0)); then
-               echo "$FontStruct" | $NSCDE_TOOLDIR/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(\.[[:digit:]]\+\)\?\(.*\)\?/\1\2${FnMaxSize}\5/g" -o -f -
+               echo "$FontStruct" | $NSCDE_TOOLSDIR/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(\.[[:digit:]]\+\)\?\(.*\)\?/\1\2${FnMaxSize}\5/g" -o -f -
             else
                echo $FnMaxSize
             fi

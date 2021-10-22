@@ -26,7 +26,7 @@ function find_colors
       fi
 
       if [ "x$palfile" != "x" ]; then
-         $NSCDE_TOOLDIR/palette_colorgen \
+         $NSCDE_TOOLSDIR/palette_colorgen \
           -n ${NSCDE_PALETTE_NCOLORS} \
           -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp -sl | \
           egrep '(ts|bs)_color_3' | while IFS=" " read name value
@@ -51,8 +51,8 @@ function find_colors
 
 find_colors
 
-if [ -x ${NSCDE_TOOLDIR}/${NSCDE_OS}_${MARCH}/fpclock ]; then
-   exec ${NSCDE_TOOLDIR}/${NSCDE_OS}_${MARCH}/fpclock -H $bs_color_3 -S $ts_color_3 "$@"
+if [ -x ${NSCDE_TOOLSDIR}/${NSCDE_OS}_${MARCH}/fpclock ]; then
+   exec ${NSCDE_TOOLSDIR}/${NSCDE_OS}_${MARCH}/fpclock -H $bs_color_3 -S $ts_color_3 "$@"
 else
    pclock=$(whence -p pclock)
    if [ "x$pclock" != "x" ]; then

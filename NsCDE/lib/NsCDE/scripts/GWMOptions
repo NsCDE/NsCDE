@@ -11,8 +11,8 @@ Colorset 22
 
 Init
 Begin
-   Set $FontDefault = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
-   Set $FontHscroll = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s small -Z 9} 1 -1)
+   Set $FontDefault = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $FontHscroll = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 9} 1 -1)
    ChangeFont 1 $FontDefault
    ChangeFont 3 $FontDefault
    ChangeFont 4 $FontDefault
@@ -422,7 +422,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeBackdropsValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:BACKDROPS:} $GetBackdropsState {/GWM:0:BACKDROPS:} (GetValue 3) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeBackdropsValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:BACKDROPS:} $GetBackdropsState {/GWM:0:BACKDROPS:} (GetValue 3) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeBackdropsValue = (GetOutput $ChangeBackdropsValueCmd 1 -1)
                If $ChangeBackdropsValue <> {} Then
                Begin
@@ -452,7 +452,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeHlCurrentValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:HLCURRENT:} $GetHlCurrentState {/GWM:0:HLCURRENT:} (GetValue 4) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeHlCurrentValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:HLCURRENT:} $GetHlCurrentState {/GWM:0:HLCURRENT:} (GetValue 4) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeHlCurrentValue = (GetOutput $ChangeHlCurrentValueCmd 1 -1)
                If $ChangeHlCurrentValue <> {} Then
                Begin
@@ -482,7 +482,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeLabelPosValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:LABELPOS:} $GetLabelPosState {/GWM:0:LABELPOS:} $WorkspaceNamesValue {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeLabelPosValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:LABELPOS:} $GetLabelPosState {/GWM:0:LABELPOS:} $WorkspaceNamesValue {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeLabelPosValue = (GetOutput $ChangeLabelPosValueCmd 1 -1)
                If $ChangeLabelPosValue <> {} Then
                Begin
@@ -512,7 +512,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeGwmRowsValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:} $Ndesks {:ROWS:} $GetGwmRowsState {/GWM:} $Ndesks {:ROWS:} (GetValue 8) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeGwmRowsValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:} $Ndesks {:ROWS:} $GetGwmRowsState {/GWM:} $Ndesks {:ROWS:} (GetValue 8) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeGwmRowsValue = (GetOutput $ChangeGwmRowsValueCmd 1 -1)
                If $ChangeGwmRowsValue <> {} Then
                Begin
@@ -542,7 +542,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeWscaleValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:} $Ndesks {:WSCALE:} $GetWscaleState {/GWM:} $Ndesks {:WSCALE:} (GetValue 10) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeWscaleValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:} $Ndesks {:WSCALE:} $GetWscaleState {/GWM:} $Ndesks {:WSCALE:} (GetValue 10) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeWscaleValue = (GetOutput $ChangeWscaleValueCmd 1 -1)
                If $ChangeWscaleValue <> {} Then
                Begin
@@ -572,7 +572,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeBalloonsValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:BALLOONS:} $GetBalloonsState {/GWM:0:BALLOONS:} (GetValue 13) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeBalloonsValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:BALLOONS:} $GetBalloonsState {/GWM:0:BALLOONS:} (GetValue 13) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeBalloonsValue = (GetOutput $ChangeBalloonsValueCmd 1 -1)
                If $ChangeBalloonsValue <> {} Then
                Begin
@@ -602,7 +602,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeSkipListValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:SKIPLIST:} $GetSkipListState {/GWM:0:SKIPLIST:} (GetValue 14) {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeSkipListValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:SKIPLIST:} $GetSkipListState {/GWM:0:SKIPLIST:} (GetValue 14) {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeSkipListValue = (GetOutput $ChangeSkipListValueCmd 1 -1)
                If $ChangeSkipListValue <> {} Then
                Begin
@@ -632,7 +632,7 @@ Widget 18
             End
             Else
             Begin
-               Set $ChangeWinContentValueCmd = {$NSCDE_TOOLDIR/ised -c 's/^GWM:0:WINCONTENT:} $GetWinContentState {/GWM:0:WINCONTENT:} $WindowContentValue {/g' -f "} $WSMCONF {" 2>&1}
+               Set $ChangeWinContentValueCmd = {$NSCDE_TOOLSDIR/ised -c 's/^GWM:0:WINCONTENT:} $GetWinContentState {/GWM:0:WINCONTENT:} $WindowContentValue {/g' -f "} $WSMCONF {" 2>&1}
                Set $ChangeWinContentValue = (GetOutput $ChangeWinContentValueCmd 1 -1)
                If $ChangeWinContentValue <> {} Then
                Begin

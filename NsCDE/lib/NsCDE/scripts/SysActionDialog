@@ -13,16 +13,16 @@ Init
 Begin
    WarpPointer 7
 
-   Set $FontBoldMedium = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t bold -s medium -Z 14} 1 -1)
+   Set $FontBoldMedium = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t bold -s medium -Z 14} 1 -1)
    ChangeFont 7 $FontBoldMedium
 
-   Set $FontNormalMedium = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11.5} 1 -1)
+   Set $FontNormalMedium = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11.5} 1 -1)
    ChangeFont 2 $FontNormalMedium
    ChangeFont 3 $FontNormalMedium
    ChangeFont 4 $FontNormalMedium
    ChangeFont 5 $FontNormalMedium
 
-   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 8 $BtnFont
    ChangeFont 9 $BtnFont
 
@@ -379,7 +379,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr suspend || $NSCDE_TOOLDIR/acpimgr suspend}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLSDIR/acpimgr suspend || $NSCDE_TOOLSDIR/acpimgr suspend}
             Quit
          End
          Else
@@ -401,7 +401,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Suspending System in hybrid mode]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr hybrid-suspend || $NSCDE_TOOLDIR/acpimgr hybrid-suspend}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLSDIR/acpimgr hybrid-suspend || $NSCDE_TOOLSDIR/acpimgr hybrid-suspend}
             Quit
          End
          Else
@@ -423,7 +423,7 @@ Property
             Do {CursorStyle ROOT left_ptr}
             Do {Module FvwmScript WaitNotice "NsCDE" "$[gt.Hibernating System]" "..." 1250}
             Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) Schedule 1000 f_Xscreensaver -lock}
-            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLDIR/acpimgr hibernate || $NSCDE_TOOLDIR/acpimgr hibernate}
+            Do {Schedule 1500 Exec sudo -n $NSCDE_TOOLSDIR/acpimgr hibernate || $NSCDE_TOOLSDIR/acpimgr hibernate}
             Quit
          End
          Else

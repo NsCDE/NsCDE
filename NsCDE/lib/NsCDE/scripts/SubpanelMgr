@@ -23,9 +23,9 @@ Begin
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
    Set $AppListToFileCmd = {fvwm-menu-desktop --mini-icon-dir "$FVWM_USERDIR/icons" --enable-mini-icons -s 32 --include-items none --theme NsCDE --desktop nscde | }
                            { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | }
-                           { $NSCDE_TOOLDIR/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | }
-                           { $NSCDE_TOOLDIR/ised -c "s/'/\\\\\\\\\"/g" -o -f - | }
-                           { $NSCDE_TOOLDIR/ised -c "s/\$NSCDE_ROOT/\$[NSCDE_ROOT]/g" -o -f - > "} $AppListTmpFile {"}
+                           { $NSCDE_TOOLSDIR/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | }
+                           { $NSCDE_TOOLSDIR/ised -c "s/'/\\\\\\\\\"/g" -o -f - | }
+                           { $NSCDE_TOOLSDIR/ised -c "s/\$NSCDE_ROOT/\$[NSCDE_ROOT]/g" -o -f - > "} $AppListTmpFile {"}
    Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
    Set $FmtAppListCmd = {cut -d"%" -f 2 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
    Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
@@ -56,12 +56,12 @@ Begin
    # Added for Localization of existing default entries.
    Set $LocalizedListTmpFile = (GetOutput {mktemp -t tmp.XXXXXXXX.SubpLocLst.XXXXXXXX} 1 -1)
    Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
-   Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+   Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLSDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
    Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
 
    ChangeTitle 4 $FmtLocalizedSubpList
 
-   Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3 | $NSCDE_TOOLDIR/ised -c 's/^\$\[gt\.\(.*\)\]/\1/g' -o -f -}
+   Set $SubpanelNameCmd = {egrep '^S} $SubpanelNo {,NAME,.*' "} $SubpanelActionsRead {" | cut -d"," -f3 | $NSCDE_TOOLSDIR/ised -c 's/^\$\[gt\.\(.*\)\]/\1/g' -o -f -}
    Set $SubpanelName = (GetOutput $SubpanelNameCmd 1 -1)
    Set $NewWinTitle = (Gettext {Subpanels Manager: Subpanel}) { } $SubpanelNo { (} (Gettext $SubpanelName) {)}
    ChangeWindowTitle $NewWinTitle
@@ -70,18 +70,18 @@ Begin
    Set $NewAppType = {}
    Set $Perform = 1
 
-   Set $DefaultFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
    ChangeFont 14 $DefaultFont
    ChangeFont 18 $DefaultFont
    ChangeFont 15 $DefaultFont
 
-   Set $BtnFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
    ChangeFont 20 $BtnFont
    ChangeFont 21 $BtnFont
    ChangeFont 22 $BtnFont
    ChangeFont 23 $BtnFont
 
-   Set $LabelFont = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    ChangeFont 1 $LabelFont
    ChangeFont 2 $LabelFont
    ChangeFont 3 $LabelFont
@@ -402,7 +402,7 @@ Widget 5
                Set $Perform = 1
             End
 
-            Set $StrippedAppIdxIconPathCmd = {$NSCDE_TOOLDIR/strip_icon_path '} $GetAppIdxIcon {'}
+            Set $StrippedAppIdxIconPathCmd = {$NSCDE_TOOLSDIR/strip_icon_path '} $GetAppIdxIcon {'}
             Set $StrippedAppIdxIconPath = (GetOutput $StrippedAppIdxIconPathCmd 1 -1)
 
             Set $CheckCharsIconCmd = {echo "} $StrippedAppIdxIconPath {" | egrep "(,|')"}
@@ -451,7 +451,7 @@ Widget 5
 
                # Added for Localization of existing default entries.
                Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
-               Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLSDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
                Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
 
                ChangeTitle 4 $FmtLocalizedSubpList
@@ -509,7 +509,7 @@ Widget 6
 
                # Added for Localization of existing default entries.
                Do {Exec echo '} $FmtSubpList {' > '} $LocalizedListTmpFile {'}
-               Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
+               Set $FmtLocalizedSubpListCmd = {$NSCDE_TOOLSDIR/usleep 250000 ; cat '} $LocalizedListTmpFile {'}
                Set $FmtLocalizedSubpList = (GetOutput $FmtLocalizedSubpListCmd 1 -1)
 
                ChangeTitle 4 $FmtLocalizedSubpList
@@ -773,12 +773,12 @@ Widget 20
          Set $WriteFinalActionsFileCmd = {cat "} $SubpNewActionsPart {" > "$FVWM_USERDIR/Subpanels.actions"}
          Set $WriteFinalActionsFile = (GetOutput $WriteFinalActionsFileCmd 1 -1)
 
-         Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_TOOLDIR/generate_subpanels" > "$FVWM_USERDIR/Subpanels.fvwmconf"}
+         Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_TOOLSDIR/generate_subpanels" > "$FVWM_USERDIR/Subpanels.fvwmconf"}
          Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
 
          Do {f_ReadCfg Subpanels}
          Do {Schedule 400 KillModule FvwmButtons NsCDE-Subpanel} $SubpanelNo
-         Do {Schedule 1800 Exec exec $[NSCDE_TOOLDIR]/xdowrapper}
+         Do {Schedule 1800 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper}
       End
 End
 

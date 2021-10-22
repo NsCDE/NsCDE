@@ -280,7 +280,7 @@ usable terminal application and run it with setup. If Gkrellm, pnmixer and/or
 stalonetray programs are installed, on the system and found, they will be run 
 too.
 
-Initial setup is a simple script (`$NSCDE_TOOLDIR/bootstrap`) from the 
+Initial setup is a simple script (`$NSCDE_TOOLSDIR/bootstrap`) from the 
 terminal which will run automatically and will set up the following:
 
 - X resources in ~/.NsCDE

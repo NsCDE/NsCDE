@@ -11,8 +11,8 @@ Colorset 22
 
 Init
 Begin
-   Set $FontDefault = (GetOutput {$NSCDE_TOOLDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
-   Set $FontNormalMono = (GetOutput {$NSCDE_TOOLDIR/getfont -m -t normal -s medium -Z 14} 1 -1)
+   Set $FontDefault = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
+   Set $FontNormalMono = (GetOutput {$NSCDE_TOOLSDIR/getfont -m -t normal -s medium -Z 14} 1 -1)
    ChangeFont 1 $FontDefault
    ChangeFont 3 $FontDefault
    ChangeFont 5 $FontDefault
@@ -72,7 +72,7 @@ Begin
    End
    Else
    Begin
-      Set $CheckIconCmd = {$NSCDE_TOOLDIR/geticon 16 '} $WindowResource {'}
+      Set $CheckIconCmd = {$NSCDE_TOOLSDIR/geticon 16 '} $WindowResource {'}
       Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
       If $CheckIcon <> {} Then
       Begin
@@ -80,7 +80,7 @@ Begin
       End
       Else
       Begin
-         Set $CheckIconCmd = {$NSCDE_TOOLDIR/geticon 16 '} $WindowClass {'}
+         Set $CheckIconCmd = {$NSCDE_TOOLSDIR/geticon 16 '} $WindowClass {'}
          Set $CheckIcon = (GetOutput $CheckIconCmd 1 -1)
          If $CheckIcon <> {} Then
          Begin
@@ -89,7 +89,7 @@ Begin
       End
    End
 
-   Set $GetExistingMappingCmd = {$NSCDE_TOOLDIR/confget -c $FVWM_USERDIR/GeoDB.ini -s } $ScreenWidth {x} $ScreenHeight { -k } $WindowResource {,} $WindowClass
+   Set $GetExistingMappingCmd = {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/GeoDB.ini -s } $ScreenWidth {x} $ScreenHeight { -k } $WindowResource {,} $WindowClass
    Set $GetExistingMapping = (GetOutput $GetExistingMappingCmd 1 -1)
    If $GetExistingMapping <> {} Then
    Begin
@@ -422,7 +422,7 @@ Widget 22
 
             If $ErrCount == {000000} Then
             Begin
-               Set $MainCmdLine = {$NSCDE_TOOLDIR/confset -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
+               Set $MainCmdLine = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/GeoDB.ini -s }
                    $ScreenWidth {x} $ScreenHeight { -k '} (GetTitle 6) {,} (GetTitle 4) {' -v "}
                    (GetTitle 11) {p } (GetTitle 13) {p } (GetTitle 15) {p } (GetTitle 17) {p"}
                Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
@@ -439,7 +439,7 @@ Widget 22
          End
          Else
          Begin
-            Set $MainCmdLine = {$NSCDE_TOOLDIR/confset -t ini -c $FVWM_USERDIR/GeoDB.ini -r -s }
+            Set $MainCmdLine = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/GeoDB.ini -r -s }
                 $ScreenWidth {x} $ScreenHeight { -k } (GetTitle 6) {,} (GetTitle 4)
             Set $MainCmd = (GetOutput $MainCmdLine 1 -1)
             If $MainCmd <> {} Then
