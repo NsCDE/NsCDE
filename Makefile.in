@@ -97,7 +97,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = NsCDE/share/NsCDE/fvwm/Main.fvwmconf \
+CONFIG_CLEAN_FILES = data/fvwm/Main.fvwmconf \
 	xdg/xsessions/nscde.desktop
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -156,11 +156,11 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in \
-	$(top_srcdir)/NsCDE/share/NsCDE/fvwm/Main.fvwmconf.in \
-	$(top_srcdir)/ac-aux/compile $(top_srcdir)/ac-aux/config.guess \
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/ac-aux/compile \
+	$(top_srcdir)/ac-aux/config.guess \
 	$(top_srcdir)/ac-aux/config.sub \
 	$(top_srcdir)/ac-aux/install-sh $(top_srcdir)/ac-aux/missing \
+	$(top_srcdir)/data/fvwm/Main.fvwmconf.in \
 	$(top_srcdir)/xdg/xsessions/nscde.desktop.in COPYING ChangeLog \
 	TODO ac-aux/compile ac-aux/config.guess ac-aux/config.sub \
 	ac-aux/depcomp ac-aux/install-sh ac-aux/missing
@@ -336,9 +336,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = 1.4
-
-# SUBDIRS = src po docbook xdg NsCDE/bin
-SUBDIRS = src po docbook NsCDE/bin
+SUBDIRS = src po docbook bin
 all: all-recursive
 
 .SUFFIXES:
@@ -375,7 +373,7 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-NsCDE/share/NsCDE/fvwm/Main.fvwmconf: $(top_builddir)/config.status $(top_srcdir)/NsCDE/share/NsCDE/fvwm/Main.fvwmconf.in
+data/fvwm/Main.fvwmconf: $(top_builddir)/config.status $(top_srcdir)/data/fvwm/Main.fvwmconf.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 xdg/xsessions/nscde.desktop: $(top_builddir)/config.status $(top_srcdir)/xdg/xsessions/nscde.desktop.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -809,7 +807,7 @@ uninstall-am:
 
 
 clean-local:
-	-rm -f NsCDE/share/NsCDE/fvwm/Main.fvwmconf
+	-rm -f data/fvwm/Main.fvwmconf
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

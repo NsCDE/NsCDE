@@ -138,9 +138,9 @@ AC_OUTPUT(
 	src/pclock/src/Makefile
 	docbook/Makefile
 	po/Makefile
-	NsCDE/bin/Makefile
-	NsCDE/bin/nscde
-	NsCDE/share/NsCDE/fvwm/Main.fvwmconf
+	bin/Makefile
+	bin/nscde
+	data/fvwm/Main.fvwmconf
 	xdg/xsessions/nscde.desktop
 )
 
