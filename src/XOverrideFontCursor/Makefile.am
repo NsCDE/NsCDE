@@ -14,5 +14,5 @@ AM_LDFLAGS = \
 	-fPIC -shared \
 	$(LDFLAGS)
 
-LDADD = -L/usr/X11R6/lib -L/usr/X11R7/lib -L/usr/local/lib -lX11
+LDADD = -L/usr/X11R6/lib -L/usr/X11R7/lib -L/usr/local/lib $(X_LIB)
 

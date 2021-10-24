@@ -73,6 +73,22 @@ AC_CHECK_PROGS(DUNST, dunst, "no")
 AC_CHECK_PROGS(XCLIP, xclip, "no")
 AC_CHECK_PROGS(ROFI, rofi, "no")
 
+AC_CHECK_HEADERS(math.h stdlib.h string.h sys/time.h time.h unistd.h \
+ X11/cursorfont.h X11/extensions/shape.h X11/Xlib.h X11/xpm.h \
+ X11/Xutil.h,,AC_MSG_ERROR([Missing required header files.]))
+
+AC_CHECK_LIB(X11, XOpenDisplay, X_LIB="-lX11", AC_MSG_ERROR([No -lX11 found.]), $X_LIBS)
+AC_SUBST(X_LIB)
+
+AC_CHECK_LIB(Xext, XShapeCombineMask, XEXT_LIB="-lXext", AC_MSG_ERROR([No -lXext found.]), $X_LIBS)
+AC_SUBST(XEXT_LIB)
+
+AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage, XPM_LIB="-lXpm", AC_MSG_ERROR([No -lXpm found.]), $X_LIBS)
+AC_SUBST(XPM_LIB)
+
+AC_CHECK_LIB(m, cos, MATH_LIB="-lm", AC_MSG_ERROR([No -lm found.]), $LIBS)
+AC_SUBST(MATH_LIB)
+
 # Dependencies failures
 AS_IF([test x"$SED" == x"no"], [AC_MSG_ERROR([No sed detected.])])
 AS_IF([test x"$KSH" == x"no"], [AC_MSG_ERROR([Please install AT&T ksh 93 package before continuing.])])
@@ -90,6 +106,9 @@ AS_IF([test x"$XDOTOOL" == x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_ERROR(
 AS_IF([test x"$XSCSVR" == x"no"], [AC_MSG_WARN([No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup.])])
 AS_IF([test x"$STALONETRAY" == x"no"], [AC_MSG_WARN([No Stalonetray was found. This NsCDE Installation will not be able to have tray applets.])])
 AS_IF([test x"$XSETTINGSD" == x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes.])])
+AS_IF([test x"$XRANDR" == x"no"], [AC_MSG_WARN([No xrandr(1) command was found. It is advised to have X11 Server Utils installed.])])
+AS_IF([test x"$DUNST" == x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
+AS_IF([test x"$XCLIP" == x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
 
 AC_CANONICAL_HOST
 AC_MSG_CHECKING(platform)

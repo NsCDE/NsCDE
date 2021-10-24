@@ -21,7 +21,7 @@ AM_LDFLAGS = \
 	-L/usr/lib64 -L/usr/local/lib
 	$(LDFLAGS)
 
-LDADD = -lX11 -lXext -lXpm -lm
+LDADD = $(X_LIB) $(XEXT_LIB) $(XPM_LIB) $(MATH_LIB)
 
 clean-local:
 	-rm -f Default.xpm
