@@ -142,5 +142,8 @@ AC_OUTPUT(
 	bin/nscde
 	data/fvwm/Main.fvwmconf
 	xdg/xsessions/nscde.desktop
+	data/Makefile
+	lib/Makefile
+	nscde_tools/Makefile
 )
 
