@@ -1,0 +1,3 @@
+
+SUBDIRS = colorpicker pclock XOverrideFontCursor
+

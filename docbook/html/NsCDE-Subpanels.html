@@ -1,0 +1,68 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>3.2. Subpanels</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-applets-docks-panels.html" title="3. Applets Docks and Panels"><link rel="prev" href="NsCDE-applets-docks-panels.html" title="3. Applets Docks and Panels"><link rel="next" href="NsCDE-Workspace-Manager.html" title="3.3. Workspace Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.2. Subpanels</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-applets-docks-panels.html">Prev</a> </td><th width="60%" align="center">3. Applets Docks and Panels</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Workspace-Manager.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Subpanels"></a>3.2. Subpanels</h3></div></div></div><p>
+NsCDE subpanels are simple transient FvwmButton docks. As Front Panel, they
+are also as much as possible similar to original CDE forms of the same
+purpose. Some applications in them are predefined, and discovered if
+installed, and the rest is up to user to populate.
+Their purpose is not to show all possible GUI applications installed on the
+system as right-click root menu. They are meant for favorite, important and often
+used apps.
+</p><p>
+There is one main difference between CDE and NsCDE subpanels: <span class="emphasis"><em>Install Icon</em></span>
+action calls special NsCDE tool for actions defining. There is no drag and
+drop from the app manager (which also doesn't exist).
+</p><p>
+On every subpanel, last selected entry will remain hilighted next time subpanel is popped up again.
+</p><p>
+Each Subpanel's application item or entry has additional third mouse pointer button action which
+will pop up dinamically populated contextual menu named after item's title. Here, there are actions
+to move up or down item for one space on the subpanel, to move item to the beginning or the end of
+the subpanel's application list, as well as to delete item from the subpanel (warning message will
+appear before deletion is really performed). First menu item is the same as menu name: title of
+the application from submenu. If clicked, it will perform default action as if item's title or icon
+was clicked on the submenu itself. This is a kind of a escape from the contextual menu, but to
+still use subpanel's default action without repeating opening of a submenu again.
+If move or delete action is silently not performed, this is most likely the situation where
+user's <code class="filename">$FVWM_USERDIR/Subpanels.actions</code> is newer than
+<code class="filename">$FVWM_USERDIR/Subpanels.fvwmconf</code>, and must be rebuilt for configuration
+actions to take a place properly. In that case, repeated operation must succeed, otherwise,
+see X session error log for details.
+</p><p>
+Subpanels, like in CDE has titlebars but as windows on screen they are without
+borders and handles. They have only left menu button like other windows, but
+with one exception: there are no actions for closing window and re-positioning
+it (no sense in this), but they have "Refresh Subpanel" and "Subpanel
+Settings" controls. First one kills process module, re-reads it's
+configuration and starts it on the next click on Front Panel subpanel
+launcher. Subpanel Settings is the small and simple FvwmScript tool which
+allows one to rename Subpanel, set it's width for application titles to fit if
+necessary, and to enable or disable that particular Subpanel.
+</p><p>
+On the first change with <span class="emphasis"><em>Install Icon</em></span> or <span class="emphasis"><em>Subpanel Settings</em></span>,
+non-FVWM configuration file <span class="emphasis"><em>Subpanels.actions</em></span> will be created in the
+<code class="varname">$FVWM_USERDIR</code>, from where all subpanels changed from default will be read
+by the <span class="command"><strong>$NSCDE_TOOLSDIR/generate_subpanels</strong></span>, while the rest will be
+generated from the <code class="filename">$NSCDE_DATADIR/defaults/Subpanels.actions</code>. This file can also
+be edited by hand (ok, not by hand, but editor will suffice) and the result may be applied by
+calling <span class="command"><strong>generate_subpanels</strong></span> and then <code class="function">f_ReadCfg Subpanels</code>.
+Generated file is called <code class="filename">Subpanels.fvwmconf</code> and it is expected in the
+<code class="varname">$FVWM_USERDIR</code>. If not found there,
+<code class="filename">$NSCDE_ROOT/config/Subpanels.fvwmconf</code> will be read instead.
+Syntax of the Subpanels.actions is explained in the
+<a class="link" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained">Configuration files explained</a> section.
+</p><p>
+Presently, there is one workaround here: as much as FVWM, and specially FvwmButtons are
+very flexible and configurable, no title for the buttons app can be set apart
+from module alias, but module alias doesn't support names with spaces in them.
+Internal names as <span class="emphasis"><em>"NsCDE-SubpanelX"</em></span> are for that reason referenced in
+<code class="filename">FrontPanel.fvwmconf</code>, and are internally mandatory names of their Subpanels.
+Since there is no configuration option for subpanel to set Window Title, we are using here
+tool <span class="command"><strong>xdotool(1)</strong></span> which is run on Subpanel initialization with a delay of 3,2
+seconds (internal workaround for xdotool) and this then takes infostore
+variable <code class="varname">NsCDE-SubpanelX-Name</code> and sets literal, system default or user picked
+name of the subpanel. Presently, an alternative option is to apply FvwmButtons patch which introduces a
+<span class="emphasis"><em>WindowName</em></span> option to it's configuration. Of course, patch will be proposed
+to the upstream FVWM.
+</p><p>
+The rest about Subpanel, or to say their visible outfit, and their main function
+are the same as in CDE - a nice, heavyweight and elegant application launchers.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-applets-docks-panels.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-applets-docks-panels.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Workspace-Manager.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3. Applets Docks and Panels </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 3.3. Workspace Manager</td></tr></table></div></body></html>

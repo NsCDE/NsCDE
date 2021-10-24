@@ -1,0 +1,108 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.20. Mousebindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained"><link rel="prev" href="Menus_fvwmconf.html" title="7.19. Menus.fvwmconf"><link rel="next" href="WspLocPager_fvwmconf.html" title="7.21. WspLocPager.fvwmconf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.20. Mousebindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Menus_fvwmconf.html">Prev</a> </td><th width="60%" align="center">7. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="WspLocPager_fvwmconf.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Mousebindings_fvwmconf"></a>7.20. Mousebindings.fvwmconf</h3></div></div></div><p>
+ File <code class="filename">Mousebindings.fvwmconf</code> is done in similar manner as the
+  <code class="filename">Keybindings.fvwmconf</code>. Can be overridden (.fvwmconf) or
+  extended (.fvwmlocal) just like (almost) any NsCDE conf file.
+  See fvwm(1) for "Mouse" commands. Here commands invoked with pointer
+  are defined. As it is the case with key bindings, mouse actions are too far more in
+  NsCDE than in original CDE. The syntax is described at the top of the file.
+</p><p>
+  Actions are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  Titlebar 1st (left) button left click: invokes Window Operations
+    menu, double click closes (Delete) a window
+</p></li><li class="listitem"><p>
+  Titlebar 1st (left) button middle click: Shortcut for calling Occupy
+  dialog with Go with the window selected by default.
+</p></li><li class="listitem"><p>
+  Titlebar 1st (left) button left click: invokes extended or full
+  version of the Window Operations menu, double click closes (Delete)
+  a window
+</p></li><li class="listitem"><p>
+  Titlebar 2nd (right) button left click: Iconify Window
+</p></li><li class="listitem"><p>
+  Titlebar 2nd (right) button middle click: No Operation
+</p></li><li class="listitem"><p>
+  Titlebar 2nd (right) button right click: Shade (Roll up/down) Window
+</p></li><li class="listitem"><p>
+  Titlebar 3rd (rightmost) button left click: (Un)Maximize Window 86% or up to
+  the Front Panel on the bottom of the screen. Double click (un)maximizes 100%,
+  covering Front Panel and it's EWMH panel area
+</p></li><li class="listitem"><p>
+  Titlebar 3rd (rightmost) button middle click: (Un)Maximizes 86% and
+    makes window sticky or unsticks it depending on window's initial
+    state
+</p></li><li class="listitem"><p>
+  Titlebar 3rd (rightmost) button right click: (Un)Maximizes 86% and
+    makes window raise or lower depending on window's initial state
+</p></li><li class="listitem"><p>
+  Titlebar left click: Moves window on move, raises/lowers on click
+</p></li><li class="listitem"><p>
+  Titlebar middle click: pops up menu with functions to take a
+    screenshot of the window, identify with info (FvwmIdent), xprop(1),
+    and xwininfo(1)
+</p></li><li class="listitem"><p>
+  Titlebar right mouse button quickly raises or lowers a window
+</p></li><li class="listitem"><p>
+  Pointer actions 4 and 5 (mouse wheel) are shading and unshading
+    (rollup, rolldown) a window
+</p></li><li class="listitem"><p>
+  Left pointer click on border or corner raises or lowers a window
+    while move action will interactively resize the window
+</p></li><li class="listitem"><p>
+  Middle pointer click on border or corner will only do lower/raise
+    action, without resize on pointer movement
+</p></li><li class="listitem"><p>
+  Right pointer click on border or corner also does lower/raise
+    action, but on pointer movement moves the window
+</p></li><li class="listitem"><p>
+  Left pointer click in combination with control on border or corner
+    calls a root window version of the Window Operations menu - this
+    rare and border functionality is aimed for difficult situations
+    where there is no other option easily available
+</p></li><li class="listitem"><p>
+  Middle pointer click in combination with control on border or corner
+    refreshes the window
+</p></li><li class="listitem"><p>
+  Right pointer click in combination with control on border or corner
+    calls root applications menu (<span class="guimenuitem">MenuFvwmRoot</span>) - this rare and border
+    functionality is aimed for difficult situations where there is no
+    other option easily available
+</p></li><li class="listitem"><p>
+  Left pointer click on icon calls <span class="guimenuitem">m_IconOps</span> menu, while double click
+    action deiconifies a window
+</p></li><li class="listitem"><p>
+  Middle pointer click on icon calls <span class="guimenuitem">m_IconM2</span> menu
+</p></li><li class="listitem"><p>
+  Right pointer click on icon directly deiconifies a window
+</p></li><li class="listitem"><p>
+  Left click on the root window calls <span class="guimenuitem">Root Menu</span> whith
+  handy shortcuts for calling visual pagers and window lists. Submenu "Window Operations"
+  will show Window Options actions.
+</p></li><li class="listitem"><p>
+  Left double click on the root window calls <span class="guimenuitem">Window Operations</span>.
+</p></li><li class="listitem"><p>
+  Middle click calls FVWM <code class="function">WindowList</code> super-menu see fvwm(1) for
+    <code class="option">WindowList</code>
+</p></li><li class="listitem"><p>
+  Right click calls main root menu <span class="guimenuitem">MenuFvwmRoot</span>
+</p></li><li class="listitem"><p>
+  Pointer actions 4 and 5 (mouse wheel) will scroll between current up and down pages
+  of the current workspace by 2% if pointer is in the context of the root window
+</p></li><li class="listitem"><p>
+  <span class="keysym">Control+</span> left mouse click will call f_CleanRestoreWorkspace function.
+  This will iconify and put into invisible group all iconified windows on the active page.
+  Repeating this action once again, restores all iconified windows back in place quickly
+  and without animation. Windows which were iconified before calling this action or from
+  windows started and iconified after this action are not affected by this function. This
+  is NsCDE smart version of the "show desktop" functionality.
+</p></li><li class="listitem"><p>
+  <span class="keysym">Control+</span> middle mouse click will call extended version of the
+    WindowList with additional window info such as page number and
+    window geometry.
+</p></li><li class="listitem"><p>
+  Left mouse button on border of the shaded Front Panel context will
+    de-shade and reposition Front Panel
+</p></li><li class="listitem"><p>
+  Right mouse button on border of Front Panel will shade or de-shade
+    Front Panel
+</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Menus_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="WspLocPager_fvwmconf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.19. Menus.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.21. WspLocPager.fvwmconf</td></tr></table></div></body></html>

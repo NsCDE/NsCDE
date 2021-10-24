@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>12. NsCDE Localization</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Startup.html" title="11. NsCDE Startup"><link rel="next" href="NsCDE-Initial-Configuration.html" title="13. Initial Configuration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">12. NsCDE Localization</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Startup.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Initial-Configuration.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Localization"></a>12. NsCDE Localization</h2></div></div></div><p>
+NsCDE implements localization capabilities provided by FVWM and system C library.
+Directive <code class="varname">LocalePath</code> in <code class="filename">$NSCDE_ROOT/config/Main.fvwmconf</code>
+is set to look at <code class="varname">$[NSCDE_ROOT]/share/locale;NsCDE:$[NSCDE_ROOT]/share/locale;NsCDE-Subpanels:+</code>.
+In other words, whole NsCDE reads it's localization from "mo" files from
+<code class="filename">$[NSCDE_ROOT]/share/locale/$LANG/LC_MESSAGES/NsCDE.mo</code> except subpanels
+which have their localization in separate mo files in the same directory.
+</p><p>
+All FvwmScript based applications are reading their own "mo" file from
+<code class="filename">$[NSCDE_ROOT]/share/locale/$LANG/LC_MESSAGES/NsCDE.mo</code> 
+which is defined in every program's header with <code class="varname">UseGettext</code> directive.
+</p><p>
+All part of visible text provided by NsCDE has localization ability with
+the restriction of the Workspace names, which are localized according to
+locale present during user's first setup. That is: "One", "Two", "Three"
+and "Four" are translated by catching text with gettext(1). Later this
+workspaces can be renamed by user as needed.
+</p><p>
+LANGUAGE and/or LC_MESSAGES must be set for localization to work correctly. Best way to do this are
+login and profile files of the user, parameters choosend with display manager, or as a fallback,
+<code class="filename">$FVWM_USERDIR/NsCDE.conf</code> can be used to assign value of the
+LC_MESSAGES (or LC_ALL) and LANGUAGE commands.
+</p><p>
+First translated language from original English is Croatian. Other translations are
+welcome. There are some pitfalls and things which must be observed when translating
+to the new languages. Existing .po files in "hr" can serve as a template for new
+translations since just msgstr lines must be replaced and msgid's are already there.
+</p><p>
+For more information about localization see README.localization text file which is
+provided with software in the root of the unpacked tarball.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Startup.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Initial-Configuration.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">11. NsCDE Startup </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 13. Initial Configuration</td></tr></table></div></body></html>

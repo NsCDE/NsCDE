@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>14. Diagnostic: X11, FVWM and Watch Errors</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Initial-Configuration.html" title="13. Initial Configuration"><link rel="next" href="NsCDE-Integrations.html" title="15. Integration with X resources and widgets"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14. Diagnostic: X11, FVWM and Watch Errors</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Initial-Configuration.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Integrations.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Logging"></a>14. Diagnostic: X11, FVWM and Watch Errors</h2></div></div></div><p>
+Most of the X11 Display Managers, such as XDM, sddm, gdm etc, are redirecting diagnostic
+output (standard error, stderr, file descriptor 2) into a file or some logging facility.
+This file is usually <code class="filename">$HOME/.xsession-errors</code>. When "Watch Errors" item
+is launched from default subpanel 7 (Desktop Settings), it will execute <span class="command"><strong>xterm -e $[infostore.xlogcmd]</strong></span>. If not redefined in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>,
+contents of the variable FVWM infostore variable <code class="varname">$[infostore.xlogcmd]</code> will be
+<span class="emphasis"><em>"tail -300f ~/.xsession-errors"</em></span>.
+</p><p>
+If your X Display Manager is using
+different path or file name, this can be redefined as it is mentioned above. Beware that some
+X Display Managers (namely lightdm) are sending diagnostic output into
+<code class="filename">/dev/null</code>. In this case, no variable redefinition can get this
+output visible to the user.
+</p><p>
+Reading X, FVWM and NsCDE log output can be informative and helping while solving possible
+unexpected or unexplainable problems with desktop setup.
+</p><p>
+Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window under
+FVWM 2.X has a custom menu entry <span class="guimenuitem">Fvwm Diagnostic Console</span> which
+starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
+<span class="guimenuitem">Watch Errors</span> which calls Watch errors.
+When both windows are on the screen, this menu entries will simply transfer focus to each other.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Initial-Configuration.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Integrations.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">13. Initial Configuration </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 15. Integration with X resources and widgets</td></tr></table></div></body></html>
