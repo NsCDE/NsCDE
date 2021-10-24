@@ -12,14 +12,9 @@ Test (Restart) Echo NsCDE: Restarting
 Test (Init) Echo NsCDE: Starting initialization
 
 # Core variables for diverting paths and setting early parameters
-SetEnv NSCDE_ROOT /opt/NsCDE
-SetEnv NSCDE_TOOLSDIR $[NSCDE_ROOT]/libexec/NsCDE
-SetEnv NSCDE_DATADIR $[NSCDE_ROOT]/share/NsCDE
-SetEnv NSCDE_LIBDIR $[NSCDE_ROOT]/lib/NsCDE
 SetEnv NSCDE_FVWM_VERSION_NUM $[version.num]
 SetEnv NSCDE_FVWM_VERSION_INFO $[version.info]
 SetEnv FVWM_USERDIR $[HOME]/.NsCDE
-SetEnv FVWM_DATADIR $[NSCDE_DATADIR]/fvwm
 SetEnv FVWM_SCRIPTDIR $[NSCDE_LIBDIR]/scripts
 SetEnv FVWM_FORMDIR $[NSCDE_LIBDIR]/forms
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWM3_LOGFILE $[FVWM_USERDIR]/tmp/fvwm.log
@@ -30,22 +25,20 @@ SetEnv SM_SAVE_DIR $[FVWM_USERDIR]/tmp
 # Test (Init, EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS $[NSCDE_ROOT]/share:$[XDG_DATA_DIRS]
 # Test (!EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS $[NSCDE_ROOT]/share:/usr/share:/usr/local/share
 SetEnv XDG_MENU_PREFIX nscde-
-PipeRead 'echo SetEnv NSCDE_VERSION $($NSCDE_ROOT/bin/nscde -v)'
 PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
 PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'
-Piperead 'echo "SetEnv NSCDE_OS $(uname -s)"'
 PipeRead $[NSCDE_TOOLSDIR]/get_logical_screens
 
 # Cleanup all what may be hardcoded builtin
 DestroyStyle *
 
 # Core Options, if necessary, can be overriden later
-ExecUseShell __KSH93__
+ExecUseShell @KSH@
 Emulate Mwm
 IgnoreModifiers L25
 ImagePath $[FVWM_USERDIR]/icons:$[NSCDE_DATADIR]/icons:$[NSCDE_ROOT]/share/icons:$[HOME]/.icons:$[HOME]/.local/share/icons:/usr/share/icons:/usr/local/share/icons:$[NSCDE_DATADIR]/fallback/icons
 LocalePath $[NSCDE_ROOT]/share/locale;NsCDE:$[NSCDE_ROOT]/share/locale;NsCDE-Subpanels:+
-# ModulePath $[NSCDE_LIBDIR]/fvwm-modules:+
+Test (!EnvMatch FVWM_IS_FVWM3 1) ModulePath $[NSCDE_LIBDIR]/fvwm-modules:+
 InfoStoreAdd menudclicktm 750
 ClickTime $[infostore.menudclicktm]
 DefaultIcon NsCDE/Noicon.xpm

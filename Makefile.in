@@ -85,6 +85,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = @build@
+host_triplet = @host@
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -95,7 +97,8 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = NsCDE/share/NsCDE/fvwm/Main.fvwmconf \
+	xdg/xsessions/nscde.desktop
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -153,10 +156,14 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/ac-aux/compile \
+am__DIST_COMMON = $(srcdir)/Makefile.in \
+	$(top_srcdir)/NsCDE/share/NsCDE/fvwm/Main.fvwmconf.in \
+	$(top_srcdir)/ac-aux/compile $(top_srcdir)/ac-aux/config.guess \
+	$(top_srcdir)/ac-aux/config.sub \
 	$(top_srcdir)/ac-aux/install-sh $(top_srcdir)/ac-aux/missing \
-	COPYING ChangeLog TODO ac-aux/compile ac-aux/depcomp \
-	ac-aux/install-sh ac-aux/missing
+	$(top_srcdir)/xdg/xsessions/nscde.desktop.in COPYING ChangeLog \
+	TODO ac-aux/compile ac-aux/config.guess ac-aux/config.sub \
+	ac-aux/depcomp ac-aux/install-sh ac-aux/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -211,25 +218,37 @@ AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DUNST = @DUNST@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EXEEXT = @EXEEXT@
+FULL_BINDIR = @FULL_BINDIR@
+FVWM = @FVWM@
+FVWM_DATADIR = @FVWM_DATADIR@
+GETTEXT = @GETTEXT@
+GSED = @GSED@
+GTAIL = @GTAIL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+KSH = @KSH@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+NSCDE_DATADIR = @NSCDE_DATADIR@
+NSCDE_LIBDIR = @NSCDE_LIBDIR@
+NSCDE_TOOLSDIR = @NSCDE_TOOLSDIR@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -239,10 +258,26 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PYTHON = @PYTHON@
+REQUIRED_PYTHON_VERSION = @REQUIRED_PYTHON_VERSION@
+ROFI = @ROFI@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+STALONETRAY = @STALONETRAY@
+STARTNSCDE = @STARTNSCDE@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XCLIP = @XCLIP@
+XDOTOOL = @XDOTOOL@
+XDPYINFO = @XDPYINFO@
+XPROP = @XPROP@
+XRANDR = @XRANDR@
+XRDB = @XRDB@
+XSCSVR = @XSCSVR@
+XSET = @XSET@
+XSETTINGSD = @XSETTINGSD@
+XTERM = @XTERM@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -254,14 +289,22 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
+build = @build@
 build_alias = @build_alias@
+build_cpu = @build_cpu@
+build_os = @build_os@
+build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+host = @host@
 host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_os = @host_os@
+host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -288,8 +331,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = 1.4
 
-# SUBDIRS = xdg src NsCDE docbook
-SUBDIRS = src docbook po
+# SUBDIRS = src po docbook xdg NsCDE/bin
+SUBDIRS = src po docbook NsCDE/bin
 all: all-recursive
 
 .SUFFIXES:
@@ -326,6 +369,10 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
+NsCDE/share/NsCDE/fvwm/Main.fvwmconf: $(top_builddir)/config.status $(top_srcdir)/NsCDE/share/NsCDE/fvwm/Main.fvwmconf.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+xdg/xsessions/nscde.desktop: $(top_builddir)/config.status $(top_srcdir)/xdg/xsessions/nscde.desktop.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -667,7 +714,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic mostlyclean-am
+clean-am: clean-generic clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -738,21 +785,25 @@ uninstall-am:
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am \
 	am--refresh check check-am clean clean-cscope clean-generic \
-	cscope cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
-	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
-	dist-zstd distcheck distclean distclean-generic distclean-tags \
-	distcleancheck distdir distuninstallcheck dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags tags-am uninstall uninstall-am
+	clean-local cscope cscopelist-am ctags ctags-am dist dist-all \
+	dist-bzip2 dist-gzip dist-lzip dist-shar dist-tarZ dist-xz \
+	dist-zip dist-zstd distcheck distclean distclean-generic \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am
 
 .PRECIOUS: Makefile
 
+
+clean-local:
+	-rm -f NsCDE/share/NsCDE/fvwm/Main.fvwmconf
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

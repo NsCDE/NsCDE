@@ -588,6 +588,42 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+GTAIL
+GSED
+host_os
+host_vendor
+host_cpu
+host
+build_os
+build_vendor
+build_cpu
+build
+ROFI
+XCLIP
+DUNST
+XRANDR
+XSETTINGSD
+STALONETRAY
+XSCSVR
+XDOTOOL
+GETTEXT
+XTERM
+XDPYINFO
+XPROP
+XSET
+XRDB
+CPP
+FVWM
+SED
+STARTNSCDE
+KSH
+FULL_BINDIR
+NSCDE_TOOLSDIR
+NSCDE_LIBDIR
+NSCDE_DATADIR
+FVWM_DATADIR
+PYTHON
+REQUIRED_PYTHON_VERSION
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -1297,6 +1333,10 @@ Program names:
   --program-prefix=PREFIX            prepend PREFIX to installed program names
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
 _ACEOF
 fi
 
@@ -3443,7 +3483,1185 @@ fi
 
 ALL_LINGUAS="hr"
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile"
+PYTHON=
+REQUIRED_PYTHON_VERSION=3.0
+
+# Extract the first word of "python3", so it can be a program name with args.
+set dummy python3; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PYTHON+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PYTHON in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PYTHON="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PYTHON" && ac_cv_path_PYTHON=":"
+  ;;
+esac
+fi
+PYTHON=$ac_cv_path_PYTHON
+if test -n "$PYTHON"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
+$as_echo "$PYTHON" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+if test "$PYTHON" != ":"; then :
+  prog="import sys
+# split strings by '.' and convert to numeric.  Append some zeros
+# because we need at least 4 digits for the hex conversion.
+# map returns an iterator in Python 3.0 and a list in 2.x
+minver = list(map(int, '$REQUIRED_PYTHON_VERSION'.split('.'))) + [0, 0, 0]
+minverhex = 0
+# xrange is not present in Python 3.0 and range returns an iterator
+for i in list(range(0, 4)): minverhex = (minverhex << 8) + minver[i]
+sys.exit(sys.hexversion < minverhex)"
+  if { echo "$as_me:$LINENO: $PYTHON -c "$prog"" >&5
+   ($PYTHON -c "$prog") >&5 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; then :
+  :
+else
+  PYTHON=":"
+fi
+fi
+
+
+
+_lcl_receval=""$bindir""
+	FULL_BINDIR=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+_lcl_receval=""$bindir/nscde""
+	STARTNSCDE=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+_lcl_receval=""$libdir/NsCDE""
+	NSCDE_LIBDIR=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+_lcl_receval=""$libexecdir/NsCDE""
+	NSCDE_TOOLSDIR=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+_lcl_receval=""$datarootdir/NsCDE""
+	NSCDE_DATADIR=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+_lcl_receval=""$datarootdir/NsCDE/fvwm""
+	FVWM_DATADIR=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
+
+# NSCDE_DATADIR=${datarootdir}/NsCDE
+
+
+
+
+
+
+
+
+
+# Dependencies
+# Extract the first word of "ksh93", so it can be a program name with args.
+set dummy ksh93; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_KSH+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $KSH in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_KSH="$KSH" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_KSH="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_KSH" && ac_cv_path_KSH="ksh93"
+  ;;
+esac
+fi
+KSH=$ac_cv_path_KSH
+if test -n "$KSH"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $KSH" >&5
+$as_echo "$KSH" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+for ac_prog in sed gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_SED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$SED"; then
+  ac_cv_prog_SED="$SED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in ""
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_SED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+SED=$ac_cv_prog_SED
+if test -n "$SED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SED" >&5
+$as_echo "$SED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$SED" && break
+done
+test -n "$SED" || SED="sed"
+
+for ac_prog in fvwm fvwm2 fvwm3 ${FVWM_BIN}
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_FVWM+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$FVWM"; then
+  ac_cv_prog_FVWM="$FVWM" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_FVWM="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+FVWM=$ac_cv_prog_FVWM
+if test -n "$FVWM"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FVWM" >&5
+$as_echo "$FVWM" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$FVWM" && break
+done
+test -n "$FVWM" || FVWM=""no""
+
+for ac_prog in cpp /lib/cpp /usr/lib/cpp /usr/local/lib/cpp
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_CPP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$CPP"; then
+  ac_cv_prog_CPP="$CPP" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CPP="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+CPP=$ac_cv_prog_CPP
+if test -n "$CPP"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
+$as_echo "$CPP" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$CPP" && break
+done
+test -n "$CPP" || CPP=""no""
+
+for ac_prog in xrdb
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XRDB+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XRDB"; then
+  ac_cv_prog_XRDB="$XRDB" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XRDB="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XRDB=$ac_cv_prog_XRDB
+if test -n "$XRDB"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XRDB" >&5
+$as_echo "$XRDB" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XRDB" && break
+done
+test -n "$XRDB" || XRDB=""no""
+
+for ac_prog in xset
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XSET+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XSET"; then
+  ac_cv_prog_XSET="$XSET" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XSET="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XSET=$ac_cv_prog_XSET
+if test -n "$XSET"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XSET" >&5
+$as_echo "$XSET" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XSET" && break
+done
+test -n "$XSET" || XSET=""no""
+
+for ac_prog in xprop
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XPROP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XPROP"; then
+  ac_cv_prog_XPROP="$XPROP" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XPROP="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XPROP=$ac_cv_prog_XPROP
+if test -n "$XPROP"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XPROP" >&5
+$as_echo "$XPROP" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XPROP" && break
+done
+test -n "$XPROP" || XPROP=""no""
+
+for ac_prog in xdpyinfo
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XDPYINFO+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XDPYINFO"; then
+  ac_cv_prog_XDPYINFO="$XDPYINFO" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XDPYINFO="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XDPYINFO=$ac_cv_prog_XDPYINFO
+if test -n "$XDPYINFO"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XDPYINFO" >&5
+$as_echo "$XDPYINFO" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XDPYINFO" && break
+done
+test -n "$XDPYINFO" || XDPYINFO=""no""
+
+for ac_prog in xterm
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XTERM+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XTERM"; then
+  ac_cv_prog_XTERM="$XTERM" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XTERM="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XTERM=$ac_cv_prog_XTERM
+if test -n "$XTERM"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XTERM" >&5
+$as_echo "$XTERM" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XTERM" && break
+done
+test -n "$XTERM" || XTERM=""no""
+
+for ac_prog in gettext
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GETTEXT+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GETTEXT"; then
+  ac_cv_prog_GETTEXT="$GETTEXT" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GETTEXT="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GETTEXT=$ac_cv_prog_GETTEXT
+if test -n "$GETTEXT"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GETTEXT" >&5
+$as_echo "$GETTEXT" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GETTEXT" && break
+done
+test -n "$GETTEXT" || GETTEXT=""no""
+
+for ac_prog in xdotool
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XDOTOOL+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XDOTOOL"; then
+  ac_cv_prog_XDOTOOL="$XDOTOOL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XDOTOOL="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XDOTOOL=$ac_cv_prog_XDOTOOL
+if test -n "$XDOTOOL"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XDOTOOL" >&5
+$as_echo "$XDOTOOL" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XDOTOOL" && break
+done
+test -n "$XDOTOOL" || XDOTOOL=""no""
+
+
+for ac_prog in xscreensaver
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XSCSVR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XSCSVR"; then
+  ac_cv_prog_XSCSVR="$XSCSVR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XSCSVR="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XSCSVR=$ac_cv_prog_XSCSVR
+if test -n "$XSCSVR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XSCSVR" >&5
+$as_echo "$XSCSVR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XSCSVR" && break
+done
+test -n "$XSCSVR" || XSCSVR=""no""
+
+for ac_prog in stalonetray
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_STALONETRAY+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$STALONETRAY"; then
+  ac_cv_prog_STALONETRAY="$STALONETRAY" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_STALONETRAY="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+STALONETRAY=$ac_cv_prog_STALONETRAY
+if test -n "$STALONETRAY"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $STALONETRAY" >&5
+$as_echo "$STALONETRAY" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$STALONETRAY" && break
+done
+test -n "$STALONETRAY" || STALONETRAY=""no""
+
+for ac_prog in xsettingsd
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XSETTINGSD+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XSETTINGSD"; then
+  ac_cv_prog_XSETTINGSD="$XSETTINGSD" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XSETTINGSD="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XSETTINGSD=$ac_cv_prog_XSETTINGSD
+if test -n "$XSETTINGSD"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XSETTINGSD" >&5
+$as_echo "$XSETTINGSD" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XSETTINGSD" && break
+done
+test -n "$XSETTINGSD" || XSETTINGSD=""no""
+
+for ac_prog in xrandr
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XRANDR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XRANDR"; then
+  ac_cv_prog_XRANDR="$XRANDR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XRANDR="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XRANDR=$ac_cv_prog_XRANDR
+if test -n "$XRANDR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XRANDR" >&5
+$as_echo "$XRANDR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XRANDR" && break
+done
+test -n "$XRANDR" || XRANDR=""no""
+
+for ac_prog in dunst
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_DUNST+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$DUNST"; then
+  ac_cv_prog_DUNST="$DUNST" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_DUNST="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+DUNST=$ac_cv_prog_DUNST
+if test -n "$DUNST"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $DUNST" >&5
+$as_echo "$DUNST" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$DUNST" && break
+done
+test -n "$DUNST" || DUNST=""no""
+
+for ac_prog in xclip
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_XCLIP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$XCLIP"; then
+  ac_cv_prog_XCLIP="$XCLIP" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_XCLIP="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+XCLIP=$ac_cv_prog_XCLIP
+if test -n "$XCLIP"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XCLIP" >&5
+$as_echo "$XCLIP" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$XCLIP" && break
+done
+test -n "$XCLIP" || XCLIP=""no""
+
+for ac_prog in rofi
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_ROFI+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$ROFI"; then
+  ac_cv_prog_ROFI="$ROFI" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_ROFI="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+ROFI=$ac_cv_prog_ROFI
+if test -n "$ROFI"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ROFI" >&5
+$as_echo "$ROFI" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$ROFI" && break
+done
+test -n "$ROFI" || ROFI=""no""
+
+
+# Dependencies failures
+if test x"$SED" == x"no"; then :
+  as_fn_error $? "No sed detected." "$LINENO" 5
+fi
+if test x"$KSH" == x"no"; then :
+  as_fn_error $? "Please install AT&T ksh 93 package before continuing." "$LINENO" 5
+fi
+if test x"$FVWM" == x"no"; then :
+  as_fn_error $? "Please install fvwm 2 or fvwm 3 before configuring." "$LINENO" 5
+fi
+if test x"$CPP" == x"no"; then :
+  as_fn_error $? "Please install C preprocessor (cpp) before configuring." "$LINENO" 5
+fi
+if test x"$XRDB" == x"no"; then :
+  as_fn_error $? "Please install X server resource database utility (xrdb) before configuring." "$LINENO" 5
+fi
+if test x"$XSET" == x"no"; then :
+  as_fn_error $? "Please install xset(1) utility before configuring." "$LINENO" 5
+fi
+if test x"$XPROP" == x"no"; then :
+  as_fn_error $? "Please install xprop(1) utility before configuring." "$LINENO" 5
+fi
+if test x"$XDPYINFO" == x"no"; then :
+  as_fn_error $? "Please install xdpyinfo(1) utility before configuring." "$LINENO" 5
+fi
+if test x"$XTERM" == x"no"; then :
+  as_fn_error $? "Please install xterm(1) application before configuring." "$LINENO" 5
+fi
+if test x"$GETTEXT" == x"no"; then :
+  as_fn_error $? "Please install gettext(1) tool before configuring." "$LINENO" 5
+fi
+if test x"$XDOTOOL" == x"no" && test x"$FVWM" != x"fvwm3"; then :
+  as_fn_error $? "No fvwm3 detected. Please install xdotool(1) tool before configuring." "$LINENO" 5
+fi
+
+# Dependencies warnings
+if test x"$XSCSVR" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup." >&5
+$as_echo "$as_me: WARNING: No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup." >&2;}
+fi
+if test x"$STALONETRAY" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No Stalonetray was found. This NsCDE Installation will not be able to have tray applets." >&5
+$as_echo "$as_me: WARNING: No Stalonetray was found. This NsCDE Installation will not be able to have tray applets." >&2;}
+fi
+if test x"$XSETTINGSD" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes." >&5
+$as_echo "$as_me: WARNING: No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes." >&2;}
+fi
+
+# Make sure we can run config.sub.
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+$as_echo_n "checking build system type... " >&6; }
+if ${ac_cv_build+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+test "x$ac_build_alias" = x &&
+  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+$as_echo "$ac_cv_build" >&6; }
+case $ac_cv_build in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+esac
+build=$ac_cv_build
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_build
+shift
+build_cpu=$1
+build_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+build_os=$*
+IFS=$ac_save_IFS
+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+$as_echo_n "checking host system type... " >&6; }
+if ${ac_cv_host+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+$as_echo "$ac_cv_host" >&6; }
+case $ac_cv_host in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+esac
+host=$ac_cv_host
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_host
+shift
+host_cpu=$1
+host_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+host_os=$*
+IFS=$ac_save_IFS
+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking platform" >&5
+$as_echo_n "checking platform... " >&6; }
+case "$host_os" in
+freebsd*|sunos*|openbsd*|dragonfly*)
+        for ac_prog in gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GSED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GSED"; then
+  ac_cv_prog_GSED="$GSED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GSED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GSED=$ac_cv_prog_GSED
+if test -n "$GSED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
+$as_echo "$GSED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GSED" && break
+done
+test -n "$GSED" || GSED=""no""
+
+        if test x"$GSED" == x"no"; then :
+  as_fn_error $? "You must have GNU sed (gsed) installed on ${host_os}." "$LINENO" 5
+fi
+        ;;
+netbsd*)
+        for ac_prog in gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GSED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GSED"; then
+  ac_cv_prog_GSED="$GSED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GSED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GSED=$ac_cv_prog_GSED
+if test -n "$GSED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
+$as_echo "$GSED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GSED" && break
+done
+test -n "$GSED" || GSED=""no""
+
+        if test x"$GSED" == x"no"; then :
+  as_fn_error $? "You must have GNU sed (gsed) installed on ${host_os}." "$LINENO" 5
+fi
+        for ac_prog in gtail
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GTAIL+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GTAIL"; then
+  ac_cv_prog_GTAIL="$GTAIL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GTAIL="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GTAIL=$ac_cv_prog_GTAIL
+if test -n "$GTAIL"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTAIL" >&5
+$as_echo "$GTAIL" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GTAIL" && break
+done
+test -n "$GTAIL" || GTAIL=""no""
+
+        if test x"$GTAIL" == x"no"; then :
+  as_fn_error $? "You must have GNU tail (gtail) installed on ${host_os}." "$LINENO" 5
+fi
+        ;;
+*)
+        ;;
+esac
+
+
+
+ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile NsCDE/bin/Makefile NsCDE/bin/nscde NsCDE/share/NsCDE/fvwm/Main.fvwmconf xdg/xsessions/nscde.desktop"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4195,6 +5413,10 @@ do
     "src/pclock/src/Makefile") CONFIG_FILES="$CONFIG_FILES src/pclock/src/Makefile" ;;
     "docbook/Makefile") CONFIG_FILES="$CONFIG_FILES docbook/Makefile" ;;
     "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
+    "NsCDE/bin/Makefile") CONFIG_FILES="$CONFIG_FILES NsCDE/bin/Makefile" ;;
+    "NsCDE/bin/nscde") CONFIG_FILES="$CONFIG_FILES NsCDE/bin/nscde" ;;
+    "NsCDE/share/NsCDE/fvwm/Main.fvwmconf") CONFIG_FILES="$CONFIG_FILES NsCDE/share/NsCDE/fvwm/Main.fvwmconf" ;;
+    "xdg/xsessions/nscde.desktop") CONFIG_FILES="$CONFIG_FILES xdg/xsessions/nscde.desktop" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

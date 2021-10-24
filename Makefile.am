@@ -1,6 +1,8 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-# SUBDIRS = xdg src NsCDE docbook
-SUBDIRS = src docbook po
+# SUBDIRS = src po docbook xdg NsCDE/bin
+SUBDIRS = src po docbook NsCDE/bin
 
+clean-local:
+	-rm -f NsCDE/share/NsCDE/fvwm/Main.fvwmconf

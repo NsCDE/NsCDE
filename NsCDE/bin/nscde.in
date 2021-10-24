@@ -13,7 +13,7 @@ if [ -z $HOME ]; then
    echo "Error: HOME not set." >&2
    exit 2
 else
-   export NSCDE_VERSION="1.3"
+   export NSCDE_VERSION="@VERSION@"
 fi
 
 # Either print version and exit, or construct main options for and output
@@ -39,18 +39,21 @@ else
    export DPI=96
 fi
 
-# Set main NSCDE and FVWM variables. Most of the things later
-# depends on this core variables.
+# Set main NSCDE and FVWM variables. Most of the things later depends
+# on this core variables.
+export NSCDE_OS=$(uname -s)
+export NSCDE_ROOT=@prefix@
+export NSCDE_DATADIR=@NSCDE_DATADIR@
+export NSCDE_LIBDIR=@NSCDE_LIBDIR@
+export NSCDE_TOOLSDIR=@NSCDE_TOOLSDIR@
+export FVWM_DATADIR="@FVWM_DATADIR@"
 export FVWM_USERDIR="${HOME}/.NsCDE"
-export NSCDE_ROOT=/opt/NsCDE
-export NSCDE_DATADIR=${NSCDE_ROOT}/share/NsCDE
-export FVWM_DATADIR="${NSCDE_DATADIR}/fvwm"
 
 mkdir -p "${FVWM_USERDIR}/tmp"
 
-echo "$PATH" | egrep -q "/opt\/NsCDE\/bin"
+echo "$PATH" | egrep -q "@FULL_BINDIR@"
 if (($? != 0)); then
-   export PATH="${PATH}:${NSCDE_ROOT}"
+   export PATH="${PATH}:@FULL_BINDIR@"
 fi
 
 # Find fvwm(1) binary. This is a critical point.
@@ -108,7 +111,7 @@ fi
 if [ -r ${FVWM_USERDIR}/Main.fvwmconf ]; then
    exec $FVWM_BIN -f ${FVWM_USERDIR}/Main.fvwmconf $FVWM_OPTS
 else
-   exec $FVWM_BIN -f ${NSCDE_DATADIR}/fvwm/Main.fvwmconf $FVWM_OPTS
+   exec $FVWM_BIN -f ${FVWM_DATADIR}/Main.fvwmconf $FVWM_OPTS
 fi
 
 # Do not be picky if there is some failure left.

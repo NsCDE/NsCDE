@@ -3,12 +3,12 @@ DOCBOOK2PDF = docbook2pdf
 DOCBOOK2TXT = docbook2txt
 XSLTPROC = xsltproc
 
-all: docs-pdf docs-txt docs-html
+all: NsCDE.pdf NsCDE.txt docs-html
 
-docs-pdf:
+NsCDE.pdf:
 	${DOCBOOK2PDF} NsCDE.xml
 
-docs-txt:
+NsCDE.txt:
 	${DOCBOOK2TXT} NsCDE.xml
 
 docs-html:
