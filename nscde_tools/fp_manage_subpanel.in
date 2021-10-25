@@ -1,0 +1,209 @@
+#!@KSH@
+
+if [ -z $HOME ]; then
+   echo "Error: HOME is not set cannot continue."
+   exit 3
+fi
+
+if [ -z $NSCDE_ROOT ]; then
+   echo "Error: NSCDE_ROOT is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_ROOT" ]; then
+   echo "Error: NSCDE_ROOT does not exist. Cannot continue."
+   exit 5
+fi
+
+if [ -z $NSCDE_DATADIR ]; then
+   echo "Error: NSCDE_DATADIR is not set cannot continue."
+   exit 4
+fi
+
+if [ ! -e "$NSCDE_DATADIR" ]; then
+   echo "Error: NSCDE_DATADIR does not exist. Cannot continue."
+   exit 5
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   echo "Error: FVWM_USERDIR is not set cannot continue."
+   exit 6
+fi
+
+function add_subpanel
+{
+   if [ "x$SubpanelNo" == "x" ]; then
+      echo "ERROR: Missing subpanel number."
+      exit 9
+   fi
+
+   if (($SubpLocalDefCheck == 3)); then
+      $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   if (($SubpLocalDefCheck == 0)); then
+      if [ -r "$NSCDE_DATADIR/defaults/Subpanels.actions" ]; then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      else
+         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
+         exit 8
+      fi
+   fi
+}
+
+function delete_subpanel
+{
+   if [ "x$SubpanelNo" == "x" ]; then
+      echo "ERROR: Missing subpanel number."
+      exit 9
+   fi
+
+   if (($SubpLocalDefCheck == 3)); then
+      $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   if (($SubpLocalDefCheck == 0)); then
+      if [ -r "$NSCDE_DATADIR/defaults/Subpanels.actions" ]; then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+         egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+         $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      else
+         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
+         exit 8
+      fi
+   fi
+
+}
+
+function reset_this_button
+{
+   echo "$BUTTONTYPE" | cut -d"." -f 3 | egrep -q '(icon|applet)'
+   if (($? != 0)); then
+      BUTTONTYPE="default"
+   fi
+
+   if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      if (($? == 0)); then
+         RestartFP=1
+      else
+         RestartFP=0
+      fi
+
+      if [ "$BUTTONTYPE" == "icon" ]; then
+         if [ -r "$NSCDE_DATADIR/defaults/FrontPanel.actions" ]; then
+            egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions"
+            if (($? == 0)); then
+               RestartFP=1
+            else
+               RestartFP=0
+            fi
+         else
+            RestartFP=0
+         fi
+      else
+         if [ "$BUTTONTYPE" == "applet" ]; then
+            RestartFP=1
+         else
+            RestartFP=0
+         fi
+      fi
+
+      egrep -q "^Btn${PanelNo},.*" "$FVWM_USERDIR/FrontPanel.actions"
+      FPA_RETVAL=$?
+      if ((FPA_RETVAL == 0)); then
+         $NSCDE_TOOLSDIR/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
+      else
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it's default configured function.]\""
+      fi
+
+      if (($RestartFP == 0)); then
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_TOOLSDIR]/fpseticon Btn${PanelNo}\""
+      else
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "InfoStoreRemove FP.Btn${PanelNo}.type"
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
+      fi
+   fi
+}
+
+function manage_launcher
+{
+   OldNumOut=$(egrep "^([[:space:]])?InfoStoreAdd FP.${2}LaunchersNum [[:digit:]].*" "$FVWM_USERDIR/NsCDE.conf")
+   ADDLNCH_RETVAL=$?
+   OldNum=$(echo "${OldNumOut#*LaunchersNum }" | awk '{ print $1 }')
+   echo "$OldNum" | egrep -q '^[[:digit:]]+$'
+   if (($? == 0)); then
+      if [ "$1" == "add" ] && [ $OldNum -lt 10 ]; then
+         NewNum=$(($OldNum + 1))
+      elif [ "$1" == "del" ] && [ $OldNum -ne 0 ]; then
+         NewNum=$(($OldNum - 1))
+      else
+         exit 0
+      fi
+   else
+      # Case where infostore variable exists, but parsed number is not what we expect.
+      if (($ADDLNCH_RETVAL == 0)); then
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+                     \"\$[gt.ERROR: Old value of FP.${2}LaunchersNum is not a number:] $OldNum\""
+         exit 1
+      fi
+   fi
+
+   if (($ADDLNCH_RETVAL == 0)); then
+
+      $NSCDE_TOOLSDIR/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
+       -f "$FVWM_USERDIR/NsCDE.conf"
+   else
+      # Adding as new value - appending.
+      if [ "$1" == add ]; then
+         NewNum=6
+      fi
+      if [ "$1" == del ]; then
+         NewNum=4
+      fi
+
+      echo "InfoStoreAdd FP.${2}LaunchersNum $NewNum" >> "$FVWM_USERDIR/NsCDE.conf"
+   fi
+
+   echo "InfoStoreAdd FP.${Direction}LaunchersNum ${NewNum}"
+}
+
+while getopts p:adr:A:D: Option
+do
+   case $Option in
+      p)
+         SubpanelNo=$OPTARG
+         PanelNo=$SubpanelNo
+         SubpLocalDefCheck=$(egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED),.*" "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null | wc -l)
+
+         if (($SubpLocalDefCheck != 0)) && (($SubpLocalDefCheck != 3)); then
+            echo "ERROR: invalid configuration for subpanel ${SubpanelNo} in $FVWM_USERDIR/Subpanels.actions."
+            exit 7
+         fi
+      ;;
+      a)
+         add_subpanel
+      ;;
+      d)
+         delete_subpanel
+      ;;
+      r)
+         BUTTONTYPE="$OPTARG"
+         reset_this_button
+      ;;
+      A)
+         Direction="$OPTARG"
+         manage_launcher add $Direction
+      ;;
+      D)
+         Direction="$OPTARG"
+         manage_launcher del $Direction
+      ;;
+   esac
+done
+

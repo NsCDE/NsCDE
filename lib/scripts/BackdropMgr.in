@@ -1,0 +1,970 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-BackdropMgr}
+WindowLocaleTitle {Style Manager - Backdrop}
+WindowSize 480 512
+Colorset 22
+
+Init
+Begin
+   Set $CurrDesk = (Add (GetScriptArgument 1) 1)
+   If $CurrDesk == {} Then
+   Begin
+      Set $CurrDesk = 1
+   End
+
+   Set $DeskNo = (GetScriptArgument 2)
+   If $DeskNo == {} Then
+   Begin
+      Set $DeskNo = 4
+   End
+
+   Set $Ncolors = (GetOutput {echo $NSCDE_PALETTE_NCOLORS} 1 -1)
+   If $Ncolors == {} Then
+   Begin
+      Set $Ncolors = 8
+   End
+
+   If $Ncolors == 4 Then
+   Begin
+      ChangeLocaleTitle 9 { Default for this Workspace}
+   End
+
+   Set $CurrentPalette = (GetOutput {echo "$NSCDE_PALETTE"} 1 -1)
+   If $CurrentPalette == {} Then
+   Begin
+      Set $CurrentPalette = {Broica}
+   End
+
+   Set $Backdrops = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p} 1 -1)
+   ChangeTitle 5 $Backdrops
+
+   # For Keybindings not to go beyond min and max
+   Set $ListTotalB = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p | tr '|' '\n' | wc -l} 1 1)
+   Set $ListTotalP = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -P | tr '|' '\n' | wc -l} 1 1)
+
+   # Defaults
+   Set $ColorVariant = 0
+   Set $PixmapVariant = {AspectPixmap}
+   Set $Performed = 0
+   Set $PreviewContaminated = 0
+   Set $PhotoMode = 0
+   Set $DefaultPalette = $CurrentPalette
+
+   # For a start, select 1st Backdrop and display preview
+   ChangeValue 5 1
+   SendSignal 5 1
+
+   # Keybindings
+   Key Q C 18 1 {KeyClose}
+   Key P A 11 1 {KeyPreview}
+   Key Down A 5 3 {KeyDown}
+   Key Up A 5 3 {KeyUp}
+   Key F1 A 19 1 {KeyHelp}
+   Key Help A 19 1 {KeyHelp}
+
+   Set $DefFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 1 $DefFont
+
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
+   ChangeFont 11 $BtnFont
+   ChangeFont 12 $BtnFont
+   ChangeFont 13 $BtnFont
+   ChangeFont 16 $BtnFont
+   ChangeFont 17 $BtnFont
+   ChangeFont 18 $BtnFont
+   ChangeFont 19 $BtnFont
+
+   Set $ListFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 5 $ListFont
+   ChangeFont 10 $ListFont
+
+   # Set different font for some elements
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11} 1 -1)
+   ChangeFont 8 $SmallFont
+   ChangeFont 9 $SmallFont
+
+   Set $ExtraSmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10} 1 -1)
+   ChangeFont 6 $ExtraSmallFont
+   ChangeFont 7 $ExtraSmallFont
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 6 (GetTitle 6)
+   ChangeLocaleTitle 7 (GetTitle 7)
+   ChangeLocaleTitle 9 (GetTitle 9)
+   ChangeLocaleTitle 11 (GetTitle 11)
+
+   # Get Screen X and Y
+   Do {SendToModule BackdropMgr SendString 7 1 $[vp.width]x$[vp.height]}
+
+   # Get FVWM3 DesktopConfiguratio mode
+   # Default is global and fvwm2
+   Set $Fvwm3DesktopNonGlobalMode = 0
+   Do {SendToModule BackdropMgr SendString 4 1 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
+End
+
+PeriodicTasks
+Begin
+   Set $MSG=(ReceivFromScript $BROWSER)
+   If $MSG <> {No message} Then
+   Begin
+     Do {SendToModule BackdropMgr SendString 12 1 } $MSG
+   End
+End
+
+QuitFunc
+Begin
+   Do {Exec exec rm -f $FVWM_USERDIR/tmp/backer-*.pm $FVWM_USERDIR/tmp/backer-*.xpm $FVWM_USERDIR/tmp/backer-*.png}
+End
+
+Widget 1
+   Property
+   Size 8 0
+   Position 16 2
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Colorset 22
+   Title { Backdrops }
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 464 286
+   Position 8 14
+   Type Rectangle
+End
+
+Widget 3
+   Property
+   Size 264 264
+   Position 17 27
+   Type Rectangle
+   Colorset 4
+End
+
+Widget 4
+   Property
+   Size 262 262
+   Position 18 28
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Colorset 20
+   Icon NsCDE/None.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         Set $IsFvwm3 = (StrCopy (LastString) 1 1)
+         Set $Monitors = (StrCopy (LastString) 3 3)
+         Set $DesktopModel = (StrCopy (LastString) 5 35)
+
+         If (Add $IsFvwm3 $Monitors) >= 3 Then
+         Begin
+            If $DesktopModel == {per-monitor} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
+            If $DesktopModel == {shared} Then
+            Begin
+               Set $Fvwm3DesktopNonGlobalMode = 1
+            End
+         End
+      End
+End
+
+Widget 5
+   Property
+   Size 176 266
+   Position 290 26
+   Type List
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            SendSignal 5 1
+         End
+         Else
+         Begin
+            SendSignal 5 2
+         End
+      End
+      1 :
+      Begin
+         # If already called Apply from this session, set $Performed to 0 if we continue to browse backdrops.
+         Set $Performed = 0
+
+         If $ColorVariant == 0 Then
+         Begin
+            Set $ColorVariant = $CurrDesk
+         End
+         Set $BackdropNameCmd = {$NSCDE_TOOLSDIR/backdropmgr -n } (GetValue 5)
+         Set $BackdropName = (GetOutput $BackdropNameCmd 1 -1)
+         Set $BackdropPreviewCmd = {$NSCDE_TOOLSDIR/backdropmgr -t -e -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
+         Set $BackdropPreview = (GetOutput $BackdropPreviewCmd 2 -1)
+         Do {Colorset 60 TiledPixmap } $BackdropPreview
+         ChangeColorset 4 60
+
+         # Calculate chars in the current backdrop name
+         Set $StrLen = 1
+         Set $iter = 0
+         While $iter <> 1 Do
+         Begin
+            Set $NameStr = (StrCopy $BackdropName $StrLen $StrLen)
+            If $NameStr <> {} Then
+            Begin
+               Set $iter = 0
+               Set $StrLen = (Add $StrLen 1)
+            End
+            Else
+            Begin
+               Set $iter = 1
+               Set $StrLen = (Mult (Add $StrLen -1) 8)
+            End
+         End
+
+         # Set backdrop name in the upper title
+         Set $StrSpace = (Add $StrLen 92)
+         Set $NameInTitle = { } (Gettext {Backdrop:}) { } $BackdropName
+         ChangeSize 1 $StrSpace 22
+         ChangeTitle 1 $NameInTitle
+      End
+      2 :
+      Begin
+         # If already called Apply from this session, set $Performed to 0 if we continue to browse backdrops.
+         Set $Performed = 0
+
+         Set $PhotoNameCmd = {$NSCDE_TOOLSDIR/backdropmgr -F } (GetValue 5)
+         Set $PhotoName = (GetOutput $PhotoNameCmd 1 -1)
+         Set $PhotoPreviewCmd = {$NSCDE_TOOLSDIR/backdropmgr -t -e -D } $ColorVariant { -s "} $PhotoName {"}
+         Set $PhotoPreview = (GetOutput $PhotoPreviewCmd 1 -1)
+         ChangeIcon 4 $PhotoPreview
+
+         # Calculate chars in the current picture name
+         Set $StrLen = 1
+         Set $iter = 0
+         While $iter <> 1 Do
+         Begin
+            Set $NameStr = (StrCopy $PhotoName $StrLen $StrLen)
+            If $NameStr <> {} Then
+            Begin
+               Set $iter = 0
+               Set $StrLen = (Add $StrLen 1)
+            End
+            Else
+            Begin
+               Set $iter = 1
+               Set $StrLen = (Mult (Add $StrLen -1) 8)
+            End
+         End
+
+         # Set picture name in the upper title
+         Set $StrSpace = (Add $StrLen 84)
+         Set $NameInTitle = { Pictures: } $PhotoName
+         ChangeSize 1 $StrSpace 22
+         ChangeTitle 1 $NameInTitle
+      End
+      3 :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            Set $ListTotal = $ListTotalB
+         End
+         Else
+         Begin
+            Set $ListTotal = $ListTotalP
+         End
+
+         If (LastString) == {KeyDown} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 5) 1)
+            If (GetValue 5) < $ListTotal Then
+            Begin
+               ChangeValue 5 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 5 1
+            End
+         End
+
+         If (LastString) == {KeyUp} Then
+         Begin
+            Set $NextListItem = (Add (GetValue 5) -1)
+            If (GetValue 5) > 1 Then
+            Begin
+               ChangeValue 5 $NextListItem
+            End
+            Else
+            Begin
+               ChangeValue 5 $ListTotal
+            End
+         End
+
+         If $PhotoMode == 0 Then
+         Begin
+            SendSignal 5 1
+         End
+         Else
+         Begin
+            SendSignal 5 2
+         End
+      End
+End
+
+Widget 6
+   Property
+   Size 180 26
+   Position 10 306
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title { Use this backdrop for all workspaces}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 180 26
+   Position 290 306
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title { Use a photo or picture}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 7) == 1 Then
+         Begin
+            ChangeTitle 1 { Pictures }
+            ChangeSize 1 80 22
+            Set $Photos = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -P} 1 -1)
+            ChangeTitle 5 $Photos
+            ChangeLocaleTitle 6 { Use this picture for all workspaces}
+            ChangeColorset 4 20
+            ChangeLocaleTitle 8 {Picture Variant: }
+            ChangeLocaleTitle 9 { Stretch Picture | Tile Picture| Original Picture }
+            HideWidget 10
+            Set $PhotoMode = 1
+            ChangeValue 9 1
+            # Select first photo
+            SendSignal 5 2
+         End
+         Else
+         Begin
+            ChangeTitle 1 { Backdrops }
+            ChangeSize 1 90 22
+            Set $Backdrops = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p} 1 -1)
+            ChangeTitle 5 $Backdrops
+            ChangeLocaleTitle 6 { Use this backdrop for all workspaces}
+            ChangeIcon 4 NsCDE/None.xpm
+            # ShowWidget 8
+            # ShowWidget 9
+            ChangeLocaleTitle 8 {Background Variant: }
+            If $Ncolors <> 4 Then
+            Begin
+               ChangeLocaleTitle 9 { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+            End
+            Else
+            Begin
+               ChangeLocaleTitle 9 { Default for this Workspace}
+            End
+            ShowWidget 10
+            Set $PhotoMode = 0
+            ChangeValue 9 1
+            # Select first backdrop
+            SendSignal 5 1
+         End
+      End
+      1 :
+      Begin
+         Set $ScreenXY = (LastString)
+      End
+End
+
+Widget 8
+   Property
+   Size 4 0
+   Position 22 344
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Background Variant: }
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 80 10
+   Position 22 370
+   Type PopupMenu
+   Flags NoReliefString
+   Value 0
+   Title { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            If (GetValue 9) == 1 Then
+            Begin
+               Set $ColorVariant = $CurrDesk
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 2 Then
+            Begin
+               Set $ColorVariant = 1
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 3 Then
+            Begin
+               Set $ColorVariant = 2
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 4 Then
+            Begin
+               Set $ColorVariant = 3
+               SendSignal 5 1
+            End
+            If (GetValue 9) == 5 Then
+            Begin
+               Set $ColorVariant = 4
+               SendSignal 5 1
+            End
+   
+            # X compositor bug workaround
+            If $RedrawSelf == 1 Then
+            Begin
+               ChangeValue 9 (GetValue 9)
+            End
+         End
+         If $PhotoMode == 1 Then
+         Begin
+            If (GetValue 9) == 1 Then
+            Begin
+               Set $PixmapVariant = {AspectPixmap}
+            End
+            If (GetValue 9) == 2 Then
+            Begin
+               Set $PixmapVariant = {TiledPixmap}
+            End
+            If (GetValue 9) == 3 Then
+            Begin
+               Set $PixmapVariant = {Pixmap}
+            End
+         End
+      End
+End
+
+Widget 10
+   Property
+   Size 236 22
+   Position 22 412
+   Type PushButton
+   Flags NoReliefString
+   Value 0
+   LocaleTitle { Load Custom Palette ... }
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {Module FvwmScript PaletteDialog}
+      End
+      1 :
+      Begin
+         Set $CurrentPalette = (LastString)
+         If $CurrentPalette == {DEFAULT} Then
+         Begin
+            Set $CurrentPalette = $DefaultPalette
+            ChangeTitle 10 { Load Custom Palette ...}
+         End
+         Else
+         Begin
+            Set $NewWidgetTitle = {Palette: } $CurrentPalette
+            ChangeTitle 10 $NewWidgetTitle
+         End
+      End
+End
+
+Widget 11
+   Property
+   Size 120 12
+   Position 340 342
+   Type PushButton
+   Flags NoReliefString
+   Title { Preview | Preview | Revert }
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 11 1
+      End
+      1 :
+      Begin
+         # Called from keybinding
+         If (LastString) == {KeyPreview} Then
+         Begin
+            ChangeValue 11 1
+         End
+
+         If (GetValue 11) == 1 Then
+         Begin
+            If $PhotoMode == 0 Then
+            Begin
+               If $BackdropPreview <> {} Then
+               Begin
+                  If $Fvwm3DesktopNonGlobalMode == 0 Then
+                  Begin
+                     Do {Colorset 3} $CurrDesk { TiledPixmap } $BackdropPreview
+                  End
+                  Else
+                  Begin
+                     Do {Exec exec @KSH@ -c 'convert }
+                     {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                     {\( -size $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] tile:} $BackdropPreview
+                     { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite "}
+                     $BackdropPreview {.png" && fvwm-root -r "} $BackdropPreview {.png"'}
+                  End
+                  Set $PreviewContaminated = 1
+               End
+            End
+            Else
+            Begin
+               If $PhotoPreview <> {} Then
+               Begin
+                  Set $PhotoPathCmd = {$NSCDE_TOOLSDIR/backdropmgr -e -f "} $PhotoName {"}
+                  Set $PhotoPath = (GetOutput $PhotoPathCmd 1 -1)
+                  If $CurrDesk == 1 Then
+                     Set $BgCs = 40
+                  If $CurrDesk == 2 Then
+                     Set $BgCs = 42
+                  If $CurrDesk == 3 Then
+                     Set $BgCs = 44
+                  If $CurrDesk == 4 Then
+                     Set $BgCs = 46
+                  If $CurrDesk == 5 Then
+                     Set $BgCs = 40
+                  If $CurrDesk == 6 Then
+                     Set $BgCs = 42
+                  If $CurrDesk == 7 Then
+                     Set $BgCs = 44
+                  If $CurrDesk == 8 Then
+                     Set $BgCs = 46
+                  If $Fvwm3DesktopNonGlobalMode == 0 Then
+                  Begin
+                     Do {Colorset 3} $CurrDesk { bg $[bg.cs} $BgCs {],} $PixmapVariant { } $PhotoPath
+                  End
+                  Else
+                  Begin
+                     If $PixmapVariant == {TiledPixmap} Then
+                     Begin
+                        Do {Exec exec @KSH@ -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( -size $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] tile:} $PhotoPath
+                        { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                     If $PixmapVariant == {AspectPixmap} Then
+                     Begin
+                        Do {Exec exec @KSH@ -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( } $PhotoPath { -resize $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height]\! }
+                        { -geometry +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] -compose over \) -composite }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                     If $PixmapVariant == {Pixmap} Then
+                     Begin
+                        Do {Exec exec @KSH@ -c 'convert }
+                        {\( $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png \) }
+                        {\( -resize $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] }
+                        {-gravity center -extent $[monitor.$[monitor.current].width]x$[monitor.$[monitor.current].height] }
+                        {-repage +$[monitor.$[monitor.current].x]+$[monitor.$[monitor.current].y] }
+                        {-background "$[bg.cs} $BgCs {.hash]" } $PhotoPath { \) -layers merge }
+                        {"$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png" && fvwm-root -r "$[FVWM_USERDIR]/tmp/backer-} $PhotoName {.png"'}
+                     End
+                  End
+                  Set $PreviewContaminated = 1
+               End
+            End
+         End
+         If (GetValue 11) == 2 Then
+         Begin
+            Do {f_Readcfg Backdrops}
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetFvwm3NonGlobalBackground}
+            End
+            Set $PreviewContaminated = 0
+         End
+      End
+End
+
+Widget 12
+   Property
+   Size 120 22
+   Position 340 376
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle { Add ... }
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $ARG={FilePicker }
+         Set $BROWSER=(LaunchScript $ARG )
+      End
+      1 :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            Set $CheckBackdropFileCmd = {$NSCDE_TOOLSDIR/backdropmgr -C } (LastString)
+            Set $CheckBackdropFile = (GetOutput $CheckBackdropFileCmd 1 -1)
+            If $CheckBackdropFile == {xpixmap} Then
+            Begin
+               Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/backdrops/}
+               Set $Backdrops = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p} 1 -1)
+               ChangeTitle 5 $Backdrops
+            End
+            Else
+            Begin
+               Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file is not a valid X Pixmap for Backdrop."}
+            End
+         End
+         Else
+         Begin
+            Set $CheckPhotoFileCmd = {$NSCDE_TOOLSDIR/backdropmgr -T } (LastString)
+            Set $CheckPhotoFileType = (GetOutput $CheckPhotoFileCmd 1 1)
+            Set $CheckPhotoFileConv = (GetOutput $CheckPhotoFileCmd 2 1)
+            Set $CheckPhotoFileBaseName = (GetOutput $CheckPhotoFileCmd 3 -1)
+            If $CheckPhotoFileType == {pic} Then
+            Begin
+               If $CheckPhotoFileConv == {noconv} Then
+               Begin
+                  Do {Exec exec cp "} (LastString) {" $FVWM_USERDIR/photos/}
+                  Set $Photos = (GetOutput {sleep 0.2; $NSCDE_TOOLSDIR/backdropmgr -P} 1 -1)
+                  ChangeTitle 5 $Photos
+               End
+               If $CheckPhotoFileConv == {conv} Then
+               Begin
+                  Do {Exec exec convert "} (LastString) {" "$FVWM_USERDIR/photos/} $CheckPhotoFileBaseName {.png"}
+                  Set $Photos = (GetOutput {sleep 0.5; $NSCDE_TOOLSDIR/backdropmgr -P} 1 -1)
+                  ChangeTitle 5 $Photos
+               End
+               Else
+               Begin
+                  # Workaround FvwmScript lack of programatic cases or elifs ...
+                  If $CheckPhotoFileConv <> {noconv} Then
+                  Begin
+                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error from $[NSCDE_TOOLSDIR]/backdropmgr: } $CheckPhotoFileConv {."}
+                  End
+               End
+            End
+            Else
+            Begin
+               Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file does not appear to be in the suitable image format for setting desktop background."}
+            End
+         End
+      End
+End
+
+Widget 13
+   Property
+   Size 120 22
+   Position 340 412
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle { Delete ... }
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            Set $DelBckNumToNameCmd = {$NSCDE_TOOLSDIR/backdropmgr -n } (GetValue 5)
+            Set $DelBckNumToName = (GetOutput $DelBckNumToNameCmd 1 -1)
+            Set $CheckDelPathCmd = {$NSCDE_TOOLSDIR/backdropmgr -e -G } $DelBckNumToName
+            Set $CheckDelPath = (GetOutput $CheckDelPathCmd 1 -1)
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Backdrop] } $DelBckNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Backdrop]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+         End
+         Else
+         Begin
+            Set $DelPhotoNumToNameCmd = {$NSCDE_TOOLSDIR/backdropmgr -F } (GetValue 5)
+            Set $DelPhotoNumToName = (GetOutput $DelPhotoNumToNameCmd 1 -1)
+            Set $CheckDelPhotoPathCmd = {$NSCDE_TOOLSDIR/backdropmgr -e -f } $DelPhotoNumToName
+            Set $CheckDelPhotoPath = (GetOutput $CheckDelPhotoPathCmd 1 -1)
+            Do {f_RunQuickScriptDialog ActionForm "$[gt.Delete Picture] } $DelPhotoNumToName {?" "$[gt.Yes]" "$[gt.No]" "$[gt.Delete Picture]" "SendToModule BackdropMgr SendString 13 1 confirmed"}
+         End
+      End
+      1 :
+      Begin
+         If (LastString) == {confirmed} Then
+         Begin
+            If $PhotoMode == 0 Then
+            Begin
+               Set $RmBackdropCmd = {rm -f } $CheckDelPath { 2>&1}
+               Set $RmBackdrop = (GetOutput $RmBackdropCmd 1 -1)
+               If $RmBackdrop <> {} Then
+               Begin
+                  Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "} $RmBackdrop {"}
+               End
+               Else
+               Begin
+                  Set $Backdrops = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p} 1 -1)
+                  ChangeTitle 5 $Backdrops
+               End
+            End
+            Else
+            Begin
+               Set $RmPhotoCmd = {rm -f } $CheckDelPhotoPath { 2>&1}
+               Set $RmPhoto = (GetOutput $RmPhotoCmd 1 -1)
+               If $RmPhoto <> {} Then
+               Begin
+                  Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "} $RmPhoto {"}
+               End
+               Else
+               Begin
+                  Set $Photos = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -P} 1 -1)
+                  ChangeTitle 5 $Photos
+               End
+            End
+         End
+      End
+End
+
+Widget 14
+   Property
+   Size 464 116
+   Position 8 334
+   Type Rectangle
+End
+
+Widget 15
+   Property
+   Size 472 1
+   Position 3 460
+   Type Rectangle
+End
+
+Widget 16
+   Property
+   Size 90 26
+   Position 16 472
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $Performed == 0 Then
+         Begin
+            # Remove preview mode if present.
+            Set $PreviewMode = 0
+            If $PhotoMode == 0 Then
+            Begin
+               SendSignal 17 1
+            End
+            Else
+            Begin
+               SendSignal 17 2
+            End
+         End
+         Quit
+      End
+End
+
+Widget 17
+   Property
+   Size 90 26
+   Position 135 472
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Apply}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $PhotoMode == 0 Then
+         Begin
+            # Remove preview mode if present.
+            Set $PreviewMode = 0
+            SendSignal 17 1
+            Set $Performed = 1
+         End
+         Else
+         Begin
+            # Remove preview mode if present.
+            Set $PreviewMode = 0
+            SendSignal 17 2
+            Set $Performed = 1
+         End
+      End
+      1 :
+      Begin
+         # Variables are set already in Widget 5 (List), instruction 1
+         If $ColorVariant == $CurrDesk Then
+         Begin
+            If (GetValue 6) == 0 Then
+            Begin
+               Set $BackdropGeneratedCmd = {$NSCDE_TOOLSDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $ColorVariant { -b "} $BackdropName {"}
+               Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
+            End
+            If (GetValue 6) <> 0 Then
+            Begin
+               Set $deskiter = 0
+               While $deskiter < $DeskNo Do
+               Begin
+                  Set $deskiter = (Add $deskiter 1)
+                  Set $BackdropGeneratedCmd = {$NSCDE_TOOLSDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D } $deskiter { -b "} $BackdropName {"}
+                  Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
+               End
+            End
+         End
+         Else
+         Begin
+            If (GetValue 6) == 0 Then
+            Begin
+               Set $BackdropGeneratedCmd = {$NSCDE_TOOLSDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $CurrDesk {:} $ColorVariant {" -b "} $BackdropName {"}
+               Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
+               Set $ColorVariant = 0
+               ChangeValue 9 1
+            End
+            If (GetValue 6) <> 0 Then
+            Begin
+               Set $deskiter = 0
+               While $deskiter < $DeskNo Do
+               Begin
+                  Set $deskiter = (Add $deskiter 1)
+                  Set $BackdropGeneratedCmd = {$NSCDE_TOOLSDIR/backdropmgr -c } $Ncolors { -g } $CurrentPalette { -D "} $deskiter {:} $ColorVariant {" -b "} $BackdropName {"}
+                  Set $BackdropGenerated = (GetOutput $BackdropGeneratedCmd 1 -1)
+               End
+               Set $ColorVariant = 0
+               ChangeValue 9 1
+            End
+         End
+         Do {f_Readcfg Backdrops}
+         If $Fvwm3DesktopNonGlobalMode == 1 Then
+         Begin
+            Do {f_SetupMonitorData}
+            Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+         End
+      End
+      2 :
+      Begin
+         If (GetValue 6) == 0 Then
+         Begin
+            Set $PhotoSetCmd = {$NSCDE_TOOLSDIR/backdropmgr -D } $CurrDesk { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
+            Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
+         End
+         If (GetValue 6) <> 0 Then
+         Begin
+            Set $deskiter = 0
+            While $deskiter < $DeskNo Do
+            Begin
+               Set $deskiter = (Add $deskiter 1)
+               Set $PhotoSetCmd = {$NSCDE_TOOLSDIR/backdropmgr -D } $deskiter { -a } $PixmapVariant { -x } $ScreenXY { -s "} $PhotoName {"}
+               Set $PhotoSet = (GetOutput $PhotoSetCmd 1 -1)
+            End
+         End
+         Do {f_Readcfg Backdrops}
+         If $Fvwm3DesktopNonGlobalMode == 1 Then
+         Begin
+            Do {f_SetupMonitorData}
+            Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+         End
+      End
+End
+
+Widget 18
+   Property
+   Size 90 26
+   Position 254 472
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Close}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 18 1
+      End
+      1 :
+      Begin
+         If $PreviewContaminated == 1 Then
+         Begin
+            Do {f_Readcfg Backdrops}
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
+         End
+         Quit
+      End
+End
+
+Widget 19
+   Property
+   Size 90 26
+   Position 376 472
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 19 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.Backdrop Style Manager]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-BackdropMgr.html}
+      End
+End
+

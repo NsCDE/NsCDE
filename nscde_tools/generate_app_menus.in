@@ -1,0 +1,53 @@
+#!@KSH@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+funcname=$1
+menuname=$2
+
+file_err=1
+
+if [ -r "$NSCDE_DATADIR/defaults/AppMenus.conf" ]; then
+   file_err=0
+fi
+
+if [ -r "$FVWM_USERDIR/AppMenus.conf" ]; then
+   if (($file_err == 0)); then
+      menufilelist="$NSCDE_DATADIR/defaults/AppMenus.conf $FVWM_USERDIR/AppMenus.conf"
+      file_err=0
+   fi
+else
+   if (($file_err == 0)); then
+      menufilelist="$NSCDE_DATADIR/defaults/AppMenus.conf"
+      file_err=0
+   fi
+fi
+
+echo "DestroyFunc $funcname"
+echo "AddToFunc $funcname"
+echo "+ I InfoStoreAdd menuitem.clres \$1,\$2"
+
+if (($file_err == 0)); then
+   cur_cls=""
+   cur_res=""
+   cat ${menufilelist} | egrep -v "^#" | sort -u | while IFS="," read cls res itemname action
+   do
+      if [ "${cls}" == "${curr_cls}" ] && [ "${res}" == "${curr_res}" ]; then
+         echo "+ I Test (EnvMatch infostore.menuitem.clres \"${cls},${res}\") AddToMenu \"$menuname\" \"$itemname\" $action"
+      else
+         echo "+ I Test (EnvMatch infostore.menuitem.clres \"${cls},${res}\") AddToMenu \"$menuname\" \"\" Nop"
+         echo "+ I Test (EnvMatch infostore.menuitem.clres \"${cls},${res}\") AddToMenu \"$menuname\" \"$itemname\" $action"
+      fi
+      curr_cls="${cls}"
+      curr_res="${res}"
+   done
+else
+   echo "${0##*/}: No valid applications menus file found." >&2
+fi
+
+echo "+ I InfoStoreRemove menuitem.clres"
+

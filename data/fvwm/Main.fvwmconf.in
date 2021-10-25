@@ -306,7 +306,7 @@ Test (EnvMatch FVWM_IS_FVWM3 1, EnvIsSet infostore.desktopconfiguration) Desktop
 # For virtual and sandbox restricted mode only ...
 # This need to be read before calling f_ReadCfg Functions
 # but after f_ReadMainConfig where sandboxmode is set to 0 or 1
-Test (EnvMatch infostore.sandboxmode 1 x $[FVWM_USERDIR]/Sandbox-Xinit.sh) Exec exec /usr/bin/env ksh93 $[FVWM_USERDIR]/Sandbox-Xinit.sh
+Test (EnvMatch infostore.sandboxmode 1 x $[FVWM_USERDIR]/Sandbox-Xinit.sh) Exec exec @KSH@ $[FVWM_USERDIR]/Sandbox-Xinit.sh
 Test (EnvMatch infostore.sandboxmode 1 x $[FVWM_USERDIR]/Sandbox-Xinit.sh) SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults
 
 # Read early configuration: functions, colorsets, fonts and styles

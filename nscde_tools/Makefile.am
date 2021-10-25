@@ -4,7 +4,18 @@
 # Licence: GPLv3
 #
 
-install-data-hook:
-	$(mkinstalldirs) $(DESTDIR)$(NSCDE_TOOLSDIR)
-	-cp -r $(srcdir)/* $(DESTDIR)$(NSCDE_TOOLSDIR)
-	-rm -f $(DESTDIR)$(NSCDE_TOOLSDIR)/Makefile*
+SUBDIRS = FvwmScripts
+
+toolsdir = $(NSCDE_TOOLSDIR)
+
+SCRIPTINS = $(wildcard $(srcdir)/*.in)
+SCRIPTOUTS = $(foreach s,$(SCRIPTINS),$(shell echo $(s) | $(SED) 's/\.in$$//g'))
+SCRIPTCLEAN = $(shell echo $(SCRIPTOUTS) | $(SED) 's/Makefile //g')
+
+tools_SCRIPTS = $(SCRIPTCLEAN) style_managers.shlib
+
+EXTRA_SCRIPTS =
+
+clean-local:
+	-rm -f $(SCRIPTCLEAN)
+

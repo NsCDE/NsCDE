@@ -1,0 +1,193 @@
+#!@KSH@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+export LC_ALL=C
+
+# Initialize default values for some variables
+PrintFnSize=0
+PrettyName=0
+
+if [ -z $NSCDE_DATADIR ]; then
+   echo "No \$NSCDE_DATADIR set. Exiting."
+   exit 3
+fi
+
+if [ -z $FVWM_USERDIR ]; then
+   echo "No \$FVWM_USERDIR set. Exiting."
+   exit 4
+fi
+
+if [ -z $NSCDE_FONT_DPI ]; then
+   NSCDE_FONT_DPI=96
+fi
+
+function Defaults
+{
+   if [ -z $FnSpacing ]; then
+      FnSpacing="variable"
+   fi
+
+   if [ -z $FnType ]; then
+      FnType="normal"
+   fi
+
+   if [ -z $FnSize ]; then
+      FnSize="medium"
+   fi
+}
+
+function GetFont
+{
+   Defaults
+
+   if [ "x$FnFile" == "x" ]; then
+      sysfncffile="${NSCDE_DATADIR}/fvwm/Font-${NSCDE_FONT_DPI}dpi.fvwmconf"
+      if [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmconf" ]; then
+         fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmconf"
+         avoiddoublegrep=0
+      elif [ -s "${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmgen" ]; then
+         fncnffile="${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmgen"
+         avoiddoublegrep=0
+      else
+         fncnffile="$sysfncffile"
+         avoiddoublegrep=1
+      fi
+   else
+      if [ -s "$FnFile" ]; then
+         fncnffile="$FnFile"
+         sysfncnffile="$FnFile"
+      else
+         echo "Error: Cannot read $FnFile"
+         exit 3
+      fi
+   fi
+
+   RequestedFont="font.${FnSpacing}.${FnType}.${FnSize}"
+   Catch=$(egrep "$RequestedFont" "$fncnffile")
+   if (($? != 0)); then
+      if (($avoiddoublegrep == 1)); then
+         Catch=$(egrep "$RequestedFont" "$sysfncffile")
+      fi
+   fi
+
+   Catch2="${Catch/InfoStoreAdd font./}"
+   Catch3="${Catch2#*\"}"
+   GetSize=$(echo "${Catch3/\"/}" | $NSCDE_TOOLSDIR/ised -c "s/\(.*\)\(size=\)\(.*\)\(.*\)\?/\3/g" -o -f -)
+   if (($PrettyName == 1)); then
+      FontStruct=$(echo "${Catch3/\"/}" | awk -F: '{ $1=""; print $0 }' | sed 's/^ //g; s/size=//g')
+   else
+      FontStruct="${Catch3/\"/}"
+   fi
+
+   if [ "x$FnMaxSize" == "x" ]; then
+      if (($PrintFnSize == 0)); then
+         echo "$FontStruct"
+      else
+         echo $GetSize
+      fi
+   else
+      echo $GetSize | egrep -q '^([[:digit:]]+)(\.[[:digit:]]+)?$'
+      if (($? == 0)); then
+         if (($NSCDE_FONT_DPI < 84)); then
+            if [ "$FnSize" == "small" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            elif [ "$FnSize" == "medium" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            elif [ "$FnSize" == "large" ]; then
+               FnMaxSize=$(($FnMaxSize + 1))
+            fi
+         elif (($NSCDE_FONT_DPI > 100 && $NSCDE_FONT_DPI <= 124)); then
+            if [ "$FnSize" == "small" ]; then
+               FnMaxSize=$(($FnMaxSize - 3))
+            elif [ "$FnSize" == "medium" ]; then
+               FnMaxSize=$(($FnMaxSize - 3))
+            elif [ "$FnSize" == "large" ]; then
+               FnMaxSize=$(($FnMaxSize - 3))
+            fi
+         elif (($NSCDE_FONT_DPI > 124 && $NSCDE_FONT_DPI <= 148)); then
+            if [ "$FnSize" == "small" ]; then
+               FnMaxSize=$(($FnMaxSize - 4.5))
+            elif [ "$FnSize" == "medium" ]; then
+               FnMaxSize=$(($FnMaxSize - 4.5))
+            elif [ "$FnSize" == "large" ]; then
+               FnMaxSize=$(($FnMaxSize - 4.5))
+            fi
+         elif (($NSCDE_FONT_DPI > 148)); then
+            if [ "$FnSize" == "small" ]; then
+               FnMaxSize=$(($FnMaxSize - 6))
+            elif [ "$FnSize" == "medium" ]; then
+               FnMaxSize=$(($FnMaxSize - 7))
+            elif [ "$FnSize" == "large" ]; then
+               FnMaxSize=$(($FnMaxSize - 7))
+            fi
+         fi
+
+         if (($GetSize > $FnMaxSize)); then
+            if (($PrintFnSize == 0)); then
+               echo "$FontStruct" | $NSCDE_TOOLSDIR/ised -c "s/\(.*\)\(size=\)\([[:digit:]]\+\)\(\.[[:digit:]]\+\)\?\(.*\)\?/\1\2${FnMaxSize}\5/g" -o -f -
+            else
+               echo $FnMaxSize
+            fi
+         else
+            if (($PrintFnSize == 0)); then
+               echo "$FontStruct"
+            else
+               echo $GetSize
+            fi
+         fi
+      else
+         if (($PrintFnSize == 0)); then
+            echo "$FontStruct"
+         else
+            echo $GetSize
+         fi
+      fi
+   fi
+}
+
+while getopts f:vmt:s:pSZ:h Option
+do
+   case $Option in
+      f)
+         FnFile="$OPTARG"
+      ;;
+      d)
+         NSCDE_FONT_DPI="$OPTARG"
+      ;;
+      m)
+         FnSpacing="monospaced"
+      ;;
+      v)
+         FnSpacing="variable"
+      ;;
+      t)
+         FnType="$OPTARG"
+      ;;
+      s)
+         FnSize="$OPTARG"
+      ;;
+      p)
+         PrettyName=1
+      ;;
+      S)
+         PrintFnSize=1
+      ;;
+      Z)
+         if [ "$NSCDE_FIX_SCRIPT_FONTSIZE" != "0" ]; then
+            FnMaxSize="$OPTARG"
+         fi
+      ;;
+      h)
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -h ]"
+         exit 0
+      ;;
+   esac
+done
+
+GetFont
+

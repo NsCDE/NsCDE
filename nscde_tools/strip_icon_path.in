@@ -1,0 +1,43 @@
+#!@KSH@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+icon="$1"
+
+if [ -z $icon ]; then
+   echo "NsCDE/Nominiicon.xpm"
+fi
+
+# Strip absolute path from FVWM_USERDIR, NSCDE_ROOT, HOME, /usr/share/icons, /usr/local/share/icons ...
+sFVWM_USERDIR=$(echo "$FVWM_USERDIR" | $NSCDE_TOOLSDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+sHOME=$(echo "$HOME" | $NSCDE_TOOLSDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+sNSCDE_ROOT=$(echo "$NSCDE_ROOT" | $NSCDE_TOOLSDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+sNSCDE_DATADIR=$(echo "$NSCDE_DATADIR" | $NSCDE_TOOLSDIR/ised -c 's/\(\[\|\]\|\^\|\$\|{\|}\|(\|)\||\|\.\|\/\|\+\|\*\)/\\\1/g' -o -f -)
+case $icon in
+   $FVWM_USERDIR/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sFVWM_USERDIR\/icons\///g" -o -f -
+   ;;
+   $NSCDE_ROOT/share/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sNSCDE_ROOT\/share\/icons\///g" -o -f -
+   ;;
+   $HOME/.icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sHOME\/\.\/icons\///g" -o -f -
+   ;;
+   $HOME/.local/share/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sHOME\/\.local\/share\/icons\///g" -o -f -
+   ;;
+   /usr/share/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^\/usr\/share\/icons\///g" -o -f -
+   ;;
+   /usr/local/share/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^\/usr\/local\/share\/icons\///g" -o -f -
+   ;;
+   $NSCDE_DATADIR/fallback/icons/*)
+      echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sNSCDE_DATADIR\/fallback\/icons\///g" -o -f -
+   ;;
+esac
+

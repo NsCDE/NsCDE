@@ -103,8 +103,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = data/fvwm/Main.fvwmconf \
-	xdg/xsessions/nscde.desktop
+CONFIG_CLEAN_FILES = xdg/xsessions/nscde.desktop
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -166,7 +165,6 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/ac-aux/compile \
 	$(top_srcdir)/ac-aux/config.guess \
 	$(top_srcdir)/ac-aux/config.sub \
 	$(top_srcdir)/ac-aux/install-sh $(top_srcdir)/ac-aux/missing \
-	$(top_srcdir)/data/fvwm/Main.fvwmconf.in \
 	$(top_srcdir)/xdg/xsessions/nscde.desktop.in COPYING ChangeLog \
 	TODO ac-aux/compile ac-aux/config.guess ac-aux/config.sub \
 	ac-aux/depcomp ac-aux/install-sh ac-aux/missing
@@ -381,8 +379,6 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-data/fvwm/Main.fvwmconf: $(top_builddir)/config.status $(top_srcdir)/data/fvwm/Main.fvwmconf.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 xdg/xsessions/nscde.desktop: $(top_builddir)/config.status $(top_srcdir)/xdg/xsessions/nscde.desktop.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 

@@ -5582,7 +5582,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde data/fvwm/Main.fvwmconf xdg/xsessions/nscde.desktop data/Makefile lib/Makefile nscde_tools/Makefile xdg/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_fvwm_infostore nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6336,12 +6336,70 @@ do
     "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
     "bin/Makefile") CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
     "bin/nscde") CONFIG_FILES="$CONFIG_FILES bin/nscde" ;;
-    "data/fvwm/Main.fvwmconf") CONFIG_FILES="$CONFIG_FILES data/fvwm/Main.fvwmconf" ;;
-    "xdg/xsessions/nscde.desktop") CONFIG_FILES="$CONFIG_FILES xdg/xsessions/nscde.desktop" ;;
+    "bin/nscde_fvwmclnt") CONFIG_FILES="$CONFIG_FILES bin/nscde_fvwmclnt" ;;
     "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
+    "data/fvwm/Makefile") CONFIG_FILES="$CONFIG_FILES data/fvwm/Makefile" ;;
+    "data/fvwm/Main.fvwmconf") CONFIG_FILES="$CONFIG_FILES data/fvwm/Main.fvwmconf" ;;
+    "data/fvwm/Functions.fvwmconf") CONFIG_FILES="$CONFIG_FILES data/fvwm/Functions.fvwmconf" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-    "nscde_tools/Makefile") CONFIG_FILES="$CONFIG_FILES nscde_tools/Makefile" ;;
+    "lib/fvwm-modules/Makefile") CONFIG_FILES="$CONFIG_FILES lib/fvwm-modules/Makefile" ;;
+    "lib/fvwm-modules/FvwmScript") CONFIG_FILES="$CONFIG_FILES lib/fvwm-modules/FvwmScript" ;;
+    "lib/python/Makefile") CONFIG_FILES="$CONFIG_FILES lib/python/Makefile" ;;
+    "lib/python/Globals.py") CONFIG_FILES="$CONFIG_FILES lib/python/Globals.py" ;;
+    "lib/python/MiscFun.py") CONFIG_FILES="$CONFIG_FILES lib/python/MiscFun.py" ;;
+    "lib/python/MotifColors.py") CONFIG_FILES="$CONFIG_FILES lib/python/MotifColors.py" ;;
+    "lib/python/Opts.py") CONFIG_FILES="$CONFIG_FILES lib/python/Opts.py" ;;
+    "lib/python/ThemeGtk.py") CONFIG_FILES="$CONFIG_FILES lib/python/ThemeGtk.py" ;;
+    "lib/python/Theme.py") CONFIG_FILES="$CONFIG_FILES lib/python/Theme.py" ;;
+    "lib/scripts/Makefile") CONFIG_FILES="$CONFIG_FILES lib/scripts/Makefile" ;;
+    "lib/scripts/BackdropMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/BackdropMgr" ;;
+    "lib/scripts/ColorMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/ColorMgr" ;;
+    "lib/scripts/ExecDialog") CONFIG_FILES="$CONFIG_FILES lib/scripts/ExecDialog" ;;
+    "lib/scripts/FontMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/FontMgr" ;;
+    "lib/scripts/PowerSaveMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/PowerSaveMgr" ;;
+    "lib/scripts/SubpanelSettings") CONFIG_FILES="$CONFIG_FILES lib/scripts/SubpanelSettings" ;;
+    "lib/scripts/Sysinfo") CONFIG_FILES="$CONFIG_FILES lib/scripts/Sysinfo" ;;
     "xdg/Makefile") CONFIG_FILES="$CONFIG_FILES xdg/Makefile" ;;
+    "xdg/xsessions/nscde.desktop") CONFIG_FILES="$CONFIG_FILES xdg/xsessions/nscde.desktop" ;;
+    "nscde_tools/Makefile") CONFIG_FILES="$CONFIG_FILES nscde_tools/Makefile" ;;
+    "nscde_tools/acpimgr") CONFIG_FILES="$CONFIG_FILES nscde_tools/acpimgr" ;;
+    "nscde_tools/appfinder") CONFIG_FILES="$CONFIG_FILES nscde_tools/appfinder" ;;
+    "nscde_tools/backdropmgr") CONFIG_FILES="$CONFIG_FILES nscde_tools/backdropmgr" ;;
+    "nscde_tools/bootstrap") CONFIG_FILES="$CONFIG_FILES nscde_tools/bootstrap" ;;
+    "nscde_tools/colormgr") CONFIG_FILES="$CONFIG_FILES nscde_tools/colormgr" ;;
+    "nscde_tools/colorpicker") CONFIG_FILES="$CONFIG_FILES nscde_tools/colorpicker" ;;
+    "nscde_tools/fontmgr") CONFIG_FILES="$CONFIG_FILES nscde_tools/fontmgr" ;;
+    "nscde_tools/fpclock") CONFIG_FILES="$CONFIG_FILES nscde_tools/fpclock" ;;
+    "nscde_tools/fpexec") CONFIG_FILES="$CONFIG_FILES nscde_tools/fpexec" ;;
+    "nscde_tools/fp_manage_subpanel") CONFIG_FILES="$CONFIG_FILES nscde_tools/fp_manage_subpanel" ;;
+    "nscde_tools/fpseticon") CONFIG_FILES="$CONFIG_FILES nscde_tools/fpseticon" ;;
+    "nscde_tools/generate_app_menus") CONFIG_FILES="$CONFIG_FILES nscde_tools/generate_app_menus" ;;
+    "nscde_tools/generate_subpanels") CONFIG_FILES="$CONFIG_FILES nscde_tools/generate_subpanels" ;;
+    "nscde_tools/getdpi") CONFIG_FILES="$CONFIG_FILES nscde_tools/getdpi" ;;
+    "nscde_tools/getfont") CONFIG_FILES="$CONFIG_FILES nscde_tools/getfont" ;;
+    "nscde_tools/get_fvwm_infostore") CONFIG_FILES="$CONFIG_FILES nscde_tools/get_fvwm_infostore" ;;
+    "nscde_tools/get_logical_screens") CONFIG_FILES="$CONFIG_FILES nscde_tools/get_logical_screens" ;;
+    "nscde_tools/ised") CONFIG_FILES="$CONFIG_FILES nscde_tools/ised" ;;
+    "nscde_tools/keymenu") CONFIG_FILES="$CONFIG_FILES nscde_tools/keymenu" ;;
+    "nscde_tools/mkpagemenu") CONFIG_FILES="$CONFIG_FILES nscde_tools/mkpagemenu" ;;
+    "nscde_tools/strip_icon_path") CONFIG_FILES="$CONFIG_FILES nscde_tools/strip_icon_path" ;;
+    "nscde_tools/subpanel_menuitem_props") CONFIG_FILES="$CONFIG_FILES nscde_tools/subpanel_menuitem_props" ;;
+    "nscde_tools/var_append") CONFIG_FILES="$CONFIG_FILES nscde_tools/var_append" ;;
+    "nscde_tools/xdowrapper") CONFIG_FILES="$CONFIG_FILES nscde_tools/xdowrapper" ;;
+    "nscde_tools/xrandr_backer") CONFIG_FILES="$CONFIG_FILES nscde_tools/xrandr_backer" ;;
+    "nscde_tools/colorconv") CONFIG_FILES="$CONFIG_FILES nscde_tools/colorconv" ;;
+    "nscde_tools/confget") CONFIG_FILES="$CONFIG_FILES nscde_tools/confget" ;;
+    "nscde_tools/confset") CONFIG_FILES="$CONFIG_FILES nscde_tools/confset" ;;
+    "nscde_tools/geticon") CONFIG_FILES="$CONFIG_FILES nscde_tools/geticon" ;;
+    "nscde_tools/getla1") CONFIG_FILES="$CONFIG_FILES nscde_tools/getla1" ;;
+    "nscde_tools/palette_colorgen") CONFIG_FILES="$CONFIG_FILES nscde_tools/palette_colorgen" ;;
+    "nscde_tools/sysinfo") CONFIG_FILES="$CONFIG_FILES nscde_tools/sysinfo" ;;
+    "nscde_tools/themegen") CONFIG_FILES="$CONFIG_FILES nscde_tools/themegen" ;;
+    "nscde_tools/usleep") CONFIG_FILES="$CONFIG_FILES nscde_tools/usleep" ;;
+    "nscde_tools/FvwmScripts/Makefile") CONFIG_FILES="$CONFIG_FILES nscde_tools/FvwmScripts/Makefile" ;;
+    "nscde_tools/FvwmScripts/GWM") CONFIG_FILES="$CONFIG_FILES nscde_tools/FvwmScripts/GWM" ;;
+    "nscde_tools/FvwmScripts/Notifier") CONFIG_FILES="$CONFIG_FILES nscde_tools/FvwmScripts/Notifier" ;;
+    "nscde_tools/FvwmScripts/Splash") CONFIG_FILES="$CONFIG_FILES nscde_tools/FvwmScripts/Splash" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

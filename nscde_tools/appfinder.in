@@ -1,0 +1,144 @@
+#!@KSH@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+if [ "x$1" == "x" ]; then
+   echo "NOARG"
+   exit 1
+else
+   CatName="$1"
+fi
+
+if [ ! -r "$NSCDE_DATADIR/fallback/app-catalog/$CatName" ]; then
+   echo "NOCATALOG"
+   exit 2
+fi
+
+# For browser, first try environment, then XDG
+if [ "$CatName" == "www-browser" ]; then
+   if [ "x$BROWSER" != "x" ]; then
+      whence -q $BROWSER
+      if (($? == 0)); then
+         echo $BROWSER
+         exit 0
+      fi
+   fi
+
+   whence -q xdg-settings
+   if (($? == 0)); then
+      candidate_raw=$(xdg-settings get default-web-browser)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               echo "${c}"
+               exit 0
+            fi
+      done
+      fi
+
+      candidate_raw=$(xdg-settings get default-url-scheme-handler htts)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               echo "${c}"
+               exit 0
+            fi
+         done
+      fi
+   
+      candidate_raw=$(xdg-settings get default-url-scheme-handler http)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               echo "${c}"
+               exit 0
+            fi
+         done
+      fi
+   fi
+   
+   whence -q xdg-mime
+   if (($? == 0)); then
+      candidate_raw=$(xdg-mime query default x-scheme-handler/https)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               echo "${c}"
+               exit 0
+            fi
+         done
+      fi
+   
+      candidate_raw=$(xdg-mime query default x-scheme-handler/http)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               echo "${c}"
+               exit 0
+            fi
+         done
+      fi
+   fi
+fi
+
+if [ "$CatName" == "mailreader" ]; then
+   whence -q xdg-mime
+   if (($? == 0)); then
+      candidate_raw=$(xdg-mime query default x-scheme-handler/mailto)
+      candidate="${candidate_raw%.desktop}"
+      if [ "x${candidate}" != "x" ]; then
+         for c in "${candidate}" "${candidate}-stable" "${candidate}-bin" "${candidate}.bin"
+         do
+            whence -q "${c}"
+            if (($? == 0)); then
+               if [ "$c" != "mutt" ]; then
+                  echo "${c}"
+               else
+                  echo "\$[infostore.terminal] -e ${c}"
+               fi
+               exit 0
+            fi
+         done
+      fi
+   fi
+fi
+
+found=0
+cat "$NSCDE_DATADIR/fallback/app-catalog/$CatName" | while read appname
+do
+   appname0="${appname%% *}"
+   appname1="${appname/:needterm/}"
+   if $(whence -q ${appname1}); then
+      if [ "${appname0##*:}" == "needterm" ]; then
+         echo "\$[infostore.terminal] -e $appname1"
+      else
+         echo "$appname0"
+      fi
+      found=1
+      break
+   fi
+done
+
+if (($found == 0)); then
+   echo "NOAPP"
+fi
+

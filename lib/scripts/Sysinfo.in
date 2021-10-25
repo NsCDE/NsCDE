@@ -1,0 +1,620 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Sysinfo}
+WindowLocaleTitle {Workstation Information}
+WindowSize 486 352
+Font "xft::Regular:pixelsize=12"
+Colorset 22
+
+Init
+Begin
+   Key Escape A 36 1 {Quit}
+   Key Return A 36 1 {Quit}
+   Key Q A 36 1 {Quit}
+   Key F1 A 36 2 {KeyHelp}
+   Key Help A 36 2 {KeyHelp}
+
+   Set $WidgetFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   ChangeFont 36 $WidgetFont
+
+   Set $TextFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10} 1 -1)
+   ChangeFont 1 $TextFont
+   ChangeFont 2 $TextFont
+   ChangeFont 3 $TextFont
+   ChangeFont 4 $TextFont
+   ChangeFont 5 $TextFont
+   ChangeFont 6 $TextFont
+   ChangeFont 7 $TextFont
+   ChangeFont 8 $TextFont
+   ChangeFont 9 $TextFont
+   ChangeFont 10 $TextFont
+   ChangeFont 11 $TextFont
+   ChangeFont 12 $TextFont
+   ChangeFont 13 $TextFont
+   ChangeFont 14 $TextFont
+   ChangeFont 19 $TextFont
+   ChangeFont 20 $TextFont
+   ChangeFont 21 $TextFont
+   ChangeFont 22 $TextFont
+   ChangeFont 23 $TextFont
+   ChangeFont 24 $TextFont
+   ChangeFont 25 $TextFont
+   ChangeFont 26 $TextFont
+   ChangeFont 27 $TextFont
+   ChangeFont 28 $TextFont
+   ChangeFont 29 $TextFont
+   ChangeFont 30 $TextFont
+   ChangeFont 31 $TextFont
+   ChangeFont 32 $TextFont
+   ChangeFont 33 $TextFont
+   ChangeFont 34 $TextFont
+
+   Set $username = {  } (GetOutput {id -un} 1 -1)
+   Set $hostname = {  } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 2 -1)
+
+   Set $ipaddr = {  } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 4 -1)
+   Set $hostid = {  } (GetOutput {@KSH@ -c '[ "$(whence hostid)" != "" ] && hostid || /sbin/sysctl -n kern.hostid'} 1 -1)
+   Set $domainname = {  } (GetOutput {domainname} 1 -1)
+   Set $inetdomain = {  } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 5 -1)
+
+   Set $mem = {  } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 6 -1) { Megabytes}
+   Set $swap = {  } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 7 -1) { Megabytes}
+   Set $swappct = {   } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 8 -1)
+   Set $swapinfo = {   } (GetOutput {$NSCDE_TOOLSDIR/sysinfo} 9 -1) { } (Gettext {Available})
+
+   Set $winmgrnamecheck = (GetOutput {echo $FVWM_IS_FVWM3} 1 -1)
+   If $winmgrnamecheck == 1 Then
+   Begin
+      Set $FvwmName = {fvwm3}
+   End
+   Else
+   Begin
+      Set $FvwmName = {fvwm}
+   End
+
+   Set $winmgr_info = (GetOutput {echo $NSCDE_FVWM_VERSION_INFO} 1 -1)
+   If $winmgr_info == {} Then
+   Begin
+      Set $winmgr = {  } $FvwmName { version } (GetOutput {echo $NSCDE_FVWM_VERSION_NUM} 1 -1)
+   End
+   Else
+   Begin
+      Set $winmgr = {  } $FvwmName { version } (GetOutput {echo "$NSCDE_FVWM_VERSION_NUM" "($NSCDE_FVWM_VERSION_INFO)"} 1 -1)
+   End
+   Set $nscdever = {  } (GetOutput {echo $NSCDE_VERSION} 1 -1)
+
+   Set $sysname = (GetOutput {uname -s} 1 -1)
+   Set $osver = (GetOutput {uname -r} 1 -1)
+   Set $NoSysBootTime = 1
+
+   If $sysname == {Linux} Then
+   Begin
+      Set $lastboot = {  } (GetOutput {date '+%A, %B %d, %Y %H:%M:%S' -d "-$(cut -d"." -f1 /proc/uptime) seconds"} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {SunOS} Then
+   Begin
+      Set $solboottime = (GetOutput {kstat -p unix:0:system_misc:boot_time | cut -d'	' -f2} 1 1)
+      Set $lastbootcmd = {/usr/bin/date -r } $solboottime { '+%A, %B %d, %Y %H:%M:%S'}
+      Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {FreeBSD} Then
+   Begin
+      Set $fbsdboottime = {  } (GetOutput {/sbin/sysctl -n kern.boottime | cut -d' ' -f4 | sed 's/,//g'} 1 -1)
+      Set $lastbootcmd = {/bin/date -r } $fbsdboottime { '+%A, %B %d, %Y %H:%M:%S'}
+      Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {DragonFly} Then
+   Begin
+      Set $fbsdboottime = {  } (GetOutput {/sbin/sysctl -n kern.boottime | cut -d' ' -f4 | sed 's/,//g'} 1 -1)
+      Set $lastbootcmd = {/bin/date -r } $fbsdboottime { '+%A, %B %d, %Y %H:%M:%S'}
+      Set $lastboot = { } (GetOutput $lastbootcmd 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = (GetOutput {uname -o} 1 -1)
+      Set $machtype = {  } (GetOutput {uname -mpi} 1 -1)
+   End
+
+   If $sysname == {NetBSD} Then
+   Begin
+      Set $lastboot = { } (GetOutput {date -r $(/sbin/sysctl -n kern.boottime) '+%A, %B %d, %Y %H:%M:%S'} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
+   End
+
+   If $sysname == {OpenBSD} Then
+   Begin
+      Set $lastboot = { } (GetOutput {date -r $(/sbin/sysctl -n kern.boottime) '+%A, %B %d, %Y %H:%M:%S'} 1 -1)
+      Set $NoSysBootTime = 0
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
+   End
+
+   If $NoSysBootTime == 1 Then
+   Begin
+      Set $lastboot = {  Not available/displayed on } $sysname
+      Set $osname = $sysname
+      Set $machtype = {  } (GetOutput {uname -mp} 1 -1)
+   End
+
+   Set $sysstring = {  } $sysname { Release } $osver { } $osname
+
+   ChangeTitle 21 $username
+   ChangeTitle 22 $hostname
+   ChangeTitle 23 $machtype
+   ChangeTitle 24 $ipaddr
+   ChangeTitle 25 $hostid
+   ChangeTitle 26 $domainname
+   ChangeTitle 27 $inetdomain
+   ChangeTitle 28 $mem
+   ChangeTitle 29 $swap
+   ChangeTitle 30 $swapinfo
+   ChangeTitle 31 $sysstring
+   ChangeTitle 32 $winmgr
+   ChangeTitle 33 $nscdever
+   ChangeTitle 34 $lastboot
+   ChangeValue 20 $swappct
+End
+
+Widget 1
+   Property
+   Size 150 0
+   Position 10 15
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {User Name:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 21
+   Property
+   Size 256 0
+   Position 159 15
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<username>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+   Property
+   Size 150 0
+   Position 10 32
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Workstation Name:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 22
+   Property
+   Size 256 0
+   Position 159 32
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<hostname>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size 150 0
+   Position 10 48
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Type:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 23
+   Property
+   Size 300 0
+   Position 159 48
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<machtype>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 150 0
+   Position 10 77
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Internet (IP) Address:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 24
+   Property
+   Size 256 0
+   Position 159 77
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<ipaddr>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 5
+   Property
+   Size 150 0
+   Position 10 94
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Host ID:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 25
+   Property
+   Size 256 0
+   Position 159 94
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<hostid>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Size 150 0
+   Position 10 110
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Network Domain:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 26
+   Property
+   Size 256 0
+   Position 159 110
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<domainname>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 150 0
+   Position 10 128
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Internet Domain:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 27
+   Property
+   Size 256 0
+   Position 159 128
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<domain>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Size 154 0
+   Position 6 162
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Physical Memory (RAM):}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 28
+   Property
+   Size 256 0
+   Position 159 162
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<mem>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 150 0
+   Position 10 179
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Virtual Memory (Swap):}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 29
+   Property
+   Size 256 0
+   Position 159 179
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<swap>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 150 0
+   Position 10 196
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Virtual Memory in Use:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 30
+   Property
+   Size 256 0
+   Position 264 196
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<swapused>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 20
+   Property
+   Position 166 198
+   Type HDipstick
+   Size 102 16
+   Title {}
+   MinValue 1
+   MaxValue 100
+   Value 50
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 11
+   Property
+   Size 150 0
+   Position 10 220
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Operating System:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 31
+   Property
+   Size 324 0
+   Position 159 220
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<sysstring>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 12
+   Property
+   Size 150 0
+   Position 10 238
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {Window Manager:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 32
+   Property
+   Size 314 0
+   Position 159 238
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<winmgr>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 13
+   Property
+   Size 150 0
+   Position 10 256
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {NsCDE Version:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 33
+   Property
+   Size 256 0
+   Position 159 256
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<nscdever>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 14
+   Property
+   Size 150 0
+   Position 10 284
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   LocaleTitle {System Last Booted:}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 34
+   Property
+   Size 300 0
+   Position 159 284
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {<lastboot>}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 36
+   Property
+    Size 72 0
+    Position 204 312
+    Type PushButton
+    LocaleTitle {Dismiss}
+    Flags NoReliefString
+    Main
+       Case message of
+       SingleClic :
+       Begin
+          SendSignal 36 1
+       End
+       1 :
+       Begin
+          Quit
+       End
+       2 :
+       Begin
+         Do {f_DisplayURL "$[gt.Workstation Information]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-SysInfo.html}
+       End
+End
+
+Widget 19
+   Property
+   Size 32 32
+   Position 300 10
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {}
+   Icon CDE/SDtsysinfo.m.pm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
