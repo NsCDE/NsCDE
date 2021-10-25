@@ -669,6 +669,7 @@ PYTHON
 REQUIRED_PYTHON_VERSION
 SED
 LOCALES
+xsessiondir
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -757,6 +758,7 @@ ac_user_opts='
 enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
+with_xsessiondir
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1402,6 +1404,11 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-xsessiondir=DIR  NsCDE X Display Manager file goes here.
 
 Some influential environment variables:
   CC          C compiler command
@@ -3772,6 +3779,19 @@ else
   am__fastdepCC_TRUE='#'
   am__fastdepCC_FALSE=
 fi
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking xsessiondir" >&5
+$as_echo_n "checking xsessiondir... " >&6; }
+
+# Check whether --with-xsessiondir was given.
+if test "${with_xsessiondir+set}" = set; then :
+  withval=$with_xsessiondir; XSESSDIR=$withval
+else
+  XSESSDIR=""
+fi
+
 
 
 
@@ -6175,12 +6195,14 @@ fi
         ;;
 esac
 
-if test -d "/usr/share/xsessions"; then
-   XSESSDIR="/usr/share/xsessions"
-elif test -d "/usr/local/share/xsessions"; then
-   XSESSDIR="/usr/local/share/xsessions"
-else
-   XSESSDIR="$(datarootdir)/xsessions"
+if test -z $XSESSDIR ; then
+   if test -d "/usr/share/xsessions"; then
+      XSESSDIR="/usr/share/xsessions"
+   elif test -d "/usr/local/share/xsessions"; then
+      XSESSDIR="/usr/local/share/xsessions"
+   else
+      XSESSDIR="$(datarootdir)/xsessions"
+   fi
 fi
 
 
@@ -7570,3 +7592,33 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+eval my_prefix="`eval echo ${prefix}`"
+eval my_bindir="`eval echo ${bindir}`"
+eval my_libdir="`eval echo ${libdir}`"
+eval my_sysconfdir="`eval echo ${sysconfdir}`"
+eval my_datadir="`eval echo ${datarootdir}`"
+eval my_docdir="`eval echo ${docdir}`"
+eval my_localedir="`eval echo ${localedir}`"
+
+echo "
+*********************************************************************
+NsCDE Configuration Summary:
+
+Platform:             `uname -srm`
+Detected FVWM:        $FVWM
+Detected Python 3:    `$PYTHON -V`
+
+Base Prefix:          ${my_prefix}
+Main Commands:        ${my_bindir}
+Library Data:         ${NSCDE_LIBDIR}
+XDG Menu Definition:  ${my_sysconfdir}/xdg/menus/nscde-applications.menu
+X Session Start File: ${XSESSDIR}/nscde.desktop
+NsCDE Data:           ${NSCDE_DATADIR}
+FVWM Data:            ${FVWM_DATADIR}
+XDG App Data:         ${my_datadir}/applications
+Icon Theme:           ${my_datadir}/icons/NsCDE
+Tools:                ${NSCDE_TOOLSDIR}
+Locale:               ${my_localedir}
+Docs:                 ${my_docdir}
+*********************************************************************
+"

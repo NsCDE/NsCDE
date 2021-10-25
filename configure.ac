@@ -14,6 +14,14 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AC_PROG_CC
 
+AC_MSG_CHECKING(xsessiondir)
+AC_ARG_WITH([xsessiondir],
+	AC_HELP_STRING([--with-xsessiondir=DIR],[NsCDE X Display Manager file goes here.]),
+	[XSESSDIR=$withval],
+	[XSESSDIR=""])
+
+AC_SUBST(xsessiondir)
+
 LOCALES="hr"
 AC_SUBST(LOCALES)
 
@@ -217,12 +225,14 @@ netbsd*)
         ;;
 esac
 
-if test -d "/usr/share/xsessions"; then
-   XSESSDIR="/usr/share/xsessions"
-elif test -d "/usr/local/share/xsessions"; then
-   XSESSDIR="/usr/local/share/xsessions"
-else
-   XSESSDIR="$(datarootdir)/xsessions"
+if test -z $XSESSDIR ; then
+   if test -d "/usr/share/xsessions"; then
+      XSESSDIR="/usr/share/xsessions"
+   elif test -d "/usr/local/share/xsessions"; then
+      XSESSDIR="/usr/local/share/xsessions"
+   else
+      XSESSDIR="$(datarootdir)/xsessions"
+   fi
 fi
 
 AC_SUBST(XSESSDIR)
@@ -317,3 +327,33 @@ AC_OUTPUT(
 	nscde_tools/FvwmScripts/Splash
 )
 
+eval my_prefix="`eval echo ${prefix}`"
+eval my_bindir="`eval echo ${bindir}`"
+eval my_libdir="`eval echo ${libdir}`"
+eval my_sysconfdir="`eval echo ${sysconfdir}`"
+eval my_datadir="`eval echo ${datarootdir}`"
+eval my_docdir="`eval echo ${docdir}`"
+eval my_localedir="`eval echo ${localedir}`"
+
+echo "
+*********************************************************************
+NsCDE Configuration Summary:
+
+Platform:             `uname -srm`
+Detected FVWM:        $FVWM
+Detected Python 3:    `$PYTHON -V`
+
+Base Prefix:          ${my_prefix}
+Main Commands:        ${my_bindir}
+Library Data:         ${NSCDE_LIBDIR}
+XDG Menu Definition:  ${my_sysconfdir}/xdg/menus/nscde-applications.menu
+X Session Start File: ${XSESSDIR}/nscde.desktop
+NsCDE Data:           ${NSCDE_DATADIR}
+FVWM Data:            ${FVWM_DATADIR}
+XDG App Data:         ${my_datadir}/applications
+Icon Theme:           ${my_datadir}/icons/NsCDE
+Tools:                ${NSCDE_TOOLSDIR}
+Locale:               ${my_localedir}
+Docs:                 ${my_docdir}
+*********************************************************************
+"
