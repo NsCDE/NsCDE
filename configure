@@ -3780,6 +3780,10 @@ LOCALES="hr"
 
 
 
+if test "$prefix" = /usr; then
+  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+fi
+
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
 
@@ -3844,6 +3848,30 @@ else
   PYTHON=":"
 fi
 fi
+
+# Custom check to expand full path
+
+
+# Check python module existance
+# https://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_python_module.m4
+# This is what autoupdate's m4 run will expand.  It fires
+# the warning (with _au_warn_XXX), outputs it into the
+# updated configure.ac (with AC_DIAGNOSE), and then outputs
+# the replacement expansion.
+
+
+# This is an auxiliary macro that is also run when
+# autoupdate runs m4.  It simply calls m4_warning, but
+# we need a wrapper so that each warning is emitted only
+# once.  We break the quoting in m4_warning's argument in
+# order to expand this macro's arguments, not AU_DEFUN's.
+
+
+# Finally, this is the expansion that is picked up by
+# autoconf.  It tells the user to run autoupdate, and
+# then outputs the replacement expansion.  We do not care
+# about autoupdate's warning because that contains
+# information on what to do *after* running autoupdate.
 
 
 
@@ -5349,6 +5377,581 @@ if test x"$XCLIP" == x"no"; then :
 $as_echo "$as_me: WARNING: No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard." >&2;}
 fi
 
+# Python modules
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: xdg" >&5
+$as_echo_n "checking $PYTHON_NAME module: xdg... " >&6; }
+    $PYTHON -c "import xdg" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_XDG=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_XDG=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module xdg" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_XDG}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module xdg is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module xdg is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: yaml" >&5
+$as_echo_n "checking $PYTHON_NAME module: yaml... " >&6; }
+    $PYTHON -c "import yaml" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_YAML=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_YAML=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module yaml" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_YAML}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module yaml is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module yaml is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: os" >&5
+$as_echo_n "checking $PYTHON_NAME module: os... " >&6; }
+    $PYTHON -c "import os" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_OS=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_OS=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module os" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_OS}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module os is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module os is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: re" >&5
+$as_echo_n "checking $PYTHON_NAME module: re... " >&6; }
+    $PYTHON -c "import re" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_RE=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_RE=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module re" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_RE}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module re is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module re is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: shutil" >&5
+$as_echo_n "checking $PYTHON_NAME module: shutil... " >&6; }
+    $PYTHON -c "import shutil" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_SHUTIL=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_SHUTIL=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module shutil" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_SHUTIL}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module shutil is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module shutil is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: subprocess" >&5
+$as_echo_n "checking $PYTHON_NAME module: subprocess... " >&6; }
+    $PYTHON -c "import subprocess" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_SUBPROCESS=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_SUBPROCESS=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module subprocess" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_SUBPROCESS}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module subprocess is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module subprocess is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: sys" >&5
+$as_echo_n "checking $PYTHON_NAME module: sys... " >&6; }
+    $PYTHON -c "import sys" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_SYS=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_SYS=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module sys" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_SYS}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module sys is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module sys is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: fnmatch" >&5
+$as_echo_n "checking $PYTHON_NAME module: fnmatch... " >&6; }
+    $PYTHON -c "import fnmatch" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_FNMATCH=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_FNMATCH=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module fnmatch" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_FNMATCH}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module fnmatch is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module fnmatch is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: getopt" >&5
+$as_echo_n "checking $PYTHON_NAME module: getopt... " >&6; }
+    $PYTHON -c "import getopt" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_GETOPT=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_GETOPT=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module getopt" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_GETOPT}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module getopt is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module getopt is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: time" >&5
+$as_echo_n "checking $PYTHON_NAME module: time... " >&6; }
+    $PYTHON -c "import time" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_TIME=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_TIME=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module time" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_TIME}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module time is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module time is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: platform" >&5
+$as_echo_n "checking $PYTHON_NAME module: platform... " >&6; }
+    $PYTHON -c "import platform" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_PLATFORM=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_PLATFORM=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module platform" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_PLATFORM}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module platform is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module platform is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: psutil" >&5
+$as_echo_n "checking $PYTHON_NAME module: psutil... " >&6; }
+    $PYTHON -c "import psutil" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_PSUTIL=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_PSUTIL=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module psutil" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_PSUTIL}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module psutil is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module psutil is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: pwd" >&5
+$as_echo_n "checking $PYTHON_NAME module: pwd... " >&6; }
+    $PYTHON -c "import pwd" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_PWD=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_PWD=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module pwd" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_PWD}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module pwd is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module pwd is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: socket" >&5
+$as_echo_n "checking $PYTHON_NAME module: socket... " >&6; }
+    $PYTHON -c "import socket" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_SOCKET=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_SOCKET=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module socket" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+if test "x${HAVE_PYMOD_SOCKET}" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Python 3 module socket is required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Python 3 module socket is required for NsCDE runtime." >&2;}
+fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: PyQt5" >&5
+$as_echo_n "checking $PYTHON_NAME module: PyQt5... " >&6; }
+    $PYTHON -c "import PyQt5" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_PYQT5=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_PYQT5=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module PyQt5" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+
+    if test -z $PYTHON;
+    then
+        if test -z "";
+        then
+            PYTHON="python3"
+        else
+            PYTHON=""
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: PyQt4" >&5
+$as_echo_n "checking $PYTHON_NAME module: PyQt4... " >&6; }
+    $PYTHON -c "import PyQt4" 2>/dev/null
+    if test $? -eq 0;
+    then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        eval HAVE_PYMOD_PYQT4=yes
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        eval HAVE_PYMOD_PYQT4=no
+        #
+        if test -n ""
+        then
+            as_fn_error $? "failed to find required module PyQt4" "$LINENO" 5
+            exit 1
+        fi
+    fi
+
+
+if test "x${HAVE_PYMOD_PYQT5}" = "xno"; then :
+  if test "x${HAVE_PYMOD_PYQT4}" = "xno"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Either python module PyQt5 or older PyQt4 are required for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: Either python module PyQt5 or older PyQt4 are required for NsCDE runtime." >&2;}
+fi
+fi
+
 # Make sure we can run config.sub.
 $SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
   as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
@@ -5582,7 +6185,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_fvwm_infostore nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
+ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf data/config_templates/Makefile data/config_templates/fontmgr.local data/config_templates/colormgr.local lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_fvwm_infostore nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6341,6 +6944,9 @@ do
     "data/fvwm/Makefile") CONFIG_FILES="$CONFIG_FILES data/fvwm/Makefile" ;;
     "data/fvwm/Main.fvwmconf") CONFIG_FILES="$CONFIG_FILES data/fvwm/Main.fvwmconf" ;;
     "data/fvwm/Functions.fvwmconf") CONFIG_FILES="$CONFIG_FILES data/fvwm/Functions.fvwmconf" ;;
+    "data/config_templates/Makefile") CONFIG_FILES="$CONFIG_FILES data/config_templates/Makefile" ;;
+    "data/config_templates/fontmgr.local") CONFIG_FILES="$CONFIG_FILES data/config_templates/fontmgr.local" ;;
+    "data/config_templates/colormgr.local") CONFIG_FILES="$CONFIG_FILES data/config_templates/colormgr.local" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
     "lib/fvwm-modules/Makefile") CONFIG_FILES="$CONFIG_FILES lib/fvwm-modules/Makefile" ;;
     "lib/fvwm-modules/FvwmScript") CONFIG_FILES="$CONFIG_FILES lib/fvwm-modules/FvwmScript" ;;

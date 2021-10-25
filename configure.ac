@@ -19,6 +19,10 @@ AC_SUBST(LOCALES)
 
 AC_SUBST(SED)
 
+if test "$prefix" = /usr; then
+  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+fi
+
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
 AC_SUBST(REQUIRED_PYTHON_VERSION)
@@ -27,6 +31,7 @@ AS_IF([test "$PYTHON" != ":"],
             [AM_PYTHON_CHECK_VERSION([$PYTHON],[$REQUIRED_PYTHON_VERSION],[:],
                                      [PYTHON=":"])])
 
+# Custom check to expand full path
 AC_DEFUN([RECURSIVE_EVAL],
 	[_lcl_receval="$1"
 	$2=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
@@ -37,6 +42,38 @@ AC_DEFUN([RECURSIVE_EVAL],
 	   eval _lcl_receval="\"[$]_lcl_receval\""
 	done
 	echo "[$]_lcl_receval")`])
+
+# Check python module existance
+# https://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_python_module.m4
+AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
+AC_DEFUN([AX_PYTHON_MODULE],[
+    if test -z $PYTHON;
+    then
+        if test -z "$3";
+        then
+            PYTHON="python3"
+        else
+            PYTHON="$3"
+        fi
+    fi
+    PYTHON_NAME=`basename $PYTHON`
+    AC_MSG_CHECKING($PYTHON_NAME module: $1)
+    $PYTHON -c "import $1" 2>/dev/null
+    if test $? -eq 0;
+    then
+        AC_MSG_RESULT(yes)
+        eval AS_TR_CPP(HAVE_PYMOD_$1)=yes
+    else
+        AC_MSG_RESULT(no)
+        eval AS_TR_CPP(HAVE_PYMOD_$1)=no
+        #
+        if test -n "$2"
+        then
+            AC_MSG_ERROR(failed to find required module $1)
+            exit 1
+        fi
+    fi
+])
 
 RECURSIVE_EVAL("$bindir", [FULL_BINDIR])
 RECURSIVE_EVAL("$bindir/nscde", [STARTNSCDE])
@@ -113,6 +150,56 @@ AS_IF([test x"$XRANDR" == x"no"], [AC_MSG_WARN([No xrandr(1) command was found. 
 AS_IF([test x"$DUNST" == x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
 AS_IF([test x"$XCLIP" == x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
 
+# Python modules
+AX_PYTHON_MODULE([xdg], [])
+AS_IF([test "x${HAVE_PYMOD_XDG}" == x"no"], [AC_MSG_WARN([Python 3 module xdg is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([yaml], [])
+AS_IF([test "x${HAVE_PYMOD_YAML}" == x"no"], [AC_MSG_WARN([Python 3 module yaml is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([os], [])
+AS_IF([test "x${HAVE_PYMOD_OS}" == x"no"], [AC_MSG_WARN([Python 3 module os is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([re], [])
+AS_IF([test "x${HAVE_PYMOD_RE}" == x"no"], [AC_MSG_WARN([Python 3 module re is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([shutil], [])
+AS_IF([test "x${HAVE_PYMOD_SHUTIL}" == x"no"], [AC_MSG_WARN([Python 3 module shutil is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([subprocess], [])
+AS_IF([test "x${HAVE_PYMOD_SUBPROCESS}" == x"no"], [AC_MSG_WARN([Python 3 module subprocess is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([sys], [])
+AS_IF([test "x${HAVE_PYMOD_SYS}" == x"no"], [AC_MSG_WARN([Python 3 module sys is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([fnmatch], [])
+AS_IF([test "x${HAVE_PYMOD_FNMATCH}" == x"no"], [AC_MSG_WARN([Python 3 module fnmatch is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([getopt], [])
+AS_IF([test "x${HAVE_PYMOD_GETOPT}" == x"no"], [AC_MSG_WARN([Python 3 module getopt is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([time], [])
+AS_IF([test "x${HAVE_PYMOD_TIME}" == x"no"], [AC_MSG_WARN([Python 3 module time is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([platform], [])
+AS_IF([test "x${HAVE_PYMOD_PLATFORM}" == x"no"], [AC_MSG_WARN([Python 3 module platform is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([psutil], [])
+AS_IF([test "x${HAVE_PYMOD_PSUTIL}" == x"no"], [AC_MSG_WARN([Python 3 module psutil is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([pwd], [])
+AS_IF([test "x${HAVE_PYMOD_PWD}" == x"no"], [AC_MSG_WARN([Python 3 module pwd is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([socket], [])
+AS_IF([test "x${HAVE_PYMOD_SOCKET}" == x"no"], [AC_MSG_WARN([Python 3 module socket is required for NsCDE runtime.])])
+
+AX_PYTHON_MODULE([PyQt5], [])
+AX_PYTHON_MODULE([PyQt4], [])
+
+AS_IF([test "x${HAVE_PYMOD_PYQT5}" = "xno"], 
+	AS_IF([test "x${HAVE_PYMOD_PYQT4}" = "xno"],
+	[AC_MSG_WARN([Either python module PyQt5 or older PyQt4 are required for NsCDE runtime.])]))
+
 AC_CANONICAL_HOST
 AC_MSG_CHECKING(platform)
 case "$host_os" in
@@ -160,6 +247,10 @@ AC_OUTPUT(
 	data/fvwm/Makefile
 	data/fvwm/Main.fvwmconf
 	data/fvwm/Functions.fvwmconf
+
+	data/config_templates/Makefile
+	data/config_templates/fontmgr.local
+	data/config_templates/colormgr.local
 
 	lib/Makefile
 	lib/fvwm-modules/Makefile

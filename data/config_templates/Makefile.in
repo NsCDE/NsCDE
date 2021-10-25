@@ -94,14 +94,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = bin
+subdir = data/config_templates
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = nscde nscde_fvwmclnt
+CONFIG_CLEAN_FILES = fontmgr.local colormgr.local
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -130,8 +130,8 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(bindir)"
-SCRIPTS = $(bin_SCRIPTS)
+am__installdirs = "$(DESTDIR)$(localscriptsdir)"
+SCRIPTS = $(localscripts_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -152,8 +152,8 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/nscde.in \
-	$(srcdir)/nscde_fvwmclnt.in
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/colormgr.local.in \
+	$(srcdir)/fontmgr.local.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -284,7 +284,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-bin_SCRIPTS = nscde nscde_fvwmclnt
+localscriptsdir = $(NSCDE_DATADIR)/config_templates/
+localscripts_SCRIPTS = fontmgr.local colormgr.local
 all: all-am
 
 .SUFFIXES:
@@ -297,9 +298,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign bin/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign data/config_templates/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign bin/Makefile
+	  $(AUTOMAKE) --foreign data/config_templates/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -317,16 +318,16 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-nscde: $(top_builddir)/config.status $(srcdir)/nscde.in
+fontmgr.local: $(top_builddir)/config.status $(srcdir)/fontmgr.local.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-nscde_fvwmclnt: $(top_builddir)/config.status $(srcdir)/nscde_fvwmclnt.in
+colormgr.local: $(top_builddir)/config.status $(srcdir)/colormgr.local.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-install-binSCRIPTS: $(bin_SCRIPTS)
+install-localscriptsSCRIPTS: $(localscripts_SCRIPTS)
 	@$(NORMAL_INSTALL)
-	@list='$(bin_SCRIPTS)'; test -n "$(bindir)" || list=; \
+	@list='$(localscripts_SCRIPTS)'; test -n "$(localscriptsdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(bindir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(bindir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(localscriptsdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(localscriptsdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
@@ -345,17 +346,17 @@ install-binSCRIPTS: $(bin_SCRIPTS)
 	while read type dir files; do \
 	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
 	     test -z "$$files" || { \
-	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(bindir)$$dir'"; \
-	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(localscriptsdir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(localscriptsdir)$$dir" || exit $$?; \
 	     } \
 	; done
 
-uninstall-binSCRIPTS:
+uninstall-localscriptsSCRIPTS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(bin_SCRIPTS)'; test -n "$(bindir)" || exit 0; \
+	@list='$(localscripts_SCRIPTS)'; test -n "$(localscriptsdir)" || exit 0; \
 	files=`for p in $$list; do echo "$$p"; done | \
 	       sed -e 's,.*/,,;$(transform)'`; \
-	dir='$(DESTDIR)$(bindir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(localscriptsdir)'; $(am__uninstall_files_from_dir)
 tags TAGS:
 
 ctags CTAGS:
@@ -400,7 +401,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(SCRIPTS)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(localscriptsdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -453,13 +454,14 @@ info: info-am
 
 info-am:
 
-install-data-am:
-
+install-data-am: install-localscriptsSCRIPTS
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-binSCRIPTS
+install-exec-am:
 
 install-html: install-html-am
 
@@ -497,27 +499,43 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binSCRIPTS
+uninstall-am: uninstall-localscriptsSCRIPTS
 
-.MAKE: install-am install-strip
+.MAKE: install-am install-data-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-local \
 	cscopelist-am ctags-am distclean distclean-generic distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-binSCRIPTS install-data install-data-am install-dvi \
+	install-data install-data-am install-data-hook install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am uninstall-binSCRIPTS
+	install-html-am install-info install-info-am \
+	install-localscriptsSCRIPTS install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags-am uninstall uninstall-am \
+	uninstall-localscriptsSCRIPTS
 
 .PRECIOUS: Makefile
 
 
 clean-local:
-	-rm -f nscde nscde_fvwmclnt
+	-rm -f colormgr.local fontmgr.local
+
+install-data-hook:
+	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/app-defaults $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/fvwm $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Gkrellm $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/progbits $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/BGdefault $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Dunst.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/GeoDB.ini $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Stalonetray.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Xdefaults $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Xdefaults.fontdefs $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Xdefaults.mouse $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Xsettingsd.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

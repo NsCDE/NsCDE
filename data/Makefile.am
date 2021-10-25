@@ -4,12 +4,11 @@
 # Licence: GPLv3
 #
 
-SUBDIRS = fvwm
+SUBDIRS = fvwm config_templates
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)
 	-cp -r $(srcdir)/backdrops $(DESTDIR)$(NSCDE_DATADIR)/
-	-cp -r $(srcdir)/config_templates $(DESTDIR)$(NSCDE_DATADIR)/
 	-cp -r $(srcdir)/defaults $(DESTDIR)$(NSCDE_DATADIR)/
 	-cp -r $(srcdir)/examples $(DESTDIR)$(NSCDE_DATADIR)/
 	-cp -r $(srcdir)/fallback $(DESTDIR)$(NSCDE_DATADIR)/
