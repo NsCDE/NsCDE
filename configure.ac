@@ -6,7 +6,7 @@ dnl Author: Hegel3DReloaded
 dnl Licence: GPLv3
 dnl
 
-AC_INIT([NsCDE], 1.3, [nscde@protonmail.com])
+AC_INIT([NsCDE], 2.0, [nscde@protonmail.com])
 
 AC_CONFIG_AUX_DIR(ac-aux)
 
@@ -89,6 +89,8 @@ RECURSIVE_EVAL("$libdir/NsCDE", [NSCDE_LIBDIR])
 RECURSIVE_EVAL("$libexecdir/NsCDE", [NSCDE_TOOLSDIR])
 RECURSIVE_EVAL("$datarootdir/NsCDE", [NSCDE_DATADIR])
 RECURSIVE_EVAL("$datarootdir/NsCDE/fvwm", [FVWM_DATADIR])
+RECURSIVE_EVAL("$datarootdir", [DATA_ROOTDIR])
+RECURSIVE_EVAL("$sysconfdir", [SYS_CONFDIR])
 
 # NSCDE_DATADIR=${datarootdir}/NsCDE
 AC_SUBST(FVWM_DATADIR)
@@ -99,6 +101,8 @@ AC_SUBST(FULL_BINDIR)
 AC_SUBST(KSH)
 AC_SUBST(VERSION)
 AC_SUBST(STARTNSCDE)
+AC_SUBST(DATA_ROOTDIR)
+AC_SUBST(SYS_CONFDIR)
 
 # Dependencies
 AC_PATH_PROG(KSH, ksh93, ksh93)
@@ -237,6 +241,11 @@ fi
 
 AC_SUBST(XSESSDIR)
 
+if test -d "./.git"; then
+   VERSIONINFO=`git describe --always --long --dirty`
+   VERSION="${VERSION}-${VERSIONINFO}"
+fi
+
 AC_OUTPUT(
 	Makefile
 	src/Makefile
@@ -339,6 +348,7 @@ echo "
 *********************************************************************
 NsCDE Configuration Summary:
 
+NsCDE Version:        ${VERSION}
 Platform:             `uname -srm`
 Detected FVWM:        $FVWM
 Detected Python 3:    `$PYTHON -V`

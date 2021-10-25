@@ -14,16 +14,17 @@ Test (Init) Echo NsCDE: Starting initialization
 # Core variables for diverting paths and setting early parameters
 SetEnv NSCDE_FVWM_VERSION_NUM $[version.num]
 SetEnv NSCDE_FVWM_VERSION_INFO $[version.info]
+SetEnv FVWM_DATADIR $[NSCDE_DATADIR]/fvwm
 SetEnv FVWM_USERDIR $[HOME]/.NsCDE
 SetEnv FVWM_SCRIPTDIR $[NSCDE_LIBDIR]/scripts
 SetEnv FVWM_FORMDIR $[NSCDE_LIBDIR]/forms
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWM3_LOGFILE $[FVWM_USERDIR]/tmp/fvwm.log
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWMMFL_SOCKET $[FVWM_USERDIR]/tmp/fvwm_mfl.sock
 SetEnv SM_SAVE_DIR $[FVWM_USERDIR]/tmp
-# Test (Init, EnvIsSet XDG_CONFIG_DIRS) SetEnv XDG_CONFIG_DIRS $[NSCDE_ROOT]/etc/xdg:$[XDG_CONFIG_DIRS]
-# Test (!EnvIsSet XDG_CONFIG_DIRS) SetEnv XDG_CONFIG_DIRS $[NSCDE_ROOT]/etc/xdg:/etc/xdg:/usr/local/etc/xdg
-# Test (Init, EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS $[NSCDE_ROOT]/share:$[XDG_DATA_DIRS]
-# Test (!EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS $[NSCDE_ROOT]/share:/usr/share:/usr/local/share
+Test (Init, EnvIsSet XDG_DATA_DIRS) PipeRead "echo SetEnv XDG_DATA_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_DATA_DIRS @DATA_ROOTDIR@)"
+Test (!EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS @DATA_ROOTDIR@/
+Test (Init, EnvIsSet XDG_CONFIG_DIRS) PipeRead "echo SetEnv XDG_CONFIG_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_CONFIG_DIRS @SYS_CONFDIR@/xdg)"
+Test (!EnvIsSet XDG_CONFIG_DIRS) SetEnv XDG_CONFIG_DIRS @SYS_CONFDIR@/xdg
 SetEnv XDG_MENU_PREFIX nscde-
 PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
 PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'
