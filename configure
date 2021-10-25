@@ -625,6 +625,7 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+XSESSDIR
 GTAIL
 GSED
 host_os
@@ -657,7 +658,6 @@ XSET
 XRDB
 CPP
 FVWM
-SED
 STARTNSCDE
 KSH
 FULL_BINDIR
@@ -667,6 +667,8 @@ NSCDE_DATADIR
 FVWM_DATADIR
 PYTHON
 REQUIRED_PYTHON_VERSION
+SED
+LOCALES
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -3773,7 +3775,10 @@ fi
 
 
 
-ALL_LINGUAS="hr"
+LOCALES="hr"
+
+
+
 
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
@@ -5281,35 +5286,44 @@ fi
 if test x"$KSH" == x"no"; then :
   as_fn_error $? "Please install AT&T ksh 93 package before continuing." "$LINENO" 5
 fi
-if test x"$FVWM" == x"no"; then :
-  as_fn_error $? "Please install fvwm 2 or fvwm 3 before configuring." "$LINENO" 5
-fi
-if test x"$CPP" == x"no"; then :
-  as_fn_error $? "Please install C preprocessor (cpp) before configuring." "$LINENO" 5
-fi
-if test x"$XRDB" == x"no"; then :
-  as_fn_error $? "Please install X server resource database utility (xrdb) before configuring." "$LINENO" 5
-fi
-if test x"$XSET" == x"no"; then :
-  as_fn_error $? "Please install xset(1) utility before configuring." "$LINENO" 5
-fi
-if test x"$XPROP" == x"no"; then :
-  as_fn_error $? "Please install xprop(1) utility before configuring." "$LINENO" 5
-fi
-if test x"$XDPYINFO" == x"no"; then :
-  as_fn_error $? "Please install xdpyinfo(1) utility before configuring." "$LINENO" 5
-fi
-if test x"$XTERM" == x"no"; then :
-  as_fn_error $? "Please install xterm(1) application before configuring." "$LINENO" 5
-fi
-if test x"$GETTEXT" == x"no"; then :
-  as_fn_error $? "Please install gettext(1) tool before configuring." "$LINENO" 5
-fi
-if test x"$XDOTOOL" == x"no" && test x"$FVWM" != x"fvwm3"; then :
-  as_fn_error $? "No fvwm3 detected. Please install xdotool(1) tool before configuring." "$LINENO" 5
-fi
 
 # Dependencies warnings
+if test x"$FVWM" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime." >&2;}
+fi
+if test x"$CPP" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No cpp(1) C Preprocessor detected. It is required for xrdb(1) in runtime." >&5
+$as_echo "$as_me: WARNING: No cpp(1) C Preprocessor detected. It is required for xrdb(1) in runtime." >&2;}
+fi
+if test x"$XRDB" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No xrdb(1) detected. X resource database utility (xrdb) is required for NsCDE in runtime." >&5
+$as_echo "$as_me: WARNING: No xrdb(1) detected. X resource database utility (xrdb) is required for NsCDE in runtime." >&2;}
+fi
+if test x"$XSET" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No xset(1) detected. Xset is required for NsCDE in runtime." >&5
+$as_echo "$as_me: WARNING: No xset(1) detected. Xset is required for NsCDE in runtime." >&2;}
+fi
+if test x"$XPROP" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No xprop(1) detected. Xset is required for NsCDE in runtime." >&5
+$as_echo "$as_me: WARNING: No xprop(1) detected. Xset is required for NsCDE in runtime." >&2;}
+fi
+if test x"$XDPYINFO" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No xdpyinfo(1) detected. Please install xdpyinfo(1) utility for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: No xdpyinfo(1) detected. Please install xdpyinfo(1) utility for NsCDE runtime." >&2;}
+fi
+if test x"$XTERM" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No xterm(1) detected. You will need xterm application at least for first NsCDE setup in runtime." >&5
+$as_echo "$as_me: WARNING: No xterm(1) detected. You will need xterm application at least for first NsCDE setup in runtime." >&2;}
+fi
+if test x"$GETTEXT" == x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No gettext(1) detected. Please install gettext(1) tool for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: No gettext(1) detected. Please install gettext(1) tool for NsCDE runtime." >&2;}
+fi
+if test x"$XDOTOOL" == x"no" && test x"$FVWM" != x"fvwm3"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime." >&2;}
+fi
 if test x"$XSCSVR" == x"no"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup." >&5
 $as_echo "$as_me: WARNING: No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup." >&2;}
@@ -5454,7 +5468,8 @@ done
 test -n "$GSED" || GSED=""no""
 
         if test x"$GSED" == x"no"; then :
-  as_fn_error $? "You must have GNU sed (gsed) installed on ${host_os}." "$LINENO" 5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
 fi
         ;;
 netbsd*)
@@ -5502,7 +5517,8 @@ done
 test -n "$GSED" || GSED=""no""
 
         if test x"$GSED" == x"no"; then :
-  as_fn_error $? "You must have GNU sed (gsed) installed on ${host_os}." "$LINENO" 5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
 fi
         for ac_prog in gtail
 do
@@ -5548,16 +5564,25 @@ done
 test -n "$GTAIL" || GTAIL=""no""
 
         if test x"$GTAIL" == x"no"; then :
-  as_fn_error $? "You must have GNU tail (gtail) installed on ${host_os}." "$LINENO" 5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&2;}
 fi
         ;;
 *)
         ;;
 esac
 
+if test -d "/usr/share/xsessions"; then
+   XSESSDIR="/usr/share/xsessions"
+elif test -d "/usr/local/share/xsessions"; then
+   XSESSDIR="/usr/local/share/xsessions"
+else
+   XSESSDIR="$(datarootdir)/xsessions"
+fi
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde data/fvwm/Main.fvwmconf xdg/xsessions/nscde.desktop data/Makefile lib/Makefile nscde_tools/Makefile"
+
+ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde data/fvwm/Main.fvwmconf xdg/xsessions/nscde.desktop data/Makefile lib/Makefile nscde_tools/Makefile xdg/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6316,6 +6341,7 @@ do
     "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
     "nscde_tools/Makefile") CONFIG_FILES="$CONFIG_FILES nscde_tools/Makefile" ;;
+    "xdg/Makefile") CONFIG_FILES="$CONFIG_FILES xdg/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

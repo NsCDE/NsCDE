@@ -1,4 +1,13 @@
-bin_PROGRAMS = XOverrideFontCursor.so
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
+machlibdepdir = $(NSCDE_LIBDIR)/$(OS_PLUS_MACHINE_ARCH)
+
+machlibdep_PROGRAMS = XOverrideFontCursor.so
 XOverrideFontCursor.so_SOURCE = XOverrideFontCursor.c
 
 AM_CPPFLAGS = \

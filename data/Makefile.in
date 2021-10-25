@@ -13,6 +13,12 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -155,6 +161,7 @@ KSH = @KSH@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
+LOCALES = @LOCALES@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MATH_LIB = @MATH_LIB@
@@ -190,6 +197,7 @@ XPROP = @XPROP@
 XRANDR = @XRANDR@
 XRDB = @XRDB@
 XSCSVR = @XSCSVR@
+XSESSDIR = @XSESSDIR@
 XSET = @XSET@
 XSETTINGSD = @XSETTINGSD@
 XTERM = @XTERM@
@@ -433,10 +441,12 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
+
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)
 	-cp -r $(srcdir)/* $(DESTDIR)$(NSCDE_DATADIR)
 	-rm -f $(DESTDIR)$(NSCDE_DATADIR)/fvwm/Main.fvwmconf.in
+	-rm -f $(DESTDIR)$(NSCDE_DATADIR)/Makefile*
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

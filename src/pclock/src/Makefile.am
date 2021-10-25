@@ -1,9 +1,18 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
 DEFAULT_XPM = Fpclock.xpm
 
 Default.xpm:
 	ln -s ../XPM/$(DEFAULT_XPM) $@
 
-bin_PROGRAMS = fpclock
+OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
+machdepdir = $(NSCDE_TOOLSDIR)/$(OS_PLUS_MACHINE_ARCH)
+
+machdep_PROGRAMS = fpclock
 BUILT_SOURCES = Default.xpm
 fpclock_SOURCES = Defaults.h getopt1.c getopt.c  \
 	getopt.h Graphics.c Main.c PClock.h Version.h Default.xpm

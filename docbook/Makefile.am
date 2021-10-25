@@ -1,3 +1,8 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
 
 DOCBOOK2PDF = docbook2pdf
 DOCBOOK2TXT = docbook2txt
@@ -19,3 +24,14 @@ docs-html:
 clean-local:
 	-rm -f NsCDE.pdf NsCDE.txt NsCDe.aux NsCDE.log NsCDE.out
 	-rm -rf html
+
+install-data-local:
+	install -d -m 755 $(DESTDIR)$(docdir)/
+	install -m 644 NsCDE.pdf $(DESTDIR)$(docdir)/
+	install -m 644 NsCDE.txt $(DESTDIR)$(docdir)/
+	install -d -m 755 $(DESTDIR)$(docdir)/html/
+	@for hh in $(srcdir)/html/*; do \
+                echo "Installing $$hh in $(DESTDIR)$(docdir)/html" ; \
+		install -m 644 $$hh $(DESTDIR)$(docdir)/$$hh ; \
+	done
+

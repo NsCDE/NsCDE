@@ -93,7 +93,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = po
+subdir = xdg
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -253,22 +253,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-MSGFMT = msgfmt
-POFILES = $(wildcard $(srcdir)/*.po)
-MOFILES = $(foreach s,$(POFILES),$(shell echo $(s) | $(SED) 's/\.po$$/\.mo/g'))
-
-# Ugly ... I know.
-INSTDIRS = $(foreach l,$(LOCALES),$(mkinstalldirs) $(DESTDIR)$(localedir)/$(l)/LC_MESSAGES/;)
-INSTFILES = $(foreach f,$(MOFILES),\
-	install -m 644 $(f) \
-	$(DESTDIR)$(localedir)/$(shell \
-	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
-	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
-
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .mo .po
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -278,9 +265,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign po/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign xdg/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign po/Makefile
+	  $(AUTOMAKE) --foreign xdg/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -374,7 +361,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-local mostlyclean-am
+clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -392,6 +379,9 @@ info: info-am
 
 info-am:
 
+install-data-am:
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -436,12 +426,12 @@ ps-am:
 
 uninstall-am:
 
-.MAKE: install-am install-strip
+.MAKE: install-am install-data-am install-strip
 
-.PHONY: all all-am check check-am clean clean-generic clean-local \
-	cscopelist-am ctags-am distclean distclean-generic distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
+.PHONY: all all-am check check-am clean clean-generic cscopelist-am \
+	ctags-am distclean distclean-generic distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-data-hook install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
@@ -452,17 +442,17 @@ uninstall-am:
 .PRECIOUS: Makefile
 
 
-.po.mo:
-	$(MSGFMT) -o $@ $<
-
-all:	$(MOFILES)
-
-install-data-am:
-	$(INSTDIRS)
-	$(INSTFILES)
-
-clean-local:
-	-rm -f $(MOFILES)
+install-data-hook:
+	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/applications
+	-cp -r $(srcdir)/applications/NsCDE-*.desktop $(DESTDIR)$(datarootdir)/applications/
+	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/desktop-directories
+	-cp -r $(srcdir)/desktop-directories/nscde-*.directory $(DESTDIR)$(datarootdir)/desktop-directories/
+	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/icons
+	-cp -r $(srcdir)/icons/NsCDE $(DESTDIR)$(datarootdir)/icons/
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/xdg/menus
+	-cp -r $(srcdir)/menus/nscde-applications.menu $(DESTDIR)$(sysconfdir)/xdg/menus/
+	$(mkinstalldirs) $(DESTDIR)$(XSESSDIR)
+	-cp -r $(srcdir)/xsessions/nscde.desktop $(DESTDIR)$(XSESSDIR)/
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

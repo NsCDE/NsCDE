@@ -14,7 +14,10 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AC_PROG_CC
 
-ALL_LINGUAS="hr"
+LOCALES="hr"
+AC_SUBST(LOCALES)
+
+AC_SUBST(SED)
 
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
@@ -92,17 +95,17 @@ AC_SUBST(MATH_LIB)
 # Dependencies failures
 AS_IF([test x"$SED" == x"no"], [AC_MSG_ERROR([No sed detected.])])
 AS_IF([test x"$KSH" == x"no"], [AC_MSG_ERROR([Please install AT&T ksh 93 package before continuing.])])
-AS_IF([test x"$FVWM" == x"no"], [AC_MSG_ERROR([Please install fvwm 2 or fvwm 3 before configuring.])])
-AS_IF([test x"$CPP" == x"no"], [AC_MSG_ERROR([Please install C preprocessor (cpp) before configuring.])])
-AS_IF([test x"$XRDB" == x"no"], [AC_MSG_ERROR([Please install X server resource database utility (xrdb) before configuring.])])
-AS_IF([test x"$XSET" == x"no"], [AC_MSG_ERROR([Please install xset(1) utility before configuring.])])
-AS_IF([test x"$XPROP" == x"no"], [AC_MSG_ERROR([Please install xprop(1) utility before configuring.])])
-AS_IF([test x"$XDPYINFO" == x"no"], [AC_MSG_ERROR([Please install xdpyinfo(1) utility before configuring.])])
-AS_IF([test x"$XTERM" == x"no"], [AC_MSG_ERROR([Please install xterm(1) application before configuring.])])
-AS_IF([test x"$GETTEXT" == x"no"], [AC_MSG_ERROR([Please install gettext(1) tool before configuring.])])
-AS_IF([test x"$XDOTOOL" == x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_ERROR([No fvwm3 detected. Please install xdotool(1) tool before configuring.])])
 
 # Dependencies warnings
+AS_IF([test x"$FVWM" == x"no"], [AC_MSG_WARN([No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime.])])
+AS_IF([test x"$CPP" == x"no"], [AC_MSG_WARN([No cpp(1) C Preprocessor detected. It is required for xrdb(1) in runtime.])])
+AS_IF([test x"$XRDB" == x"no"], [AC_MSG_WARN([No xrdb(1) detected. X resource database utility (xrdb) is required for NsCDE in runtime.])])
+AS_IF([test x"$XSET" == x"no"], [AC_MSG_WARN([No xset(1) detected. Xset is required for NsCDE in runtime.])])
+AS_IF([test x"$XPROP" == x"no"], [AC_MSG_WARN([No xprop(1) detected. Xset is required for NsCDE in runtime.])])
+AS_IF([test x"$XDPYINFO" == x"no"], [AC_MSG_WARN([No xdpyinfo(1) detected. Please install xdpyinfo(1) utility for NsCDE runtime.])])
+AS_IF([test x"$XTERM" == x"no"], [AC_MSG_WARN([No xterm(1) detected. You will need xterm application at least for first NsCDE setup in runtime.])])
+AS_IF([test x"$GETTEXT" == x"no"], [AC_MSG_WARN([No gettext(1) detected. Please install gettext(1) tool for NsCDE runtime.])])
+AS_IF([test x"$XDOTOOL" == x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_WARN([No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime.])])
 AS_IF([test x"$XSCSVR" == x"no"], [AC_MSG_WARN([No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup.])])
 AS_IF([test x"$STALONETRAY" == x"no"], [AC_MSG_WARN([No Stalonetray was found. This NsCDE Installation will not be able to have tray applets.])])
 AS_IF([test x"$XSETTINGSD" == x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes.])])
@@ -115,19 +118,27 @@ AC_MSG_CHECKING(platform)
 case "$host_os" in
 freebsd*|sunos*|openbsd*|dragonfly*)
         AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" == x"no"], [AC_MSG_ERROR([You must have GNU sed (gsed) installed on ${host_os}.])])
+        AS_IF([test x"$GSED" == x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         ;;
 netbsd*)
         AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" == x"no"], [AC_MSG_ERROR([You must have GNU sed (gsed) installed on ${host_os}.])])
+        AS_IF([test x"$GSED" == x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         AC_CHECK_PROGS(GTAIL, gtail, "no")
-        AS_IF([test x"$GTAIL" == x"no"], [AC_MSG_ERROR([You must have GNU tail (gtail) installed on ${host_os}.])])
+        AS_IF([test x"$GTAIL" == x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
         ;;
 *)
         ;;
 esac
 
-AC_SUBST(SED)
+if test -d "/usr/share/xsessions"; then
+   XSESSDIR="/usr/share/xsessions"
+elif test -d "/usr/local/share/xsessions"; then
+   XSESSDIR="/usr/local/share/xsessions"
+else
+   XSESSDIR="$(datarootdir)/xsessions"
+fi
+
+AC_SUBST(XSESSDIR)
 
 AC_OUTPUT(
 	Makefile
@@ -145,5 +156,6 @@ AC_OUTPUT(
 	data/Makefile
 	lib/Makefile
 	nscde_tools/Makefile
+	xdg/Makefile
 )
 
