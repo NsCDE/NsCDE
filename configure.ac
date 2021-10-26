@@ -31,6 +31,8 @@ if test "$prefix" = /usr; then
   test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
 fi
 
+docdir=${datarootdir}/doc/NsCDE
+
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
 AC_SUBST(REQUIRED_PYTHON_VERSION)
