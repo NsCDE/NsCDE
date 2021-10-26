@@ -21,9 +21,17 @@ INSTFILES = $(foreach f,$(MOFILES),\
 	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
 	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
 
+DELFILES = $(foreach f,$(MOFILES),\
+	rm $(DESTDIR)$(localedir)/$(shell \
+	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
+	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
+
 install-data-am:
 	$(INSTDIRS)
 	$(INSTFILES)
 
 clean-local:
 	-rm -f $(MOFILES)
+
+uninstall-am:
+	$(DELFILES)

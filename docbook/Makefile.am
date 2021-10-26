@@ -8,7 +8,7 @@ DOCBOOK2PDF = docbook2pdf
 DOCBOOK2TXT = docbook2txt
 XSLTPROC = xsltproc
 
-all: NsCDE.pdf NsCDE.txt docs-html
+docs: NsCDE.pdf NsCDE.txt docs-html
 
 NsCDE.pdf:
 	${DOCBOOK2PDF} NsCDE.xml
@@ -35,3 +35,7 @@ install-data-local:
 		install -m 644 $$hh $(DESTDIR)$(docdir)/$$hh ; \
 	done
 
+uninstall-local:
+	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -rf html)
+	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -f NsCDE.pdf NsCDE.txt)
+	test -d $(DESTDIR)$(docdir) && rmdir $(DESTDIR)$(docdir) || :

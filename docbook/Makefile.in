@@ -429,7 +429,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-local
 
 .MAKE: install-am install-strip
 
@@ -442,12 +442,12 @@ uninstall-am:
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags-am uninstall uninstall-am
+	pdf-am ps ps-am tags-am uninstall uninstall-am uninstall-local
 
 .PRECIOUS: Makefile
 
 
-all: NsCDE.pdf NsCDE.txt docs-html
+docs: NsCDE.pdf NsCDE.txt docs-html
 
 NsCDE.pdf:
 	${DOCBOOK2PDF} NsCDE.xml
@@ -473,6 +473,11 @@ install-data-local:
                 echo "Installing $$hh in $(DESTDIR)$(docdir)/html" ; \
 		install -m 644 $$hh $(DESTDIR)$(docdir)/$$hh ; \
 	done
+
+uninstall-local:
+	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -rf html)
+	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -f NsCDE.pdf NsCDE.txt)
+	test -d $(DESTDIR)$(docdir) && rmdir $(DESTDIR)$(docdir) || :
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

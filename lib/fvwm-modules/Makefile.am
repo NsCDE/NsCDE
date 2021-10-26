@@ -12,3 +12,6 @@ EXTRA_SCRIPTS =
 clean-local:
 	-rm -f FvwmScript
 
+uninstall-am:
+	rm -f $(DESTDIR)$(NSCDE_LIBDIR)/fvwm-modules/FvwmScript
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/fvwm-modules

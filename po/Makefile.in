@@ -268,6 +268,11 @@ INSTFILES = $(foreach f,$(MOFILES),\
 	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
 	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
 
+DELFILES = $(foreach f,$(MOFILES),\
+	rm $(DESTDIR)$(localedir)/$(shell \
+	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
+	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
+
 all: all-am
 
 .SUFFIXES:
@@ -437,8 +442,6 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am:
-
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-local \
@@ -466,6 +469,9 @@ install-data-am:
 
 clean-local:
 	-rm -f $(MOFILES)
+
+uninstall-am:
+	$(DELFILES)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

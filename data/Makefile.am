@@ -18,3 +18,12 @@ install-data-hook:
 	-cp -r $(srcdir)/integration $(DESTDIR)$(NSCDE_DATADIR)/
 	-cp -r $(srcdir)/palettes $(DESTDIR)$(NSCDE_DATADIR)/
 	-cp -r $(srcdir)/photos $(DESTDIR)$(NSCDE_DATADIR)/
+
+uninstall-hook:
+	test -d $(DESTDIR)$(NSCDE_DATADIR) && \
+	(cd $(DESTDIR)$(NSCDE_DATADIR) && \
+	rm -rf backdrops defaults examples fallback \
+	fontsets help icons integration palettes \
+	config_templates fvwm photos)
+	test -d $(DESTDIR)$(NSCDE_DATADIR) && \
+	rmdir $(DESTDIR)$(NSCDE_DATADIR) || :

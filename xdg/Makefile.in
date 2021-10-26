@@ -428,8 +428,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am:
-
-.MAKE: install-am install-data-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-data-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic cscopelist-am \
 	ctags-am distclean distclean-generic distdir dvi dvi-am html \
@@ -440,7 +441,7 @@ uninstall-am:
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags-am uninstall uninstall-am
+	pdf-am ps ps-am tags-am uninstall uninstall-am uninstall-hook
 
 .PRECIOUS: Makefile
 
@@ -456,6 +457,18 @@ install-data-hook:
 	-cp -r $(srcdir)/menus/nscde-applications.menu $(DESTDIR)$(sysconfdir)/xdg/menus/
 	$(mkinstalldirs) $(DESTDIR)$(XSESSDIR)
 	-cp -r $(srcdir)/xsessions/nscde.desktop $(DESTDIR)$(XSESSDIR)/
+
+uninstall-hook:
+	test -d $(DESTDIR)$(datarootdir)/applications && \
+	(cd $(DESTDIR)$(datarootdir)/applications && rm -f NsCDE-*.desktop)
+	test -d $(DESTDIR)$(datarootdir)/desktop-directories && \
+	(cd $(DESTDIR)$(datarootdir)/desktop-directories && rm -f nscde-*.directory)
+	test -d $(DESTDIR)$(datarootdir)/icons && \
+	(cd $(DESTDIR)$(datarootdir)/icons && rm -rf NsCDE)
+	test -d $(DESTDIR)$(XSESSDIR) && \
+	(cd $(DESTDIR)$(XSESSDIR) && rm -f nscde.desktop)
+	test -d $(DESTDIR)$(sysconfdir)/xdg/menus && \
+	(cd $(DESTDIR)$(sysconfdir)/xdg/menus && rm -f nscde-applications.menu)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
