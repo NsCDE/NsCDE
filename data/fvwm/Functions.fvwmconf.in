@@ -2318,17 +2318,5 @@ AddToFunc f_GWMRenameWorkspaceHelper
 # Main upgrade caller
 DestroyFunc f_Upgrade
 AddToFunc f_Upgrade
-+ I f_Upgrade_rc28
-
-# rc28 - Colorset 23 for Front Panel to differ from static Colorset 21
-DestroyFunc f_Upgrade_rc28
-AddToFunc f_Upgrade_rc28
-+ I Test (f "$[FVWM_USERDIR]/NsCDE-Colorset.conf") \
-    PipeRead "egrep -q '^Colorset 23' "$[FVWM_USERDIR]/NsCDE-Colorset.conf" && echo Break 1"
-+ I None ("NsCDE-Notifier.f_upgrade_rc28") f_Notifier \
-    "$[gt.Important Upgrade Notice]" "Dismiss" "NsCDE/Info.xpm" \
-    "$[gt.Changes in Colorsets for NsCDE version] 1.0rc28 \
-$[gt.requires current color scheme to be re-applied for Front Panel to display properly.] \
-$[gt.Please use Color Style Manager to select and confirm your color scheme.]" "f_upgrade_rc28"
-+ I Schedule 2000 None (ColorMgr) Module FvwmScript ColorMgr $[desk.n] $[NSCDE_PALETTE_NCOLORS]
++ I Nop
 
