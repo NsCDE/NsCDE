@@ -21,7 +21,7 @@ docs-html:
 	-@cp NsCDE.css html/
 	${XSLTPROC} -o html/ NsCDE.xsl NsCDE.xml
 
-clean-local:
+realclean:
 	-rm -f NsCDE.pdf NsCDE.txt NsCDe.aux NsCDE.log NsCDE.out
 	-rm -rf html
 

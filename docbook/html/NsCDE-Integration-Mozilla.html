@@ -1,0 +1,81 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>15.3. Mozilla: Firefox and Thunderbird</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Integrations.html" title="15. Integration with X resources and widgets"><link rel="prev" href="NsCDE-Integration-Gtk-Qt.html" title="15.2. Gtk2, Gtk3, Qt4 and Qt5"><link rel="next" href="NsCDE-Integration-Custom.html" title="15.4. Custom application integration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">15.3. Mozilla: Firefox and Thunderbird</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Integration-Gtk-Qt.html">Prev</a> </td><th width="60%" align="center">15. Integration with X resources and widgets</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Integration-Custom.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Integration-Mozilla"></a>15.3. Mozilla: Firefox and Thunderbird</h3></div></div></div><p>
+From version 1.3 and further, NsCDE contains CSS code and icons which can be used from
+<code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> while applying new color style and theme,
+to generate colorsets also for either or both Firefox and Thunderbird.
+</p><p>
+For this to work,
+appropriate code or the whole <code class="filename">colormgr.local</code> from
+<code class="filename">$NSCDE_DATADIR/config_templates/colormgr.local</code> must be adapted into
+<code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>. Shell variable
+<code class="varname">FIREFOX_CHROMEDIR</code> should contain path to the
+<code class="filename">~/.mozilla/firefox/__PROFILE__/chrome.</code>,
+<code class="varname">FIREFOX_MAJVER_PFX</code> should be either "7x" or "9x" depending of major version
+of the Firefox is installed and used on the system. Firefox 8x belongs to 9x code base. The same
+as for <code class="varname">FIREFOX_CHROMEDIR</code>, variable <code class="varname">THUNDERBIRD_CHROMEDIR</code> should
+point to chrome directory of user's thunderbird profile. If chrome subdirectory in the user's profile
+directory does not exist, it will be created by the <code class="filename">colormgr.local</code>. This will make
+appropriate entiries in <code class="filename">userChrome.css</code> and <code class="filename">userContent.css</code> to
+import <code class="filename">nscdeChrome.css</code>, <code class="filename">nscdeIcons.css</code> and
+<code class="filename">nscdeContent.css</code> from the <code class="filename">$NSCDE_DATADIR/integration/firefox</code>
+and/or from <code class="filename">$NSCDE_DATADIR/integration/thunderbird</code>.
+File <code class="filename">nscdeColordefs.css</code> will be generated in the chrome dir with color mappings to the
+current NsCDE theme. This wile is also imported in userChrome.css and userContent.css.
+</p><p>
+If the option "Run $FVWM_USERDIR/libexec/colormgr.local (if exists)" is not turned off in the
+Color Style Manager while applying a theme, CSS which makes Firefox and Thunderbird as to a high degree
+similar to Motif/CDE application, and in the right colors will be generated. Firefox and Thunderbird
+must be restarted for this changes to take a place.
+</p><p>
+In Thunderbird, because of the nature of mail, it is not 100% possible to use color 4 from the NsCDE
+theme as background/foreground combination, because this can give ugly and bad results with some amount
+of structured HTML mails. Hence, solor for test is black, while background is from Solaris theme (#fff7e9)
+which is yellowish, almost white.
+</p><p>
+Here is how chrome directory layout and files must look for thunderbird after <code class="filename">colormgr.local</code>
+makes a changes:
+
+</p><pre class="programlisting">
+
+/home/user/.thunderbird/profile_test_009/chrome
+|- nscdeColordefs.css
+|- userChrome.css
+|- userContent.css
+
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeContent.css");
+
+$ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeIcons.css");
+</pre><p>
+
+</p><p>
+This is how Firefox chromedir should look:
+
+</p><pre class="programlisting">
+
+/home/user/.mozilla/firefox/testtest.default-release/chrome
+|- nscdeColordefs.css
+|- nscdeContent.css -&gt; /opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
+|- userChrome.css
+|- userContent.css
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
+@import url("nscdeColordefs.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/opt/NsCDE/share/NsCDE/integration/firefox/nscdeIcons.css");
+
+$ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
+@import url("nscdeColordefs.css");
+@import url("nscdeContent.css");
+
+</pre><p>
+</p><p>
+Great care has been taken to get working CSS which modifies Mozilla applications not
+to display light text on light background, or dark text on dark background, but this
+ever changing CSS mess should be considered of beta quality, so issue reports,
+specially those with ready made fixes are more than welcome.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Integration-Gtk-Qt.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Integrations.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Integration-Custom.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">15.2. Gtk2, Gtk3, Qt4 and Qt5 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 15.4. Custom application integration</td></tr></table></div></body></html>
