@@ -12,10 +12,11 @@ AddToFunc f_ReadAndEcho
 + I Echo NsCDE: FVWM $0 Configuration read from $0
 
 # We are dealing with FVWM3
-Test (EnvMatch FVWM_IS_FVWM3 1) f_ReadAndEcho FrontPanel.fvwm3
+Test (EnvMatch FVWM_IS_FVWM3 1) f_ReadAndEcho $[FVWM_DATADIR]/FrontPanel.fvwm3
 
 # We are dealing with patched FVWM2, read FrontPanel.fvwm3
-Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1) f_ReadAndEcho FrontPanel.fvwm3
+Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1) f_ReadAndEcho $[FVWM_DATADIR]/FrontPanel.fvwm3
 
 # We are dealing with FVWM2, use FrontPanel.fvwm2
-Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1) f_ReadAndEcho FrontPanel.fvwm2
+Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1) f_ReadAndEcho $[FVWM_DATADIR]/FrontPanel.fvwm2
+
