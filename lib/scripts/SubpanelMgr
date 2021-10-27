@@ -773,8 +773,10 @@ Widget 20
          Set $WriteFinalActionsFileCmd = {cat "} $SubpNewActionsPart {" > "$FVWM_USERDIR/Subpanels.actions"}
          Set $WriteFinalActionsFile = (GetOutput $WriteFinalActionsFileCmd 1 -1)
 
-         Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_TOOLSDIR/generate_subpanels" > "$FVWM_USERDIR/Subpanels.fvwmconf"}
-         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+         Set $GenerateFvwmButtonsCfg2Cmd = {"$NSCDE_TOOLSDIR/generate_subpanels" -w > "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen"}
+         Set $GenerateFvwmButtonsCfg3Cmd = {"$NSCDE_TOOLSDIR/generate_subpanels" -f > "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen"}
+         Set $GenerateFvwmButtonsCfg2 = (GetOutput $GenerateFvwmButtonsCfg2Cmd 1 -1)
+         Set $GenerateFvwmButtonsCfg3 = (GetOutput $GenerateFvwmButtonsCfg3Cmd 1 -1)
 
          Do {f_ReadCfg Subpanels}
          Do {Schedule 400 KillModule FvwmButtons NsCDE-Subpanel} $SubpanelNo

@@ -107,6 +107,12 @@ AddToFunc f_ReadCfg
 + I Test (EnvMatch infostore.readlocal y) Echo NsCDE: Additional $0 FVWM Configuration read from $[FVWM_USERDIR]/$0.fvwmlocal
 + I InfoStoreRemove readlocal
 
+# Early sub-reader for FrontPanel and Subpanels
+DestroyFunc f_ReadSubCfg
+AddToFunc f_ReadSubCfg
++ I Read $1
++ I Echo NsCDE: $0 FVWM Configuration read from $1
+
 # Safe environment variable appender. Used for LD_PRELOAD for example
 # This must be defined early - prior to NsCDE.conf reading.
 DestroyFunc f_VarAppend

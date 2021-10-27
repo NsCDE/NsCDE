@@ -61,15 +61,26 @@ function actions_file_sanity
 
 function subpanels_file_tstamp
 {
-   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.fvwmconf" ]]; then
-      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.fvwmconf" ]; then
-         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.fvwmconf ... regenerating latest one." >&2
-         $NSCDE_TOOLSDIR/generate_subpanels > $FVWM_USERDIR/Subpanels.fvwmconf
-         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
-         sleep 1
-         $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
-         exit 0
+   REGEN=0
+   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen" ]]; then
+      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen" ]; then
+         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.fvwm2.fvwmgen ... regenerating last one." >&2
+         $NSCDE_TOOLSDIR/generate_subpanels -w > $FVWM_USERDIR/Subpanels.fvwm2.fvwmgen
+         REGEN=1
       fi
+   fi
+   if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen" ]]; then
+      if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen" ]; then
+         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.fvwm3.fvwmgen ... regenerating last one." >&2
+         $NSCDE_TOOLSDIR/generate_subpanels -f > $FVWM_USERDIR/Subpanels.fvwm3.fvwmgen
+         REGEN=1
+      fi
+   fi
+   if (($REGEN == 1)); then
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
+      sleep 1
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
+      exit 0
    fi
 }
 
@@ -252,7 +263,8 @@ function manage_entry
       if (($? == 0)); then
          cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"
          cat "$tmpfile" > "$FVWM_USERDIR/Subpanels.actions"
-         $NSCDE_TOOLSDIR/generate_subpanels > $FVWM_USERDIR/Subpanels.fvwmconf
+         $NSCDE_TOOLSDIR/generate_subpanels -w > $FVWM_USERDIR/Subpanels.fvwmgen
+         $NSCDE_TOOLSDIR/generate_subpanels -f > $FVWM_USERDIR/Subpanels.fvwmgen
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          rm "$tmpfile"

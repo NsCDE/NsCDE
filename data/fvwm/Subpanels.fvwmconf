@@ -6,11 +6,6 @@
 
 # Runtime selector of configuration for Sub Panels / FvwmButtons
 
-DestroyFunc f_ReadSubpanels
-AddToFunc f_ReadSubpanels
-+ I Read $0
-+ I Echo NsCDE: FVWM $0 Configuration read from $0
-
 Test (EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/Subpanels.actions !f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
  Exec exec HAS_WINDOWNAME=1 SYSMODE=0 $[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 
@@ -18,11 +13,20 @@ Test (!EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/Subpanels.actions !f $[FVWM_U
  Exec exec HAS_WINDOWNAME=0 SYSMODE=0 $[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen
 
 # We are dealing with FVWM3
-Test (EnvMatch FVWM_IS_FVWM3 1) f_ReadSubpanels $[FVWM_DATADIR]/Subpanels.fvwm3.fvwmconf
+Test (EnvMatch FVWM_IS_FVWM3 1, !f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_DATADIR]/Subpanels.fvwm3.fvwmconf
+Test (EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 
 # We are dealing with patched FVWM2, read FrontPanel.fvwm3
-Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1) f_ReadSubpanels $[FVWM_DATADIR]/Subpanels.fvwm3.fvwmconf
+Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1, !f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_DATADIR]/Subpanels.fvwm3.fvwmconf
+Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1, f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 
 # We are dealing with FVWM2, use FrontPanel.fvwm2
-Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1) f_ReadSubpanels $[FVWM_DATADIR]/Subpanels.fvwm2.fvwmconf
+Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1, !f $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_DATADIR]/Subpanels.fvwm2.fvwmconf
+Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1, f $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen) \
+ f_ReadSubCfg Subpanels $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmconf
 

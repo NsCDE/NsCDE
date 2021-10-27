@@ -524,7 +524,7 @@ AddToFunc f_SafeFvwmCmd
 #######################
 
 # Set number of left and right launchers
-# Called directly from FrontPanel.fvwmconf
+# Called directly from FrontPanel.fvwm2.fvwmconf or FrontPanel.fvwm3.fvwmconf
 DestroyFunc f_FpConfigLaunchers
 AddToFunc f_FpConfigLaunchers
 + I Test (EnvMatch infostore.FP.LeftLaunchersNum 0) InfoStoreAdd fpleft ""
@@ -608,7 +608,8 @@ AddToFunc f_KeyFromSubpanelToFP
 DestroyFunc f_RefreshSubpanel
 AddToFunc f_RefreshSubpanel
 + I Exec exec fvwm-menu-desktop --mini-icon-dir $[FVWM_USERDIR]/icons --enable-mini-icons -s 32 --theme NsCDE --include-items none > /dev/null 2>&1
-+ I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwmconf 2> /dev/null"
++ I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -w > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen 2> /dev/null"
++ I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen 2> /dev/null"
 + I f_ReadCfg Subpanels
 + I KillModule FvwmButtons $0
 + I SendToModule FrontPanel PressButton $0
@@ -668,7 +669,8 @@ AddToFunc f_FrontPanelPropsMenu
 DestroyFunc f_FrontPanelManageSubpanels
 AddToFunc f_FrontPanelManageSubpanels
 + I Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel -p $0 $1
-+ I Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwmconf
++ I Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels -w > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen
++ I Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 + I Schedule 800 f_ReadCfg Subpanels
 + I Schedule 1200 f_RestartFrontPanel
 

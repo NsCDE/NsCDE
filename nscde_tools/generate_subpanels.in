@@ -6,6 +6,21 @@
 # Licence: GPLv3
 #
 
+while getopts wfh OPT
+do
+   case $OPT in
+   w)
+      HAS_WINDOWNAME=0
+   ;;  
+   f)
+      HAS_WINDOWNAME=1
+   ;;
+   h)
+      echo "Usage: ${0##*/} [ -w ] [ -f ] [ -h ]"
+   ;;
+   esac
+done
+
 if [ -z $HAS_WINDOWNAME ]; then
    HAS_WINDOWNAME=0
 fi

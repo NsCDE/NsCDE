@@ -6,26 +6,21 @@
 
 # Runtime selector of configuration for Front Panel / FvwmButtons
 
-DestroyFunc f_ReadFPCfg
-AddToFunc f_ReadFPCfg
-+ I Read $0
-+ I Echo NsCDE: FVWM $0 Configuration read from $0
-
 # We are dealing with FVWM3
 Test (EnvMatch FVWM_IS_FVWM3 1, !f $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf) \
- f_ReadFPCfg $[FVWM_DATADIR]/FrontPanel.fvwm3.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_DATADIR]/FrontPanel.fvwm3.fvwmconf
 Test (EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf) \
- f_ReadFPCfg $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf
 
 # We are dealing with patched FVWM2, read FrontPanel.fvwm3.fvwmconf
 Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1, !f $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf) \
- f_ReadFPCfg $[FVWM_DATADIR]/FrontPanel.fvwm3.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_DATADIR]/FrontPanel.fvwm3.fvwmconf
 Test (!EnvMatch FVWM_IS_FVWM3 1, EnvMatch HAS_WINDOWNAME 1, f $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf) \
- f_ReadFPCfg $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_USERDIR]/FrontPanel.fvwm3.fvwmconf
 
 # We are dealing with FVWM2, use FrontPanel.fvwm2
 Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1, !f $[FVWM_USERDIR]/FrontPanel.fvwm2.fvwmconf) \
- f_ReadFPCfg $[FVWM_DATADIR]/FrontPanel.fvwm2.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_DATADIR]/FrontPanel.fvwm2.fvwmconf
 Test (!EnvMatch FVWM_IS_FVWM3 1, !EnvMatch HAS_WINDOWNAME 1, f $[FVWM_USERDIR]/FrontPanel.fvwm2.fvwmconf) \
- f_ReadFPCfg $[FVWM_USERDIR]/FrontPanel.fvwm2.fvwmconf
+ f_ReadSubCfg FrontPanel $[FVWM_USERDIR]/FrontPanel.fvwm2.fvwmconf
 

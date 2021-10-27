@@ -71,7 +71,8 @@ Begin
    ChangeMinValue 8 9999
 
    # Prepare regenerate command
-   Set $GenerateFvwmButtonsCfgCmd = {"$NSCDE_TOOLSDIR/generate_subpanels" > "$FVWM_USERDIR/Subpanels.fvwmconf"}
+   Set $GenerateFvwmButtonsCfg2Cmd = {"$NSCDE_TOOLSDIR/generate_subpanels" -w > "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen"}
+   Set $GenerateFvwmButtonsCfg3Cmd = {"$NSCDE_TOOLSDIR/generate_subpanels" -f > "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen"}
 
    Set $ResetDone = 0
 
@@ -170,7 +171,8 @@ Widget 2
 
          Set $ChangeDetectString = $SubpanelDisplayName $SubpanelWidth $SubpanelEnabled
 
-         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+         Set $GenerateFvwmButtonsCfg2 = (GetOutput $GenerateFvwmButtonsCfg2Cmd 1 -1)
+         Set $GenerateFvwmButtonsCfg3 = (GetOutput $GenerateFvwmButtonsCfg3Cmd 1 -1)
          Do {f_ReadCfg Subpanels}
          Do {Schedule 200 KillModule FvwmButtons } $SubpanelResName
 
@@ -398,11 +400,17 @@ Widget 14
              { $[gt.has errors in declaration. Edit] } $UserSubpanelActionsFile { $[gt.to fix it and then rerun this tool.]"}
          End
 
-         Set $GenerateFvwmButtonsCfg = (GetOutput $GenerateFvwmButtonsCfgCmd 1 -1)
+         Set $GenerateFvwmButtonsCfg2 = (GetOutput $GenerateFvwmButtonsCfg2Cmd 1 -1)
+         Set $GenerateFvwmButtonsCfg3 = (GetOutput $GenerateFvwmButtonsCfg3Cmd 1 -1)
 
-         If $GenerateFvwmButtonsCfg <> {} Then
+         If $GenerateFvwmButtonsCfg2 <> {} Then
          Begin
-            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg {\\\""}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg2 {\\\""}
+         End
+
+         If $GenerateFvwmButtonsCfg3 <> {} Then
+         Begin
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg3 {\\\""}
          End
 
          # Case where disabled subpanel has been enabled
