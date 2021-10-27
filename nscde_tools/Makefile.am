@@ -5,6 +5,7 @@
 #
 
 SUBDIRS = FvwmScripts
+OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 
 toolsdir = $(NSCDE_TOOLSDIR)
 
@@ -18,4 +19,9 @@ EXTRA_SCRIPTS =
 
 clean-local:
 	-rm -f $(SCRIPTCLEAN)
+
+uninstall-hook:
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/FvwmScripts || :
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/$(OS_PLUS_MACHINE_ARCH) || :
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR) || :
 

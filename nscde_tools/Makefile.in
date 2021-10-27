@@ -370,6 +370,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 SUBDIRS = FvwmScripts
+OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 toolsdir = $(NSCDE_TOOLSDIR)
 SCRIPTINS = $(wildcard $(srcdir)/*.in)
 SCRIPTOUTS = $(foreach s,$(SCRIPTINS),$(shell echo $(s) | $(SED) 's/\.in$$//g'))
@@ -772,8 +773,9 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-toolsSCRIPTS
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-am clean clean-generic clean-local cscopelist-am ctags \
@@ -786,13 +788,19 @@ uninstall-am: uninstall-toolsSCRIPTS
 	install-toolsSCRIPTS installcheck installcheck-am installdirs \
 	installdirs-am maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-am uninstall uninstall-am uninstall-toolsSCRIPTS
+	tags-am uninstall uninstall-am uninstall-hook \
+	uninstall-toolsSCRIPTS
 
 .PRECIOUS: Makefile
 
 
 clean-local:
 	-rm -f $(SCRIPTCLEAN)
+
+uninstall-hook:
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/FvwmScripts || :
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/$(OS_PLUS_MACHINE_ARCH) || :
+	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR) || :
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

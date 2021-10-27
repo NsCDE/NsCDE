@@ -317,6 +317,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 SUBDIRS = fvwm-modules python scripts
+OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 all: all-recursive
 
 .SUFFIXES:
@@ -607,8 +608,9 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am:
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-am clean clean-generic cscopelist-am ctags ctags-am \
@@ -620,10 +622,18 @@ uninstall-am:
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am tags tags-am uninstall uninstall-am
+	pdf-am ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-hook
 
 .PRECIOUS: Makefile
 
+
+uninstall-hook:
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/python || :
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/scripts || :
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/fvwm-modules || :
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/$(OS_PLUS_MACHINE_ARCH) || :
+	rmdir $(DESTDIR)$(NSCDE_LIBDIR) || :
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -273,6 +273,8 @@ DELFILES = $(foreach f,$(MOFILES),\
 	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
 	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
 
+DELDIRS1 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)/LC_MESSAGES))
+DELDIRS2 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)))
 all: all-am
 
 .SUFFIXES:
@@ -472,6 +474,8 @@ clean-local:
 
 uninstall-am:
 	$(DELFILES)
+	rmdir $(DELDIRS1) || :
+	rmdir $(DELDIRS2) || :
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

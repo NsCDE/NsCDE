@@ -27,4 +27,6 @@ uninstall-hook:
 	(cd $(DESTDIR)$(XSESSDIR) && rm -f nscde.desktop)
 	test -d $(DESTDIR)$(sysconfdir)/xdg/menus && \
 	(cd $(DESTDIR)$(sysconfdir)/xdg/menus && rm -f nscde-applications.menu)
+	rmdir $(DESTDIR)$(sysconfdir)/xdg/menus || :
+	rmdir $(DESTDIR)$(sysconfdir)/xdg || :
 

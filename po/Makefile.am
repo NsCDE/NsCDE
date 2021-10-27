@@ -26,6 +26,9 @@ DELFILES = $(foreach f,$(MOFILES),\
 	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
 	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
 
+DELDIRS1 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)/LC_MESSAGES))
+DELDIRS2 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)))
+
 install-data-am:
 	$(INSTDIRS)
 	$(INSTFILES)
@@ -35,3 +38,5 @@ clean-local:
 
 uninstall-am:
 	$(DELFILES)
+	rmdir $(DELDIRS1) || :
+	rmdir $(DELDIRS2) || :
