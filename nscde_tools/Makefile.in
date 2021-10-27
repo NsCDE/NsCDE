@@ -729,7 +729,8 @@ info: info-recursive
 info-am:
 
 install-data-am: install-toolsSCRIPTS
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
@@ -775,27 +776,32 @@ ps-am:
 uninstall-am: uninstall-toolsSCRIPTS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
-.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
+.MAKE: $(am__recursive_targets) install-am install-data-am \
+	install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-am clean clean-generic clean-local cscopelist-am ctags \
 	ctags-am distclean distclean-generic distclean-tags distdir \
 	dvi dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	install-toolsSCRIPTS installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-am uninstall uninstall-am uninstall-hook \
-	uninstall-toolsSCRIPTS
+	install-data install-data-am install-data-hook install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip install-toolsSCRIPTS installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-hook uninstall-toolsSCRIPTS
 
 .PRECIOUS: Makefile
 
 
 clean-local:
 	-rm -f $(SCRIPTCLEAN)
+
+install-data-hook:
+	NSCDE_DATADIR=$(DESTDIR)$(NSCDE_DATADIR) HAS_WINDOWNAME=0 SYSMODE=1 $(KSH) $(srcdir)/generate_subpanels > $(DESTDIR)$(FVWM_DATADIR)/Subpanels.fvwm2.fvwmconf
+	NSCDE_DATADIR=$(DESTDIR)$(NSCDE_DATADIR) HAS_WINDOWNAME=1 SYSMODE=1 $(KSH) $(srcdir)/generate_subpanels > $(DESTDIR)$(FVWM_DATADIR)/Subpanels.fvwm3.fvwmconf
 
 uninstall-hook:
 	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/FvwmScripts || :
