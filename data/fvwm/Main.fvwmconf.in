@@ -215,9 +215,7 @@ AddToFunc f_ReadNormalConfig
 + I f_ReadCfg Event
 + I f_ReadCfg WspLocPager
 + I f_ReadCfg LocalPager
-+ I Test (EnvMatch FVWM_IS_FVWM3 1) f_ReadCfg Subpanels.fvwm3 # Read Subpanels of the FrontPanel
-+ I Test (!EnvMatch FVWM_IS_FVWM3, EnvMatch HAS_WINDOWNAME 1) f_ReadCfg Subpanels.fvwm3 # Read Subpanels of the FrontPanel
-+ I Test (!EnvMatch FVWM_IS_FVWM3, !EnvMatch HAS_WINDOWNAME 1) f_ReadCfg Subpanels.fvwm2 # Read Subpanels of the FrontPanel
++ I f_ReadCfg Subpanels.fvwm3 # Read Subpanels of the FrontPanel
 + I PipeRead "$[NSCDE_TOOLSDIR]/fpseticon pre" # Read this before f_ReadCfg FrontPanel
 + I f_ReadCfg FrontPanel # Read Front Panel configuration
 + I f_ReadCfg Init # Init / Start - login function after non-session login
