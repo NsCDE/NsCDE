@@ -7,7 +7,7 @@
 fvwmdatadir = $(FVWM_DATADIR)
 
 DYNCONFS = Functions.fvwmconf Main.fvwmconf Subpanels.fvwm2.fvwmconf Subpanels.fvwm3.fvwmconf
-CONFS = $(shell echo $(srcdir)/*.fvwmconf) NsCDE.conf FrontPanel.fvwm2 FrontPanel.fvwm3
+CONFS = $(shell echo $(srcdir)/*.fvwmconf) NsCDE.conf
 
 fvwmdata_DATA = $(CONFS)
 
