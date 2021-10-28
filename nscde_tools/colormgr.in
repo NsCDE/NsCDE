@@ -63,7 +63,6 @@ function ProgBits
    # We cannot use rectangle in dynamic desk WSM
 
    mkdir -p ${FVWM_USERDIR}/icons/NsCDE || exit 1
-   mkdir -p ${FVWM_USERDIR}/icons/CDE || exit 1
 
    # Type b, subtype 2
    ${NSCDE_TOOLSDIR}/palette_colorgen \
@@ -182,8 +181,8 @@ function ProgBits
    do
       ${NSCDE_TOOLSDIR}/palette_colorgen \
        -p ${PaletteNamePath} -n $Ncolors \
-       -i ${NSCDE_DATADIR}/icons/CDE/$fpicon -P 5 \
-       -b > ${FVWM_USERDIR}/icons/CDE/$fpicon
+       -i ${NSCDE_DATADIR}/icons/NsCDE/$fpicon -P 5 \
+       -b > ${FVWM_USERDIR}/icons/NsCDE/$fpicon
    done
 
    # Default fallback background
