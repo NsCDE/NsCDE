@@ -27,7 +27,7 @@ function find_colors
       if [ "x$palfile" != "x" ]; then
          $NSCDE_ROOT/libexec/nscde_palette_colorgen.py \
           -n ${NSCDE_PALETTE_NCOLORS} \
-          -p /opt/NsCDE/share/palettes/${NSCDE_PALETTE}.dp -sl | \
+          -p ${NSCDE_ROOT}/share/palettes/${NSCDE_PALETTE}.dp -sl | \
           egrep '(ts|bs)_color_3' | while IFS=" " read name value
          do
             eval "${name}"="${value}"
