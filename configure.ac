@@ -111,6 +111,8 @@ AC_PATH_PROG(KSH, ksh93, ksh93)
 AC_CHECK_PROGS(SED, sed gsed, sed, "")
 AC_CHECK_PROGS(FVWM, fvwm fvwm2 fvwm3 ${FVWM_BIN}, "no")
 AC_CHECK_PROGS(CPP, cpp /lib/cpp /usr/lib/cpp /usr/local/lib/cpp, "no")
+AC_CHECK_PROGS(CONVERT, convert, "no")
+AC_CHECK_PROGS(IMPORT, import, "no")
 AC_CHECK_PROGS(XRDB, xrdb, "no")
 AC_CHECK_PROGS(XSET, xset, "no")
 AC_CHECK_PROGS(XPROP, xprop, "no")
@@ -163,6 +165,8 @@ AS_IF([test x"$XSETTINGSD" == x"no"], [AC_MSG_WARN([No Xsettingsd daemon was fou
 AS_IF([test x"$XRANDR" == x"no"], [AC_MSG_WARN([No xrandr(1) command was found. It is advised to have X11 Server Utils installed.])])
 AS_IF([test x"$DUNST" == x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
 AS_IF([test x"$XCLIP" == x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
+AS_IF([test x"$CONVERT" == x"no"], [AC_MSG_WARN([No ImageMagick convert(1) utility found. NsCDE will not be able to take screenshots to file.])])
+AS_IF([test x"$IMPORT" == x"no"], [AC_MSG_WARN([No ImageMagick import(1) utility found. NsCDE will not be able to take screenshots to file.])])
 
 # Python modules
 AX_PYTHON_MODULE([xdg], [])
