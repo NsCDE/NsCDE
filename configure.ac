@@ -312,7 +312,6 @@ AC_OUTPUT(
 	nscde_tools/generate_subpanels
 	nscde_tools/getdpi
 	nscde_tools/getfont
-	nscde_tools/get_fvwm_infostore
 	nscde_tools/get_logical_screens
 	nscde_tools/ised
 	nscde_tools/keymenu

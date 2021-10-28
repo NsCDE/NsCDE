@@ -145,6 +145,9 @@ Begin
    # Default is global and fvwm2
    Set $Fvwm3DesktopNonGlobalMode = 0
    Do {SendToModule ColorMgr SendString 4 2 $[FVWM_IS_FVWM3]_$[monitor.count]_$[infostore.desktopconfiguration]}
+
+   # Inform Color Style Manager if we are using xsettingsd to restart it.
+   Do {SendToModule ColorMgr SendString 4 3 $[infostore.nscde_use_xsettingsd]}
 End
 
 PeriodicTasks
@@ -375,6 +378,10 @@ Widget 4
                Set $Fvwm3DesktopNonGlobalMode = 1
             End
          End
+      End
+      3 :
+      Begin
+         Set $CheckUseXsettingsd = (LastString)
       End
 End
 
@@ -1439,7 +1446,6 @@ Widget 32
                Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
             End
 
-            Set $CheckUseXsettingsd = (GetOutput {$NSCDE_TOOLSDIR/get_fvwm_infostore nscde_use_xsettingsd} 1 1)
             If $CheckUseXsettingsd == 1 Then
             Begin
                Do {f_Xsettingsd stop}

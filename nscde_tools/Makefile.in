@@ -104,10 +104,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = acpimgr appfinder backdropmgr bootstrap colormgr \
 	colorpicker fontmgr fpclock fpexec fp_manage_subpanel \
 	fpseticon generate_app_menus generate_subpanels getdpi getfont \
-	get_fvwm_infostore get_logical_screens ised keymenu mkpagemenu \
-	strip_icon_path subpanel_menuitem_props var_append xdowrapper \
-	xrandr_backer colorconv confget confset geticon getla1 \
-	palette_colorgen sysinfo themegen usleep
+	get_logical_screens ised keymenu mkpagemenu strip_icon_path \
+	subpanel_menuitem_props var_append xdowrapper xrandr_backer \
+	colorconv confget confset geticon getla1 palette_colorgen \
+	sysinfo themegen usleep
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -202,7 +202,6 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/acpimgr.in \
 	$(srcdir)/fpexec.in $(srcdir)/fpseticon.in \
 	$(srcdir)/generate_app_menus.in \
 	$(srcdir)/generate_subpanels.in \
-	$(srcdir)/get_fvwm_infostore.in \
 	$(srcdir)/get_logical_screens.in $(srcdir)/getdpi.in \
 	$(srcdir)/getfont.in $(srcdir)/geticon.in $(srcdir)/getla1.in \
 	$(srcdir)/ised.in $(srcdir)/keymenu.in $(srcdir)/mkpagemenu.in \
@@ -438,8 +437,6 @@ generate_subpanels: $(top_builddir)/config.status $(srcdir)/generate_subpanels.i
 getdpi: $(top_builddir)/config.status $(srcdir)/getdpi.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 getfont: $(top_builddir)/config.status $(srcdir)/getfont.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-get_fvwm_infostore: $(top_builddir)/config.status $(srcdir)/get_fvwm_infostore.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 get_logical_screens: $(top_builddir)/config.status $(srcdir)/get_logical_screens.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
