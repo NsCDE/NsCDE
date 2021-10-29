@@ -127,31 +127,27 @@ articles (the, a, an) will probably be more accurate.
 
 #### Components overview
 
-   **NsCDE** is a wrapper and a bunch of configurations, scripts and apps around
-   `FVWM`. `FVWM` is in my opinion a model of free choice for people who like to
-   have things set up by their own wishes and who are aware what real freedom
-   of choice is. A stunning contrast to policies forced on Linux users in the
-   last decade from the mainstream desktop players.
+   **NsCDE** consists of 7 main facilities
 
-   **NsCDE** is by default rooted in `/opt/NsCDE` (`$NSCDE_ROOT`), but it can be
-   relocated with only one variable changed in main wrapper bin/nscde and
-   Main.fvwmconf.
+   * extensive `FVWM` configuration and customization
+   * FvwmScript GUI programs
+   * GTK2 and GTK3 theme based on pixmap engine
+   * Icon theme
+   * Python programs and Korn Shell scripts
+   * Misc pieces for integration, like CSS for `Firefox` and `Thunderbird` etc ...
+   * Integrated free software components for desktop environment tasks
 
-   It is not using your existing `$HOME/.fvwm` but sets `$FVWM_USERDIR` to
-   `$HOME/.NsCDE`, and uses `/opt/NsCDE/config` as a sources of configuration.
+   Central "driver" or framework is FVWM Window Manager. `FVWM` is in my opinion
+   a model of free choice for people who like to have things set up by their own
+   wishes and and who are aware what real freedom of choice is. A stunning
+   contrast to policies forced on Linux users in the last decade from the
+   most mainstream desktop players.
 
-   Configuration model is a bit complex, but very flexible: configuration
-   options are grouped in logical order. Configuration files are names
-   `NsCDE-<group>.conf`. For example, `NsCDE-Functions.conf` for `FVWM` functions.
-   Each configuration file can have two exclusive sources, and one
-   additional. For example, if user doesn't have
-   `$FVWM_USERDIR/NsCDE-Functions.conf`, then
-   `$NSCDE_ROOT/config/NsCDE-Functions.conf` is read as default. Additionally,
-   if `$FVWM_USERDIR/Functions.fvwmlocal` exists, it will be read in addition
-   to conf file, from wherever it was read. This is intended as a primary
-   mechanism for customization: If user doesn't need to override and change a
-   lot of "system" configuration, but just add it's own in addition to
-   existing, local file is place for such customization (of course, most
-   parts of the existing `FVWM` configuration can be overridden or destroyed
-   and recreated even in local files.
+   **NsCDE** is by default installed in `/usr/local` (`$NSCDE_ROOT`), but it can
+   be relocated to any other installation path during pre-installation
+   configuration.
+
+   It is not using default configuration directory `$HOME/.fvwm` but sets it's
+   own `$FVWM_USERDIR` to `$HOME/.NsCDE`, and uses **NsCDE** private
+   `$[FVWM_DATADIR]` as a sources of configuration.
 

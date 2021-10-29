@@ -231,26 +231,14 @@ git clone --depth 1 https://github.com/NsCDE/NsCDE.git
 cd NsCDE
 
 # ... and then:
-# for FVWM2
-./Installer.ksh -w -n -i
-
-# for FVWM3
-./Installer.ksh -f -n -i
+./configure
+make
+make install
 ```
 
-That's it. `NsCDE` is installed. You may need to resrart your X Display Manager 
+That's it. `NsCDE` is installed. You may need to restart your X Display Manager 
 (such as `lightdm`, `gdm`, `sddm` ...) for `NsCDE` entry to appear as an login 
 option.
-
-`NsCDE` upgrade uses the same installer Installer.ksh, but with `-u` option as in 
-`upgrade` instead of `-i` as in `install`.
-
-``` sh
-# for FVWM2: 
-./Installer.ksh -w -n -u
-for FVWM3: 
-./Installer.ksh -f -n -u
-```
 --------------------------------------------------------------------------
 
 ### NsCDE Startup
