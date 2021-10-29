@@ -249,7 +249,7 @@ AC_SUBST(XSESSDIR)
 
 if test -d "./.git"; then
    VERSIONINFO=`git describe --always --long --dirty`
-   VERSION="${VERSION}-${VERSIONINFO}"
+   VERSION="${VERSION}-git${VERSIONINFO}"
 fi
 
 AC_OUTPUT(
