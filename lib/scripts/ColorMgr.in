@@ -18,6 +18,17 @@ Begin
       Set $CurrDesk = 1
    End
 
+   Set $StaticConfCheck = (GetOutput {test -f "$FVWM_USERDIR/Colorset.fvwmconf" && echo 1} 1 1)
+   If $StaticConfCheck == 1 Then
+   Begin
+      Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Error.xpm" }
+         {"$[gt.Static file Colorset.fvwmconf exists and is read }
+         {instead of regular Colorset.fvwmgen which is produced by the }
+         {Color Style Manager. In order to use Color Style Manager, static }
+         {file Colorset.fvwmconf must be removed from directory] $[FVWM_USERDIR]"}
+      Quit
+   End
+
    # Defined as NSCDE_PALETTE_NCOLORS in Colorset.fvwmconf/fvwmgen
    Set $Ncolors = (GetScriptArgument 2)
    If $Ncolors == {} Then

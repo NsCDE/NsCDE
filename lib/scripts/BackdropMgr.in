@@ -11,6 +11,17 @@ Colorset 22
 
 Init
 Begin
+   Set $StaticConfCheck = (GetOutput {test -f "$FVWM_USERDIR/Backdrops.fvwmconf" && echo 1} 1 1)
+   If $StaticConfCheck == 1 Then
+   Begin
+      Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" }
+         {"$[gt.Static file Backdrops.fvwmconf exists and is read }
+         {instead of regular Backdrops.fvwmgen which is produced }
+         {by the Backdrop Style Manager. In order to use Backdrop Style Manager, }
+         {static file Backdrop.fvwmconf must be removed from directory] $[FVWM_USERDIR]"}
+      Quit
+   End
+
    Set $CurrDesk = (Add (GetScriptArgument 1) 1)
    If $CurrDesk == {} Then
    Begin

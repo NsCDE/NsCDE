@@ -810,6 +810,17 @@ Widget 4
             ChangePosition 10 12 204
             Do {All ("Window Style Manager") RefreshWindow}
             ChangeLocaleTitle 5 {Window Animation}
+
+            Set $StaticConfCheck = (GetOutput {test -f "$FVWM_USERDIR/Animate.fvwmconf" && echo 1} 1 1)
+            If $StaticConfCheck == 1 Then
+            Begin
+               Do {f_Notifier "Window Style Manager" "Dismiss" "NsCDE/Warning.xpm" }
+               {"$[gt.Static file Animate.fvwmconf exists and is read }
+               {instead of regular Animate.fvwmgen which is produced }
+               {by the Window Style Manager. In order to use animations }
+               {set by Window Style Manager, static file Animate.fvwmconf }
+               {must be removed from directory] $[FVWM_USERDIR]"}
+            End
          End
       End
 End
