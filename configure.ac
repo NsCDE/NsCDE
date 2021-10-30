@@ -106,7 +106,7 @@ AC_SUBST(DATA_ROOTDIR)
 AC_SUBST(SYS_CONFDIR)
 
 # Dependencies
-AC_CHECK_PROGS(KSH, ksh93 ksh, "no")
+AC_PATH_PROGS([KSH],[ksh93 ksh],[no])
 AC_CHECK_PROGS(SED, sed gsed, "no")
 AC_CHECK_PROGS(FVWM, fvwm fvwm2 fvwm3 ${FVWM_BIN}, "no")
 AC_CHECK_PROGS(CPP, cpp /lib/cpp /usr/lib/cpp /usr/local/lib/cpp, "no")

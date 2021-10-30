@@ -3992,20 +3992,22 @@ do
 set dummy $ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_KSH+:} false; then :
+if ${ac_cv_path_KSH+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  if test -n "$KSH"; then
-  ac_cv_prog_KSH="$KSH" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+  case $KSH in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_KSH="$KSH" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_KSH="$ac_prog"
+    ac_cv_path_KSH="$as_dir/$ac_word$ac_exec_ext"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4013,9 +4015,10 @@ done
   done
 IFS=$as_save_IFS
 
+  ;;
+esac
 fi
-fi
-KSH=$ac_cv_prog_KSH
+KSH=$ac_cv_path_KSH
 if test -n "$KSH"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $KSH" >&5
 $as_echo "$KSH" >&6; }
@@ -4027,7 +4030,7 @@ fi
 
   test -n "$KSH" && break
 done
-test -n "$KSH" || KSH=""no""
+test -n "$KSH" || KSH="no"
 
 for ac_prog in sed gsed
 do
