@@ -732,7 +732,8 @@ Property
              Begin
                 If $DeskToRename <> {} Then
                 Begin
-                   ChangeTitle $DeskToRename $NewDeskName (Gettext {|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
+                   Set $NewDeskNameFull = $NewDeskName (Gettext {|Rename ...|Manage ...|Go to Page ...|Local Pager|Windows ...})
+                   ChangeTitle $DeskToRename $NewDeskNameFull
                 End
              End
           End
