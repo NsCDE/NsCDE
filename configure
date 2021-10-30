@@ -660,10 +660,10 @@ IMPORT
 CONVERT
 CPP
 FVWM
+KSH
 SYS_CONFDIR
 DATA_ROOTDIR
 STARTNSCDE
-KSH
 FULL_BINDIR
 NSCDE_TOOLSDIR
 NSCDE_LIBDIR
@@ -3985,28 +3985,27 @@ _lcl_receval=""$sysconfdir""
 
 
 
-
 # Dependencies
-# Extract the first word of "ksh93", so it can be a program name with args.
-set dummy ksh93; ac_word=$2
+for ac_prog in ksh93 ksh
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_KSH+:} false; then :
+if ${ac_cv_prog_KSH+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  case $KSH in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_KSH="$KSH" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+  if test -n "$KSH"; then
+  ac_cv_prog_KSH="$KSH" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_KSH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_prog_KSH="$ac_prog"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4014,11 +4013,9 @@ done
   done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_KSH" && ac_cv_path_KSH="ksh93"
-  ;;
-esac
 fi
-KSH=$ac_cv_path_KSH
+fi
+KSH=$ac_cv_prog_KSH
 if test -n "$KSH"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $KSH" >&5
 $as_echo "$KSH" >&6; }
@@ -4027,6 +4024,10 @@ else
 $as_echo "no" >&6; }
 fi
 
+
+  test -n "$KSH" && break
+done
+test -n "$KSH" || KSH=""no""
 
 for ac_prog in sed gsed
 do
@@ -4041,7 +4042,7 @@ else
   ac_cv_prog_SED="$SED" # Let the user override the test.
 else
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in ""
+for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
@@ -4069,7 +4070,7 @@ fi
 
   test -n "$SED" && break
 done
-test -n "$SED" || SED="sed"
+test -n "$SED" || SED=""no""
 
 for ac_prog in fvwm fvwm2 fvwm3 ${FVWM_BIN}
 do
@@ -5436,6 +5437,8 @@ if test "x$ac_cv_lib_m_cos" = xyes; then :
 else
   as_fn_error $? "No -lm found." "$LINENO" 5
 fi
+
+
 
 
 

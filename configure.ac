@@ -100,15 +100,14 @@ AC_SUBST(NSCDE_DATADIR)
 AC_SUBST(NSCDE_LIBDIR)
 AC_SUBST(NSCDE_TOOLSDIR)
 AC_SUBST(FULL_BINDIR)
-AC_SUBST(KSH)
 AC_SUBST(VERSION)
 AC_SUBST(STARTNSCDE)
 AC_SUBST(DATA_ROOTDIR)
 AC_SUBST(SYS_CONFDIR)
 
 # Dependencies
-AC_PATH_PROG(KSH, ksh93, ksh93)
-AC_CHECK_PROGS(SED, sed gsed, sed, "")
+AC_CHECK_PROGS(KSH, ksh93 ksh, "no")
+AC_CHECK_PROGS(SED, sed gsed, "no")
 AC_CHECK_PROGS(FVWM, fvwm fvwm2 fvwm3 ${FVWM_BIN}, "no")
 AC_CHECK_PROGS(CPP, cpp /lib/cpp /usr/lib/cpp /usr/local/lib/cpp, "no")
 AC_CHECK_PROGS(CONVERT, convert, "no")
@@ -144,6 +143,8 @@ AC_SUBST(XPM_LIB)
 
 AC_CHECK_LIB(m, cos, MATH_LIB="-lm", AC_MSG_ERROR([No -lm found.]), $LIBS)
 AC_SUBST(MATH_LIB)
+
+AC_SUBST(KSH)
 
 # Dependencies failures
 AS_IF([test x"$SED" == x"no"], [AC_MSG_ERROR([No sed detected.])])
