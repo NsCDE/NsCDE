@@ -26,7 +26,7 @@ InfoStoreAdd nscde_xdg_config_sys_path @XDG_CONFIG_PATH_BOOL@
 Test (Init, EnvIsSet XDG_DATA_DIRS) PipeRead "echo SetEnv XDG_DATA_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_DATA_DIRS @DATA_ROOTDIR@)"
 Test (!EnvIsSet XDG_DATA_DIRS, !EnvMatch infostore.nscde_xdg_data_sys_path 0) SetEnv XDG_DATA_DIRS /usr/share/:/usr/local/share/:@DATA_ROOTDIR@/
 Test (Init, EnvIsSet XDG_CONFIG_DIRS) PipeRead "echo SetEnv XDG_CONFIG_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_CONFIG_DIRS @SYS_CONFDIR@/xdg)"
-Test (!EnvIsSet XDG_CONFIG_DIRS, !EnvMatch infostorenscde_xdg_config_sys_path 0) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
+Test (!EnvIsSet XDG_CONFIG_DIRS, !EnvMatch infostore.nscde_xdg_config_sys_path 0) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
 SetEnv XDG_MENU_PREFIX nscde-
 PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
 PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'
