@@ -21,10 +21,14 @@ SetEnv FVWM_FORMDIR $[NSCDE_LIBDIR]/forms
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWM3_LOGFILE $[FVWM_USERDIR]/tmp/fvwm.log
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWMMFL_SOCKET $[FVWM_USERDIR]/tmp/fvwm_mfl.sock
 SetEnv SM_SAVE_DIR $[FVWM_USERDIR]/tmp
+SetEnv NSCDE_XDG_DATA_SYSPATH @XDG_DATA_PATH_BOOL@
+SetEnv NSCDE_XDG_CONFIG_SYSPATH @XDG_CONFIG_PATH_BOOL@
 Test (Init, EnvIsSet XDG_DATA_DIRS) PipeRead "echo SetEnv XDG_DATA_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_DATA_DIRS @DATA_ROOTDIR@)"
-Test (!EnvIsSet XDG_DATA_DIRS) SetEnv XDG_DATA_DIRS /usr/share/:/usr/local/share/:@DATA_ROOTDIR@/
+Test (!EnvIsSet XDG_DATA_DIRS, !EnvMatch NSCDE_XDG_DATA_SYSPATH 1) SetEnv XDG_DATA_DIRS /usr/share/:/usr/local/share/:@DATA_ROOTDIR@/
 Test (Init, EnvIsSet XDG_CONFIG_DIRS) PipeRead "echo SetEnv XDG_CONFIG_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_CONFIG_DIRS @SYS_CONFDIR@/xdg)"
-Test (!EnvIsSet XDG_CONFIG_DIRS) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
+Test (!EnvIsSet XDG_CONFIG_DIRS, !EnvMatch NSCDE_XDG_CONFIG_SYSPATH 1) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
+UnSetEnv NSCDE_XDG_DATA_SYSPATH
+UnSetEnv NSCDE_XDG_CONFIG_SYSPATH
 SetEnv XDG_MENU_PREFIX nscde-
 PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
 PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'

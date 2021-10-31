@@ -671,6 +671,8 @@ NSCDE_DATADIR
 FVWM_DATADIR
 PYTHON
 REQUIRED_PYTHON_VERSION
+XDG_CONFIG_PATH_BOOL
+XDG_DATA_PATH_BOOL
 SED
 LOCALES
 xsessiondir
@@ -3805,8 +3807,23 @@ LOCALES="hr"
 
 
 if test "$prefix" = /usr; then
-  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+   test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
 fi
+
+if test "$datarootdir" != "/usr/share"; then
+   XDG_DATA_PATH_BOOL=1
+else
+   XDG_DATA_PATH_BOOL=0
+fi
+
+if test "$sysconfdir" != "/etc"; then
+   XDG_CONFIG_PATH_BOOL=1
+else
+   XDG_CONFIG_PATH_BOOL=0
+fi
+
+
+
 
 docdir=${datarootdir}/doc/NsCDE
 

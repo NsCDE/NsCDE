@@ -28,8 +28,23 @@ AC_SUBST(LOCALES)
 AC_SUBST(SED)
 
 if test "$prefix" = /usr; then
-  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+   test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
 fi
+
+if test "$datarootdir" != "/usr/share"; then
+   XDG_DATA_PATH_BOOL=1
+else
+   XDG_DATA_PATH_BOOL=0
+fi
+
+if test "$sysconfdir" != "/etc"; then
+   XDG_CONFIG_PATH_BOOL=1
+else
+   XDG_CONFIG_PATH_BOOL=0
+fi
+
+AC_SUBST(XDG_DATA_PATH_BOOL)
+AC_SUBST(XDG_CONFIG_PATH_BOOL)
 
 docdir=${datarootdir}/doc/NsCDE
 
