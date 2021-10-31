@@ -68,8 +68,24 @@ InfoStoreAdd windowlist.title.fontsize large
 InfoStoreAdd FP.LeftLaunchersNum 5
 InfoStoreAdd FP.RightLaunchersNum 5
 
-# Fallback default
+# Fallback defaults - normal mode
+InfoStoreAdd sandboxmode 0
 InfoStoreAdd desknum 4
+InfoStoreAdd pagematrixX 2
+InfoStoreAdd pagematrixY 2
+InfoStoreAdd desklastpage 1
+InfoStoreAdd pageraisefp 1
+InfoStoreAdd pageshowrootpager 1
+Test (x xscreensaver) InfoStoreAdd nscde_use_xscreensaver 1
+Test (!x xscreensaver) InfoStoreAdd nscde_use_xscreensaver 0
+Test (x stalonetray) InfoStoreAdd nscde_use_stalonetray 1
+Test (!x stalonetray) InfoStoreAdd nscde_use_stalonetray 0
+Test (x xsettingsd) InfoStoreAdd nscde_use_xsettingsd 1
+Test (!x xsettingsd) InfoStoreAdd nscde_use_xsettingsd 0
+Test (x dunst) InfoStoreAdd nscde_use_dunst 1
+Test (!x dunst) InfoStoreAdd nscde_use_dunst 0
+Test (x rofi) InfoStoreAdd nscde_use_rofi 1
+Test (!x rofi) InfoStoreAdd nscde_use_rofi 0
 
 # Local and Global pager DeskTopScale factor. Default values are
 # "unset" so user defaults from NsCDE.conf can take precedence and
@@ -313,8 +329,8 @@ Test (EnvMatch FVWM_IS_FVWM3 1, EnvIsSet infostore.desktopconfiguration) Desktop
 # For virtual and sandbox restricted mode only ...
 # This need to be read before calling f_ReadCfg Functions
 # but after f_ReadMainConfig where sandboxmode is set to 0 or 1
-Test (EnvMatch infostore.sandboxmode 1 x $[FVWM_USERDIR]/Sandbox-Xinit.sh) Exec exec @KSH@ $[FVWM_USERDIR]/Sandbox-Xinit.sh
-Test (EnvMatch infostore.sandboxmode 1 x $[FVWM_USERDIR]/Sandbox-Xinit.sh) SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults
+Test (EnvMatch infostore.sandboxmode 1, x $[FVWM_USERDIR]/Sandbox-Xinit.sh) Exec exec @KSH@ $[FVWM_USERDIR]/Sandbox-Xinit.sh
+Test (EnvMatch infostore.sandboxmode 1, x $[FVWM_USERDIR]/Sandbox-Xinit.sh) SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults
 
 # Read early configuration: functions, colorsets, fonts and styles
 Echo NsCDE: Reading Functions, Colorset, Font and Style
