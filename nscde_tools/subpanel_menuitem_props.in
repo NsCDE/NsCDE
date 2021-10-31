@@ -263,8 +263,8 @@ function manage_entry
       if (($? == 0)); then
          cp -f "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/tmp/Subpanels.actions.old"
          cat "$tmpfile" > "$FVWM_USERDIR/Subpanels.actions"
-         $NSCDE_TOOLSDIR/generate_subpanels -w > $FVWM_USERDIR/Subpanels.fvwmgen
-         $NSCDE_TOOLSDIR/generate_subpanels -f > $FVWM_USERDIR/Subpanels.fvwmgen
+         $NSCDE_TOOLSDIR/generate_subpanels -w > $FVWM_USERDIR/Subpanels.fvwm2.fvwmgen
+         $NSCDE_TOOLSDIR/generate_subpanels -f > $FVWM_USERDIR/Subpanels.fvwm3.fvwmgen
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReadCfg Subpanels"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "KillModule FvwmButtons NsCDE-Subpanel${subpid}"
          rm "$tmpfile"
