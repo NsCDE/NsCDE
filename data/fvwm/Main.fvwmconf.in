@@ -21,18 +21,20 @@ SetEnv FVWM_FORMDIR $[NSCDE_LIBDIR]/forms
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWM3_LOGFILE $[FVWM_USERDIR]/tmp/fvwm.log
 Test (EnvMatch FVWM_IS_FVWM3 1) SetEnv FVWMMFL_SOCKET $[FVWM_USERDIR]/tmp/fvwm_mfl.sock
 SetEnv SM_SAVE_DIR $[FVWM_USERDIR]/tmp
-SetEnv NSCDE_XDG_DATA_SYSPATH @XDG_DATA_PATH_BOOL@
-SetEnv NSCDE_XDG_CONFIG_SYSPATH @XDG_CONFIG_PATH_BOOL@
+InfoStoreAdd nscde_xdg_data_sys_path @XDG_DATA_PATH_BOOL@
+InfoStoreAdd nscde_xdg_config_sys_path @XDG_CONFIG_PATH_BOOL@
 Test (Init, EnvIsSet XDG_DATA_DIRS) PipeRead "echo SetEnv XDG_DATA_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_DATA_DIRS @DATA_ROOTDIR@)"
-Test (!EnvIsSet XDG_DATA_DIRS, !EnvMatch NSCDE_XDG_DATA_SYSPATH 0) SetEnv XDG_DATA_DIRS /usr/share/:/usr/local/share/:@DATA_ROOTDIR@/
+Test (!EnvIsSet XDG_DATA_DIRS, !EnvMatch infostore.nscde_xdg_data_sys_path 0) SetEnv XDG_DATA_DIRS /usr/share/:/usr/local/share/:@DATA_ROOTDIR@/
 Test (Init, EnvIsSet XDG_CONFIG_DIRS) PipeRead "echo SetEnv XDG_CONFIG_DIRS $($[NSCDE_TOOLSDIR]/var_append : XDG_CONFIG_DIRS @SYS_CONFDIR@/xdg)"
-Test (!EnvIsSet XDG_CONFIG_DIRS, !EnvMatch NSCDE_XDG_CONFIG_SYSPATH 0) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
-UnSetEnv NSCDE_XDG_DATA_SYSPATH
-UnSetEnv NSCDE_XDG_CONFIG_SYSPATH
+Test (!EnvIsSet XDG_CONFIG_DIRS, !EnvMatch infostorenscde_xdg_config_sys_path 0) SetEnv XDG_CONFIG_DIRS /etc/xdg:/usr/local/etc/xdg/:@SYS_CONFDIR@/xdg
 SetEnv XDG_MENU_PREFIX nscde-
 PipeRead "echo SetEnv NSCDE_DPI $($NSCDE_TOOLSDIR/getdpi)"
 PipeRead 'echo SetEnv NSCDE_FONT_DPI $($NSCDE_TOOLSDIR/getdpi fontdpi)'
 PipeRead $[NSCDE_TOOLSDIR]/get_logical_screens
+
+# Cleanup temporary variables
+InfoStoreRemove nscde_xdg_data_sys_path
+InfoStoreRemove nscde_xdg_config_sys_path
 
 # Cleanup all what may be hardcoded builtin
 DestroyStyle *
