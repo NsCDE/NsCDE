@@ -53,27 +53,27 @@ AddToMenu m_QuickMenu "$[gt.Quick Menu]" Title
 DestroyMenu m_NsCDEHelpMenu
 AddToMenu m_NsCDEHelpMenu "$[gt.NsCDE Help]" Title
 + "$[gt.Using Menus]%NsCDE/DtF.prop.t.pm%" \
- f_DisplayURL "$[gt.Menus Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/Menus_fvwmconf.html
+ f_DisplayURL "$[gt.Menus Help]" html/Menus_fvwmconf.html
 + "$[gt.GUI Tools]%NsCDE/DtF.prop.t.pm%" \
- f_DisplayURL "$[gt.GUI Tools Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-GUI-Tools.html
+ f_DisplayURL "$[gt.GUI Tools Help]" html/NsCDE-GUI-Tools.html
 + "$[gt.Backdrops Palettes Fonts]%NsCDE/DtF.prop.t.pm%" \
- f_DisplayURL "$[gt.Backdrops Palettes and Fonts Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-Backdrops-Palettes-Fonts.html
+ f_DisplayURL "$[gt.Backdrops Palettes and Fonts Help]" html/NsCDE-Backdrops-Palettes-Fonts.html
 + "$[gt.Default Key Bindings]%NsCDE/DtF.prop.t.pm%" \
- f_DisplayURL "$[gt.Key Bindings Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/Keybindings_fvwmconf.html
+ f_DisplayURL "$[gt.Key Bindings Help]" html/Keybindings_fvwmconf.html
 + "$[gt.Default Mouse Bindings]%NsCDE/DtF.prop.t.pm%" \
- f_DisplayURL "$[gt.Mouse Bindings Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/Mousebindings_fvwmconf.html
+ f_DisplayURL "$[gt.Mouse Bindings Help]" html/Mousebindings_fvwmconf.html
 + "" Nop
 + "$[gt.NsCDE Components]%NsCDE/DtRdMe.t.pm%" \
- f_DisplayURL "$[gt.NsCDE Components]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-components.html
+ f_DisplayURL "$[gt.NsCDE Components]" html/NsCDE-components.html
 + "$[gt.Configuration Files]%NsCDE/DtRdMe.t.pm%" \
- f_DisplayURL "$[gt.NsCDE Configuration Files]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-Configuration-Files.html
+ f_DisplayURL "$[gt.NsCDE Configuration Files]" html/NsCDE-Configuration-Files.html
 + "$[gt.Integration X, Gtk, Qt ...]%NsCDE/DtRdMe.t.pm%" \
- f_DisplayURL "$[gt.NsCDE X Integrations]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-Integrations.html
+ f_DisplayURL "$[gt.NsCDE X Integrations]" html/NsCDE-Integrations.html
 + "" Nop
 Test (x xdg-open) + "$[gt.All Documentation (pdf)]%NsCDE/Fphelp.t.pm%" \
- Exec exec xdg-open $[NSCDE_ROOT]/share/doc/NsCDE/NsCDE.pdf
+ Exec exec f_DisplayURL "$[gt.All Documentation (pdf)]" NsCDE.pdf
 + "$[gt.All Documentation (html)]%NsCDE/Fphelp.t.pm%" \
- f_DisplayURL "$[gt.NsCDE Documentation]" $[NSCDE_ROOT]/share/doc/NsCDE/html/index.html
+ f_DisplayURL "$[gt.NsCDE Documentation]" html/index.html
 
 # NsCDE Menu
 DestroyMenu m_NsCDEMenu
@@ -229,14 +229,14 @@ DestroyMenu m_FrontPanelLiteMenu
 AddToMenu m_FrontPanelLiteMenu
 AddToMenu m_FrontPanelLiteMenu " $[gt.Busy] " Title
 + "$[gt.&Details]" f_FpLiteClickAction
-+ "$[gt.&Help]" f_DisplayURL "$[gt.Lite Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-FpLite.html
++ "$[gt.&Help]" f_DisplayURL "$[gt.Lite Help]" html/NsCDE-FpLite.html
 
 DestroyMenu m_FrontPanelExitMenu
 AddToMenu m_FrontPanelExitMenu
 AddToMenu m_FrontPanelExitMenu " $[gt.Exit] " Title
 + "$[gt.&ExitSession]" f_RunQuickScriptDialog SysActionDialog
 + "" Nop
-+ "$[gt.&Help]" f_DisplayURL "$[gt.Exit Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-SysActionDialog.html
++ "$[gt.&Help]" f_DisplayURL "$[gt.Exit Help]" html/NsCDE-SysActionDialog.html
 
 DestroyMenu m_FrontPanelPGMMenu
 AddToMenu m_FrontPanelPGMMenu
@@ -245,7 +245,7 @@ Test (!EnvMatch infostore.pgm 1x1) + "$[gt.&Pages Menu]" SendToModule FrontPanel
 Test (!EnvMatch infostore.pgm 1x1) + "$[gt.&Local Pager]" f_MoveCursorAndExec 0 -14 f_ShowLocalPager Move screen c m-5 m-6 ewmhiwa
 + "$[gt.&Global Pager]" f_MoveCursorAndExec 0 -22 f_ShowGlobalPager Move screen c 50-50w -88p ewmhiwa
 + "" Nop
-+ "$[gt.&Help]" f_DisplayURL "$[gt.PGM Help]" $[NSCDE_ROOT]/share/doc/NsCDE/html/NsCDE-PGM.html
++ "$[gt.&Help]" f_DisplayURL "$[gt.PGM Help]" html/NsCDE-PGM.html
 
 # Apply menu styles to menus.
 ChangeMenuStyle WorkspaceMenu MenuFvwmRoot
