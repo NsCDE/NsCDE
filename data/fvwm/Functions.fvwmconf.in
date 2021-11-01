@@ -1211,12 +1211,11 @@ AddToFunc f_PolkitAgent
 + I f_FindExecPolkitAgent libexec/polkit-kde-authentication-agent-1 libexec/polkit-kde-authentication-agent-1
 + I f_FindExecPolkitAgent polkit-kde/authentication-agent-1 polkit-kde/authentication-agent-1
 
-# For displaying documentation purposes, or sending URL to web browser
+# For Displaying Documentation URL in appropriate XDG default program
 DestroyFunc f_DisplayURL
 AddToFunc f_DisplayURL
-+ I Echo Sending Link $1 from $0 to $[infostore.browser]
-+ I Module FvwmScript WaitNotice "$0" "$[gt.Sending Link to] $[infostore.browser]" " ... " 1800
-+ I Exec exec $[infostore.browser] $1
++ I Module FvwmScript WaitNotice "$[gt.Displaying NsCDE Documentation]:" "$0" " ... " 1800
++ I Exec exec xdg-open @DOCUMENTATION_ROOT@/$1
 
 # FVWM Version check function - usually called on init
 DestroyFunc f_FvwmVersionCheck

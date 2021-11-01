@@ -661,6 +661,7 @@ CONVERT
 CPP
 FVWM
 KSH
+DOCUMENTATION_ROOT
 SYS_CONFDIR
 DATA_ROOTDIR
 STARTNSCDE
@@ -3990,8 +3991,18 @@ _lcl_receval=""$sysconfdir""
 	   eval _lcl_receval="\"$_lcl_receval\""
 	done
 	echo "$_lcl_receval")`
+_lcl_receval=""$docdir""
+	DOCUMENTATION_ROOT=`(test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+	test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+	_lcl_receval_old=''
+	while test "$_lcl_receval_old" != "$_lcl_receval"; do
+	   _lcl_receval_old="$_lcl_receval"
+	   eval _lcl_receval="\"$_lcl_receval\""
+	done
+	echo "$_lcl_receval")`
 
 # NSCDE_DATADIR=${datarootdir}/NsCDE
+
 
 
 
