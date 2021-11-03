@@ -30,6 +30,9 @@ case $icon in
    $HOME/.local/share/icons/*)
       echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sHOME\/\.local\/share\/icons\///g" -o -f -
    ;;
+   @NOSTDICONDIR@/*)
+      icon=$(echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/@NOSTDICONDIRREGEX@//g" -o -f -)
+   ;;
    /usr/share/icons/*)
       echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^\/usr\/share\/icons\///g" -o -f -
    ;;
