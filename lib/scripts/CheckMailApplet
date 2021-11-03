@@ -11,16 +11,28 @@ Colorset 23
 Init
 Begin
    Set $LetterStateUp = 0
-   Set $MailCnt = 0
+   Set $idx = 1
+
+   Set $MailCnt1 = 0
+   Set $MailCnt2 = 0
+   Set $MailCnt3 = 0
+   Set $MailCnt4 = 0
+   Set $MailCnt5 = 0
+   Set $MailCnt6 = 0
+   Set $MailCnt7 = 0
+   Set $MailCnt8 = 0
+   Set $MailCnt9 = 0
 
    Key F1 A 2 1 {KeyHelp}
    Key Help A 2 1 {KeyHelp}
+
+   Do {Colorset 58 fg #ffff00000000, Transparent}
 End
 
 Widget 1
    Property
-   Position 0 0
-   Size 56 56
+   Position 0 4
+   Size 56 48
    Type ItemDraw
    Flags NoReliefString
    Icon NsCDE/Mail.s.xpm
@@ -36,14 +48,24 @@ Widget 1
          Begin
             ChangeIcon 1 NsCDE/Mail.s.xpm
             Set $LetterStateUp = 0
+            ChangePosition 1 0 4
             HideWidget 2
+            ChangeTitle 2 {...}
+            Set $MailCnt = 0
+            Set $MailCnt1 = 0
+            Set $MailCnt2 = 0
+            Set $MailCnt3 = 0
+            Set $MailCnt4 = 0
+            Set $MailCnt5 = 0
+            Set $MailCnt6 = 0
+            Set $MailCnt7 = 0
+            Set $MailCnt8 = 0
+            Set $MailCnt9 = 0
          End
 
-         HideWidget 3
-         Set $MailCnt = 0
-
          Do {f_CheckMail}
-
+         ChangeSize 1 56 56
+         ChangePosition 1 0 0
          ChangeColorset 1 24
          Do {f_UnclickScript 450 CheckMailApplet 1 3 unclick}
       End
@@ -54,41 +76,114 @@ Widget 1
          Set $CheckLetterUp = (StrCopy (LastString) 1 8)
          Set $CheckLetterDown = (StrCopy (LastString) 1 10)
          # If command from SendToModule is "LetterUp", extract
-         # account name from the rest of string into LetterUpArg2
-         If $CheckLetterUp == {LetterUp} Then
-         Begin
-            Set $LetterUpArg2 = (StrCopy (LastString) 10 18)
-         End
-
+         # account name from the rest of string into LetterUpAccInfo
          # Check if command was LetterUp
          If $CheckLetterUp == {LetterUp} Then
          Begin
-            Set $MailCnt = (Add $MailCnt 1)
-            ChangeTitle 3 $MailCnt
-            ShowWidget 3
+            Set $AccountSlot = (StrCopy (LastString) 10 10)
+            Set $LetterUpAccInfo = (StrCopy (LastString) 12 14)
+            Set $LetterUpAccColor = (StrCopy (LastString) 16 32)
+
+            If $AccountSlot <> {} Then
+            Begin
+               If $AccountSlot == 1 Then
+               Begin
+                  Set $MailCnt1 = (Add $MailCnt1 1)
+                  Set $MailCnt = $MailCnt1
+               End
+   
+               If $AccountSlot == 2 Then
+               Begin
+                  Set $MailCnt2 = (Add $MailCnt2 1)
+                  Set $MailCnt = $MailCnt2
+               End
+   
+               If $AccountSlot == 3 Then
+               Begin
+                  Set $MailCnt3 = (Add $MailCnt3 1)
+                  Set $MailCnt = $MailCnt3
+               End
+   
+               If $AccountSlot == 4 Then
+               Begin
+                  Set $MailCnt4 = (Add $MailCnt4 1)
+                  Set $MailCnt = $MailCnt4
+               End
+   
+               If $AccountSlot == 5 Then
+               Begin
+                  Set $MailCnt5 = (Add $MailCnt5 1)
+                  Set $MailCnt = $MailCnt5
+               End
+   
+               If $AccountSlot == 6 Then
+               Begin
+                  Set $MailCnt6 = (Add $MailCnt6 1)
+                  Set $MailCnt = $MailCnt6
+               End
+   
+               If $AccountSlot == 7 Then
+               Begin
+                  Set $MailCnt7 = (Add $MailCnt7 1)
+                  Set $MailCnt = $MailCnt7
+               End
+   
+               If $AccountSlot == 8 Then
+               Begin
+                  Set $MailCnt8 = (Add $MailCnt8 1)
+                  Set $MailCnt = $MailCnt8
+               End
+   
+               If $AccountSlot == 9 Then
+               Begin
+                  Set $MailCnt9 = (Add $MailCnt9 1)
+                  Set $MailCnt = $MailCnt9
+               End
+            End
+
+            If $LetterUpAccInfo <> {} Then
+            Begin
+               Set $AccMailCnt = $LetterUpAccInfo {: } $MailCnt
+            End
+            Else
+            Begin
+               Set $AccMailCnt = $MailCnt
+            End
+            If $LetterUpAccColor <> {} Then
+            Begin
+               Do {Colorset 58 fg } $LetterUpAccColor {, Transparent}
+            End
+            ChangeSize 1 56 48
+            ChangePosition 1 0 0
+            If $AccountSlot <> {} Then
+            Begin
+               ChangeTitle 2 $AccMailCnt
+            End
+            ShowWidget 2
 
             # Change Icon to raised letter if current state is
-            # not raised icon already, change title of LetterUpArg2
+            # not raised icon already, change title of LetterUpAccInfo
             # and show widget 2 which contains account name
             If $LetterStateUp == 0 Then
             Begin
                ChangeIcon 1 NsCDE/NewMail.s.xpm
                Set $LetterStateUp = 1
-               If $LetterUpArg2 <> {} Then
+               If $LetterUpAccInfo <> {} Then
                Begin
-                  ChangeTitle 2 $LetterUpArg2
+                  ChangeTitle 2 $AccMailCnt
                   ShowWidget 2
                End
             End
             Else
             Begin
+               SendSignal 1 4
                # If Letter icon is raised one already, then
                # only change account name
-               If (GetTitle 2) <> $LetterUpArg2 Then
+               If (GetTitle 2) <> $AccMailCnt Then
                Begin
-                  If $LetterUpArg2 <> {} Then
+                  If $AccMailCnt <> {} Then
                   Begin
-                     ChangeTitle 2 $LetterUpArg2
+                     ChangeTitle 2 $AccMailCnt
                   End
                End
             End
@@ -99,12 +194,11 @@ Widget 1
          # name
          If $CheckLetterDown == {LetterDown} Then
          Begin
-            If $LetterStateUp == 1 Then
-            Begin
-               ChangeIcon 1 NsCDE/Mail.s.xpm
-               Set $LetterStateUp = 0
-               HideWidget 2
-            End
+             ChangeIcon 1 NsCDE/Mail.s.xpm
+             Set $LetterStateUp = 0
+             ChangeSize 1 56 48
+             ChangePosition 1 0 4
+             HideWidget 2
          End
       End
       3 :
@@ -115,18 +209,31 @@ Widget 1
             ChangeColorset 1 23
          End
       End
+      4 :
+      Begin
+         # Temporary put Mail icon down for semi-animated view
+         ChangeIcon 1 NsCDE/Mail.s.xpm
+         # Put it up again after 1 second
+         Do {Schedule 1000 SendToModule CheckMailApplet SendString 1 5 NEWMAIL}
+      End
+      5 :
+      Begin
+         If (LastString) == {NEWMAIL} Then
+         Begin
+            ChangeIcon 1 NsCDE/NewMail.s.xpm
+         End
+      End
 End
 
 Widget 2
    Property
-   Position 5 39
+   Position 2 42
    Size 0 0
    Type ItemDraw
-   Flags NoReliefString Hidden
-   BackColor {#949494949494}
-   ForeColor {#000000000000}
-   Title { xxxxxxxx }
-   Font "xft:::pixelsize=9"
+   Flags NoReliefString Center Hidden
+   Colorset 58
+   Title {000: 0000}
+   Font "xft:::pixelsize=10"
    Main
       Case message of
       SingleClic :
@@ -135,23 +242,6 @@ Widget 2
       1 :
       Begin
          Do {f_DisplayURL "Check Mail Applet" html/NsCDE-CheckMailApplet.html}
-      End
-End
-
-Widget 3
-   Property
-   Position 2 2
-   Size 0 0
-   Type ItemDraw
-   Flags NoReliefString Left Hidden
-   BackColor {#ffff00000000}
-   ForeColor {#ffffffffffff}
-   Title {000}
-   Font "xft:::pixelsize=9"
-   Main
-      Case message of
-      SingleClic :
-      Begin
       End
 End
 
