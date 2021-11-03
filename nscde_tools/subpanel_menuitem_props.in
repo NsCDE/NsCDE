@@ -422,6 +422,9 @@ function copy_to_main_panel
          $HOME/.local/share/icons/*)
             icon=$(echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^$sHOME\/\.local\/share\/icons\///g" -o -f -)
          ;;
+         @NOSTDICONDIR@/*)
+            icon=$(echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/@NOSTDICONDIRREGEX@//g" -o -f -)
+         ;;
          /usr/share/icons/*)
             icon=$(echo "$icon" | $NSCDE_TOOLSDIR/ised -c "s/^\/usr\/share\/icons\///g" -o -f -)
          ;;
@@ -469,7 +472,7 @@ function find_appropriate_icon
       pathtype="FVWM"
    ;;
    *.png|*.svg|*.xpm)
-      icon_search_paths="${FVWM_USERDIR}/icons:${HOME}/.icons:${HOME}/.local/share/icons:/usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/local/share/pixmaps:${NSCDE_DATADIR}/fallback/icons"
+      icon_search_paths="${FVWM_USERDIR}/icons:${HOME}/.icons:${HOME}/.local/share/icons:@NOSTDICONPATH@/usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/local/share/pixmaps:${NSCDE_DATADIR}/fallback/icons"
       pathtype="FD-MISC"
    ;;
    *)

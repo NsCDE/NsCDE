@@ -122,6 +122,20 @@ AC_SUBST(DATA_ROOTDIR)
 AC_SUBST(SYS_CONFDIR)
 AC_SUBST(DOCUMENTATION_ROOT)
 
+if test "$DATA_ROOTDIR" != "/usr/share" && test "$DATA_ROOTDIR" != "/usr/local/share"; then
+   NOSTDICONPATH="$DATA_ROOTDIR/icons:"
+   NOSTDICONDIR="$DATA_ROOTDIR/icons"
+   NOSTDICONDIRREGEX=`echo "^$DATA_ROOTDIR/icons/" | sed 's/\//\\\\\//g'`
+else
+   NOSTDICONPATH=""
+   NOSTDICONDIR="/NONEXISTENT"
+   NOSTDICONDIRREGEX=`echo "/NONEXISTENT/" | sed 's/\//\\\\\//g'`
+fi
+
+AC_SUBST(NOSTDICONPATH)
+AC_SUBST(NOSTDICONDIR)
+AC_SUBST(NOSTDICONDIRREGEX)
+
 # Dependencies
 AC_PATH_PROGS([KSH],[ksh93 ksh],[no])
 AC_CHECK_PROGS(SED, sed gsed, "no")

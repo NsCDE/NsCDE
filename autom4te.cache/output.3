@@ -661,6 +661,9 @@ CONVERT
 CPP
 FVWM
 KSH
+NOSTDICONDIRREGEX
+NOSTDICONDIR
+NOSTDICONPATH
 DOCUMENTATION_ROOT
 SYS_CONFDIR
 DATA_ROOTDIR
@@ -4008,6 +4011,20 @@ _lcl_receval=""$docdir""
 
 
 
+
+
+
+
+
+if test "$DATA_ROOTDIR" != "/usr/share" && test "$DATA_ROOTDIR" != "/usr/local/share"; then
+   NOSTDICONPATH="$DATA_ROOTDIR/icons:"
+   NOSTDICONDIR="$DATA_ROOTDIR/icons"
+   NOSTDICONDIRREGEX=`echo "^$DATA_ROOTDIR/icons/" | sed 's/\//\\\\\//g'`
+else
+   NOSTDICONPATH=""
+   NOSTDICONDIR="/NONEXISTENT"
+   NOSTDICONDIRREGEX=`echo "/NONEXISTENT/" | sed 's/\//\\\\\//g'`
+fi
 
 
 
