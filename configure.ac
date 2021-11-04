@@ -416,3 +416,10 @@ Locale:               ${my_localedir}
 Docs:                 ${my_docdir}
 *********************************************************************
 "
+
+if test `uname -s` = "OpenBSD"; then
+   echo "WARNING: you must use GNU make (gmake). To build and install."
+   echo "WARNING: OpenBSD make is not able to work with this makefiles."
+   echo ""
+fi
+
