@@ -17,7 +17,7 @@ AC_PROG_CC
 AC_CANONICAL_HOST
 AC_MSG_CHECKING(platform)
 case "$host_os" in
-freebsd*|sunos*|openbsd*|dragonfly*)
+freebsd*|sunos*|dragonfly*)
         AC_CHECK_PROGS(GSED, gsed, "no")
         AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         CPPFLAGS="$CPPFLAGS -I/usr/local/include"
@@ -28,9 +28,15 @@ netbsd*)
         AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         AC_CHECK_PROGS(GTAIL, gtail, "no")
         AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
-        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include"
-        LDFLAGS="$LDFLAGS -L/usr/pkg/lib"
+        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/pkg/lib -L/usr/local/lib"
         ;;
+openbsd*)
+	AC_CHECK_PROGS(GSED, gsed, "no")
+	AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+	CPPFLAGS="$CPPFLAGS -I/usr/X11R6/include -I/usr/local/include"
+	LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -L/usr/local/lib"
+	;;
 *)
         ;;
 esac
