@@ -2139,9 +2139,9 @@ Widget 122
          # Widget 28 Default Icon Size (HScrollBar)
          If $DefaultIconSizeChange == 1 Then
          Begin
-            If (GetValue 30) <= (GetValue 28) Then
+            If (GetValue 30) < (GetValue 28) Then
             Begin
-               ChangeValue 30 (Add (GetValue 28) 2)
+               ChangeValue 30 (GetValue 28)
             End
 
             Set $check_w28 = (GetOutput $check_w28_cmd 1 -1)
@@ -2160,9 +2160,9 @@ Widget 122
          # Widget 30: Maximum Icon Size (HScrollBar)
          If $MaxIconSizeChange == 1 Then
          Begin
-            If (GetValue 28) >= (GetValue 30) Then
+            If (GetValue 28) > (GetValue 30) Then
             Begin
-               ChangeValue 28 (Add (GetValue 30) -2)
+               ChangeValue 28 (GetValue 30)
             End
 
             Set $check_w30 = (GetOutput $check_w30_cmd 1 -1)
