@@ -626,16 +626,6 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
 XSESSDIR
-GTAIL
-GSED
-host_os
-host_vendor
-host_cpu
-host
-build_os
-build_vendor
-build_cpu
-build
 MATH_LIB
 XPM_LIB
 XEXT_LIB
@@ -680,6 +670,16 @@ XDG_DATA_PATH_BOOL
 SED
 LOCALES
 xsessiondir
+GTAIL
+GSED
+host_os
+host_vendor
+host_cpu
+host
+build_os
+build_vendor
+build_cpu
+build
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -3792,6 +3792,233 @@ fi
 
 
 
+# Make sure we can run config.sub.
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+$as_echo_n "checking build system type... " >&6; }
+if ${ac_cv_build+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+test "x$ac_build_alias" = x &&
+  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+$as_echo "$ac_cv_build" >&6; }
+case $ac_cv_build in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+esac
+build=$ac_cv_build
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_build
+shift
+build_cpu=$1
+build_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+build_os=$*
+IFS=$ac_save_IFS
+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+$as_echo_n "checking host system type... " >&6; }
+if ${ac_cv_host+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+$as_echo "$ac_cv_host" >&6; }
+case $ac_cv_host in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+esac
+host=$ac_cv_host
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_host
+shift
+host_cpu=$1
+host_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+host_os=$*
+IFS=$ac_save_IFS
+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking platform" >&5
+$as_echo_n "checking platform... " >&6; }
+case "$host_os" in
+freebsd*|sunos*|openbsd*|dragonfly*)
+        for ac_prog in gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GSED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GSED"; then
+  ac_cv_prog_GSED="$GSED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GSED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GSED=$ac_cv_prog_GSED
+if test -n "$GSED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
+$as_echo "$GSED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GSED" && break
+done
+test -n "$GSED" || GSED=""no""
+
+        if test x"$GSED" = x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
+fi
+        CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+        ;;
+netbsd*)
+        for ac_prog in gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GSED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GSED"; then
+  ac_cv_prog_GSED="$GSED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GSED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GSED=$ac_cv_prog_GSED
+if test -n "$GSED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
+$as_echo "$GSED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GSED" && break
+done
+test -n "$GSED" || GSED=""no""
+
+        if test x"$GSED" = x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
+fi
+        for ac_prog in gtail
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GTAIL+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GTAIL"; then
+  ac_cv_prog_GTAIL="$GTAIL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GTAIL="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GTAIL=$ac_cv_prog_GTAIL
+if test -n "$GTAIL"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTAIL" >&5
+$as_echo "$GTAIL" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GTAIL" && break
+done
+test -n "$GTAIL" || GTAIL=""no""
+
+        if test x"$GTAIL" = x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&2;}
+fi
+        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include"
+        LDFLAGS="$LDFLAGS -L/usr/pkg/lib"
+        ;;
+*)
+        ;;
+esac
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking xsessiondir" >&5
 $as_echo_n "checking xsessiondir... " >&6; }
 
@@ -6142,237 +6369,6 @@ if test "x${HAVE_PYMOD_PYQT5}" = "xno"; then :
 $as_echo "$as_me: WARNING: Either python module PyQt5 or older PyQt4 are required for NsCDE runtime." >&2;}
 fi
 fi
-
-# Make sure we can run config.sub.
-$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
-  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
-$as_echo_n "checking build system type... " >&6; }
-if ${ac_cv_build+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_build_alias=$build_alias
-test "x$ac_build_alias" = x &&
-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
-test "x$ac_build_alias" = x &&
-  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
-  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
-$as_echo "$ac_cv_build" >&6; }
-case $ac_cv_build in
-*-*-*) ;;
-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
-esac
-build=$ac_cv_build
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_build
-shift
-build_cpu=$1
-build_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-build_os=$*
-IFS=$ac_save_IFS
-case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
-$as_echo_n "checking host system type... " >&6; }
-if ${ac_cv_host+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test "x$host_alias" = x; then
-  ac_cv_host=$ac_cv_build
-else
-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
-    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
-fi
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
-$as_echo "$ac_cv_host" >&6; }
-case $ac_cv_host in
-*-*-*) ;;
-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
-esac
-host=$ac_cv_host
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_host
-shift
-host_cpu=$1
-host_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-host_os=$*
-IFS=$ac_save_IFS
-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking platform" >&5
-$as_echo_n "checking platform... " >&6; }
-case "$host_os" in
-freebsd*|sunos*|openbsd*|dragonfly*)
-        for ac_prog in gsed
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_GSED+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$GSED"; then
-  ac_cv_prog_GSED="$GSED" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_GSED="$ac_prog"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-GSED=$ac_cv_prog_GSED
-if test -n "$GSED"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
-$as_echo "$GSED" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$GSED" && break
-done
-test -n "$GSED" || GSED=""no""
-
-        if test x"$GSED" = x"no"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
-$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
-fi
-        CPPFLAGS="-I/usr/local/include"
-        LDFLAGS="-L/usr/local/lib"
-        
-        
-        ;;
-netbsd*)
-        for ac_prog in gsed
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_GSED+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$GSED"; then
-  ac_cv_prog_GSED="$GSED" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_GSED="$ac_prog"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-GSED=$ac_cv_prog_GSED
-if test -n "$GSED"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
-$as_echo "$GSED" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$GSED" && break
-done
-test -n "$GSED" || GSED=""no""
-
-        if test x"$GSED" = x"no"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
-$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
-fi
-        for ac_prog in gtail
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_GTAIL+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$GTAIL"; then
-  ac_cv_prog_GTAIL="$GTAIL" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_GTAIL="$ac_prog"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-GTAIL=$ac_cv_prog_GTAIL
-if test -n "$GTAIL"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTAIL" >&5
-$as_echo "$GTAIL" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$GTAIL" && break
-done
-test -n "$GTAIL" || GTAIL=""no""
-
-        if test x"$GTAIL" = x"no"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&5
-$as_echo "$as_me: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&2;}
-fi
-        CPPFLAGS="-I/usr/pkg/include"
-        LDFLAGS="-L/usr/pkg/lib"
-        
-        
-        ;;
-*)
-        ;;
-esac
 
 if test -z $XSESSDIR ; then
    if test -d "/usr/share/xsessions"; then

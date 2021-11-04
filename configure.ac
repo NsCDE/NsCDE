@@ -14,6 +14,27 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AC_PROG_CC
 
+AC_CANONICAL_HOST
+AC_MSG_CHECKING(platform)
+case "$host_os" in
+freebsd*|sunos*|openbsd*|dragonfly*)
+        AC_CHECK_PROGS(GSED, gsed, "no")
+        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+        ;;
+netbsd*)
+        AC_CHECK_PROGS(GSED, gsed, "no")
+        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        AC_CHECK_PROGS(GTAIL, gtail, "no")
+        AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
+        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include"
+        LDFLAGS="$LDFLAGS -L/usr/pkg/lib"
+        ;;
+*)
+        ;;
+esac
+
 AC_MSG_CHECKING(xsessiondir)
 AC_ARG_WITH([xsessiondir],
 	AC_HELP_STRING([--with-xsessiondir=DIR],[NsCDE X Display Manager file goes here.]),
@@ -249,31 +270,6 @@ AX_PYTHON_MODULE([PyQt4], [])
 AS_IF([test "x${HAVE_PYMOD_PYQT5}" = "xno"], 
 	AS_IF([test "x${HAVE_PYMOD_PYQT4}" = "xno"],
 	[AC_MSG_WARN([Either python module PyQt5 or older PyQt4 are required for NsCDE runtime.])]))
-
-AC_CANONICAL_HOST
-AC_MSG_CHECKING(platform)
-case "$host_os" in
-freebsd*|sunos*|openbsd*|dragonfly*)
-        AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
-        CPPFLAGS="-I/usr/local/include"
-        LDFLAGS="-L/usr/local/lib"
-        AC_SUBST(CPPFLAGS)
-        AC_SUBST(LDFLAGS)
-        ;;
-netbsd*)
-        AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
-        AC_CHECK_PROGS(GTAIL, gtail, "no")
-        AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
-        CPPFLAGS="-I/usr/pkg/include"
-        LDFLAGS="-L/usr/pkg/lib"
-        AC_SUBST(CPPFLAGS)
-        AC_SUBST(LDFLAGS)
-        ;;
-*)
-        ;;
-esac
 
 if test -z $XSESSDIR ; then
    if test -d "/usr/share/xsessions"; then
