@@ -258,6 +258,8 @@ freebsd*|sunos*|openbsd*|dragonfly*)
         AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         CPPFLAGS="-I/usr/local/include"
         LDFLAGS="-L/usr/local/lib"
+        AC_SUBST(CPPFLAGS)
+        AC_SUBST(LDFLAGS)
         ;;
 netbsd*)
         AC_CHECK_PROGS(GSED, gsed, "no")
@@ -266,6 +268,8 @@ netbsd*)
         AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
         CPPFLAGS="-I/usr/pkg/include"
         LDFLAGS="-L/usr/pkg/lib"
+        AC_SUBST(CPPFLAGS)
+        AC_SUBST(LDFLAGS)
         ;;
 *)
         ;;
