@@ -6,14 +6,13 @@
 
 toolsdir = $(NSCDE_TOOLSDIR)/FvwmScripts
 
-SCRIPTINS = $(wildcard $(srcdir)/*.in)
-SCRIPTOUTS = $(foreach s,$(SCRIPTINS),$(shell echo $(s) | $(SED) 's/\.in$$//g'))
-SCRIPTCLEAN = $(shell echo $(SCRIPTOUTS) | $(SED) 's/Makefile //g')
-
-tools_SCRIPTS = $(SCRIPTCLEAN)
+tools_SCRIPTS = GWM Splash Notifier
 
 EXTRA_SCRIPTS =
 
 clean-local:
-	-rm -f $(SCRIPTCLEAN)
+	-rm -f $(tools_SCRIPTS)
+
+uninstall-hook:
+	rmdir $(toolsdir) || true
 

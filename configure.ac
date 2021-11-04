@@ -28,8 +28,8 @@ netbsd*)
         AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         AC_CHECK_PROGS(GTAIL, gtail, "no")
         AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
-        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include -I/usr/local/include"
-        LDFLAGS="$LDFLAGS -L/usr/pkg/lib -L/usr/local/lib"
+        CPPFLAGS="$CPPFLAGS -I/usr/X11R7/include -I/usr/pkg/include -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/X11R7/lib -R/usr/X11R7/lib -L/usr/pkg/lib -R/usr/pkg/lib -L/usr/local/lib -R/usr/local/lib"
         ;;
 openbsd*)
 	AC_CHECK_PROGS(GSED, gsed, "no")
@@ -295,6 +295,9 @@ if test -d "./.git"; then
    VERSIONINFO=`git describe --always --long --dirty`
    VERSION="${VERSION}-git${VERSIONINFO}"
 fi
+
+OS_PLUS_MACHINE_ARCH=`uname -sm | tr ' ' '_'`
+AC_SUBST(OS_PLUS_MACHINE_ARCH)
 
 AC_OUTPUT(
 	Makefile

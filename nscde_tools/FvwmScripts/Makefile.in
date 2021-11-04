@@ -209,6 +209,7 @@ NSCDE_DATADIR = @NSCDE_DATADIR@
 NSCDE_LIBDIR = @NSCDE_LIBDIR@
 NSCDE_TOOLSDIR = @NSCDE_TOOLSDIR@
 OBJEXT = @OBJEXT@
+OS_PLUS_MACHINE_ARCH = @OS_PLUS_MACHINE_ARCH@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -297,10 +298,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 toolsdir = $(NSCDE_TOOLSDIR)/FvwmScripts
-SCRIPTINS = $(wildcard $(srcdir)/*.in)
-SCRIPTOUTS = $(foreach s,$(SCRIPTINS),$(shell echo $(s) | $(SED) 's/\.in$$//g'))
-SCRIPTCLEAN = $(shell echo $(SCRIPTOUTS) | $(SED) 's/Makefile //g')
-tools_SCRIPTS = $(SCRIPTCLEAN)
+tools_SCRIPTS = GWM Splash Notifier
 EXTRA_SCRIPTS = 
 all: all-am
 
@@ -517,8 +515,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-toolsSCRIPTS
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic clean-local \
 	cscopelist-am ctags-am distclean distclean-generic distdir dvi \
@@ -530,13 +529,16 @@ uninstall-am: uninstall-toolsSCRIPTS
 	install-toolsSCRIPTS installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am uninstall-toolsSCRIPTS
+	uninstall-am uninstall-hook uninstall-toolsSCRIPTS
 
 .PRECIOUS: Makefile
 
 
 clean-local:
-	-rm -f $(SCRIPTCLEAN)
+	-rm -f $(tools_SCRIPTS)
+
+uninstall-hook:
+	rmdir $(toolsdir) || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

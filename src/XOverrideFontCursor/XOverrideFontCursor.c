@@ -13,9 +13,9 @@
  * Hegel3DReloaded, 1. 9. 2019.
  */
 
-#include "Xlibint.h"
-#include "Xlib.h"
-#include "cursorfont.h"
+#include <X11/Xlibint.h>
+#include <X11/Xlib.h>
+#include <X11/cursorfont.h>
 #include <string.h>
 
 #ifdef DEBUG

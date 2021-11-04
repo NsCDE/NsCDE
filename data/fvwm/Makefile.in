@@ -209,6 +209,7 @@ NSCDE_DATADIR = @NSCDE_DATADIR@
 NSCDE_LIBDIR = @NSCDE_LIBDIR@
 NSCDE_TOOLSDIR = @NSCDE_TOOLSDIR@
 OBJEXT = @OBJEXT@
+OS_PLUS_MACHINE_ARCH = @OS_PLUS_MACHINE_ARCH@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -297,9 +298,40 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 fvwmdatadir = $(FVWM_DATADIR)
-DYNCONFS = Functions.fvwmconf Main.fvwmconf Subpanels.fvwm2.fvwmconf Subpanels.fvwm3.fvwmconf
-CONFS = $(shell echo $(srcdir)/*.fvwmconf) NsCDE.conf
-fvwmdata_DATA = $(CONFS)
+DYNCONFS = Functions.fvwmconf \
+	Main.fvwmconf
+
+CONFS = NsCDE.conf \
+	Animate.fvwmconf \
+	Backdrops.fvwmconf \
+	Backer.fvwmconf \
+	Colorset.fvwmconf \
+	Event.fvwmconf \
+	FinishInit.fvwmconf \
+	Font-120dpi.fvwmconf \
+	Font-144dpi.fvwmconf \
+	Font-192dpi.fvwmconf \
+	Font-75dpi.fvwmconf \
+	Font-96dpi.fvwmconf \
+	Form.fvwmconf \
+	FrontPanel.fvwm2.fvwmconf \
+	FrontPanel.fvwm3.fvwmconf \
+	FrontPanel.fvwmconf \
+	IconMan.fvwmconf \
+	Ident.fvwmconf \
+	Init.fvwmconf \
+	Keybindings.fvwmconf \
+	LocalPager.fvwmconf \
+	Menus.fvwmconf \
+	Monitors.fvwmconf \
+	Mousebindings.fvwmconf \
+	Sandbox.fvwmconf \
+	Script.fvwmconf \
+	Style.fvwmconf \
+	Subpanels.fvwmconf \
+	WspLocPager.fvwmconf
+
+fvwmdata_DATA = $(CONFS) $(DYNCONFS)
 EXTRA_DATA = 
 all: all-am
 
@@ -500,8 +532,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-fvwmdataDATA
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic clean-local \
 	cscopelist-am ctags-am distclean distclean-generic distdir dvi \
@@ -513,13 +546,16 @@ uninstall-am: uninstall-fvwmdataDATA
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am uninstall-fvwmdataDATA
+	uninstall-am uninstall-fvwmdataDATA uninstall-hook
 
 .PRECIOUS: Makefile
 
 
 clean-local:
 	-rm -f $(DYNCONFS)
+
+uninstall-hook:
+	rmdir $(fvwmdatadir) || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

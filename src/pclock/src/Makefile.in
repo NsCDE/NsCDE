@@ -225,6 +225,7 @@ NSCDE_DATADIR = @NSCDE_DATADIR@
 NSCDE_LIBDIR = @NSCDE_LIBDIR@
 NSCDE_TOOLSDIR = @NSCDE_TOOLSDIR@
 OBJEXT = @OBJEXT@
+OS_PLUS_MACHINE_ARCH = @OS_PLUS_MACHINE_ARCH@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -313,24 +314,12 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 DEFAULT_XPM = Fpclock.xpm
-OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 machdepdir = $(NSCDE_TOOLSDIR)/$(OS_PLUS_MACHINE_ARCH)
 BUILT_SOURCES = Default.xpm
 fpclock_SOURCES = Defaults.h getopt1.c getopt.c  \
 	getopt.h Graphics.c Main.c PClock.h Version.h Default.xpm
 
-AM_CPPFLAGS = \
-	-I/usr/X11R6/include -I/usr/X11R7/include -I/usr/include \
-	-I/usr/local/include -I.
-
-AM_CFLAGS = \
-	-O2 -g \
-	$(CFLAGS)
-
-AM_LDFLAGS = \
-	-L/usr/X11R6/lib -L/usr/X11R7/lib \
-	-L/usr/lib64 -L/usr/local/lib
-
+AM_CFLAGS = $(CFLAGS)
 LDADD = $(X_LIB) $(XEXT_LIB) $(XPM_LIB) $(MATH_LIB)
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -647,8 +636,10 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-machdepPROGRAMS
-
-.MAKE: all check install install-am install-exec install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: all check install install-am install-exec install-strip \
+	uninstall-am
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-generic clean-local clean-machdepPROGRAMS cscopelist-am \
@@ -662,17 +653,19 @@ uninstall-am: uninstall-machdepPROGRAMS
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-machdepPROGRAMS
+	uninstall-am uninstall-hook uninstall-machdepPROGRAMS
 
 .PRECIOUS: Makefile
 
 
 Default.xpm:
 	ln -s ../XPM/$(DEFAULT_XPM) $@
-	$(LDFLAGS)
 
 clean-local:
 	-rm -f Default.xpm
+
+uninstall-hook:
+	rmdir $(machdepdir) || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

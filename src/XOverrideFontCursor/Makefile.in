@@ -222,6 +222,7 @@ NSCDE_DATADIR = @NSCDE_DATADIR@
 NSCDE_LIBDIR = @NSCDE_LIBDIR@
 NSCDE_TOOLSDIR = @NSCDE_TOOLSDIR@
 OBJEXT = @OBJEXT@
+OS_PLUS_MACHINE_ARCH = @OS_PLUS_MACHINE_ARCH@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -309,23 +310,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
-OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 machlibdepdir = $(NSCDE_LIBDIR)/$(OS_PLUS_MACHINE_ARCH)
 XOverrideFontCursor.so_SOURCE = XOverrideFontCursor.c
-AM_CPPFLAGS = \
-	-I/usr/include/X11 -I/usr/local/include/X11 -I/usr/local/include \
-	-I/usr/X11R6/include -I/usr/X11R7/include -I/usr/X11R6/include/X11 \
-	-I/usr/X11R7/include/X11 \
-	-fPIC
-
-AM_CFLAGS = \
-	$(CFLAGS)
-
-AM_LDFLAGS = \
-	-fPIC -shared \
-	$(LDFLAGS)
-
-LDADD = -L/usr/X11R6/lib -L/usr/X11R7/lib -L/usr/local/lib $(X_LIB)
+AM_CPPFLAGS = -fPIC $(CPPFLAGS)
+AM_CFLAGS = $(CFLAGS)
+AM_LDFLAGS = -fPIC -shared $(LDFLAGS)
+LDADD = $(X_LIB)
 all: all-am
 
 .SUFFIXES:
@@ -626,8 +616,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-machlibdepPROGRAMS
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-strip uninstall-am
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-generic clean-machlibdepPROGRAMS cscopelist-am ctags \
@@ -641,10 +632,13 @@ uninstall-am: uninstall-machlibdepPROGRAMS
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-machlibdepPROGRAMS
+	uninstall-am uninstall-hook uninstall-machlibdepPROGRAMS
 
 .PRECIOUS: Makefile
 
+
+uninstall-hook:
+	rmdir $(machlibdepdir) || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

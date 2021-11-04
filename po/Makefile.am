@@ -5,38 +5,65 @@
 #
 
 MSGFMT = msgfmt
-POFILES = $(wildcard $(srcdir)/*.po)
-MOFILES = $(foreach s,$(POFILES),$(shell echo $(s) | $(SED) 's/\.po$$/\.mo/g'))
 
 .po.mo:
 	$(MSGFMT) -o $@ $<
 
-all:	$(MOFILES)
+MOFILES = NsCDE-BackdropMgr.hr.mo \
+	NsCDE-BeepMgr.hr.mo \
+	NsCDE-ColorMgr.hr.mo \
+	NsCDE-ExecDialog.hr.mo \
+	NsCDE-FilePicker.hr.mo \
+	NsCDE-FontMgr.hr.mo \
+	NsCDE-GWM.hr.mo \
+	NsCDE-GeometryMgr.hr.mo \
+	NsCDE-KeyboardMgr.hr.mo \
+	NsCDE-NProcMgr.hr.mo \
+	NsCDE-Occupy.hr.mo \
+	NsCDE-PointerMgr.hr.mo \
+	NsCDE-PowerSaveMgr.hr.mo \
+	NsCDE-StyleMgr.hr.mo \
+	NsCDE-Subpanel.hr.mo \
+	NsCDE-Subpanels.hr.mo \
+	NsCDE-SysActionDialog.hr.mo \
+	NsCDE-Sysinfo.hr.mo \
+	NsCDE-WSM.hr.mo \
+	NsCDE-WindowMgr.hr.mo \
+	NsCDE-WsPgMgr.hr.mo \
+	NsCDE.hr.mo \
+	nscde-bootstrap.hr.mo
 
-# Ugly ... I know.
-INSTDIRS = $(foreach l,$(LOCALES),$(mkinstalldirs) $(DESTDIR)$(localedir)/$(l)/LC_MESSAGES/;)
-INSTFILES = $(foreach f,$(MOFILES),\
-	install -m 644 $(f) \
-	$(DESTDIR)$(localedir)/$(shell \
-	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
-	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
-
-DELFILES = $(foreach f,$(MOFILES),\
-	rm $(DESTDIR)$(localedir)/$(shell \
-	echo $(f) | $(SED) 's/\(.*\)\.\(..\)\.\(mo$$\)/\2/g')/LC_MESSAGES/$(shell \
-	echo $(f) | $(SED) 's/\(\.\/\)\(.*\)\.\(..\)\.\(mo$$\)/\2.\4/g');)
-
-DELDIRS1 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)/LC_MESSAGES))
-DELDIRS2 = $(foreach d,$(LOCALES),$(shell echo $(DESTDIR)$(localedir)/$(d)))
+all: $(MOFILES)
 
 install-data-am:
-	$(INSTDIRS)
-	$(INSTFILES)
+	for l in $(LOCALES); \
+	do \
+	   $(mkinstalldirs) $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/ ; \
+	   for f in $(MOFILES); \
+	   do \
+	      if `echo $$f | egrep -q ".*\.$$l\.mo"` ; then \
+	         install -m 644 $$f $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/`echo $$f | $(SED) "s/\.$$l\.mo/.mo/g"` ; \
+	      fi \
+	   done ; \
+	done
 
 clean-local:
 	-rm -f $(MOFILES)
 
 uninstall-am:
-	$(DELFILES)
-	rmdir $(DELDIRS1) || :
-	rmdir $(DELDIRS2) || :
+	for l in $(LOCALES); \
+	do \
+	   for f in $(MOFILES); \
+	   do \
+	      if `echo $$f | egrep -q ".*\.$$l\.mo"` ; then \
+	         rm -f $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/`echo $$f | $(SED) "s/\.$$l\.mo/.mo/g"` ; \
+	      fi \
+	   done ; \
+	done
+	for l in $(LOCALES); \
+	do \
+	   rmdir $(DESTDIR)$(localedir)/$$l/LC_MESSAGES || true ; \
+	   rmdir $(DESTDIR)$(localedir)/$$l || true ; \
+	done
+	rmdir $(DESTDIR)$(localedir) || true
+

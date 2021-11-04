@@ -625,6 +625,7 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+OS_PLUS_MACHINE_ARCH
 XSESSDIR
 MATH_LIB
 XPM_LIB
@@ -4013,8 +4014,8 @@ test -n "$GTAIL" || GTAIL=""no""
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&5
 $as_echo "$as_me: WARNING: You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime." >&2;}
 fi
-        CPPFLAGS="$CPPFLAGS -I/usr/pkg/include -I/usr/local/include"
-        LDFLAGS="$LDFLAGS -L/usr/pkg/lib -L/usr/local/lib"
+        CPPFLAGS="$CPPFLAGS -I/usr/X11R7/include -I/usr/pkg/include -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/X11R7/lib -R/usr/X11R7/lib -L/usr/pkg/lib -R/usr/pkg/lib -L/usr/local/lib -R/usr/local/lib"
         ;;
 openbsd*)
 	for ac_prog in gsed
@@ -6484,6 +6485,9 @@ if test -d "./.git"; then
    VERSIONINFO=`git describe --always --long --dirty`
    VERSION="${VERSION}-git${VERSIONINFO}"
 fi
+
+OS_PLUS_MACHINE_ARCH=`uname -sm | tr ' ' '_'`
+
 
 ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf data/config_templates/Makefile data/config_templates/fontmgr.local data/config_templates/colormgr.local lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
 
