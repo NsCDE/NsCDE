@@ -33,7 +33,9 @@ netbsd*)
         ;;
 openbsd*)
 	AC_CHECK_PROGS(GSED, gsed, "no")
+	AC_CHECK_PROGS(GMAKE, gmake, "no")
 	AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+	AS_IF([test x"$GMAKE" = x"no"], [AC_MSG_ERROR([You must have GNU make (gmake) installed. Native ${host_os} make is currently broken.])])
 	CPPFLAGS="$CPPFLAGS -I/usr/X11R6/include -I/usr/local/include"
 	LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -L/usr/local/lib"
 	;;
