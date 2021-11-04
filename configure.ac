@@ -178,70 +178,70 @@ AC_SUBST(MATH_LIB)
 AC_SUBST(KSH)
 
 # Dependencies failures
-AS_IF([test x"$SED" == x"no"], [AC_MSG_ERROR([No sed detected.])])
-AS_IF([test x"$KSH" == x"no"], [AC_MSG_ERROR([Please install AT&T ksh 93 package before continuing.])])
+AS_IF([test x"$SED" = x"no"], [AC_MSG_ERROR([No sed detected.])])
+AS_IF([test x"$KSH" = x"no"], [AC_MSG_ERROR([Please install AT&T ksh 93 package before continuing.])])
 
 # Dependencies warnings
-AS_IF([test x"$FVWM" == x"no"], [AC_MSG_WARN([No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime.])])
-AS_IF([test x"$CPP" == x"no"], [AC_MSG_WARN([No cpp(1) C Preprocessor detected. It is required for xrdb(1) in runtime.])])
-AS_IF([test x"$XRDB" == x"no"], [AC_MSG_WARN([No xrdb(1) detected. X resource database utility (xrdb) is required for NsCDE in runtime.])])
-AS_IF([test x"$XSET" == x"no"], [AC_MSG_WARN([No xset(1) detected. Xset is required for NsCDE in runtime.])])
-AS_IF([test x"$XPROP" == x"no"], [AC_MSG_WARN([No xprop(1) detected. Xset is required for NsCDE in runtime.])])
-AS_IF([test x"$XDPYINFO" == x"no"], [AC_MSG_WARN([No xdpyinfo(1) detected. Please install xdpyinfo(1) utility for NsCDE runtime.])])
-AS_IF([test x"$XTERM" == x"no"], [AC_MSG_WARN([No xterm(1) detected. You will need xterm application at least for first NsCDE setup in runtime.])])
-AS_IF([test x"$GETTEXT" == x"no"], [AC_MSG_WARN([No gettext(1) detected. Please install gettext(1) tool for NsCDE runtime.])])
-AS_IF([test x"$XDOTOOL" == x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_WARN([No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime.])])
-AS_IF([test x"$XSCSVR" == x"no"], [AC_MSG_WARN([No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup.])])
-AS_IF([test x"$STALONETRAY" == x"no"], [AC_MSG_WARN([No Stalonetray was found. This NsCDE Installation will not be able to have tray applets.])])
-AS_IF([test x"$XSETTINGSD" == x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes.])])
-AS_IF([test x"$XRANDR" == x"no"], [AC_MSG_WARN([No xrandr(1) command was found. It is advised to have X11 Server Utils installed.])])
-AS_IF([test x"$DUNST" == x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
-AS_IF([test x"$XCLIP" == x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
-AS_IF([test x"$CONVERT" == x"no"], [AC_MSG_WARN([No ImageMagick convert(1) utility found. NsCDE will not be able to take screenshots to file.])])
-AS_IF([test x"$IMPORT" == x"no"], [AC_MSG_WARN([No ImageMagick import(1) utility found. NsCDE will not be able to take screenshots to file.])])
+AS_IF([test x"$FVWM" = x"no"], [AC_MSG_WARN([No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime.])])
+AS_IF([test x"$CPP" = x"no"], [AC_MSG_WARN([No cpp(1) C Preprocessor detected. It is required for xrdb(1) in runtime.])])
+AS_IF([test x"$XRDB" = x"no"], [AC_MSG_WARN([No xrdb(1) detected. X resource database utility (xrdb) is required for NsCDE in runtime.])])
+AS_IF([test x"$XSET" = x"no"], [AC_MSG_WARN([No xset(1) detected. Xset is required for NsCDE in runtime.])])
+AS_IF([test x"$XPROP" = x"no"], [AC_MSG_WARN([No xprop(1) detected. Xset is required for NsCDE in runtime.])])
+AS_IF([test x"$XDPYINFO" = x"no"], [AC_MSG_WARN([No xdpyinfo(1) detected. Please install xdpyinfo(1) utility for NsCDE runtime.])])
+AS_IF([test x"$XTERM" = x"no"], [AC_MSG_WARN([No xterm(1) detected. You will need xterm application at least for first NsCDE setup in runtime.])])
+AS_IF([test x"$GETTEXT" = x"no"], [AC_MSG_WARN([No gettext(1) detected. Please install gettext(1) tool for NsCDE runtime.])])
+AS_IF([test x"$XDOTOOL" = x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_WARN([No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime.])])
+AS_IF([test x"$XSCSVR" = x"no"], [AC_MSG_WARN([No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup.])])
+AS_IF([test x"$STALONETRAY" = x"no"], [AC_MSG_WARN([No Stalonetray was found. This NsCDE Installation will not be able to have tray applets.])])
+AS_IF([test x"$XSETTINGSD" = x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes.])])
+AS_IF([test x"$XRANDR" = x"no"], [AC_MSG_WARN([No xrandr(1) command was found. It is advised to have X11 Server Utils installed.])])
+AS_IF([test x"$DUNST" = x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
+AS_IF([test x"$XCLIP" = x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
+AS_IF([test x"$CONVERT" = x"no"], [AC_MSG_WARN([No ImageMagick convert(1) utility found. NsCDE will not be able to take screenshots to file.])])
+AS_IF([test x"$IMPORT" = x"no"], [AC_MSG_WARN([No ImageMagick import(1) utility found. NsCDE will not be able to take screenshots to file.])])
 
 # Python modules
 AX_PYTHON_MODULE([xdg], [])
-AS_IF([test "x${HAVE_PYMOD_XDG}" == x"no"], [AC_MSG_WARN([Python 3 module xdg is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_XDG}" = x"no"], [AC_MSG_WARN([Python 3 module xdg is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([yaml], [])
-AS_IF([test "x${HAVE_PYMOD_YAML}" == x"no"], [AC_MSG_WARN([Python 3 module yaml is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_YAML}" = x"no"], [AC_MSG_WARN([Python 3 module yaml is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([os], [])
-AS_IF([test "x${HAVE_PYMOD_OS}" == x"no"], [AC_MSG_WARN([Python 3 module os is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_OS}" = x"no"], [AC_MSG_WARN([Python 3 module os is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([re], [])
-AS_IF([test "x${HAVE_PYMOD_RE}" == x"no"], [AC_MSG_WARN([Python 3 module re is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_RE}" = x"no"], [AC_MSG_WARN([Python 3 module re is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([shutil], [])
-AS_IF([test "x${HAVE_PYMOD_SHUTIL}" == x"no"], [AC_MSG_WARN([Python 3 module shutil is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_SHUTIL}" = x"no"], [AC_MSG_WARN([Python 3 module shutil is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([subprocess], [])
-AS_IF([test "x${HAVE_PYMOD_SUBPROCESS}" == x"no"], [AC_MSG_WARN([Python 3 module subprocess is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_SUBPROCESS}" = x"no"], [AC_MSG_WARN([Python 3 module subprocess is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([sys], [])
-AS_IF([test "x${HAVE_PYMOD_SYS}" == x"no"], [AC_MSG_WARN([Python 3 module sys is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_SYS}" = x"no"], [AC_MSG_WARN([Python 3 module sys is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([fnmatch], [])
-AS_IF([test "x${HAVE_PYMOD_FNMATCH}" == x"no"], [AC_MSG_WARN([Python 3 module fnmatch is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_FNMATCH}" = x"no"], [AC_MSG_WARN([Python 3 module fnmatch is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([getopt], [])
-AS_IF([test "x${HAVE_PYMOD_GETOPT}" == x"no"], [AC_MSG_WARN([Python 3 module getopt is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_GETOPT}" = x"no"], [AC_MSG_WARN([Python 3 module getopt is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([time], [])
-AS_IF([test "x${HAVE_PYMOD_TIME}" == x"no"], [AC_MSG_WARN([Python 3 module time is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_TIME}" = x"no"], [AC_MSG_WARN([Python 3 module time is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([platform], [])
-AS_IF([test "x${HAVE_PYMOD_PLATFORM}" == x"no"], [AC_MSG_WARN([Python 3 module platform is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_PLATFORM}" = x"no"], [AC_MSG_WARN([Python 3 module platform is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([psutil], [])
-AS_IF([test "x${HAVE_PYMOD_PSUTIL}" == x"no"], [AC_MSG_WARN([Python 3 module psutil is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_PSUTIL}" = x"no"], [AC_MSG_WARN([Python 3 module psutil is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([pwd], [])
-AS_IF([test "x${HAVE_PYMOD_PWD}" == x"no"], [AC_MSG_WARN([Python 3 module pwd is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_PWD}" = x"no"], [AC_MSG_WARN([Python 3 module pwd is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([socket], [])
-AS_IF([test "x${HAVE_PYMOD_SOCKET}" == x"no"], [AC_MSG_WARN([Python 3 module socket is required for NsCDE runtime.])])
+AS_IF([test "x${HAVE_PYMOD_SOCKET}" = x"no"], [AC_MSG_WARN([Python 3 module socket is required for NsCDE runtime.])])
 
 AX_PYTHON_MODULE([PyQt5], [])
 AX_PYTHON_MODULE([PyQt4], [])
@@ -255,13 +255,17 @@ AC_MSG_CHECKING(platform)
 case "$host_os" in
 freebsd*|sunos*|openbsd*|dragonfly*)
         AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" == x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        CPPFLAGS="-I/usr/local/include"
+        LDFLAGS="-L/usr/local/lib"
         ;;
 netbsd*)
         AC_CHECK_PROGS(GSED, gsed, "no")
-        AS_IF([test x"$GSED" == x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         AC_CHECK_PROGS(GTAIL, gtail, "no")
-        AS_IF([test x"$GTAIL" == x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
+        AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
+        CPPFLAGS="-I/usr/pkg/include"
+        LDFLAGS="-L/usr/pkg/lib"
         ;;
 *)
         ;;
