@@ -82,7 +82,8 @@ Widget 1
          Begin
             Set $AccountSlot = (StrCopy (LastString) 10 10)
             Set $LetterUpAccInfo = (StrCopy (LastString) 12 14)
-            Set $LetterUpAccColor = (StrCopy (LastString) 16 32)
+            Set $LetterUpAccFontInfo = (StrCopy (LastString) 16 18)
+            Set $LetterUpAccColor = (StrCopy (LastString) 19 35)
 
             If $AccountSlot <> {} Then
             Begin
@@ -148,6 +149,33 @@ Widget 1
             Else
             Begin
                Set $AccMailCnt = $MailCnt
+            End
+            If $LetterUpAccFontInfo <> {DEF} Then
+            Begin
+               Set $FontStyleStr = (StrCopy $LetterUpAccFontInfo 1 1)
+               If $FontStyleStr == {R} Then
+               Begin
+                  Set $FontStyle = {Regular}
+               End
+               If $FontStyleStr == {B} Then
+               Begin
+                  Set $FontStyle = {Bold}
+               End
+               If $FontStyleStr == {D} Then
+               Begin
+                  Set $FontStyle = {Demibold}
+               End
+               If $FontStyleStr == {I} Then
+               Begin
+                  Set $FontStyle = {Italic}
+               End
+               If $FontStyleStr == {O} Then
+               Begin
+                  Set $FontStyle = {Oblique}
+               End
+               Set $FontSize = (StrCopy $LetterUpAccFontInfo 2 3)
+               Set $FontToApply = {xft::} $FontStyle {:pixelsize=} $FontSize
+               ChangeFont 2 $FontToApply
             End
             If $LetterUpAccColor <> {} Then
             Begin
@@ -232,7 +260,7 @@ Widget 2
    Type ItemDraw
    Flags NoReliefString Center Hidden
    Colorset 58
-   Title {000: 0000}
+   Title {00000000}
    Font "xft:::pixelsize=10"
    Main
       Case message of
