@@ -285,7 +285,7 @@ if test -z $XSESSDIR ; then
    elif test -d "/usr/local/share/xsessions"; then
       XSESSDIR="/usr/local/share/xsessions"
    else
-      XSESSDIR="$(datarootdir)/xsessions"
+      XSESSDIR="$DATA_ROOTDIR/xsessions"
    fi
 fi
 
