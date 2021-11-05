@@ -1381,8 +1381,8 @@ AddToFunc f_GWM
 # Iconify non-iconic group of iconifiable windows on the current screen/desk/page
 DestroyFunc f_CleanWorkspace
 AddToFunc f_CleanWorkspace
-+ I f_RestoreFrontPanel WindowShade On
 + I SendToModule FvwmAnimate push pause
++ I f_RestoreFrontPanel WindowShade On
 + I PipeRead 'for iwin in $[1-]; do echo "WindowId $iwin Iconify on"; done'
 + I SendToModule FvwmAnimate pop
 + I InfoStoreAdd sdpstat-$[pointer.screen]$[desk.n]$[page.nx]$[page.ny] restore
@@ -1392,8 +1392,8 @@ AddToFunc f_CleanWorkspace
 # which was previously iconified as a group on that page by f_CleanWorkspace
 DestroyFunc f_RestoreWorkspace
 AddToFunc f_RestoreWorkspace
-+ I f_RestoreFrontPanel WindowShade Off
 + I SendToModule FvwmAnimate push pause
++ I f_RestoreFrontPanel WindowShade Off
 + I PipeRead 'for iwin in $[1-]; do echo "WindowId $iwin (Iconic) Iconify off"; done'
 + I SendToModule FvwmAnimate pop
 + I InfoStoreAdd sdpstat-$[pointer.screen]$[desk.n]$[page.nx]$[page.ny] hide
