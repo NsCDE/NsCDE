@@ -5,7 +5,6 @@
 #
 
 SUBDIRS = fvwm-modules python scripts
-OS_PLUS_MACHINE_ARCH = $(shell uname -sm | tr ' ' '_')
 
 uninstall-hook:
 	rmdir $(DESTDIR)$(NSCDE_LIBDIR)/python || :
