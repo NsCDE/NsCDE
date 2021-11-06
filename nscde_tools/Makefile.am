@@ -33,6 +33,7 @@ SCRIPTINS = \
 	ised \
 	keymenu \
 	mkpagemenu \
+	migrate_nscde2x \
 	palette_colorgen \
 	strip_icon_path \
 	subpanel_menuitem_props \

@@ -367,6 +367,7 @@ AC_OUTPUT(
 	nscde_tools/ised
 	nscde_tools/keymenu
 	nscde_tools/mkpagemenu
+	nscde_tools/migrate_nscde2x
 	nscde_tools/strip_icon_path
 	nscde_tools/subpanel_menuitem_props
 	nscde_tools/var_append
