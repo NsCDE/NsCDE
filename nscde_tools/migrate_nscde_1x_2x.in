@@ -1,12 +1,38 @@
 #!@KSH@
 
+if [ -f "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun" ]; then
+   exit 0
+fi
+
+trap "" INT
+trap "" TERM
+trap "" QUIT
+trap "" ABRT
+trap "" PIPE
+trap "" USR1
+trap "" USR2
+trap "" HUP SIGHUP
+
+if [ "x$1" == "-i" ]; then
+   set noninteractive=0
+else
+   set noninteractive=1
+fi
+
 cd "$HOME/.NsCDE"
 if (( $? != 0)); then
    echo "Error: cannot change directory to $HOME/.NsCDE"
+   sleep 3
    exit 4
 fi
 
 ISED="$NSCDE_TOOLSDIR/ised"
+
+if [ ! -x "$ISED" ]; then
+   echo "Error: ised script wrapper not found. Check if NSCDE_TOOLSDIR is set."
+   sleep 3
+   exit 5
+fi
 
 function backup_current_dot_nscde
 {
@@ -16,6 +42,7 @@ function backup_current_dot_nscde
          echo "Error: your $HOME/.NsCDE directory has more then 200 MB. Something appears to be"
          echo "wrong with your NsCDE profile. Examine your profile, or back it up manually, and"
          echo "rerun migration script like \"$0 -B\"."
+         sleep 3
          exit 2
       else
          stamp=$(date +%d-%m-%Y-%H-%M-%S)
@@ -24,8 +51,14 @@ function backup_current_dot_nscde
          if (($RETVAL1 == 0)); then
             echo "Backup copy of $HOME/.NsCDE saved as $HOME/dot_NsCDE_${stamp}.tar."
             cd -
+            if (($? != 0)); then
+               echo "Error: cannot change directory back to $HOME/.NsCDE"
+               sleep 3
+               exit 5
+            fi
          else
             echo "Error: backing up $HOME/.NsCDE exited with exit status ${RETVAL1}."
+            sleep 3
             exit 3
          fi
       fi
@@ -34,15 +67,30 @@ function backup_current_dot_nscde
 
 function rename_config_files
 {
-   old_confs="NsCDE-Backer.conf NsCDE-Event.conf NsCDE-FinishInit.conf NsCDE-Form.conf NsCDE-FrontPanel.conf NsCDE-Functions.conf NsCDE-IconMan.conf NsCDE-Ident.conf NsCDE-Init.conf NsCDE-Keybindings.conf NsCDE-Main.conf NsCDE-Menus.conf NsCDE-Monitors.conf NsCDE-Mousebindings.conf NsCDE-Pager-LocalPager.conf NsCDE-Pager-WspLocPager.conf NsCDE-Sandbox.conf NsCDE-Script.conf NsCDE-Style.conf"
+   old_confs="NsCDE-Backer.conf NsCDE-Event.conf NsCDE-FinishInit.conf \
+ NsCDE-Form.conf NsCDE-FrontPanel.conf NsCDE-Functions.conf NsCDE-IconMan.conf \
+ NsCDE-Ident.conf NsCDE-Init.conf NsCDE-Keybindings.conf NsCDE-Main.conf \
+ NsCDE-Menus.conf NsCDE-Monitors.conf NsCDE-Mousebindings.conf \
+ NsCDE-Pager-LocalPager.conf NsCDE-Pager-WspLocPager.conf \
+ NsCDE-Sandbox.conf NsCDE-Script.conf NsCDE-Style.conf"
 
-   old_genconfs="NsCDE-Animate.conf NsCDE-Backdrops.conf NsCDE-Colorset.conf NsCDE-Font-120dpi.conf NsCDE-Font-144dpi.conf NsCDE-Font-192dpi.conf NsCDE-Font-75dpi.conf NsCDE-Font-96dpi.conf"
+   old_genconfs="NsCDE-Animate.conf NsCDE-Backdrops.conf NsCDE-Colorset.conf \
+ NsCDE-Font-120dpi.conf NsCDE-Font-144dpi.conf NsCDE-Font-192dpi.conf \
+ NsCDE-Font-75dpi.conf NsCDE-Font-96dpi.conf"
 
-   old_locals="NsCDE-Animate.local NsCDE-Backdrops.local NsCDE-Backer.local NsCDE-Colorset.local NsCDE-Event.local NsCDE-FinishInit.local NsCDE-Font-120dpi.local NsCDE-Font-144dpi.local NsCDE-Font-192dpi.local NsCDE-Font-75dpi.local NsCDE-Font-96dpi.local NsCDE-Form.local NsCDE-FrontPanel.local NsCDE-Functions.local NsCDE-IconMan.local NsCDE-Ident.local NsCDE-Init.local NsCDE-Keybindings.local NsCDE-Main.local NsCDE-Menus.local NsCDE-Monitors.local NsCDE-Mousebindings.local NsCDE-Pager-LocalPager.local NsCDE-Pager-WspLocPager.local NsCDE-Sandbox.local NsCDE-Script.local NsCDE-Style.local NsCDE-Subpanels.local"
+   old_locals="NsCDE-Animate.local NsCDE-Backdrops.local NsCDE-Backer.local \
+ NsCDE-Colorset.local NsCDE-Event.local NsCDE-FinishInit.local NsCDE-Font-120dpi.local \
+ NsCDE-Font-144dpi.local NsCDE-Font-192dpi.local NsCDE-Font-75dpi.local \
+ NsCDE-Font-96dpi.local NsCDE-Form.local NsCDE-FrontPanel.local NsCDE-Functions.local \
+ NsCDE-IconMan.local NsCDE-Ident.local NsCDE-Init.local NsCDE-Keybindings.local \
+ NsCDE-Main.local NsCDE-Menus.local NsCDE-Monitors.local NsCDE-Mousebindings.local \
+ NsCDE-Pager-LocalPager.local NsCDE-Pager-WspLocPager.local NsCDE-Sandbox.local \
+ NsCDE-Script.local NsCDE-Style.local NsCDE-Subpanels.local"
 
    # Will be regenerated upon restart
    rm -f "NsCDE-Subpanels.conf"
 
+   # Convert old configs which will become "fvwmconf" type.
    for oc in $old_confs
    do
       new_oc1="${oc##*NsCDE-}"
@@ -59,6 +107,7 @@ function rename_config_files
       fi
    done
 
+   # Convert old configs which will become "fvwmgen" type.
    for og in $old_genconfs
    do
       new_og1="${og##*NsCDE-}"
@@ -75,6 +124,7 @@ function rename_config_files
       fi
    done
 
+   # Convert old configs which will become "fvwmlocal" type.
    for ol in $old_locals
    do
       new_ol1="${ol##*NsCDE-}"
@@ -90,6 +140,35 @@ function rename_config_files
          fi
       fi
    done
+
+   # Handle renaming of pager config.
+   if [ -f "Pager-LocalPager.fvwmconf" ]; then
+      echo "Renaming Pager-LocalPager.fvwmconf to LocalPager.fvwmconf"
+      mv -f Pager-LocalPager.fvwmconf LocalPager.fvwmconf
+   fi
+   if [ -f "Pager-LocalPager.fvwmlocal" ]; then
+      echo "Renaming Pager-LocalPager.fvwmlocal to LocalPager.fvwmlocal"
+      mv -f Pager-LocalPager.fvwmlocal LocalPager.fvwmlocal
+   fi
+   if [ -f "Pager-WspLocPager.fvwmconf" ]; then
+      echo "Renaming Pager-WspLocPager.fvwmconf to WspLocPager.fvwmconf"
+      mv -f Pager-WspLocPager.fvwmconf WspLocPager.fvwmconf
+   fi
+   if [ -f "Pager-WspLocPager.fvwmlocal" ]; then
+      echo "Renaming Pager-WspLocPager.fvwmlocal to WspLocPager.fvwmlocal"
+      mv -f Pager-WspLocPager.fvwmlocal WspLocPager.fvwmlocal
+   fi
+
+   # Handle local for of the FrontPanel configuration if exists.
+   if [ -f "FrontPanel.fvwmconf" ]; then
+      if [ "x$FVWM_IS_FVWM3" == "x1" ]; then
+         echo "Renaming FrontPanel.fvwmconf to FrontPanel.fvwm3.fvwmconf"
+         mv -f FrontPanel.fvwmconf FrontPanel.fvwm3.fvwmconf
+      else
+         echo "Renaming FrontPanel.fvwmconf to FrontPanel.fvwm2.fvwmconf"
+         mv -f FrontPanel.fvwmconf FrontPanel.fvwm2.fvwmconf
+      fi
+   fi
 
    # Relink fontsets
    for fo in Font-*dpi.fvwmgen
@@ -404,8 +483,84 @@ function walk_and_change_pathnames_in_files
    done
 }
 
-backup_current_dot_nscde
-rename_config_files
-replace_confnames_in_files
-walk_and_change_pathnames_in_files
+function preface
+{
+   echo "It appears that you have ~/.NsCDE profile from NsCDE 1.x installation."
+   echo "This migration script is here to convert your old profile to match"
+   echo "new file names and paths of NsCDE 2.x."
+   echo ""
+   echo "This migration process wants to do this actions:"
+   echo ""
+   echo "* Backup your existing ~/.NsCDE into ~/dot_NsCDE_dd_mm_YY_HH_MM_SS.tar"
+   echo "  just in case if anything goes wrong."
+   echo ""
+   echo "* Rename old names NsCDE-XYZ.conf into XYZ.fvwm(conf|gen) in ~/.NsCDE"
+   echo ""
+   echo "* Rename NsCDE-XYZ.local into XYZ.fvwmlocal in ~/.NsCDE"
+   echo ""
+   echo "* Examine regular configrations and scripts in ~/.NsCDE and replace"
+   echo "  old names and paths to their new pathnames."
+   echo ""
+   echo "* Restart NsCDE in normal mode."
+   echo ""
+
+   PS3="You have the following choices:"
+   
+   select action in abort skiponce migrate
+   do
+      case $action in
+      abrt) 
+         print "No automatic migration will be performed. This migration process will"
+         print "not run again. You will have to handle migration manually - either by"
+         print "running this script in non-interactive or interactive mode again after"
+         print "removing $HOME/.NsCDE/.migrate_nscde_1x_2x_norun or by editing files."
+         print "Abort ? (y/n) \c"
+         read ans
+         case $ans in 
+         Y|y|Yes|YES)
+            touch $HOME/.NsCDE/.migrate_nscde_1x_2x_norun
+            exit 0
+         ;;
+         N/n/No/NO)
+            break
+         ;;
+         esac
+      ;;
+   
+      skiponce)
+         print "No automatic migration will be performed. This migration process will"
+         print "run again on next log in. To disable, choose abort action from the menu."
+         print "This migration process will now restart NsCDE in normal mode. Many of"
+         print "your configurations will not work properly until files are not renamed"
+         print "and pathnames consolidated in them."
+         sleep 10
+         exit 0
+      ;;
+   
+      migrate)
+         print "Starting migration of your NsCDE profile ..."
+         sleep 1
+         echo ""
+         sleep 1
+         backup_current_dot_nscde
+         rename_config_files
+         replace_confnames_in_files
+         walk_and_change_pathnames_in_files
+      ;;
+   
+      *) 
+         print "Please try again. Use ’1’-’3’"
+      ;; 
+      esac
+   done
+}
+
+if (( $noninteractive == 0 )); then
+   preface
+else
+   backup_current_dot_nscde
+   rename_config_files
+   replace_confnames_in_files
+   walk_and_change_pathnames_in_files
+fi
 
