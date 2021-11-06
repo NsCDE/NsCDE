@@ -510,13 +510,14 @@ function preface
    select action in abort skiponce migrate
    do
       case $action in
-      abrt) 
+      abort) 
          print "No automatic migration will be performed. This migration process will"
          print "not run again. You will have to handle migration manually - either by"
          print "running this script in non-interactive or interactive mode again after"
          print "removing $HOME/.NsCDE/.migrate_nscde_1x_2x_norun or by editing files."
 
          touch $HOME/.NsCDE/.migrate_nscde_1x_2x_norun
+         sleep 9
          exit 0
       ;;
    
@@ -541,6 +542,7 @@ function preface
          rename_config_files
          replace_confnames_in_files
          walk_and_change_pathnames_in_files
+         exit $?
       ;;
    
       *) 
