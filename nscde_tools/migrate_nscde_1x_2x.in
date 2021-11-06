@@ -13,10 +13,10 @@ trap "" USR1
 trap "" USR2
 trap "" HUP SIGHUP
 
-if [ "x$1" == "-i" ]; then
-   set noninteractive=0
+if [ "x$1" == "x-i" ]; then
+   interactive=1
 else
-   set noninteractive=1
+   interactive=0
 fi
 
 cd "$HOME/.NsCDE"
@@ -485,6 +485,7 @@ function walk_and_change_pathnames_in_files
 
 function preface
 {
+   echo ""
    echo "It appears that you have ~/.NsCDE profile from NsCDE 1.x installation."
    echo "This migration script is here to convert your old profile to match"
    echo "new file names and paths of NsCDE 2.x."
@@ -504,7 +505,7 @@ function preface
    echo "* Restart NsCDE in normal mode."
    echo ""
 
-   PS3="You have the following choices:"
+   PS3="Choice (1, 2 or 3): "
    
    select action in abort skiponce migrate
    do
@@ -514,17 +515,9 @@ function preface
          print "not run again. You will have to handle migration manually - either by"
          print "running this script in non-interactive or interactive mode again after"
          print "removing $HOME/.NsCDE/.migrate_nscde_1x_2x_norun or by editing files."
-         print "Abort ? (y/n) \c"
-         read ans
-         case $ans in 
-         Y|y|Yes|YES)
-            touch $HOME/.NsCDE/.migrate_nscde_1x_2x_norun
-            exit 0
-         ;;
-         N/n/No/NO)
-            break
-         ;;
-         esac
+
+         touch $HOME/.NsCDE/.migrate_nscde_1x_2x_norun
+         exit 0
       ;;
    
       skiponce)
@@ -533,6 +526,7 @@ function preface
          print "This migration process will now restart NsCDE in normal mode. Many of"
          print "your configurations will not work properly until files are not renamed"
          print "and pathnames consolidated in them."
+
          sleep 10
          exit 0
       ;;
@@ -542,6 +536,7 @@ function preface
          sleep 1
          echo ""
          sleep 1
+
          backup_current_dot_nscde
          rename_config_files
          replace_confnames_in_files
@@ -555,7 +550,7 @@ function preface
    done
 }
 
-if (( $noninteractive == 0 )); then
+if (( $interactive == 1 )); then
    preface
 else
    backup_current_dot_nscde
