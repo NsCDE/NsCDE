@@ -11,7 +11,7 @@ ISED="$NSCDE_TOOLSDIR/ised"
 function backup_current_dot_nscde
 {
    if [ -d "$HOME/.NsCDE" ]; then
-      confdir_size=$(du -k "$HOME/.NsCDE")
+      confdir_size=$(du -ks "$HOME/.NsCDE" | awk '{ print $1 }')
       if (( $confdir_size > 204800 )); then
          echo "Error: your $HOME/.NsCDE directory has more then 200 MB. Something appears to be"
          echo "wrong with your NsCDE profile. Examine your profile, or back it up manually, and"
@@ -23,6 +23,7 @@ function backup_current_dot_nscde
          RETVAL1=$?
          if (($RETVAL1 == 0)); then
             echo "Backup copy of $HOME/.NsCDE saved as $HOME/dot_NsCDE_${stamp}.tar."
+            cd -
          else
             echo "Error: backing up $HOME/.NsCDE exited with exit status ${RETVAL1}."
             exit 3
@@ -403,6 +404,7 @@ function walk_and_change_pathnames_in_files
    done
 }
 
+backup_current_dot_nscde
 rename_config_files
 replace_confnames_in_files
 walk_and_change_pathnames_in_files
