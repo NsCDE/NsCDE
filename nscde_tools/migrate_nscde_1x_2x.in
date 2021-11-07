@@ -219,15 +219,15 @@ function replace_pathnames_in_files
    $ISED -c 's/\$\[NSCDE_ROOT\]\/bin\/confset\.py/\$\[NSCDE_TOOLSDIR\]\/confset/g' -o -f - > /tmp/_migrate_tmp1.$$
 
    OSMACH=$(uname -sm | tr ' ' '_')
-   cat /tmp/_migrate_tmp1.$$ | $ISED -c "s/\$NSCDE_ROOT\/bin\/fpclock-$OSMACH/\$NSCDE_LIBDIR\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\${NSCDE_ROOT}\/bin\/fpclock-$OSMACH/\${NSCDE_LIBDIR}\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\/opt\/NsCDE\/bin\/fpclock-$OSMACH/\$NSCDE_LIBDIR\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\$\[NSCDE_ROOT\]\/bin\/fpclock-$OSMACH/\$\[NSCDE_LIBDIR\]\/$OSMACH\/fpclock/g" -o -f - > /tmp/_migrate_tmp0.$$
+   cat /tmp/_migrate_tmp1.$$ | $ISED -c "s/\$NSCDE_ROOT\/bin\/fpclock-$OSMACH/\$NSCDE_TOOLSDIR\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\${NSCDE_ROOT}\/bin\/fpclock-$OSMACH/\${NSCDE_TOOLSDIR}\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\/opt\/NsCDE\/bin\/fpclock-$OSMACH/\$NSCDE_TOOLSDIR\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\$\[NSCDE_ROOT\]\/bin\/fpclock-$OSMACH/\$\[NSCDE_TOOLSDIR\]\/$OSMACH\/fpclock/g" -o -f - > /tmp/_migrate_tmp0.$$
 
-   cat /tmp/_migrate_tmp0.$$ | $ISED -c "s/\$NSCDE_ROOT\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$NSCDE_LIBDIR\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\${NSCDE_ROOT}\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\${NSCDE_LIBDIR}\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\/opt\/NsCDE\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$NSCDE_LIBDIR\/$OSMACH\/fpclock/g" -o -f - | \
-   $ISED -c "s/\$\[NSCDE_ROOT\]\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$\[NSCDE_LIBDIR\]\/$OSMACH\/fpclock/g" -o -f - > /tmp/_migrate_tmp1.$$
+   cat /tmp/_migrate_tmp0.$$ | $ISED -c "s/\$NSCDE_ROOT\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$NSCDE_TOOLSDIR\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\${NSCDE_ROOT}\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\${NSCDE_TOOLSDIR}\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\/opt\/NsCDE\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$NSCDE_TOOLSDIR\/$OSMACH\/fpclock/g" -o -f - | \
+   $ISED -c "s/\$\[NSCDE_ROOT\]\/bin\/fpclock-\$(uname -s)_\$(uname -m)/\$\[NSCDE_TOOLSDIR\]\/$OSMACH\/fpclock/g" -o -f - > /tmp/_migrate_tmp1.$$
 
    cat /tmp/_migrate_tmp1.$$ | $ISED -c 's/\$NSCDE_ROOT\/bin\/fpclock/\$NSCDE_TOOLSDIR\/fpclock/g' -o -f - | \
    $ISED -c 's/\${NSCDE_ROOT}\/bin\/fpclock/\${NSCDE_TOOLSDIR}\/fpclock/g' -o -f - | \
@@ -453,8 +453,13 @@ function replace_pathnames_in_files
    $ISED -c 's/\/opt\/NsCDE\/config/\$NSCDE_DATADIR\/fvwm/g' -o -f - | \
    $ISED -c 's/\$\[NSCDE_ROOT\]\/config/\$\[NSCDE_DATADIR\]\/fvwm/g' -o -f - > /tmp/_migrate_tmp1.$$
 
-   mv -f /tmp/_migrate_tmp1.$$ $1
-   rm -f /tmp/_migrate_tmp0.$$
+   cat /tmp/_migrate_tmp1.$$ | $ISED -c 's/\$NSCDE_ROOT\/share\/icons\/NsCDE/\$NSCDE_DATADIR\/icons\/NsCDE/g' -o -f - | \
+   $ISED -c 's/\${NSCDE_ROOT}\/share\/icons\/NsCDE/\${NSCDE_DATADIR}\/icons\/NsCDE/g' -o -f - | \
+   $ISED -c 's/\/opt\/NsCDE\/share\/icons\/NsCDE/\$NSCDE_DATADIR\/icons\/NsCDE/g' -o -f - | \
+   $ISED -c 's/\$\[NSCDE_ROOT\]\/share\/icons\/NsCDE/\$\[NSCDE_DATADIR\]\/icons\/NsCDE/g' -o -f - > /tmp/_migrate_tmp0.$$
+
+   cat /tmp/_migrate_tmp0.$$ > $1
+   rm -f /tmp/_migrate_tmp1.$$
 }
 
 function replace_confnames_in_files {
