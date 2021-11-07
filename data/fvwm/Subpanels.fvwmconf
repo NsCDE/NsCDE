@@ -7,10 +7,10 @@
 # Runtime selector of configuration for Sub Panels / FvwmButtons
 
 Test (EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/Subpanels.actions !f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
- Exec exec HAS_WINDOWNAME=1 SYSMODE=0 $[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
+ Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels -f -s > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 
 Test (!EnvMatch FVWM_IS_FVWM3 1, f $[FVWM_USERDIR]/Subpanels.actions !f $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen) \
- Exec exec HAS_WINDOWNAME=0 SYSMODE=0 $[NSCDE_TOOLSDIR]/generate_subpanels > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen
+ Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels -w -s > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen
 
 # We are dealing with FVWM3
 Test (EnvMatch FVWM_IS_FVWM3 1, !f $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen) \
