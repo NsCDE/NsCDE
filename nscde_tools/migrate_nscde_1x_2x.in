@@ -27,6 +27,7 @@ if (( $? != 0)); then
 fi
 
 ISED="$NSCDE_TOOLSDIR/ised"
+OS=$(uname -s)
 
 if [ ! -x "$ISED" ]; then
    echo "Error: ised script wrapper not found. Check if NSCDE_TOOLSDIR is set."
@@ -45,21 +46,40 @@ function backup_current_dot_nscde
          sleep 3
          exit 2
       else
-         stamp=$(date +%d-%m-%Y-%H-%M-%S)
-         cd "$HOME" && tar cpf dot_NsCDE_${stamp}.tar .NsCDE
-         RETVAL1=$?
-         if (($RETVAL1 == 0)); then
-            echo "Backup copy of $HOME/.NsCDE saved as $HOME/dot_NsCDE_${stamp}.tar."
-            cd -
-            if (($? != 0)); then
-               echo "Error: cannot change directory back to $HOME/.NsCDE"
-               sleep 3
-               exit 5
-            fi
+         cd "$HOME"
+         if (($? != 0)); then
+            echo "Error: cannot change directory to $HOME"
+            exit 6
          else
-            echo "Error: backing up $HOME/.NsCDE exited with exit status ${RETVAL1}."
-            sleep 3
-            exit 3
+            stamp=$(date +%d-%m-%Y-%H-%M-%S)
+            case $OS in
+            Linux|NetBSD|DragonFly|FreeBSD)
+               tar cpf dot_NsCDE_${stamp}.tar --exclude '.NsCDE/tmp/fvwm_mfl.sock' .NsCDE
+               RETVAL1=$?
+            ;;
+            OpenBSD)
+               tar -s '/.NsCDE\/tmp\/fvwm_mfl\.sock//' -cf dot_NsCDE_stamp.tar .NsCDE
+               RETVAL1=$?
+            ;;
+            SunOS)
+               tar cpf dot_NsCDE_${stamp}.tar .NsCDE
+               true
+               RETVAL1=$?
+            ;;
+            esac
+            if (($RETVAL1 == 0)); then
+               echo "Backup copy of $HOME/.NsCDE saved as $HOME/dot_NsCDE_${stamp}.tar."
+               cd -
+               if (($? != 0)); then
+                  echo "Error: cannot change directory back to $HOME/.NsCDE"
+                  sleep 3
+                  exit 5
+               fi
+            else
+               echo "Error: backing up $HOME/.NsCDE exited with exit status ${RETVAL1}."
+               sleep 3
+               exit 3
+            fi
          fi
       fi
    fi
