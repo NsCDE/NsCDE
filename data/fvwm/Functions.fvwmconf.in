@@ -2321,7 +2321,26 @@ AddToFunc f_GWMRenameWorkspaceHelper
 ######################
 
 # Main upgrade caller
-DestroyFunc f_Upgrade
-AddToFunc f_Upgrade
-+ I Nop
+DestroyFunc f_Upgrader
+AddToFunc f_Upgrader
++ I Test (f $[FVWM_USERDIR]/NsCDE-Colorset.conf, f $[FVWM_USERDIR]/NsCDE-Backdrops.conf) f_Upgrade_1x_to_2x
+
+DestroyFunc f_Upgrade_1x_to_2x
+AddToFunc f_Upgrade_1x_to_2x
++ I Test (!x xterm) f_Notifier \
+ "Setup Dialog Error" "Dismiss" "NsCDE/Error.xpm" \
+ "Error: Cannot continue with NsCDE 2.x upgrade procedure without xterm program. Aborting action."
++ I Test (!x xterm) Break
++ I EdgeThickness 0
++ I Exec exec \
+    xterm -g 94x26 \
+          -fa "scalable=true:spacing=mono:size=16" \
+          -bg '#68006f008200' -fg '#ffffffffffff' \
+          -title "Upgrade NsCDE Profile" -name "migrate_nscde_1x_2x" \
+          -e "$[NSCDE_TOOLSDIR]/migrate_nscde_1x_2x" -i
++ I Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 1800 All ("migrate_nscde_1x_2x", CirculateHit) Maximize fullscreen
++ I Test (!EnvMatch FVWM_IS_FVWM3 1, Version >= 2.6.8) Schedule 1800 All ("migrate_nscde_1x_2x", CirculateHit) Maximize fullscreen
++ I Test (!EnvMatch FVWM_IS_FVWM3 1, Version < 2.6.8) Schedule 1800 All ("migrate_nscde_1x_2x", CirculateHit) Maximize ewmhiwa
++ I Schedule 2000 All ("migrate_nscde_1x_2x", CirculateHit) Layer 0 6
++ I Break
 

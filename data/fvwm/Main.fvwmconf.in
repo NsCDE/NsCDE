@@ -282,13 +282,14 @@ DestroyFunc InitFunction
 AddToFunc InitFunction
 + I Echo NsCDE: Executing InitFunction
 + I Test (!f "$[FVWM_USERDIR]/NsCDE.conf") f_FirstSetup
-+ I Schedule 5000 f_Upgrade
++ I Schedule 2000 f_Upgrader
 
 # Same for SessionInitFunction
 DestroyFunc SessionInitFunction
 AddToFunc SessionInitFunction
 + I Echo NsCDE: Executing SessionInitFunction
 + I Test (!f "$[FVWM_USERDIR]/NsCDE.conf") f_FirstSetup
++ I Schedule 2000 f_Upgrader
 
 # Called on FVWM restart. Manages some workarounds initially.
 # User can put custom hooks in f_UserRestartFunction
@@ -298,7 +299,7 @@ AddToFunc RestartFunction
 + I All (Iconic, State 3) WindowStyle IconBackgroundColorset 54
 + I All (Iconic, State 4) WindowStyle IconBackgroundColorset 56
 + I All (FrontPanel,CirculateHit) PlaceAgain
-+ I Schedule 5000 f_Upgrade
++ I Schedule 2000 f_Upgrader
 + I f_UserRestartFunction
 
 ################################################################

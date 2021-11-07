@@ -1,6 +1,6 @@
 #!@KSH@
 
-if [ -f "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun" ]; then
+if [ -f "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun" ] && [ "x$1" == "x-i" ]; then
    exit 0
 fi
 
@@ -562,6 +562,11 @@ function preface
          rename_config_files
          replace_confnames_in_files
          walk_and_change_pathnames_in_files
+
+         echo "Done. Restarting ..."
+         sleep 3
+         $NSCDE_ROOT/bin/nscde_fvwmclnt Restart
+
          exit $?
       ;;
    
