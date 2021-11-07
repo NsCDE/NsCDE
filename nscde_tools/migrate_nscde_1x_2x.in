@@ -570,6 +570,12 @@ function preface
 
          echo "Done. Restarting ..."
          sleep 3
+
+         # Make sure there is no garbage here
+         rm -f  $HOME/.NsCDE/Subpanels.fvwm3.fvwmgen
+         rm -f  $HOME/.NsCDE/Subpanels.fvwm2.fvwmgen
+
+         # Restart finally
          $NSCDE_ROOT/bin/nscde_fvwmclnt Restart
 
          exit $?
