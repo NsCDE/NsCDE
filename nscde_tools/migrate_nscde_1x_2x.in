@@ -458,6 +458,7 @@ function replace_pathnames_in_files
    $ISED -c 's/\/opt\/NsCDE\/share\/icons\/NsCDE/\$NSCDE_DATADIR\/icons\/NsCDE/g' -o -f - | \
    $ISED -c 's/\$\[NSCDE_ROOT\]\/share\/icons\/NsCDE/\$\[NSCDE_DATADIR\]\/icons\/NsCDE/g' -o -f - > /tmp/_migrate_tmp0.$$
 
+   # Use cat(1) instead of mv(1) to preserve permissions and other file attributes.
    cat /tmp/_migrate_tmp0.$$ > $1
    rm -f /tmp/_migrate_tmp1.$$
 }
@@ -472,21 +473,21 @@ function replace_confnames_in_files {
    for oce in $old_confs_escaped
    do
       oce_new=$(echo "${oce}" | sed 's/^NsCDE-//g; s/\.conf/\.fvwmconf/g')
-      echo "Changing ${oce} occurences to ${oce_new} in all regular files inside ~/.NsCDE"
+      echo "Changing ${oce/\\/} occurences to ${oce_new/\\/} in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${oce}/${oce_new}/g" -f {} \;
    done
 
    for oge in $old_genconfs_escaped
    do
       oge_new=$(echo "${oge}" | sed 's/^NsCDE-//g; s/\.conf/\.fvwmgen/g')
-      echo "Changing ${oge} occurences to ${oge_new} in all regular files inside ~/.NsCDE"
+      echo "Changing ${oge/\\/} occurences to ${oge_new/\\/} in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${oge}/${oge_new}/g" -f {} \;
    done
 
    for ole in $old_locals_escaped
    do
       ole_new=$(echo "${ole}" | sed 's/^NsCDE-//g; s/\.local/\.fvwmlocal/g')
-      echo "Changing ${ole} occurences to ${ole_new} in all regular files inside ~/.NsCDE"
+      echo "Changing ${ole/\\/} occurences to ${ole_new/\\/} in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${ole}/${ole_new}/g" -f {} \;
    done
 }
