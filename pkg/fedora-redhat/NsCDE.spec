@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -50,7 +50,6 @@ autoreconf -ivf
 %make_install
 
 %files
-%doc ChangeLog INSTALL.md README.localization README.md ReleaseNotes.txt TODO
 %{_bindir}/*
 %{_libexecdir}/%{name}/
 %{_libdir}/%{name}/

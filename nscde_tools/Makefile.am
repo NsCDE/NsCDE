@@ -52,7 +52,7 @@ clean-local:
 	-rm -f $(SCRIPTINS)
 
 install-data-hook:
-	chmod 0644 $(DESTDIR)$(NSCDE_DATADIR)/style_managers.shlib
+	chmod 0644 $(DESTDIR)$(NSCDE_TOOLSDIR)/style_managers.shlib
 	NSCDE_DATADIR=$(DESTDIR)$(NSCDE_DATADIR) HAS_WINDOWNAME=0 SYSMODE=1 $(KSH) $(srcdir)/generate_subpanels > $(DESTDIR)$(FVWM_DATADIR)/Subpanels.fvwm2.fvwmconf
 	NSCDE_DATADIR=$(DESTDIR)$(NSCDE_DATADIR) HAS_WINDOWNAME=1 SYSMODE=1 $(KSH) $(srcdir)/generate_subpanels > $(DESTDIR)$(FVWM_DATADIR)/Subpanels.fvwm3.fvwmconf
 
