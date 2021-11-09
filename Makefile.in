@@ -355,7 +355,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 AUTOMAKE_OPTIONS = 1.4
-SUBDIRS = src po docbook bin data lib nscde_tools xdg
+SUBDIRS = src po doc bin data lib nscde_tools xdg
 all: all-recursive
 
 .SUFFIXES:
@@ -735,7 +735,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-local mostlyclean-am
+clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -755,7 +755,8 @@ info: info-recursive
 info-am:
 
 install-data-am:
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
@@ -801,30 +802,44 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am:
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-data-am \
+	install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am \
 	am--refresh check check-am clean clean-cscope clean-generic \
-	clean-local cscope cscopelist-am ctags ctags-am dist dist-all \
-	dist-bzip2 dist-gzip dist-lzip dist-shar dist-tarZ dist-xz \
-	dist-zip dist-zstd distcheck distclean distclean-generic \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
+	cscope cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
+	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
+	dist-zstd distcheck distclean distclean-generic distclean-tags \
+	distcleancheck distdir distuninstallcheck dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-data-hook install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs installdirs-am \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am
+	uninstall-am uninstall-hook
 
 .PRECIOUS: Makefile
 
 
-clean-local:
-	-rm -f data/fvwm/Main.fvwmconf
+install-data-hook:
+	$(mkinstalldirs) $(DESTDIR)$(docdir)
+	-cp $(srcdir)/README.md $(DESTDIR)$(docdir)/
+	-cp $(srcdir)/INSTALL.md $(DESTDIR)$(docdir)/
+	-cp $(srcdir)/ChangeLog $(DESTDIR)$(docdir)/
+	-cp $(srcdir)/COPYING $(DESTDIR)$(docdir)/LICENSE
+	-cp $(srcdir)/ReleaseNotes.txt $(DESTDIR)$(docdir)/
+	-cp $(srcdir)/README.localization $(DESTDIR)$(docdir)/
+
+uninstall-hook:
+	test -d $(DESTDIR)$(docdir) && \
+	(cd $(DESTDIR)$(docdir) && rm -f README.md INSTALL.md \
+	ChangeLog LICENSE ReleaseNotes.txt README.localization); \
+	test -d $(DESTDIR)$(docdir) && rmdir $(DESTDIR)$(docdir) || :
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

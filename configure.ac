@@ -307,7 +307,8 @@ AC_OUTPUT(
 	src/pclock/Makefile
 	src/pclock/src/Makefile
 
-	docbook/Makefile
+	doc/Makefile
+	doc/docbook/Makefile
 
 	po/Makefile
 

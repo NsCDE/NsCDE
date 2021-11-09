@@ -1,0 +1,37 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Called from f_FrontPanelAction to populate Front Panel Actions
+
+Button="$1"
+MouseBtn="$2"
+
+SysActionFile="$NSCDE_DATADIR/defaults/FrontPanel.actions"
+if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
+   UserActionFile="$FVWM_USERDIR/FrontPanel.actions"
+else
+   UserActionFile="/dev/null"
+fi
+
+ActionLine=$(egrep "^${Button},.*,${MouseBtn},.*,.*" $UserActionFile $SysActionFile | head -1)
+if [ "x${ActionLine}" != "x" ]; then
+   echo $ActionLine | while IFS="," read button icon mousebutton check cmd
+   do
+      if [ "$check" == "NOCHK" ]; then
+         echo "Exec exec $cmd"
+      elif [ "$check" == "FVWM" ]; then
+         echo "$cmd"
+      elif [ "${icon}" == "__APPLET__" ]; then
+         echo "$cmd"
+      else
+         echo "Test (x $check) Exec exec $cmd"
+      fi
+   done
+else
+   echo "Nop"
+fi

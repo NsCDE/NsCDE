@@ -1,0 +1,271 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ExecDialog}
+WindowLocaleTitle {Execute a command ...}
+WindowSize 386 174
+Colorset 22
+
+Init
+Begin
+   Set $FontBoldMedium = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t bold -s medium -Z 14} 1 -1)
+   ChangeFont 1 $FontBoldMedium
+
+   Set $FontNormalSmall = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11} 1 -1)
+   ChangeFont 2 $FontNormalSmall
+   ChangeFont 3 $FontNormalSmall
+
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
+   ChangeFont 5 $BtnFont
+   ChangeFont 6 $BtnFont
+
+   Set $FontNormalMono = (GetOutput {$NSCDE_TOOLSDIR/getfont -m -t normal -s medium -Z 12} 1 -1)
+   ChangeFont 4 $FontNormalMono
+
+   WarpPointer 2
+   Key Escape A 1 1 {Quit}
+   Key Return A 1 1 {Go}
+   Key Return C 1 1 {TerminalMode}
+   Key Return S 1 1 {LeaveOpen}
+   Key Return CS 1 1 {TerminalModePlusLeaveOpen}
+   Key F1 A 5 1 5 {KeyHelp}
+   Key Help A 1 5 {KeyHelp}
+   Key Up A 1 3 {HistUp}
+   Key Down A 1 4 {HistDown}
+
+   # Locale stuff: Hack to keep leading or ending space(s)
+   # which will be trimmed by LocaleTitle Widget directive.
+   ChangeLocaleTitle 2 (GetTitle 2)
+   ChangeLocaleTitle 3 (GetTitle 3)
+
+   Set $posmaxcmd = {uniq $FVWM_USERDIR/.Exec-History | wc -l}
+   Set $pos = (GetOutput $posmaxcmd 1 1)
+   Set $pos = (Add $pos 1)
+   Set $posmax = $pos
+
+   # Nasty workaround because ForeColor of the TextField
+   # widget is not applied and global value is used anyway.
+   # How it works: if wanted Colorset is applied with
+   # ChangeColorset to (any?) other widget after initialization
+   # of the script, colorset foreground color will be properly
+   # applied to TextField widget too. Even if fake widget is
+   # hidden, this workaround still works as it should. 
+   # We define hidden PushButton widhet on the end of the script
+   # and send string "workaround" to routine 1 of the TextField
+   # widget ("1 : " can be attached to any widget in fact ...).
+   # This routine than changes the colorset of the hidden
+   # PushButton widget, and this then triggers change in buggy
+   # TextField to be applied.
+   # This bug can be seen when default colorset for the script has
+   # different foreground color than colorset applied to the
+   # TextField widget. Another possible workaround is to define
+   # globally back/fore/sh/hi colors for the script instead of
+   # (or after definition) of a colorset, but this is unflexible,
+   # since script background cannot be changed dinamically or
+   # from outside of the script as colorset functionality allows.
+   Do {Schedule 50 SendToModule ExecDialog SendString 4 1 workaround}
+   Do {Schedule 250 SendToModule ExecDialog SendString 4 1 workaround}
+   Do {Schedule 350 SendToModule ExecDialog SendString 4 1 workaround}
+End
+
+Widget 1
+   Property
+   Size 344 20
+   Position 26 14
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   LocaleTitle {Type a command and execute.}
+   Main
+      Case message of
+      1 :
+      Begin
+         Set $keystr = (LastString)
+
+         If $keystr == {Quit} Then
+         Begin
+            Quit
+         End
+
+         If $keystr == {Go} Then
+         Begin
+            SendSignal 1 2
+         End
+
+         If $keystr == {TerminalMode} Then
+         Begin
+            If (GetValue 2) == 0 Then
+               ChangeValue 2 1
+            Else
+               ChangeValue 2 0
+         End
+
+         If $keystr == {LeaveOpen} Then
+         Begin
+            If (GetValue 3) == 0 Then
+               ChangeValue 3 1
+            Else
+               ChangeValue 3 0
+         End
+
+         If $keystr == {TerminalModePlusLeaveOpen} Then
+         Begin
+            If (GetValue 2) == 0 Then
+               ChangeValue 2 1
+            Else
+               ChangeValue 2 0
+
+            If (GetValue 3) == 0 Then
+               ChangeValue 3 1
+            Else
+               ChangeValue 3 0
+         End
+
+         SendSignal 1 2
+      End
+
+      2 :
+      Begin
+            If (GetValue 2) == 0 Then
+            Begin
+               Do {Exec exec /usr/bin/ksh93 -c '} (GetTitle 4) { & disown'}
+            End
+            Else
+            Begin
+               Do {Exec exec $[infostore.terminal] -e '} (GetTitle 4) {' & disown}
+            End
+            Do {Exec echo '} (GetTitle 4) {' >> $FVWM_USERDIR/.Exec-History}
+
+            If (GetValue 3) == 0 Then
+            Begin
+               Quit
+            End
+      End
+
+      3 :
+      Begin
+         If $pos >= 2 Then
+         Begin
+            Set $poscmd = {echo $(( } $pos { - 1 ))}
+            Set $pos = (GetOutput $poscmd 1 -1)
+            Set $cmdfromhist = (GetOutput {uniq $FVWM_USERDIR/.Exec-History} $pos -1)
+            ChangeTitle 4 $cmdfromhist
+            ChangeMinValue 4 9999
+         End
+      End
+
+      4 :
+      Begin
+         If $pos < $posmax Then
+         Begin
+            Set $pos = (Add $pos 1)
+            Set $cmdfromhist = (GetOutput {uniq $FVWM_USERDIR/.Exec-History} $pos -1)
+            ChangeTitle 4 $cmdfromhist
+            ChangeMinValue 4 9999
+         End
+      End
+
+      5 :
+      Begin
+         Do {f_DisplayURL "$[gt.Exec Dialog]" html/NsCDE-ExecDialog.html}
+      End
+End
+
+Widget 2
+   Property
+   Size 300 20
+   Position 20 86
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Value 0
+   Flags NoReliefString
+   Title { Execute in terminal}
+End
+
+Widget 3
+   Property
+   Size 300 20
+   Position 190 86
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Value 0
+   Flags NoReliefString
+   Title { Leave this dialog open}
+End
+
+Widget 4
+   Property
+   Size 344 0
+   Position 20 48
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Font "xft:::pixelsize=15"
+   Colorset 20
+   Main
+      Case message of
+      # Nasty workaround because ForeColor of the TextField
+      # widget is not applied and global value is used anyway.
+      # See end of the Init procedure for explanation.
+      1 :
+      Begin
+         If (LastString) == {workaround} Then
+         Begin
+            ChangeColorset 8 20
+         End
+      End
+End
+
+Widget 5
+   Property
+   Size 100 20
+   Position 20 134
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Exec}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 1 2
+      End
+End
+
+Widget 6
+   Property
+   Size 100 20
+   Position 264 134
+   Type PushButton
+   LocaleTitle {Dismiss}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 7
+   Property
+   Size 380 1
+   Position 2 118
+   Type Rectangle
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 8
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Title {WWWWWWWWWWWWWWWWWWWWWWWWWWW}
+   Flags NoReliefString Hidden NoFocus
+End
+

@@ -1,0 +1,484 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# NsCDE: colormgr shell script
+# ColorMgr FvwmScript backgroud worker
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Defaults for -t and -e.
+PreviewMode=0
+EchoInfo=0
+FpVariant=5
+WsmVariant=0
+
+# Load common functions
+if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
+   . ${NSCDE_TOOLSDIR}/style_managers.shlib
+else
+   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   exit 1
+fi
+
+#
+# Local ColorMgr specific functions
+#
+
+# Sanity check while importing new palette
+function CheckPalette
+{
+   egrep '^#[[:xdigit:]]{12}' $1 | wc -l
+}
+
+# Generate full 40 colors from the palette in 80x74 icon presented in ColorMgr
+function GenFullPalette
+{
+   PalettePath="$1"
+   mkdir -p ${FVWM_USERDIR}/tmp || exit 1
+
+   if [ -s "${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm" ]; then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PalettePath} -n $Ncolors \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm \
+       -c > ${FVWM_USERDIR}/tmp/_fullpalette.xpm
+
+      echo ${FVWM_USERDIR}/tmp/_fullpalette.xpm
+   else
+      echo "Error: Cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
+      exit 3
+   fi
+}
+
+# In Apply mode, generate colors in pixmaps which are program elements (-P)
+function ProgBits
+{
+   # Notice about WSM* pixmaps:
+   # South East margin of WSM buttons implemented as icon of ItemDraw.
+   # We cannot use rectangle in dynamic desk WSM
+
+   mkdir -p ${FVWM_USERDIR}/icons/NsCDE || exit 1
+
+   # Type b, subtype 2
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b2 \
+       -P 2 -b
+
+   # Type b, subtype 3
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b3 \
+       -P 3 -b
+
+   # Type b, subtype 5
+   if (($FpVariant == 5)); then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_b5 \
+          -P 5 -b
+   fi
+
+   # Type b, subtype 6
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b6 \
+       -P 6 -b
+
+   # Type b, subtype 7
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_b7 \
+       -P 7 -b
+
+   # Type b, subtype 8
+   if (($FpVariant == 8)); then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_b8 \
+          -P 8 -b
+   fi
+
+   # Type c
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+       -i ${NSCDE_DATADIR}/config_templates/progbits/type_c \
+       -c
+
+   # Type c5
+   if (($FpVariant == 5)); then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_c5 \
+          -c
+   fi
+
+   # Type c8
+   if (($FpVariant == 8)); then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o ${FVWM_USERDIR}/icons/NsCDE -g xpm \
+          -i ${NSCDE_DATADIR}/config_templates/progbits/type_c8 \
+          -c
+   fi
+
+   # Freedesktop icon type (type c)
+   mkdir -p ""${HOME}"/.icons/NsCDE/tmp"
+
+   # actions
+   mkdir -p "${HOME}"/.icons/NsCDE/{48x48,32x32,24x24,22x22,16x16}/actions
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+    -n $Ncolors -p ${PaletteNamePath} \
+    -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
+    -i ${NSCDE_DATADIR}/config_templates/progbits/icon-theme/actions \
+    -c
+   if (($? == 0)); then
+      for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
+      do
+         xpmf="${xpmf##*/}"
+         desthint="${xpmf%%-*}"
+         namehint="${xpmf#*-}"
+         mv "${HOME}/.icons/NsCDE/tmp/${xpmf}" "${HOME}/.icons/NsCDE/${desthint}/actions/${namehint}"
+      done
+   fi
+
+   # status
+   mkdir -p "${HOME}"/.icons/NsCDE/{48x48,32x32,24x24,22x22,16x16}/status
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+    -n $Ncolors -p ${PaletteNamePath} \
+    -o "${HOME}/.icons/NsCDE/tmp" -g xpm \
+    -i ${NSCDE_DATADIR}/config_templates/progbits/icon-theme/status \
+    -c
+   if (($? == 0)); then
+      for xpmf in ${HOME}/.icons/NsCDE/tmp/*.xpm
+      do
+         xpmf="${xpmf##*/}"
+         desthint="${xpmf%%-*}"
+         namehint="${xpmf#*-}"
+         mv "${HOME}/.icons/NsCDE/tmp/${xpmf}" "${HOME}/.icons/NsCDE/${desthint}/status/${namehint}"
+      done
+   fi
+
+   rmdir "${HOME}/.icons/NsCDE/tmp"
+
+   # Front Panel Stock CDE icons
+   for fpicon in Fphome.l.pm Fpterm.l.pm Fpprnt.l.pm \
+       Fpapps.l.pm Fphelp.l.pm FpCM.l.pm Fppenpd.l.pm \
+       Fpstyle.l.pm
+   do
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_DATADIR}/icons/NsCDE/$fpicon -P 5 \
+       -b > ${FVWM_USERDIR}/icons/NsCDE/$fpicon
+   done
+
+   # Default fallback background
+   ${NSCDE_TOOLSDIR}/palette_colorgen \
+    -p ${PaletteNamePath} -n $Ncolors \
+    -i ${NSCDE_DATADIR}/config_templates/BGdefault -P 3 \
+    -b > ${FVWM_USERDIR}/.BGdefault
+}
+
+# Regenerate X resources database file
+function Xresources
+{
+   mkdir -p ${FVWM_USERDIR}/tmp
+   if (($PreviewMode == 0)); then
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_DATADIR}/config_templates/Xdefaults \
+       -c > ${FVWM_USERDIR}/Xdefaults
+
+      if [ ! -s "${FVWM_USERDIR}/Xdefaults.fontdefs" ]; then
+         cat ${NSCDE_DATADIR}/config_templates/Xdefaults.fontdefs > "${FVWM_USERDIR}/Xdefaults.fontdefs"
+      fi
+
+      if [ ! -s "${FVWM_USERDIR}/Xdefaults.mouse" ]; then
+         cat ${NSCDE_DATADIR}/config_templates/Xdefaults.mouse > "${FVWM_USERDIR}/Xdefaults.mouse"
+      fi
+
+      if [ ! -f "${FVWM_USERDIR}/Xdefaults.local" ]; then
+         mkdir -p "${FVWM_USERDIR}"
+         touch "${FVWM_USERDIR}/Xdefaults.local"
+      fi
+
+      mkdir -p ${FVWM_USERDIR}/app-defaults
+
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -o "${FVWM_USERDIR}/app-defaults" -g tmpl \
+       -i ${NSCDE_DATADIR}/config_templates/app-defaults \
+       -c
+      for tmpl in ${FVWM_USERDIR}/app-defaults/*.tmpl
+      do
+         mv "$tmpl" $(echo "$tmpl" | sed 's/\.tmpl//g')
+      done
+
+      if [ -d "${FVWM_USERDIR}/templates/app-defaults" ]; then
+         ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -n $Ncolors \
+          -o "${FVWM_USERDIR}/app-defaults" -g tmpl \
+          -i "${FVWM_USERDIR}/templates/app-defaults" \
+          -c
+         for tmpl in ${FVWM_USERDIR}/app-defaults/*.tmpl
+         do
+            mv "$tmpl" $(echo "$tmpl" | sed 's/\.tmpl//g')
+         done
+      fi
+
+      # Put Stalonetray and Dunst here, we don't have a space
+      # for yet another checkbox on the Color Style Manager.
+
+      # Stalonetray
+      if [ -r "${FVWM_USERDIR}/Stalonetray.conf" ]; then
+         st_back=$($NSCDE_TOOLSDIR/palette_colorgen -p ${PaletteNamePath} -n $Ncolors -l | egrep "^sel_color_5" | cut -d" " -f 2)
+         echo "$st_back" | egrep -q '^#[[:xdigit:]]{12}'
+         if (($? == 0)); then
+            $NSCDE_TOOLSDIR/ised -c "s/^\([[:space:]]\+\)\?background[[:space:]]\+\(\"#.*\"\)/background \"${st_back}\"/g" \
+            -f "$FVWM_USERDIR/Stalonetray.conf"
+         fi
+      fi
+
+      # Dunst
+      if [ -r "$FVWM_USERDIR/Dunst.conf" ]; then
+         OIFS="$IFS"
+         IFS=" "
+            colorblock=$($NSCDE_TOOLSDIR/palette_colorgen -p ${PaletteNamePath} -n $Ncolors -s -l | \
+                         egrep '^bg_color_1|fg_color_1|ts_color_1|bg_color_2|fg_color_2|ts_color_2|bg_color_5|fg_color_5|ts_color_5')
+
+ 
+         ulbg=$(echo "$colorblock" | egrep '^bg_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k background -v "\"$ulbg\""
+         ulfg=$(echo "$colorblock" | egrep '^fg_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k foreground -v "\"$ulfg\""
+         ulfr=$(echo "$colorblock" | egrep '^ts_color_2 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_low -k frame_color -v "\"$ulfr\""
+ 
+         unbg=$(echo "$colorblock" | egrep '^bg_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k background -v "\"$unbg\""
+         unfg=$(echo "$colorblock" | egrep '^fg_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k foreground -v "\"$unfg\""
+         unfr=$(echo "$colorblock" | egrep '^ts_color_5 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_normal -k frame_color -v "\"$unfr\""
+ 
+         ucbg=$(echo "$colorblock" | egrep '^bg_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k background -v "\"$ucbg\""
+         ucfg=$(echo "$colorblock" | egrep '^fg_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k foreground -v "\"$ucfg\""
+         ucfr=$(echo "$colorblock" | egrep '^ts_color_1 #[[:xdigit:]]{6}$' | cut -d" " -f 2)
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s urgency_critical -k frame_color -v "\"$ucfr\""
+
+         $NSCDE_TOOLSDIR/confset -t ini -c "$FVWM_USERDIR/Dunst.conf" -s global -k frame_color -v "\"$ucbg\""
+
+         IFS="$OIFS"
+      fi
+   else
+      ${NSCDE_TOOLSDIR}/palette_colorgen \
+       -p ${PaletteNamePath} -n $Ncolors \
+       -i ${NSCDE_DATADIR}/config_templates/Xdefaults \
+       -c > ${FVWM_USERDIR}/tmp/Xdefaults-Preview
+
+      if (($EchoInfo == 1)); then
+         echo "${FVWM_USERDIR}/tmp/Xdefaults-Preview"
+      fi
+   fi
+}
+
+# Regenerate user's Colorset.fvwmgen
+function FvwmColorsets
+{
+   if ((WsmVariant == 1)); then
+      WsmArg="-w"
+   else
+      WsmArg=""
+   fi
+
+   if (($PreviewMode == 0)); then
+      if (($FpVariant == 5)); then
+         ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/Colorset.fvwmgen
+      fi
+      if (($FpVariant == 8)); then
+         ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -8 $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/Colorset.fvwmgen
+      fi
+   else
+      mkdir -p ${FVWM_USERDIR}/tmp || exit 1
+
+      if (($FpVariant == 5)); then
+         ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/tmp/Colorset-Preview.conf
+      fi
+
+      if (($FpVariant == 8)); then
+         ${NSCDE_TOOLSDIR}/palette_colorgen \
+          -p ${PaletteNamePath} -8 $WsmArg -n $Ncolors \
+          -f > ${FVWM_USERDIR}/tmp/Colorset-Preview.conf
+      fi
+
+      if (($EchoInfo == 1)); then
+         echo "${FVWM_USERDIR}/tmp/Colorset-Preview.conf"
+      fi
+   fi
+}
+
+# Sync existing backdrops according to new palette and number of colors
+function Backdrops
+{
+   mkdir -p ${FVWM_USERDIR}/backdrops || exit 1
+
+   # Initial
+   if [ ! -s "${FVWM_USERDIR}/Backdrops.fvwmgen" ]; then
+      mkdir -p "${FVWM_USERDIR}/tmp"
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec echo $[infostore.desknum] > "$[FVWM_USERDIR]/tmp/_ndesks"'
+      sync
+      sleep 1
+      DeskNo=$(<"${FVWM_USERDIR}/tmp/_ndesks")
+      rm "${FVWM_USERDIR}/tmp/_ndesks"
+      mkdir -p "${FVWM_USERDIR}/backer"
+      > "${FVWM_USERDIR}/Backdrops.fvwmgen"
+      while (($DeskNo != 0))
+      do
+         egrep "^Colorset 3${DeskNo}" "${NSCDE_DATADIR}/fvwm/Backdrops.fvwmconf" | \
+         sed 's/\$\[NSCDE_DATADIR\]\/defaults\/backer/\$\[FVWM_USERDIR\]\/backer/g' \
+          >> "${FVWM_USERDIR}/Backdrops.fvwmgen"
+         cp -f ${NSCDE_DATADIR}/defaults/backer/Desk${DeskNo}-*pm "${FVWM_USERDIR}/backer/"
+         ((DeskNo = DeskNo - 1))
+      done
+   fi
+
+   # Desks: 31 32 33 34 35 36 37 38
+   # Variants: 3, 5, 6, 7, 3, 5, 6, 7
+   if [ -s "${FVWM_USERDIR}/Backdrops.fvwmgen" ]; then
+      egrep '^Colorset 3(1|2|3|4|5|6|7|8) TiledPixmap \$\[FVWM_USERDIR\]\/' ${FVWM_USERDIR}/Backdrops.fvwmgen | \
+       sort -k2 -n | sed 's/\.pm$//g' | while IFS=" " read csetmark deskcset pixmark backdrop
+      do
+          basebackdrop="${backdrop##*/}"
+
+          if (($Ncolors == 4)); then
+             Variant=3
+          else
+             case $deskcset in
+                31) Variant=3 ;;
+                32) Variant=5 ;;
+                33) Variant=6 ;;
+                34) Variant=7 ;;
+                35) Variant=3 ;;
+                36) Variant=5 ;;
+                37) Variant=6 ;;
+                38) Variant=7 ;;
+             esac
+          fi
+
+          GetBackdrop "${basebackdrop##*Desk?-}"
+          if (($PreviewMode == 0)); then
+             ${NSCDE_TOOLSDIR}/palette_colorgen \
+              -p ${PaletteNamePath} -n $Ncolors \
+              -i ${BackdropNamePath} -P $Variant \
+              -b > ${FVWM_USERDIR}/backer/${basebackdrop}.pm
+          else
+             EchoInfo=0
+             mkdir -p ${FVWM_USERDIR}/tmp || exit 1
+             ${NSCDE_TOOLSDIR}/palette_colorgen \
+              -p ${PaletteNamePath} -n $Ncolors \
+              -i ${BackdropNamePath} -P $Variant \
+              -b > ${FVWM_USERDIR}/tmp/backer-${basebackdrop}.pm
+             echo ${FVWM_USERDIR}/tmp/backer-${basebackdrop}.pm
+          fi
+      done
+   fi
+}
+
+# Main getopt loop.
+# Options:
+# -C is for checking pallete sanity
+# -c is for specifying number of colors to use (4 or 8)
+# -t is for preview performance (places temporary files in FVWM_USERDIR/tmp
+# -e is echo mode - information for FvwmScript ColorMgr and BackdropMgr
+# -p generates palette menu
+# -g retrives palette path, files variables and echoes if in echo mode
+# -n returns palette name by value number from FvwmScript List widget
+# -N opposite of -n
+# -f Generates dynamic icon with all colors from the palette in ColorMgr
+# -F Generates Fvwm Colorset definitions in user's Colorset.fvwmgen
+# -P Regenerates in user's icon/NsCDE dir bits and pieces which are part of fvwm programs
+# -b Syncronizes existing backdrops with new palette color sheme
+# -X Syncronizes X resources file with new palette color sheme
+# -h Help
+while getopts C:c:85wtepg:n:N:f:FPbXh Option
+do
+   case $Option in
+      C)
+         CheckPalette $OPTARG
+      ;;
+      c)
+         Ncolors="$OPTARG"
+      ;;
+      5)
+         FpVariant=5
+      ;;
+      8)
+         FpVariant=8
+      ;;
+      w)
+         WsmVariant=1
+      ;;
+      t)
+         export PreviewMode=1
+      ;;
+      e)
+         export EchoInfo=1
+      ;;
+      p)
+         GeneratePaletteMenu
+      ;;
+      g)
+         GetPalette "$OPTARG"
+      ;;
+      n)
+         GetPaletteByNumber $OPTARG
+      ;;
+      N)
+         GetPaletteByName $OPTARG
+      ;;
+      f)
+         GenFullPalette $OPTARG
+      ;;
+      F)
+         FvwmColorsets
+      ;;
+      P)
+         if (($PreviewMode == 0)); then
+            ProgBits
+         else
+            echo "Not performing pixmap modification in preview mode."
+         fi
+      ;;
+      b)
+         Backdrops
+      ;;
+      X)
+         Xresources
+      ;;
+      h)
+         echo "Usage: ${0##*/} <options> ..."
+      ;;
+   esac
+done
+

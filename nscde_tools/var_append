@@ -1,0 +1,41 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+valsep="$1"
+varname="$2"
+varnewval="$3"
+
+if [ "$valsep" == "__space__" ]; then
+   valsep=" "
+fi
+
+eval varcontent='$'$varname
+
+for argv in "$valsep" "$varname" "$varnewval"
+do
+   if [ "x$argv" == "x" ]; then
+      echo "Usage: ${0##*/} <separator> <varname> <varvalue>" >&2
+      if [ "x$varname" != "x" ]; then
+         echo "$varcontent"
+      fi
+      exit 1
+   fi
+done
+
+echo "$varcontent" | tr "$valsep" "\n" | egrep -wq "$varnewval"
+if (($? != 0)); then
+   if [ "$varcontent" == "" ]; then
+      export $varname="${varnewval}"
+   else
+      export $varname="${varcontent}${valsep}${varnewval}"
+   fi
+fi
+
+if [ "x$varname" != "x" ]; then
+   eval echo '$'$varname
+fi

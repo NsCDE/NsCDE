@@ -1,0 +1,80 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+ARG="$1"
+
+function get_dpi
+{
+   if [ -z $DPI ]; then
+      type -p xdpyinfo > /dev/null 2>&1
+      if (($? == 0)); then
+         dpi1=$(xdpyinfo 2>/dev/null | egrep "resolution:.*dots per inch" | awk '{ print $2 }')
+         echo "${dpi1##*x}" | egrep -q "^[[:digit:]]+x[[:digit:]]+$"
+         if (($? == 0)); then
+            DPI=${dpi1##*x}
+         fi
+         if [ "x$DPI" == "x" ]; then
+            DPI=96
+         fi
+      else
+         DPI=96
+      fi
+   fi
+
+   if (($DPI <= 88 && $DPI != 75)); then
+      NSCDE_DPI=75
+   elif (($DPI > 88 && $DPI <= 102 && $DPI != 96)); then
+      NSCDE_DPI=96
+   elif (($DPI > 102 && $DPI <= 128 && $DPI != 120)); then
+      NSCDE_DPI=120
+   elif (($DPI > 128 && $DPI <= 152 && $DPI != 144)); then
+      NSCDE_DPI=144
+   elif (($DPI > 152 && $DPI != 192)); then
+      NSCDE_DPI=192
+   else
+      NSCDE_DPI=$DPI
+   fi
+
+   echo $NSCDE_DPI
+}
+
+function get_font_dpi
+{
+   if [ -z $NSCDE_FONT_DPI ]; then
+      NSCDE_FONT_DPI=$(xrdb -q | sed -n "s/^Xft\\.dpi:\([\t ]\+\)\?//gp")
+   fi
+
+   if [ "x$NSCDE_FONT_DPI" != "x" ]; then
+      # Normalize DPI
+      if (($NSCDE_FONT_DPI <= 88 && $NSCDE_FONT_DPI != 75)); then
+         NSCDE_FONT_DPI=75
+      elif (($NSCDE_FONT_DPI > 88 && $NSCDE_FONT_DPI <= 102 && $NSCDE_FONT_DPI != 96)); then
+         NSCDE_FONT_DPI=96
+      elif (($NSCDE_FONT_DPI > 102 && $NSCDE_FONT_DPI <= 128 && $NSCDE_FONT_DPI != 120)); then
+         NSCDE_FONT_DPI=120
+      elif (($NSCDE_FONT_DPI > 128 && $NSCDE_FONT_DPI <= 152 && $NSCDE_FONT_DPI != 144)); then
+         NSCDE_FONT_DPI=144
+      elif (($NSCDE_FONT_DPI > 152 && $NSCDE_FONT_DPI != 192)); then
+         NSCDE_FONT_DPI=192
+      fi
+
+      echo $NSCDE_FONT_DPI
+   else
+      echo $NSCDE_DPI
+   fi
+}
+
+if [ "$ARG" == "fontdpi" ]; then
+   get_font_dpi
+else
+   get_dpi
+fi
+

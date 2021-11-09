@@ -1,0 +1,52 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# This script is workaround for xdotool which is workaround for non-patched FvwmButtons
+# to get names of the subpanels in place.
+
+type -qp xdotool
+if (($? != 0)); then
+   echo "No xdotool found. Exiting." >&2
+   exit 1
+fi
+
+function xdofunc
+{
+   userid=$(id -u)
+   for subp in {1..20}
+   do
+      pgrep -U $userid -xf ".*FvwmButtons.*-transientpanel NsCDE-Subpanel${subp}$" >/dev/null
+      if (($? == 0)); then
+         xdotool search --name "NsCDE-Subpanel${subp}$" > /dev/null 2>&1
+         if (($? == 0)); then
+            echo "Refreshing subpanel NsCDE-Subpanel${subp}" >&2
+            $NSCDE_ROOT/bin/nscde_fvwmclnt "Exec exec xdotool search --name "NsCDE-Subpanel${subp}\$" \
+                         set_window --name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\" \
+                         --icon-name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\""
+         fi
+      fi
+   done
+}
+
+cnt=0
+while $(sleep 1)
+do
+   if (($cnt == 20)); then
+      exit 10
+   fi
+
+   xdotool search --name "NsCDE-Subpanel*" > /dev/null
+   if (($? == 0)); then
+      xdofunc
+   else
+      exit 0
+   fi
+
+   (( cnt = cnt + 1 ))
+done
+

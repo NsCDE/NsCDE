@@ -1,0 +1,122 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Main starting wrapper
+
+# Basic sanity check.
+if [ -z $HOME ]; then
+   echo "Error: HOME not set." >&2
+   exit 2
+else
+   export NSCDE_VERSION="2.0-git8daacfa-dirty"
+fi
+
+# Either print version and exit, or construct main options for and output
+if [ "$1" == "-V" ]; then
+   echo "NsCDE Version $NSCDE_VERSION"
+   exit 0
+elif [ "$1" == "-v" ]; then
+   echo "$NSCDE_VERSION"
+   exit 0
+else
+   export FVWM_OPTS="$@"
+   exec 2>&1
+   # exec 1>> "$HOME"/.xsession-errors
+fi
+
+# Find out which DPI we are using.
+DpiInfo=$(LC_ALL=C xdpyinfo | egrep 'resolution:.*dots per inch' | awk '{ print $2 }')
+echo "${DpiInfo}" | egrep -q "^[[:digit:]]+x[[:digit:]]+$"
+if (($? == 0)); then
+   export DPI="${DpiInfo##*x}"
+else
+   echo "Warning: DPI \"$DPI\" is not recognized as X DPI specification. Setting DPI to 96"
+   export DPI=96
+fi
+
+# Set main NSCDE and FVWM variables. Most of the things later depends
+# on this core variables.
+# FVWM_DATADIR will be undefined briefly when fvwm starts, but
+# it will be set again to NsCDE value from Main.fvwmconf.
+export NSCDE_OS=$(uname -s)
+export NSCDE_ROOT=/opt/product
+export NSCDE_DATADIR=/opt/product/share/NsCDE
+export NSCDE_LIBDIR=/opt/product/lib/NsCDE
+export NSCDE_TOOLSDIR=/opt/product/libexec/NsCDE
+export FVWM_DATADIR="/opt/product/share/NsCDE/fvwm"
+export FVWM_USERDIR="${HOME}/.NsCDE"
+
+mkdir -p "${FVWM_USERDIR}/tmp"
+
+echo "$PATH" | egrep -q "/opt/product/bin"
+if (($? != 0)); then
+   export PATH="${PATH}:/opt/product/bin"
+fi
+
+# Find fvwm(1) binary. This is a critical point.
+# We cannot continue without main workforce.
+if [ "x$FVWM_BIN" == "x" ]; then
+   for fvwmname in fvwm3 fvwm fvwm2
+   do
+      FVWM_BIN=$(whence -p $fvwmname)
+      if (($? == 0)); then
+         break
+      fi
+   done
+fi
+if [ "x$FVWM_BIN" == "x" ]; then
+   echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH and"
+   echo "environment variable FVWM_BIN is not set. Exiting."
+   exit 3
+fi
+
+# Handle our X defaults if it exists.
+if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
+   cd $HOME
+   whence -qp xrdb cpp
+   if (($? == 0)); then
+      xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
+   else
+      echo "Warning: cannot find xrdb or cpp in ${PATH}, ${FVWM_USERDIR}/Xdefaults will not be processed"
+   fi
+else
+   echo "Warning: cannot read ${FVWM_USERDIR}/Xdefaults file"
+fi
+
+# Handle our app-defaults dir if it exists.
+if [ -d "${FVWM_USERDIR}/app-defaults" ]; then
+   export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
+else
+   echo "Warning: cannot find ${FVWM_USERDIR}/app-defaults directory"
+fi
+
+# Set xset(1), setxkbmap(1), xgamma(1), xmodmap(1) and such things from
+# Xset.conf if it exists.
+if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
+   . "${FVWM_USERDIR}/Xset.conf"
+else
+   echo "Notice: ${FVWM_USERDIR}/Xset.conf does not exist"
+fi
+
+# Early user customizations if needed can be set here.
+if [ -x "${FVWM_USERDIR}/libexec/pre_start.sh" ]; then
+   . "${FVWM_USERDIR}/libexec/pre_start.sh"
+fi
+
+# Now exec fvwm. Forking Main.fvwmconf should be a rare case,
+# but we never know. From Main everything else is read.
+if [ -r ${FVWM_USERDIR}/Main.fvwmconf ]; then
+   exec $FVWM_BIN -f ${FVWM_USERDIR}/Main.fvwmconf $FVWM_OPTS
+else
+   exec $FVWM_BIN -f ${FVWM_DATADIR}/Main.fvwmconf $FVWM_OPTS
+fi
+
+# Do not be picky if there is some failure left.
+# Do the best effort and exit always with 0.
+exit 0
+

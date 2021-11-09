@@ -11,7 +11,7 @@ BuildRequires:  gcc
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	make
-BuildRequires:	gettext libX11-devel libXt-devel libXext-devel libXpm-devel libXcursor-devel
+BuildRequires:	gettext libX11-devel libXt-devel libXext-devel libXpm-devel
 BuildRequires:	glibc-headers
 Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-yaml python3-psutil PyQt5

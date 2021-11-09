@@ -1,0 +1,81 @@
+#!/usr/bin/ksh93
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Wrapper for sed used heavily in FvwmScript scripts
+# We are not using "sed -i" since GNU sed is not present on
+# all systems, specially not under it's original name.
+# This should work with almost any sed(1). Result is kept
+# in memory variable and written to a file on the end. No
+# tmp files are created in the process.
+
+OIFS="$IFS"
+IFS=" "
+TO_STDOUT=0
+
+case $NSCDE_OS in
+   'Linux')
+      SED="sed"
+   ;;
+   'FreeBSD'|'SunOS'|'NetBSD'|'OpenBSD'|'DragonFly')
+      type -q gsed
+      if (($? == 0)); then
+         SED="gsed"
+      else
+         sed --version 2>&1 | sed -n 1p | grep -q GNU
+         if (($? == 0)); then
+            SED="sed"
+         else
+            echo "Error: ${0##*/}: Cannot find GNU sed."
+         exit 4
+         fi
+      fi
+   ;;
+   *)
+   sed --version 2>&1 | sed -n 1p | grep -q GNU
+   if (($? == 0)); then
+      SED="sed"
+   else
+      type -q gsed
+      if (($? == 0)); then
+         SED="gsed"
+      else
+         echo "Error: ${0##*/}: Cannot find GNU sed."
+         exit 4
+      fi
+   fi
+   ;;   
+esac
+
+while getopts s:c:f:oh Option
+do
+   case $Option in
+   s)
+      SEDOPTS="$OPTARG"
+   ;;
+   c)
+      SEDCODE="$OPTARG"
+   ;;
+   f)
+      IFILE="${OPTARG}"
+   ;;
+   o)
+      TO_STDOUT=1
+   ;;
+   h)
+      echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
+      exit 0
+   ;;
+   esac
+done
+
+RESULT=$(cat "${IFILE}" | $SED $SEDOPTS "$SEDCODE")
+if (($TO_STDOUT == 0)); then
+   echo "$RESULT" > "$IFILE"
+else
+   echo "$RESULT"
+fi
