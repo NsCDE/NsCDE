@@ -18,6 +18,7 @@ MOFILES = NsCDE-BackdropMgr.hr.mo \
 	NsCDE-GWM.hr.mo \
 	NsCDE-GeometryMgr.hr.mo \
 	NsCDE-KeyboardMgr.hr.mo \
+	nscde-migrate-1x_to_2x.hr.mo \
 	NsCDE-NProcMgr.hr.mo \
 	NsCDE-Occupy.hr.mo \
 	NsCDE-PointerMgr.hr.mo \
