@@ -12,7 +12,12 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	make
 BuildRequires:	gettext libX11-devel libXt-devel libXext-devel libXpm-devel
-BuildRequires:	glibc-headers
+%if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  glibc-headers
+%endif
+%if 0%{?suse_version}
+BuildRequires:  glibc-devel
+%endif
 Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-yaml python3-psutil PyQt5
 Requires:	%{_bindir}/convert
@@ -56,9 +61,9 @@ autoreconf -ivf
 %{_datadir}/applications/
 %{_datadir}/desktop-directories/
 %{_datadir}/xsessions/nscde.desktop
-%{_datadir}/doc/
 %{_datadir}/icons/
-%{_datadir}/locale/
+%{_datadir}/doc/%{name}/
+%{_datadir}/locale/*
 %{_datadir}/%{name}/
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
