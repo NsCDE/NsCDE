@@ -19,7 +19,13 @@ BuildRequires:  glibc-headers
 BuildRequires:  glibc-devel
 %endif
 Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
-Requires:	python3-pyxdg python3-yaml python3-psutil PyQt5
+Requires:	python3-pyxdg python3-psutil
+%if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
+python3-yaml PyQt5
+%endif
+%if 0%{?suse_version}
+python3-qt5 python3-pyaml
+%endif
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
 Requires:	%{_bindir}/xrdb
