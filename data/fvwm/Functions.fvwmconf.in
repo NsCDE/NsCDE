@@ -1995,17 +1995,24 @@ AddToFunc f_ShowFPPGMenu
 # Called from the CheckMailApplet (left from the WSM on Front Panel)
 DestroyFunc f_CheckMail
 AddToFunc f_CheckMail
+DestroyFunc f_CheckMail
+AddToFunc f_CheckMail
 + I Test (!EnvMatch infostore.mailreader NOAPP) Exec exec $[infostore.mailreader]
 + I Test (EnvMatch infostore.mailreader "NOAPP") None ("NsCDE-Notifier.f_CheckMail") f_Notifier \
     "Check Mail Function" "Dismiss" "NsCDE/Info.xpm" \
-    "$[gt.Write your f_CheckMail function in] $[FVWM_USERDIR]/Functions.fvwmlocal." "f_CheckMail"
+    "$[gt.Default E-mail application is not set. You can set] \$\[infostore.mailreader\] $[gt.in your] $[FVWM_USERDIR]/NsCDE.conf\
+ $[gt.file and it will be called when e-mail icon is clicked. For visual letter icon notifications to work, a FVWM function\
+ called] \\\"f_CheckMail\\\" $[gt.must be enabled and edited in your] $[FVWM_USERDIR]/Functions.fvwmlocal\
+ $[gt.file. See the documentation for ideas how to set up personal e-mail notifications.]" "f_CheckMail"
 
 # Called from MonthDayApplet (right of the watch on Front Panel)
 DestroyFunc f_Calendar
 AddToFunc f_Calendar
 + I None ("NsCDE-Notifier.f_Calendar") f_Notifier \
  "Calendar Function" "Dismiss" "NsCDE/Info.xpm" \
- "$[gt.Write your f_Calendar function in] $[FVWM_USERDIR]/Functions.fvwmlocal." "f_Calendar"
+ "$[gt.Default action is not set. If you wish to call some application when calendar icon is clicked, you must enable and edit]\
+ \\\"f_Calendar\\\" $[gt.FVWM function in your] $[FVWM_USERDIR]/Functions.fvwmlocal\
+ $[gt.file. See the documentation for ideas how to set that up.]
 
 # Currently unused.
 DestroyFunc f_Mixer
