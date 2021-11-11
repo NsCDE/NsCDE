@@ -10,12 +10,12 @@ import os
 import sys
 import shutil
 
-nscde_root = os.environ.get('NSCDE_ROOT')
-if not nscde_root:
-   sys.stderr.write("NSCDE_ROOT not set. Stop.\n")
+nscde_libdir = os.environ.get('NSCDE_LIBDIR')
+if not nscde_libdir:
+   sys.stderr.write("NSCDE_LIBDIR not set. Stop.\n")
    sys.exit(1)
 else:
-   sys.path.append(nscde_root + "/lib/NsCDE/python")
+   sys.path.append(nscde_libdir + "/python")
 
 nscde_datadir = os.environ.get('NSCDE_DATADIR')
 if not nscde_datadir:

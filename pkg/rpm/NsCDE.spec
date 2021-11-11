@@ -19,12 +19,12 @@ BuildRequires:  glibc-headers
 BuildRequires:  glibc-devel
 %endif
 Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
-Requires:	python3-pyxdg python3-psutil
+Requires:	python3-pyxdg python3-psutil qt5ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-python3-yaml PyQt5
+Requires: python3-yaml PyQt5 qt5-qtstyleplugins dex-autostart
 %endif
 %if 0%{?suse_version}
-python3-qt5 python3-pyaml
+Requires: python3-qt5 python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex
 %endif
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
