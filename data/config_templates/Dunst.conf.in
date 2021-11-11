@@ -1,0 +1,80 @@
+[global]
+monitor = 0
+follow = mouse
+geometry = "320x6-10-140"
+indicate_hidden = yes
+shrink = no
+transparency = 0
+notification_height = 0
+separator_height = 3
+padding = 8
+horizontal_padding = 8
+frame_width = 3
+frame_color = "#eda870"
+separator_color = frame
+sort = yes
+idle_threshold = 120
+font = DejaVU Serif Book 10
+line_height = 0
+markup = full
+format = "<b>%a:</b>\n\n<b>%s</b>\n\n%b"
+alignment = left
+show_age_threshold = 60
+word_wrap = yes
+ellipsize = middle
+ignore_newline = no
+stack_duplicates = true
+hide_duplicate_count = false
+show_indicators = yes
+icon_position = left
+max_icon_size = 64
+icon_path = @DATA_ROOTDIR@/icons/NsCDE/32x32/status/:@DATA_ROOTDIR@/icons/NsCDE/32x32/devices/
+sticky_history = yes
+history_length = 20
+dmenu = /usr/bin/rofi -dmenu -p dunst:
+browser = /usr/bin/firefox
+always_run_script = true
+title = Dunst
+class = Dunst
+startup_notification = false
+verbosity = mesg
+corner_radius = 0
+force_xinerama = false
+mouse_left_click = close_current
+mouse_middle_click = do_action
+mouse_right_click = close_all
+
+[experimental]
+per_monitor_dpi = false
+
+[shortcuts]
+close = ctrl+space
+close_all = ctrl+shift+space
+history = ctrl+grave
+context = ctrl+shift+period
+
+[urgency_low]
+background = "#999999"
+foreground = "#ffffff"
+frame_color = "#d2d2d3"
+timeout = 8
+icon = dialog-information
+
+[urgency_normal]
+background = "#c6b2a8"
+foreground = "#000000"
+frame_color = "#e7deda"
+timeout = 12
+icon = dialog-information
+
+[urgency_critical]
+background = "#eda870"
+foreground = "#ffffff"
+frame_color = "#f7dac1"
+timeout = 0
+icon = dialog-error
+
+[rule_1]
+desktop_entry = "Test"
+new_icon = preferences-desktop-screensaver
+

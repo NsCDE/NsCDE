@@ -101,7 +101,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = fontmgr.local colormgr.local
+CONFIG_CLEAN_FILES = fontmgr.local colormgr.local Dunst.conf
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -152,8 +152,8 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/colormgr.local.in \
-	$(srcdir)/fontmgr.local.in
+am__DIST_COMMON = $(srcdir)/Dunst.conf.in $(srcdir)/Makefile.in \
+	$(srcdir)/colormgr.local.in $(srcdir)/fontmgr.local.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -299,6 +299,8 @@ top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 localscriptsdir = $(NSCDE_DATADIR)/config_templates/
 localscripts_SCRIPTS = fontmgr.local colormgr.local
+localdatadir = $(NSCDE_DATADIR)/config_templates/
+localdata = Dunst.conf
 all: all-am
 
 .SUFFIXES:
@@ -334,6 +336,8 @@ $(am__aclocal_m4_deps):
 fontmgr.local: $(top_builddir)/config.status $(srcdir)/fontmgr.local.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 colormgr.local: $(top_builddir)/config.status $(srcdir)/colormgr.local.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+Dunst.conf: $(top_builddir)/config.status $(srcdir)/Dunst.conf.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-localscriptsSCRIPTS: $(localscripts_SCRIPTS)
 	@$(NORMAL_INSTALL)
@@ -534,6 +538,9 @@ uninstall-am: uninstall-localscriptsSCRIPTS
 
 clean-local:
 	-rm -f colormgr.local fontmgr.local
+
+clean-data:
+	-rm -f Dunst.conf
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)/config_templates/

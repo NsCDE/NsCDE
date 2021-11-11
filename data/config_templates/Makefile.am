@@ -8,9 +8,14 @@ localscriptsdir = $(NSCDE_DATADIR)/config_templates/
 
 localscripts_SCRIPTS = fontmgr.local colormgr.local
 
+localdatadir = $(NSCDE_DATADIR)/config_templates/
+localdata = Dunst.conf
+
 clean-local:
 	-rm -f colormgr.local fontmgr.local
 
+clean-data:
+	-rm -f Dunst.conf
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)/config_templates/

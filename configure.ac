@@ -326,6 +326,7 @@ AC_OUTPUT(
 	data/config_templates/Makefile
 	data/config_templates/fontmgr.local
 	data/config_templates/colormgr.local
+	data/config_templates/Dunst.conf
 
 	lib/Makefile
 	lib/fvwm-modules/Makefile
