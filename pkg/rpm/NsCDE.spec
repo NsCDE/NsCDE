@@ -68,7 +68,7 @@ autoreconf -ivf
 %{_datadir}/desktop-directories/
 %{_datadir}/xsessions/nscde.desktop
 %{_datadir}/icons/
-%{_datadir}/doc/%{name}/
+%{_datadir}/doc/nscde/
 %{_datadir}/locale/*
 %{_datadir}/%{name}/
 %{_sysconfdir}/xdg/menus/nscde-applications.menu

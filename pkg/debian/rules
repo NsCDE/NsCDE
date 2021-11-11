@@ -3,9 +3,6 @@
 %:
 	dh $@
 
-override_dh_auto_configure:
-	dh_auto_configure -- --docdir=/usr/share/doc/nscde
-
 override_dh_fixperms:
 	dh_fixperms ; \
 	find debian/nscde -name "XOverrideFontCursor.so" -exec chmod 0755 {} \;
