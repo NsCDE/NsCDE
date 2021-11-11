@@ -75,7 +75,9 @@ fi
 AC_SUBST(XDG_DATA_PATH_BOOL)
 AC_SUBST(XDG_CONFIG_PATH_BOOL)
 
-docdir=${datarootdir}/doc/NsCDE
+if [ "x$docdir" == "x" ]; then
+   docdir=${datarootdir}/doc/NsCDE
+fi
 
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
