@@ -1098,6 +1098,8 @@ AddToFunc f_Xscreensaver
     "Screensaver Error" "Dismiss" "NsCDE/Error.xpm" \
     "Screensaver has been disabled in configuration. See \\\"nscde_use_xscreensaver\\\" in your NsCDE.conf." "f_Xscreensaver_2"
 + I TestRc (Match) Break
++ I Test (EnvMatch infostore.nscde_use_xscreensaver 1, !r $[HOME]/.xscreensaver) \
+    Exec exec cp -f $[NSCDE_DATADIR]/config_templates/dot_xscreensaver $[HOME]/.xscreensaver
 + I InfoStoreAdd xsc_cmd $0
 + I PipeRead "echo InfoStoreAdd xsc_status A$(pgrep -u $[USER] xscreensaver)O"
 + I Test (EnvMatch infostore.xsc_status "AO", !EnvMatch infostore.xsc_cmd "-restart", !EnvMatch infostore.xsc_cmd "-start") f_Notifier \
