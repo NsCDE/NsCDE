@@ -388,12 +388,18 @@ function setup_nscde
       fi
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
+         if [ ! -f "$HOME/.xscreensaver" ] ; then
+            cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
+         fi
       elif [ "x$ans" == "xn" ]; then
          echo "$locale_disabling nscde_use_xscreensaver --> 0"
          $NSCDE_TOOLSDIR/ised -c 's/InfoStoreAdd nscde_use_xscreensaver 1/InfoStoreAdd nscde_use_xscreensaver 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
       else
          gettext -s "Answer not understood."
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
+         if [ ! -f "$HOME/.xscreensaver" ] ; then
+            cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
+         fi
       fi
 
       # Stalonetray - if it doesn't have configuration yet ready.

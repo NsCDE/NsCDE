@@ -323,6 +323,7 @@ AC_OUTPUT(
 	data/config_templates/fontmgr.local
 	data/config_templates/colormgr.local
 	data/config_templates/Dunst.conf
+	data/config_templates/dot_xscreensaver
 
 	lib/Makefile
 	lib/fvwm-modules/Makefile

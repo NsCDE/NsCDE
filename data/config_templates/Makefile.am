@@ -5,17 +5,13 @@
 #
 
 localscriptsdir = $(NSCDE_DATADIR)/config_templates/
-
 localscripts_SCRIPTS = fontmgr.local colormgr.local
 
 localdatadir = $(NSCDE_DATADIR)/config_templates/
-localdata = Dunst.conf
+localdata_DATA = Dunst.conf dot_xscreensaver
 
 clean-local:
-	-rm -f colormgr.local fontmgr.local
-
-clean-data:
-	-rm -f Dunst.conf
+	-rm -f $(localscripts_SCRIPTS) $(localdata_DATA)
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
@@ -25,6 +21,7 @@ install-data-hook:
 	-cp -r $(srcdir)/progbits $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/BGdefault $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Dunst.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/dot_xscreensaver $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/GeoDB.ini $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Stalonetray.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xdefaults $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
