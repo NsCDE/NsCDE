@@ -1043,6 +1043,14 @@ Property
           End
 
           ShowWidget 41
+          Do {Module FvwmScript WaitNotice "$[gt.Front Panel Information]" "$[gt.Press] Ctrl+Return $[gt.to finish rename action]" "$[gt.and return to normal mode.]" 5000}
+          Do {Schedule 400 All (FvwmButtons, FrontPanel, CirculateHit) Focus}
+          # Nasty workaround because ForeColor of the TextField widget is not applied
+          # and global value is used anyway. See Widget 42 for what is done with this
+          # dummy calls.
+          Do {Schedule 50 SendToModule $[infostore.WSM] SendString 41 7 workaround}
+          Do {Schedule 250 SendToModule $[infostore.WSM] SendString 41 7 workaround}
+          Do {Schedule 350 SendToModule $[infostore.WSM] SendString 41 7 workaround}
        End
 
        3 :
@@ -1173,6 +1181,7 @@ Property
                 ChangeValue (Add $NextDesk 1) 1
              End
        End
+
        5 :
        Begin
           If (StrCopy (LastString) 1 3) == {CHN} Then
@@ -1189,9 +1198,34 @@ Property
              End
           End
        End
+
        6 :
        Begin
           Do {f_DisplayURL "$[gt.Workspace Manager Help]" html/NsCDE-Workspace-Manager.html}
        End
+
+       7 :
+       # Nasty workaround because ForeColor of the TextField widget is not applied
+       # and global value is used anyway. See Widget 41:2 and 42 for what is done
+       # with this dummy calls.
+       Begin
+          If (LastString) == {workaround} Then
+          Begin
+             ChangeColorset 42 20
+          End
+       End
 End
+
+# Nasty workaround because ForeColor of the TextField widget is not
+# applied and global value is used anyway. See Widget 41:1 procedure
+# for what is done with this dummy widget declaration.
+Widget 42
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Title {WWWWWWWWWWWWWWWWWWWWWWWWWWW}
+   Flags NoReliefString Hidden NoFocus
+End
+
 
