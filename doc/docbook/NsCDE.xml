@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.3">
-<!ENTITY date "October 2021">
+<!ENTITY appversion "2.0">
+<!ENTITY date "December 2021">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -20,6 +20,7 @@
       <year>2019</year>
       <year>2020</year>
       <year>2021</year>
+      <year>2022</year>
       <holder>M. Z.</holder>
     </copyright>
 
@@ -50,38 +51,35 @@
 <title>What is NsCDE?</title> 
 
 <para>
-In a nutshell, NsCDE is the CDE clone. Tehnically, it can be considered a heavy FVWM theme
-enriched with additional free software tools and applications, combining all
-this components into something which can be called lightweight hybrid
-desktop environment. It can even be integrated into existing desktop
-environments as a window manager wrapper for session handling and
+In a nutshell, NsCDE is CDE visual clone built with more moden tools around FVWM window manager.
+Tehnically, it can also be considered a heavyweight FVWM theme enriched with additional free
+software tools and applications, combining all this components into something which can be
+called lightweight hybrid desktop environment. It can even be integrated into existing desktop
+environments with session management as a window manager wrapper for session handling and
 additional DE functionality.
 </para>
 
 <para>
-NsCDE's main goal is to revive look and feel of the Common Desktop
-Environment found on many UNIX and unix-like systems during nineties and first
-decade of the 21 century, but with a slightly polished interface (XFT,
-unicode, dynamic changes, rich key and mouse bindings, workspace pages,
-rich menus etc) and a goal to produce comfortable "retro" environment
-which is not just a eye candy toy, but a real working environment for
-users who contrary to mainstream trends really like CDE, thus making semi-optimal
-blend of usability and compatibility with modern tools with look and feel which mainstream
-abadoned for some new fashion, and ... in a nutshell, giving to user the best of the both worlds.
+NsCDE's main goal is to revive somewhat brutalist look and feel of the Common Desktop Environment
+found on many UNIX and unix-like systems during nineties and first decade of the 21 century, but
+with a more polished interface (XFT, unicode, dynamic changes, rich key and mouse bindings,
+workspace pages, rich menus etc) and a goal to produce comfortable "retro" environment which is
+not just a eye candy toy, but a real working environment for users who contrary to mainstream
+trends really like CDE, thus making semi-optimal blend of usability and compatibility with modern
+tools with look and feel which mainstream abadoned for some new fashion, and ... in a nutshell,
+giving to user the best of the both worlds.
 </para>
 
 <para>
-Main driver behind NsCDE is the excellent FVWM window manager with it's
-endless options for customization, GUI Script engine, Colorsets, and modules.
-NsCDE is largely a wrapper around FVWM - something like a heavyweight theme,
-sort of.
-</para>
-
-<para>
-Other main components are GTK2, GTK3, Qt4 and Qt5 theme for unifying look and feel
-for the most Unix/Linux applications, custom scripts which are helpers and
-backend workers for GUI parts and some data from the original CDE, as icons,
-palettes, and backdrops.
+Main driver behind NsCDE is the excellent FVWM window manager with it's endless options for
+customization, GUI Script engine, Colorsets, and modules. NsCDE is largely a wrapper around
+FVWM - something like a heavyweight theme, sort of. The other important pars are FvwmScript
+GUI in which CDE-like tools are written, GTK2 and GTK3 theme for unifying look and feel,
+which can also extend to Qt4 and Qt5 with gtk engine of Qt, X settings which are following
+the same theme rules, icon theme, python programs, converters and generators, korn shell
+scripts, CDE-compatible backdrops and palettes and misc pieces for integration like CSS theme
+for Firefox and Thunderbird, and stand alone integrated desktop-making parts like stalonetray,
+dunst, xsettingsd, xscreensaver etc.
 </para>
 </sect2>
 
@@ -89,25 +87,25 @@ palettes, and backdrops.
 <title>Why NsCDE?</title>
 
 <para>
-Since the 90-ties, I have always liked this environment and it's somewhat crude
-socrealistic look in a contrast to "modern" Windows and GNOME approach which is going in
-the opposite taste from what I always liked to see on my screen. I have
-created this environment for my own usage 8-10 years ago and it was a
-patchwork, chaotic and not well suited for sharing with someone. While it
-looked ok on the surface, behind it was a years of ad hoc hacks and senseless
-configurations and scripts, dysfunctional menus etc. Couple of months in a row
-I had a time and chance to rewrite this as a more consistent environment,
-first for myself, and during this process, idea came to do it even better, and
-put on the web for everyone else who may like this idea of modern CDE.
+Since the 90-ties, I have always liked this environment and it's somewhat crude socrealistic
+look, described by some people as brutalism in achitecture. All that in a contrast to
+"modern" Windows and GNOME flat black/white interfaces and Google's "material" design - which
+are going in the opposite taste direction from what I always liked to see on my screen. I have
+created this environment for my own usage 8-10 years ago and it was a patchwork, chaotic and
+not well suited for sharing with someone. While it looked ok on the surface, behind it was a
+years of ad hoc hacks and senseless configurations and scripts, dysfunctional menus etc.
+Couple of months in a row I had a time and chance to rewrite this as a more consistent
+environment, first for myself, and during this process, idea came to do it even better, and
+put on the web for everyone else who may like this idea of CDE for 21st century. Year by year
+NsCDE has 3 years now. Many things are added, changed, hardened, debugged.
 </para>
 
 <para>
-NsCDE is intended for a people which doesn't like "modern" hypes, interfaces
-that try to mimic Mac and Windows and reimplementing their ideas for
-non-technical user's desktops, and reimplementing them poorly. Older and mature
-system administrators, programmers and generally people from the Unix
-background are more likely to have attraction to NsCDE. It is probably not well
-suited for beginners.
+NsCDE is intended for a people which doesn't like "modern" hypes, interfaces that try to mimic Mac
+and Windows and reimplementing their (poor) ideas for non-technical user's desktops, and
+reimplementing them even more poorly. Older and mature system administrators, programmers and
+generally people from the Unix background are more likely to have attraction to NsCDE. It is
+probably not well suited for beginners.
 </para>
 
 <para>
@@ -115,17 +113,17 @@ Of course, question arises: why not simply use original original CDE now when it
 </para>
 
 <para>
-Apart from desirable look, because it has it's own problems: it is a product
-from 90-ties, based on Motif and time has passed since then. In CDE there is
-no really XFT font rendering, no immediate application dynamic changes. Beside
-that, I have found dtwm, CDE's window manager inferior to FVWM and some 3rd party solutions which
-can be paired with it. So I wanted the best of the two worlds: good old retro
-look and feel from original CDE, but more flexible, modern and maintained
-"driver" behind it, which will allow for individual customizations as one
-find's them fit for it's own amusement and usage. As it will be seen later,
-there are some intentional differences between CDE and NsCDE - a middle line
-between trying to stay as close as possible to look of the CDE, but with more
-flexibility and functionality on the second and third look.
+Apart from desirable look, because it has it's own problems: it is a product from 90-ties, based
+on Motif and time has passed since then. In CDE there is no really smooth out of the box XFT font
+rendering, no immediate application dynamic changes, there are insecure RPC and obsolete tooltalk
+procedures even for starting local applications. Beside that, I have found dtwm, CDE's window
+manager inferior to FVWM and some 3rd party solutions which can be paired with it. So I wanted the
+best of the two worlds: good old retro look and feel from original CDE, but more flexible, modern
+and maintained "drivers" behind it, which will allow for individual customizations as one find's
+them fit for it's own amusement and usage. As it will be seen later, there are some small
+intentional differences between CDE and NsCDE - a middle line between trying to stay as close as
+possible to look of the CDE, but with more flexibility and functionality on the second and third
+look.
 </para>
 </sect2>
 </sect1>
@@ -136,42 +134,96 @@ flexibility and functionality on the second and third look.
 <sect2 id="NsCDE-components-overview">
 <title>Components overview</title>
 <para>
-NsCDE is a wrapper and a bunch of configurations, scripts and apps around
-FVWM. FVWM is in my opinion a model of free choice for people who like to have
-things set up by their own wishes and who are aware what real freedom of
-choice is. A stunning contrast to policies forced on Linux users in the last
-decade from the mainstream desktop players.
+NsCDE uses very extensive bunch of configurations, scripts and apps around FVWM. FVWM is in my
+opinion very good model of free choice for people who like to have things set up by their own
+wishes and who are aware what real freedom of choice is. A stunning contrast to policies forced
+on Linux an Unix users in the last decade from the mainstream desktop players.
 </para>
 
 <para>
-NsCDE is by default rooted in <filename class="directory">/opt/NsCDE</filename> ($NSCDE_ROOT),
-but it can be relocated with only one variable changed in main
-wrapper <filename class="directory">bin/nscde</filename> and <filename>Main.fvwmconf</filename>.
-</para>
-
-<para>
-It is not using your existing <filename class="directory">$HOME/.fvwm</filename>
+NsCDE is not using FVWM default <filename class="directory">$HOME/.fvwm</filename> if exists,
 but sets <varname>$FVWM_USERDIR</varname> to <filename class="directory">$HOME/.NsCDE</filename>,
-and uses <filename class="directory">/opt/NsCDE/config</filename> as a sources of configuration.
+and uses <filename class="directory">$NSCDE_DATADIR/fvwm</filename> and
+<filename class="directory">$NSCDE_DATADIR/default</filename> as a sources of configuration.
 </para>
 
 <para>
-Configuration model is a bit complex, but very flexible: configuration options
-are grouped in logical order. Configuration files are names
-<filename>NsCDE-&lt;group&gt;.conf</filename>. For example, <filename>NsCDE-Functions.conf</filename>
-for FVWM functions. Each
-configuration file can have two exclusive sources, and one additional. For
-example, if user doesn't have <filename>$FVWM_USERDIR/NsCDE-Functions.conf</filename>, then
-<filename>$NSCDE_ROOT/config/NsCDE-Functions.conf</filename> is read as default. Additionally, if
-<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> exists, it will be read in addition to
-conf file, from wherever it was read. This is intended as a primary mechanism
-for customization: If user doesn't need to override and change a lot of
-"system" configuration, but just add it's own in addition to existing, local
-file is place for such customization (of course, most parts of the existing FVWM
-configuration can be overridden or destroyed and recreated even in local files.
+NsCDE configuration consists largely of files parsed by it's own scripts, and FVWM
+configuration which is grouped in separate thematic files. System FVWM configuration
+is initialized by <filename>nscde</filename> X startup wrapper which calls
+<filename>Main.fvwmconf</filename>. This file, as well as the rest of FVWM functions
+and code (except FvwmScript GUI programs) is located in <filename class="directory">$NSCDE_DATADIR/fvwm</filename>.
 </para>
+
 <para>
-One notable addon to this system of configuration is the way FVWM Styles are read.
+FVWM configuration sections are:
+
+<itemizedlist>
+<listitem><para>Animate.fvwmconf - FvwmAnimate module configuration</para></listitem>
+<listitem><para>Backdrops.fvwmconf - Backdrops, read by FvwmBacker and FvwmPager</para></listitem>
+<listitem><para>Backer.fvwmconf - FvwmBacker module configuration</para></listitem>
+<listitem><para>Colorset.fvwmconf - FVWM Colorset definitions (generated for user in ~/.NsCDE)</para></listitem>
+<listitem><para>Event.fvwmconf - FvwmEvent module configuration</para></listitem>
+<listitem><para>FinishInit.fvwmconf - End of startap cleanup and safety last-second routines</para></listitem>
+<listitem><para>Font-XXXdpi.fvwmconf - Set of fonts ad InfoStore variables used across FVWM</para></listitem>
+<listitem><para>Form.fvwmconf - obsolete and not used by default, NsCDE does not use FvwmForm</para></listitem>
+<listitem><para>FrontPanel.fvwmconf - selector of FrontPanel configuration which is going to be read</para></listitem>
+<listitem><para>FrontPanel.fvwm2.fvwmconf - FrontPanel configuration for FVWM2</para></listitem>
+<listitem><para>FrontPanel.fvwm3.fvwmconf - FrontPanel configuration for FVWM3</para></listitem>
+<listitem><para>Functions.fvwmconf - almost all functions used by NsCDE FVWM setup, paired in logical sections</para></listitem>
+<listitem><para>IconMan.fvwmconf - Not used by default</para></listitem>
+<listitem><para>Ident.fvwmconf - FvwmIdent module configuration</para></listitem>
+<listitem><para>Init.fvwmconf - Fallback and example of session statup. Usually run from ~/.NsCDE</para></listitem>
+<listitem><para>Keybindings.fvwmconf - Static key bindings, without written menu hints</para></listitem>
+<listitem><para>LocalPager.fvwmconf - Single Workspace floating FvwmPager configuration</para></listitem>
+<listitem><para>Main.fvwmconf - Most important and early FVWM directives, environment and InfoStore variables, functions</para></listitem>
+<listitem><para>Menus.fvwmconf - All FVWM Menus used or generated for NsCDE</para></listitem>
+<listitem><para>Monitors.fvwmconf - Monitor and resolution static database as helper for some calculations</para></listitem>
+<listitem><para>Mousebindings.fvwmconf - All mouse actions with and without keyboard modifiers</para></listitem>
+<listitem><para>Sandbox.fvwmconf - not read by default, cleanup definitions for stripped down NsCDE sandbox mode</para></listitem>
+<listitem><para>Script.fvwmconf - FvwmScript module defaults</para></listitem>
+<listitem><para>Style.fvwmconf - All NsCDE FVWM Style directives, Menustyle, Cursorstyle, Decor addons etc</para></listitem>
+<listitem><para>Subpanels.fvwmconf - Default system configuration for subpanels of the FrontPanel, generated on install.</para></listitem>
+<listitem><para>WspLocPager.fvwmconf - Configuration of another local pager which uses FvwmPager, but for non-local workspaces</para></listitem>
+<listitem><para>NsCDE.conf - de-facto main user configuration file. All important variables are here.</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para>
+It should be noted that FVWM configuration system is created in a very flexible manner. While there
+are only files of type "fvwmconf" in <filename class="directory">$NSCDE_DATADIR/fvwm</filename>,
+user's <filename class="directory">$FVWM_USERDIR</filename> or "~/.NsCDE" can contain this 3 types
+of FVWM configuration:
+</para>
+
+<para>
+<itemizedlist>
+<listitem><para>
+Files with extension ".fvwmconf" are overriding defaults from the <filename class="directory">$NSCDE_DATADIR/fvwm</filename>.
+In other words, if <filename>$NSCDE_USERDIR/Init.fvwmconf</filename> exists, it will be read instead
+of <filename>$NSCDE_DATADIR/fvwm/Init.fvwmconf</filename>. For some parts of the FVWM configuration this
+makes a sense, for most it doesn't.
+</para></listitem>
+<listitem><para>
+Files with extension ".fvwmgen" are files which are generated by NsCDE tools and GUI programs. They
+can be managed by hand, but usage of tools will overwrite them. They counterparts in the
+<filename class="directory">$NSCDE_DATADIR/fvwm</filename> have extension ".fvwmconf", but if
+for example <filename>$NSCDE_USERDIR/Colorset.fvwmgen</filename> exits, it will be read instead
+of <filename>$NSCDE_DATADIR/fvwm/Colorset.fvwmconf</filename>. Putting static <filename>$NSCDE_USERDIR/Colorset.fvwmconf</filename>
+will be unusual, and will disable GUI tools and FVWM under NsCDE to read dynamically generated configurations.
+</para></listitem>
+<listitem><para>
+Third form of FVWM configuration in <filename class="directory">$NSCDE_USERDIR</filename> are ".fvwmlocal" files.
+This files will extend (append) configuration read from their ".fvwmconf" and/or ".fvwmgen" files. Good examples
+whould be Functions.fvwmlocal and Styles.fvwmlocal in <filename class="directory">$NSCDE_USERDIR</filename> to
+add local custom functions and per-application styles.
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+One notable exception to this system of configuration is the way FVWM Styles are read.
 In addition to reading <filename>$FVWM_USERDIR/Style.fvwmlocal</filename> "early"
 configuration in <filename>$FVWM_USERDIR/NsCDE-Style.override</filename> will be read from
 <filename>$NSCDE_DATADIR/fvwm/Style.fvwmconf</filename> just after applying general core
@@ -184,6 +236,40 @@ can nullify overrides for that particular applications, this is why this mechani
 This file is not created in <varname>$FVWM_USERDIR</varname> by setup procedure or Style
 Managers, but it will be read if created manually.
 </para>
+
+<para>
+In addition to FVWM configuration read by fvwm window manager and it's modules, there are some files
+parsed by NsCDE scripts and programs in <filename class="directory">$NSCDE_DATADIR/defaults</filename>.
+</para>
+
+<para>
+This files are:
+
+<itemizedlist>
+<listitem><para>AppMenus.conf - default per application addons for Window Operations menu on the 1st titlebar button</para></listitem>
+<listitem><para>FrontPanel.actions - read by FVWM functions called when FrontPanel controls and buttons are used</para></listitem>
+<listitem><para>Keymenu.actions - Part of the FVWM NsCDE keybindings which have menu hints written on menus</para></listitem>
+<listitem><para>Subpanels.actions - From this file, Subpanels.fvwmconf is generated.</para></listitem>
+<listitem><para>WSM.conf - Workspace Manager and Graphical Workspace Manager configuration file</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para>
+All files above except WSM.conf if found in <filename class="directory">$NSCDE_USERDIR</filename> are
+read in addition to system defaults in <filename class="directory">$NSCDE_DATADIR/defaults</filename>.
+Local lines and statemets in user's copy are overriding system defaults. WSM.conf is read exclusively
+from <filename class="directory">$NSCDE_USERDIR</filename>. System file is only an example.
+</para>
+
+<para>
+The rest of configuration is in <filename class="directory">$NSCDE_USERDIR</filename>. For example Dunst.conf,
+Stylonetray.conf, Xsettingsd.conf, NsCDE.radi (rofi), Xset.conf and Xdefaults. This files are either read by
+their programs which are called and configured/integrated by NsCDE, or by X server (Xset.conf, Xdefaults*).
+Various subdirectories contains additional data generated for the user or configured by the user. This
+parts of the configuration are described in more detail later in this document.
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-components-applets-tools">

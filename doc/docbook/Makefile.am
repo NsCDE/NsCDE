@@ -10,10 +10,10 @@ XSLTPROC = xsltproc
 
 docs: NsCDE.pdf NsCDE.txt docs-html
 
-NsCDE.pdf:
+NsCDE.pdf: NsCDE.xml
 	${DOCBOOK2PDF} NsCDE.xml
 
-NsCDE.txt:
+NsCDE.txt: NsCDE.xml
 	${DOCBOOK2TXT} NsCDE.xml
 
 docs-html:

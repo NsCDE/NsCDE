@@ -1,33 +1,50 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>2. Components of the NsCDE</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="next" href="NsCDE-components-applets-tools.html" title="2.2. Applets and GUI Tools"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. Components of the NsCDE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-components-applets-tools.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-components"></a>2. Components of the NsCDE</h2></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-components-overview"></a>2.1. Components overview</h3></div></div></div><p>
-NsCDE is a wrapper and a bunch of configurations, scripts and apps around
-FVWM. FVWM is in my opinion a model of free choice for people who like to have
-things set up by their own wishes and who are aware what real freedom of
-choice is. A stunning contrast to policies forced on Linux users in the last
-decade from the mainstream desktop players.
+NsCDE uses very extensive bunch of configurations, scripts and apps around FVWM. FVWM is in my
+opinion very good model of free choice for people who like to have things set up by their own
+wishes and who are aware what real freedom of choice is. A stunning contrast to policies forced
+on Linux an Unix users in the last decade from the mainstream desktop players.
 </p><p>
-NsCDE is by default rooted in <code class="filename">/opt/NsCDE</code> ($NSCDE_ROOT),
-but it can be relocated with only one variable changed in main
-wrapper <code class="filename">bin/nscde</code> and <code class="filename">Main.fvwmconf</code>.
-</p><p>
-It is not using your existing <code class="filename">$HOME/.fvwm</code>
+NsCDE is not using FVWM default <code class="filename">$HOME/.fvwm</code> if exists,
 but sets <code class="varname">$FVWM_USERDIR</code> to <code class="filename">$HOME/.NsCDE</code>,
-and uses <code class="filename">/opt/NsCDE/config</code> as a sources of configuration.
+and uses <code class="filename">$NSCDE_DATADIR/fvwm</code> and
+<code class="filename">$NSCDE_DATADIR/default</code> as a sources of configuration.
 </p><p>
-Configuration model is a bit complex, but very flexible: configuration options
-are grouped in logical order. Configuration files are names
-<code class="filename">NsCDE-&lt;group&gt;.conf</code>. For example, <code class="filename">NsCDE-Functions.conf</code>
-for FVWM functions. Each
-configuration file can have two exclusive sources, and one additional. For
-example, if user doesn't have <code class="filename">$FVWM_USERDIR/NsCDE-Functions.conf</code>, then
-<code class="filename">$NSCDE_ROOT/config/NsCDE-Functions.conf</code> is read as default. Additionally, if
-<code class="filename">$FVWM_USERDIR/Functions.fvwmlocal</code> exists, it will be read in addition to
-conf file, from wherever it was read. This is intended as a primary mechanism
-for customization: If user doesn't need to override and change a lot of
-"system" configuration, but just add it's own in addition to existing, local
-file is place for such customization (of course, most parts of the existing FVWM
-configuration can be overridden or destroyed and recreated even in local files.
+NsCDE configuration consists largely of files parsed by it's own scripts, and FVWM
+configuration which is grouped in separate thematic files. System FVWM configuration
+is initialized by <code class="filename">nscde</code> X startup wrapper which calls
+<code class="filename">Main.fvwmconf</code>. This file, as well as the rest of FVWM functions
+and code (except FvwmScript GUI programs) is located in <code class="filename">$NSCDE_DATADIR/fvwm</code>.
 </p><p>
-One notable addon to this system of configuration is the way FVWM Styles are read.
+FVWM configuration sections are:
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Animate.fvwmconf - FvwmAnimate module configuration</p></li><li class="listitem"><p>Backdrops.fvwmconf - Backdrops, read by FvwmBacker and FvwmPager</p></li><li class="listitem"><p>Backer.fvwmconf - FvwmBacker module configuration</p></li><li class="listitem"><p>Colorset.fvwmconf - FVWM Colorset definitions (generated for user in ~/.NsCDE)</p></li><li class="listitem"><p>Event.fvwmconf - FvwmEvent module configuration</p></li><li class="listitem"><p>FinishInit.fvwmconf - End of startap cleanup and safety last-second routines</p></li><li class="listitem"><p>Font-XXXdpi.fvwmconf - Set of fonts ad InfoStore variables used across FVWM</p></li><li class="listitem"><p>Form.fvwmconf - obsolete and not used by default, NsCDE does not use FvwmForm</p></li><li class="listitem"><p>FrontPanel.fvwmconf - selector of FrontPanel configuration which is going to be read</p></li><li class="listitem"><p>FrontPanel.fvwm2.fvwmconf - FrontPanel configuration for FVWM2</p></li><li class="listitem"><p>FrontPanel.fvwm3.fvwmconf - FrontPanel configuration for FVWM3</p></li><li class="listitem"><p>Functions.fvwmconf - almost all functions used by NsCDE FVWM setup, paired in logical sections</p></li><li class="listitem"><p>IconMan.fvwmconf - Not used by default</p></li><li class="listitem"><p>Ident.fvwmconf - FvwmIdent module configuration</p></li><li class="listitem"><p>Init.fvwmconf - Fallback and example of session statup. Usually run from ~/.NsCDE</p></li><li class="listitem"><p>Keybindings.fvwmconf - Static key bindings, without written menu hints</p></li><li class="listitem"><p>LocalPager.fvwmconf - Single Workspace floating FvwmPager configuration</p></li><li class="listitem"><p>Main.fvwmconf - Most important and early FVWM directives, environment and InfoStore variables, functions</p></li><li class="listitem"><p>Menus.fvwmconf - All FVWM Menus used or generated for NsCDE</p></li><li class="listitem"><p>Monitors.fvwmconf - Monitor and resolution static database as helper for some calculations</p></li><li class="listitem"><p>Mousebindings.fvwmconf - All mouse actions with and without keyboard modifiers</p></li><li class="listitem"><p>Sandbox.fvwmconf - not read by default, cleanup definitions for stripped down NsCDE sandbox mode</p></li><li class="listitem"><p>Script.fvwmconf - FvwmScript module defaults</p></li><li class="listitem"><p>Style.fvwmconf - All NsCDE FVWM Style directives, Menustyle, Cursorstyle, Decor addons etc</p></li><li class="listitem"><p>Subpanels.fvwmconf - Default system configuration for subpanels of the FrontPanel, generated on install.</p></li><li class="listitem"><p>WspLocPager.fvwmconf - Configuration of another local pager which uses FvwmPager, but for non-local workspaces</p></li><li class="listitem"><p>NsCDE.conf - de-facto main user configuration file. All important variables are here.</p></li></ul></div><p>
+
+</p><p>
+It should be noted that FVWM configuration system is created in a very flexible manner. While there
+are only files of type "fvwmconf" in <code class="filename">$NSCDE_DATADIR/fvwm</code>,
+user's <code class="filename">$FVWM_USERDIR</code> or "~/.NsCDE" can contain this 3 types
+of FVWM configuration:
+</p><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Files with extension ".fvwmconf" are overriding defaults from the <code class="filename">$NSCDE_DATADIR/fvwm</code>.
+In other words, if <code class="filename">$NSCDE_USERDIR/Init.fvwmconf</code> exists, it will be read instead
+of <code class="filename">$NSCDE_DATADIR/fvwm/Init.fvwmconf</code>. For some parts of the FVWM configuration this
+makes a sense, for most it doesn't.
+</p></li><li class="listitem"><p>
+Files with extension ".fvwmgen" are files which are generated by NsCDE tools and GUI programs. They
+can be managed by hand, but usage of tools will overwrite them. They counterparts in the
+<code class="filename">$NSCDE_DATADIR/fvwm</code> have extension ".fvwmconf", but if
+for example <code class="filename">$NSCDE_USERDIR/Colorset.fvwmgen</code> exits, it will be read instead
+of <code class="filename">$NSCDE_DATADIR/fvwm/Colorset.fvwmconf</code>. Putting static <code class="filename">$NSCDE_USERDIR/Colorset.fvwmconf</code>
+will be unusual, and will disable GUI tools and FVWM under NsCDE to read dynamically generated configurations.
+</p></li><li class="listitem"><p>
+Third form of FVWM configuration in <code class="filename">$NSCDE_USERDIR</code> are ".fvwmlocal" files.
+This files will extend (append) configuration read from their ".fvwmconf" and/or ".fvwmgen" files. Good examples
+whould be Functions.fvwmlocal and Styles.fvwmlocal in <code class="filename">$NSCDE_USERDIR</code> to
+add local custom functions and per-application styles.
+</p></li></ul></div><p>
+</p><p>
+One notable exception to this system of configuration is the way FVWM Styles are read.
 In addition to reading <code class="filename">$FVWM_USERDIR/Style.fvwmlocal</code> "early"
 configuration in <code class="filename">$FVWM_USERDIR/NsCDE-Style.override</code> will be read from
 <code class="filename">$NSCDE_DATADIR/fvwm/Style.fvwmconf</code> just after applying general core
@@ -39,4 +56,23 @@ after NsCDE applications in the <code class="filename">$NSCDE_DATADIR/fvwm/Style
 can nullify overrides for that particular applications, this is why this mechanism is provided.
 This file is not created in <code class="varname">$FVWM_USERDIR</code> by setup procedure or Style
 Managers, but it will be read if created manually.
+</p><p>
+In addition to FVWM configuration read by fvwm window manager and it's modules, there are some files
+parsed by NsCDE scripts and programs in <code class="filename">$NSCDE_DATADIR/defaults</code>.
+</p><p>
+This files are:
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>AppMenus.conf - default per application addons for Window Operations menu on the 1st titlebar button</p></li><li class="listitem"><p>FrontPanel.actions - read by FVWM functions called when FrontPanel controls and buttons are used</p></li><li class="listitem"><p>Keymenu.actions - Part of the FVWM NsCDE keybindings which have menu hints written on menus</p></li><li class="listitem"><p>Subpanels.actions - From this file, Subpanels.fvwmconf is generated.</p></li><li class="listitem"><p>WSM.conf - Workspace Manager and Graphical Workspace Manager configuration file</p></li></ul></div><p>
+
+</p><p>
+All files above except WSM.conf if found in <code class="filename">$NSCDE_USERDIR</code> are
+read in addition to system defaults in <code class="filename">$NSCDE_DATADIR/defaults</code>.
+Local lines and statemets in user's copy are overriding system defaults. WSM.conf is read exclusively
+from <code class="filename">$NSCDE_USERDIR</code>. System file is only an example.
+</p><p>
+The rest of configuration is in <code class="filename">$NSCDE_USERDIR</code>. For example Dunst.conf,
+Stylonetray.conf, Xsettingsd.conf, NsCDE.radi (rofi), Xset.conf and Xdefaults. This files are either read by
+their programs which are called and configured/integrated by NsCDE, or by X server (Xset.conf, Xdefaults*).
+Various subdirectories contains additional data generated for the user or configured by the user. This
+parts of the configuration are described in more detail later in this document.
 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-components-applets-tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Not so Common Desktop Environment (NsCDE) Manual </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2. Applets and GUI Tools</td></tr></table></div></body></html>
