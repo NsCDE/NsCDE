@@ -1256,7 +1256,16 @@ Widget 24
       End
       1 :
       Begin
-         Set $NewButtonLabel = (GetTitle 24)
+         # Handle cosmetic space at the beggining of the PushButton
+         Set $CheckTitle = (StrCopy (GetTitle 24) 1 1)
+         If $CheckTitle == { } Then
+         Begin
+            Set $NewButtonLabel = (StrCopy (GetTitle 24) 2 18)
+         End
+         Else
+         Begin
+            Set $NewButtonLabel = (GetTitle 24)
+         End
          Set $OldButtonLabelOut = {egrep 'WSP:} $CalledBy {:.*' "} $ConfFile {" 2>/dev/null}
          Set $OldButtonLabel = (GetOutput $OldButtonLabelOut 1 -1)
 
