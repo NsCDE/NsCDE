@@ -964,6 +964,7 @@ backdrops/India.pm
 backdrops/InlayColor.pm
 backdrops/InlayPlain.pm
 backdrops/Irix.pm
+backdrops/Iris.pm
 backdrops/Ironworks.pm
 backdrops/Jungle.pm
 backdrops/Jute.pm
@@ -1062,6 +1063,7 @@ backdrops/Structura.pm
 backdrops/Structure.pm
 backdrops/SunLogo.pm
 backdrops/Sun.pm
+backdrops/Solyaris.pm
 backdrops/Swirl.pm
 backdrops/Symphony.pm
 backdrops/Tartan.pm
@@ -1168,6 +1170,7 @@ palettes/Grass.dp
 palettes/GrayScale.dp
 palettes/GreenShades.dp
 palettes/Irix.dp
+palettes/Iris.dp
 palettes/Kamari.dp
 palettes/LateSummer.dp
 palettes/Lilac.dp
