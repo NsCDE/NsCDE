@@ -984,13 +984,25 @@ AddToFunc f_FindApp
                   "$[gt.Dismiss]" \
                   "NsCDE/Error.xpm" \
                   "$[gt.Error: Application Catalog] $1 $[gt.for defining] \\\"$0\\\" $[gt.does not exist]."
-+ I PipeRead "echo InfoStoreAdd $0 \\\"$($[NSCDE_TOOLSDIR]/appfinder $1)\\\""
-+ I Test (!Init, !Restart, EnvMatch infostore.$$0 "NOAPP") f_Notifier \
++ I PipeRead "echo InfoStoreAdd $0 \\\"$($[NSCDE_TOOLSDIR]/appfinder $0 $1)\\\""
++ I Test (!Init, !Restart, EnvMatch infostore.$$0 *NOAPP*) f_Notifier \
                   "App Finder" \
                   "Dismiss" \
                   "NsCDE/Error.xpm" \
                   "$[gt.Error defining] \\\"$0\\\" $[gt.automatic default: cannot find any usable application.]"
 + I Test (!EnvMatch infostore.$$0 "NOTFOUND") Echo NsCDE: Selected default for $0: $[infostore.$$0]
+
+DestroyFunc f_NoApp
+AddToFunc f_NoApp
++ I Test (x notify-send, EnvMatch infostore.nscde_use_dunst 1) Exec exec notify-send -u normal -i error \
+ -a "NsCDE NOAPP ($1)" "$[gt.Cannot find any usable application of type] \"$1\".\
+ $[gt.Edit your ~/NsCDE/NsCDE.conf and set some value for] infostore.$1,\
+ $[gt.or try to install some utility or application of that type.]"
++ I Test (!x notify-send, !EnvMatch infostore.nscde_use_dunst 1) None ("NsCDE-Notifier.f_NoApp") f_Notifier \
+ "Execute Default Application Error" "Dismiss" "NsCDE/Error.xpm" \
+ "$[gt.Error: Func:f_NoApp:] $[gt.Cannot find any usable application of type] \"$1\".\
+ $[gt.Edit your ~/NsCDE/NsCDE.conf and set some value for] infostore.$1,\
+ $[gt.or try to install some utility or application of that type.]" "f_NoApp"
 
 DestroyFunc f_WideTerm
 AddToFunc f_WideTerm
@@ -1999,8 +2011,8 @@ DestroyFunc f_CheckMail
 AddToFunc f_CheckMail
 DestroyFunc f_CheckMail
 AddToFunc f_CheckMail
-+ I Test (!EnvMatch infostore.mailreader NOAPP) Exec exec $[infostore.mailreader]
-+ I Test (EnvMatch infostore.mailreader "NOAPP") None ("NsCDE-Notifier.f_CheckMail") f_Notifier \
++ I Test (!EnvMatch infostore.mailreader *NOAPP*) Exec exec $[infostore.mailreader]
++ I Test (EnvMatch infostore.mailreader *NOAPP*) None ("NsCDE-Notifier.f_CheckMail") f_Notifier \
     "Check Mail Function" "Dismiss" "NsCDE/Info.xpm" \
     "$[gt.Default E-mail application is not set. You can set] \$\[infostore.mailreader\] $[gt.in your] $[FVWM_USERDIR]/NsCDE.conf\
  $[gt.file and it will be called when e-mail icon is clicked. For visual letter icon notifications to work, a FVWM function\
@@ -2193,7 +2205,7 @@ AddToFunc f_SameWspActionForWSM
 DestroyFunc f_FpLiteClickAction
 AddToFunc f_FpLiteClickAction
 + I Exec exec $[infostore.taskmgr]
-+ I Test (EnvMatch infostore.taskmgr NOAPP) None ("FpLite Function Error") f_Notifier \
++ I Test (EnvMatch infostore.taskmgr *NOAPP*) None ("FpLite Function Error") f_Notifier \
  "FpLite Function Error" "Dismiss" "NsCDE/Error.xpm" \
  "$[gt.Error: Func:f_FpLiteClickAction: Cannot find any known task manager in path.] $[PATH]."
 

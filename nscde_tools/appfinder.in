@@ -10,7 +10,14 @@ if [ "x$1" == "x" ]; then
    echo "NOARG"
    exit 1
 else
-   CatName="$1"
+   InfVarName="$1"
+fi
+
+if [ "x$2" == "x" ]; then
+   echo "NOARG"
+   exit 1
+else
+   CatName="$2"
 fi
 
 if [ ! -r "$NSCDE_DATADIR/fallback/app-catalog/$CatName" ]; then
@@ -144,6 +151,6 @@ do
 done
 
 if (($found == 0)); then
-   echo "NOAPP"
+   echo "nscde_fvwmclnt 'f_NoApp NOAPP $InfVarName'"
 fi
 
