@@ -33,7 +33,7 @@ Requires:	%{_bindir}/xset
 Requires:	%{_bindir}/xprop
 Requires:	%{_bindir}/xdpyinfo
 Requires:	%{_bindir}/xrandr
-Requires:	xdg-utils
+Requires:	xdg-utils gettext
 
 %description
 NsCDE is a retro but powerful UNIX desktop environment which resembles
