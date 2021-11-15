@@ -144,6 +144,10 @@ Init
 Begin
         Set \$Font = (GetOutput {\$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
         ChangeFont 3 \$Font
+        Do {Schedule 125 Next ("NsCDE-Notifier*", CirculateHit) WarpToWindow 50 75}
+        Do {Schedule 100 Next ("NsCDE-Notifier*", CirculateHit) Focus}
+        Do {Exec exec rm -f \$[FVWM_USERDIR]/tmp/NsCDE-Notifier} (GetScriptArgument 1)
+        Do {Schedule 1000 InfoStoreRemove } (GetScriptArgument 1)
 EOF
 
 fntcnt=9

@@ -145,9 +145,18 @@ do
    appname2="${appname1/:needterm/}" # -c 3
    appname3="${appname##*:}"         # needterm
 
+   if [ "${appname3}" == "needterm" ]; then
+      appname4="${appname/:needterm/}"
+      if $(whence -q ${appname4}); then
+         echo "\$[infostore.terminal] -e $appname4"
+         found=1
+         break
+      fi
+   fi
+
    if $(whence -q ${appname0}); then
       if [ "${appname3}" == "needterm" ]; then
-          appname4="${appname/:needterm/}"
+         appname4="${appname/:needterm/}"
          echo "\$[infostore.terminal] -e $appname4"
       else
          echo $appname

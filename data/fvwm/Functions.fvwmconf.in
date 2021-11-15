@@ -1349,17 +1349,16 @@ AddToFunc f_FindMiniIcon
 # $4 - ID of the notification which will be added to $[w.resource] of the message window
 DestroyFunc f_Notifier
 AddToFunc f_Notifier
+DestroyFunc f_Notifier
+AddToFunc f_Notifier
 + I InfoStoreAdd notif_id ".$4"
 + I Test (EnvMatch infostore.notif_id ".") Current InfoStoreAdd notif_id ".$[w.id]"
 + I Test (EnvMatch infostore.notif_id ".") PipeRead "echo Current InfoStoreAdd notif_id .$[RANDOM]"
 + I All ("NsCDE-Notifier$[infostore.notif_id]", CirculateHit) Break 1
 + I Exec exec mkdir -p "$[FVWM_USERDIR]/tmp"
-+ I Exec exec $[NSCDE_TOOLSDIR]/FvwmScripts/Notifier \
- -t "$0" -b "$1" -i "$2" -s "$3" > $[FVWM_USERDIR]/tmp/NsCDE-Notifier$[infostore.notif_id]
-+ I Schedule 250 Module FvwmScript $[FVWM_USERDIR]/tmp/NsCDE-Notifier$[infostore.notif_id]
-+ I Schedule 450 Next (NsCDE-Notifier, CirculateHit) WarpToWindow 50 75
-+ I Schedule 550 InfoStoreRemove notif_id
-+ I Schedule 2500 Exec exec rm -f $[FVWM_USERDIR]/tmp/NsCDE-Notifier$[infostore.notif_id]
++ I PipeRead '$[NSCDE_TOOLSDIR]/FvwmScripts/Notifier \
+ -t "$0" -b "$1" -i "$2" -s "$3" > $[FVWM_USERDIR]/tmp/NsCDE-Notifier$[infostore.notif_id] && \
+ echo "Module FvwmScript $[FVWM_USERDIR]/tmp/NsCDE-Notifier$[infostore.notif_id] $[infostore.notif_id]"'
 
 # Popup Notifications from generated FvwmScript
 # Version which reads text from file
