@@ -132,6 +132,13 @@ fi
 found=0
 cat "$NSCDE_DATADIR/fallback/app-catalog/$CatName" | while read appname
 do
+   echo "$appname" | egrep -q '^\$\[infostore\..*\]'
+   if (($? == 0)); then
+      found=1
+      echo "$appname"
+      break
+   fi
+
    # appname: top -c 3:needterm
    appname0="${appname%% *}"         # top
    appname1="${appname#* }"          # -c 3:needterm
