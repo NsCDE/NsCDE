@@ -1184,8 +1184,8 @@ Key Bindings:
 <title>Color Style Manager</title>
 <para>
 With Backdrop Style Manager, this is probably the most important theme tool in (Ns)CDE. This tool
-applies colors to the widgets, menus, applications and backdrops. As in CDE,
-it reads color information from the palette files in
+applies colors to the widgets, menus, applications and backdrops. As in CDE, it reads color
+information from the palette files in
 <filename class="directory">$NSCDE_DATADIR/palettes</filename> and
 <filename class="directory">$FVWM_USERDIR/palettes</filename>. Palettes are the 16bpp
 color definitions (8 of them). This colors and border bg/fg/sel colors
@@ -1271,6 +1271,46 @@ As in Backdrop Style Manager there are <guibutton>Add</guibutton> and <guibutton
 button actions. System palettes cannot be deleted, while local can be added to
 <filename class="directory">$FVWM_USERDIR/palettes</filename> and applied immediately.
 </para>
+
+<para>
+Importing a ready-made new custom Palette: you can import your own palette
+
+<orderedlist numeration="upperroman">
+<listitem><para>Open the Color Style Manager.</para></listitem>
+
+<listitem><para>
+Choose <guibutton>Add ...</guibutton> in the Color dialog box.
+</para></listitem>
+
+<listitem><para>
+Browse files and directories to the new Palette file. Palette file
+must have <emphasis>.dp</emphasis> extension and conform to the simple format
+(8x16bpp hex colors).
+</para></listitem>
+
+<listitem><para>Select the new Palette file from the list of files</para></listitem>
+
+<listitem><para>Click OK in the Color dialog box.</para></listitem>
+</orderedlist>
+</para>
+
+<para>
+Custom Palettes from the <filename>$FVWM_USERDIR/palettes</filename> can also be
+deleted. Just pick the name from the list and click on the <guibutton>Delete ...</guibutton>
+button. You will be asked for confirmation, and then, if standard UNIX filesystem
+user and group ownership and permissions are allowing that, palette file will be
+permanently deleted.
+</para>
+
+<para>
+Creating new palette by modifying an existing one makes a copy of the currently
+selected palette with a default name "Custom". When applying this new palette,
+Color Style Manager will ask you to rename this palette, which is a good idea,
+because the next modification will rewrite "Custom" generic name again, and
+previous work will be lost. You then create your custom palette by modifying
+the copy, so the original palette is not changed.
+</para>
+
 <para>
 Button <guibutton>Modify</guibutton> will popup color editor if user selects one of the
 8 (or 4) base colors. When selected, this color frames will get "Abc" written in them
@@ -1279,8 +1319,7 @@ by simply clicking on them again. When one base color is selected <guibutton>Mod
 will present editor with controls for Red, Green and Blue values, as well as Hue, Saturation
 and Value. On the top left corner are preview squares with names "Old" and "New". When changing
 color with RGB and/or HSV controls, this "New" square button will change it's colorset. Color can
-also be picked with <guibutton>Grab Color</guibutton> button if a small binary "colorpicker" is
-functional and properly installed in <filename class="directory">$NSCDE_ROOT/bin</filename>.
+also be picked from any screen element with <guibutton>Grab Color</guibutton> button-
 If action is not <guibutton>Cancel</guibutton> but <guibutton>OK</guibutton>, selected color will
 be modified and new palette with generic name "Custom" created immediately. When finishing theme
 selection in Color Style Manager with modified colors, Color Style Manager will ask for a name
@@ -1291,12 +1330,14 @@ In that way, it can be temporary changed for some other and turned back again la
 color modification dialog actually serves as palette creator (based on previous palettes) and
 editor.
 </para>
+
 <para>
 There are 8 spaces with colors from the currently selected palette (4 spaces
 in 4-color mode) and generated XPM file with all 40 colors displayed.
 Button <guibutton>Number of Colors</guibutton> calls transient window where user can select 4 or 8
 color mode. System default on modern desktop is 8.
 </para>
+
 <para>
 What is most important new feature in Color Style Manager are integration
 options. This are:
@@ -1354,8 +1395,8 @@ in configuration files if last palette in NsCDE was using dark background.
 
 <para>
 If <varname>nscde_use_xsettingsd</varname> is set to 1 in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
-after applying new color theme, user's X Settings in <filename>$HOME/.xsettingsd</filename> will be adjusted
-and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
+after applying new color theme, user's X Settings in <filename>$FVWM_USERDIR/Xsettingsd.conf</filename> will
+be adjusted and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
 This option can be enabled by editing NsCDE.conf or during initial setup. NsCDE starts <command>xsettingsd</command>
 daemon with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be present if it was not
 installed by the initial setup procedure.
@@ -1390,12 +1431,11 @@ focused monitor is previewed in the colors of the new palette.
 <sect2 id="NsCDE-ExecDialog">
 <title>Exec Dialog</title>
 <para>
-By default key binding for Exec Dialog is <keysym>Meta</keysym> (mod4) + <keysym>F2</keysym>,
-and located on main root menu before
-terminal i a "Exec" dialog. This is an input form for executing one-shot
-commands without terminal. It has options to run command in terminal
-(<varname>$[infostore.terminal]</varname>), and to remain open after executing commands for
-subsequent commands. It has it's own command history which can be turned back
+By default key binding for Exec Dialog is <keysym>Alt</keysym>+<keysym>F12</keysym>,
+and an entry "Execute ..." located on main Workspace Menu above terminal item as "Exec" dialog.
+This is an input form for executing one-shot commands without terminal. It has options to run
+command in terminal (<varname>$[infostore.terminal]</varname>), and to remain open after executing
+commands for subsequent commands. It has it's own command history which can be turned back
 with cursor <keysym>up</keysym> and <keysym>down</keysym> keys. <keysym>Escape</keysym> key
 closes dialog, <keysym>enter</keysym> executes, <keysym>Ctrl+Enter</keysym> executes in default
 terminal application.
@@ -1437,12 +1477,12 @@ both checked.
 </para>
 <para>
 If installed, NsCDE can use rofi(1) command and application launcher from the
-keybinding Alt+F12 instead of built in Exec Dialog. For this to work,
-InfoStore variable <varname>nscde_use_rofi</varname> must be set to "1" in
-<filename>$FVWM_USERDIR/NsCDE.conf</filename>. Rofi is integrated with
-NsCDE color theme and will be set up on the first use, which lasts 3 seconds
-initially and after changing color theme with
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+keybinding <keysym>Alt+F12</keysym> instead of built in Exec Dialog. Workspace
+Menu item "Execute ..." remains the same, only keybinding will call rofi(1)
+instead of built-in simple Exec dialog. For this to work, InfoStore variable
+<varname>nscde_use_rofi</varname> must be set to "1" in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+Rofi is integrated with NsCDE color theme and will be set up on the first use, which lasts 3 seconds
+initially and after changing color theme with <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 </para>
 
 </sect2>
