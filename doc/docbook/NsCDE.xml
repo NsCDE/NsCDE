@@ -1043,7 +1043,7 @@ Key Bindings:
 <para>
 Part of the Style Managers which can be called from the main Style Manager (7th button on the Front Panel).
 This is the clone of the same-named CDE tool. It loads backdrops from the
-<filename class="directory">$NSCDE_ROOT/share/backdrops</filename> and
+<filename class="directory">$NSCDE_DATADIR/backdrops</filename> and
 <filename class="directory">$FVWM_USERDIR/backdrops</filename> (if any). From XPM
 backdrop templates with symbol names (with .pm extension) it will generate
 previews in user's <filename class="directory">$FVWM_USERDIR/tmp</filename> and if
@@ -1085,7 +1085,7 @@ more than CDE original:
 <listitem><para>
  Custom palette can be loaded instead of default one, and backdrops can be
   set with colors from that palette. In 8-colors mode, there is even more
-  possibility of course.
+  possibility because colors can freely change their associated workspace.
 </para></listitem>
 <listitem><para>
  Instead of backdrops, user can opt for a background image. If option "Use
@@ -1138,6 +1138,32 @@ xset(1) options which are executed during NsCDE startup.
 </para>
 
 <para>
+Changing Beep Options
+
+<orderedlist numeration="upperroman">
+
+<listitem><para>
+Open Beep Style Manager Beep from the main Style Manager window.
+</para></listitem>
+
+<listitem><para>
+Select the settings you prefer:
+<itemizedlist>
+<listitem><para>Volume: Determines the volume of the beep (off at 0%)</para></listitem>
+<listitem><para>Pitch (Hz): Determines the pitch of the beep from 82 to 9000 Hz</para></listitem>
+<listitem><para>Duration: Determines the time length of the beep sound</para></listitem>
+<listitem><para>Beep Button (upper left) test the current settings</para></listitem>
+</itemizedlist>
+</para></listitem>
+
+<listitem><para>
+To save the changes, click Save. To return to the default settings, click Default button at upper right corner of the window.
+</para></listitem>
+
+</orderedlist>
+</para>
+
+<para>
 Key Bindings:
 <itemizedlist>
 <listitem><para>
@@ -1160,14 +1186,77 @@ Key Bindings:
 With Backdrop Style Manager, this is probably the most important theme tool in (Ns)CDE. This tool
 applies colors to the widgets, menus, applications and backdrops. As in CDE,
 it reads color information from the palette files in
-<filename class="directory">$NSCDE_ROOT/share/palettes</filename> and
+<filename class="directory">$NSCDE_DATADIR/palettes</filename> and
 <filename class="directory">$FVWM_USERDIR/palettes</filename>. Palettes are the 16bpp
 color definitions (8 of them). This colors and border bg/fg/sel colors
 calculated from them are the base of the look of pretty much all of the things
 on the screen. Colors can be applied in 4 or 8 colors mode. Most notable
-palettes are <emphasis>Broica</emphasis> in 8-colors mode and <emphasis>Solaris</emphasis>
+palettes are <emphasis>Broica</emphasis> in 8-colors mode and <emphasis>Solyaris</emphasis>
 (called <emphasis>Default</emphasis> on SunOS) in 4 colors mode.
 </para>
+
+<para>
+Color Buttons and the Number of Colors selection determine the number of colors that make
+up a palette. You will have four or eight colors in the Color dialog box. The different
+color buttons in the palette control the colors used for different areas of the screen.
+</para>
+
+<para>
+If you have eight color buttons, they will be used as follows (buttons numbered from left to right, top to bottom):
+
+<orderedlist numeration="upperroman">
+
+<listitem><para>Active window borders, corners and titlebars</para></listitem>
+
+<listitem><para>Inactive window borders and non-application menus</para></listitem>
+
+<listitem><para>
+Workspace Manager (WSM) Switch for workspace 1 and 5
+</para></listitem>
+
+<listitem><para>Text, text field, list areas and text areas</para></listitem>
+
+<listitem><para>
+Main window background and Workspace 2 and 6 button background
+</para></listitem>
+
+<listitem><para>Dialog box background, menu bar, popup menu and background of workspace 3 and 7</para></listitem>
+
+<listitem><para>Workspace 4 and 8 background</para></listitem>
+
+<listitem><para>
+Front Panel background when "Color 8 for Front Panel and Icons" is selected
+in the "Number of Colors ..." subdialog.
+</para></listitem>
+
+</orderedlist>
+</para>
+
+<para>
+If you have four color buttons, they will be used as follows (buttons numbered from left to right):
+
+<orderedlist numeration="upperroman">
+<listitem><para>
+Active window borders
+</para></listitem>
+
+<listitem><para>
+Window bodies:
+
+<orderedlist numeration="loweralpha">
+<listitem><para>Inactive window borders and non-application menus</para></listitem>
+<listitem><para>Main window and dialog box backgrounds and menu bar</para></listitem>
+<listitem><para>Front Panel background</para></listitem>
+</orderedlist>
+</para></listitem>
+
+<listitem><para>Workspace switches and backgrounds</para></listitem>
+
+<listitem><para>Text, text field, list areas and text areas</para></listitem>
+
+</orderedlist>
+</para>
+
 <para>
 Color Style Manager as most tools is written in FvwmScript with background
 shell helper and color calculation and generator routines. Visually it tries
