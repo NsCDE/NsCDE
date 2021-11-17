@@ -1693,16 +1693,16 @@ Key Bindings:
 Keyboard Style Manager tool can be used to set (xset) 4 values:
 <itemizedlist>
 <listitem><para>
-Auto Repeat on/off
+Auto Repeat on/off: Sets characters to repeat when you hold down their keys
 </para></listitem>
 <listitem><para>
-Start Delay (start of repeat delay)
+Start Delay (start of repeat delay): initial delay on pressed key to start with auto repetition
 </para></listitem>
 <listitem><para>
-Repeat Delay
+Repeat Delay: Speed at which auto repeat works
 </para></listitem>
 <listitem><para>
-Click Volume
+Click Volume: Determines the volume of key clicks (turned off at 0%)
 </para></listitem>
 </itemizedlist>
 </para>
@@ -1750,13 +1750,13 @@ pages with <guibutton>All Workspaces</guibutton> or <guibutton>All Pages</guibut
 pressed in. One addition here is the checkbox <guibutton>Go With the Window</guibutton>; when checked,
 makes NsCDE to change a current workspace, page and/or monitor and go with the window, or where window was sent.
 Radio buttons <guibutton>Workspaces:</guibutton>, <guibutton>Pages:</guibutton> and <guibutton>Monitors:</guibutton> are changing the
-current context of operation between workspaces and pages, which is visually also manifested in the
-main list as the names of either workspaces or pages. If called as "Occupy Workspace", pages or monitors can also
-be selected and changed by switching this context with this buttons or with the <keysym>Space</keysym>
+current context of operation between workspaces, pages and monitors, which is visually also manifested in the
+main list as the names of either workspaces, pages or RandR names of the monitors. If called as "Occupy Workspace",
+pages or monitors can also be selected and changed by switching this context with this buttons or with the <keysym>Space</keysym>
 key shortcut in focused Occupy window. Radio button for monitors and "Occupy Monitor" functionality is only shown
 and available if multiple physical (or virtual) monitors are detected by FVWM and NsCDE.
 <guibutton>OK</guibutton> performs an action, <guibutton>Dismiss</guibutton> quits Occupy tool without
-action taken.
+taking action.
 </para>
 <para>
 On the upper left part of the window there are three buttons with labels <guilabel>Workspaces</guilabel>,
@@ -1978,25 +1978,25 @@ Options Dialog Key Bindings:
 <sect2 id="NsCDE-GeometryMgr">
 <title>Window Geometry Manager</title>
 <para>
-This tool dialog is called from the left titlebar button menu. Or from
-<keysym>Meta+F6</keysym> key combination from the window context. This Manager offers convenience
-to save size and position of the non-transient window. Once window geometry is saved, next run of
-the same application window on FVWM page where it is not already present that window will cause window
-to be resized to that exact width, height, X position and Y position X11 coordinates as stored in the
-<filename>$FVWM_USERDIR/GeoDB.ini</filename>. This ini-style file is managed by this application, as
-well as from the background runner <filename>$NSCDE_TOOLSDIR/confset</filename> and read by the
-<filename>$NSCDE_TOOLSDIR/confget</filename>. Application automatically fills X11 Class and X11
-Resource names on contextual call, as well as geometry parameters. Before applying this settings,
-user has a chance to fine tune this parameters in text fields and confirm (or cancel) the action
-on the end. Using <guibutton>Clear</guibutton> all geometry values, as well as those which may be
-saved from the past are cleared and deleted. After the Clear action, there are two options:
+This tool dialog is called from the left titlebar button menu. Or from <keysym>Meta+Alt+G</keysym>
+key combination from the window context. This Manager offers convenience to save size and position
+of the non-transient window. Once window geometry is saved, next run of the same application window
+on FVWM page where the window of the same resource+class combination is not already present will cause
+window to be resized to that exact width, height, X position and Y position X11 coordinates as stored
+in the <filename>$FVWM_USERDIR/GeoDB.ini</filename>. This ini-style file is managed by this
+application, as well as from the background runner <filename>$NSCDE_TOOLSDIR/confset</filename> and
+read by the <filename>$NSCDE_TOOLSDIR/confget</filename>. Application automatically fills X11 Class
+and X11 Resource names on contextual call, as well as geometry parameters. Before applying this
+settings, user has a chance to fine tune this parameters in text fields and confirm (or cancel) the
+action on the end. Using <guibutton>Clear</guibutton> all geometry values, as well as those which may
+be saved from the past are cleared and deleted. After the Clear action, there are two options:
 <itemizedlist>
 <listitem><para>
 Filling all fields manually and saving the result
 </para></listitem>
 <listitem><para>
 Saving empty fields: this action will cancel and/or remove any existing geometry
-mappings for the selected X11 window.
+mappings for the selected X11 program window.
 </para></listitem>
 </itemizedlist>
 Note that geometry savings are dependent on the current monitor resolution. In other words,
@@ -2019,7 +2019,6 @@ Key Bindings:
 </itemizedlist>
 </para>
 </sect2>
-
 
 <sect2 id="NsCDE-PointerMgr">
 <title>Mouse Style Manager</title>

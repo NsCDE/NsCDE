@@ -30,7 +30,7 @@ M. Z.
         3.3. Workspace Manager
         3.4. Page Manager
         3.5. MonthDayApplet
-        3.6. Front Panel Clock - pclock
+        3.6. Front Panel Clock - fpclock
         3.7. Check Mail Applet
         3.8. FpLite
 
@@ -383,9 +383,10 @@ M. Z.
    NsCDE provides GUI tools which are built in FvwmScript(1) and
    their shell and python helpers. Also, some external
    applications that fit in the picture as recommended. This tools
-   are mainly built by me, but some, such as mouse, keyboard and
-   beep control are modified from the default FVWM scripts to look
-   more CDEish and they implement some additional functionality.
+   are mainly built for NsCDE from scratch, but some, such as
+   mouse, keyboard and beep control are modified from the default
+   FVWM scripts to look more CDEish and they implement some
+   additional functionality.
 
    Applets docks and panels are:
 
@@ -447,9 +448,10 @@ M. Z.
 
    In NsCDE, CDE Front Panel is re-implemented with the help of
    FvwmButtons(1) Configuration is stored under alias *FrontPanel
-   in FrontPanel.fvwmconf, read and activated from the
-   Main.fvwmconf. Visually, this is remake almost in a pixel as
-   CDE Front Panel. The main differences are:
+   in FrontPanel.fvwm2.fvwmconf and FrontPanel.fvwm3.fvwmconf,
+   read and activated from the Main.fvwmconf. Visually, this
+   remake of Front Panel matches almost in a pixel CDE Front
+   Panel. The main differences are:
 
      * Since FvwmButtons doesn't implement drag and drop protocol,
        there is no possibility to install icons by dragging them
@@ -461,14 +463,14 @@ M. Z.
        Main Panel can be choosen. This will edit file
        FrontPanel.actions in user's $FVWM_USERDIR and put
        appropriate custom launcher. All Front Panel launchers can
-       be customized, including the ones with applets (watch,
+       be customized, including the ones with applets (clock,
        calendar, mail) instead of static icons. One notable
        inconvinience here is that subpanel must be enabled and
        icon installed on that subpanel before it can be copied to
        the main panel. If one does want to customize icon launcher
        without having subpanel above it, subpanel can be enabled
        temporary, icon installed on it, and copied to the main
-       panel, and after this, subpanel can be disabled again. File
+       panel, and subpanel above icon disabled afterwards. File
        FrontPanel.actions can also be edited manually as an
        alternative (caution should be taken) to achieve the same
        effect. Manual editing is mandatory when one wants to
@@ -485,15 +487,15 @@ M. Z.
      * On every icon, for the first two mouse buttons different
        action can be assigned. This is used for example 7th icon
        where mouse button 1 calls Style Manager, while mouse
-       button 2 is calling Backdrop Style Manager directly as a
-       quick shortcut. Second (middle) mouse button action can be
-       considered as hidden hack for advanced users.
-     * Mouse button 3 on any of the 10 Front Panel icons brigs
-       contextual pop-up menu titled by the main action from mouse
-       button 1. Action on this menu are: a) call main application
-       as if icon has been clicked with the 1st mouse button, b)
-       "reset this button" which will remove user's customizations
-       for that launcher button from the
+       button 2 calls Backdrop Style Manager directly as a quick
+       shortcut. Second (middle) mouse button action can be
+       considered as hidden hack for advanced usage.
+     * Mouse button 3 on any of the default 10 Front Panel icons
+       brings contextual pop-up menu titled by the main action
+       from mouse button 1. Action on this menu are: a) call main
+       application as if icon has been clicked with the 1st mouse
+       button, b) "reset this button" which will remove user's
+       customizations for that launcher button from the
        $FVWM_USERDIR/FrontPanel.actions and load default from the
        $NSCDE_DATADIR/defaults/FrontPanel.actions., c) "Reset
        Subpanel" will reset upper subpanel to it's default value
@@ -505,7 +507,9 @@ M. Z.
      * In addition to iconification, Front Panel can be shaded to
        the bottom edge of the screen with Shift-Esc action, and
        put back in it's place with the same key binding when it is
-       called again.
+       called again. Shade direction of the Front Panel is the
+       opposite one from ordinary windows - they are rolled from
+       the bottom up.
      * Iconification is by default to bottom right screen edge,
        leaving last 96px space to the right for Stalonetray the
        while all other programs are by default iconified in the
@@ -541,37 +545,41 @@ M. Z.
           + CheckMailApplet (FvwmScript)
           + WSM / Workspace Manager (FvwmScript)
           + FpLite (FvwmScript)
-     * Third icon expects $[infostore.filemgr] to be defined.
+     * Third icon expects $[infostore.filemgr] to be defined or
+       discovered and automatically filled if not defined.
      * Fourth icon will call $[infostore.terminal] which must be
        defined or it is discovered.
-     * Sixth or Print icon is not really usable. It should call
-       some predefined printer application in the future or to be
-       replaced with something more useful. Good place for
-       personal custom icon and redefinition with
-       FrontPanel.actions.
-     * Seventh: Style Manager - clone of the well known CDE
-       Launcher of "Style" tools.
+     * Sixth icon tries to discover system print manager.
+       Currently, only system-config-printer and
+       $[infostore.browser] http://localhost:631 are discovered,
+       but this can be set manually by putting InfoStore variable
+       $[infostore.printmgr] in ~/.NsCDE/NsCDE.conf. Good place
+       for personal custom icon and redefinition if printing
+       really doesn't that much to the user. FrontPanel.actions.
+     * Seventh: NsCDE Style Manager from which all other Style
+       Managers can be called.
      * $[infostore.xeditor] - if defined in
-       $FVWM_USERDIR/NsCDE.conf.
+       $FVWM_USERDIR/NsCDE.conf. If not defined, NsCDE will try to
+       find some usable app and autofill this value on startup.
      * Semi-empty. By default, it popups 9th subpanel if pressed.
        A nice idea is to call pavucontrol or some audio mixer on
        3rd mouse click from FrontPanel.actions.
      * Help, documentation.
-     * Front Panel Subpanels 2, 5 and 6 are empty, but they can be
-       activated with middle pointer click on an empty place, or
-       with a contextual menu on the icon below it on the Front
-       Panel, and selecting a menu item "Add Subpanel". In a
-       former case, dialog will ask user if he wants subpanel to
-       be enabled, while in later case, subpanel will be enabled
-       immediately. This is specially useful for subpanel 5 which
-       will show Thunderbird if activated and if Thunderbird is
-       installed.
+     * Front Panel Subpanels 2, 5, 6 and 8 are empty by default,
+       but they can be activated with a triple middle pointer
+       click on an empty place, or with a contextual menu on the
+       icon below it on the Front Panel, and selecting a menu item
+       "Add Subpanel". In a former case, dialog will ask user if
+       he wants subpanel to be enabled, while in later case,
+       subpanel will be enabled immediately. This is specially
+       useful for subpanel 5 which will show
+       $[infostore.mailreader] if it is defined or autodiscovered.
           + Subpanel 1: Applications
           + Subpanel 3: Libre Office Components and various
-            office/productivity tools
+            office/productivity tools (PS/PDF reades etc ...)
           + Subpanel 4: Tools
           + Subpanel 7: NsCDE Style Manager and various Qt, Gtk
-            and misc management applications
+            and misc desktop management applications
           + Subpanel 9: Multimedia programs: audio, video, photo
             ...
           + Subpanel 10: Documentation
@@ -597,9 +605,9 @@ M. Z.
        Exit button (lower right) has a small contextual menu which
        calls main action and help.
        In the middle of this area there is WSM - Work Space
-       Manager with well known four buttons for four virtual
-       desks. By default, four desks are shown and configured, but
-       this can be changed (see Section 3.3).
+       Manager with well known buttons for navigating NsCDE
+       workspaces. By default, four workspaces are shown and
+       configured, but this can be changed (see Section 3.3).
      __________________________________________________________
 
 3.1.1. Customizing number of Front Panel launchers
@@ -654,18 +662,23 @@ M. Z.
 
 3.2. Subpanels
 
-   NsCDE subpanels are simple transient FvwmButton docks. As Front
-   Panel, they are also as much as possible similar to original
-   CDE forms of the same purpose. Some applications in them are
-   predefined, and discovered if installed, and the rest is up to
-   user to populate. Their purpose is not to show all possible GUI
-   applications installed on the system as right-click root menu.
-   They are meant for favorite, important and often used apps.
+   NsCDE subpanels are simple transient FvwmButtons based docks.
+   As the Front Panel itself, they are also as much as possible
+   similar to original CDE forms of the same purpose. Some
+   applications in them are predefined, and discovered if
+   installed, and the rest is up to user to populate. Their
+   purpose is not to show all possible GUI applications installed
+   on the system as right-clicked Workspace Menu does. They are
+   meant for favorite, important and often used programs.
 
-   There is one main difference between CDE and NsCDE subpanels:
-   Install Icon action calls special NsCDE tool for actions
-   defining. There is no drag and drop from the app manager (which
-   also doesn't exist).
+   There is one big difference between CDE and NsCDE subpanels:
+   Install Icon is not (and cannot be due to FvwmButtons not
+   implementing) drag-and-drop destionation. Click action on
+   Install Icon calls special NsCDE tool for installing and
+   defining items on the subpanel. There is no drag and drop off
+   items from the applicaton manager (the later also doesn't
+   exist, but it can be used as menu://applications/ pseudo path
+   in some file managers).
 
    On every subpanel, last selected entry will remain hilighted
    next time subpanel is popped up again.
@@ -676,16 +689,16 @@ M. Z.
    are actions to move up or down item for one space on the
    subpanel, to move item to the beginning or the end of the
    subpanel's application list, as well as to delete item from the
-   subpanel (warning message will appear before deletion is really
-   performed). First menu item is the same as menu name: title of
-   the application from submenu. If clicked, it will perform
-   default action as if item's title or icon was clicked on the
-   submenu itself. This is a kind of a escape from the contextual
-   menu, but to still use subpanel's default action without
-   repeating opening of a submenu again. If move or delete action
-   is silently not performed, this is most likely the situation
-   where user's $FVWM_USERDIR/Subpanels.actions is newer than
-   $FVWM_USERDIR/Subpanels.fvwmconf, and must be rebuilt for
+   subpanel (warning message will appear before deletion is
+   finally performed). First menu item is the same as menu name:
+   title of the application from submenu. If clicked, it will
+   perform default action as if item's title or icon was clicked
+   on the submenu itself. This is a kind of a escape from the
+   contextual menu, but to still use subpanel's default action
+   without repeating opening of a submenu again. If move or delete
+   action is silently not performed, this is most likely the
+   situation where user's $FVWM_USERDIR/Subpanels.actions is newer
+   than $FVWM_USERDIR/Subpanels.fvwmconf, and must be rebuilt for
    configuration actions to take a place properly. In that case,
    repeated operation must succeed, otherwise, see X session error
    log for details.
@@ -704,33 +717,40 @@ M. Z.
 
    On the first change with Install Icon or Subpanel Settings,
    non-FVWM configuration file Subpanels.actions will be created
-   in the $FVWM_USERDIR, from where all subpanels changed from
+   in the $FVWM_USERDIR, from there, all subpanels changed from
    default will be read by the $NSCDE_TOOLSDIR/generate_subpanels,
-   while the rest will be generated from the
+   while the rest will be generated and combined/mixed from the
    $NSCDE_DATADIR/defaults/Subpanels.actions. This file can also
    be edited by hand (ok, not by hand, but editor will suffice)
    and the result may be applied by calling generate_subpanels and
-   then f_ReadCfg Subpanels. Generated file is called
-   Subpanels.fvwmconf and it is expected in the $FVWM_USERDIR. If
-   not found there, $NSCDE_ROOT/config/Subpanels.fvwmconf will be
-   read instead. Syntax of the Subpanels.actions is explained in
-   the Configuration files explained section.
+   then f_ReadCfg Subpanels. Generated files will be called
+   Subpanels.fvwm2.fvwmconf and Subpanels.fvwm3.fvwmconf with the
+   same content, but a slightly different syntax, one of this
+   files will be read as subpanels configuration depending under
+   which version of FVWM NsCDE is running. This files are expected
+   to appear in the $FVWM_USERDIR. If not found there,
+   $NSCDE_ROOT/config/Subpanels.fvwmX.fvwmconf will be read
+   instead. Syntax of the Subpanels.actions is explained in the
+   Configuration files explained section.
 
-   Presently, there is one workaround here: as much as FVWM, and
-   specially FvwmButtons are very flexible and configurable, no
-   title for the buttons app can be set apart from module alias,
-   but module alias doesn't support names with spaces in them.
-   Internal names as "NsCDE-SubpanelX" are for that reason
-   referenced in FrontPanel.fvwmconf, and are internally mandatory
-   names of their Subpanels. Since there is no configuration
-   option for subpanel to set Window Title, we are using here tool
-   xdotool(1) which is run on Subpanel initialization with a delay
-   of 3,2 seconds (internal workaround for xdotool) and this then
-   takes infostore variable NsCDE-SubpanelX-Name and sets literal,
-   system default or user picked name of the subpanel. Presently,
-   an alternative option is to apply FvwmButtons patch which
-   introduces a WindowName option to it's configuration. Of
-   course, patch will be proposed to the upstream FVWM.
+   Presently, there is one workaround here under FVWM2: as much as
+   FVWM, and specially FvwmButtons are very flexible and
+   configurable, no title for the buttons app can be set apart
+   from module alias, but module alias doesn't support names with
+   spaces in them. Internal names as "NsCDE-SubpanelX" are for
+   that reason referenced in FrontPanel.fvwmX.fvwmconf, and are
+   internally mandatory names of their Subpanels. Because there is
+   no configuration option in FVWM2 for subpanel to set Window
+   Title, we are using tool xdotool(1) which is run on Subpanel
+   initialization with a delay of 3,2 seconds (internal workaround
+   for xdotool) and this then takes infostore variable
+   NsCDE-SubpanelX-Name and sets literal, system default or user
+   picked name of the subpanel. Presently, an alternative option
+   is to apply FvwmButtons patch present in the patches
+   subdirectory of NsCDE tarball which introduces a WindowName
+   option for FVWM2 to it's configuration, or even better, to use
+   new FVWM3 which has this and many other handy options and
+   capabilities already in place.
 
    The rest about Subpanel, or to say their visible outfit, and
    their main function are the same as in CDE - a nice,
@@ -749,82 +769,75 @@ M. Z.
        2, 4, 6 and 8. Default is of course 4.
      * If InfoStore variable wsm.eco is defined as "InfoStoreAdd
        wsm.eco 1" in user's profile $FVWM_USERDIR/NsCDE.conf, WSM
-       buttons will not be fixed in width as in CDE. They are not
-       extending a width of the Front Panel, rather they are more
-       wide in 2-buttons combination, and narrow in 6 and
-       specially 8 button combination. By default, buttons are all
-       of the same width and they are extending or narrowing width
-       of the Front Panel if changed from default 4 workspaces to
-       2, 6 or 8.
+       buttons will not be fixed in width as in CDE. In that case,
+       Workspace Manager will not extend a width of the Front
+       Panel, rather buttons will be more wide in 2-buttons
+       combination, and more narrow in 6 and specially 8 button
+       combination. By default, buttons are all of the same width
+       and they are extending or narrowing the cummulative Front
+       Panel width size if changed from default 4 workspaces to 2,
+       6 or 8 workspaces.
      * As in CDE, workspace names can be renamed. There is a
        keyboard combination in FvwmScript WSM which enters rename
-       mode: Ctrl+Space on the current active desk, while pointer
-       is inside WSM. Ctrl+Enter saves new name. Names are
-       synchronized with FVWM desktop names and used in the rest
-       of the configuration. Names are saved in
+       mode: Ctrl+Space on the current active workspace button,
+       while pointer is above it. Then, Ctrl+Enter saves a new
+       name. Names are synchronized with FVWM desktop names and
+       used in the rest of the configuration. Names are saved in
        $FVWM_USERDIR/WSM.conf, and EWMH desktop names are applied
-       immediately in a existing X11 NsCDE session.
+       immediately in a existing X11 NsCDE session. Workspaces can
+       also enter rename mode if their workspace buttons are
+       clicked with 3rd mouse button and Rename ... option choosen
+       from the popup menu.
      * If Sun type keyboard is in use, Help key above WSM will
        bring this help text in browser. On PC keyboard, F1 has the
        same function.
      * Addition: right mouse button on workspace button brings
        contextual menu. From this menu, the following items can be
-       selected: default acion (activate workspace), Rename to
-       rename the workspace, Manage to call Workspace and Page
-       Manager, Local Pager (visual FvwmPager) (for a workspace,
-       not necessarily the current one), then the option Windows
-       ... to bring up Window List, with windows on that
-       workspace, and last, a small submenu Go to Page ... for
-       changing the active page on the that workspace, which will
-       of course change active workspace to that where page was
-       selected.
-     * If $FVWM_USERDIR/WSM.conf value WSPPG is 1, then in 2 or 4
-       desks/buttons mode a small current page indicator is shown
-       on the right side of the button. In addition to Page
-       Manager Icon southwest of the WSM. Disabled (0) by default.
-       WSM.conf (system wide: $NSCDE_DATADIR/defaults/WSM.conf) is
-       a separate configuration file read by WSM, WsPgMgr and
-       such. Not a FVWM configuration file.
+       selected: default acion (activate workspace), Rename ... to
+       rename the workspace, Manage ... to call Workspace and Page
+       Style Manager,Popup menu Go to Page ..., Local Pager
+       (visual FvwmPager) (for a workspace, not necessarily the
+       current one), then the option Windows ... to bring up
+       Window List, with windows on that workspace, and last, a
+       small submenu Go to Page ... for changing the active page
+       on the that workspace, which will of course change active
+       workspace to that where page was selected.
      * Number of Workspaces and Pages can be configured with
-       Workspace and Pages Style Manager tool which is called with
-       right pointer click on Front Panel's left button and
-       selected from the menu.
+       Workspace and Pages Style Manager tool.
 
    State of the buttons is synchronized by FVWM function called
    from FvwmEvent(1) module whenever desks and pages are changed
-   by other means, such as keyboard shortcut, mouse move, or
-   FvwmCommand(1).
+   by other means, such as keyboard shortcut, mouse move, or by
+   issuing direct commands to FvwmCommand(1).
 
-   In 4 color palette mode, all WSM buttons are of the same color,
-   while in 8 colors mode, there are four color variations from
-   the given palette. In the 8 colors mode, InfoStore option
-   wsmcolored in the $FVWM_USERDIR/NsCDE.conf can be set to 1 to
-   get background of the WSM colored as button 3, which was the
-   case on some versions of the CDE. By default, this value is 0.
+   In 4-color palette mode, all WSM buttons are of the same color,
+   while in 8-colors mode, there are four color variations from
+   the given palette.
 
    Workspaces in NsCDE are named and numbered from 1, while in
    FVWM (where they are called desks), they start from 0. This
    fact required additional effort while coding FvwmScripts and
-   making default and core configuration.
+   making core configurations.
      __________________________________________________________
 
 3.4. Page Manager
 
    Page Manager is entirely new thing. There is no concept of
-   Pages in the original CDE, just desks (workspaces). This nice
-   feature of pages is too useful to be disabled and sacrificed
-   just to get even more CDE similarity, but really zealous user
-   can configure NsCDE not to include pages, just desks. PGM is a
-   dynamic FvwmButtons Icon southwest from the WSM, represented by
-   the silver-gray icon of the desk divided on pagesX x pagesY.
-   Default is 2x2, that is, four pages per every desk, which in
-   default first run gives 4 x 4 = 16 screens for applications.
+   Pages in the original CDE, just workspaces (FVWM: desks). A
+   nice FVWM feature of pages is too useful to be disabled and
+   sacrificed just for the sake of even more CDE similarity, but
+   really zealous user can configure NsCDE not to use pages, just
+   workspaces. That is, 1 page per workspace. PGM is a dynamic
+   FvwmButtons Icon southwest from the WSM, represented by the
+   silver-gray icon of the workspace divided on pagesX x pagesY.
+   Default is 2x2, that is, four pages per every workspace, which
+   in default setup gives 4 x 4 = 16 screens for applications.
    Minimum for pages is 0, and maximum 16. For example, in maximal
-   desks+pages configuration, one gets 8x16 desktop, that is 128
-   screens! While undoubtedly this is diversion from a more
-   flexible plain FVWM configuration, it covers really great
+   workspaces+pages configuration, one gets 8x16 desktop, that is
+   128 screens! While undoubtedly this is diversion from a even
+   more flexible plain FVWM configuration, it covers really great
    number of possible preferences. Pages can be configured in any
-   XxY combination. For example 1x4, 2x3, 3x3, 2x1, 2x2 ...
+   XxY combination. For example 1x4, 2x3, 3x3, 2x1, 2x2, 3x2 ...
 
    Page Manager icon changes with the page to represent position
    of the current page on current workspace while user moves from
@@ -832,57 +845,86 @@ M. Z.
    just like the Workspace Manager (WSM).
 
    When clicked, popups menu with names of the pages. When option
-   from the menu is selected, menu pops down and page is changed
-   to the selected one. Middle pointer button calls Workspace and
-   Page Manager, while the right pointer button calls visual Local
-   Pager.
+   from the menu is selected, menu pops down and active pointer
+   screen is changed to the selected page. Second pointer button
+   calls Workspace and Page Manager, while the third pointer
+   button calls pages popup menu.
      __________________________________________________________
 
 3.5. MonthDayApplet
 
-   Usual CDE icon with month and day of the month in it. Simple
+   Familiar CDE icon with month and day of the month in it. Simple
    applet which calls empty, do-nothing (by default) function
    f_Calendar. This function can be overridden in
-   $FVWM_USERDIR/Functions.fvwmlocal to call a program which user
-   wishes.
+   $FVWM_USERDIR/Functions.fvwmlocal to call a program configured
+   by the user.
 
    If Sun type keyboard is in use, Help key above Month Day Applet
    will bring this help text in browser. On PC keyboard, F1 has
    the same function.
      __________________________________________________________
 
-3.6. Front Panel Clock - pclock
+3.6. Front Panel Clock - fpclock
 
    This is a small C program (GPL) written many years ago by
    Alexander Kourakos. It supports XPM skins and displays hours,
    minutes and seconds. It is well suited for window manager docks
    like FvwmButtons(1). In NsCDE it is applied with a skin similar
    to original one, but slightly bigger and with more clear edges
-   and colors. Default can be used from $NSCDE_DATADIR/icons/CDE
+   and colors. Default can be used from $NSCDE_DATADIR/icons/NsCDE
    or even replaced with a Solaris version with picture of the
    globe with red hands for hours and minutes and white for
    seconds. If clicked, it will try to execute firefox by default
-   (which appears doesn't work if FVWM is started under some
-   desktop environment like MATE). Pclock C source is provided for
-   user's convenience if it needs to be recompiled on another
-   system or architecture. Source is in
-   $NSCDE_ROOT/src/pclock-0.13.1. With NsCDE binary for Linux is
-   provided by default in $NSCDE_ROOT/bin.
+   (which appears doesn't work if Num Lock is active on the
+   keyboard).
      __________________________________________________________
 
 3.7. Check Mail Applet
 
    Fifth icon from the left on Front Panel is FvwmScript applet.
-   It is calling f_CheckMail FVWM function every minute. If
-   clicked, function is called immediately. By default f_CheckMail
-   is an empty function. Up to user is to redefine it in his
+   It is calling f_CheckMail FVWM function if clicked. By default
+   f_CheckMail is calling $[infostore.mailreader], which if
+   defined by user or discovery, will bring up mail application.
+   Up to user is to redefine this variable in his
    $FVWM_USERDIR/Functions.fvwmlocal to suit the needs for mail
    checking. To be clear, by default, it is not functional as an
-   applet. Above this applet, there is an empty space for subpanel
-   launcher which can be activated with middle click, and it will
-   present Thunderbird entry if thunderbird is installed. User can
-   use Install Icon action to change or add entries on this menu.
-   For example, to call urxvt -e mutt or something like that.
+   new mail notification applet. External applications can use it
+   for this by calling nscde_fvwmclnt to send it a signal. The
+   syntax is:
+nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
+ LetterUp <accnum> <accname> <fontsize> <color>"
+
+
+   Where:
+
+     * nscde_fvwmclnt is NsCDE wrapper for FVWM2 or FVWM3
+       FvwmCommand sender
+     * "SendToModule CheckMailApplet SendString 1 2" will send
+       directions to widget 1, subroutine 2 of the CheckMailApplet
+       FvwmScript module
+     * "accnum" is a number identifying a separate mail account or
+       entity, one per name, 10 max
+     * "accname" is 3 letters identifying account, for example
+       "PTN" for proton
+     * "fontsize" can send font size hint to CheckMailApplet for
+       displaying notification info
+     * "color" is a hex or X11 color name hint to CheckMailApplet
+       for displaying notification info
+
+   This command can be used by mail programs to notify Front Panel
+   Mail icon to change from closed letter to open letter when new
+   mail arrives. For any new mail, counter for named and numbered
+   account will increase by 1, until icon is clicked by the user.
+   For example, Thunderbird has a "mailbox alert" extension that
+   can use scripting way of sending notifications.
+
+   Above this applet, there is an empty space for subpanel
+   launcher which can be activated with middle triple click, and
+   it will present Mail Reader if thunderbird, claws-mail, mutt or
+   some other popular and known mail application is installed.
+   User can use Install Icon action to change or add entries on
+   this menu. For example, to call urxvt -e mutt or something like
+   that.
 
    Key F1 will bring this help text in browser. If Sun type
    keyboard is in use, Help key above Check Mail Applet has the
@@ -895,8 +937,8 @@ M. Z.
    Panel contains a small applet called FpLite. In original CDE it
    was used to indicate desktop activity, but since on today's
    processors this tasks are short and almost immediate (specially
-   with a good window manager such as FVWM), I find it better
-   suited to show system load.
+   with a good window manager such as FVWM), It appears to be
+   better suited to server as system load indicator.
 
    It has 10 micro-bars. When there is no load, all are yellow.
    Load grows from left to right. First 5 green bars, then 3 blue,
@@ -915,10 +957,13 @@ M. Z.
    but user gets an idea what is going on if FpLite is all red.
 
    If clicked, it will call a function f_FpLiteClickAction which
-   is by default set to safe defaults ([default terminal app] -e
-   top). FpLite FvwmScript app uses little portable python script
-   getla1 from the $NSCDE_ROOT/libexec to obtain 1-minute load
-   data.
+   is by default set to $[infostore.taskmgr] or autodiscovery
+   during starup. If nothing else, it will call [default terminal
+   app] -e top on Linux and BSD systems, [default terminal app] -e
+   prstat on Solaris and it's clones, and [default terminal app]
+   -e topas on AIX. FpLite FvwmScript app uses little portable
+   python script getla1 from the $NSCDE_TOOLSDIR/libexec to obtain
+   1-minute load data.
 
    Key F1 will bring this help text in browser. If Sun type
    keyboard is in use, Help key above FpLite has the same function
@@ -945,15 +990,15 @@ M. Z.
      * Power Style Manager
      * Startup Style Manager
 
-   If NsCDE was started under X Session Manager, Startup Style
+   If NsCDE was started by some X Session Manager, Startup Style
    Manager icon will call setup tool for that session manager or
-   DE. Otherwise, error message is displayed: either that NsCDE
-   was not started under X Session Management, or X Session
-   Manager is not recognized, and it's setup tool cannot be run.
-   Currently, only MATE, LXDE, KDE and GNOME session managers are
-   recognized and their respective tools called. See Section 11
-   about running NsCDE under X Session Manager for more
-   information about this matter.
+   DE if it is known to Style Manager. Otherwise, error message is
+   displayed: either that NsCDE was not started under X Session
+   Management, or X Session Manager is not recognized, and it's
+   setup tool cannot be run. Currently, only MATE, LXDE, KDE and
+   GNOME session managers are recognized and their respective
+   tools called. See Section 11 about running NsCDE under X
+   Session Manager for more information about this matter.
 
    Key Bindings:
 
@@ -977,8 +1022,8 @@ M. Z.
    Part of the Style Managers which can be called from the main
    Style Manager (7th button on the Front Panel). This is the
    clone of the same-named CDE tool. It loads backdrops from the
-   $NSCDE_ROOT/share/backdrops and $FVWM_USERDIR/backdrops (if
-   any). From XPM backdrop templates with symbol names (with .pm
+   $NSCDE_DATADIR/backdrops and $FVWM_USERDIR/backdrops (if any).
+   From XPM backdrop templates with symbol names (with .pm
    extension) it will generate previews in user's
    $FVWM_USERDIR/tmp and if applied or OK'ed, will set permanent
    backdrop in $FVWM_USERDIR/backer. Backer is named after
@@ -1017,7 +1062,8 @@ M. Z.
        menu. There are four variants.
      * Custom palette can be loaded instead of default one, and
        backdrops can be set with colors from that palette. In
-       8-colors mode, there is even more possibility of course.
+       8-colors mode, there is even more possibility because
+       colors can freely change their associated workspace.
      * Instead of backdrops, user can opt for a background image.
        If option "Use photo or picture" is selected, list of
        backdrops will dissapear and image backgrounds (so called
@@ -1059,6 +1105,20 @@ M. Z.
    with other xset(1) options which are executed during NsCDE
    startup.
 
+   Changing Beep Options
+
+    I. Open Beep Style Manager Beep from the main Style Manager
+       window.
+   II. Select the settings you prefer:
+          + Volume: Determines the volume of the beep (off at 0%)
+          + Pitch (Hz): Determines the pitch of the beep from 82
+            to 9000 Hz
+          + Duration: Determines the time length of the beep sound
+          + Beep Button (upper left) test the current settings
+   III. To save the changes, click Save. To return to the default
+       settings, click Default button at upper right corner of the
+       window.
+
    Key Bindings:
 
      * Escape: Quits Beep Style Manager.
@@ -1072,13 +1132,45 @@ M. Z.
    important theme tool in (Ns)CDE. This tool applies colors to
    the widgets, menus, applications and backdrops. As in CDE, it
    reads color information from the palette files in
-   $NSCDE_ROOT/share/palettes and $FVWM_USERDIR/palettes. Palettes
+   $NSCDE_DATADIR/palettes and $FVWM_USERDIR/palettes. Palettes
    are the 16bpp color definitions (8 of them). This colors and
    border bg/fg/sel colors calculated from them are the base of
    the look of pretty much all of the things on the screen. Colors
    can be applied in 4 or 8 colors mode. Most notable palettes are
-   Broica in 8-colors mode and Solaris (called Default on SunOS)
+   Broica in 8-colors mode and Solyaris (called Default on SunOS)
    in 4 colors mode.
+
+   Color Buttons and the Number of Colors selection determine the
+   number of colors that make up a palette. You will have four or
+   eight colors in the Color dialog box. The different color
+   buttons in the palette control the colors used for different
+   areas of the screen.
+
+   If you have eight color buttons, they will be used as follows
+   (buttons numbered from left to right, top to bottom):
+
+    I. Active window borders, corners and titlebars
+   II. Inactive window borders and non-application menus
+   III. Workspace Manager (WSM) Switch for workspace 1 and 5
+   IV. Text, text field, list areas and text areas
+    V. Main window background and Workspace 2 and 6 button
+       background
+   VI. Dialog box background, menu bar, popup menu and background
+       of workspace 3 and 7
+   VII. Workspace 4 and 8 background
+   VIII. Front Panel background when "Color 8 for Front Panel and
+       Icons" is selected in the "Number of Colors ..." subdialog.
+
+   If you have four color buttons, they will be used as follows
+   (buttons numbered from left to right):
+
+    I. Active window borders
+   II. Window bodies:
+         a. Inactive window borders and non-application menus
+         b. Main window and dialog box backgrounds and menu bar
+         c. Front Panel background
+   III. Workspace switches and backgrounds
+   IV. Text, text field, list areas and text areas
 
    Color Style Manager as most tools is written in FvwmScript with
    background shell helper and color calculation and generator
@@ -1093,6 +1185,32 @@ M. Z.
    actions. System palettes cannot be deleted, while local can be
    added to $FVWM_USERDIR/palettes and applied immediately.
 
+   Importing a ready-made new custom Palette: you can import your
+   own palette
+
+    I. Open the Color Style Manager.
+   II. Choose Add ... in the Color dialog box.
+   III. Browse files and directories to the new Palette file.
+       Palette file must have .dp extension and conform to the
+       simple format (8x16bpp hex colors).
+   IV. Select the new Palette file from the list of files
+    V. Click OK in the Color dialog box.
+
+   Custom Palettes from the $FVWM_USERDIR/palettes can also be
+   deleted. Just pick the name from the list and click on the
+   Delete ... button. You will be asked for confirmation, and
+   then, if standard UNIX filesystem user and group ownership and
+   permissions are allowing that, palette file will be permanently
+   deleted.
+
+   Creating new palette by modifying an existing one makes a copy
+   of the currently selected palette with a default name "Custom".
+   When applying this new palette, Color Style Manager will ask
+   you to rename this palette, which is a good idea, because the
+   next modification will rewrite "Custom" generic name again, and
+   previous work will be lost. You then create your custom palette
+   by modifying the copy, so the original palette is not changed.
+
    Button Modify will popup color editor if user selects one of
    the 8 (or 4) base colors. When selected, this color frames will
    get "Abc" written in them with automatic foreground choice for
@@ -1102,9 +1220,8 @@ M. Z.
    values, as well as Hue, Saturation and Value. On the top left
    corner are preview squares with names "Old" and "New". When
    changing color with RGB and/or HSV controls, this "New" square
-   button will change it's colorset. Color can also be picked with
-   Grab Color button if a small binary "colorpicker" is functional
-   and properly installed in $NSCDE_ROOT/bin. If action is not
+   button will change it's colorset. Color can also be picked from
+   any screen element with Grab Color button- If action is not
    Cancel but OK, selected color will be modified and new palette
    with generic name "Custom" created immediately. When finishing
    theme selection in Color Style Manager with modified colors,
@@ -1166,8 +1283,8 @@ M. Z.
 
    If nscde_use_xsettingsd is set to 1 in the
    $FVWM_USERDIR/NsCDE.conf after applying new color theme, user's
-   X Settings in $HOME/.xsettingsd will be adjusted and
-   xsettingsd(1) daemon restarted for settings in GTK and Qt
+   X Settings in $FVWM_USERDIR/Xsettingsd.conf will be adjusted
+   and xsettingsd(1) daemon restarted for settings in GTK and Qt
    applications to be applied immediately. This option can be
    enabled by editing NsCDE.conf or during initial setup. NsCDE
    starts xsettingsd daemon with "-c
@@ -1190,15 +1307,15 @@ M. Z.
 
 4.5. Exec Dialog
 
-   By default key binding for Exec Dialog is Meta (mod4) + F2, and
-   located on main root menu before terminal i a "Exec" dialog.
-   This is an input form for executing one-shot commands without
-   terminal. It has options to run command in terminal
-   ($[infostore.terminal]), and to remain open after executing
-   commands for subsequent commands. It has it's own command
-   history which can be turned back with cursor up and down keys.
-   Escape key closes dialog, enter executes, Ctrl+Enter executes
-   in default terminal application.
+   By default key binding for Exec Dialog is Alt+F12, and an entry
+   "Execute ..." located on main Workspace Menu above terminal
+   item as "Exec" dialog. This is an input form for executing
+   one-shot commands without terminal. It has options to run
+   command in terminal ($[infostore.terminal]), and to remain open
+   after executing commands for subsequent commands. It has it's
+   own command history which can be turned back with cursor up and
+   down keys. Escape key closes dialog, enter executes, Ctrl+Enter
+   executes in default terminal application.
 
    As an example, this dialog can be used if on the current page
    or workspace terminal application is not present, and only some
@@ -1221,11 +1338,14 @@ M. Z.
 
    If installed, NsCDE can use rofi(1) command and application
    launcher from the keybinding Alt+F12 instead of built in Exec
-   Dialog. For this to work, InfoStore variable nscde_use_rofi
-   must be set to "1" in $FVWM_USERDIR/NsCDE.conf. Rofi is
-   integrated with NsCDE color theme and will be set up on the
-   first use, which lasts 3 seconds initially and after changing
-   color theme with Color Style Manager.
+   Dialog. Workspace Menu item "Execute ..." remains the same,
+   only keybinding will call rofi(1) instead of built-in simple
+   Exec dialog. For this to work, InfoStore variable
+   nscde_use_rofi must be set to "1" in the
+   $FVWM_USERDIR/NsCDE.conf. Rofi is integrated with NsCDE color
+   theme and will be set up on the first use, which lasts 3
+   seconds initially and after changing color theme with Color
+   Style Manager.
      __________________________________________________________
 
 4.6. Font Style Manager
@@ -1373,10 +1493,13 @@ M. Z.
 
    Keyboard Style Manager tool can be used to set (xset) 4 values:
 
-     * Auto Repeat on/off
-     * Start Delay (start of repeat delay)
-     * Repeat Delay
-     * Click Volume
+     * Auto Repeat on/off: Sets characters to repeat when you hold
+       down their keys
+     * Start Delay (start of repeat delay): initial delay on
+       pressed key to start with auto repetition
+     * Repeat Delay: Speed at which auto repeat works
+     * Click Volume: Determines the volume of key clicks (turned
+       off at 0%)
 
    This values are standard xset(1) r and c subcommands and their
    values, minimal and maximal allowed values are (or should be in
@@ -1412,15 +1535,16 @@ M. Z.
    workspace, page and/or monitor and go with the window, or where
    window was sent. Radio buttons Workspaces:, Pages: and
    Monitors: are changing the current context of operation between
-   workspaces and pages, which is visually also manifested in the
-   main list as the names of either workspaces or pages. If called
-   as "Occupy Workspace", pages or monitors can also be selected
-   and changed by switching this context with this buttons or with
-   the Space key shortcut in focused Occupy window. Radio button
-   for monitors and "Occupy Monitor" functionality is only shown
-   and available if multiple physical (or virtual) monitors are
+   workspaces, pages and monitors, which is visually also
+   manifested in the main list as the names of either workspaces,
+   pages or RandR names of the monitors. If called as "Occupy
+   Workspace", pages or monitors can also be selected and changed
+   by switching this context with this buttons or with the Space
+   key shortcut in focused Occupy window. Radio button for
+   monitors and "Occupy Monitor" functionality is only shown and
+   available if multiple physical (or virtual) monitors are
    detected by FVWM and NsCDE. OK performs an action, Dismiss
-   quits Occupy tool without action taken.
+   quits Occupy tool without taking action.
 
    On the upper left part of the window there are three buttons
    with labels Workspaces, Pages and Monitors:. When either one or
@@ -1574,15 +1698,16 @@ M. Z.
 4.10. Window Geometry Manager
 
    This tool dialog is called from the left titlebar button menu.
-   Or from Meta+F6 key combination from the window context. This
-   Manager offers convenience to save size and position of the
-   non-transient window. Once window geometry is saved, next run
-   of the same application window on FVWM page where it is not
-   already present that window will cause window to be resized to
-   that exact width, height, X position and Y position X11
-   coordinates as stored in the $FVWM_USERDIR/GeoDB.ini. This
-   ini-style file is managed by this application, as well as from
-   the background runner $NSCDE_TOOLSDIR/confset and read by the
+   Or from Meta+Alt+G key combination from the window context.
+   This Manager offers convenience to save size and position of
+   the non-transient window. Once window geometry is saved, next
+   run of the same application window on FVWM page where the
+   window of the same resource+class combination is not already
+   present will cause window to be resized to that exact width,
+   height, X position and Y position X11 coordinates as stored in
+   the $FVWM_USERDIR/GeoDB.ini. This ini-style file is managed by
+   this application, as well as from the background runner
+   $NSCDE_TOOLSDIR/confset and read by the
    $NSCDE_TOOLSDIR/confget. Application automatically fills X11
    Class and X11 Resource names on contextual call, as well as
    geometry parameters. Before applying this settings, user has a
@@ -1594,7 +1719,8 @@ M. Z.
 
      * Filling all fields manually and saving the result
      * Saving empty fields: this action will cancel and/or remove
-       any existing geometry mappings for the selected X11 window.
+       any existing geometry mappings for the selected X11 program
+       window.
 
    Note that geometry savings are dependent on the current monitor
    resolution. In other words, size and position of the X11 window
@@ -4622,3 +4748,4 @@ export FVWM_BIN=fvwm
        share/examples. Since there are similar programs in
        existence, plus FVWM's own functions for automatic start of
        programs, NsCDE is more or less covered here.
+
