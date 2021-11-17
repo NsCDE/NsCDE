@@ -804,19 +804,16 @@ core configurations.
 <title>Page Manager</title>
 <para>
 Page Manager is entirely new thing.
-There is no concept of <emphasis>Pages</emphasis> in the original CDE,
-just desks (workspaces). This nice feature of pages is too useful to be disabled
-and sacrificed just to get even more CDE similarity, but really zealous user can configure NsCDE not
-to include pages, just desks. PGM is a dynamic FvwmButtons Icon
-southwest from the WSM, represented by the silver-gray icon of the desk
-divided on <emphasis>pagesX</emphasis> x <emphasis>pagesY</emphasis>.
-Default is 2x2, that is, four pages per every
-desk, which in default first run gives 4 x 4 = 16 screens for applications.
-Minimum for pages is 0, and maximum 16. For example, in maximal desks+pages
-configuration, one gets 8x16 desktop, that is 128 screens! While undoubtedly
-this is diversion from a more flexible plain FVWM configuration, it covers
-really great number of possible preferences. Pages can be configured in any
-<emphasis>XxY</emphasis> combination. For example 1x4, 2x3, 3x3, 2x1, 2x2 ...
+There is no concept of <emphasis>Pages</emphasis> in the original CDE, just workspaces (FVWM: desks).
+A nice FVWM feature of pages is too useful to be disabled and sacrificed just for the sake
+of even more CDE similarity, but really zealous user can configure NsCDE not to use pages, just workspaces.
+That is, 1 page per workspace. PGM is a dynamic FvwmButtons Icon southwest from the WSM, represented by the
+silver-gray icon of the workspace divided on <emphasis>pagesX</emphasis> x <emphasis>pagesY</emphasis>.
+Default is 2x2, that is, four pages per every workspace, which in default setup gives 4 x 4 = 16 screens
+for applications. Minimum for pages is 0, and maximum 16. For example, in maximal workspaces+pages
+configuration, one gets 8x16 desktop, that is 128 screens! While undoubtedly this is diversion from a even
+more flexible plain FVWM configuration, it covers really great number of possible preferences. Pages can be
+configured in any <emphasis>XxY</emphasis> combination. For example 1x4, 2x3, 3x3, 2x1, 2x2, 3x2 ...
 </para>
 <para>
 Page Manager icon changes with the page to represent position of the current page on
@@ -824,46 +821,39 @@ current workspace while user moves from page to page automatically with the help
 the FvwmEvent(1) just like the Workspace Manager (WSM).
 </para>
 <para>
-When clicked, popups menu with names of the pages.
-When option from the menu is selected, menu pops down and page is changed to the selected one.
-Middle pointer button calls Workspace and Page Manager,
-while the right pointer button calls visual Local Pager.
+When clicked, popups menu with names of the pages. When option from the menu is selected,
+menu pops down and active pointer screen is changed to the selected page. Second pointer
+button calls Workspace and Page Manager, while the third pointer button calls pages
+popup menu.
 </para>
 </sect2>
 
 <sect2 id="NsCDE-MonthDayApplet">
 <title>MonthDayApplet</title>
 <para>
-Usual CDE icon with month and day of the month in it. Simple applet which
-calls empty, do-nothing (by default) function <function>f_Calendar</function>. This function can be
-overridden in <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to call a program which user
-wishes.
+Familiar CDE icon with month and day of the month in it. Simple applet which calls empty,
+do-nothing (by default) function <function>f_Calendar</function>. This function can be overridden
+in <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to call a program configured by the user.
 </para>
 <para>
-If Sun type keyboard is in use, <keysym>Help</keysym> key above
-Month Day Applet will bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the
-same function.
+If Sun type keyboard is in use, <keysym>Help</keysym> key above Month Day Applet will
+bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the same function.
 </para>
 </sect2>
 
 <sect2 id="NsCDE-Pclock">
-<title>Front Panel Clock - pclock</title>
+<title>Front Panel Clock - fpclock</title>
 <para>
 This is a small C program (GPL) written many years ago by Alexander Kourakos.
 It supports XPM skins and displays hours, minutes and seconds. It is well
 suited for window manager docks like FvwmButtons(1). In NsCDE it is applied with
 a skin similar to original one, but slightly bigger and with more clear edges
 and colors. Default can be used from
-<filename class="directory">$NSCDE_DATADIR/icons/CDE</filename> or even
+<filename class="directory">$NSCDE_DATADIR/icons/NsCDE</filename> or even
 replaced with a Solaris version with picture of the globe with red hands for
 hours and minutes and white for seconds. If clicked, it will try to execute
-firefox by default (which appears doesn't work if FVWM is started under some
-desktop environment like MATE).
-Pclock C source is provided for user's convenience if it
-needs to be recompiled on another system or architecture. Source is in
-<filename class="directory">$NSCDE_ROOT/src/pclock-0.13.1</filename>.
-With NsCDE binary for Linux is provided by
-default in <filename class="directory">$NSCDE_ROOT/bin</filename>.
+firefox by default (which appears doesn't work if Num Lock is active on the
+keyboard).
 </para>
 </sect2>
 
@@ -871,14 +861,45 @@ default in <filename class="directory">$NSCDE_ROOT/bin</filename>.
 <title>Check Mail Applet</title>
 <para>
 Fifth icon from the left on Front Panel is FvwmScript applet. It is calling
-<function>f_CheckMail</function> FVWM function every minute. If clicked, function is called immediately.
-By default <function>f_CheckMail</function> is an empty function. Up to user is to redefine it in his
-<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to suit the needs for mail checking. To be
-clear, by default, it is not functional as an applet. Above this applet, there
-is an empty space for subpanel launcher which can be activated with middle
-click, and it will present Thunderbird entry if thunderbird is installed. User
-can use <emphasis>Install Icon</emphasis> action to change or add entries on this menu. For
-example, to call <command>urxvt -e</command> mutt or something like that.
+<function>f_CheckMail</function> FVWM function if clicked.
+By default <function>f_CheckMail</function> is calling <varname>$[infostore.mailreader]</varname>, which
+if defined by user or discovery, will bring up mail application. Up to user is to redefine this variable
+in his <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to suit the needs for mail checking. To be
+clear, by default, it is not functional as an new mail notification applet. External applications can
+use it for this by calling <command>nscde_fvwmclnt</command> to send it a signal. The syntax is:
+
+<programlisting>
+<![CDATA[
+nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
+ LetterUp <accnum> <accname> <fontsize> <color>"
+]]>
+</programlisting>
+
+Where:
+
+<itemizedlist>
+<listitem><para><emphasis>nscde_fvwmclnt</emphasis> is NsCDE wrapper for FVWM2 or FVWM3 FvwmCommand sender</para></listitem>
+<listitem><para>"SendToModule CheckMailApplet SendString 1 2" will send directions to widget 1, subroutine 2 of the CheckMailApplet FvwmScript module</para></listitem>
+<listitem><para>"accnum" is a number identifying a separate mail account or entity, one per name, 10 max</para></listitem>
+<listitem><para>"accname" is 3 letters identifying account, for example "PTN" for proton </para></listitem>
+<listitem><para>"fontsize" can send font size hint to CheckMailApplet for displaying notification info</para></listitem>
+<listitem><para>"color" is a hex or X11 color name hint to CheckMailApplet for displaying notification info</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para>
+This command can be used by mail programs to notify Front Panel Mail icon to change from closed letter to
+open letter when new mail arrives. For any new mail, counter for named and numbered account will increase
+by 1, until icon is clicked by the user. For example, Thunderbird has a "mailbox alert" extension that can
+use scripting way of sending notifications.
+</para>
+
+<para>Above this applet, there is an empty space for subpanel launcher which can be activated with middle
+triple click, and it will present <emphasis>Mail Reader</emphasis> if thunderbird, claws-mail, mutt or some
+other popular and known mail application is installed. User can use <emphasis>Install Icon</emphasis> action
+to change or add entries on this menu. For example, to call <command>urxvt -e</command> mutt or something
+like that.
 </para>
 <para>
 Key <keysym>F1</keysym> will bring this help text in browser.
@@ -893,34 +914,35 @@ Check Mail Applet has the same function as F1 on PC.
 Load Indicator on the top right side of the center of the Front Panel contains
 a small applet called FpLite. In original CDE it was used to indicate desktop
 activity, but since on today's processors this tasks are short and almost
-immediate (specially with a good window manager such as FVWM), I find it
-better suited to show system load.
+immediate (specially with a good window manager such as FVWM), It appears to
+be better suited to server as system load indicator.
 </para>
 <para>
-It has 10 micro-bars. When there is no
-load, all are yellow. Load grows from left to right. First 5 green bars, then
-3 blue, 2 magenta, an after that it starts from the beginning with red bars.
-FpLite summarizes load of all CPUs on the system in a way that 1-minute load
-is divided with number of CPU cores, and then counted as such while displaying
-load with color micro-bars. Everything under 1 (internally 100) is yellow,
-green, blue and magenta, and after that it counts 10 red micro-bars. For
-example: on the system with 2 CPU cores, 1-minute load of 0.6 will be
-presented with 3 bars (0.6 / num-cores), load of 2.2 will be presented with
-one red bar etc ... on the system with four CPU cores load of 3 will be
-magenta on the two rightmost bars, and load of 4 or more will be red. Load of
-more than (numcpu * 10) will not be shown specially, but user gets an idea
-what is going on if FpLite is all red.
+It has 10 micro-bars. When there is no load, all are yellow. Load grows from
+left to right. First 5 green bars, then 3 blue, 2 magenta, an after that it
+starts from the beginning with red bars. FpLite summarizes load of all CPUs on
+the system in a way that 1-minute load is divided with number of CPU cores,
+and then counted as such while displaying load with color micro-bars.
+Everything under 1 (internally 100) is yellow, green, blue and magenta, and
+after that it counts 10 red micro-bars. For example: on the system with 2 CPU
+cores, 1-minute load of 0.6 will be presented with 3 bars (0.6 / num-cores),
+load of 2.2 will be presented with one red bar etc ... on the system with four
+CPU cores load of 3 will be magenta on the two rightmost bars, and load of 4
+or more will be red. Load of more than (numcpu * 10) will not be shown
+specially, but user gets an idea what is going on if FpLite is all red.
 </para>
 <para>
 If clicked, it will call a function <function>f_FpLiteClickAction</function> which is by default
-set to safe defaults (<emphasis>[default terminal app]</emphasis> <command>-e top</command>).
+set to <varname>$[infostore.taskmgr]</varname> or autodiscovery during starup. If nothing else, it
+will call <emphasis>[default terminal app]</emphasis> <command>-e top</command> on Linux and BSD
+systems, <emphasis>[default terminal app]</emphasis> <command>-e prstat</command> on Solaris and
+it's clones, and <emphasis>[default terminal app]</emphasis> <command>-e topas</command> on AIX.
 FpLite FvwmScript app uses little portable python script <emphasis>getla1</emphasis> from the
-<filename class="directory">$NSCDE_ROOT/libexec</filename> to obtain 1-minute load data.
+<filename class="directory">$NSCDE_TOOLSDIR/libexec</filename> to obtain 1-minute load data.
 </para>
 <para>
-Key <keysym>F1</keysym> will bring this help text in browser.
-If Sun type keyboard is in use, <keysym>Help</keysym> key above
-FpLite has the same function as F1 on PC.
+Key <keysym>F1</keysym> will bring this help text in browser. If Sun type keyboard is in use,
+<keysym>Help</keysym> key above FpLite has the same function as F1 on PC.
 </para>
 </sect2>
 
@@ -933,8 +955,7 @@ FpLite has the same function as F1 on PC.
 <title>Style Manager</title>
 <para>
 This Window is a starting point for all other <emphasis>Style Manager</emphasis> applications to be
-called. It is called from 7th button on the Front Panel. It has big icons for
-calling:
+called. It is called from 7th button on the Front Panel. It has big icons for calling:
 <itemizedlist>
 <listitem><para><link linkend="NsCDE-ColorMgr">Color Style Manager</link></para></listitem>
 <listitem><para><link linkend="NsCDE-FontMgr">Font Style Manager</link></para></listitem>
@@ -950,13 +971,12 @@ calling:
 </itemizedlist>
 </para>
 <para>
-If NsCDE was started under X Session Manager, Startup Style Manager icon will
-call setup tool for that session manager or DE. Otherwise, error message is displayed:
-either that NsCDE was not started under X Session Management, or X Session
-Manager is not recognized, and it's setup tool cannot be run. Currently,
-only MATE, LXDE, KDE and GNOME session managers are recognized and their respective
-tools called. See <xref linkend="NsCDE-Startup"/> about running NsCDE under X Session Manager for more
-information about this matter.
+If NsCDE was started by some X Session Manager, Startup Style Manager icon will call setup tool for
+that session manager or DE if it is known to Style Manager. Otherwise, error message is displayed:
+either that NsCDE was not started under X Session Management, or X Session Manager is not
+recognized, and it's setup tool cannot be run. Currently, only MATE, LXDE, KDE and GNOME session
+managers are recognized and their respective tools called. See <xref linkend="NsCDE-Startup"/> about
+running NsCDE under X Session Manager for more information about this matter.
 </para>
 
 <para>
