@@ -1083,7 +1083,8 @@ more than CDE original:
   for the current workspace from the popup menu. There are four variants.
 </para></listitem>
 <listitem><para>
- Custom palette can be loaded instead of default one, and backdrops can be
+ <link linkend="NsCDE-PaletteDialog">Custom palette</link> can be loaded instead of default one,
+  and backdrops can be
   set with colors from that palette. In 8-colors mode, there is even more
   possibility because colors can freely change their associated workspace.
 </para></listitem>
@@ -1123,6 +1124,34 @@ Key Bindings:
 </para></listitem>
 </itemizedlist>
 </para>
+
+<sect3 id="NsCDE-PaletteDialog">
+<title>Load Custom Palette Dialog</title>
+<para>
+A <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link> part
+</para>
+<para>
+Helper dialog which provides a list of palettes to the <link linkend="NsCDE-BackdropMgr">Backdrop
+Style Manager</link> when user wants to use color schemes from another
+palette from currently used in user's setup. This is NsCDE addon
+functionality, not present in original CDE. Additionally,
+background variants from custom palettes can be used too as from
+the default user's palette in 8-color mode, which is also NsCDE
+feature not present in original CDE.
+</para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+</itemizedlist>
+</para>
+</sect3>
 
 </sect2>
 
@@ -1192,7 +1221,10 @@ color definitions (8 of them). This colors and border bg/fg/sel colors
 calculated from them are the base of the look of pretty much all of the things
 on the screen. Colors can be applied in 4 or 8 colors mode. Most notable
 palettes are <emphasis>Broica</emphasis> in 8-colors mode and <emphasis>Solyaris</emphasis>
-(called <emphasis>Default</emphasis> on SunOS) in 4 colors mode.
+(called <emphasis>Default</emphasis> on SunOS) in 4 colors mode. Color mode can be selected
+with the <link linkend="NsCDE-NColorsDialog">Number Of Colors</link> dialog which opens when
+the same named button in the main dialog of Color Style Manager is pressed.
+
 </para>
 
 <para>
@@ -1425,6 +1457,68 @@ color scheme from the list.
 Notice: In the preview mode under FVWM3 non-global monitor layout, only the backdrop of the currently
 focused monitor is previewed in the colors of the new palette.
 </para>
+
+<sect3 id="NsCDE-NColorsDialog">
+<title>Number Of Colors Dialog</title>
+<para>
+A <link linkend="NsCDE-ColorMgr">Color Style Manager</link> part
+</para>
+<para>
+Helper dialog to select 4, 8 or default color scheme in
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+It changes number of colors while browsing, previewing or
+choosing a color theme, as well as two additional options for
+8 colors scheme.
+</para>
+<para>
+<itemizedlist>
+<listitem><para>
+Use 4 Colors Scheme: Uses only the first four colors of the choosen palette.
+With slightly modified palette "Crimson" this was probably default on all
+versions of Sun Solaris.
+</para></listitem>
+<listitem><para>
+Use 8 Colors Scheme: uses full palette with all 8 colors. This is NsCDE
+default on all modern displays.
+</para></listitem>
+<listitem><para>
+Default (4|8): Indicates default which can be changed or turned back.
+</para></listitem>
+<listitem><para>
+Color 8 for Front Panel and Icons: in 8 colors scheme, this will make icon part
+of the Front Panel and workspace icons background to use eighth color from the
+choosen palette instead of fifth color. This scheme was known to have been
+default on some HP-UX and AIX versions of CDE, and in NsCDE it is a user
+option. This option does not have effect in 4 colors scheme, and hence cannot
+be selected together with it.
+</para></listitem>
+<listitem><para>
+Color 6 for Workspace Manager: in 8 colors scheme, this will make Workspace
+Manager colored with color 6 which is usually used for menus, and tools
+background. This scheme was default on some versions of CDE on some UNIX
+systems, but in NsCDE it is a user option. This option does not have effect
+in 4 colors scheme, and hence cannot be selected together with it.
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Return</keysym>: Selects OK.
+</para></listitem>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+</itemizedlist>
+</para>
+
+</sect3>
 
 </sect2>
 
@@ -2207,7 +2301,8 @@ Subpanels configuration file <filename>Subpanels.actions</filename>, can be edit
 hand in <varname>$FVWM_USERDIR</varname> if something needs to be changed on existing
 entries. If editing by hand, <command>$NSCDE_TOOLSDIR/generate_subpanels</command>
 must be used to generate FVWM configuration output which must be redirected into
-<filename>$FVWM_USERDIR/Subpanels.fvwmconf</filename>.
+<filename>$FVWM_USERDIR/Subpanels.fvwmX.fvwmconf</filename>, where "fvwmX" is either
+"fvwm2" or "fvwm3".
 </para>
 
 <para>
@@ -2265,24 +2360,27 @@ Key Bindings:
 
 <sect2 id="NsCDE-SysActionDialog">
 <title>System Action Dialog</title>
-<para>
 
+<para>
 This is the login/logout form with the possibilities to reboot or shutdown the
 system, or change X session. It has also options for suspend/sleep (S3), hybrid suspend,
 and hibernation of the system. Of course, <command>reboot</command>, <command>shutdown</command>,
-<command>suspend</command>, <command>hybrid suspend</command> and
-<command>hibernate</command> will work only if
-<command>sudo(8)</command> entries are configured properly. While System Action Dialog is active,
-root cursor changes to line-crossed cursor which is dismissed after the action is performed or
-dialog action dismissed. Not all of this actions are possible on all systems, but with the
-<filename>$NSCDE_TOOLSDIR/nscde-acpi</filename> wrapper, Linux with pm-utils, Linux without
-pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this moment.
+<command>suspend</command>, <command>hybrid suspend</command> and <command>hibernate</command>
+will work for a ordinary user only if system is configured with authorizations for a user to
+perform such actions. Examples of this can be systemd(1) on Linux which recognizes local user,
+or system with <command>sudo(8)</command> entries are configured to do so. While System Action
+Dialog is active, root cursor changes to line-crossed cursor which is dismissed after the
+action is performed or dialog action dismissed. Not all of this actions are possible on all
+systems, but with the <filename>$NSCDE_TOOLSDIR/acpimgr</filename> wrapper, Linux with pm-utils,
+Linux without pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this
+moment.
+</para>
 
-In <filename class="directory">$NSCDE_ROOT/share/examples/sudo</filename>, one can find example
-which can be put in <filename class="directory">/etc/sudoers.d</filename> with little changes.
-<guibutton>Confirm</guibutton> button applies, <guibutton>Dismiss</guibutton> cancels and
-closes the dialog.
-
+<para>
+In <filename class="directory">$NSCDE_ROOT/share/doc/nscde/examples/sudo</filename>, one can
+find example which can be put in <filename class="directory">/etc/sudoers.d</filename> with
+little changes. <guibutton>Confirm</guibutton> button applies, <guibutton>Dismiss</guibutton>
+cancels and closes the dialog.
 </para>
 
 <para>
@@ -2315,14 +2413,14 @@ Key Bindings:
 <title>Sysinfo</title>
 <para>
 
-Copy of the Sun Solaris <emphasis>Workstation Information</emphasis> info dialog.
+Well known <emphasis>Workstation Information</emphasis> info dialog.
 It doesn't have any functions apart <guibutton>close (Dismiss)</guibutton> button. It's
 role is informational. It displays current username, hostname, machine
 and CPU architecture type. IP address, hostid, network (NIS, NISPLUS,
 LDAP ...) domain name, internet domain name, size of the physical RAM,
 swap size, swap usage (as progressbar), operating system long name, and
-then version of the FVWM and version of the NsCDE. Last it shows time
-when system was last booted. This dialog can be found on the <emphasis>System</emphasis>
+then version of the FVWM and version of the NsCDE. Last, it shows time
+when system was last booted. This dialog can be found on the <emphasis>Tools</emphasis>
 or fourth Subpanel of the Front Panel in default configuration, under
 the entry <emphasis>Workstation Info</emphasis>.
 In the context of it's window, keys <keysym>Escape</keysym>, <keysym>Return</keysym> and
@@ -2336,26 +2434,23 @@ In the context of it's window, keys <keysym>Escape</keysym>, <keysym>Return</key
 <title>Window Style Manager</title>
 <abstract>
 <para>
-In the beginning, this GUI tool has been exact copy of the CDE
+This GUI tool is not just exact copy of the similary named CDE tool
 <link linkend="NsCDE-WindowMgr">Window Style Manager</link>.
-In a way, this was bad. While providing exact copy of the same named
-CDE tool. It was ignoring the fact we are using FVWM as a WM and
-framework for NsCDE, and FVWM has couple hundred more options, and it
-is tens times more powerful than CDE's dtwm, and probably the
-main reason for combining CDE look and (partially) feel of CDE with
-powerful new functionalities which are provided by FVWM and some 3rd
-party programs.
+NsCDE Window Style Manager extends number of actions which can be
+configured regarding window behaviour, which is undestandible because
+FVWM window manager is a way more configurable and powerful than CDE's
+original dtwm.
 </para>
 <para>
-On the other hand, writing a tool that will handle ALL fvwm options and write that
-in FvwmScript which not much a powerful language can easily contain
-tens of thousands lines of code, and yet be buggy and probably some
-things will be impossible to do. Even then, it will be burden for
-users to use and almost completely avoided.
+On the other hand, writing a tool that will handle ALL fvwm options
+and write that in FvwmScript which not much a powerful language can
+easily contain tens of thousands lines of code, and yet be buggy and
+probably some things will be impossible to do. Even then, it will be
+burden for users to use and almost completely avoided.
 </para>
 <para>
-A middle solution was provided: all from CDE original dialog, plus
-some similar extended FVWM options, on the first tab, and other
+A middle solution was provided: all functions from original CDE dialog,
+plus some similar extended FVWM options, on the first tab, and other
 important configurations on the rest three tabs. Tabs are implemented
 as popup menu on the top right side of the window - choosing an option
 from that menu changes displayed options - a poor man's tabs in a way.
@@ -2566,7 +2661,7 @@ Key Bindings:
 <sect2 id="NsCDE-WsPgMgr">
 <title>Workspaces and Pages Style Manager (WsPgMgr)</title>
 <para>
-This tool is specific to NsCDE. It configures five things:
+This tool is specific to NsCDE. It configures the following things:
 <itemizedlist>
 <listitem><para>
 Number of the workspaces
@@ -2605,16 +2700,18 @@ Check Box <guibutton>Use Compact Workspace Manager</guibutton> when checked in w
 instruct NsCDE to use Workspace Manager widget in the Front Panel sized for as it is
 for four workspaces, but it will expand buttons in two workspaces setup and shrink
 accordingly in the case of six or eight workspaces setup. This option does not have
-any visual effect on four workspaces setups.
+any visual effect on four workspaces setups, because it is sized for such setup.
 </para>
 <para>
 Number of vertical and horizontal pages can also be configured here.
 This change will affect Page Manager (PGM) icon on the Front Panel, and menus which are displaying
-pages. Page names are not configurable via GUI. User is encouraged to
-open <filename>$FVWM_USERDIR/WSM.conf</filename> and edit to suit.
+pages. Page names are not configurable via GUI, their names are read from
+<filename class="directory">$NSCDE_DATADIR/defaults/pages/</filename>, but can be overriden in
+user's configuration. User can put into it's <filename>$FVWM_USERDIR/WSM.conf</filename> enties
+in the same format as files in the above mentioned directory.
 </para>
 <para>
-Pop up menu prefixed as "Monitor Workspaces" allows users NsCDE with FVWM3 to select between
+Pop up menu prefixed as "Monitor Workspaces" allows users of NsCDE with FVWM3 to select between
 currently existing three modes of FVWM3 desktop configurations: global, per-monitor or shared.
 When used with FVWM2, this popup will not be shown, instead, text "Global Only (FVWM2)" will
 indicate non-applicability of this feature under FVWM2. Under FVWM3, new DesktopConfiguation
@@ -2625,17 +2722,17 @@ behaviour of the window manager.
 <guibutton>OK</guibutton> button saves configuration, restarts window manager and quits.
 <guibutton>Cancel</guibutton> button discards, except if new names of desks are set, because
 this is written immediately, but window manager is not restarted.
-Workspaces and Pages Style Manager is called from the Front Panel's small
-left button menu which is called when that button is clicked with the right
-pointer button.
+Workspaces and Pages Style Manager is called from the Style Manager, NsCDE submenu of the
+Workspace Menu's Applications submenu, and Front Panel's small left button menu which is called
+when that button is clicked with the right pointer button.
 </para>
 </sect2>
 
 <sect2 id="NsCDE-NProcMgr">
 <title>NsCDE Process Manager (NProcMgr)</title>
 <para>
-This tool is specific to NsCDE. It manages NsCDE FVWM and rest processes, and re-reads
-given part of FVWM configuration on demand. The followin actions are provided and supported:
+This tool is specific to NsCDE. It manages NsCDE FVWM and rest NsCDE processes, and re-reads
+given part of the FVWM configuration on demand. The following actions are provided and supported:
 <itemizedlist>
 <listitem><para>
  Recheck - Check selected item processes running state
@@ -2650,12 +2747,13 @@ given part of FVWM configuration on demand. The followin actions are provided an
  Start - Starts selected item processes
 </para></listitem>
 <listitem><para>
- Reread - Reads fresh FVWM configuration for the item selected on the <guibutton>Configurations</guibutton> popup menu.
+ Reread - Reads fresh FVWM configuration for the item selected on the
+ <guibutton>Configurations</guibutton> popup menu.
 </para></listitem>
 </itemizedlist>
 </para>
 <para>
-There can be more processes (items) selected for the given action. Items are not unselected after action.
+There can be more processes (items) selected for a given action. Items are not unselected after action.
 NsCDE Process Manager can be used for diagnostic, debugging and developing functions and other parts of
 the NsCDE. It Provides GUI for "KillModule", "Module" and various NsCDE FVWM functions, and for f_ReadCfg".
 Process list consists of check buttons with item/process names on the left, and their functional state, running
@@ -2773,97 +2871,6 @@ calling this function.
 </para>
 </sect2>
 
-<sect2 id="NsCDE-NColorsDialog">
-<title>NColorsDialog - FvwmScript</title>
-<para>
-A <link linkend="NsCDE-ColorMgr">Color Style Manager</link> part
-</para>
-<para>
-Helper dialog to select 4, 8 or default color scheme in
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
-It changes number of colors while browsing, previewing or
-choosing a color theme, as well as two additional options for
-8 colors scheme.
-</para>
-<para>
-<itemizedlist>
-<listitem><para>
-Use 4 Colors Scheme: Uses only the first four colors of the choosen palette.
-With slightly modified palette "Crimson" this was probably default on all
-versions of Sun Solaris.
-</para></listitem>
-<listitem><para>
-Use 8 Colors Scheme: uses full palette with all 8 colors. This is NsCDE
-default on all modern displays.
-</para></listitem>
-<listitem><para>
-Default (4|8): Indicates default which can be changed or turned back.
-</para></listitem>
-<listitem><para>
-Color 8 for Front Panel and Icons: in 8 colors scheme, this will make icon part
-of the Front Panel and workspace icons background to use eighth color from the
-choosen palette instead of fifth color. This scheme was known to have been
-default on some HP-UX and AIX versions of CDE, and in NsCDE it is a user
-option. This option does not have effect in 4 colors scheme, and hence cannot
-be selected together with it.
-</para></listitem>
-<listitem><para>
-Color 6 for Workspace Manager: in 8 colors scheme, this will make Workspace
-Manager colored with color 6 which is usually used for menus, and tools
-background. This scheme was default on some versions of CDE on some UNIX
-systems, but in NsCDE it is a user option. This option does not have effect
-in 4 colors scheme, and hence cannot be selected together with it.
-</para></listitem>
-</itemizedlist>
-
-</para>
-
-<para>
-Key Bindings:
-<itemizedlist>
-<listitem><para>
-<keysym>Return</keysym>: Selects OK.
-</para></listitem>
-<listitem><para>
-<keysym>Escape</keysym>: Quits Dialog.
-</para></listitem>
-<listitem><para>
-<keysym>Sun Help and F1</keysym>: Displays this help text.
-</para></listitem>
-</itemizedlist>
-</para>
-
-</sect2>
-
-<sect2 id="NsCDE-PaletteDialog">
-<title>PaletteDialog - FvwmScript</title>
-<para>
-A <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link> part
-</para>
-<para>
-Helper dialog which provides a list of palettes to the <link linkend="NsCDE-BackdropMgr">Backdrop
-Style Manager</link> when user wants to use color schemes from another
-palette from currently used in user's setup. This is NsCDE addon
-functionality, not present in original CDE. Additionally,
-background variants from custom palettes can be used too as from
-the default user's palette in 8-color mode, which is also NsCDE
-feature not present in original CDE.
-</para>
-
-<para>
-Key Bindings:
-<itemizedlist>
-<listitem><para>
-<keysym>Escape</keysym>: Quits Dialog.
-</para></listitem>
-<listitem><para>
-<keysym>Sun Help and F1</keysym>: Displays this help text.
-</para></listitem>
-</itemizedlist>
-</para>
-
-</sect2>
-
 </sect1>
 
 <sect1 id="NsCDE-Backdrops-Palettes-Fonts">
@@ -2922,12 +2929,12 @@ This file is read by FvwmBacker(1) FVWM module. It is automatically generated wh
 first change with <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>.
 </para>
 <para>
-Until then, file <filename>$NSCDE_ROOT/config/Backdrops.fvwmgen</filename> is read, which
+Until then, file <filename>$NSCDE_DATADIR/fvwm/Backdrops.fvwmconf</filename> is read, which
 itself reads pre-generated and pre-defined backdrops from the
 <filename class="directory">$NSCDE_DATADIR/defaults/backer</filename> directory.
 </para>
 <para>
-We can conclude that backdrops are source form or template file, and when processed
+We can consider backdrops as the source form or template files, and when processed
 with color values from the palette, this backdrop's final form is, ready to be set by FvwmBacker(1).
 </para>
 <para>
@@ -3102,11 +3109,11 @@ extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename
 </sect2>
 
 <sect2 id="NsCDE-Animate_fvwmconf">
-<title>NsCDE-Animate.fvwmconf</title>
+<title>Animate.fvwmconf / Animate.fvwmgen</title>
 <para>
 FVWM Animate Module configuration. Animate module is started by NsCDE by
 default automatically, but with <emphasis>None</emphasis> as a default effect. This can be
-reconfigured by the user in private <filename>$FVWM_USERDIR/Animate.gen</filename> with Window Style Manager,
+reconfigured by the user in private <filename>$FVWM_USERDIR/Animate.fvwmgen</filename> with Window Style Manager,
 or in static manual configuration <filename>$[FVWM_USERDIR]Animate.fvwmconf</filename>.
 No effect (None) is choosen as default for increased CDE similarity, because CDE doesn't have iconification
 animation effects.
