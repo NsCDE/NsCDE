@@ -1,21 +1,21 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.15. System Action Dialog</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-SubpanelSettings.html" title="4.14. Subpanel Settings"><link rel="next" href="NsCDE-SysInfo.html" title="4.16. Sysinfo"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.15. System Action Dialog</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-SubpanelSettings.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-SysInfo.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-SysActionDialog"></a>4.15. System Action Dialog</h3></div></div></div><p>
-
 This is the login/logout form with the possibilities to reboot or shutdown the
 system, or change X session. It has also options for suspend/sleep (S3), hybrid suspend,
 and hibernation of the system. Of course, <span class="command"><strong>reboot</strong></span>, <span class="command"><strong>shutdown</strong></span>,
-<span class="command"><strong>suspend</strong></span>, <span class="command"><strong>hybrid suspend</strong></span> and
-<span class="command"><strong>hibernate</strong></span> will work only if
-<span class="command"><strong>sudo(8)</strong></span> entries are configured properly. While System Action Dialog is active,
-root cursor changes to line-crossed cursor which is dismissed after the action is performed or
-dialog action dismissed. Not all of this actions are possible on all systems, but with the
-<code class="filename">$NSCDE_TOOLSDIR/nscde-acpi</code> wrapper, Linux with pm-utils, Linux without
-pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this moment.
-
-In <code class="filename">$NSCDE_ROOT/share/examples/sudo</code>, one can find example
-which can be put in <code class="filename">/etc/sudoers.d</code> with little changes.
-<span class="guibutton">Confirm</span> button applies, <span class="guibutton">Dismiss</span> cancels and
-closes the dialog.
-
+<span class="command"><strong>suspend</strong></span>, <span class="command"><strong>hybrid suspend</strong></span> and <span class="command"><strong>hibernate</strong></span>
+will work for a ordinary user only if system is configured with authorizations for a user to
+perform such actions. Examples of this can be systemd(1) on Linux which recognizes local user,
+or system with <span class="command"><strong>sudo(8)</strong></span> entries are configured to do so. While System Action
+Dialog is active, root cursor changes to line-crossed cursor which is dismissed after the
+action is performed or dialog action dismissed. Not all of this actions are possible on all
+systems, but with the <code class="filename">$NSCDE_TOOLSDIR/acpimgr</code> wrapper, Linux with pm-utils,
+Linux without pm-utils but with systemd(1) and FreeBSD with acpiconf(8) are supported in this
+moment.
+</p><p>
+In <code class="filename">$NSCDE_ROOT/share/doc/nscde/examples/sudo</code>, one can
+find example which can be put in <code class="filename">/etc/sudoers.d</code> with
+little changes. <span class="guibutton">Confirm</span> button applies, <span class="guibutton">Dismiss</span>
+cancels and closes the dialog.
 </p><p>
 Key Bindings:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>

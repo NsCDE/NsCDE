@@ -1,10 +1,14 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7. Configuration files explained</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Backdrops-Palettes-Fonts.html" title="6. Backdrops, Palettes and Fonts"><link rel="next" href="AppMenus_conf.html" title="7.2. AppMenus.conf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Configuration files explained</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Backdrops-Palettes-Fonts.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="AppMenus_conf.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Configuration-Files"></a>7. Configuration files explained</h2></div></div></div><div class="abstract"><p class="title"><b>Abstract</b></p><p>
-As pointed above, NsCDE has a quite complex set of configuration
-files. ~ 80% of them are the FVWM configurations. But, this system
-of configurations is arranged in some logical and consistent way.
-For example, keyboard shortcuts in Keybindings.fvwmconf,
-FvwmBacker configuration in Backer.fvwmconf, (generated)
-colorsets in Colorset.fvwmgen/fvwmconf etc.
+As pointed above, NsCDE has a number of configuration files.
+Approximately 75% of them are the FVWM configurations, where a line
+between using FVWM directives for it's core and modular functionality
+as a desktop-building material and tool, and merely configuring
+aspects for end use are wastly blurred and cannot be really
+distinguished and separated in that strict categories. This system of
+configurations is arranged in some logical and consistent way. For
+example, keyboard shortcuts in Keybindings.fvwmconf, FvwmBacker
+configuration in Backer.fvwmconf, (generated) colorsets in
+Colorset.fvwmgen etc.
 </p><p>
 All this configurations are included from the Main.fvwmconf.
 This is the starting FVWM configuration which sets core options
@@ -12,17 +16,18 @@ and safe defaults, and reads the rest of the configuration files
 which are included there. It defines StartFunction which starts
 all additional modules and calls important things during start
 or restart of the Window Manager. System Wide configuration files
-are located in $NSCDE_ROOT/config, while user local hooks or
-user complete overrides are in $FVWM_USERDIR.
+are located in $NSCDE_DATADIR/fvwm and $NSCDE_DATADIR/defaults,
+while user local hooks or user complete overrides are stored in
+<code class="filename">$FVWM_USERDIR</code>.
 </p></div><p>
 This is default list of system-wide configurations:
 </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="FrontPanel_actions"></a>7.1. FrontPanel.actions</h3></div></div></div><p>
-This is not a FVWM file. Lines in this file are default actions
-and icons for Front Panel. This file is parsed by the <span class="command"><strong>fpexec</strong></span>
-and <span class="command"><strong>fpseticon</strong></span> shell scripts. All or individual entries from this
-file can be overridden by creating <code class="filename">$FVWM_USERDIR/FrontPanel.actions</code>
-file. This is a CSV-like file (comma is a field separator), and it defines main 10
-buttons of the Front Panel, their actions and icons.
+A non-FVWM file. Lines in this file are default actions and icons for Front Panel.
+This file is parsed by the <span class="command"><strong>fpexec</strong></span> and <span class="command"><strong>fpseticon</strong></span>
+shell script tools. All or individual entries from this file can be overridden by
+creating <code class="filename">$FVWM_USERDIR/FrontPanel.actions</code> file. This is a
+CSV-like file (comma is a field separator), and it defines buttons of the
+Front Panel, their actions and icons.
 </p><p>
 File format is:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Button Number (Btn1, Btn2, BtnN ...)</p></li><li class="listitem"><p>Icon path (FVWM relative from ImagePath)</p></li><li class="listitem"><p>Mouse Button (3 mouse buttons for 3 different actions if needed)</p></li><li class="listitem"><p>Program executable to check for or <span class="emphasis"><em>NOCHK</em></span> for check
@@ -37,7 +42,7 @@ applet must be prefixed with a <code class="varname">ActionIgnoresClientWindow</
 last filed with the actions can be "Nop" because Front Panel will not accept this clicks
 (it may accept them if possible transparent area around applet exists and is clicked). If
 the applet is not clickable, a standard FVWM Action or command can be put in the last field
-to make a click on the applet usefull.
+to make a click on the applet useful.
 </p><p>
 Here is the example of the custom swallowed applet. This one was initially created for the
 Window Maker window manager:
@@ -75,7 +80,6 @@ slightly different options:
 
 </p><pre class="programlisting">
 
-
    Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
    \\"Exec exec $NSCDE_TOOLSDIR/$(uname -s)_$(uname -m)/fpclock
    -H red -S white --hands-width=4
@@ -95,6 +99,7 @@ but in the <code class="filename">FrontPanel.actions</code> must be written as o
 </p><p>
 After editing this file (system-wide or user's) nothing needs to be
 reloaded because file is read from the <code class="function">f_FrontPanelAction</code> function
-on every click on every icon on the Front Panel.
-There is no GUI tool for managing this file yet.
+on every click on every icon on the Front Panel. There is no GUI tool for fully managing this
+file yet, but currently, "Copy to Main Panel" action from the submenu will edit <code class="filename">FrontPanel.actions</code>
+and put choosen entry there, binding it to some button.
 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Backdrops-Palettes-Fonts.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="AppMenus_conf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6. Backdrops, Palettes and Fonts </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.2. AppMenus.conf</td></tr></table></div></body></html>

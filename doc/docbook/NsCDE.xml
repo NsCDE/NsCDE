@@ -3250,16 +3250,30 @@ of the screen.</para></listitem>
 FvwmEvent(1) module configuration. In this file a single instance of the
 FvwmEvent called <option>MainLoop</option> is defined. It passes ID (Window ID, desk
 etc ... depending on context) for window manager actions. <option>Cmd</option> option is
-empty: FVWM functions are used for all defined actions. Currently,
-actions <option>new_desk</option>, <option>new_page</option>, <option>add_window</option>
-and <option>focus_change</option> are observed and
-their respective functions from <filename>Functions.fvwmconf</filename> are triggered.
-This serves Workspace Manager,
-Page Manager (PGM) and window placement functions in an important way. If
-redefined or disabled, things will start to break. It can be extended by
-the user to suit the needs, but here also care must be taken, because
-complex functions, or calling slow and/or resource hungry commands from
-that functions can make FVWM (and hence NsCDE) dramatically slow.
+empty: FVWM functions are used for all defined actions. The following events are observed
+and reacted by functions Currently:
+
+<itemizedlist>
+<listitem><para><option>new_desk</option></para></listitem>
+<listitem><para><option>new_page</option></para></listitem>
+<listitem><para><option>add_window</option></para></listitem>
+<listitem><para><option>destroy_window</option></para></listitem>
+<listitem><para><option>focus_change</option></para></listitem>
+<listitem><para><option>enter_window</option></para></listitem>
+<listitem><para><option>leave_window</option></para></listitem>
+<listitem><para><option>configure_window</option></para></listitem>
+<listitem><para><option>iconify</option></para></listitem>
+<listitem><para><option>deiconify</option></para></listitem>
+<listitem><para><option>res_class</option></para></listitem>
+<listitem><para><option>map</option></para></listitem>
+</itemizedlist>
+
+Event Functions from <filename>Functions.fvwmconf</filename> are triggered on the events above.
+This serves Workspace Manager, Page Manager (PGM) and window placement functions in an
+important way. If redefined or disabled, things will start to break. It can be extended by
+the user to suit the needs in <filename>$NSCDE_USERDIR/Event.fvwmlocal</filename>, but here
+also care must be taken, because complex functions, or calling slow and/or resource hungry
+commands from that functions can make FVWM (and hence NsCDE) dramatically slow and even unstable.
 </para>
 </sect2>
 

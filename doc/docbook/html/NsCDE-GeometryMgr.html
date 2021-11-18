@@ -1,21 +1,21 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>4.10. Window Geometry Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="4. GUI Tools"><link rel="prev" href="NsCDE-GWM.html" title="4.9. Graphical Workspace Manager (GWM)"><link rel="next" href="NsCDE-PointerMgr.html" title="4.11. Mouse Style Manager"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.10. Window Geometry Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-GWM.html">Prev</a> </td><th width="60%" align="center">4. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-PointerMgr.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-GeometryMgr"></a>4.10. Window Geometry Manager</h3></div></div></div><p>
-This tool dialog is called from the left titlebar button menu. Or from
-<span class="keysym">Meta+F6</span> key combination from the window context. This Manager offers convenience
-to save size and position of the non-transient window. Once window geometry is saved, next run of
-the same application window on FVWM page where it is not already present that window will cause window
-to be resized to that exact width, height, X position and Y position X11 coordinates as stored in the
-<code class="filename">$FVWM_USERDIR/GeoDB.ini</code>. This ini-style file is managed by this application, as
-well as from the background runner <code class="filename">$NSCDE_TOOLSDIR/confset</code> and read by the
-<code class="filename">$NSCDE_TOOLSDIR/confget</code>. Application automatically fills X11 Class and X11
-Resource names on contextual call, as well as geometry parameters. Before applying this settings,
-user has a chance to fine tune this parameters in text fields and confirm (or cancel) the action
-on the end. Using <span class="guibutton">Clear</span> all geometry values, as well as those which may be
-saved from the past are cleared and deleted. After the Clear action, there are two options:
+This tool dialog is called from the left titlebar button menu. Or from <span class="keysym">Meta+Alt+G</span>
+key combination from the window context. This Manager offers convenience to save size and position
+of the non-transient window. Once window geometry is saved, next run of the same application window
+on FVWM page where the window of the same resource+class combination is not already present will cause
+window to be resized to that exact width, height, X position and Y position X11 coordinates as stored
+in the <code class="filename">$FVWM_USERDIR/GeoDB.ini</code>. This ini-style file is managed by this
+application, as well as from the background runner <code class="filename">$NSCDE_TOOLSDIR/confset</code> and
+read by the <code class="filename">$NSCDE_TOOLSDIR/confget</code>. Application automatically fills X11 Class
+and X11 Resource names on contextual call, as well as geometry parameters. Before applying this
+settings, user has a chance to fine tune this parameters in text fields and confirm (or cancel) the
+action on the end. Using <span class="guibutton">Clear</span> all geometry values, as well as those which may
+be saved from the past are cleared and deleted. After the Clear action, there are two options:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 Filling all fields manually and saving the result
 </p></li><li class="listitem"><p>
 Saving empty fields: this action will cancel and/or remove any existing geometry
-mappings for the selected X11 window.
+mappings for the selected X11 program window.
 </p></li></ul></div><p>
 Note that geometry savings are dependent on the current monitor resolution. In other words,
 size and position of the X11 window are saved for 1920x1080, 2560x1440, 1600x900 and any

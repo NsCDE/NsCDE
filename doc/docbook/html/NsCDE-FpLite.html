@@ -2,29 +2,30 @@
 Load Indicator on the top right side of the center of the Front Panel contains
 a small applet called FpLite. In original CDE it was used to indicate desktop
 activity, but since on today's processors this tasks are short and almost
-immediate (specially with a good window manager such as FVWM), I find it
-better suited to show system load.
+immediate (specially with a good window manager such as FVWM), It appears to
+be better suited to server as system load indicator.
 </p><p>
-It has 10 micro-bars. When there is no
-load, all are yellow. Load grows from left to right. First 5 green bars, then
-3 blue, 2 magenta, an after that it starts from the beginning with red bars.
-FpLite summarizes load of all CPUs on the system in a way that 1-minute load
-is divided with number of CPU cores, and then counted as such while displaying
-load with color micro-bars. Everything under 1 (internally 100) is yellow,
-green, blue and magenta, and after that it counts 10 red micro-bars. For
-example: on the system with 2 CPU cores, 1-minute load of 0.6 will be
-presented with 3 bars (0.6 / num-cores), load of 2.2 will be presented with
-one red bar etc ... on the system with four CPU cores load of 3 will be
-magenta on the two rightmost bars, and load of 4 or more will be red. Load of
-more than (numcpu * 10) will not be shown specially, but user gets an idea
-what is going on if FpLite is all red.
+It has 10 micro-bars. When there is no load, all are yellow. Load grows from
+left to right. First 5 green bars, then 3 blue, 2 magenta, an after that it
+starts from the beginning with red bars. FpLite summarizes load of all CPUs on
+the system in a way that 1-minute load is divided with number of CPU cores,
+and then counted as such while displaying load with color micro-bars.
+Everything under 1 (internally 100) is yellow, green, blue and magenta, and
+after that it counts 10 red micro-bars. For example: on the system with 2 CPU
+cores, 1-minute load of 0.6 will be presented with 3 bars (0.6 / num-cores),
+load of 2.2 will be presented with one red bar etc ... on the system with four
+CPU cores load of 3 will be magenta on the two rightmost bars, and load of 4
+or more will be red. Load of more than (numcpu * 10) will not be shown
+specially, but user gets an idea what is going on if FpLite is all red.
 </p><p>
 If clicked, it will call a function <code class="function">f_FpLiteClickAction</code> which is by default
-set to safe defaults (<span class="emphasis"><em>[default terminal app]</em></span> <span class="command"><strong>-e top</strong></span>).
+set to <code class="varname">$[infostore.taskmgr]</code> or autodiscovery during starup. If nothing else, it
+will call <span class="emphasis"><em>[default terminal app]</em></span> <span class="command"><strong>-e top</strong></span> on Linux and BSD
+systems, <span class="emphasis"><em>[default terminal app]</em></span> <span class="command"><strong>-e prstat</strong></span> on Solaris and
+it's clones, and <span class="emphasis"><em>[default terminal app]</em></span> <span class="command"><strong>-e topas</strong></span> on AIX.
 FpLite FvwmScript app uses little portable python script <span class="emphasis"><em>getla1</em></span> from the
-<code class="filename">$NSCDE_ROOT/libexec</code> to obtain 1-minute load data.
+<code class="filename">$NSCDE_TOOLSDIR/libexec</code> to obtain 1-minute load data.
 </p><p>
-Key <span class="keysym">F1</span> will bring this help text in browser.
-If Sun type keyboard is in use, <span class="keysym">Help</span> key above
-FpLite has the same function as F1 on PC.
+Key <span class="keysym">F1</span> will bring this help text in browser. If Sun type keyboard is in use,
+<span class="keysym">Help</span> key above FpLite has the same function as F1 on PC.
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-CheckMailApplet.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-applets-docks-panels.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-GUI-Tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.7. Check Mail Applet </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4. GUI Tools</td></tr></table></div></body></html>
