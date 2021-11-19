@@ -2885,23 +2885,38 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 7.16. Keybindings.fvwmconf
 
-   For CDE clone and CDE compatibility, key bindings are a bit
-   problematic area. In my local installation of open sourced CDE
-   in virtual machine with CentOS 7, (didn't bothered to install
-   Solaris 10 to examine their flavor again), key bindings are
-   almost non-existent. Alt+F4 usually closes the window and
-   that's it. Because of this fact, and because NsCDE is not only
-   a visual clone of the CDE, but it aims to provide more
-   functionality and to be useful daily driver for user to enjoy
-   in familiar look and feel (hated by a lot of people) and to be
-   seriously productive in the same time, comfortable and quick,
-   to have good graphic (such as anti-aliased fonts, but this also
-   can be turned off), a set of useful key bindings is defined by
-   default. This default keybindings set can be extended,
-   partially overridden (by writing your local
-   $FVWM_USERDIR/Keybinding.fvwmlocal), or completely replaced
-   (copy the NsCDE-Keybinding.conf in $FVWM_USERDIR and edit, or
-   even write from scratch). Defaults are author's daily driver.
+   According to the old CDE documentation, there are couple of key
+   bindings known under CDE, but that documentation also assumes
+   Motif application bindings and X resource configuration, which
+   is far from universally applicable in today's world. That said,
+   while GTK and Qt applicatios have it's own key bindings, NsCDE
+   tries to combine a bit of CDE legacy with a huge number of new
+   functions, originally not present in CDE. Hence, we have a rich
+   set of keybindings for almost any action in NsCDE.
+
+   NsCDE is using 4 modifier keys in single and multi-modifier
+   combinations with other keys to implement key bindings. This
+   modifiers are:
+
+     * Control
+     * Shift
+     * Meta (often called Super)
+     * Alt
+
+   In combinations with escape, function keys, tab, backspace,
+   home, menu, letters, numbers and other keys, NsCDE builds rich
+   set of keyboard shortcuts also called keybindings which tries
+   to achieve some golden middle between ergonomics position on
+   the keyboard for often used ones, and logical grouping for easy
+   memorizing actions.
+
+   Keybindings can be partially or complitely overriden by the
+   user's writing $FVWM_USERDIR/Keybindings.fvwmconf (override) or
+   $FVWM_USERDIR/Keybindings.fvwmlocal (extend, paritally
+   override). Key bindings which are described with their Mod+Key
+   items on menus can be extended or overwritten in
+   $FVWM_USERDIR/Keymenu.actions.
+
    Notice when there is a reference to the "Menu" key this means
    also "Compose" on some keyboards.
 
@@ -3266,7 +3281,7 @@ Silent Key Tab A S -
 7.17. Keymenu.actions
 
    This file is not FVWM configuration file. It is written
-   manually with editor, and read by the $NSCDE_TOOLSDIR/keymenu
+   manually (with editor), and read by the $NSCDE_TOOLSDIR/keymenu
    command which will generate infostore variables with
    descriptive keyboard shortcut names which are used in NsCDE
    menus from Menus.fvwmconf and Functions.fvwmconf, and
@@ -3284,7 +3299,7 @@ Silent Key Tab A S -
    during initialization with f_KeyMenu -a from Main.fvwmconf.
 
    Every line, or dynamic keybinding can be overriden here if
-   (re)defined in user's $FVWM_USERDIR/Keymeu.actions: whole file
+   (re)defined in user's $FVWM_USERDIR/Keymenu.actions: whole file
    or just choosen keybindings. The goal is to get their
    descriptions (after functions and menus reload) automatically
    in place on menus. For example, "F3 A M" configuration for FVWM
@@ -3303,31 +3318,31 @@ Silent Key Tab A S -
 
 7.18. Main.fvwmconf
 
-   Core configuration. This file is read the first upon starting
-   FVWM Window Manager. In fact, FVWM is invoked with -f
-   /path/to/Main.fvwmconf to read it instead of default FVWM
-   system configuration or user's ~/.fvwm/config. This invocation
-   and configuration in Main.fvwmconf changes everything. It
-   avoids ~/.fvwm if user has a plain (normal) FVWM setup, defines
-   and redefines FVWM internal variables and sets NSCDE_ROOT,
-   configures some core FVWM options (like DefaultIcon), defines
-   main FVWM Read command wrapper f_ReadCfg, sets desktop names,
-   reads NsCDE.conf depending if user has it, or system-wide one,
-   defines StartFunction, DesktopSize, and then reads most of the
-   files described in this documents, composing NsCDE FVWM
-   configuration. Care must be taken NOT to read this file with
-   f_ReadCfg, because it will end up in the endless CPU hogging
-   loop because f_ReadCfg will be destroyed and recreated during
-   it's own execution. This file should probably never be
-   overridden in $FVWM_USERDIR. It is the init(8) of the NsCDE
+   Core configuration. This file is read as first initialization
+   upon starting FVWM Window Manager. In fact, FVWM is invoked
+   with -f /path/to/Main.fvwmconf to read it instead of default
+   FVWM system configuration or user's ~/.fvwm/config. This
+   invocation and configuration in Main.fvwmconf changes
+   everything: it avoids ~/.fvwm if user has a plain (normal) FVWM
+   setup, defines and redefines FVWM internal variables and sets
+   NSCDE_ROOT, configures some core FVWM options (like
+   DefaultIcon), defines main FVWM Read command wrapper f_ReadCfg,
+   sets desktop names, reads NsCDE.conf depending if user has it,
+   or system-wide one, defines StartFunction, DesktopSize, and
+   then reads most of the files described in this documents,
+   composing NsCDE FVWM configuration. Care must be taken NOT to
+   read this file with f_ReadCfg, because it will end up in the
+   endless CPU hogging loop because f_ReadCfg will be destroyed
+   and recreated during it's own execution. This file should never
+   be overridden in $FVWM_USERDIR. It is the init(8) of the NsCDE
    system.
      __________________________________________________________
 
 7.19. Menus.fvwmconf
 
    In NsCDE, there is a bunch of the menus. Root menus, contextual
-   menus, and even menus called or dinamically generated from
-   FvwmScript(1).
+   menus, and even menus called or dinamically generated from the
+   FvwmScript(1) scripts.
 
      * MenuFvwmRoot built-in root menu of FVWM. As in CDE, menu of
        such type, it is called with a right click on the root
@@ -3492,57 +3507,74 @@ Silent Key Tab A S -
 
 7.22. LocalPager.fvwmconf
 
-   Infostore variable pageraisefp in NsCDE.conf is by default 0.
-   If enabled, when active page changes, visual FvwmPager(1) will
-   be shown in the center of the screen near the top of it. On
+   Pager which is showing only a current workspace. It's windows
+   and pages on thish windows reside. This pager is meant to be
+   primary of informational nature. Infostore variable pageraisefp
+   in NsCDE.conf is by default 0. If enabled (1), when active page
+   or workspace changes, visual FvwmPager(1) will be shown in the
+   center of the screen near the top of it by default. On
    Ctrl+Compose (Ctrl+Menu) and/or Shift+ISO_Level3_Shift (Right
    Alt), pager will move to the position of the pointer, it will
    eventually disappear from the screen after 1 second, 3 seconds,
    5 seconds, 8 seconds, or 10 seconds if it looses the focus, or
    it can be dismissed by pressing the same key combination once
-   more while pointer is above pager.
+   more while pointer is above pager. Local pager can also be
+   called with Shift+Backspace keys. Local pager's initial
+   appearing position on the active screen can be controled with
+   rootpagerposition FVWM InfoStore variable in the
+   $FVWM_USERDIR/NsCDE.conf. There, a timeout can also be set with
+   rootpagertimeout variable; rootpagertimeout is in milliseconds.
      __________________________________________________________
 
 7.23. Script.fvwmconf
 
-   Default for all FvwmScript(1) Module based applications and
-   widgets. Script Path, default font and colorset. All this
-   values are defined outside of this file, so nothing really
-   should be changed here.
+   Some bare defaults for all FvwmScript(1) Module based
+   applications and widgets: script Path, default font and
+   colorset. All this values are usually redefined outside of this
+   file, so in FvwmScript source body, nothing really should be
+   changed here.
      __________________________________________________________
 
 7.24. WSM.conf
 
-   Non-FVWM config file. Here, names of the desks are provided and
-   can be changed manually of with Workspace Manager. Names of the
-   workspace pages (for the menus) are defined here too, and
-   manager manually only for now. Option WSPPG can have value 0 or
-   1. If 1, small dynamic icon similar to the Page Manager (PGM)
-   will be shown right of the workspace name on the Workspace
-   Manager active workspace button, but only in 2 and 4 button
-   configuration. Off by default, edit manually.
+   Non-FVWM config file. Here, the names of the NsCDE Workspaces
+   are read and written by the NsCDE and can be changed manually
+   or with the Workspaces and Pages Style Manager. Options for
+   Graphical Workspace Manager (GWM) are also saved here. Names of
+   the workspace pages (for the menus) can be redefined here
+   manually (there is no tool for this one).
+
+   WSM file is not read from the system's central location. It is
+   installed there only for a reference. WSM.conf will be created
+   in $FVWM_USERDIR when workspaces are renamed, or GWM settings
+   are changed. Overrides for names of the pages are user's care
+   if there is really need to name pages differently from default
+   scheme.
      __________________________________________________________
 
 7.25. Style.fvwmconf
 
    Main decoration configuration. Style '*' is applied globally.
-   This is the main source of CDE and Motif-like behavior. If user
-   wants to preserve CDE-like look and feel, this options should
-   not be changed too much. Otherwise, a plain FVWM configuration
-   can be done which can drastically differ from NsCDE, since FVWM
-   has much more options and variants for a huge number of tastes.
-   Style '*' options are partially overridden or extended in
-   NsCDE.conf which can be generated with Window Style Manager or
-   simply copied from $NSCDE_ROOT/config to $FVWM_USERDIR and
-   edited to suit.
+   This is the main source of CDE and Motif-like look and
+   behavior. If user wants to preserve CDE-like look and feel,
+   this options should not be changed too much. Otherwise, a plain
+   FVWM configuration can be done which can drastically differ
+   from NsCDE, since FVWM has much more options and variants for a
+   huge number of tastes. Style '*' options are partially
+   overridden or extended in NsCDE.conf which can be generated
+   with Window Style Manager or simply copied from
+   $NSCDE_DATADIR/fvwm to $FVWM_USERDIR and edited to suit.
 
-   Options are grouped in 5 categories:
+   Options in Style.fvwmconf are grouped in 7 categories:
 
      * Default, or '*' styles
      * Fvwm modules and FvwmScript(1) script specific
      * Some basic sane defaults for common applications
      * Menu styles (not a style commands, but styles anyway)
      * Cursor styles (not a style commands, but styles anyway)
+     * Decors "SubpanelsDecor" and "FpDecor" which are slightly
+       modifiying Front Panel and it's Subpanels.
+     * GeometryWindow directives (FVWM3 only)
 
    This styles can be extended and/or overridden by the user's own
    $FVWM_USERDIR/Style.fvwmlocal, and core style for all windows
@@ -3564,11 +3596,13 @@ Silent Key Tab A S -
    This file is not FVWM configuration file. It is written by the
    Subpanels Manager, Subpanel Settings, or manually with editor,
    and read by the $NSCDE_TOOLSDIR/generate_subpanels command
-   which will generate Subpanels.fvwmconf file in user's
-   $FVWM_USERDIR. The syntax of this file is simple. It is
-   CSV-like file where values are delimited with a comma ",".
-   Every line belongs to one of the ten subpanels. Comma and "'"
-   characters cannot be part of the field values. This values are:
+   which will generate Subpanels.fvwmX.fvwmconf file in user's
+   $FVWM_USERDIR directory, where "fvwmX" is either fvwm2 or fvwm3
+   depending under which FVWM NsCDE is running. The syntax of this
+   file is simple. It is CSV-like file where values are delimited
+   with a comma ",". Every line belongs to one of the ten
+   subpanels. Comma and "'" characters cannot be part of the field
+   values. This values are:
 
      * S<X>: where <X> is a number from 1 to 10 indicates which
        subpanel's line is this
@@ -3606,23 +3640,27 @@ Silent Key Tab A S -
    This file is generated by the
    $NSCDE_TOOLSDIR/generate_subpanels. It is static in system
    directory, but changable and easly generated in the
-   $FVWM_USERDIR It contains FvwmButtons(8) definitions of all 10
-   possible subpanels which can be popped up from the Front Panel.
-   There are 3 ways to regenerate this file: Subpanels Manager
-   tool called from the Install Icon, Subpanel Settings tool
-   called from the titlebar popdown menu on every subpanel as
-   Subpanel Settings or manually by calling
+   $FVWM_USERDIR where it is then called
+   $FVWM_USERDIR/Subpanels.fvwmX.fvwmgen, where "fvwmX" is either
+   FVWM2 or FVWM3, depending on which FVWM is used by the NsCDE.
+   It contains FvwmButtons(8) definitions of all 20 possible
+   subpanels which can be popped up from the Front Panel. There
+   are 3 ways to regenerate this file: Subpanels Manager tool
+   called from the Install Icon, Subpanel Settings tool called
+   from the titlebar popdown menu on every subpanel as Subpanel
+   Settings or manually by calling
    $NSCDE_TOOLSDIR/generate_subpanels which will read user's or
    system Subpanels.actions for every subpanel and if it is
    defined in user's one, take this one while generating
-   Subpanels.fvwmconf. In system default, subpanels 2, 5 and 6 are
-   disabled by default, but can be activated with a very quick
-   double middle pointer click on the empty launcher without
-   arrow: a Subpanel Settings application will appear on the
-   screen which has a checkbox "This Subpanel is Enabled" which
-   will be checked out by default, and can be checked in, and OK
-   will enable subpanel with initial system defaults for name,
-   width and application entries.
+   Subpanels.fvwmX.fvwmconf. In system default, subpanels 2, 5, 6
+   and 8 are disabled by default, but can be activated with a very
+   quick tripple middle pointer click on the empty launcher
+   without up arrow: a Subpanel Settings application will appear
+   on the screen which has a checkbox "This Subpanel is Enabled"
+   which will be checked out by for disabled subpanels by default,
+   and can be checked in, to apply OK will enable subpanel with
+   initial system defaults for name, width and application
+   entries.
      __________________________________________________________
 
 8. System and User NsCDE Tree Layout

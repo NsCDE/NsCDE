@@ -3456,19 +3456,35 @@ for user to customize this further.
 <sect2 id="Keybindings_fvwmconf">
 <title>Keybindings.fvwmconf</title>
 <para>
-For CDE clone and CDE compatibility, key bindings are a bit problematic area. In my local
-installation of open sourced CDE in virtual machine with CentOS 7, (didn't bothered to
-install Solaris 10 to examine their flavor again), key bindings are almost non-existent.
-<keysym>Alt+F4</keysym> usually closes the window and that's it. Because of this fact, and
-because NsCDE is not only a visual clone of the CDE, but it aims to provide more
-functionality and to be useful <emphasis>daily driver</emphasis> for user to enjoy in
-familiar look and feel (hated by a lot of people) and to be seriously productive in the
-same time, comfortable and quick, to have good graphic (such as anti-aliased fonts, but
-this also can be turned off), a set of useful key bindings is defined by default. This
-default keybindings set can be extended, partially overridden (by writing your local
-<varname>$FVWM_USERDIR/Keybinding.fvwmlocal</varname>), or completely replaced (copy the
-<filename>NsCDE-Keybinding.conf</filename> in <varname>$FVWM_USERDIR</varname> and edit,
-or even write from scratch). Defaults are author's <emphasis>daily driver</emphasis>.
+According to the old CDE documentation, there are couple of key bindings known under CDE,
+but that documentation also assumes Motif application bindings and X resource configuration,
+which is far from universally applicable in today's world. That said, while GTK and Qt
+applicatios have it's own key bindings, NsCDE tries to combine a bit of CDE legacy with
+a huge number of new functions, originally not present in CDE. Hence, we have a rich set
+of keybindings for almost any action in NsCDE.
+</para>
+<para>
+NsCDE is using 4 modifier keys in single and multi-modifier combinations with other keys
+to implement key bindings. This modifiers are:
+<itemizedlist>
+<listitem><para>Control</para></listitem>
+<listitem><para>Shift</para></listitem>
+<listitem><para>Meta (often called Super)</para></listitem>
+<listitem><para>Alt</para></listitem>
+</itemizedlist>
+In combinations with escape, function keys, tab, backspace, home, menu, letters, numbers
+and other keys, NsCDE builds rich set of keyboard shortcuts also called keybindings which
+tries to achieve some golden middle between ergonomics position on the keyboard for often
+used ones, and logical grouping for easy memorizing actions.
+</para>
+<para>
+Keybindings can be partially or complitely overriden by the user's writing
+<filename>$FVWM_USERDIR/Keybindings.fvwmconf</filename> (override) or
+<filename>$FVWM_USERDIR/Keybindings.fvwmlocal</filename> (extend, paritally override).
+Key bindings which are described with their <emphasis>Mod+Key</emphasis> items on menus
+can be extended or overwritten in <filename>$FVWM_USERDIR/Keymenu.actions</filename>.
+</para>
+<para>
 Notice when there is a reference to the "Menu" key this means also "Compose" on some
 keyboards.
 </para>
@@ -4101,7 +4117,7 @@ Front Panel or Subpanels documentation.
 <sect2 id="Keymenu_actions">
 <title>Keymenu.actions</title>
 <para>
-This file is not FVWM configuration file. It is written manually with editor, and read by the
+This file is not FVWM configuration file. It is written manually (with editor), and read by the
 <command>$NSCDE_TOOLSDIR/keymenu</command> command which will generate infostore variables with
 descriptive keyboard shortcut names which are used in NsCDE menus from
 <filename>Menus.fvwmconf</filename> and <filename>Functions.fvwmconf</filename>, and additionaly,
@@ -4118,7 +4134,7 @@ with <function>f_KeyMenu -a</function> from <filename>Main.fvwmconf</filename>.
 </para>
 <para>
 Every line, or dynamic keybinding can be overriden here if (re)defined in user's
-<filename>$FVWM_USERDIR/Keymeu.actions</filename>: whole file or just choosen keybindings.
+<filename>$FVWM_USERDIR/Keymenu.actions</filename>: whole file or just choosen keybindings.
 The goal is to get their descriptions (after functions and menus reload) automatically in place
 on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym>Alt+F3</keysym>
 description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
@@ -4139,24 +4155,21 @@ notices in section about <link linkend="Keybindings_fvwmconf">Keybindings.fvwmco
 <sect2 id="Main_fvwmconf">
 <title>Main.fvwmconf</title>
 <para>
-  Core configuration. This file is read the first upon starting FVWM
-  Window Manager. In fact, FVWM is invoked with <option>-f /path/to/Main.fvwmconf</option>
-  to read it instead of default FVWM system configuration or user's
-  <filename>~/.fvwm/config</filename>.
+  Core configuration. This file is read as first initialization upon starting FVWM Window Manager.
+  In fact, FVWM is invoked with <option>-f /path/to/Main.fvwmconf</option> to read it instead of
+  default FVWM system configuration or user's <filename>~/.fvwm/config</filename>.
   This invocation and configuration in <filename>Main.fvwmconf</filename>
-  changes everything. It avoids <filename class="directory">~/.fvwm</filename> if user has a plain (normal)
+  changes everything: it avoids <filename class="directory">~/.fvwm</filename> if user has a plain (normal)
   FVWM setup, defines and redefines FVWM internal variables and sets
   <varname>NSCDE_ROOT</varname>, configures some core FVWM options (like <option>DefaultIcon</option>),
   defines main FVWM <command>Read</command> command wrapper <function>f_ReadCfg</function>,
   sets desktop names, reads <filename>NsCDE.conf</filename> depending if user has it, or system-wide one,
   defines <function>StartFunction</function>, <option>DesktopSize</option>, and
-  then reads most of the files
-  described in this documents, composing NsCDE FVWM configuration.
+  then reads most of the files described in this documents, composing NsCDE FVWM configuration.
   Care must be taken NOT to read this file with <function>f_ReadCfg</function>, because it
   will end up in the endless CPU hogging loop because <function>f_ReadCfg</function> will be
-  destroyed and recreated during it's own execution. This file should
-  probably never be overridden in <varname>$FVWM_USERDIR</varname>. It is the init(8) of
-  the NsCDE system.
+  destroyed and recreated during it's own execution. This file should never be overridden
+  in <varname>$FVWM_USERDIR</varname>. It is the init(8) of the NsCDE system.
 </para>
 </sect2>
 
@@ -4164,7 +4177,8 @@ notices in section about <link linkend="Keybindings_fvwmconf">Keybindings.fvwmco
 <title>Menus.fvwmconf</title>
 <para>
 In NsCDE, there is a bunch of the menus. Root menus, contextual menus,
-and even menus called or dinamically generated from FvwmScript(1).
+and even menus called or dinamically generated from the FvwmScript(1)
+scripts.
 </para>
 
 <itemizedlist>
@@ -4468,37 +4482,47 @@ transient and will disappear after being used with a pointer click.
 <sect2 id="LocalPager_fvwmconf">
 <title>LocalPager.fvwmconf</title>
 <para>
-Infostore variable <varname>pageraisefp</varname> in <filename>NsCDE.conf</filename> is by default 0.
-If enabled, when active page changes, visual FvwmPager(1) will be shown in the center
-of the screen near the top of it.
-On <keysym>Ctrl+Compose</keysym> (<keysym>Ctrl+Menu</keysym>) and/or
-<keysym>Shift+ISO_Level3_Shift</keysym> (Right Alt), pager will move to the position of
-the pointer, it will eventually disappear from the screen after 1 second, 3 seconds,
-5 seconds, 8 seconds, or 10 seconds if it looses the focus, or it can
-be dismissed by pressing the same key combination once more while
-pointer is above pager.
+Pager which is showing only a current workspace. It's windows and pages on thish windows
+reside. This pager is meant to be primary of informational nature. Infostore variable
+<varname>pageraisefp</varname> in <filename>NsCDE.conf</filename> is by default 0.
+If enabled (1), when active page or workspace changes, visual FvwmPager(1) will be shown
+in the center of the screen near the top of it by default. On <keysym>Ctrl+Compose</keysym>
+(<keysym>Ctrl+Menu</keysym>) and/or <keysym>Shift+ISO_Level3_Shift</keysym> (Right Alt),
+pager will move to the position of the pointer, it will eventually disappear from the
+screen after 1 second, 3 seconds, 5 seconds, 8 seconds, or 10 seconds if it looses the
+focus, or it can be dismissed by pressing the same key combination once more while
+pointer is above pager. Local pager can also be called with
+<keysym>Shift+Backspace</keysym> keys. Local pager's initial appearing position on the
+active screen can be controled with <varname>rootpagerposition</varname> FVWM
+InfoStore variable in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>. There, a timeout
+can also be set with <varname>rootpagertimeout</varname> variable; rootpagertimeout is
+in milliseconds.
 </para>
 </sect2>
 
 <sect2 id="Script_fvwmconf">
 <title>Script.fvwmconf</title>
 <para>
-Default for all FvwmScript(1) Module based applications and widgets. Script Path,
-default font and colorset. All this values are defined outside of
-this file, so nothing really should be changed here.
+Some bare defaults for all FvwmScript(1) Module based applications and widgets: script Path,
+default font and colorset. All this values are usually redefined outside of this file, so
+in FvwmScript source body, nothing really should be changed here.
 </para>
 </sect2>
 
 <sect2 id="NsCDE-WSM_conf">
 <title>WSM.conf</title>
 <para>
-Non-FVWM config file. Here, names of the desks are provided and can be
-changed manually of with Workspace Manager. Names of the workspace pages
-(for the menus) are defined here too, and manager manually only for now.
-Option <option>WSPPG</option> can have value 0 or 1. If 1, small dynamic icon similar to
-the Page Manager (PGM) will be shown right of the workspace name on the Workspace
-Manager active workspace button, but only in 2 and 4 button configuration.
-Off by default, edit manually.
+Non-FVWM config file. Here, the names of the NsCDE Workspaces are read and written
+by the NsCDE and can be changed manually or with the Workspaces and Pages Style Manager.
+Options for Graphical Workspace Manager (GWM) are also saved here. Names of the workspace
+pages (for the menus) can be redefined here manually (there is no tool for this one).
+</para>
+<para>
+WSM file is not read from the system's central location. It is installed there only
+for a reference. <filename>WSM.conf</filename> will be created in
+<filename class="directory">$FVWM_USERDIR</filename> when workspaces are renamed, or
+GWM settings are changed. Overrides for names of the pages are user's care if there
+is really need to name pages differently from default scheme.
 </para>
 </sect2>
 
@@ -4506,18 +4530,18 @@ Off by default, edit manually.
 <title>Style.fvwmconf</title>
 <para>
 Main decoration configuration. <option>Style</option> '*' is applied globally. This is
-the main source of CDE and Motif-like behavior. If user wants to preserve
-CDE-like look and feel, this options should not be changed too much.
-Otherwise, a plain FVWM configuration can be done which can drastically
-differ from NsCDE, since FVWM has much more options and variants for a
-huge number of tastes. <option>Style</option> '*' options are partially overridden or
-extended in <filename>NsCDE.conf</filename> which can be generated with
-<link linkend="NsCDE-WindowMgr">Window Style Manager</link>
-or simply copied from <filename class="directory">$NSCDE_ROOT/config</filename>
-to <varname>$FVWM_USERDIR</varname> and edited to suit.
+the main source of CDE and Motif-like look and behavior. If user wants to preserve
+CDE-like look and feel, this options should not be changed too much. Otherwise, a
+plain FVWM configuration can be done which can drastically differ from NsCDE, since
+FVWM has much more options and variants for a huge number of tastes.
+<option>Style</option> '*' options are partially overridden or extended in
+<filename>NsCDE.conf</filename> which can be generated with
+<link linkend="NsCDE-WindowMgr">Window Style Manager</link> or simply copied from
+<filename class="directory">$NSCDE_DATADIR/fvwm</filename> to
+<varname>$FVWM_USERDIR</varname> and edited to suit.
 </para>
 <para>
-Options are grouped in 5 categories:
+Options in Style.fvwmconf are grouped in 7 categories:
 </para>
 <itemizedlist>
 <listitem><para>
@@ -4534,6 +4558,13 @@ Options are grouped in 5 categories:
 </para></listitem>
 <listitem><para>
    Cursor styles (not a style commands, but styles anyway)
+</para></listitem>
+<listitem><para>
+   Decors "SubpanelsDecor" and "FpDecor" which are slightly modifiying Front Panel and it's
+   Subpanels.
+</para></listitem>
+<listitem><para>
+   GeometryWindow directives (FVWM3 only)
 </para></listitem>
 </itemizedlist>
 <para>
@@ -4563,11 +4594,11 @@ This file is not FVWM configuration file. It is written by the
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link>, or
 manually with editor, and read by the <command>$NSCDE_TOOLSDIR/generate_subpanels</command>
 command which will generate
-<link linkend="Subpanels_fvwmconf"><filename>Subpanels.fvwmconf</filename></link> file in user's
-<varname>$FVWM_USERDIR</varname>.
-The syntax of this file is simple. It is CSV-like file where values are delimited with a comma ",".
-Every line belongs to one of the ten subpanels. Comma and "'" characters cannot be part of
-the field values. This values are:
+<link linkend="Subpanels_fvwmconf"><filename>Subpanels.fvwmX.fvwmconf</filename></link> file
+in user's <varname>$FVWM_USERDIR</varname> directory, where "fvwmX" is either fvwm2 or fvwm3
+depending under which FVWM NsCDE is running. The syntax of this file is simple. It is CSV-like
+file where values are delimited with a comma ",". Every line belongs to one of the ten
+subpanels. Comma and "'" characters cannot be part of the field values. This values are:
 </para>
 
 <itemizedlist>
@@ -4609,20 +4640,22 @@ the field values. This values are:
 <para>
 This file is generated by the <command>$NSCDE_TOOLSDIR/generate_subpanels</command>.
 It is static in system directory, but changable and easly generated in the <varname>$FVWM_USERDIR</varname>
-It contains FvwmButtons(8) definitions of all 10 possible subpanels which can be popped up from the
+where it is then called <filename>$FVWM_USERDIR/Subpanels.fvwmX.fvwmgen</filename>, where "fvwmX" is
+either FVWM2 or FVWM3, depending on which FVWM is used by the NsCDE.
+It contains FvwmButtons(8) definitions of all 20 possible subpanels which can be popped up from the
 <link linkend="NsCDE-FrontPanel">Front Panel</link>. There are 3 ways to regenerate this file:
 <link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link> tool called from
 the <emphasis>Install Icon</emphasis>, <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> tool
 called from the titlebar popdown menu on every subpanel as <emphasis>Subpanel Settings</emphasis> or
 manually by calling <command>$NSCDE_TOOLSDIR/generate_subpanels</command> which will
 read user's or system <link linkend="Subpanels_actions"><filename>Subpanels.actions</filename></link> for
-every subpanel and if it is defined in user's one, take this one while generating Subpanels.fvwmconf.
-In system default, subpanels 2, 5 and 6 are disabled by default, but can be activated with a very quick
-double middle pointer click on the empty launcher without arrow: a
+every subpanel and if it is defined in user's one, take this one while generating Subpanels.fvwmX.fvwmconf.
+In system default, subpanels 2, 5, 6 and 8 are disabled by default, but can be activated with a very quick
+tripple middle pointer click on the empty launcher without up arrow: a
 <link linkend="NsCDE-SubpanelSettings">Subpanel Settings</link> application will appear on the screen
 which has a checkbox <guilabel>"This Subpanel is Enabled"</guilabel> which will be checked out by
-default, and can be checked in, and <guibutton>OK</guibutton> will enable subpanel with initial
-system defaults for name, width and application entries.
+for disabled subpanels by default, and can be checked in, to apply <guibutton>OK</guibutton> will enable
+subpanel with initial system defaults for name, width and application entries.
 </para>
 
 </sect2>
