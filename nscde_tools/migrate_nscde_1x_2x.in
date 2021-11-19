@@ -533,6 +533,72 @@ function walk_and_change_pathnames_in_files
       $textn "Processing "; echo -ne "$ftp"; $text " with pathname replacements for NsCDE 2.0"
       replace_pathnames_in_files "$ftp"
    done
+
+   # Handling old share/icons/CDE/ as share/icons/NsCDE (best effort)
+   if [ -r "FrontPanel.actions" ]; then
+      $text "Processing icon paths in FrontPanel.actions"
+      $ISED -c 's/\(^Btn.*\),\(CDE\)\(\/.*\.pm\),\(M1,.*,.*\)/\1,NsCDE\3,\4/g' -f FrontPanel.actions
+      cat FrontPanel.actions | while IFS="," read Btn fpicon mice chk cmdrest
+      do
+         echo "$fpicon" | egrep -q 'NsCDE\/'
+         if (($? == 0)); then
+            $textn "Processing "; echo -ne "$fpicon"; $textn " for button "; echo "$Btn"
+            if [ ! -f "$NSCDE_DATADIR/icons/$fpicon" ]; then
+               fpicon_candidate=$(echo "$fpicon" | sed 's/SDt/Dt/g')
+               if [ ! -f "$NSCDE_DATADIR/icons/$fpicon_candidate" ]; then
+                  fpicon_candidate_two=$(echo "$fpicon_candidate" | sed 's/\.pm$/\.xpm/g')
+                  if [ ! -f "$NSCDE_DATADIR/icons/$fpicon_candidate_two" ]; then
+                     fpicon_candidate_three=$(echo "$fpicon" | sed 's/\.pm$/\.xpm/g')
+                     if [ -f "$NSCDE_DATADIR/icons/$fpicon_candidate_three" ]; then
+                        $ISED -c "s@$fpicon@$fpicon_candidate_three@g" -f FrontPanel.actions
+                     fi
+                  else
+                     if [ -f "$NSCDE_DATADIR/icons/$fpicon_candidate_two" ]; then
+                        $ISED -c "s@$fpicon@$fpicon_candidate_two@g" -f FrontPanel.actions
+                     fi
+                  fi
+               else
+                  if [ -f "$NSCDE_DATADIR/icons/$fpicon_candidate" ]; then
+                     $ISED -c "s@$fpicon@$fpicon_candidate@g" -f FrontPanel.actions
+                  fi
+               fi
+            fi
+         fi
+      done
+   fi
+
+   # Handling old share/icons/CDE/ as share/icons/NsCDE (best effort)
+   if [ -r "Subpanels.actions" ]; then
+      $text "Processing icon paths in Subpanels.actions"
+      $ISED -c 's/\(^S[[:digit:]]\+,ENTRY,.*,.*,\)CDE\(\/.*\.pm,.*\)/\1NsCDE\2/g' -f Subpanels.actions
+      cat Subpanels.actions | while IFS="," read S ENTRY name spec subicon cmdrest
+      do
+         echo "$subicon" | egrep -q '^NsCDE\/SDt.*\.pm'
+         if (($? == 0)); then
+            $textn "Processing "; echo -ne "$subicon"; $textn " for entry "; echo "$name"
+            if [ ! -f "$NSCDE_DATADIR/icons/$subicon" ]; then
+               subicon_candidate=$(echo "$subicon" | sed 's/SDt/Dt/g')
+               if [ ! -f "$NSCDE_DATADIR/icons/$subicon_candidate" ]; then
+                  subicon_candidate_two=$(echo "$subicon_candidate" | sed 's/\.pm$/\.xpm/g')
+                  if [ ! -f "$NSCDE_DATADIR/icons/$subicon_candidate_two" ]; then
+                     subicon_candidate_three=$(echo "$subicon" | sed 's/\.pm$/\.xpm/g')
+                     if [ -f "$NSCDE_DATADIR/icons/$subicon_candidate_three" ]; then
+                        $ISED -c "s@$subicon@$subicon_candidate_three@g" -f Subpanels.actions
+                     fi
+                  else
+                     if [ -f "$NSCDE_DATADIR/icons/$subicon_candidate_two" ]; then
+                        $ISED -c "s@$subicon@$subicon_candidate_two@g" -f Subpanels.actions
+                     fi
+                  fi
+               else
+                  if [ -f "$NSCDE_DATADIR/icons/$subicon_candidate" ]; then
+                     $ISED -c "s@$subicon@$subicon_candidate@g" -f Subpanels.actions
+                  fi
+               fi
+            fi
+         fi
+      done
+   fi
 }
 
 function preface
