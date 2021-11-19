@@ -1,58 +1,78 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8. System and User NsCDE Tree Layout</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="Subpanels_fvwmconf.html" title="7.27. Subpanels.fvwmconf"><link rel="next" href="NsCDE-User-Tree-Layout.html" title="8.2. User Tree Layout"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8. System and User NsCDE Tree Layout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Subpanels_fvwmconf.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-User-Tree-Layout.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-System-User-Tree-Layout"></a>8. System and User NsCDE Tree Layout</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8. System and User NsCDE Tree Layout</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="Subpanels_fvwmconf.html" title="7.27. Subpanels.fvwmX.fvwmconf"><link rel="next" href="NsCDE-User-Tree-Layout.html" title="8.2. User Tree Layout"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8. System and User NsCDE Tree Layout</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Subpanels_fvwmconf.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-User-Tree-Layout.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-System-User-Tree-Layout"></a>8. System and User NsCDE Tree Layout</h2></div></div></div><p>
 This section describes in detail what is stored where in NsCDE system-wide
 installation hierarchy, and user's home directory <code class="filename">.NsCDE</code>
 or <code class="varname">$FVWM_USERDIR</code>.
 </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-System-Tree-Layout"></a>8.1. System Tree Layout</h3></div></div></div><p>
-Everything from NsCDE is for now located as one compact place for easier
-portability between Linux and Unix systems in
-<code class="filename">/opt/NsCDE</code>. Only symlink
-to main starting wrapper <code class="filename">/opt/NsCDE/bin/nscde</code> is feasible to be put into
-<code class="filename">/usr/bin</code> or <code class="filename">/usr/local/bin,</code>
-since <code class="filename">/opt/NsCDE/bin</code> doesn't really need tobe put in
-user's <code class="varname">$PATH</code>.
+From the major version 2, NsCDE is following Filesystem Hierarchy Standard of Linux
+and other surviving Unix and BSD systems. The installation procedure will put main
+calling wrapper <span class="emphasis"><em>nscde</em></span> and <span class="command"><strong>nscde_fvwmclnt</strong></span> into
+PREFIX/bin, NsCDE helper programs and tools into PREFIX/libexec/NsCDE, python api code
+and FvwmScript scripts, fpclock and colorpicker binaries into PREFIX/lib/NsCDE, while
+rest of the data goes into PREFIX/share/NsCDE, except icon theme, .desktop files, which
+are following XDG specification and are installed in /usr/share/icons/NsCDE,
+/usr/share/applications, and so on. NsCDE app menu will be positioned in
+PREFIX/etc/xdg/menus (or /etc/xdg/menus if installed from package), while X session
+file read by the graphical display manager usually goes into /usr/share/xsessions,
+regardless of the PREFIX, or /usr/local/share/xsessions on BSD-based systems.
 </p><p>
-This are subdirectories of <code class="filename">/opt/NsCDE</code> with short
-description what is what, and what is where:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="filename">/opt/NsCDE</code></p><p>
-main top directory of NsCDE installation all further
-descriptions will be written as relative to this directory
+Variable meanings for further paths:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<code class="filename">$NSCDE_ROOT</code>
+</p><p>
+Main top directory of NsCDE installation; usually /usr, /usr/local, /opt/local,
+/opt/sfw, /usr/pkg etc ... most parts of the installation are under this hierarcy
+referenced also as "$PREFIX" in documentation
 </p></li><li class="listitem"><p>
+<code class="filename">$NSCDE_DATADIR</code>
+</p><p>
+This points to $PREFIX/share/NsCDE
+</p></li><li class="listitem"><p>
+<code class="filename">$NSCDE_TOOLSDIR</code>
+</p><p>
+This is sometimes $PREFIX/libexec/NsCDE and some systems, which doesn't like libexec
+will put this as $PREFIX/lib/NsCDE, $PREFIX/lib64/NsCDE and so on
+</p></li><li class="listitem"><p>
+<code class="filename">$NSCDE_LIBDIR</code>
+</p><p>
+This is usually $PREFIX/lib/NsCDE with variations as $PREFIX/lib64/NsCDE, $PREFIX/lib/x86_64-linux-gnu/NsCDE
+and so on.
+</p></li></ul></div><p>
+</p><p>
+This are the main directory components of the NsCDE with description what is what,
+and what is where:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 <code class="filename">bin</code>
 </p><p>
-  nscde start wrapper called from <code class="filename">.xsession</code> or integrated as .desktop
-  file in <code class="filename">/usr/share/xsession</code> is located here,
-  as well as some helper
-  scripts of the NsCDE which are suitable for general use. Front Panel
-  <span class="command"><strong>pclock</strong></span> is also here. Pclock is the only binary part of the NsCDE
+  nscde start wrapper called from <code class="filename">/usr/share/xsessions/nscde.desktop</code>
+  nscde_fvwmclnt caller of the right (FVWM2 or FVWM3) FvwmCommand.
 </p></li><li class="listitem"><p>
-   config
+   <code class="filename">$NSCDE_DATADIR/fvwm</code>
 </p><p>
-  Configuration directory. All .conf files described in documentation
-  are here. They are read from <code class="filename">config/Main.fvwmconf</code> which is called
-  from bin/nscde by fvwm binary with <code class="option">-f</code> directly.
+  NsCDE private FVWM settings directory. All .fvwmconf files described in documentation
+  are here. They are read from <code class="filename">Main.fvwmconf</code> which is called
+  from PREFIX/bin/nscde by fvwm binary with <code class="option">-f</code> directly.
 </p></li><li class="listitem"><p>
-   <code class="filename">share/NsCDE/config_templates/progbits</code>
+   <code class="filename">$NSCDE_DATADIR/config_templates/progbits</code>
 </p><p>
   Template X pixmap files used by <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> for producing
   user's copy in the <code class="filename">$FVWM_USERDIR/icons/NsCDE/</code>
-  this pixmaps are
-  invalid as pictures in their source form since they contain internal
-  macros for replacement with real colors. System starting theme is
-  using their copied in <code class="filename">$NSCDE_DATADIR/icons/NsCDE</code>.
+  this pixmaps are invalid as pictures in their source form since they contain internal
+  macros for replacement with real colors. System starting theme is using their copied
+  in <code class="filename">$NSCDE_DATADIR/icons/NsCDE</code>.
 </p></li><li class="listitem"><p>
-  <code class="filename">lib/NsCDE/python</code>
+  <code class="filename">$NSCDE_LIBDIR/python</code>
 </p><p>
   Python libraries used by <span class="command"><strong>themegen</strong></span>: part of the integration suite
-  for GTK and Qt.
+  for GTK and Qt theme.
 </p></li><li class="listitem"><p>
-  <code class="filename">libexec</code>
+  <code class="filename">$NSCDE_TOOLSDIR</code>
 </p><p>
   The rest of the scripts (korn shell and python) are located here. In
   normal circumstances this scripts should not be run directly, but
   they are used by numerous NsCDE FvwmScript apps and FVWM functions
   as helpers and background program workers.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/backdrops</code>
+  <code class="filename">$NSCDE_DATADIR/backdrops</code>
 </p><p>
   Backdrop files. CDE and new, additional. Source for generation of active
   user's backdrop depending on theme, that is color scheme. They have
@@ -61,25 +81,25 @@ descriptions will be written as relative to this directory
   supported by style managers and hence some of CDE's original
   backdrops of that type are in NsCDE converted to X pixmaps.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/cursors</code>
+  <code class="filename">$NSCDE_DATADIR/icons/cursors</code>
 </p><p>
   Custom cursors which are missing on plain X server installations but
-  can be found in CDE. Referenced in <code class="filename">fvwm/Style.fvwmconf</code>.
+  can be found in CDE. Referenced in <code class="filename">$NSCDE_DATADIR/fvwm/Style.fvwmconf</code>.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/defaults/backer</code>
+  <code class="filename">$NSCDE_DATADIR/defaults/backer</code>
 </p><p>
   Default generated backdrops for first start (Broica, 8 colors)
-  Referenced in system's <code class="filename">fvwm/Backdrops.fvwmconf</code>.
+  Referenced in system's <code class="filename">$NSCDE_DATADIR/fvwm/Backdrops.fvwmconf</code>.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/defaults/pages</code>
+  <code class="filename">$NSCDE_DATADIR/defaults/pages</code>
 </p><p>
   Default page names for every possible combination supported by NsCDE
 </p></li><li class="listitem"><p>
-  <code class="filename">share/doc/NsCDE</code>
+  <code class="filename">$PREFIX/share/doc/nscde</code>
 </p><p>
   Documentation
 </p></li><li class="listitem"><p>
-  <code class="filename">share/examples</code>
+  <code class="filename">$PREFIX/share/doc/nscde/examples</code>
 </p><p>
 Examples for X display manager and DE integrations, <span class="command"><strong>sudo</strong></span> for <span class="command"><strong>shutdown
 </strong></span>  <span class="command"><strong>reboot</strong></span>, <span class="command"><strong>pm-suspend</strong></span> or <span class="command"><strong>pm-hibernate</strong></span>,
@@ -89,22 +109,17 @@ Examples for X display manager and DE integrations, <span class="command"><stron
 </p><p>
   Default font sets used by the <a class="link" href="NsCDE-FontMgr.html" title="4.6. Font Style Manager">Font Style Manager</a>
 </p></li><li class="listitem"><p>
-  <code class="filename">$NSCDE_DATADIR/icons/CDE</code>
-</p><p>
-  Original CDE icons
-</p></li><li class="listitem"><p>
   <code class="filename">$NSCDE_DATADIR/icons/NsCDE</code>
 </p><p>
-  Custom NsCDE icons of which many are part of FvwmScript programs and
+  CDE and custom NsCDE icons of which many are part of FvwmScript programs and
   applets
 </p></li><li class="listitem"><p>
-  <code class="filename">share/palettes</code>
+  <code class="filename">$NSCDE_DATADIR/palettes</code>
 </p><p>
     CDE palettes plus a bunch of new custom palettes. Used by <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color
     Style Manager</a> and <a class="link" href="NsCDE-BackdropMgr.html" title="4.2. Backdrop Style Manager">Backdrop Style Manager</a>, as well as
-    <span class="command"><strong>libexec/NsCDE/themegen</strong></span>, <span class="command"><strong>libexec/NsCDE/backdropmgr</strong></span>,
-    <span class="command"><strong>libexec/NsCDE/colormgr</strong></span>,
-    <span class="command"><strong>libexec/NsCDE/palette_colorgen</strong></span>
+    <span class="command"><strong>$NSCDE_TOOLSDIR/themegen</strong></span>, <span class="command"><strong>$NSCDE_TOOLSDIR/backdropmgr</strong></span>,
+    <span class="command"><strong>$NSCDE_TOOLSDIR/colormgr</strong></span>, <span class="command"><strong>$NSCDE_TOOLSDIR/palette_colorgen</strong></span>
 </p></li><li class="listitem"><p>
   <code class="filename">$NSCDE_DATADIR/photos</code>
 </p><p>
@@ -114,21 +129,21 @@ Examples for X display manager and DE integrations, <span class="command"><stron
     in <code class="filename">$HOME/.xscreensaver</code> for some
     screensavers which are loading photos.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/NsCDE/config_templates/app-defaults</code>
+  <code class="filename">$NSCDE_DATADIR/config_templates/app-defaults</code>
 </p><p>
     X resources for a particular X applications (like <span class="command"><strong>XTerm</strong></span>) which
-    are processed by the <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> for user to be put into
-    <code class="filename">$FVWM_USERDIR/app-defaults</code> (if enabled).
+    are processed by the <a class="link" href="NsCDE-ColorMgr.html" title="4.4. Color Style Manager">Color Style Manager</a> for
+    user to be put into <code class="filename">$FVWM_USERDIR/app-defaults</code> (if enabled).
     Referenced by the usual <code class="varname">XAPPLRESDIR</code> environment variable.
 </p></li><li class="listitem"><p>
-  <code class="filename">share/NsCDE/integration/gtk2_gtk3_qt</code>
+  <code class="filename">$NSCDE_DATADIR/integration/gtk2_gtk3_qt</code>
 </p><p>
-    Part of the CDE theme which are used by <span class="command"><strong>libexec/NsCDE/themegen</strong></span> and
-    the rest of lib/NsCDE/python/*.py to generate
+    Part of the CDE theme which are used by <span class="command"><strong>$NSCDE_TOOLSDIR/themegen</strong></span> and
+    the rest of $NSCDE_LIBDIRY/python/*.py to generate
     <code class="filename">$HOME/.themes/NsCDE</code> with
     a selected palette and color depth.
 </p><p>
-  share/NsCDE/config_templates also contains <code class="filename">Xdefaults</code> and some include files
+  $NSCDE_DATADIR/config_templates also contains <code class="filename">Xdefaults</code> and some include files
     for it, as well as configuration for <span class="command"><strong>stalonetray</strong></span> which is installed
     on initial setup, and <code class="filename">BGdefault</code>, which is a monochrome pixmap
     loaded as bare default early on start, before FvwmBacker(1) sets up
@@ -138,15 +153,15 @@ Examples for X display manager and DE integrations, <span class="command"><stron
     <code class="filename">colormgr.local</code> and possibly other files are installed into
     user's <code class="filename">$FVWM_USERDIR</code>.
 </p></li><li class="listitem"><p>
-  <code class="filename">src</code>
+  <code class="filename">$NSCDE_DATADIR/integration/firefox</code>
 </p><p>
-    Here is the patch for fvwm 2.6.7 and 2.6.8 which adds additional
-    small features to fvwm, so we can achieve even more similarity
-    between NsCDE and CDE. See <a class="xref" href="NsCDE-Patches-FVWM.html" title="19. Patches for FVWM">Section 19, &#8220;Patches for FVWM&#8221;</a> for the details.
+Mozilla Firefox CSS which integrates Firefox Web Browser with the current NsCDE theme.
 </p></li><li class="listitem"><p>
-  <code class="filename">src/pclock-0.13.1</code>
+  <code class="filename">$NSCDE_DATADIR/integration/thunderbird</code>
 </p><p>
-    Latest version of pclock. Provided as C source (plus FreeBSD 12
-    binary) for non-Linux systems and Linux distributions where default
-    binary cannot work (no matter how small and modest dependencies it has)
-</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Subpanels_fvwmconf.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-User-Tree-Layout.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.27. Subpanels.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.2. User Tree Layout</td></tr></table></div></body></html>
+Mozilla Thunderbird CSS which integrates Thunderbird Mail Reader with the current NsCDE theme.
+</p></li><li class="listitem"><p>
+  <code class="filename">$NSCDE_DATADIR/integration/rofi</code>
+</p><p>
+Template theme for rofi(1) window switcher, launcher, ssh dialog and dmenu replacement
+</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Subpanels_fvwmconf.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-User-Tree-Layout.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.27. Subpanels.fvwmX.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.2. User Tree Layout</td></tr></table></div></body></html>
