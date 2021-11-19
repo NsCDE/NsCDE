@@ -1,16 +1,15 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.12. Functions.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained"><link rel="prev" href="FrontPanel_fvwmconf.html" title="7.11. FrontPanel.fvwmconf"><link rel="next" href="IconMan_fvwmconf.html" title="7.13. IconMan.fvwmconf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.12. Functions.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="FrontPanel_fvwmconf.html">Prev</a> </td><th width="60%" align="center">7. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="IconMan_fvwmconf.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Functions_fvwmconf"></a>7.12. Functions.fvwmconf</h3></div></div></div><p>
-Another important part of the configuration. Almost all FVWM functions
-are defined here, except 2-3 of core functions in Main.fvwmconf
-which are reading the rest of the configuration. They are sorted in
-logical groups and are used widely in almost every part of the
-configuration, and particularly from the FvwmScript scripts. Main groups of NsCDE
-FVWM functions are:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Core Window Operation Functions</p></li><li class="listitem"><p>Front Panel functions</p></li><li class="listitem"><p>Misc core functions</p></li><li class="listitem"><p>Functions called from FvwmEvent <code class="option">MainLoop</code></p></li><li class="listitem"><p>Functions for generating menus</p></li><li class="listitem"><p>Placeholders for functions aimed for user to override</p></li><li class="listitem"><p>Functions used in NsCDE FvwmScripts</p></li></ul></div><p>
-For a FVWM function description see fvwm(1), in this file there is a
-plethora of examples, and for user usage is the most interesting part
-placeholders for functions which are here merely for programs to not
-complain about missing them and which should be overridden in user's local
-extension <code class="filename">$FVWM_USERDIR/Functions.fvwmlocal</code> - this extension file will
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.12. Functions.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained"><link rel="prev" href="FrontPanel_fvwmconf.html" title="7.11. FrontPanel.fvwmX.fvwmconf"><link rel="next" href="IconMan_fvwmconf.html" title="7.13. IconMan.fvwmconf"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.12. Functions.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="FrontPanel_fvwmconf.html">Prev</a> </td><th width="60%" align="center">7. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="IconMan_fvwmconf.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Functions_fvwmconf"></a>7.12. Functions.fvwmconf</h3></div></div></div><p>
+Another important part of the configuration. Almost all FVWM functions are defined
+here, except 5-6 of core functions in <code class="filename">Main.fvwmconf</code> which are
+reading the rest of the configuration. They are sorted in logical groups and are
+used widely in almost every part of the configuration, and particularly from the
+FvwmScript scripts. Main groups of NsCDE FVWM functions are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Core Window Operation Functions</p></li><li class="listitem"><p>Front Panel functions</p></li><li class="listitem"><p>Misc core functions</p></li><li class="listitem"><p>Functions called from FvwmEvent <code class="option">MainLoop</code></p></li><li class="listitem"><p>Functions for generating menus</p></li><li class="listitem"><p>Placeholders for functions aimed for user to override</p></li><li class="listitem"><p>Functions used in NsCDE FvwmScripts</p></li><li class="listitem"><p>Upgrade Functions</p></li></ul></div><p>
+For a FVWM function description see fvwm(1), in this file there is a plethora of
+examples, and for user usage is the most interesting part placeholders for
+functions which are here merely for programs to not complain about missing them
+and which should be overridden in user's local extension
+<code class="filename">$FVWM_USERDIR/Functions.fvwmlocal</code> - this extension file will
 be read by the main configuration immediately after processing
 <code class="filename">Functions.fvwmconf</code>. This functions are:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -32,18 +31,24 @@ be read by the main configuration immediately after processing
   <code class="function">f_UserChangeDesk</code>: called when current active workspace changes
 </p></li><li class="listitem"><p>
   <code class="function">f_UserChangePage</code>: called when current active page changes
+</p></li><li class="listitem"><p>
+  <code class="function">f_UserRestartFunction</code>: hook called when NsCDE restarts
+</p></li><li class="listitem"><p>
+  <code class="function">f_UserEnterWindow</code>: hook called when window is entered
+</p></li><li class="listitem"><p>
+  <code class="function">f_UserLeaveWindow</code>: hook called when focus leaves window
 </p></li></ul></div><p>
 Another useful function is conditional execution function <code class="function">f_WarpOrExec</code>.
-It takes 3+ arguments. First is the window name or class (or icon,
-resource) name, second is the binary to check in <code class="varname">$PATH</code>&gt;, and 3rd to the rest
-of the command line is what to execute with all arguments included.
-If window with name from arg1 is already present on <code class="varname">$DISPLAY</code>, it will
-not be executed, but pointer will be simply pointed to that window.
-If window was iconified, or function called from another workspace or page,
-window will be deiconified, and workspace and/or current page changed to one where
+It takes 3+ arguments. First is the window name or class (or icon, resource) name, second is
+the binary to check in <code class="varname">$PATH</code>&gt;, and 3rd to the rest of the command line is
+what to execute with all arguments included. If window with name from arg1 is already
+present on <code class="varname">$DISPLAY</code>, it will not be executed, but pointer will be simply
+pointed to that window. If window was iconified, or function called from another workspace
+or page, window will be deiconified, and workspace and/or current page changed to one where
 existing window is residing.
 </p><p>
-Care must be taken if this file is overridden by the local copy of the
-<span class="emphasis"><em>conf</em></span> (not local) file, because a lot of things depends on this
-functions.
-</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="FrontPanel_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="IconMan_fvwmconf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.11. FrontPanel.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.13. IconMan.fvwmconf</td></tr></table></div></body></html>
+It is pointless and bad idea for this file to be overridden by the local copy of the
+<span class="emphasis"><em>conf</em></span> (fvwmconf, not fvwmlocal) file, because a lot of things
+depends on this functions. Regular update of NsCDE software version will almost certain
+make setup with missing or incompatible functions.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="FrontPanel_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="IconMan_fvwmconf.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">7.11. FrontPanel.fvwmX.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 7.13. IconMan.fvwmconf</td></tr></table></div></body></html>

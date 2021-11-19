@@ -1,20 +1,19 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7.16. Keybindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="7. Configuration files explained"><link rel="prev" href="Init_fvwmconf.html" title="7.15. Init.fvwmconf"><link rel="next" href="Keymenu_actions.html" title="7.17. Keymenu.actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7.16. Keybindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><th width="60%" align="center">7. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Keybindings_fvwmconf"></a>7.16. Keybindings.fvwmconf</h3></div></div></div><p>
 For CDE clone and CDE compatibility, key bindings are a bit problematic area. In my local
-installation of open sourced CDE in virtual machine with CentOS 7,
-(didn't bothered to install Solaris 10 to examine their flavor again), key
-bindings are almost non-existent. <span class="keysym">Alt+F4</span> usually closes the window and
-that's it. Because of this fact, and because NsCDE is not only a visual
-clone of the CDE, but it aims to provide more functionality and to be
-useful <span class="emphasis"><em>daily driver</em></span> for user to enjoy in familiar look and feel (hated
-by a lot of people) and to be seriously productive in the same time,
-comfortable and quick, to have good graphic (such as anti-aliased fonts,
-but this also can be turned off), a set of useful key bindings is
-defined by default. This default keybindings set can be extended, partially
-overridden (write your <code class="varname">$FVWM_USERDIR/Keybinding.fvwmlocal</code>),
-or completely replaced (copy the <code class="filename">NsCDE-Keybinding.conf</code> in
-<code class="varname">$FVWM_USERDIR</code> and edit, or even write from scratch). Defaults are
-author's <span class="emphasis"><em>daily driver</em></span>. Notice when there is a reference to the "Menu" key
-this means also "Compose" on some keyboards.
+installation of open sourced CDE in virtual machine with CentOS 7, (didn't bothered to
+install Solaris 10 to examine their flavor again), key bindings are almost non-existent.
+<span class="keysym">Alt+F4</span> usually closes the window and that's it. Because of this fact, and
+because NsCDE is not only a visual clone of the CDE, but it aims to provide more
+functionality and to be useful <span class="emphasis"><em>daily driver</em></span> for user to enjoy in
+familiar look and feel (hated by a lot of people) and to be seriously productive in the
+same time, comfortable and quick, to have good graphic (such as anti-aliased fonts, but
+this also can be turned off), a set of useful key bindings is defined by default. This
+default keybindings set can be extended, partially overridden (by writing your local
+<code class="varname">$FVWM_USERDIR/Keybinding.fvwmlocal</code>), or completely replaced (copy the
+<code class="filename">NsCDE-Keybinding.conf</code> in <code class="varname">$FVWM_USERDIR</code> and edit,
+or even write from scratch). Defaults are author's <span class="emphasis"><em>daily driver</em></span>.
+Notice when there is a reference to the "Menu" key this means also "Compose" on some
+keyboards.
 </p><p>
 If some unwanted or clashing keybindings needs to be cleared, for example <span class="keysym">Shift+Tab</span>
 from the any context, use the following FVWM syntax:
@@ -92,13 +91,13 @@ Key <span class="keysym">Meta+Alt+BackSpace</span> will give a focus to the prev
   <span class="keysym">Shift+BackSpace</span> If pressed twice in a time frame of two seconds will call LocalPager in any context.
   This Pager will disappear soon as it looses a pointer focus, or if keybinding is pressed again once, while pager is still visible.
 </p></li><li class="listitem"><p>
-  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager, a stripped down version of GWM
-(Graphical Workspace Manager) which shows matrix of pages and workspaces.
-This keybinding works in any context, but it must be called twice to avoid accidental invocation.
-When Global Pager is visible, calling it second time will replace it's window with full version of
-standard GWM window tool until it is not closed with a third invocation of this same keybinding.
-In stripped down semi-transient mode, this pager, if not called as full GWM, disappears shortly
-after losing mouse focus to free up space on the screen.
+  <span class="keysym">Shift+Tab</span>Calls visual GlobalPager, a stripped down version of GWM (Graphical
+Workspace Manager) which shows matrix of pages and workspaces. This keybinding works in any
+context, but it must be called twice to avoid accidental invocation. When Global Pager is
+visible, calling it second time will replace it's window with full version of standard GWM window
+tool until it is not closed with a third invocation of this same keybinding. In stripped down
+semi-transient mode, this pager, if not called as full GWM, disappears shortly after losing mouse
+focus to free up space on the screen.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+Tab</span> is cycling trough pages of the active page of the current workspace
   from up to down and then right up to down
