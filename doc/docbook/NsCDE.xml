@@ -5567,27 +5567,29 @@ for everyday work.
 Most of the X11 Display Managers, such as XDM, sddm, gdm etc, are redirecting diagnostic
 output (standard error, stderr, file descriptor 2) into a file or some logging facility.
 This file is usually <filename>$HOME/.xsession-errors</filename>. When "Watch Errors" item
-is launched from default subpanel 7 (Desktop Settings), it will execute <command>xterm -e $[infostore.xlogcmd]</command>. If not redefined in <filename>$FVWM_USERDIR/NsCDE.conf</filename>,
-contents of the variable FVWM infostore variable <varname>$[infostore.xlogcmd]</varname> will be
-<emphasis>"tail -300f ~/.xsession-errors"</emphasis>.
+is launched from default subpanel 7 (Desktop Settings), it will execute
+<command>xterm -e $[infostore.xlogcmd]</command>. If not redefined in
+<filename>$FVWM_USERDIR/NsCDE.conf</filename>, contents of the FVWM infostore variable
+<varname>$[infostore.xlogcmd]</varname> will be <emphasis>"tail -300f ~/.xsession-errors"</emphasis>.
 </para>
 <para>
-If your X Display Manager is using
-different path or file name, this can be redefined as it is mentioned above. Beware that some
-X Display Managers (namely lightdm) are sending diagnostic output into
-<filename>/dev/null</filename>. In this case, no variable redefinition can get this
-output visible to the user.
+If your X Display Manager is using different path or file name, this can be redefined in
+a way mentioned above. Beware that some X Display Managers (namely lightdm) are sending
+diagnostic output into <filename>/dev/null</filename>. In this case, no variable
+redefinition can get this output visible to the user.
 </para>
 <para>
-Reading X, FVWM and NsCDE log output can be informative and helping while solving possible
+Reading X, FVWM and NsCDE log output can be informative and helpful while solving possible
 unexpected or unexplainable problems with desktop setup.
 </para>
 <para>
-Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window under
-FVWM 2.X has a custom menu entry <guimenuitem>Fvwm Diagnostic Console</guimenuitem> which
+Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window
+has a custom menu entry <guimenuitem>Fvwm Diagnostic Console</guimenuitem> which
 starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
 <guimenuitem>Watch Errors</guimenuitem> which calls Watch errors.
 When both windows are on the screen, this menu entries will simply transfer focus to each other.
+Both of this applications have custom Window Options Menu "NsCDE Process Manager" which will
+run the same named application on demand.
 </para>
 </sect1>
 
@@ -5611,20 +5613,19 @@ Session Manager's app will do the job.
 <para>
 Special private paths for X resources are used in order not to mess
 with user's maybe existing resources and files. If wanted, custom
-app-defaults files can be places in
+app-defaults files can be placed in
 <filename class="directory">$FVWM_USERDIR/app-defaults</filename> or
 even better, <filename class="directory">$FVWM_USERDIR/templates/app-defaults</filename>
 and reworked for <link linkend="NsCDE-ColorMgr">Color Style Manager</link> integration,
-because if find in that directory,
-and with <emphasis>.tmpl</emphasis> extension, it will be processed in the same way
-as system files from <filename class="directory">$NSCDE_DATADIR/config_templates/app-defaults/</filename>
+because if find in that directory, and with <emphasis>.tmpl</emphasis> extension, it will
+be processed in the same way as system files from
+<filename class="directory">$NSCDE_DATADIR/config_templates/app-defaults/</filename>
 and put in <filename class="directory">$FVWM_USERDIR/app-defaults</filename>.
 </para>
 <para>
 Plain custom X resources can be put in <filename>$FVWM_USERDIR/Xdefaults.local</filename>.
-This file will not be overwritten by Style Managers.
-X resources integration is turned on by default in
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+This file will not be overwritten by Style Managers. X resources integration is turned on
+by default in <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 </para>
 </sect2>
 
@@ -5632,16 +5633,16 @@ X resources integration is turned on by default in
 <title>Gtk2, Gtk3, Qt4 and Qt5</title>
 <para>
 <command>$NSCDE_TOOLSDIR/themegen</command> with
-<filename class="directory">$NSCDE_ROOT/lib/NsCDE/python</filename> and with
+<filename class="directory">$NSCDE_LIBDIR/NsCDE/python</filename> and with
 <filename class="directory">$NSCDE_DATADIR/integration/gtk2_gtk3_qt</filename>
 are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> or manually with the
-<command>$NSCDE_TOOLSDIR/themegen</command>,
-with proper options, this will produce <filename class="directory">$HOME/.themes/NsCDE</filename>
-directory with either or both Gtk2 and Gtk3 themes. <filename>$HOME/.gtkrc-2.0</filename> and
+<command>$NSCDE_TOOLSDIR/themegen</command>, with proper options, this will produce
+<filename class="directory">$HOME/.themes/NsCDE</filename> directory with either or both
+Gtk2 and Gtk3 themes. <filename>$HOME/.gtkrc-2.0</filename> and
 <filename>$HOME/.config/gtk-3.0/settings.ini</filename> will be edited to point to this
-directory with <option>gtk-theme-name</option> option. Excessive button images on menus and
-buttons will be turned off of course.
+directory with <option>gtk-theme-name</option> option. Excessive button images on menus
+and buttons will be turned off of course.
 </para>
 <para>
 If Qt4 and/or Qt5 integration is also selected in
@@ -5654,6 +5655,10 @@ Gtk2 theme in use is deciding what GTK2 Qt4 and Qt5 engine will display.
 For Qt5 integration, make sure <emphasis>qt5-qtstyleplugins</emphasis> (or something like
 that name) is installed: <filename>platformthemes/libqgtk2.so</filename> is needed.
 </para>
+<para>
+All integrations of this type: GTK2, GTK3, QT4 and QT5 are turned on in the
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+</para>
 </sect2>
 
 <sect2 id="NsCDE-Integration-Mozilla">
@@ -5664,8 +5669,7 @@ From version 1.3 and further, NsCDE contains CSS code and icons which can be use
 to generate colorsets also for either or both Firefox and Thunderbird.
 </para>
 <para>
-For this to work,
-appropriate code or the whole <filename>colormgr.local</filename> from
+For this to work, appropriate code or the whole <filename>colormgr.local</filename> from
 <filename>$NSCDE_DATADIR/config_templates/colormgr.local</filename> must be adapted into
 <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>. Shell variable
 <varname>FIREFOX_CHROMEDIR</varname> should contain path to the
@@ -5691,7 +5695,7 @@ must be restarted for this changes to take a place.
 <para>
 In Thunderbird, because of the nature of mail, it is not 100% possible to use color 4 from the NsCDE
 theme as background/foreground combination, because this can give ugly and bad results with some amount
-of structured HTML mails. Hence, solor for test is black, while background is from Solaris theme (#fff7e9)
+of structured HTML mails. Hence, color for text is black, while background is from Solyaris theme (#fff7e9)
 which is yellowish, almost white.
 </para>
 <para>
@@ -5708,30 +5712,31 @@ makes a changes:
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeContent.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeContent.css");
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeIcons.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeChrome.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeIcons.css");
 </programlisting>
 
 </para>
 <para>
-This is how Firefox chromedir should look:
+This is how Firefox chromedir should look like, assuming NsCDE was installed in
+/usr as prefix and root of installation dir:
 
 <programlisting>
 <![CDATA[
 /home/user/.mozilla/firefox/testtest.default-release/chrome
 |- nscdeColordefs.css
-|- nscdeContent.css -> /opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
+|- nscdeContent.css -> /usr/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
 |- userChrome.css
 |- userContent.css
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/firefox/nscdeIcons.css");
+@import url("/usr/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/usr/share/NsCDE/integration/firefox/nscdeIcons.css");
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
 @import url("nscdeColordefs.css");
@@ -5752,9 +5757,9 @@ specially those with ready made fixes are more than welcome.
 <para>
 If <command>$FVWM_USERDIR/libexec/colormgr.local</command> exists,
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>
-will run it if it's checkbox is selected. This script or program will
-be run with a full path of CDE palette file followed by the number of
-colors selected in interface (4 or 8). This can be useful for
+will run it if it's checkbox is selected. This script program will
+be run with a full path of CDE palette file, followed by the number of
+colors selected in the interface (4 or 8). This can be useful for
 regenerating settings of applications which do not use X resources,
 and neither GTK nor Qt, but have support for some level of customization
 of this resources. Also "skins" for programs like <command>smplayer,</command> <command>audacious</command>
@@ -5764,10 +5769,9 @@ and <command>Gkrellm</command> can be processed from custom <command>colormgr.lo
 In the directory <filename class="directory">$NSCDE_DATADIR/config_templates/Gkrellm</filename>
 is the complete NsCDE theme for the Gkrellm.
 File <filename>$NSCDE_ROOT/share/examples/colormgr.local.example</filename>
-can be used for this integration. There are also examples for
-<command>Gkrellm</command> and
-<command>mate-terminal</command>. Local script <command>colormgr.local</command>
-will most likely use <command>$NSCDE_TOOLSDIR/nscde_palette_colorgen</command> in some way.
+can be used for this integration. There are also examples for <command>Gkrellm</command> and
+<command>mate-terminal</command>. Local script <command>colormgr.local</command> will most
+likely use <command>$NSCDE_TOOLSDIR/palette_colorgen</command> in some way.
 </para>
 </sect2>
 
@@ -5776,23 +5780,23 @@ will most likely use <command>$NSCDE_TOOLSDIR/nscde_palette_colorgen</command> i
 <sect1 id="NsCDE-Additional-Software">
 <title>Additional recommended software</title>
 <para>
-Since NsCDE is basically a collection of configurations, themes and tools around FVWM
-and not desktop environment in official definition, user must choose some favorite and
-default applications such as X terminal emulator file manager, and X editor, which will
-then be provided to him in occations where programs of that type must be called.
+NsCDE is basically a collection of configurations, themes and tools around FVWM
+and is a kind od "hybrid" desktop environment as unofficial definition and attempt
+to define it, user must choose some favorite and default applications such as
+X terminal emulator file manager, and X editor, which will then be provided to
+him in occations where programs of that type must be called.
 </para>
 <para>
 Apart from this, since <emphasis>system</emphasis> tray concept has been introduced on X11 and is
-here to stay, user will need some standalone tray application. For this
-purpose, a logical and really great <command>stalonetray</command> (Stand Alone Tray) is more than
-adequate. When NsCDE configuration for stalonetray <filename>$FVWM_USERDIR/Stalonetray.conf</filename>
-is used, it will have this defaults: grid 3x3 and it's place will be in the bottom right corner of
-the screen. Stalonetray is not integrated into Front Panel because it's
-size cannot be known in all times: is it one button size, two, ten? It is growing and
-shrinking depending on number of widgets or tray icons, and apart from
-that, this can significantly alter the precious CDE look of the Front Panel. A window
-with traditional mwm/dtwm borders and without title in corner of the screen is
-default in NsCDE. Ideas are welcome.
+here to stay, user will need some standalone tray application. For this purpose, a logical and
+really great <command>stalonetray</command> (Stand Alone Tray) is more than adequate. When NsCDE
+configuration for stalonetray <filename>$FVWM_USERDIR/Stalonetray.conf</filename> is used, it
+will have this defaults: grid 3x3 and it's place will be in the bottom right corner of the
+screen. Stalonetray is not integrated into Front Panel because it's size cannot be known in all
+times: is it one button size, two, ten? It is growing and shrinking depending on number of widgets
+or tray icons, and apart from that, this can significantly alter the precious CDE look of the
+Front Panel. A window with traditional mwm/dtwm borders and without title in corner of the screen is
+default in NsCDE. Alternative ideas are welcome.
 </para>
 <para>
 There are some programs which needs to be run under escalated privileges. Usually as root.
@@ -5841,19 +5845,17 @@ real tabs, tmux(1), screen(1) or possibly tabbed(1) can be used for the same fun
 Suggestions for more dtterm-like alternative are welcome.
 </para>
 <para>
-File manager? Since author does not use them very much, there is no
-some strong suggestion. Maybe <command>Krusader</command> from KDE is a best choice because
-it has a lot of features and functions plus two pane mode for work. It
-looks like a total contrast to GNOME way of doing things, so it must be
-good, although it is not at all similar to CDE's original dtfile(1), but
-dtfile(1) is a bad and poor file manager anyway. Another reasonable
-choice can be <command>pcmanfm</command> or <command>pcmanfm-qt</command>.
-For something more <emphasis>original</emphasis>, Xplore
-file manager is written with Motif widget. It looks nice, but it is unfinished
-(lacks real actions for many things, and instead input dialogs are
-popped up for copy/paste ...) it is not maintained and developed, and
-if someone does not brings it up from the past it can serve only for
-overview of directories, simple actions and nice Motif decoration.
+File manager? Since author does not use them very much, there is no some strong suggestion.
+Maybe <command>Krusader</command> from KDE is a best choice because it has a lot of features
+and functions plus two pane mode for work. It looks like a total contrast to GNOME way of
+doing things, so it must be good, although it is not at all similar to CDE's original
+dtfile(1), but dtfile(1) is a bad and poor file manager anyway. Another reasonable
+choice can be <command>pcmanfm</command> or <command>pcmanfm-qt</command>. For something
+more <emphasis>original</emphasis>, Xplore file manager is written with Motif widget.
+It looks nice, but it is unfinished (lacks real actions for many things, and instead input
+dialogs are popped up for copy/paste ...) it is not maintained and developed, and if someone
+does not brings it up from the past it can serve only for overview of directories, simple
+actions and nice Motif decoration.
 </para>
 <para>
 Editor? Gvim, Emacs, Xemacs, Nedit ... user's choice.
@@ -5863,8 +5865,8 @@ Another nice and useful app is <command>Gkrellm</command> for which
 NsCDE has a ready drop-in theme called (of course) NsCDE in
 <filename class="directory">share/config_templates</filename> and it can be put in user's
 <filename class="directory">~/.gkrellm2/themes</filename> and integrated with
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>
-with the <filename>$NSCDE_ROOT/share/examples/colormgr.local.example</filename> which can be
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link> with the
+<filename>$NSCDE_DATADIR/config_templates/colormgr.local</filename> which is by default
 installed as <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>.
 </para>
 <para>
@@ -5877,19 +5879,19 @@ in the <filename class="directory">$HOME/.config/autostart</filename> directory.
 X Compositor: if user likes visual effects with tinting, transparency,
 shadows, 3D, smooth changes and so on, <emphasis>compton(1)</emphasis>, <emphasis>compton-ng(1)</emphasis>
 or <emphasis>picom(1)</emphasis> standalone compositors are excellent programs and tools for such users,
-who want to combine retro and modern style. It the time of writing this, it looks like <emphasis>picom(1)</emphasis> is
+who want to combine retro and modern style. In the time of writing this, it looks like <emphasis>picom(1)</emphasis> is
 the most maintained of this three X compositors. Personally, I feel it like some kind of <emphasis>lag</emphasis>, no matter how
-powerful GPU, CPU and RAM I have. I turn it on occasionally, more as an
-amusement of xsnow, xsanta or xeyes type, but when I have serious work to do,
-I simply turn it off in some moment.
-Maybe it can be better if it is configured more conservative than example. See
-<filename class="directory">/opt/NsCDE/share/examples/compton-integration</filename> for
-a starting point. Syntax of this file is largely compatible for all three above mentioned
-X compositors.
+powerful GPU, CPU and RAM I have. I turn it on occasionally, more as an amusement of xsnow, xsanta or xeyes type,
+but when I have serious work to do, I simply turn it off in some moment. Maybe it can be better if it is
+configured more conservative than example. See
+<filename class="directory">/opt/NsCDE/share/examples/compton-integration</filename> for a starting point.
+Syntax of this file is largely compatible for all three above mentioned X compositors.
 </para>
 <para>
 Notice: when X Compositor is active on X display, FVWM geometry indicator which is shown
-at the center of the screen during window move or resize actions will not be visible.
+at the center of the screen during window move or resize actions will not be visible. Also,
+consider uncommenting <varname>NSCDE_REDRAW_WORKAROUND</varname> and set it to 1 in your
+<filename>$FVWM_USERDIR/NsCDe.conf</filename>.
 </para>
 </sect1>
 
@@ -5897,18 +5899,20 @@ at the center of the screen during window move or resize actions will not be vis
 <title>Single Logical Screen, Xinerama - multiscreen support</title>
 <para>
 NsCDE has a basic support for the multiscreen setup which is basic as it is
-FVWM multiscreen support, with couple of menus added and functions dealing
+FVWM2 multiscreen support, with couple of menus added and functions dealing
 with move and resize operations which are aware of the multiple logical
 screens. Single logical screen is referred as "SLS" in FVWM and NsCDE
-documentation. Screens are implemented (and this cannot be changed in FVWM)
+documentation. Screens are implemented (and this cannot be changed in FVWM2)
 on the sub-page level. In other words, as workspaces (desks) contains pages,
 pages are split to two or more monitors inside one single page. This can be
 a bit confusing in the combination with edge scrolling and window positioning
 and it takes some practice to become comfortable with such third, non-trivial
-space on the screen which is already divided logically in two levels.
+space on the screen which is already divided logically in two levels. Better
+solution here will be to use FVWM3 which is slowly becoming of non-beta quality
+at the time of writing this. FVWM3 has native XRandR support.
 </para>
 <para>
-Monitor handling by the Xrandr X extension is for now out of scope for NsCDE
+Monitor handling by the Xrandr X extension is out of scope for NsCDE under FVWM2
 and is dealed with xrandr(1) command and other such tools. Nevertheless, when
 other monitor is added to the system in SLS mode, FVWM/NsCDE must be restarted
 (restart session simply) to recompute spaces, screen sizes and so on. After
@@ -5921,7 +5925,7 @@ menu. This menu allows moving current window to other logical screen.
 </para>
 <para>
 When logical monitor is disconnected from the X setup, FVWM NsCDE must be
-restarted again to get things right again.
+restarted again to get things right.
 </para>
 <para>
 Front Panel will appear on the primary screen, but can be moved to other
@@ -5941,22 +5945,35 @@ page manager left down from the Workspace Manager on the Front Panel when
 clicked will popup "Go to Page ..." menu in a more free floating form, and
 not directly above PGM dynamic icon and such things ...
 </para>
+<para>
+NsCDE under FVWM3 is a different story. FVWM3 implements couple different
+multimonitor modes of operation which are configured with DesktopConfiguration
+command in FVWM3 config. NsCDE under FVWM3 can manage and change this modes of
+operation from the <link linkend="NsCDE-WsPgMgr">Workspaces and Pages Style Manager</link>.
+Currently, supported workspace modes of operation are: global, per-monitor and shared.
+See fvwm3(1) for explanation and detailed documentation how this multi-monitor
+models are behaving and how they are implemented. In non-global mode, Local Pager,
+Global Pager and GWM will be showing only workspaces and pages from the current
+monitor on which they are started (and possibly updated in the future versions of
+FVWM3).
+</para>
 </sect1>
 
 <sect1 id="NsCDE-Similar-Different">
 <title>Similarities and differences in usage and look between CDE and NsCDE</title>
 <para>
-NsCDE is not a mere clone of CDE. Under the first visual impression,
-there are unintentional and intentional differences.
+NsCDE is not a mere clone of CDE. Under the first visual impression, there are some
+unintentional and intentional differences.
 </para>
 <para>
-First of all, it is not a standalone Window Manager or Desktop
-Environment written in some language(s). It is a patchwork which
-owns 80% of it's functionality to wonderful and powerful Window Manager
-of FVWM. Other parts are configurations, scripts and programs which are making the whole
-thing to function like the combination of the CDE experience and modern
-powerful X Window Manager. Here are some things that I can recall to
-be different - for the worse or for the better, user's opinion may vary.
+First of all, it is not a standalone Window Manager or Desktop Environment written in some
+language(s), tightly integrated as uniform army of tools (like lxqt, xfce4 ...). It is a
+patchwork which owns 80% of it's functionality to wonderful and powerful Window Manager
+of FVWM. Other parts are standalone desktop tools and implementations of desktop concepts
+which are integrated, various configurations, scripts and programs which are making the whole
+thing to function like one entirety: the combination of the CDE experience and modern
+powerful X Window Manager ... a hybrid desktop environment. Here are some things that I
+can recall to be different - for the worse or for the better, user's opinion may vary.
 </para>
 <para>
 What is similar or the same:
@@ -5969,16 +5986,16 @@ What is similar or the same:
 <listitem><para>Workspace Manager</para></listitem>
 <listitem><para>Workspace Menu / Root Menu (right click on the root window)</para></listitem>
 <listitem><para>Workspaces (desks)</para></listitem>
-<listitem><para>Most of the icons reused</para></listitem>
+<listitem><para>Many of the icons are reused for XDG compatible icon theme</para></listitem>
 <listitem><para>Backdrops</para></listitem>
 <listitem><para>Style Manager launcher and most of the Style Managers</para></listitem>
 <listitem><para>Occupy Workspace/Page/Monitor dialog</para></listitem>
-<listitem><para>Workstation Info window (as found in Solaris CDE)</para></listitem>
+<listitem><para>Workstation Info window</para></listitem>
 <listitem><para>FpLite (not with the same function)</para></listitem>
 <listitem><para>Front Panel clock, calendar and check mail</para></listitem>
 <listitem><para>Icon positioning</para></listitem>
 <listitem><para>Look and feel via FVWM Styles</para></listitem>
-<listitem><para>Nice vintage but somewhat irritating wait cursor in the sand clock shape</para></listitem>
+<listitem><para>Nice vintage wait cursor in the sand clock shape</para></listitem>
 <listitem><para>Various misc small imitations ...</para></listitem>
 </itemizedlist>
 <para>
@@ -5988,144 +6005,135 @@ with complete explanations:
 
 <itemizedlist>
 <listitem><para>
-  Workspace Manager has a four default choices for workspaces (desks). As in CDE four is a
-  default, but combinations with 2, 6 and 8 are possible. Workspace Manger can be of dynamic
-  width when number of workspaces is changed, or it can be of fixed width if InfoStore
-  variable wsm.eco is set to 1 in <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+Workspace Manager has a four default choices for workspaces (desks). As in CDE four is a
+default, but combinations with 2, 6 and 8 are possible. Workspace Manger can be of dynamic
+width when number of workspaces is changed, or it can be of fixed width if InfoStore
+variable <varname>wsm.eco</varname> is set to 1 in <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
 </para></listitem>
  
 <listitem><para>
-  No drag and drop. This is specially visible in <emphasis>Install Icon</emphasis> action
-  which actually calls custom tool Subpanel Manager for this actions.
-  Subpanel Manager itself will be rewritten in a nicer and less buggy
-  way on the first good occasion.
+No drag and drop. This is specially visible in <emphasis>Install Icon</emphasis> action
+which actually calls custom tool <link linkend="NsCDE-SubpanelMgr">Subpanel Manager</link>
+for this actions. Subpanel Manager itself will be rewritten in a nicer and less buggy
+way on the first good occasion.
 </para></listitem>
 
 <listitem><para>
-  No Dt Actions builder, and never will be. Write FvwmScript scripts
-    or use some toolkit in combination with python, perl ...
+No Dt Actions builder, and never will be. Write FvwmScript scripts or use some toolkit
+in combination with python, perl ...
 </para></listitem>
 
 <listitem><para>
-  No Application Manager. If integration with <emphasis>Install Icon</emphasis> and
-    possibly menus will be possible with some file manager, it may be
-    (re)invented in the future.
+No Application Manager. If integration with <emphasis>Install Icon</emphasis> and
+possibly menus will be possible with some file manager, it may be
+(re)invented in the future. The good candidates are pcmanfm and spacefm, but this
+has it's problems still.
 </para></listitem>
 
 <listitem><para>
-  Keybindings are 90% custom made, and user have a choice to use it
-    or - partially or totally rewrite it. There are more
-    functions and actions in NsCDE than in CDE, and hence there are
-    a lot of key bindings.
+Keybindings are 90% custom made, and user have a choice to use it or - partially or
+totally rewrite it. There are more functions and actions in NsCDE than in CDE, and
+hence there are a lot of key bindings.
 </para></listitem>
 
 <listitem><para>
-  Mouse bindings - some actions like Workspace Menu in CDE are
-    mimicked in NsCDE, titlebar and titlebar buttons too, but since
-    there is no much of them in original CDE anyway, there is a plenty of
-    custom mouse bindings and mouse bindings in combination with
-    modifier keys. As for keybindings apply: use it or write your own.
+Mouse bindings - some actions like Workspace Menu in CDE are mimicked in NsCDE,
+titlebar and titlebar buttons too, but since there is no much of them in original
+CDE anyway, there is a plenty of custom mouse bindings and mouse bindings in
+combination with modifier keys. As for keybindings apply: use it or write your own.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-ColorMgr">Color Style Manager</link> has numerous new functions: Gtk and Qt
-    integration, X resources integration is optional, and it has even
-    a possibility to run a custom script with required parameters of
-    current palette and number of colors for external and marginal color
-    scheme integrations - like <command>Gkrellm</command> for example.
-    Palette color editor is missing. It should be possible to write it
-    in the FvwmScript in some future version update.
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link> has numerous new functions: Gtk and Qt
+integration, X resources integration is optional, and it has even a possibility to run a custom
+script with required parameters of current palette and number of colors for external and
+marginal color scheme integrations - like <command>Gkrellm</command> for example.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-FontMgr">Font Style Manager</link> is totally NsCDE oriented and doesn't work much
-    as font management in CDE. NsCDE supports XFT fonts (disable
-    antialiasing if you want <emphasis>extreme</emphasis> original look) and it combines 5
-    groups of fonts in 3 sizes described in this documentation.
+<link linkend="NsCDE-FontMgr">Font Style Manager</link> is totally NsCDE oriented and doesn't work
+the same as font management in CDE. NsCDE supports XFT fonts (disable antialiasing if you
+want <emphasis>extreme</emphasis> original look) and it combines 5 groups of fonts in 3 sizes
+described in this documentation.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link> implements all options
-    supported by the xset(1)
-    on PC. CDE original in default installation at least, seems to have
-    only auto-repeat and click volume controls.
+<link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link> implements all options
+supported by the xset(1) on PC. CDE original in default installation at least, seems
+to have only auto-repeat and click volume controls.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-PointerMgr">Mouse Style Manager</link> does not have
-    configurable middle mouse (button
-    2) action since this is not applicable very much on today's GUI widgets.
+<link linkend="NsCDE-PointerMgr">Mouse Style Manager</link> does not have configurable
+middle mouse (button 2) action since this is not applicable very much on today's GUI
+widgets.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-BeepMgr">Beep Style Manager</link> has a additional Beep
-  button for testing during setup.
+<link linkend="NsCDE-BeepMgr">Beep Style Manager</link> has a additional Beep button
+for testing during setup.
 </para></listitem>
 
 <listitem><para>
-  Screensaver Style Manager is in fact Xscreensaver setup. Perfect
-  drop in replacement and much fancier than original.
+Screensaver Style Manager is in fact Xscreensaver setup. Perfect drop in replacement
+and much fancier than original.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-WindowMgr">Window Style Manager</link>
-  manages much more of window, icon, pages and animation
-  behavior than original program in CDE, and even this is a small subset of
-  options in FVWM. See it's documentation and fvwm(1) man page.
+<link linkend="NsCDE-WindowMgr">Window Style Manager</link> manages much more of window,
+icon, pages and animation behavior than original program in CDE, and even this is a
+small subset of options in FVWM. See it's documentation and fvwm(1) man page.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-PowerSaveMgr">Power Style Manager</link> is actually very
-   rare in Style Manager across
-   old CDE setups. It manages DPMS setting of the monitor with xset(1).
+<link linkend="NsCDE-PowerSaveMgr">Power Style Manager</link> is actually very rare in
+Style Manager across old CDE setups. It manages DPMS setting of the monitor with xset(1).
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-WsPgMgr">Workspaces and Pager Style Manager</link> is NsCDE
-   custom tool for managing Workspaces and Pages. It is not present in any version
-   of the CDE.
+<link linkend="NsCDE-WsPgMgr">Workspaces and Pager Style Manager</link> is NsCDE custom tool
+for managing Workspaces and Pages. It is not present in any version of the CDE.
 </para></listitem>
 
 <listitem><para>
-  Startup Style Manager is available only if NsCDE is started under some X Session
-  Manager. It detects supported DE's and starts appropriate settings
-  tool for that desktop environment if it is found.
+Startup Style Manager is available only if NsCDE is started under some X Session Manager.
+It detects supported DE's and starts appropriate settings tool for that desktop environment
+if it is found.
 </para></listitem>
 
 <listitem><para>
-  Pages: not present in CDE in best of my knowledge. Only workspaces (desks) in
-  original. Page Manager (PGM) is a custom FrontPanel icon which is using place
-  left bottom of the Workspace Manager. It popups menu with the list of pages and can change current page.
+Pages: not present in CDE in best of my knowledge. Only workspaces (desks) in original.
+Page Manager (PGM) is a custom FrontPanel icon which is using place left bottom of the
+Workspace Manager. It popups menu with the list of pages and can change current page.
 </para></listitem>
 
 <listitem><para>
-  Custom keyboard and mouse actions on titlebars, buttons and root window.
+Custom keyboard and mouse actions on titlebars, buttons and root window.
 </para></listitem>
 
 <listitem><para>
-  WsPgMgr - Manage Workspaces and Pages. NsCDE specific tool not present in CDE.
+<link linkend="NsCDE-GeometryMgr">GeometryMgr</link> - Manages custom X11 window starting
+size and position. NsCDE invention.
 </para></listitem>
 
 <listitem><para>
-  <link linkend="NsCDE-GeometryMgr">GeometryMgr</link> - Manages custom X11 window starting size and position.
+FpLite is measuring system load, not desktop activity. It has much more fine grained
+indication of activity with colors, and it's height is 3x of the original for a better
+visibility. On click it is calling FVWM function which will run terminal program with
+top or similar program (<varname>$[infostore.taskmgr]</varname>), or anything else if
+user overrides that function in local configuration (NsCDE.conf) with InfoStore
+variable.
 </para></listitem>
 
 <listitem><para>
-  FpLite is measuring system load, not desktop activity. It has much
-    more fine grained indication of activity with colors, and it's
-    height is 3x of the original for a better visibility. On click it is
-    calling FVWM function which will run terminal program with top or similar
-    program, or anything else if use overrides that function in local configuration.
+Calendar and Mail widgets are placeholders and simple indicators which are expected
+to be extended with already named functions to do what user wants. Mail widget will
+call either default user's mailer program, or it will try to guess from the names of
+some popular programs if they are installed on the system.
 </para></listitem>
 
 <listitem><para>
-  Calendar and Mail widgets are placeholders and simple indicators
-  which are expected to be extended with already named functions
-  to do what user wants.
-</para></listitem>
-
-<listitem><para>
-  Probably some more small differences.
+Probably there are more small differences.
 </para></listitem>
 
 </itemizedlist>
@@ -6135,66 +6143,54 @@ with complete explanations:
 <sect1 id="NsCDE-Patches-FVWM">
 <title>Patches for FVWM</title>
 <para>
-Optional but recommended patches for FVWM 2.6.7 and 2.6.8 are in
-<filename class="directory">/opt/NsCDE/src</filename> directory.
+Optional but recommended patches for FVWM from 2.6.7 to 2.6.9 are in
+<filename class="directory">patches/fvwm2</filename> top directory of
+the NsCDE tarball for installation.
 </para>
 <para>
 This patches will add:
 </para>
 <itemizedlist>
 <listitem><para>
-   Three underlines Menu Style (used in <guimenuitem>MenuFvwmRoot</guimenuitem> for NsCDE)
+corrections for cursor icon under buttons of the FvwmScript(1) it is really not a nice thing
+to have <option>XC_hand2</option> which is usually used for hyperlinks as a pointer icon
+when mouse is above buttons. Implemented as an option in FVWM3, not to disturb old default, no
+matter how bad is that default probably is.
 </para></listitem>
 <listitem><para>
-   corrections for cursor icon under buttons of the FvwmScript(1)
-    it is really not a nice thing to have <option>XC_hand2</option> which is usually
-    used for hyperlinks as a pointer icon when mouse is above buttons. Planned
-    to be implemented as an option, not to disturb old default, no
-    matter how bad is probably that default
+FvwmButtons(1) WindowName support - an native alternative to xdotool(1) workaround. It will
+set name and icon name of single subpanels, that is, every FvwmButtons object which has
+titlebar enabled with FVWM styles. Implemented by default in FVWM3.
 </para></listitem>
 <listitem><para>
-   FvwmButtons(1) WindowName support - an native alternative to xdotool(1)
-    workaround. It will set name and icon name of single subpanels, that
-    is, every FvwmButtons object which has titlebar enabled with FVWM
-    styles
-</para></listitem>
-<listitem><para>
-   FvwmButtons triangle-in (sunken) support. Provides a 3rd argument
-    for <option>indicator</option> parameter of the FvwmButtons(1) button. It can be
-    "in" (default for NsCDE in <filename class="directory">fvwm/FrontPanel.fvwmconf)</filename>
-    or "out" to confirm the FVWM default. If omitted, "out" is default, since
-    it was that way before this patch.
+FvwmButtons triangle-in (sunken) support. Provides a 3rd argument for
+<option>indicator</option> parameter of the FvwmButtons(1) button. It can be
+"in" (default for NsCDE in <filename class="directory">fvwm/FrontPanel.fvwmconf)</filename>
+or "out" to confirm the FVWM default. If omitted, "out" is default, since it was
+that way before this patch. Implemented by default in FVWM3.
 </para></listitem>
 </itemizedlist>
 <para>
-In order to have patched fvwm, apply this patch or patches against FVWM
-2.6.7 or 2.6.8 source and (re)compile FVWM. You can even make your own RPM
+In order to have patched FVWM2, apply this patch or patches against FVWM
+2.6.7, 2.6.8 or 2.6.9 source and (re)compile FVWM2. You can even make your own RPM
 DEB, Arch, BSD, SunOS or similar package from that and install it.
-</para>
-<para>
-If NsCDE is going to be installed on system with non-patched FVWM, Installer.ksh
-option "-w" should be used. This will ensure Front Panel pixmaps instead of built in
-triangles on subpanel launcher buttons, and XOverrideFontCursor dynamic preloading
-library piece which will handle XC_left_ptr for some FvwmScript(1) widgets instead
-of strange default of the XC_hand2. Subpanel window names will be set by the xdotool(1)
-xdowrapper script.
 </para>
 </sect1>
 
 <sect1 id="NsCDE-FVWM3">
 <title>FVWM3 Support</title>
 <para>
-NsCDE from version 1.3 has late beta quality of support for FVWM3.
-NsCDE is and will stay compatible for FVWM2 as long as possible.
-In the time of this writing, FVWM3 was in it's fourth release and much
-of the previous problems are solved, altrough it still has some problems with
-FvwmPager and FvwmBacker in multi-monitor setup. Nevertheless, NsCDE will
-search for "fvwm" and then "fvwm3" in <varname>$PATH</varname>. If both, FVWM3
-and FVWM2 are installed on the same system, FVWM2 will still be used first currently.
-This can be overriden in user's environment (for example <filename>$HOME/.bashrc</filename>)
-by setting environment variable <varname>FVWM_BIN</varname> with the value which points to
-name of the FVWM binary, or full path to the binary if for example, FVWM3 was installed from
-source in some non-standard place out of the path.
+NsCDE from version 1.3 has late beta quality of support for FVWM3. MsCDE is and will
+stay compatible for FVWM2 as long as possible. At the time of this writing, FVWM3 was
+in it's fourth release and much of the previous problems are solved, altrough it
+still has some problems with FvwmPager in multi-monitor setup. Nevertheless, NsCDE will
+search for "fvwm3" and then "fvwm2" and "fvwm" in <varname>$PATH</varname>. If both, FVWM3
+and FVWM2 are installed on the same system, from NsCDE 2.0 and up, FVWM3 has higher
+priority. This can be overriden in user's environment (for example
+<filename>$HOME/.bashrc</filename>) by setting environment variable
+<varname>FVWM_BIN</varname> with the value which points to name of the FVWM binary, or
+full path to the binary if for example, FVWM3 was installed from source in some
+non-standard place out of the path.
 </para>
 <para>
 For example:
@@ -6211,10 +6207,9 @@ or ...
 </programlisting>
 </para>
 <para>
-When running with FVWM3, NsCDE will behave almost identical as in FVWM2, with
-benefit of RandR support in multiple monitors setup. This allows dynamic
-addition and removal of physical monitors and better management of such
-configurations.
+When running with FVWM3, NsCDE will behave almost identical as in FVWM2, with benefit of
+RandR support in multiple monitors setup. This allows dynamic addition and removal of
+physical monitors and better management of such configurations.
 </para>
 <para>
 Probably the most notable feature of FVWM3 is <varname>DesktopConfiguration</varname>.
@@ -6225,7 +6220,7 @@ in layout to old Xinerama support in FVWM2, while second and third model are spl
 workspaces, so different parts of different workspaces can be shown on different
 monitors. NsCDE implements dynamic finding and displaying, as well as creation of
 joint backdrops combinations for multiple monitors layout out of the box, so old
-hack described in <filename>$NSCDE_ROOT/share/examples/fvwm3-per-monitor/README</filename>
+hack described in <filename>$NSCDE_ROOT/share/doc/nscde/examples/fvwm3-per-monitor/README</filename>
 is not needed anymore. As in the future more desktop layouts are planned by FVWM3 developers, this
 setting has it's GUI control usable on FVWM3 in the
 <link linkend="NsCDE-WsPgMgr">Workspaces and Pages Style Manager</link>. NsCDE
@@ -6235,26 +6230,26 @@ edited manually to contain "global", "per-monitor" or "shared" value, or Workspa
 Manager can be used for that task.
 </para>
 <para>
-Third difference between NsCDE under FVWM2 and FVWM3 is logging. While FVWM2 logged
-all it's actions on X server's standard output and standard error, which usually
-ended up in <filename>$HOME/.xsession-errors</filename>, FVWM3 logs into default
-or configured log file. In NsCDE this file is <filename>$FVWM_USERDIR/tmp/fvwm.log</filename>.
-By default FVWM3 does not log anything there if not invoked with "-v" option, but
-logging can be toggled by sending SIGUSR2 to FVWM3 process. When <guimenuitem>Watch Errors</guimenuitem>
-menu item is called, it has one new option on personalized window menu which is
-called from the first (left) titlebar button: <guimenuitem>Togle FVWM3 Logging</guimenuitem>.
-When opening this log window, FVWM3 logging will be enabled almost immediately. To have logging
+Third difference between NsCDE under FVWM2 and FVWM3 is logging. While FVWM2 is logging
+all it's actions on X server's standard output and standard error, which usually ended
+up in <filename>$HOME/.xsession-errors</filename>, FVWM3 logs into default or configured
+log file. In NsCDE this file is <filename>$FVWM_USERDIR/tmp/fvwm.log</filename>. By
+default, FVWM3 does not log anything there if not invoked with "-v" option, but logging
+can be toggled by sending SIGUSR2 to FVWM3 process. When <guimenuitem>Watch Errors</guimenuitem>
+menu item is called, it has one new option on personalized window menu which is called
+from the first (left) titlebar button: <guimenuitem>Togle FVWM3 Logging</guimenuitem>. When
+opening this log window, FVWM3 logging will be enabled almost immediately. To have logging
 enabled as soon as possible when FVWM3 is started or restarted, infostore variable
 <varname>$[infostore.fvwm3_default_logging]</varname> should be set in
 <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
 </para>
 <para>
-Caution: using NsCDE under FVWM3 is still a bit of beta quality. Local Pager shown when
-changing pages and workspaces will contain primary monitor content, which will be wrong
-on the secondary monitor(s). Any misbehaviour should be carefully distinguished if it is
-NsCDE or FVWM3 bug while deciding where to report bugs. Watching logs, trying to trigger
-the same error under FVWM2 will be a good starting point for diagnostic of such problems
-which may manifest itself.
+Caution: using NsCDE under FVWM3 is still a bit of beta quality. Example of the current
+unsolved FVWM3 bug: Local Pager shown when changing pages and workspaces will contain
+primary monitor content, which will be wrong on the secondary monitor(s). Any
+misbehaviour should be carefully distinguished if it is NsCDE or FVWM3 bug while deciding
+where to report bugs. Watching logs, trying to trigger the same error under FVWM2 will
+be a good starting point for diagnostic of such problems which may manifest itself.
 </para>
 </sect1>
 
@@ -6288,12 +6283,11 @@ seems to me as a logical choice for screensaver facility.
 <itemizedlist>
 <listitem><para>
 Application Manager: Maybe with the help of some extensible (but sane and standalone, with
-titlebar) file manager, but question remains how to send enumerated apps
-from such a file manager view to Front Panel subpanels or as submenu.
-Probably external drag and drop applet which can be swallowed in
-subpanels to accept drop with middle mouse move and edit subpanel
-configuration? This will than replace Subpanels Manager app, but it
-must also have functions for editing, deleting etc ...
+normal titlebar) file manager, but question remains how to send enumerated apps from such a
+file manager view to Front Panel subpanels or as submenu. Probably external drag and drop
+applet which can be swallowed in subpanels to accept drop with middle mouse move and edit
+subpanel configuration? This will than replace Subpanels Manager app, but it must also have
+functions for editing, deleting etc ...
 </para></listitem>
 
 <listitem><para>
@@ -6301,11 +6295,10 @@ Action builder (dtaction) - not likely ever. Use FvwmScript or maybe some Python
 </para></listitem>
 
 <listitem><para>
-Session Management (dtsession) - NsCDE can use the external custom
-Session Managers from various DE's. See examples in
-<filename class="directory">share/examples</filename>.
-Since there are similar programs in existence, plus FVWM's own functions for
-automatic start of programs, NsCDE is more or less covered here.
+Session Management (dtsession) - NsCDE can use the external custom Session Managers from
+various DE's. See examples in <filename class="directory">$NSCDE_ROOT/share/doc/nscde/examples</filename>.
+Since there are similar programs in existence, plus FVWM's own functions for automatic
+start of programs, NsCDE is more or less covered here.
 </para></listitem>
 </itemizedlist>
 </sect1>

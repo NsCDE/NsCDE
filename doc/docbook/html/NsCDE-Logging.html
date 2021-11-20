@@ -2,22 +2,24 @@
 Most of the X11 Display Managers, such as XDM, sddm, gdm etc, are redirecting diagnostic
 output (standard error, stderr, file descriptor 2) into a file or some logging facility.
 This file is usually <code class="filename">$HOME/.xsession-errors</code>. When "Watch Errors" item
-is launched from default subpanel 7 (Desktop Settings), it will execute <span class="command"><strong>xterm -e $[infostore.xlogcmd]</strong></span>. If not redefined in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>,
-contents of the variable FVWM infostore variable <code class="varname">$[infostore.xlogcmd]</code> will be
-<span class="emphasis"><em>"tail -300f ~/.xsession-errors"</em></span>.
+is launched from default subpanel 7 (Desktop Settings), it will execute
+<span class="command"><strong>xterm -e $[infostore.xlogcmd]</strong></span>. If not redefined in
+<code class="filename">$FVWM_USERDIR/NsCDE.conf</code>, contents of the FVWM infostore variable
+<code class="varname">$[infostore.xlogcmd]</code> will be <span class="emphasis"><em>"tail -300f ~/.xsession-errors"</em></span>.
 </p><p>
-If your X Display Manager is using
-different path or file name, this can be redefined as it is mentioned above. Beware that some
-X Display Managers (namely lightdm) are sending diagnostic output into
-<code class="filename">/dev/null</code>. In this case, no variable redefinition can get this
-output visible to the user.
+If your X Display Manager is using different path or file name, this can be redefined in
+a way mentioned above. Beware that some X Display Managers (namely lightdm) are sending
+diagnostic output into <code class="filename">/dev/null</code>. In this case, no variable
+redefinition can get this output visible to the user.
 </p><p>
-Reading X, FVWM and NsCDE log output can be informative and helping while solving possible
+Reading X, FVWM and NsCDE log output can be informative and helpful while solving possible
 unexpected or unexplainable problems with desktop setup.
 </p><p>
-Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window under
-FVWM 2.X has a custom menu entry <span class="guimenuitem">Fvwm Diagnostic Console</span> which
+Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window
+has a custom menu entry <span class="guimenuitem">Fvwm Diagnostic Console</span> which
 starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
 <span class="guimenuitem">Watch Errors</span> which calls Watch errors.
 When both windows are on the screen, this menu entries will simply transfer focus to each other.
+Both of this applications have custom Window Options Menu "NsCDE Process Manager" which will
+run the same named application on demand.
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Initial-Configuration.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Integrations.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">13. Initial Configuration </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 15. Integration with X resources and widgets</td></tr></table></div></body></html>

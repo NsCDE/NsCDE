@@ -3,8 +3,7 @@ From version 1.3 and further, NsCDE contains CSS code and icons which can be use
 <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> while applying new color style and theme,
 to generate colorsets also for either or both Firefox and Thunderbird.
 </p><p>
-For this to work,
-appropriate code or the whole <code class="filename">colormgr.local</code> from
+For this to work, appropriate code or the whole <code class="filename">colormgr.local</code> from
 <code class="filename">$NSCDE_DATADIR/config_templates/colormgr.local</code> must be adapted into
 <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>. Shell variable
 <code class="varname">FIREFOX_CHROMEDIR</code> should contain path to the
@@ -28,7 +27,7 @@ must be restarted for this changes to take a place.
 </p><p>
 In Thunderbird, because of the nature of mail, it is not 100% possible to use color 4 from the NsCDE
 theme as background/foreground combination, because this can give ugly and bad results with some amount
-of structured HTML mails. Hence, solor for test is black, while background is from Solaris theme (#fff7e9)
+of structured HTML mails. Hence, color for text is black, while background is from Solyaris theme (#fff7e9)
 which is yellowish, almost white.
 </p><p>
 Here is how chrome directory layout and files must look for thunderbird after <code class="filename">colormgr.local</code>
@@ -44,29 +43,30 @@ makes a changes:
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userContent.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeContent.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeContent.css");
 
 $ cat /home/user/.thunderbird/Profile_1/chrome/userChrome.css
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/thunderbird/nscdeIcons.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeChrome.css");
+@import url("/usr/share/NsCDE/integration/thunderbird/nscdeIcons.css");
 </pre><p>
 
 </p><p>
-This is how Firefox chromedir should look:
+This is how Firefox chromedir should look like, assuming NsCDE was installed in
+/usr as prefix and root of installation dir:
 
 </p><pre class="programlisting">
 
 /home/user/.mozilla/firefox/testtest.default-release/chrome
 |- nscdeColordefs.css
-|- nscdeContent.css -&gt; /opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
+|- nscdeContent.css -&gt; /usr/share/NsCDE/integration/firefox/ff9x_nscdeContent.css
 |- userChrome.css
 |- userContent.css
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userChrome.css 
 @import url("nscdeColordefs.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
-@import url("/opt/NsCDE/share/NsCDE/integration/firefox/nscdeIcons.css");
+@import url("/usr/share/NsCDE/integration/firefox/ff9x_nscdeChrome.css");
+@import url("/usr/share/NsCDE/integration/firefox/nscdeIcons.css");
 
 $ cat /home/user/.mozilla/firefox/testtest.default-release/chrome/userContent.css
 @import url("nscdeColordefs.css");
