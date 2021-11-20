@@ -4113,10 +4113,10 @@ Silent Key Tab A S -
 
    NsCDE implements localization capabilities provided by FVWM and
    system C library. Directive LocalePath in
-   $NSCDE_ROOT/config/Main.fvwmconf is set to look at
+   $NSCDE_DATADIR/fvwm/Main.fvwmconf is set to look at
    $[NSCDE_ROOT]/share/locale;NsCDE:$[NSCDE_ROOT]/share/locale;NsC
    DE-Subpanels:+. In other words, whole NsCDE reads it's
-   localization from "mo" files from
+   localization from ".mo" files from
    $[NSCDE_ROOT]/share/locale/$LANG/LC_MESSAGES/NsCDE.mo except
    subpanels which have their localization in separate mo files in
    the same directory.
@@ -4126,29 +4126,28 @@ Silent Key Tab A S -
    which is defined in every program's header with UseGettext
    directive.
 
-   All part of visible text provided by NsCDE has localization
-   ability with the restriction of the Workspace names, which are
-   localized according to locale present during user's first
-   setup. That is: "One", "Two", "Three" and "Four" are translated
-   by catching text with gettext(1). Later this workspaces can be
-   renamed by user as needed.
+   All parts of visible text provided by NsCDE have localization
+   ability.
 
-   LANGUAGE and/or LC_MESSAGES must be set for localization to
-   work correctly. Best way to do this are login and profile files
-   of the user, parameters choosend with display manager, or as a
-   fallback, $FVWM_USERDIR/NsCDE.conf can be used to assign value
-   of the LC_MESSAGES (or LC_ALL) and LANGUAGE commands.
+   LANGUAGE and LC_MESSAGES environment variables must be set for
+   localization to work correctly. Best way to do this are user's
+   login and profile files, but it can also work with parameters
+   choosen with display manager's popdown menu or similar
+   pre-login mechanism, or as a fallback, $FVWM_USERDIR/NsCDE.conf
+   can be used to assign value of the LC_MESSAGES (or LC_ALL) and
+   LANGUAGE commands.
 
    First translated language from original English is Croatian.
-   Other translations are welcome. There are some pitfalls and
-   things which must be observed when translating to the new
-   languages. Existing .po files in "hr" can serve as a template
-   for new translations since just msgstr lines must be replaced
-   and msgid's are already there.
+   Other translations are welcome and expected. There are some
+   pitfalls and things which must be observed when translating to
+   the new languages. Existing .po files in "hr" can serve as a
+   template for new translations since just msgstr lines must be
+   replaced and msgid's are already there.
 
-   For more information about localization see README.localization
-   text file which is provided with software in the root of the
-   unpacked tarball.
+   For more information about localization see
+   $PREFIX/share/doc/nscde/README.localization README file which
+   is also provided with software in the root of the unpacked
+   tarball.
      __________________________________________________________
 
 13. Initial Configuration
@@ -4156,18 +4155,20 @@ Silent Key Tab A S -
    Upon the first (successful) start, ~/.NsCDE, that is
    $FVWM_USERDIR is created, and only icons subdirectory is
    created as fvwm-menu-desktop is run. User will be presented
-   with a default system setup and with default color theme Broica
-   in 8 colors, and f_FindApp function will try hard to find some
-   usable terminal application and run it with setup. If Gkrellm,
-   pnmixer programs are installed, on the system and found, they
-   will be run too. Stalonetray and Dunst will be run if enabled
-   by the user. Stalonetray and Dunst colors and fonts will be
+   with a first run NsCDE setup wizard in plain default xterm
+   terminal emulator and with default color theme Broica in 8
+   colors. If Gkrellm and pnmixer programs are installed, on the
+   system and found, they will be run too. Stalonetray and Dunst
+   will be run if installed and enabled by the user during the
+   wizard process. Stalonetray and Dunst colors and fonts will be
    handled internally by Color Style Manager and Font Style
-   Manager when theme or font is changed.
+   Manager when theme or font is changed and the same goes for
+   Gkrellm, rofi, Firefox, Thunderbird or any 3rd party program
+   integrated with NsCDE color and font theme.
 
-   Initial setup is a simple script
-   ($NSCDE_ROOT/libexec/bootstrap) from the terminal which will
-   run automatically and will set up the following:
+   Initial setup wizard is a simple script
+   ($NSCDE_DATADIR/bootstrap) from the terminal which will run
+   automatically and will set up the following:
 
      * X resources in ~/.NsCDE
      * Default background color (pre-FvwmBacker) from default
@@ -4189,28 +4190,38 @@ Silent Key Tab A S -
        installed
      * Enable NsCDE to remember last used page on workspace if
        selected
+     * Enable FVWM3 diagnostic logging by default or not
      * Configure favorite X file manager, if desired
      * Configure favorite X text editor, if desired
 
+   There are more options in $FVWM_USERDIR/NsCDE.conf which can be
+   edited after first setup finishes, and during the desktop
+   operation.
+
    Note that no file from the above list will be overwritten if it
    already exists in it's place. It will be skipped, but GTK and
-   Qt theme integration files can be still written with Color
-   Style Manager. After bootstrap script finishes setup, Color
-   Style Manager will be run and user asked to confirm default
-   theme or change it. Do not avoid this step, since some program
-   bits are not fully setup on bare defaults, (like a clock
+   Qt theme integration files will be edited with
+   $NSCDE_TOOLSDIR/confset to change theme and settings. This
+   settings can be further edited with Color Style Manager, or
+   with the tools from other desktop environments. After bootstrap
+   script finishes setup, Color Style Manager will be run and user
+   asked to confirm default theme or change it. Do not avoid this
+   step, because some program bits are not fully setup if local
+   user configuration uses fallback bare defaults, (like a clock
    background) and must be generated in the ~/.NsCDE/icons/NsCDE
    directory.
 
    After Color Style Manager's OK button is pressed, theme will be
    regenerated. Gtk and Qt themes will be regenerated only if
-   their checkboxes in Color Style Manager are checked in. Setup
-   script after the finish will ask user to press RETURN to exit.
-   This is for user's convenience to read output of the setup for
-   informative and/or diagnostic reasons. It is advised after this
-   setup to open $FVWM_USERDIR/NsCDE.conf and set up InfoStoreAdd
-   internal FVWM variables for terminal, filemgr and xeditor to
-   user's favorite programs for functions.
+   their checkboxes in Color Style Manager are checked in. This is
+   default since NsCDE 1.0. Setup script after the finish will ask
+   user to press RETURN to exit. This is for user's convenience to
+   read output of the setup for informative and/or diagnostic
+   reasons. It is advised that after this setup
+   $FVWM_USERDIR/NsCDE.conf is opened and further edited, for
+   example InfoStoreAdd internal FVWM variables for terminal,
+   browser, taskmgr, printmgr to user's favorite programs for
+   mentioned functions.
 
    Layout of the $FVWM_USERDIR after the initial setup should look
    like this:
@@ -4229,6 +4240,7 @@ Silent Key Tab A S -
      * Backdrops.fvwmgen
      * Colorset.fvwmgen
      * NsCDE.conf
+     * NsCDE.rasi
      * tmp/
      * Xdefaults
      * Xdefaults.fontdefs
@@ -4236,12 +4248,12 @@ Silent Key Tab A S -
      * Xdefaults.mouse
 
    It is advised to logout and login from the X session after
-   this, and check if everything looks ok. Also, it is a good idea
-   to start using programs from the menu and examine environment
-   around for a half an hour or so, before running Style Manager
-   (2nd button right of the Workspace Manager on the Front Panel)
-   to customize other aspects of the interface. NsCDE is now ready
-   for usage.
+   finishing initial setup and check if everything looks ok. Also,
+   it is a good idea to start using programs from the menu and
+   examine environment around, before customizing Subpanels, and
+   Front Panel, running Style Manager (2nd button right of the
+   Workspace Manager on the Front Panel) to customize other
+   aspects of the interface. NsCDE is now ready for everyday work.
      __________________________________________________________
 
 14. Diagnostic: X11, FVWM and Watch Errors
