@@ -352,6 +352,294 @@ External fit-in Programs:
 
 </sect1>
 
+<sect1 id="NsCDE-basics">
+<title>NsCDE Basics</title>
+
+<sect2 id="basics_desktop_overview">
+<title>Desktop Overview</title>
+
+<para>
+NsCDE as desktop provides windows, workspaces, keybindings, controls, menus and the Front Panel.
+
+<itemizedlist>
+
+<listitem><para>
+Windows contain software applications and are framed with controls so you can move them,
+resize them, or place them in additional workspaces.
+</para></listitem>
+
+<listitem><para>
+Keybindings, or keyboard shortuts enables you to call actions or manipulate windows without
+touching the mouse and immediately.
+</para></listitem>
+
+<listitem><para>
+Workspaces are the screen areas where application windows are placed when opened. We can
+consider workspaces as software or virtual screens.
+</para></listitem>
+
+<listitem><para>
+Controls enable you to manipulate objects, select choices, or type information.
+</para></listitem>
+
+<listitem><para>
+Menus provide access to commands used to manage windows and operate applications.
+</para></listitem>
+
+<listitem><para>
+The Front Panel is a collection of frequently used controls, available in every workspace.
+</para></listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+Some of the windows, icons and objects you'll encounter as you use the desktop are:
+
+<itemizedlist>
+<listitem><para>
+Window icons
+</para></listitem>
+<listitem><para>
+The Front Panel
+</para></listitem>
+<listitem><para>
+Style Manager
+</para></listitem>
+<listitem><para>
+File Manager
+</para></listitem>
+<listitem><para>
+Editor
+</para></listitem>
+<listitem><para>
+Tray
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+<sect3 id="basics_window_icons">
+<title>Window Icons</title>
+
+<para>
+When you iconify a window, it becomes an icon on the workspace. To iconify a window, click
+the first of two buttons near the upper right corner of the window titlebar.
+</para>
+
+<para>
+To deiconify the window, double-click mouse button 1 on the icon. You can also deiconify
+the window by clicking its icon to display the Window menu and then clicking on the menu's
+Deiconify item.
+</para>
+
+</sect3>
+
+<sect3 id="basics_front_panel">
+<title>Front Panel</title>
+
+<para>
+The Front Panel is a special window at the bottom of the display. It provides controls,
+indicators, and subpanels for quick overview and launch. The Front Panel also provides
+the workspace manager (WSM) for selecting a workspace. The clock, calendar, check mail,
+and FP Lite are examples of indicators. Arrow buttons over Front Panel controls are
+Subpanels launchers. Clicking an arrow button will open a Subpanel.
+</para>
+
+</sect3>
+
+<sect3 id="basics_style_manager">
+<title>Style Manager</title>
+
+<para>
+Use Style Manager to easily customize many elements of the desktop including:
+<itemizedlist>
+<listitem><para>
+Colors, Backdrops
+</para></listitem>
+<listitem><para>
+Font size
+</para></listitem>
+<listitem><para>
+Keyboard, Mouse, Screensaver, Beep
+</para></listitem>
+<listitem><para>
+Screen Power, Window Behavior, Workspaces and Pages Behavior
+</para></listitem>
+</itemizedlist>
+To start Style Manager, click its icon on the Front Panel. Second right of the
+Workspace Manager.
+</para>
+
+</sect3>
+
+<sect3 id="basics_filemgr_editor">
+<title>File Manager and Editor</title>
+
+<para>
+File Manager and Editor are the user's choice among great amount of them for X11
+interface. While it is totally possible to run NsCDE without them, many people
+prefer to have them. Good choices for graphical File Manager are Krusader, PcmanFM,
+PcmanFM-qt, Spacefm and so on. PcmanFM and PcmanFM-qt can serve also as application
+managers, because they support <emphasis>menu://applications/</emphasis> pseudo-path
+which presents system catalog of installed GUI apps with their icons under their
+categories. Gvim is a good choice for editor, while some more lightweight include
+Mousepad, Nedit, Xfe ...
+</para>
+
+</sect3>
+
+<sect3 id="basics_tray">
+<title>System Tray</title>
+
+<para>
+System Tray functionality is provided by the stalonetray(1) application which is
+fully integrated with NsCDE and serves well for the purpose of hosting tray icons
+added by the user, user's XDG autostart files by dex(1), or by the programs. By
+default, stalonetray is located in lower right corner of the screen, and it is
+configured in <filename>$FVWM_USERDIR/Stalonetray.conf</filename>.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="basics_working_with_windows_controls">
+<title>Working with Window controls</title>
+
+<para>
+
+This section describes how to start applications in NsCDE, move them around,
+iconify, shade, resize, maximize, close and so on.
+
+</para>
+
+<sect3 id="basics_window_frame_ctrls">
+<title>Window Frame Controls</title>
+
+<para>
+
+A window's frame provides controls with which you can:
+
+<itemizedlist>
+<listitem><para>
+Focus attention on a window, making it active for input from mouse or keyboard.
+When window is selected and it becomes active, its titlebar changes color into
+a active window color.
+</para></listitem>
+
+<listitem><para>
+Move a window.
+</para></listitem>
+
+<listitem><para>
+Turn the window into a icon (iconify).
+</para></listitem>
+
+<listitem><para>
+Size a window.
+</para></listitem>
+
+<listitem><para>
+Close a window, removing it from the desktop.
+</para></listitem>
+
+<listitem><para>
+Migrate open window into other workspaces.
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+The leftmost button on the window titlebar is menu button. Click the Window menu button to
+display the Window Operations Menu.
+</para>
+
+<para>
+To close a window and remove it from the desktop, double-click the Window menu button or
+display the Window menu and click on <guimenuitem>Close</guimenuitem>. If this doesn't work
+for some reason, you can try to forcibly remove a window with <guimenuitem>Forcefully Close</guimenuitem>.
+</para>
+
+<para>
+Right of the window title, there are iconify and maximize buttons. Iconify is the first one,
+while maximize is the rightmost at the corner. Click the <guimenuitem>iconify</guimenuitem>
+button to turn the window into a window icon. To restore a window from its icon,
+double-click the icon.
+</para>
+
+<para>
+Click the <guimenuitem>maximize</guimenuitem> button to display the window in maximized state.
+To ignore area of the Front Panel, and really maximize a window to the whole screen,
+double-click the button. Window can be turned into its former size by clicking the maximize
+button again.
+</para>
+
+<para>
+The title bar shows the name of the application that owns the window. Select a window by
+clicking its title bar. You can move a window by dragging its title bar. Clicking title bar
+with the third mouse button will lower or raise it below or above another overlapping window,
+second (middle) mouse button gives you a quick diagnostic and screenshot options menu.
+</para>
+
+<para>
+Click and drag a window's resize corner or border to resize the window in any direction.
+</para>
+
+</sect3>
+
+<sect3 id="basics_opening_windows">
+<title>Opening Application Windows</title>
+
+<para>
+There are couple ways to open applications in NsCDE. NsCDE offers a handy way to group
+often used applications and other applications in a more or less accessible desktop
+controls.
+
+<itemizedlist>
+<listitem><para>
+Front Panel: big icons of the Front Panel offer easiest and most visible access to
+applications. By default,it contains access to editor, office application, terminal,
+Style Manager, Printer Manager etc. This list can be customized to suit individual
+needs.
+</para></listitem>
+<listitem><para>
+Subpanels of the Front Panel are by category grouped popup menus of applications.
+Often used, important and popular applications are here, and can be put here by
+the user, to suit the needs.
+</para></listitem>
+<listitem><para>
+Workspace Menu: called with third mouse button on the root window (screen backdrop).
+It contains submenu <guimenuitem>Applications</guimenuitem> which is generated by
+gathering system GUI applications into categorized submenus. Almost every application
+is accessible from this menu. There is also a <guimenuitem>Quick Menu</guimenuitem>
+submenu of the Workspace Menu, where user can put it' picks of applications for
+ease of access.
+</para></listitem>
+<listitem><para>
+Exec dialog, called with <keysym>Alt+F12</keysym>, or rofi(1) launcher if it is
+installed and configured to work with NsCDE. Here, the name of the command which
+invokes application can be typed. Return will execute a command and window will
+appear.
+</para></listitem>
+<listitem><para>
+By using some file manager which supports <emphasis>menu://application/</emphasis>
+pseudo path, that is, it can serve as Application Manager. PcmanFM is a good choice
+here.
+</para></listitem>
+<listitem><para>
+By typing application invocation commands into terminal emulator.
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
 <sect1 id="NsCDE-applets-docks-panels">
 <title>Applets Docks and Panels</title>
 <sect2 id="NsCDE-FrontPanel">
