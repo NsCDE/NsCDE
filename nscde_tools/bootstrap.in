@@ -402,6 +402,8 @@ function setup_nscde
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
          if [ ! -e "$HOME/.xscreensaver" ] ; then
+            echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
+            gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
             cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
          fi
       elif [ "x$ans" == "xn" ]; then
@@ -487,7 +489,7 @@ function setup_nscde
 
       whence -q rofi
       if (($? == 0)); then
-         locale_run_rofi_question=$(gettext -s "Do you want to run rofi launcher on Meta+F2 or built in Exec Dialog?")
+         locale_run_rofi_question=$(gettext -s "Do you want to run rofi launcher on Alt+F12 or built in Exec Dialog?")
          echo -ne "$locale_run_rofi_question (y|n)[y] \c"
          read ans
          if [ "x$ans" == "x" ]; then

@@ -22,6 +22,8 @@ install-data-hook:
 	-cp -r $(srcdir)/BGdefault $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Dunst.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/dot_xscreensaver $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/rofi_config $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Xset.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/GeoDB.ini $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Stalonetray.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xdefaults $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
