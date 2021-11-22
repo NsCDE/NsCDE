@@ -401,7 +401,7 @@ function setup_nscde
       fi
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
-         if [ ! -e "$HOME/.xscreensaver" ] ; then
+         if [ ! -e "$HOME/.xscreensaver" ]; then
             echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
             gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
             cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
@@ -412,7 +412,7 @@ function setup_nscde
       else
          gettext -s "Answer not understood."
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
-         if [ ! -e "$HOME/.xscreensaver" ] ; then
+         if [ ! -e "$HOME/.xscreensaver" ]; then
             echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
             gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
             cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
@@ -501,7 +501,7 @@ function setup_nscde
             if [ ! -e "$HOME/.config/rofi/config" ] ; then
                echo -ne "$HOME/.config/rofi/config "; gettext -s "does not exist."
                gettext -s -n "Installing default rofi config file as "; echo "$HOME/.config/rofi/config."
-               mkdir -p $HOME/.config/rofi/config
+               mkdir -p $HOME/.config/rofi
                cp -f ${NSCDE_DATADIR}/config_templates/rofi_config "${HOME}/.config/rofi/config"
             fi
          elif [ "x$ans" == "xn" ]; then
