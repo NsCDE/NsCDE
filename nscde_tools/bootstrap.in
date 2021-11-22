@@ -11,6 +11,19 @@ export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
 export TEXTDOMAIN="nscde-bootstrap"
 export OS=$(uname -s)
 
+# Handle gettext absence from the system
+function echofunc
+{
+   shift
+   echo "$@"
+}
+
+# Handle gettext absence from the system
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="echofunc"
+fi
+
 if [ -z $HOME ]; then
    gettext -s "Error: HOME is not set cannot continue."
    exit 3
@@ -388,7 +401,7 @@ function setup_nscde
       fi
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
-         if [ ! -f "$HOME/.xscreensaver" ] ; then
+         if [ ! -e "$HOME/.xscreensaver" ] ; then
             cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
          fi
       elif [ "x$ans" == "xn" ]; then
@@ -397,7 +410,9 @@ function setup_nscde
       else
          gettext -s "Answer not understood."
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
-         if [ ! -f "$HOME/.xscreensaver" ] ; then
+         if [ ! -e "$HOME/.xscreensaver" ] ; then
+            echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
+            gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
             cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
          fi
       fi
@@ -481,12 +496,26 @@ function setup_nscde
          if [ "x$ans" == "xy" ]; then
             echo "$locale_enabling nscde_use_rofi --> 1"
             $NSCDE_TOOLSDIR/ised -c 's/# InfoStoreAdd nscde_use_rofi 1/InfoStoreAdd nscde_use_rofi 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+            if [ ! -e "$HOME/.config/rofi/config" ] ; then
+               echo -ne "$HOME/.config/rofi/config "; gettext -s "does not exist."
+               gettext -s -n "Installing default rofi config file as "; echo "$HOME/.config/rofi/config."
+               mkdir -p $HOME/.config/rofi/config
+               cp -f ${NSCDE_DATADIR}/config_templates/rofi_config "${HOME}/.config/rofi/config"
+            fi
          elif [ "x$ans" == "xn" ]; then
             echo "$locale_not_enabling nscde_use_rofi --> 0"
          else
             gettext -s "Answer not understood."
             echo "$locale_not_enabling nscde_use_rofi --> 0"
          fi
+      fi
+
+      # Make a default $FVWM_USERDIR/Xset.conf
+      if [ ! -e $HOME/.NsCDE/Xset.conf ]; then
+         locale_setting_up_default_xset_conf=$(gettext -s "Installing default Xset.conf example.")
+         echo "$locale_setting_up_default_xset_conf"
+         cp -f ${NSCDE_DATADIR}/config_templates/Xset.conf "${HOME}/.NsCDE/Xset.conf"
+         chmod u+x "${HOME}/.NsCDE/Xset.conf"
       fi
 
       locale_remember_workspace_question=$(gettext -s "Do you want to remember last page on workspace when changing back to it?")
