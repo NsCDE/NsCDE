@@ -12,6 +12,12 @@ In CDE, option is displayed as dimmed, but in NsCDE both is the case: some
 options which FVWM manages can appear dimmed, while other will be complitely
 missing from the menu.
 </p><p>
+FVWM menus can be "teared off" and temporary converted into a window. By
+pressing <span class="keysym">Backspace</span> while menu popup is active and focused,
+menu will turn into a simple widow with title bar which will contain internal
+menu name as window name and the title bar menu button on the left side of
+the title bar.
+</p><p>
 Menus used by applications include:
 
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -23,7 +29,7 @@ used to build application. Like GTK2, GTK3 or Qt4, Qt5 ...
 The same goes for contextual menus that "pop up" when you click mouse button 3
 in an application window.
 </p></li></ul></div><p>
-</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_using_menus"></a>3.4.1. Window Operation Menu</h4></div></div></div><p>
+</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_using_menus"></a>3.4.1. Window Operations Menu</h4></div></div></div><p>
 Use Window menu items to control windows and window icons. This menu is displayed when:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 Window menu button on window's title bar in the upper left corner of a window is clicked
@@ -33,4 +39,175 @@ When Window Icon is clicked - Altrough Icon Operation Menu is somewhat different
 Press <span class="keysym">Meta+Alt+M</span> with the keyboard focus on a window
 </p></li></ul></div><p>
 
-</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basics_using_workspaces.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-basics.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-applets-docks-panels.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.3. Using Workspaces </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4. Applets Docks and Panels</td></tr></table></div></body></html>
+</p><p>
+Reposition - Places Window Again on the desktop as if it is just newly opened, or resizes
+and places it according to rules in <code class="filename">$FVWM_USERDIR/GeoDB.ini</code> written
+by <a class="link" href="NsCDE-GeometryMgr.html" title="5.10. Window Geometry Manager">Geometry Manager</a>.
+</p><p>
+Refresh - Causes the window to redraw itself.
+</p><p>
+Move - Changes the window's location
+</p><p>
+Size - Changes the size of the window (absent on icons)
+</p><p>
+Iconify - Turns the window into an icon
+</p><p>
+Deiconify - Turns the window into an icon
+</p><p>
+Shade - Rollw window up to the height of just it's title bar, an alternative to iconify
+</p><p>
+Grow - Maximizes window avoiding EWMH working area and other windows
+</p><p>
+Stretch - Maximizes window avoiding EWMH working area
+</p><p>
+Maximize - Maximizes window ignoring EWMH working area
+</p><p>
+Restore - Puts window in non-maximized non-iconified state
+</p><p>
+Lower / Raise - Puts window back behind some other window, or raises it in front,
+putting other window into background
+</p><p>
+Occupy Workspace - Used to select the workspace in which we want the window to appear
+</p><p>
+Occupy Page - Used to select the page of workspace in which we want the window to appear
+</p><p>
+Occupy Monitor - Used to put window on the other XRandR monitors
+</p><p>
+Occupy All - Make window sticky (visible) across all workspaces and pages
+</p><p>
+Extended Menu / Standard Menu - extend or shring Window Operations Menu to
+show or hide less used functions
+</p><p>
+Window Layers - submenu with "top" "put" and "bottom" X11 window layer choices
+Rarely used interactive. (extended menu)
+</p><p>
+Identify - call FvwmIdent dialog with the current window information (extended menu)
+</p><p>
+Save Geometry - starts Geometry Manager (extended menu)
+</p><p>
+Title Bar On/Off - hides and restores window's title bar (extended menu)
+</p><p>
+Center Window - centers the window on the center of the screen (extended menu)
+</p><p>
+Full Screen - puts the window into full screen mode (extended menu)
+</p><p>
+Close -  Closes the window, removing it from the workspace
+</p><p>
+Forcefully Close -  Forcefully closes troublesome window, removing it from
+the workspace
+</p><p>
+Custom - Terminal emulator, File Manager ... many of the programs, or types of the
+programs may have additional option on the Window Operations Menu which is unique
+to that application (or a group of the applications). Customizable by the user.
+</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_titlebar_m2_menu"></a>3.4.2. Title Bar (M2) Menu</h4></div></div></div><p>
+This menu contains diagnostic and screenshot options. It can be invoked with mouse 2
+click on the window's title bar. It contains the following functions:
+</p><p>
+Identify Window - call FvwmIdent dialog with the current window information
+</p><p>
+X Window Info - run xwininfo(1) on the window, display information in the terminal window
+</p><p>
+X Window Property Display - run xprop(1) on the window, display information in terminal window
+</p><p>
+Screenshot (With WM decorations) - take a screenshot of the current window with all borders,
+corners, titlebar and the buttons. Picture in PNG format will be saved in user's
+<code class="varname">XDG_PICTURES_DIR</code> if defined by XDG subsystem (usually
+<code class="filename">$HOME/Pictures</code>), or if this is not defined or possible,
+into user's <code class="filename">$HOME</code>. File name will be in the form
+"ScreenShot.&lt;window name&gt;.&lt;X11 Window ID&gt;.YYMMDD.HHMMSS.png".
+</p><p>
+Screenshot (Without WM decorations) - take a screenshot of the current window without borders,
+corners, titlebar and buttons. Only actual application's frame. Picture in PNG format will be
+saved in user's <code class="varname">XDG_PICTURES_DIR</code> if defined by XDG subsystem (usually
+<code class="filename">$HOME/Pictures</code>), or if this is not defined or possible,
+into user's <code class="filename">$HOME</code>. File name will be in the form
+"ScreenShot.&lt;window name&gt;.&lt;X11 Window ID&gt;.YYMMDD.HHMMSS.png".
+</p><p>
+Screenshot to Clipboard (With WM decorations) - take a screenshot of the current window with all borders,
+corners, titlebar and the buttons. The result will not be saved automatically into
+<code class="varname">XDG_PICTURES_DIR</code>, but copied into system's clipboard, from where it can be pasted into
+compatible applications. 
+</p><p>
+Screenshot to Clipboard (Without WM decorations) - take a screenshot of the current window without borders,
+corners, titlebar and the buttons. Just an application frame. The result will not be saved automatically into
+<code class="varname">XDG_PICTURES_DIR</code>, but copied into system's clipboard, from where it can be pasted into
+compatible applications. 
+</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_winlist_menu"></a>3.4.3. Window List</h4></div></div></div><p>
+Window List menu contains a list of currently running and present applications
+on the current and all other workspaces. Every workspace on this menu has it's
+own title (name of the workspace) and below the title list of applications with
+their mini icons left of the text which describes application window name.
+</p><p>
+Window List menu can be called with mouse in a two ways:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+By clicking on the screen backdrop with mouse button 2
+</p></li><li class="listitem"><p>
+By clicking on the screen backdrop with mouse button 2 while holding
+<span class="keysym">Ctrl</span> modifier: this will bring up detailed informative
+Window List with window geometry information.
+</p></li><li class="listitem"><p>
+By pressing key binding <span class="keysym">Alt+Escape</span> once for Window List of the current
+menu, then second <span class="keysym">Escape</span> while Window List is active to get full list
+of all applications on all workspaces, and the third <span class="keysym">Escape</span> will popdown
+and dismiss the Window List.
+</p></li></ul></div><p>
+</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_detached_win_ops_menu"></a>3.4.4. Detached Standalone Window Operations menu</h4></div></div></div><p>
+Double click on the root window (backdrop) will popup extended version of the Window
+Operations Menu. This menu does not have a window context, so any action choosen on this
+menu will turn pointer cursor into a cross symbol, waiting for the user to pick some window
+or element on the screen for processing. This can be useful with non-standard windows
+without title bar, docks, hardly accessible elements etc.
+</p><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="basics_screenshot_menu"></a>3.4.4.1. Screenshot submenu</h5></div></div></div><p>
+Detached Standalone Window Operations menu contains <span class="emphasis"><em>Screenshot Options</em></span>
+submenu. This submenu offers 4 methods to save the whole active workspace/page or selected
+part of it.
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Screenshot (3s delay): Take a screenshot 3 seconds after clicked. This leaves enough time to
+the user to hide menu, and set the focus to have best possible screenshot. Picture in PNG format
+will be saved in user's <code class="varname">XDG_PICTURES_DIR</code> if defined by XDG subsystem (usually
+<code class="filename">$HOME/Pictures</code>), or if this is not defined or possible,
+into user's <code class="filename">$HOME</code>.
+File name will be in the form "RootWinShot.YYMMDD.HHMMSS.png".
+</p></li><li class="listitem"><p>
+Selected Area Screenshot: Mouse pointer will turn into a cross symbol, expecting user to select
+part of the screen as rectangle. This area will be saved as PNG picture file in user's
+<code class="varname">XDG_PICTURES_DIR</code> if defined by XDG subsystem (usually
+<code class="filename">$HOME/Pictures</code>), or if this is not defined or possible,
+into user's <code class="filename">$HOME</code>.
+File name will be in the form "ScreenAreaShot.WSP_&lt;workspace name&gt;.YYMMDD.HHMMSS.png".
+</p></li><li class="listitem"><p>
+Screenshot to Clipbpard (3s delay): similar as the plain whole screen screenshot, the result
+will not get saved automatically into <code class="varname">XDG_PICTURES_DIR</code>, but copied into
+system's clipboard, from where it can be pasted into compatible applications. 
+</p></li><li class="listitem"><p>
+Selected Area Screenshot to Clipbpard: similar as the plain screen area screenshot above,
+the result will not get saved automatically into <code class="varname">XDG_PICTURES_DIR</code>, but
+copied into system's clipboard, from where it can be pasted into compatible applications. 
+</p></li></ul></div><p>
+</p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_root_menu"></a>3.4.5. Root Menu</h4></div></div></div><p>
+XXX
+</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="basics_workspace_menu"></a>3.4.6. Workspace Menu</h4></div></div></div><p>
+The Workspace menu is a pop-up menu that contains items for managing the workspace.
+To display the Workspace menu, click mouse button 3 on the workspace backdrop. Menu can
+also be called by pressing <span class="keysym">Menu</span> button on the keyboard twice in less than
+a second.
+</p><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="basics_applications_submenu"></a>3.4.6.1. Applications Submenu</h5></div></div></div><p>
+This important submenu is located on the Workspace Menu as a first entry from the above on it.
+You can start many of the applications listed in the Applications submenu by clicking their
+Front Panel icons or subpanels. Howerver, practically all GUI applications installed on the
+system, that is, which have and ".desktop" entry in <code class="filename">/usr/share/applications</code>
+or <code class="filename">/usr/local/share/applications</code> or someware else will
+be find in this submenu, grouped in categories. Clicking their menu item starts the application.
+Number and kind of applications on this menu varies depending what is installed on the system
+and on the system itself.
+</p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="basics_quick_menu"></a>3.4.6.2. Quick Menu</h5></div></div></div><p>
+This submenu is located on the Workspace Menu as a second entry from the above on it.
+This submenu is meant to be customized by the user in <code class="filename">$FVWM_USERDIR/Menus.fvwmlocal</code>.
+Menu <span class="emphasis"><em>m_QuickMenu</em></span> is FVWM menu definition which has to be edited. Here,
+user can put often used, important, or any other items for quick locating them while operating
+on the Workspace Menu.
+</p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="basics_nscde_help_menu"></a>3.4.6.3. NsCDE Help menu</h5></div></div></div><p>
+This submenu is located on the Workspace Menu as a third entry from the above on it.
+This menu offers access to the most important topics of the NsCDE manual in HTML and PDF form.
+</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="basics_using_workspaces.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-basics.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-applets-docks-panels.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.3. Using Workspaces </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 4. Applets Docks and Panels</td></tr></table></div></body></html>

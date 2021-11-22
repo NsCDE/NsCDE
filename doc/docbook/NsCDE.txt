@@ -43,7 +43,12 @@ M. Z.
 
         3.4. Using Menus
 
-              3.4.1. Window Operation Menu
+              3.4.1. Window Operations Menu
+              3.4.2. Title Bar (M2) Menu
+              3.4.3. Window List
+              3.4.4. Detached Standalone Window Operations menu
+              3.4.5. Root Menu
+              3.4.6. Workspace Menu
 
    4. Applets Docks and Panels
 
@@ -749,6 +754,12 @@ M. Z.
    manages can appear dimmed, while other will be complitely
    missing from the menu.
 
+   FVWM menus can be "teared off" and temporary converted into a
+   window. By pressing Backspace while menu popup is active and
+   focused, menu will turn into a simple widow with title bar
+   which will contain internal menu name as window name and the
+   title bar menu button on the left side of the title bar.
+
    Menus used by applications include:
 
      * Menus that you "pull down" from an application's menu bar
@@ -761,7 +772,7 @@ M. Z.
        click mouse button 3 in an application window.
      __________________________________________________________
 
-3.4.1. Window Operation Menu
+3.4.1. Window Operations Menu
 
    Use Window menu items to control windows and window icons. This
    menu is displayed when:
@@ -771,6 +782,235 @@ M. Z.
      * When Window Icon is clicked - Altrough Icon Operation Menu
        is somewhat different and shorter
      * Press Meta+Alt+M with the keyboard focus on a window
+
+   Reposition - Places Window Again on the desktop as if it is
+   just newly opened, or resizes and places it according to rules
+   in $FVWM_USERDIR/GeoDB.ini written by Geometry Manager.
+
+   Refresh - Causes the window to redraw itself.
+
+   Move - Changes the window's location
+
+   Size - Changes the size of the window (absent on icons)
+
+   Iconify - Turns the window into an icon
+
+   Deiconify - Turns the window into an icon
+
+   Shade - Rollw window up to the height of just it's title bar,
+   an alternative to iconify
+
+   Grow - Maximizes window avoiding EWMH working area and other
+   windows
+
+   Stretch - Maximizes window avoiding EWMH working area
+
+   Maximize - Maximizes window ignoring EWMH working area
+
+   Restore - Puts window in non-maximized non-iconified state
+
+   Lower / Raise - Puts window back behind some other window, or
+   raises it in front, putting other window into background
+
+   Occupy Workspace - Used to select the workspace in which we
+   want the window to appear
+
+   Occupy Page - Used to select the page of workspace in which we
+   want the window to appear
+
+   Occupy Monitor - Used to put window on the other XRandR
+   monitors
+
+   Occupy All - Make window sticky (visible) across all workspaces
+   and pages
+
+   Extended Menu / Standard Menu - extend or shring Window
+   Operations Menu to show or hide less used functions
+
+   Window Layers - submenu with "top" "put" and "bottom" X11
+   window layer choices Rarely used interactive. (extended menu)
+
+   Identify - call FvwmIdent dialog with the current window
+   information (extended menu)
+
+   Save Geometry - starts Geometry Manager (extended menu)
+
+   Title Bar On/Off - hides and restores window's title bar
+   (extended menu)
+
+   Center Window - centers the window on the center of the screen
+   (extended menu)
+
+   Full Screen - puts the window into full screen mode (extended
+   menu)
+
+   Close - Closes the window, removing it from the workspace
+
+   Forcefully Close - Forcefully closes troublesome window,
+   removing it from the workspace
+
+   Custom - Terminal emulator, File Manager ... many of the
+   programs, or types of the programs may have additional option
+   on the Window Operations Menu which is unique to that
+   application (or a group of the applications). Customizable by
+   the user.
+     __________________________________________________________
+
+3.4.2. Title Bar (M2) Menu
+
+   This menu contains diagnostic and screenshot options. It can be
+   invoked with mouse 2 click on the window's title bar. It
+   contains the following functions:
+
+   Identify Window - call FvwmIdent dialog with the current window
+   information
+
+   X Window Info - run xwininfo(1) on the window, display
+   information in the terminal window
+
+   X Window Property Display - run xprop(1) on the window, display
+   information in terminal window
+
+   Screenshot (With WM decorations) - take a screenshot of the
+   current window with all borders, corners, titlebar and the
+   buttons. Picture in PNG format will be saved in user's
+   XDG_PICTURES_DIR if defined by XDG subsystem (usually
+   $HOME/Pictures), or if this is not defined or possible, into
+   user's $HOME. File name will be in the form "ScreenShot.<window
+   name>.<X11 Window ID>.YYMMDD.HHMMSS.png".
+
+   Screenshot (Without WM decorations) - take a screenshot of the
+   current window without borders, corners, titlebar and buttons.
+   Only actual application's frame. Picture in PNG format will be
+   saved in user's XDG_PICTURES_DIR if defined by XDG subsystem
+   (usually $HOME/Pictures), or if this is not defined or
+   possible, into user's $HOME. File name will be in the form
+   "ScreenShot.<window name>.<X11 Window ID>.YYMMDD.HHMMSS.png".
+
+   Screenshot to Clipboard (With WM decorations) - take a
+   screenshot of the current window with all borders, corners,
+   titlebar and the buttons. The result will not be saved
+   automatically into XDG_PICTURES_DIR, but copied into system's
+   clipboard, from where it can be pasted into compatible
+   applications.
+
+   Screenshot to Clipboard (Without WM decorations) - take a
+   screenshot of the current window without borders, corners,
+   titlebar and the buttons. Just an application frame. The result
+   will not be saved automatically into XDG_PICTURES_DIR, but
+   copied into system's clipboard, from where it can be pasted
+   into compatible applications.
+     __________________________________________________________
+
+3.4.3. Window List
+
+   Window List menu contains a list of currently running and
+   present applications on the current and all other workspaces.
+   Every workspace on this menu has it's own title (name of the
+   workspace) and below the title list of applications with their
+   mini icons left of the text which describes application window
+   name.
+
+   Window List menu can be called with mouse in a two ways:
+
+     * By clicking on the screen backdrop with mouse button 2
+     * By clicking on the screen backdrop with mouse button 2
+       while holding Ctrl modifier: this will bring up detailed
+       informative Window List with window geometry information.
+     * By pressing key binding Alt+Escape once for Window List of
+       the current menu, then second Escape while Window List is
+       active to get full list of all applications on all
+       workspaces, and the third Escape will popdown and dismiss
+       the Window List.
+     __________________________________________________________
+
+3.4.4. Detached Standalone Window Operations menu
+
+   Double click on the root window (backdrop) will popup extended
+   version of the Window Operations Menu. This menu does not have
+   a window context, so any action choosen on this menu will turn
+   pointer cursor into a cross symbol, waiting for the user to
+   pick some window or element on the screen for processing. This
+   can be useful with non-standard windows without title bar,
+   docks, hardly accessible elements etc.
+     __________________________________________________________
+
+3.4.4.1. Screenshot submenu
+
+   Detached Standalone Window Operations menu contains Screenshot
+   Options submenu. This submenu offers 4 methods to save the
+   whole active workspace/page or selected part of it.
+
+     * Screenshot (3s delay): Take a screenshot 3 seconds after
+       clicked. This leaves enough time to the user to hide menu,
+       and set the focus to have best possible screenshot. Picture
+       in PNG format will be saved in user's XDG_PICTURES_DIR if
+       defined by XDG subsystem (usually $HOME/Pictures), or if
+       this is not defined or possible, into user's $HOME. File
+       name will be in the form "RootWinShot.YYMMDD.HHMMSS.png".
+     * Selected Area Screenshot: Mouse pointer will turn into a
+       cross symbol, expecting user to select part of the screen
+       as rectangle. This area will be saved as PNG picture file
+       in user's XDG_PICTURES_DIR if defined by XDG subsystem
+       (usually $HOME/Pictures), or if this is not defined or
+       possible, into user's $HOME. File name will be in the form
+       "ScreenAreaShot.WSP_<workspace name>.YYMMDD.HHMMSS.png".
+     * Screenshot to Clipbpard (3s delay): similar as the plain
+       whole screen screenshot, the result will not get saved
+       automatically into XDG_PICTURES_DIR, but copied into
+       system's clipboard, from where it can be pasted into
+       compatible applications.
+     * Selected Area Screenshot to Clipbpard: similar as the plain
+       screen area screenshot above, the result will not get saved
+       automatically into XDG_PICTURES_DIR, but copied into
+       system's clipboard, from where it can be pasted into
+       compatible applications.
+     __________________________________________________________
+
+3.4.5. Root Menu
+
+   XXX
+     __________________________________________________________
+
+3.4.6. Workspace Menu
+
+   The Workspace menu is a pop-up menu that contains items for
+   managing the workspace. To display the Workspace menu, click
+   mouse button 3 on the workspace backdrop. Menu can also be
+   called by pressing Menu button on the keyboard twice in less
+   than a second.
+     __________________________________________________________
+
+3.4.6.1. Applications Submenu
+
+   This important submenu is located on the Workspace Menu as a
+   first entry from the above on it. You can start many of the
+   applications listed in the Applications submenu by clicking
+   their Front Panel icons or subpanels. Howerver, practically all
+   GUI applications installed on the system, that is, which have
+   and ".desktop" entry in /usr/share/applications or
+   /usr/local/share/applications or someware else will be find in
+   this submenu, grouped in categories. Clicking their menu item
+   starts the application. Number and kind of applications on this
+   menu varies depending what is installed on the system and on
+   the system itself.
+     __________________________________________________________
+
+3.4.6.2. Quick Menu
+
+   This submenu is located on the Workspace Menu as a second entry
+   from the above on it. This submenu is meant to be customized by
+   the user in $FVWM_USERDIR/Menus.fvwmlocal. Menu m_QuickMenu is
+   FVWM menu definition which has to be edited. Here, user can put
+   often used, important, or any other items for quick locating
+   them while operating on the Workspace Menu.
+     __________________________________________________________
+
+3.4.6.3. NsCDE Help menu
+
+   This submenu is located on the Workspace Menu as a third entry
+   from the above on it. This menu offers access to the most
+   important topics of the NsCDE manual in HTML and PDF form.
      __________________________________________________________
 
 4. Applets Docks and Panels
