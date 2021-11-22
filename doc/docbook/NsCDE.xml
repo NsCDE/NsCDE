@@ -355,6 +355,17 @@ External fit-in Programs:
 <sect1 id="NsCDE-basics">
 <title>NsCDE Basics</title>
 
+<para>
+Default NsCDE hybrid desktop envoronment contains a Front Panel at the center bottom of
+the current workspace. The Front Panel displays most important application icons and applets,
+information about workstation, date, time, current active workspace and page, system load, and
+exit controls. The Front Panel and enables user to run applications, to log out, and to switch
+between workspaces and pages. Applications that are running are visible as X11 windows and icons
+on the workspace, bordered by FVWM window manager with title bar, buttons on the title bar,
+borders and corners. Applications can also be started from the Workspace Menu, which is
+displayed by clicking mouse button 3 on an unused part of the workspace backdrop (root window).
+</para>
+
 <sect2 id="basics_desktop_overview">
 <title>Desktop Overview</title>
 
@@ -1062,7 +1073,41 @@ copied into system's clipboard, from where it can be pasted into compatible appl
 <title>Root Menu</title>
 
 <para>
-XXX
+Root Menu can be obtained only with a click-and-move gesture on the root window (backdrop).
+This menu contains entries which are calling:
+</para>
+
+<para>
+<link linkend="NsCDE-GWM">Graphical Workspace Manager <guimenuitem>GWM</guimenuitem></link>
+</para>
+
+<para>
+<guimenuitem>Local Pager</guimenuitem> (showing only the current workspace and it's pages if enabled)
+</para>
+
+<para>
+<guimenuitem>Local Window List</guimenuitem> (obtained also with <keysym>Alt+Escape</keysym>)
+</para>
+
+<para>
+<guimenuitem>Global Window List</guimenuitem> (obtained also with <keysym>Alt+Escape+Escape</keysym>)
+</para>
+
+<para>
+<guimenuitem>Window Operations</guimenuitem> entry which opens
+<link linkend="basics_detached_win_ops_menu">Standalone Window Operations</link> as submenu
+</para>
+
+<para>
+<guimenuitem>Refresh All Windows</guimenuitem> - this will refresh all windows
+</para>
+
+<para>
+<guimenuitem>Clean/Restore Workspace</guimenuitem>This will iconify all visible windows on a
+screen, rolldown and shade front panel into thin border which. Calling this function again will
+deiconify windows on the screen, but only those which were iconified by this function and restore
+Front Panel in it's default width, height and position. Notice that Front Panel can be rolled down
+and restored also with the <keysym>Shift+Escape</keysym>.
 </para>
 
 </sect3>
@@ -1116,6 +1161,75 @@ This menu offers access to the most important topics of the NsCDE manual in HTML
 
 </sect4>
 
+</sect3>
+
+<sect3 id="basics_menus_epilogue">
+<title>Further information about menus in NsCDE</title>
+
+<para>
+More information and techical details about implementation of FVWM menus in NsCDE can be found
+in the <link linkend="Menus_fvwmconf">section about <filename>Menus.fvwmconf</filename></link>
+configuration file.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="basics_logging_out">
+<title>Lock, Restart, Logout, Suspend, Reboot, Shutdown ...</title>
+
+<para>
+This section describes how to log out of and exit the desktop, how to lock X display to
+prevent unauthorized use of your system when you are away from it and have not logged out,
+how to restart NsCDE, suspend the system into S3 sleep mode (if supported), reboot and
+shutdown the system.
+</para>
+
+<para>
+For more information see <link linkend="NsCDE-SysActionDialog">SysActionDialog</link> section.
+</para>
+
+<sect3 id="basics_sysaction_lock">
+<title>Lock the screen</title>
+<para>
+XXX
+</para>
+</sect3>
+
+<sect3 id="basics_sysaction_restart">
+<title>Restarting NsCDE desktop</title>
+<para>
+XXX
+</para>
+</sect3>
+
+<sect3 id="basics_sysaction_logout">
+<title>Logout from NsCDE and X session</title>
+<para>
+XXX
+</para>
+</sect3>
+
+<sect3 id="basics_sysaction_suspend">
+<title>Suspend the system</title>
+<para>
+XXX
+</para>
+</sect3>
+
+<sect3 id="basics_sysaction_reboot">
+<title>Reboot the system</title>
+<para>
+XXX
+</para>
+</sect3>
+
+<sect3 id="basics_sysaction_shutdown">
+<title>Shutdown the system</title>
+<para>
+XXX
+</para>
 </sect3>
 
 </sect2>
