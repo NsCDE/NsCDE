@@ -26,6 +26,12 @@ if [ "x${ActionLine}" != "x" ]; then
          echo "Exec exec $cmd"
       elif [ "$check" == "FVWM" ]; then
          echo "$cmd"
+      elif [ "$check" == "__SPECIAL8__" ]; then
+         if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
+            echo "Exec exec $[infostore.appmgr]"
+         else
+            echo "Exec exec $[infostore.xeditor]"
+         fi
       elif [ "${icon}" == "__APPLET__" ]; then
          echo "$cmd"
       else
