@@ -26,17 +26,34 @@ if [ "$Button" == "pre" ]; then
 
    egrep "^Btn.*,__APPLET__,M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
    do
-         if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
-            echo "InfoStoreAdd FP.${button}.type applet"
-            echo "InfoStoreAdd FP.${button}.content ${check//\|/,}"
-         fi
+      if [ "$mousebutton" == "M1" ] && [ "${icon}" == "__APPLET__" ]; then
+         echo "InfoStoreAdd FP.${button}.type applet"
+         echo "InfoStoreAdd FP.${button}.content ${check//\|/,}"
+      fi
    done
+
+   # Hardcoded special case to choose pcmanfm or pcmanfm-qt as Application Manager
+   # because this two are only that fits the role. If none of this is installed,
+   # editor icon and default editor will be placed on the button.
+   egrep "^Btn8,__ICON8__,M1,__SPECIAL8__,__APPCMD8__$" "$SysActionFile" | while IFS="," read button icon mousebutton check cmd
+   do
+      if [ "$icon" == "__ICON8__" ]; then
+         if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
+            icon="NsCDE/Fpapps.l.pm"
+         else
+            icon="NsCDE/Fppenpd.l.pm"
+         fi
+      fi
+      echo "InfoStoreAdd FP.Btn8.type icon"
+      echo "InfoStoreAdd FP.Btn8.content \"Icon ${icon}\""
+   done
+
    egrep -i "^Btn.*,*.(x?pm|png),M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
    do
-         if [ "$mousebutton" == "M1" ] && [ "${icon}" != "__APPLET__" ]; then
-            echo "InfoStoreAdd FP.${button}.type icon"
-            echo "InfoStoreAdd FP.${button}.content \"Icon ${icon}\""
-         fi
+      if [ "$mousebutton" == "M1" ] && [ "${icon}" != "__APPLET__" ]; then
+         echo "InfoStoreAdd FP.${button}.type icon"
+         echo "InfoStoreAdd FP.${button}.content \"Icon ${icon}\""
+      fi
    done
 else
    ActionLine=$(egrep "^${Button},.*,.*,.*,.*" $UserActionFile $SysActionFile | head -1)
@@ -46,6 +63,16 @@ else
          if [ "$mousebutton" == "M1" ] && [ "$icon" != "__APPLET__" ]; then
             if [ "$icon" == "" ]; then
                icon="NsCDE/None.xpm"
+            fi
+            # Hardcoded special case to choose pcmanfm or pcmanfm-qt as Application Manager
+            # because this two are only that fits the role. If none of this is installed,
+            # editor icon and default editor will be placed on the button.
+            if [ "$icon" == "__ICON8__" ]; then
+               if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
+                  icon="NsCDE/Fpapps.l.pm"
+               else
+                  icon="NsCDE/Fppenpd.l.pm"
+               fi
             fi
             if [ "$When" != "pre" ]; then
                echo "SendToModule FrontPanel ChangeButton $Button Icon $icon"

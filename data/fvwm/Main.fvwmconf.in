@@ -182,6 +182,13 @@ AddToFunc f_SplashQuit
 + I Schedule 2800 Exec exec rm -f "$[FVWM_USERDIR]/tmp/NsCDE-Splash"
 + I Schedule 12000 KillModule FvwmScript $[FVWM_USERDIR]/tmp/NsCDE-Splash 
 
+# Hack: helper function to get editor or application manager on button 8 of Front Panel
+DestroyFunc f_AppMgrOrXEditor
+AddToFunc f_AppMgrOrXEditor
++ I Test (!EnvMatch infostore.appmgr *NOAPP*) SetEnv NSCDE_HAS_APPMGR 1
++ I Test (!EnvMatch infostore.appmgr *NOAPP*) InfoStoreAdd fp_props_menu_title_8 "$[gt.Application Manager]"
++ I Test (EnvMatch infostore.appmgr *NOAPP*) InfoStoreAdd fp_props_menu_title_8 "$[gt.Text Editor]"
+
 #########################################
 # Read User or System NsCDE.conf function
 #########################################
@@ -225,6 +232,8 @@ AddToFunc f_ReadNormalConfig
 + I f_FindApp taskmgr taskmgr
 + I f_FindApp mailreader mailreader
 + I f_FindApp printmgr printmgr
++ I f_FindApp appmgr appmgr
++ I f_AppMgrOrXEditor
 + I f_ReadCfg Backdrops
 + I f_KeyMenu -a
 + I Test (EnvMatch infostore.loc_pg.desk_scale unset, EnvMatch infostore.glob_pg.desk_scale unset) f_ReadCfg Monitors
