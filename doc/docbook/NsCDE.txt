@@ -1082,32 +1082,189 @@ M. Z.
 
 3.5.1. Lock the screen
 
-   XXX
+   To prevent unauthorized use of the system when you are away
+   from it and have not logged out, click the Lock control in the
+   Front Panel. It is located left from the first Workspace
+   Manager button. The Xscreensaver if enabled and installed will
+   appear. If Xscreensaver is configured to lock the screen, you
+   will have to provide password to unlock it and get the desktop
+   back.
      __________________________________________________________
 
 3.5.2. Restarting NsCDE desktop
 
-   XXX
+   Sometimes, while changing parameters in NsCDE.conf or upgrading
+   NsCDE, or because of some problem, it is necessary to restart
+   NsCDE and FVWM. There are two dialogs and 3 ways to do this.
+
+   Restart with System Action Dialog:
+
+     * Click on the Exit icon right bottom of the Workspace
+       Manager, or choose Log out ... from the bottom of the
+       Workspace Menu. Workspace Menu can be invoked with mouse
+       button 1, or by opening menu by pressing Menu+Menu, that
+       is, Menu key twice. Item Log out ...can be choosen with the
+       "g" mnemonic, or clicked with the mouse button 1.
+     * System Action dialog appears. From the popup select X
+       Window System: Window Manager Restart with mouse button 1,
+       or Arrow Up and Arrow Down keys.
+     * Click Confirm or press Ctrl+Return to confirm. FVWM and
+       NsCDE restarts.
+
+   Restart with Restart dialog:
+
+     * Press Menu+Menu or click with mouse button 3 on the empty
+       space of the backdrop to get Workspace Menu. Choose Restart
+       NsCDE ... near the bottom of the Workspace Menu. This can
+       be done with mouse pointer 1, or by pressing the "r"
+       mnemonic.
+     * Restart dialog appears with the question "Restart NsCDE".
+       Click the Ok button or press Return. FVWM and NsCDE
+       restarts.
+
+   Restart from the terminal command line:
+
+     * From the Front Panel's default fourth button click the icon
+       of the terminal, or from Workspace Menu choose Terminal to
+       open default terminal emulator.
+     * Terminal window appears. Type nscde_fvwmclnt Restart and
+       press return. FVWM and NsCDE restarts.
      __________________________________________________________
 
 3.5.3. Logout from NsCDE and X session
 
-   XXX
+     * Click on the Exit icon right bottom of the Workspace
+       Manager, or choose Log out ... from the bottom of the
+       Workspace Menu. Workspace Menu can be invoked with mouse
+       button 1, or by opening menu by pressing Menu+Menu, that
+       is, Menu key twice. Item Log out ...can be choosen with the
+       "g" mnemonic, or clicked with the mouse button 1.
+     * System Action dialog appears. From the popup select X
+       Window System: Logout with mouse button 1, or Arrow Up and
+       Arrow Down keys.
+     * Click Confirm or press Ctrl+Return to confirm.
+
+   Logout from the terminal command line:
+
+     * From the Front Panel's default fourth button click the icon
+       of the terminal, or from Workspace Menu choose Terminal to
+       open default terminal emulator.
+     * Terminal window appears. Type nscde_fvwmclnt Quit and press
+       return. Note that this option will not perform any
+       housekeeping.
      __________________________________________________________
 
 3.5.4. Suspend the system
 
-   XXX
+     * Click on the Exit icon right bottom of the Workspace
+       Manager, then choose Suspend System ... with mouse or Arrow
+       Up/Arrow Down keys, or choose Suspend System ... from the
+       bottom of the Workspace Menu. Workspace Menu can be invoked
+       with mouse button 1, or by opening menu by pressing
+       Menu+Menu, that is, Menu key twice. Item Suspend System
+       ...can be choosen with the "s" mnemonic, or clicked with
+       the mouse button 1.
+     * In the later case, System Action dialog appears. With
+       Operating System: Suspend/Sleep menu item already selected.
+       In the former case, it must be selected with keyboard or
+       mouse as described above.
+     * Click Confirm or press Ctrl+Return to confirm.
+
+   Suspend from the terminal command line can vary across
+   different flavors of Unix and even Linux. NsCDE implements
+   wrapper $NSCDE_LIBDIR/acpimgr for portable way to do system
+   suspend, hiberbate, hybrid suspend, poweroff/shutdown and
+   reboot. Notice however that this wrapper must be called with
+   sudo(8) or pfexec(1) on systems which are not detecting and
+   implementing local user recognition policy like Linux systems
+   with systemd(1).
+
+   Generally, one of this should work:
+$NSCDE_LIBDIR/acpimgr suspend
+
+
+   or
+sudo $NSCDE_LIBDIR/acpimgr suspend
+
+
+   For the second example to work, a proper sudo(1) authorizations
+   for the user or group must be implemented on the system. For
+   such example, see
+   $NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager.
      __________________________________________________________
 
 3.5.5. Reboot the system
 
-   XXX
+     * Click on the Exit icon right bottom of the Workspace
+       Manager, or choose Log out ... from the bottom of the
+       Workspace Menu. Workspace Menu can be invoked with mouse
+       button 1, or by opening menu by pressing Menu+Menu, that
+       is, Menu key twice. Item Log out ...can be choosen with the
+       "g" mnemonic, or clicked with the mouse button 1.
+     * System Action dialog appears. From the popup select
+       Operating System: Reboot with mouse button 1, or Arrow Up
+       and Arrow Down keys.
+     * Click Confirm or press Ctrl+Return to confirm.
+
+   Reboot from the terminal command line can vary across different
+   flavors of Unix and even Linux. NsCDE implements wrapper
+   $NSCDE_LIBDIR/acpimgr for portable way to do system suspend,
+   hiberbate, hybrid suspend, poweroff/shutdown and reboot. Notice
+   however that this wrapper must be called with sudo(8) or
+   pfexec(1) on systems which are not detecting and implementing
+   local user recognition policy like Linux systems with
+   systemd(1).
+
+   Calling NsCDE acpimgr directly should work in one or more of
+   this ways:
+$NSCDE_LIBDIR/acpimgr reboot
+
+
+   or
+sudo $NSCDE_LIBDIR/acpimgr reboot
+
+
+   For the second example to work, a proper sudo(1) authorizations
+   for the user or group must be implemented on the system. For
+   such example, see
+   $NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager.
      __________________________________________________________
 
 3.5.6. Shutdown the system
 
-   XXX
+     * Click on the Exit icon right bottom of the Workspace
+       Manager, or choose Log out ... from the bottom of the
+       Workspace Menu. Workspace Menu can be invoked with mouse
+       button 1, or by opening menu by pressing Menu+Menu, that
+       is, Menu key twice. Item Log out ...can be choosen with the
+       "g" mnemonic, or clicked with the mouse button 1.
+     * System Action dialog appears. From the popup select
+       Operating System: Shutdown with mouse button 1, or Arrow Up
+       and Arrow Down keys.
+     * Click Confirm or press Ctrl+Return to confirm.
+
+   Shutdown from the terminal command line can vary across
+   different flavors of Unix and even Linux. NsCDE implements
+   wrapper $NSCDE_LIBDIR/acpimgr for portable way to do system
+   suspend, hiberbate, hybrid suspend, poweroff/shutdown and
+   reboot. Notice however that this wrapper must be called with
+   sudo(8) or pfexec(1) on systems which are not detecting and
+   implementing local user recognition policy like Linux systems
+   with systemd(1).
+
+   Calling NsCDE acpimgr directly should work in one or more of
+   this ways:
+$NSCDE_LIBDIR/acpimgr poweroff
+
+
+   or
+sudo $NSCDE_LIBDIR/acpimgr poweroff
+
+
+   For the second example to work, a proper sudo(1) authorizations
+   for the user or group must be implemented on the system. For
+   such example, see
+   $NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager.
      __________________________________________________________
 
 4. Applets Docks and Panels
@@ -2667,6 +2824,10 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Up/Down: Changes between 7 possible options of System
        Action Dialog's popup menu.
      * Sun Help and F1: Displays this help text.
+
+   For a detailed description of how to use System Action dialog
+   and other desktop and system actions, see Lock, Restart,
+   Logout, Suspend, Reboot, Shutdown ... section.
      __________________________________________________________
 
 5.16. Sysinfo
@@ -4064,6 +4225,9 @@ Silent Key Tab A S -
        Window Operations menu intended for a general and tricky
        circumstances. It is invoked from the m_RootMenu, and
        keybindings Ctrl+Meta+Space and Meta+Menu.
+
+   For a more detailed guide about important menus, how to invoke
+   and use them, see section Using Menus.
      __________________________________________________________
 
 8.20. Mousebindings.fvwmconf

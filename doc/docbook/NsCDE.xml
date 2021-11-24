@@ -1193,43 +1193,269 @@ For more information see <link linkend="NsCDE-SysActionDialog">SysActionDialog</
 <sect3 id="basics_sysaction_lock">
 <title>Lock the screen</title>
 <para>
-XXX
+To prevent unauthorized use of the system when you are away from it and have not logged out,
+click the Lock control in the Front Panel. It is located left from the first Workspace Manager
+button. The Xscreensaver if enabled and installed will appear. If Xscreensaver is configured
+to lock the screen, you will have to provide password to unlock it and get the desktop back.
 </para>
 </sect3>
 
 <sect3 id="basics_sysaction_restart">
 <title>Restarting NsCDE desktop</title>
 <para>
-XXX
+Sometimes, while changing parameters in <filename>NsCDE.conf</filename> or upgrading NsCDE,
+or because of some problem, it is necessary to restart NsCDE and FVWM. There are two dialogs
+and 3 ways to do this.
 </para>
+<para>
+Restart with System Action Dialog:
+<itemizedlist>
+<listitem><para>
+Click on the <guibutton>Exit</guibutton> icon right bottom of the Workspace Manager, or choose
+<guimenuitem>Log out ...</guimenuitem> from the bottom of the Workspace Menu. Workspace Menu can be
+invoked with mouse button 1, or by opening menu by pressing <keysym>Menu+Menu</keysym>, that is, Menu
+key twice. Item <guimenuitem>Log out ...</guimenuitem>can be choosen with the "g" mnemonic, or
+clicked with the mouse button 1.
+</para></listitem>
+<listitem><para>
+System Action dialog appears. From the popup select <guimenuitem>X Window System: Window Manager Restart</guimenuitem>
+with mouse button 1, or Arrow Up and Arrow Down keys.
+</para></listitem>
+<listitem><para>
+Click <guibutton>Confirm</guibutton> or press <keysym>Ctrl+Return</keysym> to confirm. FVWM and NsCDE restarts.
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Restart with Restart dialog:
+<itemizedlist>
+<listitem><para>
+Press <keysym>Menu+Menu</keysym> or click with mouse button 3 on the empty space of the backdrop to get
+Workspace Menu. Choose <guimenuitem>Restart NsCDE ...</guimenuitem> near the bottom of the Workspace Menu.
+This can be done with mouse pointer 1, or by pressing the "r" mnemonic.
+</para></listitem>
+<listitem><para>
+Restart dialog appears with the question "Restart NsCDE". Click the <guibutton>Ok</guibutton> button or
+press Return. FVWM and NsCDE restarts.
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Restart from the terminal command line:
+<itemizedlist>
+<listitem><para>
+From the Front Panel's default fourth button click the icon of the terminal, or from Workspace Menu
+choose <guimenuitem>Terminal</guimenuitem> to open default terminal emulator.
+</para></listitem>
+<listitem><para>
+Terminal window appears. Type <command>nscde_fvwmclnt Restart</command> and press return. FVWM and NsCDE restarts.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect3>
 
 <sect3 id="basics_sysaction_logout">
 <title>Logout from NsCDE and X session</title>
 <para>
-XXX
+<itemizedlist>
+<listitem><para>
+Click on the <guibutton>Exit</guibutton> icon right bottom of the Workspace Manager, or choose
+<guimenuitem>Log out ...</guimenuitem> from the bottom of the Workspace Menu. Workspace Menu can be
+invoked with mouse button 1, or by opening menu by pressing <keysym>Menu+Menu</keysym>, that is, Menu
+key twice. Item <guimenuitem>Log out ...</guimenuitem>can be choosen with the "g" mnemonic, or
+clicked with the mouse button 1.
+</para></listitem>
+<listitem><para>
+System Action dialog appears. From the popup select <guimenuitem>X Window System: Logout</guimenuitem>
+with mouse button 1, or Arrow Up and Arrow Down keys.
+</para></listitem>
+<listitem><para>
+Click <guibutton>Confirm</guibutton> or press <keysym>Ctrl+Return</keysym> to confirm.
+</para></listitem>
+</itemizedlist>
 </para>
+
+<para>
+Logout from the terminal command line:
+<itemizedlist>
+<listitem><para>
+From the Front Panel's default fourth button click the icon of the terminal, or from Workspace Menu
+choose <guimenuitem>Terminal</guimenuitem> to open default terminal emulator.
+</para></listitem>
+<listitem><para>
+Terminal window appears. Type <command>nscde_fvwmclnt Quit</command> and press return. Note that this
+option will not perform any housekeeping.
+</para></listitem>
+</itemizedlist>
+</para>
+
 </sect3>
 
 <sect3 id="basics_sysaction_suspend">
 <title>Suspend the system</title>
+
 <para>
-XXX
+<itemizedlist>
+<listitem><para>
+Click on the <guibutton>Exit</guibutton> icon right bottom of the Workspace Manager, then choose
+<guimenuitem>Suspend System ...</guimenuitem> with mouse or Arrow Up/Arrow Down keys, or choose
+<guimenuitem>Suspend System ...</guimenuitem> from the bottom of the Workspace Menu. Workspace Menu can be
+invoked with mouse button 1, or by opening menu by pressing <keysym>Menu+Menu</keysym>, that is, Menu
+key twice. Item <guimenuitem>Suspend System ...</guimenuitem>can be choosen with the "s" mnemonic, or
+clicked with the mouse button 1.
+</para></listitem>
+<listitem><para>
+In the later case, System Action dialog appears. With <guimenuitem>Operating System: Suspend/Sleep</guimenuitem>
+menu item already selected. In the former case, it must be selected with keyboard or mouse as described above.
+</para></listitem>
+<listitem><para>
+Click <guibutton>Confirm</guibutton> or press <keysym>Ctrl+Return</keysym> to confirm.
+</para></listitem>
+</itemizedlist>
 </para>
+
+<para>
+Suspend from the terminal command line can vary across different flavors of Unix and even Linux. NsCDE
+implements wrapper <command>$NSCDE_LIBDIR/acpimgr</command> for portable way to do system suspend,
+hiberbate, hybrid suspend, poweroff/shutdown and reboot. Notice however that this wrapper must be
+called with sudo(8) or pfexec(1) on systems which are not detecting and implementing local user
+recognition policy like Linux systems with systemd(1).
+</para>
+
+<para>
+Generally, one of this should work:
+
+<programlisting>
+<![CDATA[
+$NSCDE_LIBDIR/acpimgr suspend
+]]>
+</programlisting>
+
+or
+
+<programlisting>
+<![CDATA[
+sudo $NSCDE_LIBDIR/acpimgr suspend
+]]>
+</programlisting>
+
+For the second example to work, a proper sudo(1) authorizations for the user or group must be
+implemented on the system. For such example, see
+<filename>$NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager</filename>.
+
+</para>
+
 </sect3>
 
 <sect3 id="basics_sysaction_reboot">
 <title>Reboot the system</title>
+
 <para>
-XXX
+<itemizedlist>
+<listitem><para>
+Click on the <guibutton>Exit</guibutton> icon right bottom of the Workspace Manager, or choose
+<guimenuitem>Log out ...</guimenuitem> from the bottom of the Workspace Menu. Workspace Menu can be
+invoked with mouse button 1, or by opening menu by pressing <keysym>Menu+Menu</keysym>, that is, Menu
+key twice. Item <guimenuitem>Log out ...</guimenuitem>can be choosen with the "g" mnemonic, or
+clicked with the mouse button 1.
+</para></listitem>
+<listitem><para>
+System Action dialog appears. From the popup select <guimenuitem>Operating System: Reboot</guimenuitem>
+with mouse button 1, or Arrow Up and Arrow Down keys.
+</para></listitem>
+<listitem><para>
+Click <guibutton>Confirm</guibutton> or press <keysym>Ctrl+Return</keysym> to confirm.
+</para></listitem>
+</itemizedlist>
 </para>
+
+<para>
+Reboot from the terminal command line can vary across different flavors of Unix and even Linux. NsCDE
+implements wrapper <command>$NSCDE_LIBDIR/acpimgr</command> for portable way to do system suspend,
+hiberbate, hybrid suspend, poweroff/shutdown and reboot. Notice however that this wrapper must be
+called with sudo(8) or pfexec(1) on systems which are not detecting and implementing local user
+recognition policy like Linux systems with systemd(1).
+</para>
+
+<para>
+Calling NsCDE <command>acpimgr</command> directly should work in one or more of this ways:
+
+<programlisting>
+<![CDATA[
+$NSCDE_LIBDIR/acpimgr reboot
+]]>
+</programlisting>
+
+or
+
+<programlisting>
+<![CDATA[
+sudo $NSCDE_LIBDIR/acpimgr reboot
+]]>
+</programlisting>
+
+For the second example to work, a proper sudo(1) authorizations for the user or group must be
+implemented on the system. For such example, see
+<filename>$NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager</filename>.
+</para>
+
 </sect3>
 
 <sect3 id="basics_sysaction_shutdown">
 <title>Shutdown the system</title>
+
 <para>
-XXX
+<itemizedlist>
+<listitem><para>
+Click on the <guibutton>Exit</guibutton> icon right bottom of the Workspace Manager, or choose
+<guimenuitem>Log out ...</guimenuitem> from the bottom of the Workspace Menu. Workspace Menu can be
+invoked with mouse button 1, or by opening menu by pressing <keysym>Menu+Menu</keysym>, that is, Menu
+key twice. Item <guimenuitem>Log out ...</guimenuitem>can be choosen with the "g" mnemonic, or
+clicked with the mouse button 1.
+</para></listitem>
+<listitem><para>
+System Action dialog appears. From the popup select <guimenuitem>Operating System: Shutdown</guimenuitem>
+with mouse button 1, or Arrow Up and Arrow Down keys.
+</para></listitem>
+<listitem><para>
+Click <guibutton>Confirm</guibutton> or press <keysym>Ctrl+Return</keysym> to confirm.
+</para></listitem>
+</itemizedlist>
 </para>
+
+<para>
+Shutdown from the terminal command line can vary across different flavors of Unix and even Linux. NsCDE
+implements wrapper <command>$NSCDE_LIBDIR/acpimgr</command> for portable way to do system suspend,
+hiberbate, hybrid suspend, poweroff/shutdown and reboot. Notice however that this wrapper must be
+called with sudo(8) or pfexec(1) on systems which are not detecting and implementing local user
+recognition policy like Linux systems with systemd(1).
+</para>
+
+<para>
+Calling NsCDE <command>acpimgr</command> directly should work in one or more of this ways:
+
+<programlisting>
+<![CDATA[
+$NSCDE_LIBDIR/acpimgr poweroff
+]]>
+</programlisting>
+
+or
+
+<programlisting>
+<![CDATA[
+sudo $NSCDE_LIBDIR/acpimgr poweroff
+]]>
+</programlisting>
+
+For the second example to work, a proper sudo(1) authorizations for the user or group must be
+implemented on the system. For such example, see
+<filename>$NSCDE_ROOT/share/doc/nscde/examples/sudo/006_PowerManager</filename>.
+</para>
+
 </sect3>
 
 </sect2>
@@ -3291,6 +3517,11 @@ Key Bindings:
 </itemizedlist>
 </para>
 
+<para>
+For a detailed description of how to use System Action dialog and other desktop and system
+actions, see <link linkend="basics_logging_out">Lock, Restart, Logout, Suspend, Reboot, Shutdown ...</link> section.
+</para>
+
 </sect2>
 
 <sect2 id="NsCDE-SysInfo">
@@ -5172,6 +5403,11 @@ menu, and to refresh all windows on the screen.
 </para></listitem>
 
 </itemizedlist>
+
+<para>
+For a more detailed guide about important menus, how to invoke and use them, see section
+<link linkend="basics_using_menus_preface">Using Menus</link>.
+</para>
 
 </sect2>
 
