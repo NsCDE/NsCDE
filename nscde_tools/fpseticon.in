@@ -35,7 +35,13 @@ if [ "$Button" == "pre" ]; then
    # Hardcoded special case to choose pcmanfm or pcmanfm-qt as Application Manager
    # because this two are only that fits the role. If none of this is installed,
    # editor icon and default editor will be placed on the button.
-   egrep "^Btn8,__ICON8__,M1,__SPECIAL8__,__APPCMD8__$" "$SysActionFile" | while IFS="," read button icon mousebutton check cmd
+   Btn8FromUser=$(egrep "^Btn.*,__ICON8__,M1,__SPECIAL8__,__APPCMD8__$" "$UserActionFile")
+   if (($? == 0)); then
+      ParseFile="$UserActionFile"
+   else
+      ParseFile="$SysActionFile"
+   fi
+   egrep "^Btn.*,__ICON8__,M1,__SPECIAL8__,__APPCMD8__$" "$ParseFile" | while IFS="," read button icon mousebutton check cmd
    do
       if [ "$icon" == "__ICON8__" ]; then
          if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
@@ -44,8 +50,8 @@ if [ "$Button" == "pre" ]; then
             icon="NsCDE/Fppenpd.l.pm"
          fi
       fi
-      echo "InfoStoreAdd FP.Btn8.type icon"
-      echo "InfoStoreAdd FP.Btn8.content \"Icon ${icon}\""
+      echo "InfoStoreAdd FP.${button}.type icon"
+      echo "InfoStoreAdd FP.${button}.content \"Icon ${icon}\""
    done
 
    egrep -i "^Btn.*,*.(x?pm|png),M1,.*,.*" "$UserActionFile" | while IFS="," read button icon mousebutton check cmd
