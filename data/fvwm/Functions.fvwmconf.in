@@ -655,7 +655,7 @@ AddToFunc f_FrontPanelMenuAction
 DestroyFunc f_FrontPanelPropsMenu
 AddToFunc f_FrontPanelPropsMenu
 + I InfoStoreAdd fp_btn_num $0
-+ I PipeRead '@KSH@ -c "last_fp_btn=\"$[infostore.fpright]\"; echo InfoStoreAdd fp_last_btn ${last_fp_btn##*R}"'
++ I PipeRead "@KSH@ -c 'last_fp_btn=\"$[infostore.fpright]\"; echo InfoStoreAdd fp_last_btn ${last_fp_btn##*R}'"
 + I DestroyMenu m_FrontPanelPropsMenu
 + I AddToMenu m_FrontPanelPropsMenu " $[1-] " Title
 + I AddToMenu m_FrontPanelPropsMenu "$[1-]" SendToModule FrontPanel PressButton Btn$0
