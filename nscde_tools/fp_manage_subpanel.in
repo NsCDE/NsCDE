@@ -116,10 +116,10 @@ function reset_this_button
       if ((FPA_RETVAL == 0)); then
          $NSCDE_TOOLSDIR/ised -c "/^Btn${PanelNo},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it's default configured function.]\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.has been restored to it\\\'s default configured function.]\""
       else
          $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Front Panel Info\" \"Dismiss\" \"NsCDE/Info.xpm\" \
-                     \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it's default configured function.]\""
+                     \"\$[gt.Button nr.] $PanelNo \$[gt.is already set at it\\\'s default configured function.]\""
       fi
 
       if (($RestartFP == 0)); then
@@ -155,7 +155,6 @@ function manage_launcher
    fi
 
    if (($ADDLNCH_RETVAL == 0)); then
-
       $NSCDE_TOOLSDIR/ised -c "s/\([[:space:]]\+\)\?InfoStoreAdd FP\.${2}LaunchersNum [[:digit:]]\+/InfoStoreAdd FP.${2}LaunchersNum $NewNum/g" \
        -f "$FVWM_USERDIR/NsCDE.conf"
    else
@@ -173,7 +172,166 @@ function manage_launcher
    echo "InfoStoreAdd FP.${Direction}LaunchersNum ${NewNum}"
 }
 
-while getopts p:adr:A:D: Option
+function move_launcher
+{
+   FpLeftBtns=$1
+   FpRightBtns=$2
+   MoveDirection=$3
+   BtnToMove=$PanelNo
+
+   case $PanelNo in
+      1|2|3|4|5|11|12|13|14|15)
+      FpSide=L
+   ;;
+      6|7|8|9|10|16|17|18|19|20)  
+      FpSide=R
+   ;;
+   esac
+   
+   if [ "$FpSide" == "L" ] && [ "$MoveDirection" == "Right" ]; then
+      OldPos=$BtnToMove
+      NewPos=$(($BtnToMove + 1))
+      if (( $(( $NewPos - 5 )) > $FpLeftBtns )); then
+         NewPos=$(($NewPos - $FpLeftBtns))
+      elif (($NewPos == 6)) && (($FpLeftBtns > 5)); then
+         NewPos=$(($NewPos + 5))
+      elif (($NewPos == ($FpLeftBtns + 1))); then
+         NewPos=6
+      fi
+   fi
+   
+   if [ "$FpSide" == "R" ] && [ "$MoveDirection" == "Right" ]; then
+      OldPos=$BtnToMove
+      NewPos=$(($BtnToMove + 1))
+      if (( $(( $NewPos - 5 )) > $FpRightBtns )) && (($BtnToMove <= 10)); then
+         NewPos=$(($NewPos - $FpRightBtns - 5))
+      elif (($NewPos == 11)); then
+         NewPos=$(($NewPos + 5))
+      elif (($NewPos == ($FpRightBtns + 1 + 10))); then
+         NewPos=1
+      fi
+   fi
+   
+   if [ "$FpSide" == "L" ] && [ "$MoveDirection" == "Left" ]; then
+      OldPos=$BtnToMove
+      NewPos=$(($BtnToMove - 1))
+      if (($BtnToMove == 11)); then
+         NewPos=$(($NewPos - 5))
+      elif (($BtnToMove == 1 )) && (($FpRightBtns <= 5)); then
+         NewPos=$(($FpRightBtns + 5))
+      elif (($BtnToMove == 1 )) && (($FpRightBtns > 5)); then
+         NewPos=$(($FpRightBtns + 10))
+      fi
+   fi
+   
+   if [ "$FpSide" == "R" ] && [ "$MoveDirection" == "Left" ]; then
+      OldPos=$BtnToMove
+      NewPos=$(($BtnToMove - 1))
+      if (($NewPos == 5)) && (($FpLeftBtns > 5)); then
+         NewPos=$(($FpLeftBtns + 5))
+      elif (($NewPos == 5)) && (($FpLeftBtns < 5)); then
+         NewPos=$FpLeftBtns
+      elif (($NewPos == 15)); then
+         NewPos=10
+      fi
+   fi
+
+   if [ ! -e "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      touch "$FVWM_USERDIR/FrontPanel.actions"
+   fi
+
+   if [ ! -e "$FVWM_USERDIR/Subpanels.actions" ]; then
+      touch "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   old_need_fpa_from_sys=$(egrep -c "^Btn${OldPos},.*,M(1|3)" "$FVWM_USERDIR/FrontPanel.actions")
+   if (($old_need_fpa_from_sys != 2)); then
+      $NSCDE_TOOLSDIR/ised -c "/^Btn${OldPos},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+      sed -n '$p' "$FVWM_USERDIR/FrontPanel.actions" | egrep '^$'
+      if (($? != 0)); then
+         echo "" >> "$FVWM_USERDIR/FrontPanel.actions"
+      fi
+      egrep "^Btn${OldPos},.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions" >> "$FVWM_USERDIR/FrontPanel.actions"
+   fi
+
+   old_need_spa_from_sys=$(egrep -c "^S${OldPos},(NAME|WIDTH|ENABLED)" "$FVWM_USERDIR/Subpanels.actions")
+   if (($old_need_spa_from_sys != 3)); then
+      $NSCDE_TOOLSDIR/ised -c "/^S${OldPos},.*/d" -f "$FVWM_USERDIR/Subpanels.actions"
+      sed -n '$p' "$FVWM_USERDIR/Subpanels.actions" | egrep '^$'
+      if (($? != 0)); then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+      fi
+      egrep "^S${OldPos},.*,.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   new_need_fpa_from_sys=$(egrep -c "^Btn${NewPos},.*,M(1|3)" "$FVWM_USERDIR/FrontPanel.actions")
+   if (($new_need_fpa_from_sys != 2)); then
+      $NSCDE_TOOLSDIR/ised -c "/^Btn${NewPos},.*/d" -f "$FVWM_USERDIR/FrontPanel.actions"
+      sed -n '$p' "$FVWM_USERDIR/FrontPanel.actions" | egrep '^$'
+      if (($? != 0)); then
+         echo "" >> "$FVWM_USERDIR/FrontPanel.actions"
+      fi
+      egrep "^Btn${NewPos},.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions" >> "$FVWM_USERDIR/FrontPanel.actions"
+   fi
+
+   new_need_spa_from_sys=$(egrep -c "^S${NewPos},(NAME|WIDTH|ENABLED)" "$FVWM_USERDIR/Subpanels.actions")
+   if (($new_need_spa_from_sys != 3)); then
+      $NSCDE_TOOLSDIR/ised -c "/^S${NewPos},.*/d" -f "$FVWM_USERDIR/Subpanels.actions"
+      sed -n '$p' "$FVWM_USERDIR/Subpanels.actions" | egrep '^$'
+      if (($? != 0)); then
+         echo "" >> "$FVWM_USERDIR/Subpanels.actions"
+      fi
+      egrep "^S${NewPos},.*,.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
+   fi
+
+   if ((${PanelNo} == ${OldPos})); then
+      $NSCDE_TOOLSDIR/ised -c "s/^Btn${OldPos},\(.*\)/__Btn${NewPos},\1/g" -f "$FVWM_USERDIR/FrontPanel.actions"
+      $NSCDE_TOOLSDIR/ised -c "s/^Btn${NewPos},\(.*\)/Btn${OldPos},\1/g" -f "$FVWM_USERDIR/FrontPanel.actions"
+      $NSCDE_TOOLSDIR/ised -c "s/^__Btn${NewPos},\(.*\)/Btn${NewPos},\1/g" -f "$FVWM_USERDIR/FrontPanel.actions"
+      $NSCDE_TOOLSDIR/ised -c \
+      "s/Btn${NewPos},,M3,FVWM,f_FrontPanelPropsMenu ${OldPos} /Btn${NewPos},,M3,FVWM,f_FrontPanelPropsMenu ${NewPos} /g" \
+      -f "$FVWM_USERDIR/FrontPanel.actions"
+      $NSCDE_TOOLSDIR/ised -c \
+      "s/Btn${OldPos},,M3,FVWM,f_FrontPanelPropsMenu ${NewPos} /Btn${OldPos},,M3,FVWM,f_FrontPanelPropsMenu ${OldPos} /g" \
+      -f "$FVWM_USERDIR/FrontPanel.actions"
+   fi
+
+   if ((${SubpanelNo} == ${OldPos})); then
+      $NSCDE_TOOLSDIR/ised -c "s/^S${OldPos},\(.*\)/__S${NewPos},\1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      $NSCDE_TOOLSDIR/ised -c "s/^S${NewPos},\(.*\)/S${OldPos},\1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+      $NSCDE_TOOLSDIR/ised -c "s/^__S${NewPos},\(.*\)/S${NewPos},\1/g" -f "$FVWM_USERDIR/Subpanels.actions"
+
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_ReloadSwitchedSubpanels $OldPos $NewPos"
+   fi
+
+   old_type=$(egrep "^Btn${OldPos},.*,M1.*" "$FVWM_USERDIR/FrontPanel.actions" | cut -d, -f2)
+   new_type=$(egrep "^Btn${NewPos},.*,M1.*" "$FVWM_USERDIR/FrontPanel.actions" | cut -d, -f2)
+
+   if [ -e "$FVWM_USERDIR/Subpanels.actions" ]; then
+      old_subpanel_enabled=$(egrep "^S${OldPos},ENABLED" "$FVWM_USERDIR/Subpanels.actions" | cut -d, -f3)
+      if [ "$old_subpanel_enabled" != "1" ] && [ "$old_subpanel_enabled" != "0" ]; then
+         old_subpanel_enabled=$(egrep "^S${OldPos},ENABLED" "$NSCDE_DATADIR/defaults/Subpanels.actions" | cut -d, -f3)
+      fi
+      new_subpanel_enabled=$(egrep "^S${NewPos},ENABLED" "$FVWM_USERDIR/Subpanels.actions" | cut -d, -f3)
+      if [ "$new_subpanel_enabled" != "1" ] && [ "$new_subpanel_enabled" != "0" ]; then
+         new_subpanel_enabled=$(egrep "^S${NewPos},ENABLED" "$NSCDE_DATADIR/defaults/Subpanels.actions" | cut -d, -f3)
+      fi
+   else
+      old_subpanel_enabled=$(egrep "^S${OldPos},ENABLED" "$NSCDE_DATADIR/defaults/Subpanels.actions" | cut -d, -f3)
+      new_subpanel_enabled=$(egrep "^S${NewPos},ENABLED" "$NSCDE_DATADIR/defaults/Subpanels.actions" | cut -d, -f3)
+   fi
+
+   if [ "$old_type" == "__APPLET__" ] || [ "$new_type" == "__APPLET__" ] || [ "$new_subpanel_enabled" == 1 ] || [ "$old_subpanel_enabled" == 1 ]; then
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "InfoStoreRemove FP.Btn${NewPos}.type"
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "InfoStoreRemove FP.Btn${OldPos}.type"
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
+   else
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_TOOLSDIR]/fpseticon Btn${OldPos}\""
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"\$[NSCDE_TOOLSDIR]/fpseticon Btn${NewPos}\""
+   fi
+}
+
+while getopts p:adm:w:e:r:A:R: Option
 do
    case $Option in
       p)
@@ -192,6 +350,12 @@ do
       d)
          delete_subpanel
       ;;
+      w)
+         FpLeftBtns="$OPTARG"
+      ;;
+      e)
+         FpRightBtns="$OPTARG"
+      ;;
       r)
          BUTTONTYPE="$OPTARG"
          reset_this_button
@@ -200,9 +364,13 @@ do
          Direction="$OPTARG"
          manage_launcher add $Direction
       ;;
-      D)
+      R)
          Direction="$OPTARG"
          manage_launcher del $Direction
+      ;;
+      m)
+         Direction="$OPTARG"
+         move_launcher $FpLeftBtns $FpRightBtns $Direction
       ;;
    esac
 done
