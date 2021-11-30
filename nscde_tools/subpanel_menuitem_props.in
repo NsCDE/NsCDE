@@ -262,7 +262,8 @@ function manage_entry
       entrybefore=$(($entryid - 1))
       entryafter=$(($entryid + 1))
 
-      newentrypart=$(echo "$entrypart" | $NSCDE_TOOLSDIR/ised -c "${entryid}s/\(${subpid},ENTRY,\)${TITLE}\(.*\)/\1${newitemname}\2/g" -o -f -)
+      newitemname=$(echo ${newitemname} | tr '\057\134\042\054' '.')
+      newentrypart=$(echo "$entrypart" | $NSCDE_TOOLSDIR/ised -c "${entryid}s/\(${subpid}\),\(ENTRY\),\(.*\),\(.*\),\(.*\),\(.*\)/\1,\2,${newitemname},\4,\5,\6/g" -o -f -)
 
       echo "$restoffile"
       echo "$restoffile" | head -1 | egrep -q '^$'
