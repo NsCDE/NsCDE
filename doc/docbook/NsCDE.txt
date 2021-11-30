@@ -1408,15 +1408,16 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        subpanel will be enabled immediately. This is specially
        useful for subpanel 5 which will show
        $[infostore.mailreader] if it is defined or autodiscovered.
-          + Subpanel 1: Applications
-          + Subpanel 3: Libre Office Components and various
+          + Subpanel 1: Communications
+          + Subpanel 3: Office Tools - Components and various
             office/productivity tools (PS/PDF reades etc ...)
           + Subpanel 4: Tools
-          + Subpanel 7: NsCDE Style Manager and various Qt, Gtk
-            and misc desktop management applications
-          + Subpanel 9: Multimedia programs: audio, video, photo
-            ...
-          + Subpanel 10: Documentation
+          + Subpanel 7: Desktop Settings - NsCDE Style Manager and
+            various Qt, Gtk and misc desktop management
+            applications
+          + Subpanel 9: Graphics and Multimedia - photo, drawing,
+            audio and video programs ...
+          + Subpanel 10: Help - Documentation
      * In the center of the Front Panel there is a place without
        subpanel launchers and separated by vertical line. Inside
        this area, there are 4 small command icons: Left: Lock
@@ -1519,20 +1520,31 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
 
    Each Subpanel's application item or entry has additional third
    mouse pointer button action which will pop up dinamically
-   populated contextual menu named after item's title. Here, there
-   are actions to move up or down item for one space on the
-   subpanel, to move item to the beginning or the end of the
-   subpanel's application list, as well as to delete item from the
-   subpanel (warning message will appear before deletion is
-   finally performed). First menu item is the same as menu name:
-   title of the application from submenu. If clicked, it will
-   perform default action as if item's title or icon was clicked
-   on the submenu itself. This is a kind of a escape from the
-   contextual menu, but to still use subpanel's default action
-   without repeating opening of a submenu again. If move or delete
-   action is silently not performed, this is most likely the
-   situation where user's $FVWM_USERDIR/Subpanels.actions is newer
-   than $FVWM_USERDIR/Subpanels.fvwmconf, and must be rebuilt for
+   populated contextual menu named after item's title. Here, the
+   following actions are available:
+
+     * Application Entry Name (varies): clicking it will have the
+       same effect as first mouse button click This is a kind of a
+       escape from the contextual menu, but to still use
+       subpanel's default action without repeating opening of a
+       submenu again.
+     * Move Up: move the current item one space up
+     * Move Down: move the current item one space down
+     * Move to Beginning: move the current item to top of the
+       subpanel
+     * Move to End: move the current item to bottom of the
+       subpanel
+     * Copy to Main Panel: Promote item icon to the main panel as
+       bigger icon, keeping it's function
+     * Rename: Rename the current item on the subpanel
+     * Delete: Delete the current item from the subpanel (warning
+       message will appear before deletion is finally performed)
+     * Help: Display relevant documentation
+
+   If move or delete action is silently not performed, this is
+   most likely the situation where user's
+   $FVWM_USERDIR/Subpanels.actions is newer than
+   $FVWM_USERDIR/Subpanels.fvwmX.fvwmconf, and must be rebuilt for
    configuration actions to take a place properly. In that case,
    repeated operation must succeed, otherwise, see X session error
    log for details.
@@ -3365,9 +3377,12 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    to be reloaded because file is read from the f_FrontPanelAction
    function on every click on every icon on the Front Panel. There
    is no GUI tool for fully managing this file yet, but currently,
-   "Copy to Main Panel" action from the submenu will edit
+   Copy to Main Panel action from the submenu will edit
    FrontPanel.actions and put choosen entry there, binding it to
-   some button.
+   the choosen button. Options Move Button Left and Move Button
+   Right from the contextual menu of icons on the main panel will
+   push icons and their subpanels (if enabled) left or right,
+   implicitly editing FrontPanel.actions in that way.
      __________________________________________________________
 
 8.2. AppMenus.conf
@@ -4761,9 +4776,10 @@ Silent Key Tab A S -
        in WSM and GWM.
      * FrontPanel.actions file:
        user's overrides/addons for Front Panel icons and actions.
-       Written by editor manually, and by Copy to Main Panel
-       option of the context submenu of subpanel's items. See
-       section about Front Panel for more information.
+       Written by editor manually, by Copy to Main Panel, Move
+       Button Left/Right options of the context submenu of
+       subpanel's items. See section about Front Panel for more
+       information.
      * GeoDB.ini file:
        part of the Geometry Manager functionality. Written and
        read by the $NSCDE_TOOLSDIR/confset and

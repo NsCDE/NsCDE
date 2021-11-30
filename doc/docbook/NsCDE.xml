@@ -1659,22 +1659,22 @@ As FvwmButtons based dock, by default it swallows the following applets:
    which will show <varname>$[infostore.mailreader]</varname> if it is defined or autodiscovered.
 <itemizedlist>
 <listitem><para>
-   Subpanel 1: Applications
+   Subpanel 1: Communications
 </para></listitem>
 <listitem><para>
-   Subpanel 3: Libre Office Components and various office/productivity tools (PS/PDF reades etc ...)
+   Subpanel 3: Office Tools - Components and various office/productivity tools (PS/PDF reades etc ...)
 </para></listitem>
 <listitem><para>
    Subpanel 4: Tools
 </para></listitem>
 <listitem><para>
-   Subpanel 7: NsCDE Style Manager and various Qt, Gtk and misc desktop management applications
+   Subpanel 7: Desktop Settings - NsCDE Style Manager and various Qt, Gtk and misc desktop management applications
 </para></listitem>
 <listitem><para>
-   Subpanel 9: Multimedia programs: audio, video, photo ...
+   Subpanel 9: Graphics and Multimedia - photo, drawing, audio and video programs ...
 </para></listitem>
 <listitem><para>
-   Subpanel 10: Documentation
+   Subpanel 10: Help - Documentation
 </para></listitem>
 </itemizedlist>
 
@@ -1807,18 +1807,45 @@ On every subpanel, last selected entry will remain hilighted next time subpanel 
 </para>
 <para>
 Each Subpanel's application item or entry has additional third mouse pointer button action which
-will pop up dinamically populated contextual menu named after item's title. Here, there are actions
-to move up or down item for one space on the subpanel, to move item to the beginning or the end of
-the subpanel's application list, as well as to delete item from the subpanel (warning message will
-appear before deletion is finally performed). First menu item is the same as menu name: title of
-the application from submenu. If clicked, it will perform default action as if item's title or icon
-was clicked on the submenu itself. This is a kind of a escape from the contextual menu, but to
-still use subpanel's default action without repeating opening of a submenu again.
+will pop up dinamically populated contextual menu named after item's title. Here, the following
+actions are available:
+<itemizedlist>
+<listitem><para>
+Application Entry Name (varies): clicking it will have the same effect as first mouse button click
+This is a kind of a escape from the contextual menu, but to still use subpanel's default action
+without repeating opening of a submenu again.
+</para></listitem>
+<listitem><para>
+Move Up: move the current item one space up
+</para></listitem>
+<listitem><para>
+Move Down: move the current item one space down
+</para></listitem>
+<listitem><para>
+Move to Beginning: move the current item to top of the subpanel
+</para></listitem>
+<listitem><para>
+Move to End: move the current item to bottom of the subpanel
+</para></listitem>
+<listitem><para>
+Copy to Main Panel: Promote item icon to the main panel as bigger icon, keeping it's function
+</para></listitem>
+<listitem><para>
+Rename: Rename the current item on the subpanel
+</para></listitem>
+<listitem><para>
+Delete: Delete the current item from the subpanel (warning message will appear before
+deletion is finally performed)
+</para></listitem>
+<listitem><para>
+Help: Display relevant documentation
+</para></listitem>
+</itemizedlist>
 If move or delete action is silently not performed, this is most likely the situation where
 user's <filename>$FVWM_USERDIR/Subpanels.actions</filename> is newer than
-<filename>$FVWM_USERDIR/Subpanels.fvwmconf</filename>, and must be rebuilt for configuration
-actions to take a place properly. In that case, repeated operation must succeed, otherwise,
-see X session error log for details.
+<filename>$FVWM_USERDIR/Subpanels.fvwmX.fvwmconf</filename>, and must be rebuilt for
+configuration actions to take a place properly. In that case, repeated operation must succeed,
+otherwise, see X session error log for details.
 </para>
 <para>
 Subpanels, like in CDE has titlebars but as windows on screen they are without
@@ -4233,8 +4260,12 @@ but in the <filename>FrontPanel.actions</filename> must be written as one line.
 After editing this file (system-wide or user's) nothing needs to be
 reloaded because file is read from the <function>f_FrontPanelAction</function> function
 on every click on every icon on the Front Panel. There is no GUI tool for fully managing this
-file yet, but currently, "Copy to Main Panel" action from the submenu will edit <filename>FrontPanel.actions</filename>
-and put choosen entry there, binding it to some button.
+file yet, but currently, <guimenuitem>Copy to Main Panel</guimenuitem> action from the submenu
+will edit <filename>FrontPanel.actions</filename> and put choosen entry there, binding it to
+the choosen button. Options <guimenuitem>Move Button Left</guimenuitem> and
+<guimenuitem>Move Button Right</guimenuitem> from the contextual menu of icons on the main
+panel will push icons and their subpanels (if enabled) left or right, implicitly editing
+<filename>FrontPanel.actions</filename> in that way.
 </para>
 </sect2>
 
@@ -6274,8 +6305,9 @@ in <varname>$FVWM_USERDIR</varname>:
   <filename>FrontPanel.actions</filename> file:
    </para>
    <para>
-   user's overrides/addons for Front Panel icons and actions. Written by editor manually, and by
-   <guimenuitem>Copy to Main Panel</guimenuitem> option of the context submenu of subpanel's items.
+   user's overrides/addons for Front Panel icons and actions. Written by editor manually, by
+   <guimenuitem>Copy to Main Panel</guimenuitem>, <guimenuitem>Move Button Left/Right</guimenuitem>
+   options of the context submenu of subpanel's items.
    See section about <link linkend="FrontPanel_actions"> Front Panel </link> for more information.
 </para></listitem>
 
