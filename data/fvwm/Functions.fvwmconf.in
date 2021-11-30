@@ -614,7 +614,17 @@ AddToFunc f_RefreshSubpanel
 + I KillModule FvwmButtons $0
 + I SendToModule FrontPanel PressButton $0
 + I Schedule 800 SendToModule FrontPanel PressButton $0
-+ I Schedule 3200 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper
++ I Test (!EnvMatch HAS_WINDOWNAME 1) Schedule 3200 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper
+
+# Called from fp_manage_subpanels with nscde_fvwmclnt
+DestroyFunc f_ReloadSwitchedSubpanels
+AddToFunc f_ReloadSwitchedSubpanels
++ I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -w > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen 2> /dev/null"
++ I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen 2> /dev/null"
++ I f_ReadCfg Subpanels
++ I KillModule FvwmButtons $0
++ I KillModule FvwmButtons $1
++ I Test (!EnvMatch HAS_WINDOWNAME 1) Schedule 3200 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper
 
 # Front Panel functions f_FrontPanelAction and f_FrontPanelActionStyler
 # must be separated because f_FrontPanelActionStyler is called by very
@@ -644,11 +654,27 @@ AddToFunc f_FrontPanelMenuAction
 
 DestroyFunc f_FrontPanelPropsMenu
 AddToFunc f_FrontPanelPropsMenu
++ I InfoStoreAdd fp_btn_num $0
++ I PipeRead "@KSH@ -c 'last_fp_btn=\"$[infostore.fpright]\"; echo InfoStoreAdd fp_last_btn ${last_fp_btn##*R}'"
 + I DestroyMenu m_FrontPanelPropsMenu
 + I AddToMenu m_FrontPanelPropsMenu " $[1-] " Title
 + I AddToMenu m_FrontPanelPropsMenu "$[1-]" SendToModule FrontPanel PressButton Btn$0
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
-+ I AddToMenu m_FrontPanelPropsMenu "$[gt.Reset This Button]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel -p $0 -r $[infostore.FP.Btn$0.type]
++ I AddToMenu m_FrontPanelPropsMenu "$[gt.Reset This Button]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
+ -p $0 -r $[infostore.FP.Btn$0.type]
++ I AddToMenu m_FrontPanelPropsMenu "" Nop
++ I Test (EnvMatch infostore.fp_btn_num 1) \
+  AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button To The End]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
+  -p $0 -w $[infostore.FP.LeftLaunchersNum] -e $[infostore.FP.RightLaunchersNum] -m Left
++ I Test (!EnvMatch infostore.fp_btn_num 1) \
+  AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button Left]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
+  -p $0 -w $[infostore.FP.LeftLaunchersNum] -e $[infostore.FP.RightLaunchersNum] -m Left
++ I Test (EnvMatch infostore.fp_btn_num $[infostore.fp_last_btn]) \
+  AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button At The Beginning]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
+  -p $0 -w $[infostore.FP.LeftLaunchersNum] -e $[infostore.FP.RightLaunchersNum] -m Right
++ I Test (!EnvMatch infostore.fp_btn_num $[infostore.fp_last_btn]) \
+  AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button Right]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
+  -p $0 -w $[infostore.FP.LeftLaunchersNum] -e $[infostore.FP.RightLaunchersNum] -m Right
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
 + I Test (EnvMatch infostore.NsCDE-Subpanel$0-Enabled 1) \
     AddToMenu m_FrontPanelPropsMenu "$[gt.Reset Subpanel]" \
@@ -665,6 +691,8 @@ AddToFunc f_FrontPanelPropsMenu
 + I AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html
 + I ChangeMenuStyle CommonAppMenu m_FrontPanelPropsMenu
 + I Popup m_FrontPanelPropsMenu mouse -0m -0m
++ I InfoStoreRemove fp_btn_num
++ I InfoStoreRemove fp_last_btn
 
 DestroyFunc f_FrontPanelManageSubpanels
 AddToFunc f_FrontPanelManageSubpanels
