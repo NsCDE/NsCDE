@@ -258,6 +258,21 @@ function manage_entry
       fi
    fi
 
+   if [ "$ACTION" == "rename" ]; then
+      entrybefore=$(($entryid - 1))
+      entryafter=$(($entryid + 1))
+
+      newentrypart=$(echo "$entrypart" | $NSCDE_TOOLSDIR/ised -c "${entryid}s/\(${subpid},ENTRY,\)${TITLE}\(.*\)/\1${newitemname}\2/g" -o -f -)
+
+      echo "$restoffile"
+      echo "$restoffile" | head -1 | egrep -q '^$'
+      if (($? == 0)); then
+         echo ""
+      fi
+      echo "$subpinfopart"
+      echo "$newentrypart"
+   fi
+
    if [[ -z $NSCDE_DEBUG ]]; then
       egrep -q "^S${subpid},NAME,.*" "$tmpfile"
       if (($? == 0)); then
@@ -623,7 +638,7 @@ function exec_entry
    $NSCDE_ROOT/bin/nscde_fvwmclnt "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
 }
 
-while getopts p:s:a:t:edc: Option
+while getopts p:s:n:a:t:edc: Option
 do
    case $Option in
       p)
@@ -631,6 +646,9 @@ do
       ;;
       s)
          entryid="$OPTARG"
+      ;;
+      n)
+         newitemname="$OPTARG"
       ;;
       a)
          ACTION="$OPTARG"

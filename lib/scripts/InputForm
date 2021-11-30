@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE}
 WindowLocaleTitle {User Input Required}
-WindowSize 320 122
+WindowSize 320 124
 Colorset 22
 
 Init
@@ -27,6 +27,19 @@ Begin
       ChangeTitle 2 $DefaultText
       ChangeValue 2 228
    End
+
+   Set $WindowTitle = (GetScriptArgument 3)
+   If $WindowTitle <> {} Then
+   Begin
+      ChangeWindowTitle $WindowTitle
+   End
+
+   # Can be "stdalone" or anything other for script father/child interaction
+   Set $OpMode = (GetScriptArgument 4)
+
+   Set $OkAction = (GetScriptArgument 5)
+
+   Set $CancelAction = (GetScriptArgument 6)
 
    Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 15} 1 -1)
    ChangeFont 1 $BtnFont
@@ -66,7 +79,7 @@ End
 Widget 1
    Property
    Size 0 0
-   Position 92 4
+   Position 72 6
    Type ItemDraw
    Flags NoReliefString NoFocus Left
    Title {Enter Required Parameter: }
@@ -80,12 +93,13 @@ End
 
 Widget 2
    Property
-   Size 228 20
-   Position 74 28
+   Size 230 20
+   Position 74 32
    Type TextField
    Flags NoReliefString
    Title {}
    Font "xft:::pixelsize=15"
+   Colorset 20
    Main
       Case message of
       SingleClic :
@@ -114,7 +128,7 @@ End
 Widget 4
    Property
    Size 96 0
-   Position 16 82
+   Position 16 86
    Type PushButton
    LocaleTitle {OK}
    Font "xft:::pixelsize=15"
@@ -127,10 +141,19 @@ Widget 4
       End
    1 :
    Begin
-      SendToScript (GetScriptFather) (GetTitle 2)
+      If $OpMode == {stdalone} Then
+      Begin
+         Do {InfoStoreAdd inputform.text "} (GetTitle 2) {"}
+         Do {Schedule 1000 } $OkAction
+         Do {Schedule 3000 } InfoStoreRemove inputform.text
+      End
+      Else
+      Begin
+         SendToScript (GetScriptFather) (GetTitle 2)
+      End
       SendSignal 4 2
    End
-   1 :
+   2 :
    Begin
       Quit
    End
@@ -139,7 +162,7 @@ End
 Widget 5
    Property
    Size 96 0
-   Position 208 82
+   Position 208 86
    Type PushButton
    LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
@@ -152,7 +175,14 @@ Widget 5
       End
    1 :
    Begin
-      SendToScript (GetScriptFather) {Cancel}
+      If $OpMode == {stdalone} Then
+      Begin
+         Do $CancelAction
+      End
+      Else
+      Begin
+         SendToScript (GetScriptFather) {Cancel}
+      End
       SendSignal 5 2
    End
    2 :
@@ -164,7 +194,7 @@ End
 Widget 6
    Property
    Size 312 0
-   Position 4 68
+   Position 4 74
    Type Rectangle
    Flags NoReliefString NoFocus
    Main
