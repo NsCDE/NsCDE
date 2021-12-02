@@ -662,7 +662,7 @@ AddToFunc f_FrontPanelPropsMenu
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
 + I AddToMenu m_FrontPanelPropsMenu "$[gt.Reset This Button]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
  -p $0 -r $[infostore.FP.Btn$0.type]
-+ I AddToMenu m_FrontPanelPropsMenu "Properties ..." f_ToggleFvwmModule FvwmScript FpIconMgr $0
++ I AddToMenu m_FrontPanelPropsMenu "$[gt.Properties ...]" f_ToggleFvwmModule FvwmScript FpIconMgr $0
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
 + I Test (EnvMatch infostore.fp_btn_num 1) \
   AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button To The End]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
