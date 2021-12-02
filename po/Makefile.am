@@ -31,7 +31,7 @@ MOFILES = NsCDE-BackdropMgr.hr.mo \
 	NsCDE-WSM.hr.mo \
 	NsCDE-WindowMgr.hr.mo \
 	NsCDE-WsPgMgr.hr.mo \
-	NsCDE-FpIconMgr.mo \
+	NsCDE-FpIconMgr.hr.mo \
 	NsCDE.hr.mo \
 	nscde-bootstrap.hr.mo
 
