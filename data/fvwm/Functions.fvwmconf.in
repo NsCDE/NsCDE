@@ -662,6 +662,7 @@ AddToFunc f_FrontPanelPropsMenu
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
 + I AddToMenu m_FrontPanelPropsMenu "$[gt.Reset This Button]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
  -p $0 -r $[infostore.FP.Btn$0.type]
++ I AddToMenu m_FrontPanelPropsMenu "Properties ..." f_ToggleFvwmModule FvwmScript FpIconMgr $0
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
 + I Test (EnvMatch infostore.fp_btn_num 1) \
   AddToMenu m_FrontPanelPropsMenu "$[gt.Move Button To The End]" Exec exec $[NSCDE_TOOLSDIR]/fp_manage_subpanel \
@@ -803,13 +804,7 @@ AddToFunc f_FrontPanelVisualFocus
 
 DestroyFunc f_EmptyFrontPanelLauncher
 AddToFunc f_EmptyFrontPanelLauncher
-+ I f_Notifier "$[gt.New Front Panel Button] ($[0])" "Dismiss" "NsCDE/Info.xpm" \
-  "$[gt.To assign action and icon to this button, add Subpanel above it, and then \
-press \\\"Install Icon\\\" Subpanel item to launch Subpanels Manager and add some \
-application to that Subpanel. Next, copy that application item to the Main Panel. \
-Finally, either keep or disable Subpanel above the button. Alternatively, \
-~/.NsCDE/FrontPanel.actions file can be manually edited and assigment of icon and \
-command to the button can be configured there.]" "FP_Lnch_Notice_$[0]"
++ I f_ToggleFvwmModule FvwmScript FpIconMgr $0
 
 # Function: f_CloseFrontPanel
 # Used in: f_WindowOpsFPBtn1 menu generator function

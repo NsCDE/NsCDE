@@ -1,0 +1,378 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-FpIconMgr}
+WindowLocaleTitle {Front Panel Icon Manager}
+WindowSize 680 280
+Colorset 22
+
+Init
+Begin
+   Set $FpButton = (GetScriptArgument 1)
+
+   If $FpButton == {} Then
+   Begin
+      Quit
+   End
+
+   Set $RefreshWindowTitle = (Gettext {Front Panel Icon Manager: Button }) $FpButton
+   ChangeWindowTitle $RefreshWindowTitle
+
+   # Fill the App List on the left with all apps found by fvwm-menu-desktop
+   Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst.XXXXXXXX}
+   Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
+   Set $AppListToFileCmd = {fvwm-menu-desktop --mini-icon-dir "$FVWM_USERDIR/icons" --enable-mini-icons -s 48 --include-items none --theme NsCDE --desktop nscde | }
+                           { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | }
+                           { $NSCDE_TOOLSDIR/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | }
+                           { $NSCDE_TOOLSDIR/ised -c "s/'/\"/g" -o -f - | }
+                           { $NSCDE_TOOLSDIR/ised -c "s/\$NSCDE_ROOT/\$[NSCDE_ROOT]/g" -o -f - > "} $AppListTmpFile {"}
+   Set $AppListToFile = (GetOutput $AppListToFileCmd 1 -1)
+   Set $FmtAppListCmd = {cut -d"%" -f 2 < "} $AppListTmpFile {" | tr '\n' '|' | sed 's/|$//g'}
+   Set $FmtAppList = (GetOutput $FmtAppListCmd 1 -1)
+   ChangeTitle 3 $FmtAppList
+
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+
+   ChangeFont 1 $DefaultFont
+   ChangeFont 2 $DefaultFont
+   ChangeFont 3 $DefaultFont
+   ChangeFont 4 $DefaultFont
+   ChangeFont 5 $DefaultFont
+   ChangeFont 6 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 8 $DefaultFont
+   ChangeFont 9 $DefaultFont
+   ChangeFont 10 $DefaultFont
+   ChangeFont 11 $DefaultFont
+   ChangeFont 12 $DefaultFont
+   ChangeFont 13 $DefaultFont
+   ChangeFont 15 $DefaultFont
+
+   # Key bindings
+   Key Q C 13 1 {KeyClose}
+   Key Escape A 13 1 {KeyClose}
+   Key F1 A 14 1 {KeyHelp}
+   Key Help A 14 1 {KeyHelp}
+
+   # Nasty workaround because ForeColor of the TextField
+   # widget is not applied and global value is used anyway.
+   # How it works: if wanted Colorset is applied with
+   # ChangeColorset to (any?) other widget after initialization
+   # of the script, colorset foreground color will be properly
+   # applied to TextField widget too. Even if fake widget is
+   # hidden, this workaround still works as it should.
+   # We define hidden PushButton widhet on the end of the script
+   # and send string "workaround" to routine 1 of the TextField
+   # widget ("1 : " can be attached to any widget in fact ...).
+   # This routine than changes the colorset of the hidden
+   # PushButton widget, and this then triggers change in buggy
+   # TextField to be applied.
+   # This bug can be seen when default colorset for the script has
+   # different foreground color than colorset applied to the
+   # TextField widget. Another possible workaround is to define
+   # globally back/fore/sh/hi colors for the script instead of
+   # (or after definition) of a colorset, but this is unflexible,
+   # since script background cannot be changed dinamically or
+   # from outside of the script as colorset functionality allows.
+   Do {Schedule 50 SendToModule SubpanelMgr SendString 15 1 workaround}
+   Do {Schedule 250 SendToModule SubpanelMgr SendString 15 1 workaround}
+   Do {Schedule 350 SendToModule SubpanelMgr SendString 15 1 workaround}
+End
+
+PeriodicTasks
+Begin
+   Set $MSG=(ReceivFromScript $BROWSER)
+   If $MSG <> {No message} Then
+   Begin
+      ChangeTitle 10 $MSG
+      ChangeIcon 4 $MSG
+   End
+End
+
+QuitFunc
+Begin
+   Do {Exec exec rm -f "} $AppListTmpFile {"}
+End
+
+Widget 1
+   Property
+   Size 664 206
+   Position 8 16
+   Type Rectangle
+End
+
+Widget 2
+   Property
+   Size 180 20
+   Position 18 6
+   Type ItemDraw
+   Flags NoReliefString Center NoFocus
+   LocaleTitle { Available Applications: }
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size 282 178
+   Position 20 32
+   Type List
+   Flags NoReliefString
+   Value 0
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $SelectedIndex = (GetValue 3)
+         Set $GetAppIdxNameCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 2}
+         Set $GetAppIdxIconCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 3}
+         Set $GetAppIdxCmdCmd = {egrep "^} $SelectedIndex {%.*" "} $AppListTmpFile {" | cut -d"%" -f 4}
+         Set $GetAppIdxName = (GetOutput $GetAppIdxNameCmd 1 -1)
+         Set $GetAppIdxIcon = (GetOutput $GetAppIdxIconCmd 1 -1)
+         Set $GetAppIdxCmd = (GetOutput $GetAppIdxCmdCmd 1 -1)
+         Set $GetAppIdxCmdType = (GetOutput $GetAppIdxCmdCmd 1 1)
+
+         Set $StrippedAppIdxIconPathCmd = {$NSCDE_TOOLSDIR/strip_icon_path '} $GetAppIdxIcon {'}
+         Set $StrippedAppIdxIconPath = (GetOutput $StrippedAppIdxIconPathCmd 1 -1)
+
+         # Set the icon preview
+         ChangeIcon 4 $GetAppIdxIcon
+
+         # Normalize field text visibility after long titles with tricks
+         ChangeTitle 6 $GetAppIdxCmd
+         ChangeMaxValue 6 0
+         ChangeMinValue 6 999
+
+         # Normalize field text visibility after long titles with tricks
+         ChangeTitle 8 $GetAppIdxName
+         ChangeMaxValue 8 0
+         ChangeMinValue 8 999
+
+         # Normalize field text visibility after long titles with tricks
+         ChangeTitle 10 $StrippedAppIdxIconPath
+         ChangeMaxValue 10 0
+         ChangeMinValue 10 99
+      End
+End
+
+Widget 4
+   Property
+   Size 64 64
+   Position 592 34
+   Type ItemDraw
+   Flags NoReliefString
+   Title {}
+   Icon NsCDE/Dtdeflt.l.pm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $ARG={FilePicker }
+         Set $BROWSER=(LaunchScript $ARG )
+      End
+End
+
+Widget 5
+   Property
+   Size 264 20
+   Position 316 26
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   Title {Command:}
+   Font "xft:::pixelsize=18"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Size 264 24
+   Position 316 56
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 7
+   Property
+   Size 220 20
+   Position 316 94
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Name:}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 8
+   Property
+   Size 342 24
+   Position 316 120
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 220 20
+   Position 316 158
+   Type ItemDraw
+   Flags NoReliefString Left NoFocus
+   LocaleTitle {Icon File:}
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 10
+   Property
+   Size 342 24
+   Position 316 184
+   Type TextField
+   Flags NoReliefString
+   Title {}
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+
+Widget 11
+   Property
+   Size 670 1
+   Position 4 232
+   Type Rectangle
+End
+
+Widget 12
+   Property
+   Size 196 26
+   Position 16 242
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Apply}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 12 1
+      End
+      1 :
+      Begin
+         If $GetAppIdxIcon <> {} Then
+         Begin
+            Set $PerformCmd = {$NSCDE_TOOLSDIR/subpanel_menuitem_props -p } $FpButton { -t '} (GetTitle 8) {' -x '} (GetTitle 6) {' -i '} (GetTitle 10) {'}
+            Set $Perform = (GetOutput $PerformCmd 1 -1)
+            If $Perform <> {} Then
+            Begin
+               Do {f_Notifier "Front Panel Icon Manager" "Dismiss" "NsCDE/Warning.xpm" "Unexpected output while setting the icon: } $Perform
+            End
+         End
+         Quit
+      End
+End
+
+Widget 13
+   Property
+   Size 196 26
+   Position 240 242
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 13 1
+      End
+      1 :
+      Begin
+         Quit
+      End
+End
+
+Widget 14
+   Property
+   Size 196 26
+   Position 466 242
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Colorset 22
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 14 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.Subpanels Manager]" html/NsCDE-FpIconMgr.html}
+      End
+End
+
+# Nasty workaround because ForeColor of the TextField
+# widget is not applied and global value is used anyway.
+# See end of the Init procedure for explanation.
+Widget 15
+   Property
+   Size 40 10
+   Position 10 10
+   Type PushButton
+   Flags NoReliefString NoFocus Hidden
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      # Nasty workaround because ForeColor of the TextField
+      # widget is not applied and global value is used anyway.
+      # See end of the Init procedure for explanation.
+      1 :
+      Begin
+         If (LastString) == {workaround} Then
+         Begin
+            ChangeColorset 15 20
+         End
+      End
+End
+

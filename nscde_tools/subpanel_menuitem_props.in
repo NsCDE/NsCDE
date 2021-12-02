@@ -301,6 +301,49 @@ function manage_entry
    fi
 }
 
+function add_to_main_panel
+{
+   if [ -e "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      if (($? == 0)); then
+         RestartFP=1
+      else
+         RestartFP=0
+      fi
+   else
+      egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions"
+      if (($? == 0)); then
+         RestartFP=1
+      else
+         RestartFP=0
+      fi
+   fi
+
+   title=$(echo ${TITLE} | tr '\057\134\042\054' '.')
+
+   fp_m1="Btn${subpid},$icon,M1,NOCHK,$cmd"
+   fp_m2="Btn${subpid},,M2,FVWM,Nop"
+   fp_m3="Btn${subpid},,M3,FVWM,f_FrontPanelPropsMenu ${subpid} $title"
+
+   if [ -e "$FVWM_USERDIR/FrontPanel.actions" ]; then
+      $NSCDE_TOOLSDIR/ised -c "/^Btn${subpid},\(.*\)\?,M\(1\|2\|3\)/d" -f $FVWM_USERDIR/FrontPanel.actions
+   fi
+
+   tail -1 "$FVWM_USERDIR/FrontPanel.actions" | egrep -q "^$"
+   if (($? != 0)); then
+      echo "" >> "$FVWM_USERDIR/FrontPanel.actions"
+   fi
+   echo "$fp_m1" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
+   echo "$fp_m2" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
+   echo "$fp_m3" | head -1 >> "$FVWM_USERDIR/FrontPanel.actions"
+   $NSCDE_ROOT/bin/nscde_fvwmclnt "SendToModule FrontPanel ChangeButton Btn${subpid} Icon \"$icon\""
+
+   # If changing from applet to icon, restart Front Panel for settings to be visible
+   if (($RestartFP == 1)); then
+      $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RestartFrontPanel"
+   fi
+}
+
 function copy_to_main_panel
 {
    echo "$BUTTONTYPE" | cut -d"." -f 3 | egrep -q '(icon|applet)'
@@ -309,7 +352,7 @@ function copy_to_main_panel
    fi
 
    if [ -r "$FVWM_USERDIR/FrontPanel.actions" ]; then
-      egrep -q "^Btn${PanelNo},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
       if (($? == 0)); then
          RestartFP=1
       else
@@ -639,7 +682,7 @@ function exec_entry
    $NSCDE_ROOT/bin/nscde_fvwmclnt "SendToModule NsCDE-Subpanel${subpid} PressButton Btn-${subpid}-${entryid}"
 }
 
-while getopts p:s:n:a:t:edc: Option
+while getopts p:s:n:a:t:i:x:edc: Option
 do
    case $Option in
       p)
@@ -659,6 +702,13 @@ do
       ;;
       t)
          TITLE="$OPTARG"
+      ;;
+      x)
+         cmd="$OPTARG"
+      ;;
+      i)
+         icon="$OPTARG"
+         add_to_main_panel
       ;;
       e)
          exec_entry

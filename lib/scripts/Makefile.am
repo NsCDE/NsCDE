@@ -15,7 +15,7 @@ FVWMSCRIPTS = ActionForm BackdropMgr BeepMgr CheckMailApplet ChoiceForm \
 	NColorsDialog NProcMgr Occupy PaletteDialog PointerMgr \
 	PowerSaveMgr StyleMgr SubpanelMgr SubpanelSettings \
 	SysActionDialog Sysinfo WaitNotice WindowMgr WSM WSM-2 WSM-4 \
-	WSM-6 WSM-8 WsPgMgr
+	WSM-6 WSM-8 WsPgMgr FpIconMgr
 
 nscdescript_DATA = $(FVWMSCRIPTS)
 
