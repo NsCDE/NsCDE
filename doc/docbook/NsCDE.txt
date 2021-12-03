@@ -99,18 +99,19 @@ M. Z.
         5.12. Power Save Manager
         5.13. Subpanel Manager
         5.14. Subpanel Settings
-        5.15. System Action Dialog
-        5.16. Sysinfo
-        5.17. Window Style Manager
+        5.15. Front Panel Icon Manager
+        5.16. System Action Dialog
+        5.17. Sysinfo
+        5.18. Window Style Manager
 
-              5.17.1. Configuration Section: Window Behavior
-              5.17.2. Configuration Section: Window Icons
-              5.17.3. Configuration Section: Page Edges
-              5.17.4. Configuration Section: Animation
-              5.17.5. Misc Window Style Manager Functions
+              5.18.1. Configuration Section: Window Behavior
+              5.18.2. Configuration Section: Window Icons
+              5.18.3. Configuration Section: Page Edges
+              5.18.4. Configuration Section: Animation
+              5.18.5. Misc Window Style Manager Functions
 
-        5.18. Workspaces and Pages Style Manager (WsPgMgr)
-        5.19. NsCDE Process Manager (NProcMgr)
+        5.19. Workspaces and Pages Style Manager (WsPgMgr)
+        5.20. NsCDE Process Manager (NProcMgr)
 
    6. Helper Dialogs
 
@@ -462,6 +463,7 @@ M. Z.
      * Mouse Style Manager (PointerMgr) - FvwmScript
      * Power Save Manager (PowerSaveMgr) - FvwmScript
      * Subpanel Manager (SubpanelMgr) - FvwmScript
+     * Front Panel Icon Manager (FpIconMgr) - FvwmScript
      * Subpanel Settings (SubpanelSettings) - FvwmScript
      * System Action Dialog (SysActionDialog) - FvwmScript, sudo
      * Sysinfo - FvwmScript, python
@@ -2813,7 +2815,41 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-5.15. System Action Dialog
+5.15. Front Panel Icon Manager
+
+   Front Panel Icon Manager can set icon and command of the empty
+   Front Panel Button, or change it's icon and content if selected
+   from the Front Panel button contextual menu with the mouse
+   button 3 as Change This Button. Front Panel Icon Manager edits
+   user's $FVWM_USERDIR/FrontPanel.actions.
+
+   Front Panel Icon Manager has a list of system recognized
+   desktop applications, and text fields with their names,
+   commands and icon paths. Icon for every entry is also displayed
+   if it exists. If the icon does not exist, or user wants to
+   change it, clicking an icon will run file picker, which can be
+   used to select alternative icon of choice. Icon should not be
+   bigger than 48x48 pixels, which is default size for Front Panel
+   icons, it can be less, but it will not looks nice in that case.
+   Fileds with name and command can be also edited before applying
+   new settings to the button. Name of the action is visible on
+   the contextual menu called with mouse button 3 on the Front
+   Panel's icon.
+
+   Adding or editing Front Panel applets is currently not
+   supported, one will have to edit
+   $FVWM_USERDIR/FrontPanel.actions to get new applet on the Front
+   Panel.
+
+   Key Bindings:
+
+     * Escape: Quits Front Panel Icon Manager.
+     * Ctrl+Q: Quits Front Panel Icon Manager.
+     * Sun Help and F1: Displays this help text.
+     * Ctrl+Return: Perform Apply button action and exit.
+     __________________________________________________________
+
+5.16. System Action Dialog
 
    This is the login/logout form with the possibilities to reboot
    or shutdown the system, or change X session. It has also
@@ -2851,7 +2887,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    Logout, Suspend, Reboot, Shutdown ... section.
      __________________________________________________________
 
-5.16. Sysinfo
+5.17. Sysinfo
 
    Well known Workstation Information info dialog. It doesn't have
    any functions apart close (Dismiss) button. It's role is
@@ -2868,7 +2904,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    displays this documentation.
      __________________________________________________________
 
-5.17. Window Style Manager
+5.18. Window Style Manager
 
    This GUI tool is not just exact copy of the similary named CDE
    tool Window Style Manager. NsCDE Window Style Manager extends
@@ -2895,7 +2931,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    clone this is more than enough.
      __________________________________________________________
 
-5.17.1. Configuration Section: Window Behavior
+5.18.1. Configuration Section: Window Behavior
 
      * Only Pointer Inside Window Makes Focus: this configures so
        called MouseFocus as catch-all FVWM Style (*). See fvwm(1)
@@ -2931,7 +2967,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        MoveThreshold option. 5 pixels is the default.
      __________________________________________________________
 
-5.17.2. Configuration Section: Window Icons
+5.18.2. Configuration Section: Window Icons
 
      * Use Icon Box: if this option is selected, main FVWM
        configuration in Main.fvwmconf will spawn FvwmIconBox
@@ -2952,7 +2988,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Maximum Icon Size: in pixels. See IconSIze in fvwm(1).
      __________________________________________________________
 
-5.17.3. Configuration Section: Page Edges
+5.18.3. Configuration Section: Page Edges
 
      * Raise Front Panel On Page Change: as is says, when current
        active page changes, Front Panel will be raised.
@@ -2983,7 +3019,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        Defaults to 320 pixels.
      __________________________________________________________
 
-5.17.4. Configuration Section: Animation
+5.18.4. Configuration Section: Animation
 
    This tab controls behavior of the FvwmAnimate. See
    FvwmAnimate(1).
@@ -2999,7 +3035,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        really slower than on host system with the same parameters.
      __________________________________________________________
 
-5.17.5. Misc Window Style Manager Functions
+5.18.5. Misc Window Style Manager Functions
 
    Button Default on the top right edge of the window will read
    system defaults into options and they will be set in permanent
@@ -3015,7 +3051,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-5.18. Workspaces and Pages Style Manager (WsPgMgr)
+5.19. Workspaces and Pages Style Manager (WsPgMgr)
 
    This tool is specific to NsCDE. It configures the following
    things:
@@ -3080,7 +3116,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    pointer button.
      __________________________________________________________
 
-5.19. NsCDE Process Manager (NProcMgr)
+5.20. NsCDE Process Manager (NProcMgr)
 
    This tool is specific to NsCDE. It manages NsCDE FVWM and rest
    NsCDE processes, and re-reads given part of the FVWM
@@ -3468,7 +3504,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    are managed by the Workspace and Pages Manager while
    menudclicktm infostore variable is managed by the Pointer Style
    Manager. In NsCDE.conf, defaults for page edges, focus, icons,
-   and such are defined. See Section 5.17 and fvwm(1) for details.
+   and such are defined. See Section 5.18 and fvwm(1) for details.
    Since this is read by FVWM, user can set in this file local
    variables and additional configuration options if needful,
    which are not covered in other parts of the configuration.

@@ -316,6 +316,7 @@ GUI tools are:
 <listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
 <listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
 <listitem><para>Subpanel Manager (SubpanelMgr) - FvwmScript</para></listitem>
+<listitem><para>Front Panel Icon Manager (FpIconMgr) - FvwmScript</para></listitem>
 <listitem><para>Subpanel Settings (SubpanelSettings) - FvwmScript</para></listitem>
 <listitem><para>System Action Dialog (SysActionDialog) - FvwmScript, sudo</para></listitem>
 <listitem><para>Sysinfo - FvwmScript, python</para></listitem>
@@ -3518,6 +3519,51 @@ Key Bindings:
 </para></listitem>
 <listitem><para>
 <keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+</itemizedlist>
+</para>
+
+</sect2>
+
+
+<sect2 id="NsCDE-FpIconMgr">
+<title>Front Panel Icon Manager</title>
+<para>
+Front Panel Icon Manager can set icon and command of the empty Front Panel Button, or change
+it's icon and content if selected from the Front Panel button contextual menu with the mouse
+button 3 as <guimenuitem>Change This Button</guimenuitem>. Front Panel Icon Manager edits
+user's <link linkend="FrontPanel_actions"><filename>$FVWM_USERDIR/FrontPanel.actions</filename></link>.
+</para>
+<para>
+Front Panel Icon Manager has a list of system recognized desktop applications, and text fields
+with their names, commands and icon paths. Icon for every entry is also displayed if it exists.
+If the icon does not exist, or user wants to change it, clicking an icon will run file picker,
+which can be used to select alternative icon of choice. Icon should not be bigger than 48x48
+pixels, which is default size for Front Panel icons, it can be less, but it will not looks nice
+in that case. Fileds with name and command can be also edited before applying new settings to
+the button. Name of the action is visible on the contextual menu called with mouse button 3
+on the Front Panel's icon.
+</para>
+<para>
+Adding or editing Front Panel applets is currently not supported, one will have to edit
+<link linkend="FrontPanel_actions"><filename>$FVWM_USERDIR/FrontPanel.actions</filename></link>
+to get new applet on the Front Panel.
+</para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Front Panel Icon Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Q</keysym>: Quits Front Panel Icon Manager.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Perform <guibutton>Apply</guibutton> button action and exit.
 </para></listitem>
 </itemizedlist>
 </para>
