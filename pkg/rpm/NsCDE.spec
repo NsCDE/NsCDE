@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -77,4 +77,12 @@ autoreconf -ivf
 %changelog
 * Tue Nov 9 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0
 - First RPM package, working example
+
+* Fri Dec 3 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-3
+- Introduce Front Panel Icon Manager
+- Update docs and locales
+- Misc minor fixes
+- Move Front Panel icons feature
+- Rename Subpanel Items feature
+- Input checking
 
