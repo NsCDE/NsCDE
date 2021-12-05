@@ -1339,7 +1339,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
          e. Delete Subpanel will disable subpanel for above this
             icon (without resetting user's configuration for it),
             and
-         f. Help will call this documentation.
+         f. Help will try to find matching man page for a button's
+            command or appropriate part of NsCDE documentation if
+            the entry is the NsCDE component. Failing this, it
+            will display this document. Documentation is displayed
+            as HTML in the default www browser.
      * In addition to iconification, Front Panel can be shaded to
        the bottom edge of the screen with Shift-Esc action, and
        put back in it's place with the same key binding when it is
@@ -1541,7 +1545,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
      * Rename: Rename the current item on the subpanel
      * Delete: Delete the current item from the subpanel (warning
        message will appear before deletion is finally performed)
-     * Help: Display relevant documentation
+     * Help: Display relevant documentation in a browser: this
+       will try to find matching man page for the subpanel's entry
+       command or appropriate part of NsCDE documentation if the
+       entry is the NsCDE component. Failing this, it will display
+       this document.
 
    If move or delete action is silently not performed, this is
    most likely the situation where user's
