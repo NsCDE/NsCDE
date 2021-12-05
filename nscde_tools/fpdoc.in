@@ -92,18 +92,21 @@ function view_man_page
       man -Thtml "$Str" > ${TMPDIR}/${Unique}_man_page_${Str}.html
    ;;
    FreeBSD|NetBSD|OpenBSD|DrygonFly)
-      if [ -x "mandoc" ]; then
+      whence -q mandoc
+      if (($? == 0))
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       fi
    ;;
    SunOS)
-      if [ -x "mandoc" ]; then
+      whence -q mandoc
+      if (($? == 0))
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       fi
    ;;
    *)
       # Unknown. Try this.
-      if [ -x "mandoc" ]; then
+      whence -q mandoc
+      if (($? == 0))
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       else
          man -Thtml "$Str" > ${TMPDIR}/${Unique}_man_page_${Str}.html
@@ -119,7 +122,7 @@ function man_path
 {
    case $OS in
    Linux|FreeBSD|NetBSD|OpenBSD|DrygonFly)
-      man -w "$1" >/dev/null 2>&1
+      man -w "$1" 2>/dev/null
    ;;
    SunOS)
       # Idiots ...
@@ -195,10 +198,10 @@ function locate_man_candidate
       Str="${Str%% *}"
    fi
 
-   man_path "$Str"
+   man_path "$Str" >/dev/null
    if (($? != 0)); then
       Str=$(echo "$Str" | sed 's/^\(.*\)\(\.\|-\|_\)\(qt5\|qt4\|qt\|gtk4\|gtk3\|gtk2\|gtk\|x11\|bin\|wrapper\|beta\|gui\|pkexec\)/\1/g')
-      man_path "$Str"
+      man_path "$Str" > /dev/null
       if (($? == 0)); then
          return 0
       fi
@@ -208,19 +211,19 @@ function locate_man_candidate
 
    for suffix in qt5 qt4 qt gtk4 gtk3 gtk2 gtk x11 bin wrapper beta gui esr
    do
-      man_path "${Str}-${suffix}"
+      man_path "${Str}-${suffix}" >/dev/null
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
       fi
 
-      man_path "${Str}_${suffix}"
+      man_path "${Str}_${suffix}" >/dev/null
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
       fi
 
-      man_path "${Str}.${suffix}"
+      man_path "${Str}.${suffix}" >/dev/null
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
