@@ -151,6 +151,11 @@ function locate_man_candidate
       Str=${Str##*/}
    fi
 
+   echo "${Str}" | egrep -q -- "^Exec exec "
+   if (($? == 0)); then
+      Str=$(echo "$Str" | sed 's/^Exec exec //g')
+   fi
+
    echo "${Str%% *}" | egrep -q -- "="
    if (($? == 0)); then
       Str0="${Str% *}"

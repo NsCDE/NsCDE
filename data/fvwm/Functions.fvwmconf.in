@@ -2024,6 +2024,8 @@ AddToFunc f_FrontPanelLockMenu
 + I DestroyMenu recreate m_FrontPanelLockMenu
 + I AddToMenu m_FrontPanelLockMenu " $[gt.Lock] " Title
 + I Test (EnvMatch infostore.nscde_use_xscreensaver 0) AddToMenu m_FrontPanelLockMenu "$[gt.(Disabled)]" Nop
++ I Test (EnvMatch infostore.nscde_use_xscreensaver 0, x xscreensaver) \
+  AddToMenu m_FrontPanelLockMenu "$[gt.&Help]" Exec exec $[infostore.terminal] -e "man xscreensaver"
 + I Test (EnvMatch infostore.nscde_use_xscreensaver 0) Break 1
 + I AddToMenu m_FrontPanelLockMenu "$[gt.&Lock Display]" Test (x xscreensaver) f_Xscreensaver -lock
 + I Test (!EnvMatch infostore.xsc_status "Alck_disabledO") AddToMenu m_FrontPanelLockMenu "$[gt.&Suspend Screensaver]" Test (x xscreensaver) f_Xscreensaver -stop
