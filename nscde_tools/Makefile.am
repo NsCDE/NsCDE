@@ -22,6 +22,7 @@ SCRIPTINS = \
 	fp_manage_subpanel \
 	fpclock \
 	fpexec \
+	fpdoc \
 	fpseticon \
 	generate_app_menus \
 	generate_subpanels \

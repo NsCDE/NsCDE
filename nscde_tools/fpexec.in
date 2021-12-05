@@ -25,6 +25,20 @@ if [ "x${ActionLine}" != "x" ]; then
       if [ "$check" == "NOCHK" ]; then
          echo "Exec exec $cmd"
       elif [ "$check" == "FVWM" ]; then
+         # Find the docs if this was mouse button 3
+         if [ "${cmd%% *}" == "f_FrontPanelPropsMenu" ] && [ "$mousebutton" == "M3" ]; then
+            ExamineActionLine=$(egrep "^${Button},.*,M1,.*,.*" $UserActionFile $SysActionFile | head -1)
+            ExamineActionLine="${ExamineActionLine//\"}"
+            if [ "${ExamineActionLine##*,}" != "__APPCMD8__" ]; then
+               echo "InfoStoreAdd fp_help_line \"${ExamineActionLine##*,}\""
+            else
+               if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
+                  echo "InfoStoreAdd fp_help_line \"$[infostore.appmgr]\""
+               else
+                  echo "InfoStoreAdd fp_help_line \"$[infostore.xeditor]\""
+               fi
+            fi
+         fi
          echo "$cmd"
       elif [ "$check" == "__SPECIAL8__" ]; then
          if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then

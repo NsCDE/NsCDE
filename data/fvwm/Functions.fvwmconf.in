@@ -689,11 +689,12 @@ AddToFunc f_FrontPanelPropsMenu
     AddToMenu m_FrontPanelPropsMenu "$[gt.Delete Subpanel]" \
     f_FrontPanelManageSubpanels $0 -d
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
-+ I AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html
++ I AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp "$[infostore.fp_help_line]"'
 + I ChangeMenuStyle CommonAppMenu m_FrontPanelPropsMenu
 + I Popup m_FrontPanelPropsMenu mouse -0m -0m
 + I InfoStoreRemove fp_btn_num
 + I InfoStoreRemove fp_last_btn
++ I InfoStoreRemove fp_help_line
 
 DestroyFunc f_FrontPanelManageSubpanels
 AddToFunc f_FrontPanelManageSubpanels
@@ -702,6 +703,15 @@ AddToFunc f_FrontPanelManageSubpanels
 + I Exec exec $[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen
 + I Schedule 800 f_ReadCfg Subpanels
 + I Schedule 1200 f_RestartFrontPanel
+
+# Help displaying entries from subpanels which are infostore variables fpdoc script
+# does not know how to dereference them, so when "infostore." is detected, we send
+# it trough FVWM function to be resolved, then feed the script back, but calling it
+# with "-fp", not "-subp" to avoid endless loop for infostore variables which are
+# undefined. A hack, but it works.
+DestroyFunc f_SubpanelInfostoreHelpHelper
+AddToFunc f_SubpanelInfostoreHelpHelper
++ I PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp $[0-]'
 
 DestroyFunc f_SubpanelPropsMenu
 AddToFunc f_SubpanelPropsMenu
@@ -718,7 +728,7 @@ AddToFunc f_SubpanelPropsMenu
   "Exec exec $[NSCDE_TOOLSDIR]/subpanel_menuitem_props -p $0 -s $1 -t \"$2\" -n \"$[infostore.inputform.text]\" -a rename" "Nop"
 + I AddToMenu m_SubpanelPropsMenu "$[gt.Delete]" Exec exec $[NSCDE_TOOLSDIR]/subpanel_menuitem_props -p $0 -s $1 -t "$2" -d
 + I AddToMenu m_SubpanelPropsMenu "" Nop
-+ I AddToMenu m_SubpanelPropsMenu "$[gt.Help]" f_DisplayURL "$[gt.Subpanels Help]" html/NsCDE-Subpanels.html
++ I AddToMenu m_SubpanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -subp $0 $1'
 + I ChangeMenuStyle CommonAppMenu m_SubpanelPropsMenu
 + I Popup m_SubpanelPropsMenu mouse -0m -0m
 
@@ -1996,7 +2006,7 @@ AddToFunc f_ControlFrontPanelMenu
 + I AddToMenu m_ControlFrontPanelMenu "$[gt.Restart Front Panel Lite]" KillModule FvwmScript FpLite
 + I AddToMenu m_ControlFrontPanelMenu "$[gt.Restart Front Panel]" f_RestartFrontPanel
 + I AddToMenu m_ControlFrontPanelMenu "" Nop
-+ I AddToMenu m_ControlFrontPanelMenu "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html#NsCDE-FrontPanel
++ I AddToMenu m_ControlFrontPanelMenu "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html
 
 DestroyFunc f_CtrlFPLaunchers
 AddToFunc f_CtrlFPLaunchers
@@ -2007,7 +2017,7 @@ AddToFunc f_CtrlFPLaunchers
 + I Test (!EnvMatch infostore.FP.LeftLaunchersNum 0) AddToMenu m_CtrlFPLaunchers "$[gt.Remove Left Launcher]" f_AddRemoveLauncher -R Left
 + I Test (!EnvMatch infostore.FP.RightLaunchersNum 0) AddToMenu m_CtrlFPLaunchers "$[gt.Remove Right Launcher]" f_AddRemoveLauncher -R Right
 + I AddToMenu m_CtrlFPLaunchers "" Nop
-+ I AddToMenu m_CtrlFPLaunchers "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html#NsCDE-FrontPanelNrOofLaunchers
++ I AddToMenu m_CtrlFPLaunchers "$[gt.Help]" f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html
 
 DestroyFunc f_FrontPanelLockMenu
 AddToFunc f_FrontPanelLockMenu

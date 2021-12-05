@@ -1,0 +1,242 @@
+#!@KSH@
+
+Mode="$1"
+shift 1
+
+function find_cmd_in_subpanel
+{
+   if [ -e "${FVWM_USERDIR}/Subpanels.actions" ]; then
+      RawStr=$(egrep "^S${SubpanelNo},ENTRY,.*,.*,.*" "${FVWM_USERDIR}/Subpanels.actions" | sed -n ${LineInSubpanel}p | cut -d"," -f6)
+      if [ "x$RawStr" == "x" ]; then
+         RawStr=$(egrep "^S${SubpanelNo},ENTRY,.*,.*,.*" "${NSCDE_DATADIR}/defaults/Subpanels.actions" | sed -n ${LineInSubpanel}p | cut -d"," -f6)
+      fi
+   else
+      RawStr=$(egrep "^S${SubpanelNo},ENTRY,.*,.*,.*" "${NSCDE_DATADIR}/defaults/Subpanels.actions" | sed -n ${LineInSubpanel}p | cut -d"," -f6)
+   fi
+
+   if [ "x$RawStr" != "x" ]; then
+      Str="$(echo "$RawStr" | tr -d '\042\134')"
+      echo "$Str" | egrep -q '\$\[infostore\..*\]'
+      if (($? == 0)); then
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_SubpanelInfostoreHelpHelper \"$Str\""
+         exit 0
+      fi
+   else
+      echo "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
+      exit 1
+   fi
+}
+
+if [ "$Mode" == "-fp" ]; then
+   Str="$@"
+elif [ "$Mode" == "-subp" ]; then
+   SubpanelNo="$1"
+   LineInSubpanel="$2"
+   find_cmd_in_subpanel
+else
+   echo "Error: ${0##*/}: Unknown mode of operation."
+   exit 1
+fi
+
+OS=$(uname -s)
+
+echo "Echo DEBUG DEBUG DEBUG: We got this string from functions: $Str"
+
+if [ "x$TMPDIR" == "x" ]; then
+   TMPDIR=${FVWM_USERDIR}/tmp
+   if [ ! -d "$TMPDIR" ]; then
+      mkdir -p "$TMPDIR"
+   fi
+fi
+
+function find_in_nscde_manual
+{
+   Str="$1"
+
+   if [ ! -e "${NSCDE_DATADIR}/help/fp_help.catalog" ]; then
+      echo "f_Notifier \"Front Panel Help\" \"Dismiss\" \"NsCDE/Error.xpm\" \
+      \"$[gt.Catalog of NsCDE internal docs in this installation is missing.]\" fpdoc"
+      return 1
+   fi
+
+   for strs in $Str
+   do
+      egrep -w -- "$strs" "${NSCDE_DATADIR}/help/fp_help.catalog" >/dev/null 2>&1
+      if (($? == 0)); then
+         check_catalog="$strs"
+         break
+      fi
+   done
+
+   if [ "x$check_catalog" != "x" ]; then
+      check_catalog=$(egrep "$check_catalog" "${NSCDE_DATADIR}/help/fp_help.catalog" | head -1)
+      help_text=$(echo "$check_catalog" | cut -d"," -f2)
+      help_page=$(echo "$check_catalog" | cut -d"," -f3)
+      echo "f_DisplayURL \"\$[gt.${help_text}]\" ${help_page}"
+   else
+      return 1
+   fi
+}
+
+function view_man_page
+{
+   locate_man_candidate
+   if (($? != 0)); then
+      return 1
+   fi
+
+   Unique="$(id -u)_$$_$RANDOM"
+
+   case $OS in
+   Linux)
+      man -Thtml "$Str" > ${TMPDIR}/${Unique}_man_page_${Str}.html
+   ;;
+   FreeBSD|NetBSD|OpenBSD|DrygonFly)
+      if [ -x "mandoc" ]; then
+         mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
+      fi
+   ;;
+   SunOS)
+      if [ -x "mandoc" ]; then
+         mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
+      fi
+   ;;
+   *)
+      # Unknown. Try this.
+      if [ -x "mandoc" ]; then
+         mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
+      else
+         man -Thtml "$Str" > ${TMPDIR}/${Unique}_man_page_${Str}.html
+      fi
+   ;;
+   esac
+
+   echo "Exec exec \$[infostore.browser] ${TMPDIR}/${Unique}_man_page_${Str}.html"
+   echo "Schedule 10000 Exec exec rm -f ${TMPDIR}/${Unique}_man_page_${Str}.html"
+}
+
+function man_path
+{
+   case $OS in
+   Linux|FreeBSD|NetBSD|OpenBSD|DrygonFly)
+      man -w "$1" >/dev/null 2>&1
+   ;;
+   SunOS)
+      # Idiots ...
+      get_section=$(man -l "$1" | awk '{ print $1 }' | \
+      $NSCDE_TOOLSDIR/ised -c 's/\(.*\)\((.*)\)\(.*\)/\2/g' -o -f - | tr -d '()')
+      get_base_manpath=$(man -l "$1" | nawk '{ print $3 }')
+      if [ -e "${get_base_manpath}/man${get_section}/${S1}" ]; then
+         echo "${get_base_manpath}/man${get_section}/${S1}"
+         return 0
+      else
+         return 1
+      fi
+   ;;
+   esac
+}
+
+function locate_man_candidate
+{
+   # This is a total fuzzy mess. But considering with what it needs
+   # to deal, we sacrifice this ugliness for having more that 90%
+   # chance to get proper documentation displayed.
+
+   # Save it for find_in_nscde_manual in original form
+   SaveStr="$Str"
+
+   # Stip path if it exists
+   echo "${Str%% *}" | egrep -q "^/"
+   if (($? == 0)); then
+      Str=${Str##*/}
+   fi
+
+   echo "${Str%% *}" | egrep -q -- "="
+   if (($? == 0)); then
+      Str0="${Str% *}"
+      Str1="${Str0#* }"
+      Str="${Str0%% *}"
+   fi
+
+   echo "${Str% *}" | egrep -q -- "nscde_fvwmclnt"
+   if (($? == 0)); then
+      EndStr="${Str##* }"
+      if [ "$EndStr" == "menu://applications/" ]; then
+         Str0="${SaveStr//nscde_fvwmclnt Exec exec }"
+         Str="${Str0%% *}"
+      else
+         # Double place holder, may be extended ...
+         Str0="${SaveStr//nscde_fvwmclnt Exec exec }"
+         Str="${Str0%% *}"
+      fi
+
+      StripStr="${SaveStr//nscde_fvwmclnt }"
+      if [ "${StripStr%% *}" == "f_ToggleFvwmModule" ]; then
+         Str0="${StripStr//f_ToggleFvwmModule }"
+         Str1="${Str0%% *}"
+         if [ "$Str1" != "FvwmScript" ]; then
+            Str="$Str1"
+         fi
+      fi
+   fi
+
+   echo "${Str% *}" | egrep -q -- " "
+   if (($? == 0)); then
+      Str="${Str%% *}"
+   fi
+
+   echo "${Str}" | egrep -q -- " "
+   if (($? == 0)); then
+      Str="${Str%% *}"
+   fi
+
+   man_path "$Str"
+   if (($? != 0)); then
+      Str=$(echo "$Str" | sed 's/^\(.*\)\(\.\|-\|_\)\(qt5\|qt4\|qt\|gtk4\|gtk3\|gtk2\|gtk\|x11\|bin\|wrapper\|beta\|gui\|pkexec\)/\1/g')
+      man_path "$Str"
+      if (($? == 0)); then
+         return 0
+      fi
+   else
+      return 0
+   fi
+
+   for suffix in qt5 qt4 qt gtk4 gtk3 gtk2 gtk x11 bin wrapper beta gui esr
+   do
+      man_path "${Str}-${suffix}"
+      if (($? == 0)); then
+         Str="${Str}-${suffix}"
+         return 0
+      fi
+
+      man_path "${Str}_${suffix}"
+      if (($? == 0)); then
+         Str="${Str}-${suffix}"
+         return 0
+      fi
+
+      man_path "${Str}.${suffix}"
+      if (($? == 0)); then
+         Str="${Str}-${suffix}"
+         return 0
+      fi
+   done
+
+   # Trap non-matching
+   return 1
+}
+
+view_man_page
+if (($? != 0)); then
+   FinalStr=$(echo "$SaveStr" | sed 's/Exec exec//g')
+   find_in_nscde_manual "$FinalStr"
+   if (($? != 0)); then
+      # Final fallback
+      if [ "$Mode" == "-fp" ]; then
+         echo 'f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html'
+      else
+         echo 'f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-Subpanels.html'
+      fi
+   fi
+fi
+
