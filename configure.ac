@@ -358,6 +358,7 @@ AC_OUTPUT(
 	nscde_tools/fontmgr
 	nscde_tools/fpclock
 	nscde_tools/fpexec
+	nscde_tools/fpdoc
 	nscde_tools/fp_manage_subpanel
 	nscde_tools/fpseticon
 	nscde_tools/generate_app_menus
