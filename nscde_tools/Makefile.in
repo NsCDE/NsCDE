@@ -102,7 +102,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = acpimgr appfinder backdropmgr bootstrap colormgr \
-	colorpicker fontmgr fpclock fpexec fp_manage_subpanel \
+	colorpicker fontmgr fpclock fpexec fpdoc fp_manage_subpanel \
 	fpseticon generate_app_menus generate_subpanels getdpi getfont \
 	get_logical_screens ised keymenu mkpagemenu \
 	migrate_nscde_1x_2x strip_icon_path subpanel_menuitem_props \
@@ -199,7 +199,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/acpimgr.in \
 	$(srcdir)/colormgr.in $(srcdir)/colorpicker.in \
 	$(srcdir)/confget.in $(srcdir)/confset.in $(srcdir)/fontmgr.in \
 	$(srcdir)/fp_manage_subpanel.in $(srcdir)/fpclock.in \
-	$(srcdir)/fpexec.in $(srcdir)/fpseticon.in \
+	$(srcdir)/fpdoc.in $(srcdir)/fpexec.in $(srcdir)/fpseticon.in \
 	$(srcdir)/generate_app_menus.in \
 	$(srcdir)/generate_subpanels.in \
 	$(srcdir)/get_logical_screens.in $(srcdir)/getdpi.in \
@@ -313,7 +313,9 @@ SYS_CONFDIR = @SYS_CONFDIR@
 VERSION = @VERSION@
 XCLIP = @XCLIP@
 XDG_CONFIG_PATH_BOOL = @XDG_CONFIG_PATH_BOOL@
+XDG_CONF_DIRS = @XDG_CONF_DIRS@
 XDG_DATA_PATH_BOOL = @XDG_DATA_PATH_BOOL@
+XDG_DATA_ROOTDIRS = @XDG_DATA_ROOTDIRS@
 XDOTOOL = @XDOTOOL@
 XDPYINFO = @XDPYINFO@
 XEXT_LIB = @XEXT_LIB@
@@ -395,6 +397,7 @@ SCRIPTINS = \
 	fp_manage_subpanel \
 	fpclock \
 	fpexec \
+	fpdoc \
 	fpseticon \
 	generate_app_menus \
 	generate_subpanels \
@@ -468,6 +471,8 @@ fontmgr: $(top_builddir)/config.status $(srcdir)/fontmgr.in
 fpclock: $(top_builddir)/config.status $(srcdir)/fpclock.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 fpexec: $(top_builddir)/config.status $(srcdir)/fpexec.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+fpdoc: $(top_builddir)/config.status $(srcdir)/fpdoc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 fp_manage_subpanel: $(top_builddir)/config.status $(srcdir)/fp_manage_subpanel.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
