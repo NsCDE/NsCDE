@@ -304,11 +304,21 @@ function manage_entry
 function add_to_main_panel
 {
    if [ -e "$FVWM_USERDIR/FrontPanel.actions" ]; then
-      egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+      egrep -q "^Btn${subpid},.*,.*,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
       if (($? == 0)); then
-         RestartFP=1
+         egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$FVWM_USERDIR/FrontPanel.actions"
+         if (($? == 0)); then
+            RestartFP=1
+         else
+            RestartFP=0
+         fi
       else
-         RestartFP=0
+         egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions"
+         if (($? == 0)); then
+            RestartFP=1
+         else
+            RestartFP=0
+         fi
       fi
    else
       egrep -q "^Btn${subpid},__APPLET__,M1,.*,.*" "$NSCDE_DATADIR/defaults/FrontPanel.actions"
