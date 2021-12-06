@@ -93,20 +93,20 @@ function view_man_page
    ;;
    FreeBSD|NetBSD|OpenBSD|DrygonFly)
       whence -q mandoc
-      if (($? == 0))
+      if (($? == 0)); then
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       fi
    ;;
    SunOS)
       whence -q mandoc
-      if (($? == 0))
+      if (($? == 0)); then
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       fi
    ;;
    *)
       # Unknown. Try this.
       whence -q mandoc
-      if (($? == 0))
+      if (($? == 0)); then
          mandoc -T html $(man_path "$Str") > ${TMPDIR}/${Unique}_man_page_${Str}.html
       else
          man -Thtml "$Str" > ${TMPDIR}/${Unique}_man_page_${Str}.html
