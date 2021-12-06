@@ -30,7 +30,7 @@ if [ "x${ActionLine}" != "x" ]; then
             ExamineActionLine=$(egrep "^${Button},.*,M1,.*,.*" $UserActionFile $SysActionFile | head -1)
             ExamineActionLine="${ExamineActionLine//\"}"
             if [ "${ExamineActionLine##*,}" != "__APPCMD8__" ]; then
-               if [[ "$ExamineActionLine" == *(f_DisplayURL)* ]]; then
+               if [[ "$ExamineActionLine" =~ f_DisplayURL ]]; then
                   echo "InfoStoreAdd fp_help_line SPECIAL:NSCDE_DOCS"
                else
                   echo "InfoStoreAdd fp_help_line \"${ExamineActionLine##*,}\""
