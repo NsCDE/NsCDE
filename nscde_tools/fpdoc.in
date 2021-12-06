@@ -129,8 +129,8 @@ function man_path
       get_section=$(man -l "$1" | awk '{ print $1 }' | \
       $NSCDE_TOOLSDIR/ised -c 's/\(.*\)\((.*)\)\(.*\)/\2/g' -o -f - | tr -d '()')
       get_base_manpath=$(man -l "$1" | nawk '{ print $3 }')
-      if [ -e "${get_base_manpath}/man${get_section}/${S1}" ]; then
-         echo "${get_base_manpath}/man${get_section}/${S1}"
+      if [ -e "${get_base_manpath}/man${get_section}/${1}.${get_section}" ]; then
+         echo "${get_base_manpath}/man${get_section}/${1}.${get_section}"
          return 0
       else
          return 1
@@ -198,10 +198,10 @@ function locate_man_candidate
       Str="${Str%% *}"
    fi
 
-   man_path "$Str" >/dev/null
+   man_path "$Str" >/dev/null 2>&1
    if (($? != 0)); then
       Str=$(echo "$Str" | sed 's/^\(.*\)\(\.\|-\|_\)\(qt5\|qt4\|qt\|gtk4\|gtk3\|gtk2\|gtk\|x11\|bin\|wrapper\|beta\|gui\|pkexec\)/\1/g')
-      man_path "$Str" > /dev/null
+      man_path "$Str" > /dev/null 2>&1
       if (($? == 0)); then
          return 0
       fi
@@ -211,19 +211,19 @@ function locate_man_candidate
 
    for suffix in qt5 qt4 qt gtk4 gtk3 gtk2 gtk x11 bin wrapper beta gui esr
    do
-      man_path "${Str}-${suffix}" >/dev/null
+      man_path "${Str}-${suffix}" >/dev/null 2>&1
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
       fi
 
-      man_path "${Str}_${suffix}" >/dev/null
+      man_path "${Str}_${suffix}" >/dev/null 2>&1
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
       fi
 
-      man_path "${Str}.${suffix}" >/dev/null
+      man_path "${Str}.${suffix}" >/dev/null 2>&1
       if (($? == 0)); then
          Str="${Str}-${suffix}"
          return 0
