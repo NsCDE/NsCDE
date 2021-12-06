@@ -689,7 +689,10 @@ AddToFunc f_FrontPanelPropsMenu
     AddToMenu m_FrontPanelPropsMenu "$[gt.Delete Subpanel]" \
     f_FrontPanelManageSubpanels $0 -d
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
-+ I AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp "$[infostore.fp_help_line]"'
++ I Test (!EnvMatch infostore.fp_help_line SPECIAL:*) \
+    AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp "$[infostore.fp_help_line]"'
++ I Test (EnvMatch infostore.fp_help_line SPECIAL:NSCDE_DOCS) \
+    AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" f_DisplayURL "$[gt.Documentation]" html/index.html
 + I ChangeMenuStyle CommonAppMenu m_FrontPanelPropsMenu
 + I Popup m_FrontPanelPropsMenu mouse -0m -0m
 + I InfoStoreRemove fp_btn_num
