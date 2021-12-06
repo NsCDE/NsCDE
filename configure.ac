@@ -163,6 +163,34 @@ AC_SUBST(NOSTDICONPATH)
 AC_SUBST(NOSTDICONDIR)
 AC_SUBST(NOSTDICONDIRREGEX)
 
+XDG_DATA_ROOTDIRS="$DATA_ROOTDIR/"
+TRY_RTDT="/usr/share/"
+AS_IF([test "x$TRY_RTDT" != "x$DATA_ROOTDIR/"], [ XDG_DATA_ROOTDIRS=$XDG_DATA_ROOTDIRS:$TRY_RTDT ])
+TRY_RTDT="/usr/local/share/"
+AS_IF([test "x$TRY_RTDT" != "x$DATA_ROOTDIR/"], [ XDG_DATA_ROOTDIRS=$XDG_DATA_ROOTDIRS:$TRY_RTDT ])
+
+echo "$host_os" | egrep -q "netbsd"
+if test $? -eq 0; then
+   TRY_RTDT="/usr/pkg/share/"
+   AS_IF([test "x$TRY_RTDT" != "x$DATA_ROOTDIR/"], [ XDG_DATA_ROOTDIRS=$XDG_DATA_ROOTDIRS:$TRY_RTDT ])
+fi
+
+AC_SUBST(XDG_DATA_ROOTDIRS)
+
+XDG_CONF_DIRS="$SYS_CONFDIR/xdg"
+TRY_SYSCF="/etc/xdg"
+AS_IF([test "x$TRY_SYSCF" != "x$SYS_CONFDIR/xdg"], [ XDG_CONF_DIRS=$XDG_CONF_DIRS:$TRY_SYSCF ])
+TRY_SYSCF="/usr/local/etc/xdg"
+AS_IF([test "x$TRY_SYSCF" != "x$SYS_CONFDIR/xdg"], [ XDG_CONF_DIRS=$XDG_CONF_DIRS:$TRY_SYSCF ])
+
+echo "$host_os" | egrep -q "netbsd"
+if test $? -eq 0; then
+   TRY_SYSCF="/usr/pkg/etc/xdg"
+   AS_IF([test "x$TRY_SYSCF" != "x$SYS_CONFDIR/xdg"], [ XDG_CONF_DIRS=$XDG_CONF_DIRS:$TRY_SYSCF ])
+fi
+
+AC_SUBST(XDG_CONF_DIRS)
+
 # Dependencies
 AC_PATH_PROGS([KSH],[ksh93 ksh],[no])
 AC_CHECK_PROGS(SED, sed gsed, "no")
