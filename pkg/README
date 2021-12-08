@@ -1,0 +1,99 @@
+Packaging NsCDE
+
+If someone wants to make own Debian, RPM or Arch package, or as a template
+for distribution package, this directory contains workable files for that
+task.
+
+1. Debian, Ubuntu, MX Linux and friends
+
+- Obtain NsCDE as a tarball release or clone master branch from Github.
+
+- Make some build directory:
+
+  mkdir build
+  cd build
+
+- Move the content of NsCDE release or master branch to it
+
+  mv ~/NsCDE nscde-2.X # (where X is 0, 1, 2 etc ...)
+  cd nscde-2.X
+
+- Symlink debian build environment into top directory
+
+  ln -s pkg/debian
+
+- Make sure you have devscripts, gcc, autoconf, automake and
+  NsCDE build time dependencies (see debian/control)
+
+  apt install devscripts
+
+- Build a package
+
+  debuild -uc -us -b
+
+- The result will be in the parent directory. Install it.
+
+  cd ..
+  sudo -i || su -
+  dpkg -i ./nscde_2.X-Y_<arch>.deb
+
+That's it.
+
+
+2. Red Hat, CentOS, Fedora, Open SuSE and similar:
+
+- Obtain NsCDE as a tarball release.
+
+- Optional step: if installing from the git master branch
+  instead of release tarball, make a tarball prior to building:
+
+  mv NsCDE NsCDE-2.0
+  tar cpzf NsCDE-2.0.tar.gz NsCDE-2.0
+
+- Make sure you have rpm-build, gcc, autoconf, automake installed
+
+  yum|zypper|dnf install rpm-build
+
+- Instruct rpmbuild to find spec file in the tarball and use it:
+
+  rpmbuild -tb NsCDE-2.X.tar.gz
+
+- Install it:
+
+  sudo -i || su -
+  rpm -i NsCDE-2.X-Y.<arch>.rpm
+
+
+3. Arch Linux (and probably compatible packaging distros?)
+
+- Obtain NsCDE as a tarball release or clone master branch from Github.
+
+- Make some build directory:
+
+  mkdir build
+  cd build
+
+- Move the content of NsCDE release or master branch to it
+
+  mv ~/NsCDE nscde-2.X # (where X is 0, 1, 2 etc ...)
+  or
+  tar xzf ~/NsCDE-2.X.tar.gz
+  mv NsCDE-2.X nscde-2.X
+
+- Pull out PKGBUILD file
+
+  cp nscde-2.X/pkg/pacman/PKGBUILD .
+
+- Make a new tarball:
+
+  tar cpzf nscde-2.X.tar.gz nscde-2.X
+
+- Build a package
+
+   makepkg
+
+Install the package:
+
+   sudo -i || su -
+   pacman -U /home/user/build/nscde-2.X-Y-<arch>.pkg.tar.zst
+
