@@ -1289,23 +1289,22 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        the name of the application will appear and action Copy to
        Main Panel can be choosen. This will edit file
        FrontPanel.actions in user's $FVWM_USERDIR and put
-       appropriate custom launcher. All Front Panel launchers can
-       be customized, including the ones with applets (clock,
-       calendar, mail) instead of static icons. One notable
-       inconvinience here is that subpanel must be enabled and
-       icon installed on that subpanel before it can be copied to
-       the main panel. If one does want to customize icon launcher
-       without having subpanel above it, subpanel can be enabled
-       temporary, icon installed on it, and copied to the main
-       panel, and subpanel above icon disabled afterwards. File
-       FrontPanel.actions can also be edited manually as an
+       appropriate custom launcher. Another possibility is to use
+       Front Panel Icon Manager: Change This Button can be choosen
+       from the contextual menu with third mouse button: from
+       here, a new icon and action can be choosen. All Front Panel
+       launchers can be customized, including the ones with
+       applets (clock, calendar, mail) instead of static icons.
+       File FrontPanel.actions can also be edited manually as an
        alternative (caution should be taken) to achieve the same
        effect. Manual editing is mandatory when one wants to
        install new applets instead of static icons, because this
        cannot be done with gui menu actions. See
        FrontPanel.actions for examples. The other way (full
        control) is by copying FrontPanel.actions configuration
-       file from $NSCDE_ROOT/config to $FVWM_USERDIR.
+       file from $NSCDE_DATADIR/fvwm to $FVWM_USERDIR, but this is
+       not recommended because any fixes or additions in the
+       system FrontPanel.actions will not be seen by the user.
      * In the original CDE, Front Panel is part of the dtwm Window
        Manager binary, while in NsCDE it is configuration of
        FvwmButtons(1) FVWM module. Workspace Manager in the middle
@@ -1313,10 +1312,10 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        FvwmScript(1).
      * On every icon, for the first two mouse buttons different
        action can be assigned. This is used for example 7th icon
-       where mouse button 1 calls Style Manager, while mouse
-       button 2 calls Backdrop Style Manager directly as a quick
-       shortcut. Second (middle) mouse button action can be
-       considered as hidden hack for advanced usage.
+       where mouse button 1 calls Style Manager, while hidden
+       action on mouse button 2 calls Backdrop Style Manager
+       directly as a quick shortcut. Second (middle) mouse button
+       action can be considered as hidden hack for advanced usage.
      * Mouse button 3 on any of the default 10 Front Panel icons
        brings contextual pop-up menu titled by the main action
        from mouse button 1. Action on this menu are:
@@ -1380,7 +1379,7 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        replace Window Options Menu with Front Panel Controls Menu.
      * As FvwmButtons based dock, by default it swallows the
        following applets:
-          + pclock (external standalone app with CDEish skin)
+          + fpclock (external standalone app with CDEish skin)
           + MonthDayApplet (FvwmScript)
           + CheckMailApplet (FvwmScript)
           + WSM / Workspace Manager (FvwmScript)
@@ -1395,15 +1394,30 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        but this can be set manually by putting InfoStore variable
        $[infostore.printmgr] in ~/.NsCDE/NsCDE.conf. Good place
        for personal custom icon and redefinition if printing
-       really doesn't that much to the user. FrontPanel.actions.
+       really doesn't that much to the user.
      * Seventh: NsCDE Style Manager from which all other Style
        Managers can be called.
-     * $[infostore.xeditor] - if defined in
-       $FVWM_USERDIR/NsCDE.conf. If not defined, NsCDE will try to
-       find some usable app and autofill this value on startup.
-     * Semi-empty. By default, it popups 9th subpanel if pressed.
-       A nice idea is to call pavucontrol or some audio mixer on
-       3rd mouse click from FrontPanel.actions.
+     * If some of the file managers which is capable to present
+       menu://applications/ namespace, eighth Front Panel button
+       will act as a sort of Application Manager and call
+       $[infostore.appmgr]. Currently, only pcmanfm and pcmanfm-qt
+       are known to support this namespace. Note however that you
+       cannot drag and drop applications into Front Panel or it's
+       subpanels, because FvwmButtons(1) does not implement
+       drag-and-drop protocol. A stand alone drag and drop
+       receiver is planned for the future, which will be capable
+       to execute arbitrary action when DnD message is received,
+       and this will be implemented then.
+       If niether of this file managers is not installed, icon on
+       this launcher will appear as editor icon and
+       $[infostore.xeditor] - if defined in
+       $FVWM_USERDIR/NsCDE.conf. will be launched when clicked
+       with the first mouse button. If $[infostore.xeditor] is not
+       defined, NsCDE will try to find some usable app from it's
+       static fallback catalog and autofill this value on startup.
+     * Semi-empty. By default, it only popups 9th subpanel if
+       pressed. A nice idea is to call pavucontrol or some audio
+       mixer on 3rd mouse click from FrontPanel.actions.
      * Help, documentation.
      * Front Panel Subpanels 2, 5, 6 and 8 are empty by default,
        but they can be activated with a triple middle pointer
@@ -1457,7 +1471,9 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
    Front Panel buttons or launchers. Default is 10 (5 launchers
    left and 5 launchers right from the Workspace Manager). There
    can be even or unequal number of launchers on any side of the
-   Front Panel. In that way, it is possible to:
+   Front Panel. Limit is 10 launchers per one side (Workspace
+   Manager is the middle) of the Front Panel. That way, it is
+   possible to:
 
      * Extend number of launchers (buttons)
      * Move Workspace Manager to left or right
@@ -1491,10 +1507,22 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
      * Help
 
    Once a new launcher is on the Front Panel, it can be customized
-   by the means of enabling (temporary or permanently) subpanel on
-   which icons can be installed, or by editing configuration
-   $FVWM_USERDIR/FrontPanel.actions and restarting the Front
-   Panel. Under the hood, adding or removing launchers on the
+   in the following ways:
+
+    a. Clicking on a gray empty icon handler. The Front Panel Icon
+       Manager will appear. Here, new action (program) with it's
+       icon or custom icon can be choosen.
+    b. Temporary or permanently enabling subpanel, installing
+       icons on it with Subpanel Manager, then using Copy to Main
+       Panel function from the contextual menu popped up with
+       third mouse button on the new item on subpanel. Icon will
+       be installed in the Front Panel. One can leave subpanel
+       enabled, or disable it back.
+    c. By manual editing of the configuration in
+       $FVWM_USERDIR/FrontPanel.actions and restarting Front Panel
+       to pick up new preferences.
+
+   Under the hood, adding or removing number of launchers on the
    Front Panel is actually editing FVWM InfoStore variables
    FP.LeftLaunchersNum and FP.RightLaunchersNum in the
    $FVWM_USERDIR/NsCDE.conf which are both by default 5. Front
@@ -1515,11 +1543,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
    There is one big difference between CDE and NsCDE subpanels:
    Install Icon is not (and cannot be due to FvwmButtons not
    implementing) drag-and-drop destionation. Click action on
-   Install Icon calls special NsCDE tool for installing and
-   defining items on the subpanel. There is no drag and drop off
-   items from the applicaton manager (the later also doesn't
-   exist, but it can be used as menu://applications/ pseudo path
-   in some file managers).
+   Install Icon calls special NsCDE tool Subpanels Manager for
+   installing, that is, defining items on the subpanel. There is
+   no drag and drop off items from the applicaton manager (the
+   later also doesn't exist, but it can be used as
+   menu://applications/ pseudo path in some file managers).
 
    On every subpanel, last selected entry will remain hilighted
    next time subpanel is popped up again.
@@ -1546,10 +1574,10 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
      * Delete: Delete the current item from the subpanel (warning
        message will appear before deletion is finally performed)
      * Help: Display relevant documentation in a browser: this
-       will try to find matching man page for the subpanel's entry
-       command or appropriate part of NsCDE documentation if the
-       entry is the NsCDE component. Failing this, it will display
-       this document.
+       will try to find a matching man page for the subpanel's
+       entry command or appropriate part of NsCDE documentation if
+       the entry is the NsCDE component. Failing this, it will
+       display this document.
 
    If move or delete action is silently not performed, this is
    most likely the situation where user's
@@ -1568,8 +1596,8 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
    configuration and starts it on the next click on Front Panel
    subpanel launcher. Subpanel Settings is the small and simple
    FvwmScript tool which allows one to rename Subpanel, set it's
-   width for application titles to fit if necessary, and to enable
-   or disable that particular Subpanel.
+   width for application item titles to fit if necessary, and to
+   enable or disable that particular Subpanel.
 
    On the first change with Install Icon or Subpanel Settings,
    non-FVWM configuration file Subpanels.actions will be created
@@ -1649,16 +1677,20 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        same function.
      * Addition: right mouse button on workspace button brings
        contextual menu. From this menu, the following items can be
-       selected: default acion (activate workspace), Rename ... to
-       rename the workspace, Manage ... to call Workspace and Page
-       Style Manager,Popup menu Go to Page ..., Local Pager
-       (visual FvwmPager) (for a workspace, not necessarily the
-       current one), then the option Windows ... to bring up
-       Window List, with windows on that workspace, and last, a
-       small submenu Go to Page ... for changing the active page
-       on the that workspace, which will of course change active
-       workspace to that where page was selected.
-     * Number of Workspaces and Pages can be configured with
+       selected:
+         a. Default acion (activate workspace),
+         b. Rename ... to rename the workspace
+         c. Manage ... to call Workspace and Page Style Manager
+            Popup menu
+         d. Submenu item Go to Page ... for changing the active
+            page on the that workspace, which will of course
+            change active workspace to that where page was
+            selected.
+         e. Local Pager, Local Pager (visual FvwmPager) (for a
+            workspace, not necessarily the current one)
+         f. The last option Windows ... to bring up Window List
+            menu, with window items for that workspace
+     * Number of Workspaces and Pages can be configured with the
        Workspace and Pages Style Manager tool.
 
    State of the buttons is synchronized by FVWM function called

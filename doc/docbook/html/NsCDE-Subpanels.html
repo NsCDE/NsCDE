@@ -8,8 +8,9 @@ favorite, important and often used programs.
 </p><p>
 There is one big difference between CDE and NsCDE subpanels: <span class="emphasis"><em>Install Icon</em></span>
 is not (and cannot be due to FvwmButtons not implementing) drag-and-drop destionation. Click
-action on <span class="emphasis"><em>Install Icon</em></span> calls special NsCDE tool for installing and
-defining items on the subpanel. There is no drag and drop off items from the applicaton manager
+action on <span class="emphasis"><em>Install Icon</em></span> calls special NsCDE tool
+<a class="link" href="NsCDE-SubpanelMgr.html" title="5.13. Subpanel Manager">Subpanels Manager</a> for installing, that is, defining items
+on the subpanel. There is no drag and drop off items from the applicaton manager
 (the later also doesn't exist, but it can be used as menu://applications/ pseudo path in some
 file managers).
 </p><p>
@@ -38,9 +39,9 @@ Rename: Rename the current item on the subpanel
 Delete: Delete the current item from the subpanel (warning message will appear before
 deletion is finally performed)
 </p></li><li class="listitem"><p>
-Help: Display relevant documentation in a browser: this will try to find matching man
-page for the subpanel's entry command or appropriate part of NsCDE documentation if
-the entry is the NsCDE component. Failing this, it will display this document.
+Help: Display relevant documentation in a browser: this will try to find a matching man page
+for the subpanel's entry command or appropriate part of NsCDE documentation if the entry is
+the NsCDE component. Failing this, it will display this document.
 </p></li></ul></div><p>
 If move or delete action is silently not performed, this is most likely the situation where
 user's <code class="filename">$FVWM_USERDIR/Subpanels.actions</code> is newer than
@@ -48,14 +49,13 @@ user's <code class="filename">$FVWM_USERDIR/Subpanels.actions</code> is newer th
 configuration actions to take a place properly. In that case, repeated operation must succeed,
 otherwise, see X session error log for details.
 </p><p>
-Subpanels, like in CDE has titlebars but as windows on screen they are without
-borders and handles. They have only left menu button like other windows, but
-with one exception: there are no actions for closing window and re-positioning
-it (no sense in this), but they have "Refresh Subpanel" and "Subpanel
-Settings" controls. First one kills process module, re-reads it's
-configuration and starts it on the next click on Front Panel subpanel
-launcher. Subpanel Settings is the small and simple FvwmScript tool which
-allows one to rename Subpanel, set it's width for application titles to fit if
+Subpanels, like in CDE has titlebars but as windows on screen they are without borders and handles.
+They have only left menu button like other windows, but with one exception: there are no actions
+for closing window and re-positioning it (no sense in this), but they have "Refresh Subpanel"
+and "Subpanel Settings" controls. First one kills process module, re-reads it's configuration and
+starts it on the next click on Front Panel subpanel launcher.
+<a class="link" href="NsCDE-SubpanelSettings.html" title="5.14. Subpanel Settings">Subpanel Settings</a> is the small and simple FvwmScript
+tool which allows one to rename Subpanel, set it's width for application item titles to fit if
 necessary, and to enable or disable that particular Subpanel.
 </p><p>
 On the first change with <span class="emphasis"><em>Install Icon</em></span> or <span class="emphasis"><em>Subpanel Settings</em></span>,
