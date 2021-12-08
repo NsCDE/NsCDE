@@ -126,6 +126,106 @@ possible to look of the CDE, but with more flexibility and functionality on the 
 look.
 </para>
 </sect2>
+
+<sect2 id="NsCDE-path-conventions">
+<title>Path conventions</title>
+<para>
+In this document, a certain file and directory components of the NsCDE are referred with variables.
+This variables represents system or user paths. The former can be different on different systems,
+depending the OS convention for instaling third party software, or if NsCDE was installed from the
+package or the source tarball. For example, on BSD systems, ports and packages will usually use
+<filename class="directory">/usr/local</filename> as the installation base (reffered by NsCDE as
+<varname>$NSCDE_ROOT</varname>), while on Linux, this is often <filename class="directory">/usr</filename>
+if installed from the package. On Solaris systems, this can be <filename class="directory">/usr/sfw</filename>,
+while on NetBSD it may default to <filename class="directory">/usr/pkg</filename>. Various components of
+this installarion base, such as <emphasis>share</emphasis>, <emphasis>lib</emphasis> or similar are
+represented with the following variables:
+<itemizedlist>
+
+<listitem><para>
+<varname>$NSCDE_ROOT</varname> - the base of the installation, such are
+<filename class="directory">/usr/local</filename> or <filename class="directory">/usr</filename>
+</para></listitem>
+
+<listitem><para>
+<varname>$NSCDE_DATADIR</varname> - refers to <filename class="directory">share/NsCDE</filename> directory.
+Probably majority of the stuff is located here. FVWM configurations, defaults, program bits, backdrops,
+photos, palettes, config templates, non-XDG old style icons, integration templates etc ...
+</para></listitem>
+
+<listitem><para>
+<varname>$NSCDE_LIBDIR</varname> - refers to <filename class="directory">lib/NsCDE</filename> directory.
+This can often be <filename class="directory">lib64/NsCDE</filename> or
+<filename class="directory">lib/&lt;arch&gt;-linux-gnu/NsCDE</filename> directory. Here are FvwmScript, Python
+and C components, as well as wrappers which may override some FVWM modules.
+</para></listitem>
+
+<listitem><para>
+<varname>$NSCDE_TOOLSDIR</varname> - refers to <filename class="directory">libexec/NsCDE</filename> directory.
+but it is often the same as <varname>$NSCDE_LIBDIR</varname> specially on Debian and it's clones. Here are the
+python programs and scripts, as well as shell helpers used by FVWM functions and FvwmScript programs. Altrough
+not intended to be run manually, it can be used by advanced users to achieve some integration or additional
+locale functionality. For example, python command <command>palette_colorgen</command> is used in the default
+<filename>$FVWM_USERDIR/libexec/colormgr.local</filename> to shape Gkrellm, Firefox, Thunderbird and such
+programs into the CDE palette color scheme. This is never installed in <emphasis>$prefix/bin</emphasis>
+paths, because it is not of general usage, and therefore to minimize commands in path pollution.
+</para></listitem>
+
+<listitem><para>
+<varname>$FVWM_USERDIR</varname> refers to <filename>$HOME/.NsCDE</filename>. In an early phase of NsCDE
+startup, this is defined, so NsCDE never clashes with the default FVWM <filename>$HOME/.fvwm</filename>.
+User configurations, customizations and preferences are located there.
+</para></listitem>
+
+</itemizedlist>
+
+Outside of this paths, NsCDE installs the following contents on the filesystem:
+
+<itemizedlist>
+
+<listitem><para>
+<filename>/etc/xdg/menus/nscde-applications.menu</filename> where /etc can be /usr/local/etc or
+some other install base.
+</para></listitem>
+
+<listitem><para>
+<filename>$NSCDE_ROOT/share/xsessions/nscde.desktop</filename>: many X Display Managers pick up
+this. Exact installation depends on the system's defaults for xsession <emphasis>.desktop</emphasis>
+files.
+</para></listitem>
+
+<listitem><para>
+<filename class="directory">share/icons/NsCDE</filename> - XDG compatible icon theme.
+</para></listitem>
+
+<listitem><para>
+<filename>share/desktop-directories/nscde-*</filename> - XDG grouping of applications
+for NsCDE as dekstop environment.
+</para></listitem>
+
+<listitem><para>
+<filename class="directory">share/doc/nscde</filename> - documentation (like this one)
+</para></listitem>
+
+<listitem><para>
+<filename class="directory">share/locale/$LANG/LC_MESSAGES/...</filename> - ".mo" localization
+files.
+</para></listitem>
+
+<listitem><para>
+<filename>bin/nscde</filename> - main starting wrapper.
+</para></listitem>
+
+<listitem><para>
+<filename>bin/nscde_fvwmclnt</filename> - selector of the right <command>FvwmCommand</command>
+on the systems with multiple versions and paths of the FVWM installations.
+</para></listitem>
+
+</itemizedlist>
+</para>
+
+</sect2>
+
 </sect1>
 
 <sect1 id="NsCDE-components">
@@ -159,33 +259,33 @@ and code (except FvwmScript GUI programs) is located in <filename class="directo
 FVWM configuration sections are:
 
 <itemizedlist>
-<listitem><para>Animate.fvwmconf - FvwmAnimate module configuration</para></listitem>
-<listitem><para>Backdrops.fvwmconf - Backdrops, read by FvwmBacker and FvwmPager</para></listitem>
-<listitem><para>Backer.fvwmconf - FvwmBacker module configuration</para></listitem>
-<listitem><para>Colorset.fvwmconf - FVWM Colorset definitions (generated for user in ~/.NsCDE)</para></listitem>
-<listitem><para>Event.fvwmconf - FvwmEvent module configuration</para></listitem>
+<listitem><para><link linkend="NsCDE-Animate_fvwmconf">Animate.fvwmconf</link> - FvwmAnimate module configuration</para></listitem>
+<listitem><para><link linkend="Backdrops_fvwmgen">Backdrops.fvwmconf</link> - Backdrops, read by FvwmBacker and FvwmPager</para></listitem>
+<listitem><para><link linkend="Backer_fvwmconf">Backer.fvwmconf</link> - FvwmBacker module configuration</para></listitem>
+<listitem><para><link linkend="Colorset_fvwmgen">Colorset.fvwmconf</link> - FVWM Colorset definitions (generated for user in ~/.NsCDE)</para></listitem>
+<listitem><para><link linkend="Event_fvwmconf">Event.fvwmconf</link> - FvwmEvent module configuration</para></listitem>
 <listitem><para>FinishInit.fvwmconf - End of startap cleanup and safety last-second routines</para></listitem>
-<listitem><para>Font-XXXdpi.fvwmconf - Set of fonts ad InfoStore variables used across FVWM</para></listitem>
-<listitem><para>Form.fvwmconf - obsolete and not used by default, NsCDE does not use FvwmForm</para></listitem>
-<listitem><para>FrontPanel.fvwmconf - selector of FrontPanel configuration which is going to be read</para></listitem>
-<listitem><para>FrontPanel.fvwm2.fvwmconf - FrontPanel configuration for FVWM2</para></listitem>
-<listitem><para>FrontPanel.fvwm3.fvwmconf - FrontPanel configuration for FVWM3</para></listitem>
-<listitem><para>Functions.fvwmconf - almost all functions used by NsCDE FVWM setup, paired in logical sections</para></listitem>
-<listitem><para>IconMan.fvwmconf - Not used by default</para></listitem>
-<listitem><para>Ident.fvwmconf - FvwmIdent module configuration</para></listitem>
-<listitem><para>Init.fvwmconf - Fallback and example of session statup. Usually run from ~/.NsCDE</para></listitem>
-<listitem><para>Keybindings.fvwmconf - Static key bindings, without written menu hints</para></listitem>
-<listitem><para>LocalPager.fvwmconf - Single Workspace floating FvwmPager configuration</para></listitem>
-<listitem><para>Main.fvwmconf - Most important and early FVWM directives, environment and InfoStore variables, functions</para></listitem>
-<listitem><para>Menus.fvwmconf - All FVWM Menus used or generated for NsCDE</para></listitem>
+<listitem><para><link linkend="Font-DPIdpi_fvwmgen">Font-XXXdpi.fvwmconf</link> - Set of fonts ad InfoStore variables used across FVWM</para></listitem>
+<listitem><para><link linkend="Form_fvwmconf">Form.fvwmconf</link> - obsolete and not used by default, NsCDE does not use FvwmForm</para></listitem>
+<listitem><para><link linkend="FrontPanel_fvwmconf">FrontPanel.fvwmconf</link> - selector of FrontPanel configuration which is going to be read</para></listitem>
+<listitem><para><link linkend="FrontPanel_fvwmconf">FrontPanel.fvwm2.fvwmconf</link> - FrontPanel configuration for FVWM2</para></listitem>
+<listitem><para><link linkend="FrontPanel_fvwmconf">FrontPanel.fvwm3.fvwmconf</link> - FrontPanel configuration for FVWM3</para></listitem>
+<listitem><para><link linkend="Functions_fvwmconf">Functions.fvwmconf</link> - almost all functions used by NsCDE FVWM setup, paired in logical sections</para></listitem>
+<listitem><para><link linkend="IconMan_fvwmconf">IconMan.fvwmconf</link> - Not used by default</para></listitem>
+<listitem><para><link linkend="Ident_fvwmconf">Ident.fvwmconf</link> - FvwmIdent module configuration</para></listitem>
+<listitem><para><link linkend="Init_fvwmconf">Init.fvwmconf</link> - Fallback and example of session statup. Usually run from ~/.NsCDE</para></listitem>
+<listitem><para><link linkend="Keybindings_fvwmconf">Keybindings.fvwmconf</link> - Static key bindings, without written menu hints</para></listitem>
+<listitem><para><link linkend="LocalPager_fvwmconf">LocalPager.fvwmconf</link> - Single Workspace floating FvwmPager configuration</para></listitem>
+<listitem><para><link linkend="Main_fvwmconf">Main.fvwmconf</link> - Most important and early FVWM directives, environment and InfoStore variables, functions</para></listitem>
+<listitem><para><link linkend="Menus_fvwmconf">Menus.fvwmconf</link> - All FVWM Menus used or generated for NsCDE</para></listitem>
 <listitem><para>Monitors.fvwmconf - Monitor and resolution static database as helper for some calculations</para></listitem>
-<listitem><para>Mousebindings.fvwmconf - All mouse actions with and without keyboard modifiers</para></listitem>
+<listitem><para><link linkend="Mousebindings_fvwmconf">Mousebindings.fvwmconf</link> - All mouse actions with and without keyboard modifiers</para></listitem>
 <listitem><para>Sandbox.fvwmconf - not read by default, cleanup definitions for stripped down NsCDE sandbox mode</para></listitem>
-<listitem><para>Script.fvwmconf - FvwmScript module defaults</para></listitem>
-<listitem><para>Style.fvwmconf - All NsCDE FVWM Style directives, Menustyle, Cursorstyle, Decor addons etc</para></listitem>
-<listitem><para>Subpanels.fvwmconf - Default system configuration for subpanels of the FrontPanel, generated on install.</para></listitem>
-<listitem><para>WspLocPager.fvwmconf - Configuration of another local pager which uses FvwmPager, but for non-local workspaces</para></listitem>
-<listitem><para>NsCDE.conf - de-facto main user configuration file. All important variables are here.</para></listitem>
+<listitem><para><link linkend="Script_fvwmconf">Script.fvwmconf</link> - FvwmScript module defaults</para></listitem>
+<listitem><para><link linkend="Style_fvwmconf">Style.fvwmconf</link> - All NsCDE FVWM Style directives, Menustyle, Cursorstyle, Decor addons etc</para></listitem>
+<listitem><para><link linkend="Subpanels_fvwmconf">Subpanels.fvwmconf</link> - Default system configuration for subpanels of the FrontPanel, generated.</para></listitem>
+<listitem><para><link linkend="WspLocPager_fvwmconf">WspLocPager.fvwmconf</link> - Configuration of another local pager which uses FvwmPager, but for non-local workspaces</para></listitem>
+<listitem><para><link linkend="NsCDE_conf">NsCDE.conf</link> - de-facto main user configuration file. All important variables are here.</para></listitem>
 </itemizedlist>
 
 </para>
@@ -246,17 +346,17 @@ parsed by NsCDE scripts and programs in <filename class="directory">$NSCDE_DATAD
 This files are:
 
 <itemizedlist>
-<listitem><para>AppMenus.conf - default per application addons for Window Operations menu on the 1st titlebar button</para></listitem>
-<listitem><para>FrontPanel.actions - read by FVWM functions called when FrontPanel controls and buttons are used</para></listitem>
-<listitem><para>Keymenu.actions - Part of the FVWM NsCDE keybindings which have menu hints written on menus</para></listitem>
-<listitem><para>Subpanels.actions - From this file, Subpanels.fvwmconf is generated.</para></listitem>
-<listitem><para>WSM.conf - Workspace Manager and Graphical Workspace Manager configuration file</para></listitem>
+<listitem><para><link linkend="AppMenus_conf">AppMenus.conf</link> - default per application addons for Window Operations menu on the 1st titlebar button</para></listitem>
+<listitem><para><link linkend="FrontPanel_actions">FrontPanel.actions</link> - read by FVWM functions called when FrontPanel controls and buttons are used</para></listitem>
+<listitem><para><link linkend="Keymenu_actions">Keymenu.actions</link> - Part of the FVWM NsCDE keybindings which have menu hints written on menus</para></listitem>
+<listitem><para><link linkend="Subpanels_actions">Subpanels.actions</link> - From this file, Subpanels.fvwmconf is generated.</para></listitem>
+<listitem><para><link linkend="NsCDE-WSM_conf">WSM.conf</link> - Workspace Manager and Graphical Workspace Manager configuration file</para></listitem>
 </itemizedlist>
 
 </para>
 
 <para>
-All files above except WSM.conf if found in <filename class="directory">$NSCDE_USERDIR</filename> are
+All files above except <filename>WSM.conf</filename> if found in <filename class="directory">$NSCDE_USERDIR</filename> are
 read in addition to system defaults in <filename class="directory">$NSCDE_DATADIR/defaults</filename>.
 Local lines and statemets in user's copy are overriding system defaults. WSM.conf is read exclusively
 from <filename class="directory">$NSCDE_USERDIR</filename>. System file is only an example.
@@ -286,13 +386,13 @@ scripts to look more CDEish and they implement some additional functionality.
 Applets docks and panels are:
 
 <itemizedlist>
-<listitem><para>Front Panel (FvwmButtons)</para></listitem>
-<listitem><para>Subpanels (FvwmButtons)</para></listitem>
-<listitem><para>Workspace Manager (WSM) - FvwmScript</para></listitem>
-<listitem><para>MonthDayApplet - FvwmScript</para></listitem>
-<listitem><para>Clock - External C applet pclock</para></listitem>
-<listitem><para>CheckMailApplet - FvwmScript</para></listitem>
-<listitem><para>FpLite - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-FrontPanel">Front Panel</link> (FvwmButtons)</para></listitem>
+<listitem><para><link linkend="NsCDE-Subpanels">Subpanels</link> (FvwmButtons)</para></listitem>
+<listitem><para><link linkend="NsCDE-Workspace-Manager">Workspace Manager (WSM)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-MonthDayApplet">MonthDayApplet</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-Pclock">Clock</link> - External C applet fpclock</para></listitem>
+<listitem><para><link linkend="NsCDE-CheckMailApplet">CheckMailApplet</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-FpLite">FpLite</link> - FvwmScript</para></listitem>
 </itemizedlist>
 </para>
 
@@ -300,29 +400,29 @@ Applets docks and panels are:
 GUI tools are:
 
 <itemizedlist>
-<listitem><para>Style Manager (StlyeMgr) - FvwmScript</para></listitem>
-<listitem><para>Backdrop Style Manager (BackdropMgr) - FvwmScript + Korn Shell</para></listitem>
-<listitem><para>Beep Style Manager - FvwmScript</para></listitem>
-<listitem><para>Color Style Manager (ColorMgr) - FvwmScript</para></listitem>
-<listitem><para>ExecDialog - FvwmScript</para></listitem>
-<listitem><para>Font Style Manager (FontMgr) - FvwmScript + Korn Shell</para></listitem>
-<listitem><para>Keyboard Style Manager (KeyboardMgr) - FvwmScript</para></listitem>
-<listitem><para>Occupy Workspace (Occupy) - FvwmScript</para></listitem>
-<listitem><para>Occupy Page (Occupy) - FvwmScript</para></listitem>
-<listitem><para>Occupy Monitor (Occupy) - FvwmScript</para></listitem>
-<listitem><para>Graphical Workspace Manager (GWM) - FvwmScript</para></listitem>
-<listitem><para>Graphical Workspace Manager Options (GWMOptions) - FvwmScript</para></listitem>
-<listitem><para>Window Geometry Manager - FvwmScript</para></listitem>
-<listitem><para>Mouse Style Manager (PointerMgr) - FvwmScript</para></listitem>
-<listitem><para>Power Save Manager (PowerSaveMgr) - FvwmScript</para></listitem>
-<listitem><para>Subpanel Manager (SubpanelMgr) - FvwmScript</para></listitem>
-<listitem><para>Front Panel Icon Manager (FpIconMgr) - FvwmScript</para></listitem>
-<listitem><para>Subpanel Settings (SubpanelSettings) - FvwmScript</para></listitem>
-<listitem><para>System Action Dialog (SysActionDialog) - FvwmScript, sudo</para></listitem>
-<listitem><para>Sysinfo - FvwmScript, python</para></listitem>
-<listitem><para>Window Style Manager (WindowMgr) - FvwmScript, sed, egrep</para></listitem>
-<listitem><para>Workspaces and Pages Style Manager (WsPgMgr) - FvwmScript</para></listitem>
-<listitem><para>NsCDE Process Manager (NProcMgr) - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-StyleMgr">Style Manager (StlyeMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-BackdropMgr">Backdrop Style Manager (BackdropMgr)</link> - FvwmScript + Korn Shell</para></listitem>
+<listitem><para><link linkend="NsCDE-BeepMgr">Beep Style Manager</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-ColorMgr">Color Style Manager (ColorMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-ExecDialog">ExecDialog</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-FontMgr">Font Style Manager (FontMgr)</link> - FvwmScript + Korn Shell</para></listitem>
+<listitem><para><link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager (KeyboardMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-Occupy">Occupy Workspace (Occupy)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-Occupy">Occupy Page (Occupy)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-Occupy">Occupy Monitor (Occupy)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-GWM">Graphical Workspace Manager (GWM)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-GWMOptions">Graphical Workspace Manager Options (GWMOptions)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-GeometryMgr">Window Geometry Manager</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-PointerMgr">Mouse Style Manager (PointerMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-PowerSaveMgr">Power Save Manager (PowerSaveMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-SubpanelMgr">Subpanel Manager (SubpanelMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-FpIconMgr">Front Panel Icon Manager (FpIconMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-SubpanelSettings">Subpanel Settings (SubpanelSettings)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-SysActionDialog">System Action Dialog (SysActionDialog)</link> - FvwmScript, sudo</para></listitem>
+<listitem><para><link linkend="NsCDE-SysInfo">Sysinfo</link> - FvwmScript, python</para></listitem>
+<listitem><para><link linkend="NsCDE-WindowMgr">Window Style Manager (WindowMgr)</link> - FvwmScript, sed, egrep</para></listitem>
+<listitem><para><link linkend="NsCDE-WsPgMgr">Workspaces and Pages Style Manager (WsPgMgr)</link> - FvwmScript</para></listitem>
+<listitem><para><link linkend="NsCDE-NProcMgr">NsCDE Process Manager (NProcMgr)</link> - FvwmScript</para></listitem>
 </itemizedlist>
 
 </para>
@@ -1604,11 +1704,11 @@ Panel Controls Menu.
 As FvwmButtons based dock, by default it swallows the following applets:
 
 <itemizedlist>
-<listitem><para>fpclock (external standalone app with CDEish skin)</para></listitem>
-<listitem><para>MonthDayApplet (FvwmScript)</para></listitem>
-<listitem><para>CheckMailApplet (FvwmScript)</para></listitem>
-<listitem><para>WSM / Workspace Manager (FvwmScript)</para></listitem>
-<listitem><para>FpLite (FvwmScript)</para></listitem>
+<listitem><para><link linkend="NsCDE-Pclock">fpclock</link> (external standalone app with CDEish skin)</para></listitem>
+<listitem><para><link linkend="NsCDE-MonthDayApplet">MonthDayApplet</link> (FvwmScript)</para></listitem>
+<listitem><para><link linkend="NsCDE-CheckMailApplet">CheckMailApplet</link> (FvwmScript)</para></listitem>
+<listitem><para><link linkend="NsCDE-WSM_conf">WSM / Workspace Manager</link> (FvwmScript)</para></listitem>
+<listitem><para><link linkend="NsCDE-FpLite">FpLite</link> (FvwmScript)</para></listitem>
 </itemizedlist>
 
 </para></listitem>

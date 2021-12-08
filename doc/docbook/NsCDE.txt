@@ -14,6 +14,7 @@ M. Z.
 
         1.1. What is NsCDE?
         1.2. Why NsCDE?
+        1.3. Path conventions
 
    2. Components of the NsCDE
 
@@ -272,6 +273,71 @@ M. Z.
    functionality on the second and third look.
      __________________________________________________________
 
+1.3. Path conventions
+
+   In this document, a certain file and directory components of
+   the NsCDE are referred with variables. This variables
+   represents system or user paths. The former can be different on
+   different systems, depending the OS convention for instaling
+   third party software, or if NsCDE was installed from the
+   package or the source tarball. For example, on BSD systems,
+   ports and packages will usually use /usr/local as the
+   installation base (reffered by NsCDE as $NSCDE_ROOT), while on
+   Linux, this is often /usr if installed from the package. On
+   Solaris systems, this can be /usr/sfw, while on NetBSD it may
+   default to /usr/pkg. Various components of this installarion
+   base, such as share, lib or similar are represented with the
+   following variables:
+
+     * $NSCDE_ROOT - the base of the installation, such are
+       /usr/local or /usr
+     * $NSCDE_DATADIR - refers to share/NsCDE directory. Probably
+       majority of the stuff is located here. FVWM configurations,
+       defaults, program bits, backdrops, photos, palettes, config
+       templates, non-XDG old style icons, integration templates
+       etc ...
+     * $NSCDE_LIBDIR - refers to lib/NsCDE directory. This can
+       often be lib64/NsCDE or lib/<arch>-linux-gnu/NsCDE
+       directory. Here are FvwmScript, Python and C components, as
+       well as wrappers which may override some FVWM modules.
+     * $NSCDE_TOOLSDIR - refers to libexec/NsCDE directory. but it
+       is often the same as $NSCDE_LIBDIR specially on Debian and
+       it's clones. Here are the python programs and scripts, as
+       well as shell helpers used by FVWM functions and FvwmScript
+       programs. Altrough not intended to be run manually, it can
+       be used by advanced users to achieve some integration or
+       additional locale functionality. For example, python
+       command palette_colorgen is used in the default
+       $FVWM_USERDIR/libexec/colormgr.local to shape Gkrellm,
+       Firefox, Thunderbird and such programs into the CDE palette
+       color scheme. This is never installed in $prefix/bin paths,
+       because it is not of general usage, and therefore to
+       minimize commands in path pollution.
+     * $FVWM_USERDIR refers to $HOME/.NsCDE. In an early phase of
+       NsCDE startup, this is defined, so NsCDE never clashes with
+       the default FVWM $HOME/.fvwm. User configurations,
+       customizations and preferences are located there.
+
+   Outside of this paths, NsCDE installs the following contents on
+   the filesystem:
+
+     * /etc/xdg/menus/nscde-applications.menu where /etc can be
+       /usr/local/etc or some other install base.
+     * $NSCDE_ROOT/share/xsessions/nscde.desktop: many X Display
+       Managers pick up this. Exact installation depends on the
+       system's defaults for xsession .desktop files.
+     * share/icons/NsCDE - XDG compatible icon theme.
+     * share/desktop-directories/nscde-* - XDG grouping of
+       applications for NsCDE as dekstop environment.
+     * share/doc/nscde - documentation (like this one)
+     * share/locale/$LANG/LC_MESSAGES/... - ".mo" localization
+       files.
+     * bin/nscde - main starting wrapper.
+     * bin/nscde_fvwmclnt - selector of the right FvwmCommand on
+       the systems with multiple versions and paths of the FVWM
+       installations.
+     __________________________________________________________
+
 2. Components of the NsCDE
 
 2.1. Components overview
@@ -339,7 +405,7 @@ M. Z.
      * Style.fvwmconf - All NsCDE FVWM Style directives,
        Menustyle, Cursorstyle, Decor addons etc
      * Subpanels.fvwmconf - Default system configuration for
-       subpanels of the FrontPanel, generated on install.
+       subpanels of the FrontPanel, generated.
      * WspLocPager.fvwmconf - Configuration of another local pager
        which uses FvwmPager, but for non-local workspaces
      * NsCDE.conf - de-facto main user configuration file. All
@@ -439,7 +505,7 @@ M. Z.
      * Subpanels (FvwmButtons)
      * Workspace Manager (WSM) - FvwmScript
      * MonthDayApplet - FvwmScript
-     * Clock - External C applet pclock
+     * Clock - External C applet fpclock
      * CheckMailApplet - FvwmScript
      * FpLite - FvwmScript
 
