@@ -2242,20 +2242,20 @@ AddToFunc f_FpLiteClickAction
 # SysActionDialog
 DestroyFunc f_QuitAndExit
 AddToFunc f_QuitAndExit
-+ I Test (EnvIsSet SESSION_MANAGER) SetEnv QuitCmd SaveQuitSession
-+ I Test (!EnvIsSet SESSION_MANAGER) SetEnv QuitCmd Quit
++ I Test (EnvIsSet SESSION_MANAGER, !EnvIsSet QuitCmd) SetEnv QuitCmd SaveQuitSession
++ I Test (!EnvIsSet SESSION_MANAGER, !EnvIsSet QuitCmd) SetEnv QuitCmd Quit
 + I Echo NsCDE: Quit X Session
-+ I Test (!EnvIsSet SESSION_MANAGER) Deschedule
++ I Deschedule
 + I Test (!EnvIsSet SESSION_MANAGER) Schedule 1200 $[QuitCmd]
-+ I Test (EnvIsSet SESSION_MANAGER) Schedule 200 $[QuitCmd]
++ I Test (EnvIsSet SESSION_MANAGER) Schedule 400 $[QuitCmd]
 
 # SysActionDialog
 DestroyFunc f_QuitAndShutdown
 AddToFunc f_QuitAndShutdown
-+ I Test (EnvIsSet SESSION_MANAGER) SetEnv QuitCmd SaveQuitSession
-+ I Test (!EnvIsSet SESSION_MANAGER) SetEnv QuitCmd Quit
++ I Test (EnvIsSet SESSION_MANAGER, !EnvIsSet QuitCmd) SetEnv QuitCmd SaveQuitSession
++ I Test (!EnvIsSet SESSION_MANAGER, !EnvIsSet QuitCmd) SetEnv QuitCmd Quit
 + I Echo NsCDE: Quit and Shutdown
-+ I Test (!EnvIsSet SESSION_MANAGER) Deschedule
++ I Deschedule
 + I Test (!EnvIsSet SESSION_MANAGER) Schedule 1200 Exec exec @KSH@ -c \
  "sudo -n $[NSCDE_TOOLSDIR]/acpimgr $0 || $[NSCDE_TOOLSDIR]/acpimgr $0"
 + I Test (!EnvIsSet SESSION_MANAGER) Schedule 1600 $[QuitCmd]

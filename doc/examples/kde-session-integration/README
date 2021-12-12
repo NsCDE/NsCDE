@@ -1,3 +1,5 @@
+- General:
+
 It is very easy to get it into Plasma, but Plasma insists to manage background
 of the root window (pkill plasmashell), and it doesn't even have a capability
 to set different backdrop or picture to different desks.
@@ -6,3 +8,21 @@ https://forum.kde.org/viewtopic.php?f=67&t=141878 )
 
 You should probably move or remove redundant KDE dock which covers FvwmButtons
 Front Panel.
+
+- Notice about wallpapers unser KDE Plasma:
+
+Different wallpaper per workspace: Currently this is not available by default in
+KDE and it doesn't seem like it will come soon, people can watch this bug:
+https://bugs.kde.org/show_bug.cgi?id=341143
+However it's an easy fix: https://store.kde.org/p/1197828/
+Vallpaper is a powerful desktop setting widget (support for borders,
+colors, slideshows, etc). The user can simply "cd ~/NsCDE/backer/ &&
+convert *.pm *.jpg" and then set Vallpaper to those (remembering to
+change Vallpaper from fill to tile).
+
+- Logging out of Plasma session:
+
+Put this into your ~/.NsCDE/NsCDE.conf:
+
+SetEnv QuitCmd "Exec exec qdbus org.kde.ksmserver /KSMServer logout 0 0 0"
+
