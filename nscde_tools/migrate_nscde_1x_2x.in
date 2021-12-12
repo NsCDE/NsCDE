@@ -667,7 +667,20 @@ function preface
          replace_confnames_in_files
          walk_and_change_pathnames_in_files
 
-         $text "Done. Press return to restart NsCDE with migrated profile."
+         echo ""
+         $text "Done."
+         echo ""
+
+         $text "ATTENTION:"
+         $text "If you have used NsCDE CSS styling for Firefox and/or Thunderbird,"
+         $text "you will have to either fix manually new symlink and @import paths"
+         $text "in your Firefox and/or Thunderbird chrome subdirectory inside profile"
+         $text "directory. The easiest way (if you don't have any other customizations"
+         $text "there) is to remove all contents of chrome/ subdirectory and rerun"
+         $text "Color Style Manager with the choosen color scheme to recreate NsCDE"
+         $text "CSS customizations for this Mozilla applications."
+         echo ""
+         $text "Press return to restart NsCDE with migrated profile."
 	 read ret
 	 $text "Restarting ..."
 
