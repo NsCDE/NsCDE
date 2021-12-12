@@ -28,7 +28,8 @@ function find_cmd_in_subpanel
       Str="$(echo "$RawStr" | tr -d '\042\134')"
       echo "$Str" | egrep -q '\$\[infostore\..*\]'
       if (($? == 0)); then
-         $NSCDE_ROOT/bin/nscde_fvwmclnt "f_SubpanelInfostoreHelpHelper \"$Str\""
+         # Push it trough FVWM to get infostore variable resolved.
+         $NSCDE_ROOT/bin/nscde_fvwmclnt "PipeRead \"$NSCDE_TOOLSDIR/fpdoc -fp $Str\""
          exit 0
       fi
    else

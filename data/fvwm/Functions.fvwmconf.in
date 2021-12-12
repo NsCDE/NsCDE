@@ -707,15 +707,6 @@ AddToFunc f_FrontPanelManageSubpanels
 + I Schedule 800 f_ReadCfg Subpanels
 + I Schedule 1200 f_RestartFrontPanel
 
-# Help displaying entries from subpanels which are infostore variables fpdoc script
-# does not know how to dereference them, so when "infostore." is detected, we send
-# it trough FVWM function to be resolved, then feed the script back, but calling it
-# with "-fp", not "-subp" to avoid endless loop for infostore variables which are
-# undefined. A hack, but it works.
-DestroyFunc f_SubpanelInfostoreHelpHelper
-AddToFunc f_SubpanelInfostoreHelpHelper
-+ I PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp $[0-]'
-
 DestroyFunc f_SubpanelPropsMenu
 AddToFunc f_SubpanelPropsMenu
 + I DestroyMenu m_SubpanelPropsMenu

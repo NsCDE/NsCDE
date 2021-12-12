@@ -10,10 +10,24 @@
 <!-- please do not change the id; for translations, change lang to -->
 <!-- appropriate code -->
 <articleinfo>
- <title>Not so Common Desktop Environment (&app;) Manual</title>
- <abstract role="description">
+  <title>Not so Common Desktop Environment (&app;) Manual</title>
+  <abstract role="description">
     <para>
-    This manual describes NsCDE: Not so Common Desktop Environment
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata fileref="img/fig_nscde_logo.png" format="PNG" scale="100" align="center"/>
+        </imageobject>
+        <imageobject role="fo">
+          <imagedata fileref="img/fig_nscde_logo.png" format="EPS" scale="60" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </para>
+    <para>
+      This manual describes <emphasis>&app;</emphasis>: <emphasis>Not so Common Desktop Environment</emphasis>.
+      Visual CDE clone built with more up to date tools, to fit with modern day toolkits and applications.
+      &app; is invented to provide "blast from the past" which is perfectly usable for professionals and people
+      tring to recover from PTSD syndrome after beeing in touch with so called "material design" and various
+      toy-like interfaces.
     </para>
     </abstract>
     <copyright>
@@ -34,6 +48,7 @@
     <releaseinfo>
       This manual describes version &appversion; of &app;.
     </releaseinfo> 
+
 </articleinfo> 
 
 <!-- ============= Index ===================================== -->
@@ -125,6 +140,16 @@ intentional differences between CDE and NsCDE - a middle line between trying to 
 possible to look of the CDE, but with more flexibility and functionality on the second and third
 look.
 </para>
+
+    <mediaobject>
+      <imageobject role="html">
+        <imagedata fileref="img/fig_nscde_intro.png" format="PNG" scale="100"/>
+      </imageobject>
+      <imageobject role="fo">
+        <imagedata fileref="img/fig_nscde_intro.png" format="EPS" scale="36"/>
+      </imageobject>
+    </mediaobject>
+
 </sect2>
 
 <sect2 id="NsCDE-path-conventions">
@@ -558,7 +583,7 @@ Deiconify item.
 </para>
 
 <figure id="fig_icons">
-  <title>Window Icons on Workspace</title>
+  <title>Window Icons on Workspace and Icon Menu</title>
   <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_icons.png" format="PNG" scale="100"/>
@@ -993,7 +1018,7 @@ in an application window.
 <para>
 
 <figure id="fig_winops">
-  <title>Window Operations Menu</title>
+  <title>Standard and Extended Window Operations Menu</title>
     <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_window_menu.png" format="PNG" scale="100"/>
@@ -1875,7 +1900,7 @@ it will display this document. Documentation is displayed as HTML in the default
 </orderedlist>
 
 <figure id="fig_fp_ctx_menu">
-  <title>Front Panel</title>
+  <title>Front Panel Launcher Context Menu</title>
   <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_fp_ctx_menu.png" format="PNG" scale="100"/>
@@ -2367,7 +2392,9 @@ desktop names and used in the rest of the configuration. Names are saved in
 a existing X11 NsCDE session. Workspaces can also enter rename mode if their workspace buttons
 are clicked with 3rd mouse button and <guimenuitem>Rename ...</guimenuitem> option choosen from
 the popup menu.
+</para>
 
+<para>
 <mediaobject>
 <imageobject role="html">
   <imagedata fileref="img/fig_wsp_rename.png" format="PNG" scale="100"/>
@@ -2376,7 +2403,9 @@ the popup menu.
   <imagedata fileref="img/fig_wsp_rename.png" format="EPS" scale="50"/>
 </imageobject>
 </mediaobject>
+</para>
 
+<para>
 <mediaobject>
 <imageobject role="html">
   <imagedata fileref="img/fig_wsp_renamed.png" format="PNG" scale="100"/>
@@ -2707,7 +2736,7 @@ called. It is called from 7th button on the Front Panel. It has big icons for ca
 <listitem><para><link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link></para></listitem>
 <listitem><para><link linkend="NsCDE-PointerMgr">Mouse Style Manager</link></para></listitem>
 <listitem><para><link linkend="NsCDE-BeepMgr">Beep Style Manager</link></para></listitem>
-<listitem><para>Xscreensaver Demo (setup)</para></listitem>
+<listitem><para><link linkend="NsCDE-XscreenSaver">Screen Style Manager (Xscreensaver)</link></para></listitem>
 <listitem><para><link linkend="NsCDE-WindowMgr">Window Style Manager</link></para></listitem>
 <listitem><para><link linkend="NsCDE-WsPgMgr">Workspaces and Pages Style Manager</link></para></listitem>
 <listitem><para><link linkend="NsCDE-PowerSaveMgr">Power Style Manager</link></para></listitem>
@@ -2987,6 +3016,91 @@ Key Bindings:
 </para></listitem>
 </itemizedlist>
 </para>
+
+</sect2>
+
+<sect2 id="NsCDE-XscreenSaver">
+<title>Screen Style Manager (Xscreensaver)</title>
+<para>
+Well known X screen saver is a perfect drop in as Screen Style Manager for NsCDE. It is more
+extended, fancier and more capable than original CDE screensaver. Xscreensaver has it's own
+configuration in <filename>~/.xscreensaver</filename>. If this file does not exist during
+initial setup of the NsCDE, and if xscreensaver(1) is installed on the system, a default
+NsCDE version of the <filename>~/.xscreensaver</filename> will be installed in user's
+home directory. Xscreensaver probably does not have much sense in virtual machines, but on
+notebooks and workstations it is almost mandatory as a locking mechanism with surplus
+value of nice animations.
+</para>
+<para>
+Xscreensaver's GUI configuration program xscreensaver-demo(1) can be called from the
+NsCDE Style Manager main window. It allows user to tune various acpects of the program's
+behaviour such as:
+</para>
+
+<figure id="fig_screenmgr">
+  <title>Screen Style Manager (Xscreensaver setup)</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_screenmgr.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_screenmgr.png" format="EPS" scale="50"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
+<itemizedlist>
+<listitem><para>
+Xscreensaver damon management
+</para></listitem>
+<listitem><para>
+Locking or just blanking
+</para></listitem>
+<listitem><para>
+Which screensaver animations (hacks) are enabled
+</para></listitem>
+<listitem><para>
+Mode of operation (One animation only, random, blank screen only)
+</para></listitem>
+<listitem><para>
+Cycling in random mode and blanking timers
+</para></listitem>
+<listitem><para>
+Weather images of the desktop may be grabbed by certain animations (security concern)
+</para></listitem>
+<listitem><para>
+Path to directory with photos which may be used in animations.
+</para></listitem>
+<listitem><para>
+Text sources for manipulation by certail animations
+</para></listitem>
+<listitem><para>
+Power management: this parameters are also set by the <link linkend="NsCDE-PowerSaveMgr">Power Style Manager</link>
+</para></listitem>
+<listitem><para>
+Fade in and fade out of the animations when screen is unlocked.
+</para></listitem>
+</itemizedlist>
+
+<para>
+X screen saver may be started with <keysym>Meta+Alt+L</keysym> or with the lock icon upper left from the
+Workspace Manager on the Front Panel. Screen may also be locked from the Workspace Menu with the
+option <guimenuitem>Lock Screen</guimenuitem>. For all this to work, usage of the xscreensaver must be
+enabled in the <filename>$HOME/.NsCDE/NsCDe.conf</filename> - <varname>nscde_use_xscreensaver</varname>
+must be set to 1.
+</para>
+
+<figure id="fig_wsm_3rd">
+  <title>Lock icon is in the upper left corner near the Workspace Manager on the Front Panel</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_wsm_lock.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_wsm_lock.png" format="EPS" scale="50"/>
+    </imageobject>
+  </mediaobject>
+</figure>
 
 </sect2>
 
@@ -4544,7 +4658,7 @@ needs of CDE clone this is more than enough.
 <title>Configuration Section: Window Behavior</title>
 
 <figure id="fig_windowmgr1">
-  <title>Window Style Manager: Window</title>
+  <title>Window Style Manager: Window and Window Icons tabs</title>
     <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_windowmgr1.png" format="PNG" scale="100"/>
@@ -4612,19 +4726,6 @@ milliseconds can be set here. See FvwmAuto(1).
 
 <sect3 id="NsCDE-WindowMgr-Icons">
 <title>Configuration Section: Window Icons</title>
-
-<figure id="fig_windowmgr2">
-  <title>Window Style Manager: Window Icons</title>
-    <mediaobject>
-    <imageobject role="html">
-      <imagedata fileref="img/fig_windowmgr2.png" format="PNG" scale="100"/>
-    </imageobject>
-    <imageobject role="fo">
-      <imagedata fileref="img/fig_windowmgr2.png" format="EPS" scale="50"/>
-    </imageobject>
-  </mediaobject>
-</figure>
-
 <para>
 <itemizedlist>
 <listitem><para>
@@ -4657,14 +4758,14 @@ exclusive options will direct icon placement on the screen. See
 <sect3 id="NsCDE-WindowMgr-Pageedges">
 <title>Configuration Section: Page Edges</title>
 
-<figure id="fig_windowmgr3">
-  <title>Window Style Manager: Page Edges</title>
+<figure id="fig_windowmgr2">
+  <title>Window Style Manager: Page Edges and Animation tabs</title>
     <mediaobject>
     <imageobject role="html">
-      <imagedata fileref="img/fig_windowmgr3.png" format="PNG" scale="100"/>
+      <imagedata fileref="img/fig_windowmgr2.png" format="PNG" scale="100"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="img/fig_windowmgr3.png" format="EPS" scale="50"/>
+      <imagedata fileref="img/fig_windowmgr2.png" format="EPS" scale="50"/>
     </imageobject>
   </mediaobject>
 </figure>
@@ -4718,19 +4819,6 @@ Resistance). Defaults to 320 pixels.
 
 <sect3 id="NsCDE-WindowMgr-Animations">
 <title>Configuration Section: Animation</title>
-
-<figure id="fig_windowmgr4">
-  <title>Window Style Manager: Animation</title>
-    <mediaobject>
-    <imageobject role="html">
-      <imagedata fileref="img/fig_windowmgr4.png" format="PNG" scale="100"/>
-    </imageobject>
-    <imageobject role="fo">
-      <imagedata fileref="img/fig_windowmgr4.png" format="EPS" scale="50"/>
-    </imageobject>
-  </mediaobject>
-</figure>
-
 <para>
 This tab controls behavior of the FvwmAnimate. See FvwmAnimate(1).
 <itemizedlist>
@@ -5261,6 +5349,19 @@ Window Maker window manager:
    Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
 ]]>
 </programlisting>
+
+<figure id="fig_cust_applet">
+  <title>Visual: resulting applet on the Front Panel</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_cust_applet.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_cust_applet.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </para>
 
 <para>
@@ -5842,6 +5943,19 @@ visible, calling it second time will replace it's window with full version of st
 tool until it is not closed with a third invocation of this same keybinding. In stripped down
 semi-transient mode, this pager, if not called as full GWM, disappears shortly after losing mouse
 focus to free up space on the screen.
+
+<figure id="fig_globalpager">
+  <title>Global Pager</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_globalpager.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_globalpager.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </para></listitem>
 
 <listitem><para>
@@ -6618,27 +6732,35 @@ For a more detailed guide about important menus, how to invoke and use them, see
 </para></listitem>
 
 <listitem><para>
-  Left pointer click in combination with control on border or corner
-    calls a root window version of the Window Operations menu - this
-    rare and border functionality is aimed for difficult situations
-    where there is no other option easily available
+Left pointer click in combination with control on border or corner
+will popup Window Operations Menu as if first titlebar button was
+pressed once.
 </para></listitem>
 
 <listitem><para>
-  Middle pointer click in combination with control on border or corner
-    refreshes the window
+Middle pointer click in combination with control on border or corner
+will popup <link linkend="NsCDE-Occupy">Occupy Workspace</link> dialog.
 </para></listitem>
 
 <listitem><para>
-  Right pointer click in combination with control on border or corner
-    calls root applications menu (<guimenuitem>MenuFvwmRoot</guimenuitem>) - this rare and border
-    functionality is aimed for difficult situations where there is no
-    other option easily available
+Right pointer click in combination with control on border or corner
+calls root applications menu (<guimenuitem>MenuFvwmRoot</guimenuitem>) - this rare and border
+functionality is aimed for difficult situations where there is no
+other option easily available
 </para></listitem>
 
 <listitem><para>
-  Left pointer click on icon calls <guimenuitem>m_IconOps</guimenuitem> menu, while double click
-    action deiconifies a window
+Left pointer click in combination with meta on border or corner will refresh that window.
+</para></listitem>
+
+<listitem><para>
+Right pointer click in combination with meta on border or corner will reposition window as if
+<guimenuitem>Reposition</guimenuitem> or <keysym>Alt+F3</keysym> was called.
+</para></listitem>
+
+<listitem><para>
+Left pointer click on icon calls <guimenuitem>m_IconOps</guimenuitem> menu, while double click
+action on the same object deiconifies a window
 </para></listitem>
 
 <listitem><para>
@@ -6686,6 +6808,19 @@ For a more detailed guide about important menus, how to invoke and use them, see
   <keysym>Control+</keysym> middle mouse click will call extended version of the
     WindowList with additional window info such as page number and
     window geometry.
+
+<figure id="fig_winlist_ext">
+  <title>Window List (Extended)</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_winlist_ext.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_winlist_ext.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </para></listitem>
 
 <listitem><para>
@@ -6713,6 +6848,19 @@ transient and will disappear after being used with a pointer click.
 
 <sect2 id="LocalPager_fvwmconf">
 <title>LocalPager.fvwmconf</title>
+
+<figure id="fig_localpager">
+  <title>Local Pager</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_localpager.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_localpager.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 <para>
 Pager which is showing only a current workspace. It's windows and pages on thish windows
 reside. This pager is meant to be primary of informational nature. Infostore variable
@@ -7641,6 +7789,19 @@ session selector. See the rest of the X Session Manager integration examples in 
 directory <filename class="directory">$PREFIX/share/doc/nscde/examples/</filename>
 for MATE, KDE, LXDE and similar DE integrations and play with this if you like.
 </para>
+
+<figure id="fig_splash_2nd">
+  <title>NsCDE Splash Screen</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_splash.png" format="PNG" scale="75"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_splash.png" format="EPS" scale="40"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </sect1>
 
 <sect1 id="NsCDE-Localization">
@@ -7722,6 +7883,18 @@ the terminal which will run automatically and will set up the following:
 <listitem><para>Configure favorite X file manager, if desired</para></listitem>
 <listitem><para>Configure favorite X text editor, if desired</para></listitem>
 </itemizedlist>
+
+<figure id="fig_bootstrap">
+  <title>NsCDE first time setup (bootstrap)</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_bootstrap.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_bootstrap.png" format="EPS" scale="50"/>
+    </imageobject>
+  </mediaobject>
+</figure>
 
 <para>
 There are more options in <filename>$FVWM_USERDIR/NsCDE.conf</filename> which can be edited
@@ -7805,6 +7978,19 @@ is launched from default subpanel 7 (Desktop Settings), it will execute
 <filename>$FVWM_USERDIR/NsCDE.conf</filename>, contents of the FVWM infostore variable
 <varname>$[infostore.xlogcmd]</varname> will be <emphasis>"tail -300f ~/.xsession-errors"</emphasis>.
 </para>
+
+<figure id="fig_watcherrors">
+  <title>Watch Errors (logging)</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_watcherrors.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_watcherrors.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 <para>
 If your X Display Manager is using different path or file name, this can be redefined in
 a way mentioned above. Beware that some X Display Managers (namely lightdm) are sending
@@ -7818,12 +8004,39 @@ unexpected or unexplainable problems with desktop setup.
 <para>
 Window Options menu (called by titlebar button 1, leftmost) of the "Watch Errors" window
 has a custom menu entry <guimenuitem>Fvwm Diagnostic Console</guimenuitem> which
-starts FVWM module FvwmConsole. FvwmConsole on the other hand has custom menu entry
+starts FVWM module FvwmConsole.
+
+<figure id="fig_appmenu1">
+  <title>Personalized Window Operations Menu on "Watch Errors" window</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_appmenu1.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_appmenu1.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
+FvwmConsole on the other hand has custom menu entry
 <guimenuitem>Watch Errors</guimenuitem> which calls Watch errors.
 When both windows are on the screen, this menu entries will simply transfer focus to each other.
 Both of this applications have custom Window Options Menu "NsCDE Process Manager" which will
 run the same named application on demand.
 </para>
+
+<figure id="fig_fvwmconsole">
+  <title>FVWM Diagnostic Console</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_fvwmconsole.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_fvwmconsole.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </sect1>
 
 <sect1 id="NsCDE-Integrations">
@@ -7877,6 +8090,19 @@ Gtk2 and Gtk3 themes. <filename>$HOME/.gtkrc-2.0</filename> and
 directory with <option>gtk-theme-name</option> option. Excessive button images on menus
 and buttons will be turned off of course.
 </para>
+
+<figure id="fig_audacious">
+  <title>Example: Audacious with motified NsCDE theme: GTK engine for Qt5</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_audacious.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_audacious.png" format="EPS" scale="50"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 <para>
 If Qt4 and/or Qt5 integration is also selected in
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, files
@@ -7896,6 +8122,19 @@ All integrations of this type: GTK2, GTK3, QT4 and QT5 are turned on in the
 
 <sect2 id="NsCDE-Integration-Mozilla">
 <title>Mozilla: Firefox and Thunderbird</title>
+
+<figure id="fig_firefox">
+  <title>Firefox with NsCDE GTK3 theme and NsCDE userChrome and userContent CSS</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_firefox.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_firefox.png" format="EPS" scale="40"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 <para>
 From version 1.3 and further, NsCDE contains CSS code and icons which can be used from
 <filename>$FVWM_USERDIR/libexec/colormgr.local</filename> while applying new color style and theme,
@@ -8088,10 +8327,11 @@ more <emphasis>original</emphasis>, Xplore file manager is written with Motif wi
 It looks nice, but it is unfinished (lacks real actions for many things, and instead input
 dialogs are popped up for copy/paste ...) it is not maintained and developed, and if someone
 does not brings it up from the past it can serve only for overview of directories, simple
-actions and nice Motif decoration.
+actions and nice Motif decoration. Defined as <varname>$[infostore.filemgr]</varname> in NsCDE.
 </para>
 <para>
-Editor? Gvim, Emacs, Xemacs, Nedit ... user's choice.
+Editor? Gvim, Emacs, Xemacs, Nedit ... user's choice. Defined as
+<varname>$[infostore.xeditor]</varname> in NsCDE.
 </para>
 <para>
 Another nice and useful app is <command>Gkrellm</command> for which
@@ -8257,10 +8497,10 @@ in combination with python, perl ...
 </para></listitem>
 
 <listitem><para>
-No Application Manager. If integration with <emphasis>Install Icon</emphasis> and
-possibly menus will be possible with some file manager, it may be
-(re)invented in the future. The good candidates are pcmanfm and spacefm, but this
-has it's problems still.
+There is no really a functional Application Manager. If integration with
+<emphasis>Install Icon</emphasis> and possibly menus will be possible with some file manager, it may be
+(re)invented in the future. The good candidates are pcmanfm and pcmanfm-qt, but this
+has it's own problems which are yet to be solved.
 </para></listitem>
 
 <listitem><para>
@@ -8308,8 +8548,8 @@ for testing during setup.
 </para></listitem>
 
 <listitem><para>
-Screensaver Style Manager is in fact Xscreensaver setup. Perfect drop in replacement
-and much fancier than original.
+<link linkend="NsCDE-XscreenSaver">Screen Style Manager</link> is in fact Xscreensaver
+setup. Perfect drop in replacement and much fancier than original.
 </para></listitem>
 
 <listitem><para>
@@ -8413,7 +8653,7 @@ DEB, Arch, BSD, SunOS or similar package from that and install it.
 <sect1 id="NsCDE-FVWM3">
 <title>FVWM3 Support</title>
 <para>
-NsCDE from version 1.3 has late beta quality of support for FVWM3. MsCDE is and will
+NsCDE from version 1.3 has late beta quality of support for FVWM3. NsCDE is and will
 stay compatible for FVWM2 as long as possible. At the time of this writing, FVWM3 was
 in it's fourth release and much of the previous problems are solved, altrough it
 still has some problems with FvwmPager in multi-monitor setup. Nevertheless, NsCDE will
@@ -8520,7 +8760,24 @@ normal titlebar) file manager, but question remains how to send enumerated apps 
 file manager view to Front Panel subpanels or as submenu. Probably external drag and drop
 applet which can be swallowed in subpanels to accept drop with middle mouse move and edit
 subpanel configuration? This will than replace Subpanels Manager app, but it must also have
-functions for editing, deleting etc ...
+functions for editing, deleting etc ... In the time of writing this, only two file managers
+were known to support <emphasis>menu://applications/</emphasis> pseudo path: PCManFM and
+PCManFM-qt. If one of this are found on the system it will be defined as
+<varname>$[infostore.appmgr]</varname> and placed on the Front Panel's eighth launcher
+instead of icon for default editor.
+
+<figure id="fig_appmgr">
+  <title>PCManFM as Application Manager</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_appmgr.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_appmgr.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
 </para></listitem>
 
 <listitem><para>

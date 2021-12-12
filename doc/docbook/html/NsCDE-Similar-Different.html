@@ -22,17 +22,17 @@ width when number of workspaces is changed, or it can be of fixed width if InfoS
 variable <code class="varname">wsm.eco</code> is set to 1 in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>.
 </p></li><li class="listitem"><p>
 No drag and drop. This is specially visible in <span class="emphasis"><em>Install Icon</em></span> action
-which actually calls custom tool <a class="link" href="NsCDE-SubpanelMgr.html" title="5.13. Subpanel Manager">Subpanel Manager</a>
+which actually calls custom tool <a class="link" href="NsCDE-SubpanelMgr.html" title="5.14. Subpanel Manager">Subpanel Manager</a>
 for this actions. Subpanel Manager itself will be rewritten in a nicer and less buggy
 way on the first good occasion.
 </p></li><li class="listitem"><p>
 No Dt Actions builder, and never will be. Write FvwmScript scripts or use some toolkit
 in combination with python, perl ...
 </p></li><li class="listitem"><p>
-No Application Manager. If integration with <span class="emphasis"><em>Install Icon</em></span> and
-possibly menus will be possible with some file manager, it may be
-(re)invented in the future. The good candidates are pcmanfm and spacefm, but this
-has it's problems still.
+There is no really a functional Application Manager. If integration with
+<span class="emphasis"><em>Install Icon</em></span> and possibly menus will be possible with some file manager, it may be
+(re)invented in the future. The good candidates are pcmanfm and pcmanfm-qt, but this
+has it's own problems which are yet to be solved.
 </p></li><li class="listitem"><p>
 Keybindings are 90% custom made, and user have a choice to use it or - partially or
 totally rewrite it. There are more functions and actions in NsCDE than in CDE, and
@@ -43,38 +43,38 @@ titlebar and titlebar buttons too, but since there is no much of them in origina
 CDE anyway, there is a plenty of custom mouse bindings and mouse bindings in
 combination with modifier keys. As for keybindings apply: use it or write your own.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-ColorMgr.html" title="5.4. Color Style Manager">Color Style Manager</a> has numerous new functions: Gtk and Qt
+<a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> has numerous new functions: Gtk and Qt
 integration, X resources integration is optional, and it has even a possibility to run a custom
 script with required parameters of current palette and number of colors for external and
 marginal color scheme integrations - like <span class="command"><strong>Gkrellm</strong></span> for example.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-FontMgr.html" title="5.6. Font Style Manager">Font Style Manager</a> is totally NsCDE oriented and doesn't work
+<a class="link" href="NsCDE-FontMgr.html" title="5.7. Font Style Manager">Font Style Manager</a> is totally NsCDE oriented and doesn't work
 the same as font management in CDE. NsCDE supports XFT fonts (disable antialiasing if you
 want <span class="emphasis"><em>extreme</em></span> original look) and it combines 5 groups of fonts in 3 sizes
 described in this documentation.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-KeyboardMgr.html" title="5.7. Keyboard Style Manager">Keyboard Style Manager</a> implements all options
+<a class="link" href="NsCDE-KeyboardMgr.html" title="5.8. Keyboard Style Manager">Keyboard Style Manager</a> implements all options
 supported by the xset(1) on PC. CDE original in default installation at least, seems
 to have only auto-repeat and click volume controls.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-PointerMgr.html" title="5.11. Mouse Style Manager">Mouse Style Manager</a> does not have configurable
+<a class="link" href="NsCDE-PointerMgr.html" title="5.12. Mouse Style Manager">Mouse Style Manager</a> does not have configurable
 middle mouse (button 2) action since this is not applicable very much on today's GUI
 widgets.
 </p></li><li class="listitem"><p>
 <a class="link" href="NsCDE-BeepMgr.html" title="5.3. Beep Style Manager">Beep Style Manager</a> has a additional Beep button
 for testing during setup.
 </p></li><li class="listitem"><p>
-Screensaver Style Manager is in fact Xscreensaver setup. Perfect drop in replacement
-and much fancier than original.
+<a class="link" href="NsCDE-XscreenSaver.html" title="5.4. Screen Style Manager (Xscreensaver)">Screen Style Manager</a> is in fact Xscreensaver
+setup. Perfect drop in replacement and much fancier than original.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-WindowMgr.html" title="5.18. Window Style Manager">Window Style Manager</a> manages much more of window,
+<a class="link" href="NsCDE-WindowMgr.html" title="5.19. Window Style Manager">Window Style Manager</a> manages much more of window,
 icon, pages and animation behavior than original program in CDE, and even this is a
 small subset of options in FVWM. See it's documentation and fvwm(1) man page.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-PowerSaveMgr.html" title="5.12. Power Save Manager">Power Style Manager</a> is actually very rare in
+<a class="link" href="NsCDE-PowerSaveMgr.html" title="5.13. Power Save Manager">Power Style Manager</a> is actually very rare in
 Style Manager across old CDE setups. It manages DPMS setting of the monitor with xset(1).
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-WsPgMgr.html" title="5.19. Workspaces and Pages Style Manager (WsPgMgr)">Workspaces and Pager Style Manager</a> is NsCDE custom tool
+<a class="link" href="NsCDE-WsPgMgr.html" title="5.20. Workspaces and Pages Style Manager (WsPgMgr)">Workspaces and Pager Style Manager</a> is NsCDE custom tool
 for managing Workspaces and Pages. It is not present in any version of the CDE.
 </p></li><li class="listitem"><p>
 Startup Style Manager is available only if NsCDE is started under some X Session Manager.
@@ -87,7 +87,7 @@ Workspace Manager. It popups menu with the list of pages and can change current 
 </p></li><li class="listitem"><p>
 Custom keyboard and mouse actions on titlebars, buttons and root window.
 </p></li><li class="listitem"><p>
-<a class="link" href="NsCDE-GeometryMgr.html" title="5.10. Window Geometry Manager">GeometryMgr</a> - Manages custom X11 window starting
+<a class="link" href="NsCDE-GeometryMgr.html" title="5.11. Window Geometry Manager">GeometryMgr</a> - Manages custom X11 window starting
 size and position. NsCDE invention.
 </p></li><li class="listitem"><p>
 FpLite is measuring system load, not desktop activity. It has much more fine grained
