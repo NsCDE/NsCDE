@@ -925,7 +925,7 @@ AddToFunc f_StartLocalPager
 + I Module FvwmPager LocalPager * $[infostore.fvwmdesknum]
 + I Wait LocalPager
 + I All ("LocalPager") State 6
-+ I All ("LocalPager", State 6) Schedule 1000 Move +32768p +32768p
++ I All ("LocalPager", State 6) Schedule 1000 Move +32767p +32767p
 + I Test (EnvMatch FVWM_IS_FVWM3 1) InfoStoreAdd localpager.monitor $[monitor.current]
 
 DestroyFunc f_RestartLocalPager
