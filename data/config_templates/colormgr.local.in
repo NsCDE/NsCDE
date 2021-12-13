@@ -94,6 +94,32 @@ if (($? == 0)); then
    rm -f $TEMP1 $TEMP2
 fi
 
+# KDE konsole
+whence -q konsole
+if (($? == 0)); then
+   if [ ! -d "$HOME/.local/share/konsole" ]; then
+      mkdir -p "$HOME/.local/share/konsole"
+   fi
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Blur -v False
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Description -v NsCDE
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k ColorRandomization -v false
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Opacity -v 1
+   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^bg_color_4" | cut -d" " -f2)
+   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^fg_color_4" | cut -d" " -f2)
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s Background -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s BackgroundFaint -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s BackgroundIntense -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s Foreground -k Color -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s ForegroundFaint -k Color -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s ForegroundIntense -k Color -v $FG_COLOR_4
+
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s General -k DimWhenInactive -v false
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s General -k Name -v NsCDE
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s Appearance -k ColorScheme -v NsCDE
+
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/konsolerc -s "Desktop Entry" -k DefaultProfile -v NsCDE.profile
+fi
+
 # Firefox
 function do_firefox
 {

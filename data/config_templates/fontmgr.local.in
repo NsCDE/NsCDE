@@ -26,3 +26,15 @@ if (($? == 0)); then
    fi
 fi
 
+# KDE konsole
+whence -q konsole
+if (($? == 0)); then
+   if [ ! -d "$HOME/.local/share/konsole" ]; then
+      mkdir -p "$HOME/.local/share/konsole"
+   fi
+   K_NewMonoFont=$(echo "$NewMonoFont" | $NSCDE_TOOLSDIR/ised -c 's/\(.*\)\ \(.*$\)/\1, \2/g' -o -f -)
+   if [ "x$K_NewMonoFont" != "x" ]; then
+      ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s Appearance -k Font -v "$K_NewMonoFont"
+   fi
+fi
+

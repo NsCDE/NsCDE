@@ -359,6 +359,21 @@ function setup_nscde
       fi
    fi
 
+   # Font Manager local hooks
+   if [ ! -e "${FVWM_USERDIR}/libexec/fontmgr.local" ]; then
+      if (($VERBOSE == 1)); then
+         setting_default=$(gettext -s "Setting default")
+         echo "$setting_default ${FVWM_USERDIR}/libexec/fontmgr.local ..."
+      fi
+      mkdir -p "${FVWM_USERDIR}/libexec"
+      cp ${NSCDE_DATADIR}/config_templates/fontmgr.local "${FVWM_USERDIR}/libexec/fontmgr.local"
+      chmod +x "${FVWM_USERDIR}/libexec/fontmgr.local"
+   else
+      if (($VERBOSE == 1)); then
+         echo "${FVWM_USERDIR}/libexec/fontmgr.local ${already_exists}."
+      fi
+   fi
+
    locale_enabling=$(gettext -s "Enabling:")
    locale_not_enabling=$(gettext -s "Not Enabling:")
    locale_enabled_by_default=$(gettext -s "Enabled by default:")
