@@ -333,7 +333,8 @@ function setup_nscde
          gettext -s "Integrating Qt5 theme with generated Gtk2 theme ..."
       fi
       mkdir -p "$HOME/.config/qt5ct"
-      echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\n' > "$HOME/.config/qt5ct/qt5ct.conf"
+      echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\nicon_theme=NsCDE\n\n' > "$HOME/.config/qt5ct/qt5ct.conf"
+      echo -ne '[Fonts]\ngeneral=DejaVu Serif Book\nfixed=DejaVu Sans Mono Book\n' >> "$HOME/.config/qt5ct/qt5ct.conf"
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.config/qt5ct/qt5ct.conf ${already_exists}."
@@ -341,6 +342,8 @@ function setup_nscde
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v "DejaVu Serif Book"
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v "DejaVu Sans Mono Book"
       fi
    fi
 

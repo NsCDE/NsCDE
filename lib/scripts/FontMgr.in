@@ -1471,9 +1471,10 @@ Widget 26
                End
             End
 
-            # GTK2/GTK3
+            # GTK2/GTK3, Qt5, Xsettingsd, X ...
             If (GetValue 23) == 1 Then
             Begin
+               # GTK2
                Set $PrepareFontCmd = {$NSCDE_TOOLSDIR/fontmgr -T "} $FontNormalMediumStr {"}
                Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
                Set $Gtk2FontCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
@@ -1482,13 +1483,35 @@ Widget 26
                Begin
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
                End
+
+               # GTK3
                Set $Gtk3FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
                Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
                If $Gtk3Font <> {} Then
                Begin
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
                End
-   
+
+               # Qt5 "general" font
+               Set $PrepareQFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontNormalMediumStr {"}
+               Set $PrepareQFont = (GetOutput $PrepareQFontCmd 1 -1)
+               Set $Qt5FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v "} $PrepareQFont {" 2>&1}
+               Set $Qt5Font = (GetOutput $Qt5FontCmd 1 -1)
+               If $Qt5Font <> {} Then
+               Begin
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\\"} $Qt5Font {\\\""}
+               End
+
+               # Qt5 "fixed" font
+               Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
+               Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
+               Set $Qt5fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k fixed -v "} $PrepareQfFont {" 2>&1}
+               Set $Qt5fFont = (GetOutput $Qt5fFontCmd 1 -1)
+               If $Qt5fFont <> {} Then
+               Begin
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\\"} $Qt5fFont {\\\""}
+               End
+
                # XSETTINGS Daemon Integration
                Set $XSETTINGSFILE = (GetOutput {ls -1 "$FVWM_USERDIR/Xsettingsd.conf" 2>/dev/null} -1 1)
    
