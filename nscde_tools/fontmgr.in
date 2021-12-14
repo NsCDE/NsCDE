@@ -253,11 +253,6 @@ function preparefontforgtk
    echo "$XftStr" | awk -F: '{ print $2, $4, $5 }' | sed 's/pixelsize=//g; s/size=//g'
 }
 
-function preparefontforqt5
-{
-   echo "$XftStr" | awk -F: '{ print $2, $4 }' | sed 's/pixelsize=//g; s/size=//g'
-}
-
 function miscintegrations
 {
    # Dunst
@@ -270,7 +265,7 @@ function miscintegrations
 }
 
 
-while getopts pPF:f:g:G:n:N:s:r:m:X:T:Q:M:h Option
+while getopts pPF:f:g:G:n:N:s:r:m:X:T:M:h Option
 do
    case $Option in
       p)
@@ -320,10 +315,6 @@ do
       T)
          XftStr="$OPTARG"
          preparefontforgtk
-      ;;
-      Q)
-         XftStr="$OPTARG"
-         preparefontforqt5
       ;;
       M)
          XftFontStr="$OPTARG"

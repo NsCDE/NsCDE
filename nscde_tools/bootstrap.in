@@ -334,7 +334,7 @@ function setup_nscde
       fi
       mkdir -p "$HOME/.config/qt5ct"
       echo -ne '[Appearance]\nstandard_dialogs=gtk2\nstyle=gtk2\nicon_theme=NsCDE\n\n' > "$HOME/.config/qt5ct/qt5ct.conf"
-      echo -ne '[Fonts]\ngeneral=DejaVu Serif Book\nfixed=DejaVu Sans Mono Book\n' >> "$HOME/.config/qt5ct/qt5ct.conf"
+      echo -ne '[Interface]\nmenus_have_icons=false\nshow_shortcuts_in_context_menus=true\n' >> "$HOME/.config/qt5ct/qt5ct.conf"
    else
       if (($VERBOSE == 1)); then
          echo "${HOME}/.config/qt5ct/qt5ct.conf ${already_exists}."
@@ -342,8 +342,13 @@ function setup_nscde
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
-         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v "DejaVu Serif Book"
-         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v "DejaVu Sans Mono Book"
+
+         # Unknown format ... cannot do anything here.
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -r
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k fixed -r
+
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k menus_have_icons -v false
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k show_shortcuts_in_context_menus -v true
       fi
    fi
 
