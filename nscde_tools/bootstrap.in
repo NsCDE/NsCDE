@@ -430,6 +430,7 @@ function setup_nscde
       elif [ "x$ans" == "xn" ]; then
          echo "$locale_disabling nscde_use_xscreensaver --> 0"
          $NSCDE_TOOLSDIR/ised -c 's/InfoStoreAdd nscde_use_xscreensaver 1/InfoStoreAdd nscde_use_xscreensaver 0/g' -f "$FVWM_USERDIR/NsCDE.conf"
+         pkill -u $(id -u) xscreensaver
       else
          gettext -s "Answer not understood."
          echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"

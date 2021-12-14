@@ -120,6 +120,39 @@ if (($? == 0)); then
    ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/konsolerc -s "Desktop Entry" -k DefaultProfile -v NsCDE.profile
 fi
 
+# Q terminal
+whence -q qterminal
+if (($? == 0)); then
+   if [ ! -d "$HOME/.config/qterminal.org/color-schemes" ]; then
+      mkdir -p "$HOME/.config/qterminal.org/color-schemes"
+   fi
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Blur -v False
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Description -v NsCDE
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k ColorRandomization -v false
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Opacity -v 1
+   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^bg_color_4" | cut -d" " -f2)
+   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^fg_color_4" | cut -d" " -f2)
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s Background -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s BackgroundFaint -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s BackgroundIntense -k Color -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s Foreground -k Color -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s ForegroundFaint -k Color -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s ForegroundIntense -k Color -v $FG_COLOR_4
+
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/qterminal.ini -s General -k colorScheme -v NsCDE
+fi
+
+# xfce4-terminal
+whence -q xfce4-terminal
+if (($? == 0)); then
+   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^bg_color_4" | cut -d" " -f2)
+   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^fg_color_4" | cut -d" " -f2)
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorBackground -v $BG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorForeground -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorSelectionBackground -v $FG_COLOR_4
+   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorSelectionForeground -v $BG_COLOR_4
+fi
+
 # Firefox
 function do_firefox
 {
