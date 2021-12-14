@@ -29,20 +29,18 @@ install-data-local:
 	install -d -m 755 $(DESTDIR)$(docdir)/
 	install -m 644 NsCDE.pdf $(DESTDIR)$(docdir)/
 	install -m 644 NsCDE.txt $(DESTDIR)$(docdir)/
-	install -d -m 755 $(DESTDIR)$(docdir)/html/ ; \
-	(cd $(DESTDIR)$(docdir)/html && ln -s ../img)
+	install -d -m 755 $(DESTDIR)$(docdir)/html/
 	@for hh in $(srcdir)/html/*; do \
 		echo "Installing $$hh in $(DESTDIR)$(docdir)/html" ; \
 		install -m 644 $$hh $(DESTDIR)$(docdir)/$$hh ; \
 	done
-	install -d -m 755 $(DESTDIR)$(docdir)/img/
+	install -d -m 755 $(DESTDIR)$(docdir)/html/img/
 	@for ii in $(srcdir)/img/*; do \
-		echo "Installing $$ii in $(DESTDIR)$(docdir)/img" ; \
-		install -m 644 $$ii $(DESTDIR)$(docdir)/$$ii ; \
+		echo "Installing $$ii in $(DESTDIR)$(docdir)/html/img" ; \
+		install -m 644 $$ii $(DESTDIR)$(docdir)/html/$$ii ; \
 	done
 
 uninstall-local:
-	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -rf img)
 	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -rf html)
 	test -d $(DESTDIR)$(docdir) && (cd $(DESTDIR)$(docdir) && rm -f NsCDE.pdf NsCDE.txt)
 	test -d $(DESTDIR)$(docdir) && rmdir $(DESTDIR)$(docdir) || :
