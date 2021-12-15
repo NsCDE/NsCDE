@@ -26,6 +26,7 @@ Begin
    ChangeFont 2 $DefaultFont
    # Keybindings
    Key Escape A 6 1 {KeyClose}
+   Key Return A 5 1 {KeyOk}
    Key F1 A 7 1 {KeyHelp}
    Key Help A 7 1 {KeyHelp}
 
@@ -105,6 +106,10 @@ Property
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 5 1
+      End
+      1 :
       Begin
          Do {SendToModule BackdropMgr SendString 10 1 } $Palette
          Quit

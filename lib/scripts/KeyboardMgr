@@ -43,6 +43,8 @@ Begin
 
    # Key bindings
    Key Escape A 14 1 {KeyClose}
+   Key Return A 11 1 {KeyApply}
+   Key Return C 12 1 {KeySave}
    Key Q C 14 1 {KeyClose}
    Key F1 A 13 1 {KeyHelp}
    Key Help A 13 1 {KeyHelp}
@@ -238,7 +240,10 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-
+         SendSignal 11 1
+      End
+      1 :
+      Begin
          Do {Exec xset c } (GetValue 9)
          If (GetValue 3) == 1 Then
             Do {Exec xset r on r rate } (GetValue 5) { } (GetValue 7)
@@ -258,6 +263,10 @@ Widget 12
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 12 1
+      End
+      1 :
       Begin
          # Workaround for FvwmScript WriteToFile which truncates existing file if it
          # doesn't find script's signature in it.

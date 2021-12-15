@@ -75,6 +75,7 @@ Begin
 
    # Keybindings
    Key Escape A 22 1 {KeyClose}
+   Key Return C 21 1 {KeyOk}
    Key G A 5 1 {KeyGrab}
    Key F1 A 23 1 {KeyHelp}
    Key Help A 23 1 {KeyHelp}
@@ -473,6 +474,10 @@ Widget 21
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 21 1
+      End
+      1 :
       Begin
          If $BuildHexForTest <> {} Then
          Begin

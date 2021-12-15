@@ -65,6 +65,8 @@ Begin
 
    # Key bindings
    Key Escape A 14 1 {KeyClose}
+   Key Return A 10 1 {KeyApply}
+   Key Return C 11 1 {KeyOk}
    Key Q C 14 1 {KeyClose}
    Key F1 A 13 1 {KeyHelp}
    Key Help A 13 1 {KeyHelp}
@@ -220,6 +222,10 @@ Widget 10
       Case message of
       SingleClic :
       Begin
+         SendSignal 10 1
+      End
+      1 :
+      Begin
          Do {Exec xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
          Set $SAVEDVOL = (GetValue 4)
          Set $SAVEDPITCH = (GetValue 6)
@@ -238,6 +244,10 @@ Widget 11
    Main
    Case message of
       SingleClic :
+      Begin
+         SendSignal 11 1
+      End
+      1 :
       Begin
           Do {Exec xset b } (GetValue 4) { } (GetValue 6) { } (GetValue 8)
 

@@ -78,6 +78,8 @@ Begin
    # Key bindings
    Key Escape A 3 1 {KeyClose}
    Key Q C 3 1 {KeyClose}
+   Key Return A 1 1 {KeyApply}
+   Key Return C 2 2 {KeySave}
    Key F1 A 13 1 {KeyHelp}
    Key Help A 13 1 {KeyHelp}
 
@@ -100,6 +102,10 @@ Widget 1
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 1 1
+      End
+      1 :
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin
@@ -181,6 +187,10 @@ Widget 2
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 2 2
+      End
+      2 :
       Begin
          If (GetValue 4) > (GetValue 9) Then
          Begin

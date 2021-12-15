@@ -125,6 +125,7 @@ Begin
 
    # Key bindings
    Key Q C 27 1 {KeyClose}
+   Key Return C 26 5 {KeySave}
    Key F1 A 28 1 {KeyHelp}
    Key Help A 28 1 {KeyHelp}
    Key Prior A 101 5 {PreviewUp}
@@ -1388,17 +1389,7 @@ Widget 26
       Case message of
       SingleClic :
       Begin
-         If $OperationMode == 1 Then
-         Begin
-            # Spawn InputForm, suggest new fontset name "Custom"
-            Set $ARG = {InputForm "$[gt.Enter New Fontset Name:]" "Custom"}
-            Set $INPUTFORM = (LaunchScript $ARG )
-         End
-         If $OperationMode == 2 Then
-         Begin
-            # For existing fontset selection, skip 26 1, go to 26 2
-            SendSignal 26 2
-         End
+         SendSignal 26 5
       End
       1 :
       Begin
@@ -1581,6 +1572,20 @@ Widget 26
          Begin
             # On cancel, simply quit.
             Quit
+         End
+      End
+      5 :
+      Begin
+         If $OperationMode == 1 Then
+         Begin
+            # Spawn InputForm, suggest new fontset name "Custom"
+            Set $ARG = {InputForm "$[gt.Enter New Fontset Name:]" "Custom"}
+            Set $INPUTFORM = (LaunchScript $ARG )
+         End
+         If $OperationMode == 2 Then
+         Begin
+            # For existing fontset selection, skip 26 1, go to 26 2
+            SendSignal 26 2
          End
       End
 End

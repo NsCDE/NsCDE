@@ -139,6 +139,7 @@ Begin
    # Keys
    Key Return A 24 1 {ReturnFromRename}
    Key Escape A 24 2 {ReturnFromRename}
+   Key Return C 21 6 {KeyOk}
 
    Set $DefFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
    ChangeFont 9 $DefFont
@@ -926,6 +927,140 @@ Widget 21
       Case message of
       SingleClic :
       Begin
+         SendSignal 21 6
+      End
+      1 :
+      Begin
+         Set $DStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+desknum' '} $ExpandFile {' ; echo $?}
+         Set $DStringToCheck = (GetOutput $DStringToCheckCmd 1 -1)
+         If $DStringToCheck == 0 Then
+         Begin
+            Do {InfoStoreAdd desknum } $TmpDesks
+            Set $WriteDeskCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+desknum[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $TmpDesks {/g' -f "} $ExpandFile {"}
+            Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
+         End
+ 
+         If $DStringToCheck == 2 Then
+         Begin
+            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+            Quit
+         End
+ 
+         If $DStringToCheck == 1 Then
+         Begin
+            Do {InfoStoreAdd desknum } $TmpDesks
+            Set $WriteDeskCmd = {echo 'InfoStoreAdd desknum } $TmpDesks {' >> '} $ExpandFile {'}
+            Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
+         End
+      End
+      2 :
+      Begin
+         Set $PVStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixY' '} $ExpandFile {' ; echo $?}
+         Set $PVStringToCheck = (GetOutput $PVStringToCheckCmd 1 -1)
+         If $PVStringToCheck == 0 Then
+         Begin
+            Do {InfoStoreAdd pagematrixY } $VTmpPageNo
+            Set $WritePVCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixY[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $VTmpPageNo {/g' -f "} $ExpandFile {"}
+            Set $WritePV = (GetOutput $WritePVCmd 1 -1)
+         End
+ 
+         If $PVStringToCheck == 2 Then
+         Begin
+            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PVStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+            Quit
+         End
+ 
+         If $PVStringToCheck == 1 Then
+         Begin
+            Do {InfoStoreAdd pagematrixY } $VTmpPageNo
+            Set $WritePVCmd = {echo 'InfoStoreAdd pagematrixY } $VTmpPageNo {' >> '} $ExpandFile {'}
+            Set $WritePV = (GetOutput $WritePVCmd 1 -1)
+         End
+      End
+      3 :
+      Begin
+         Set $PHStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixX' '} $ExpandFile {' ; echo $?}
+         Set $PHStringToCheck = (GetOutput $PHStringToCheckCmd 1 -1)
+         If $PHStringToCheck == 0 Then
+         Begin
+            Do {InfoStoreAdd pagematrixX } $HTmpPageNo
+            Set $WritePHCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixX[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $HTmpPageNo {/g' -f "} $ExpandFile {"}
+            Set $WritePH = (GetOutput $WritePHCmd 1 -1)
+         End
+         If $PHStringToCheck == 2 Then
+         Begin
+            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PHStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+            Quit
+         End
+ 
+         If $PHStringToCheck == 1 Then
+         Begin
+            Do {InfoStoreAdd pagematrixX } $HTmpPageNo
+            Set $WritePHCmd = {echo 'InfoStoreAdd pagematrixX } $HTmpPageNo {' >> '} $ExpandFile {'}
+            Set $WritePH = (GetOutput $WritePHCmd 1 -1)
+         End
+      End
+      4 :
+      Begin
+         Set $WSMECOStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+wsm\.eco' '} $ExpandFile {' ; echo $?}
+         Set $WSMECOStringToCheck = (GetOutput $WSMECOStringToCheckCmd 1 -1)
+         If $WSMECOStringToCheck == 0 Then
+         Begin
+            Do {InfoStoreAdd wsm.eco } $WsmEco
+            Set $WriteWSMECOCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+wsm\.eco[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\3} $WsmEco {/g' -f "} $ExpandFile {"}
+            Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
+         End
+         If $WSMECOStringToCheck == 2 Then
+         Begin
+            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $WSMECOStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+            Quit
+         End
+         If $WSMECOStringToCheck == 1 Then
+         Begin
+            Do {InfoStoreAdd wsm.eco } $WsmEco
+            Set $WriteWSMECOCmd = {echo 'InfoStoreAdd wsm.eco } $WsmEco {' >> '} $ExpandFile {'}
+            Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
+         End
+      End
+      5 :
+      Begin
+         If $Fvwm3DskConfVal == 1 Then
+         Begin
+            Set $Fvwm3DskConf = {global}
+         End
+         If $Fvwm3DskConfVal == 2 Then
+         Begin
+            Set $Fvwm3DskConf = {per-monitor}
+         End
+         If $Fvwm3DskConfVal == 3 Then
+         Begin
+            Set $Fvwm3DskConf = {shared}
+         End
+ 
+         Set $DskConfStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+desktopconfiguration' '} $ExpandFile {' ; echo $?}
+         Set $DskConfStringToCheck = (GetOutput $DskConfStringToCheckCmd 1 -1)
+         If $DskConfStringToCheck == 0 Then
+         Begin
+            Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
+            Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
+            Set $WriteDskConfCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+desktopconfiguration[[:space:]]\+\)\(\(global\|per-monitor\|shared\)\+\([[:space:]]\+\)\?\)/\3} $Fvwm3DskConf {/g' -f "} $ExpandFile {"}
+            Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
+         End
+         If $DskConfStringToCheck == 2 Then
+         Begin
+            Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DskConfStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
+            Quit
+         End
+         If $DskConfStringToCheck == 1 Then
+         Begin
+            Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
+            Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
+            Set $WriteDskConfCmd = {echo 'InfoStoreAdd desktopconfiguration } $Fvwm3DskConf {' >> '} $ExpandFile {'}
+            Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
+         End
+      End
+      6 :
+      Begin
          Set $Action = 0
          Set $PerformRestart = 0
 
@@ -1063,136 +1198,6 @@ Widget 21
             End
          End
          Quit
-     End
-     1 :
-     Begin
-        Set $DStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+desknum' '} $ExpandFile {' ; echo $?}
-        Set $DStringToCheck = (GetOutput $DStringToCheckCmd 1 -1)
-        If $DStringToCheck == 0 Then
-        Begin
-           Do {InfoStoreAdd desknum } $TmpDesks
-           Set $WriteDeskCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+desknum[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $TmpDesks {/g' -f "} $ExpandFile {"}
-           Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
-        End
-
-        If $DStringToCheck == 2 Then
-        Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
-           Quit
-        End
-
-        If $DStringToCheck == 1 Then
-        Begin
-           Do {InfoStoreAdd desknum } $TmpDesks
-           Set $WriteDeskCmd = {echo 'InfoStoreAdd desknum } $TmpDesks {' >> '} $ExpandFile {'}
-           Set $WriteDesk = (GetOutput $WriteDeskCmd 1 -1)
-        End
-     End
-     2 :
-     Begin
-        Set $PVStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixY' '} $ExpandFile {' ; echo $?}
-        Set $PVStringToCheck = (GetOutput $PVStringToCheckCmd 1 -1)
-        If $PVStringToCheck == 0 Then
-        Begin
-           Do {InfoStoreAdd pagematrixY } $VTmpPageNo
-           Set $WritePVCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixY[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $VTmpPageNo {/g' -f "} $ExpandFile {"}
-           Set $WritePV = (GetOutput $WritePVCmd 1 -1)
-        End
-
-        If $PVStringToCheck == 2 Then
-        Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PVStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
-           Quit
-        End
-
-        If $PVStringToCheck == 1 Then
-        Begin
-           Do {InfoStoreAdd pagematrixY } $VTmpPageNo
-           Set $WritePVCmd = {echo 'InfoStoreAdd pagematrixY } $VTmpPageNo {' >> '} $ExpandFile {'}
-           Set $WritePV = (GetOutput $WritePVCmd 1 -1)
-        End
-     End
-     3 :
-     Begin
-        Set $PHStringToCheckCmd = {egrep -q '^([[:space:]]+)?InfoStoreAdd[[:space:]]+pagematrixX' '} $ExpandFile {' ; echo $?}
-        Set $PHStringToCheck = (GetOutput $PHStringToCheckCmd 1 -1)
-        If $PHStringToCheck == 0 Then
-        Begin
-           Do {InfoStoreAdd pagematrixX } $HTmpPageNo
-           Set $WritePHCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\)\?InfoStoreAdd[[:space:]]\+pagematrixX[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\1} $HTmpPageNo {/g' -f "} $ExpandFile {"}
-           Set $WritePH = (GetOutput $WritePHCmd 1 -1)
-        End
-        If $PHStringToCheck == 2 Then
-        Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $PHStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
-           Quit
-        End
-
-        If $PHStringToCheck == 1 Then
-        Begin
-           Do {InfoStoreAdd pagematrixX } $HTmpPageNo
-           Set $WritePHCmd = {echo 'InfoStoreAdd pagematrixX } $HTmpPageNo {' >> '} $ExpandFile {'}
-           Set $WritePH = (GetOutput $WritePHCmd 1 -1)
-        End
-     End
-     4 :
-     Begin
-        Set $WSMECOStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+wsm\.eco' '} $ExpandFile {' ; echo $?}
-        Set $WSMECOStringToCheck = (GetOutput $WSMECOStringToCheckCmd 1 -1)
-        If $WSMECOStringToCheck == 0 Then
-        Begin
-           Do {InfoStoreAdd wsm.eco } $WsmEco
-           Set $WriteWSMECOCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+wsm\.eco[[:space:]]\+\)\([[:digit:]]\+\([[:space:]]\+\)\?\)/\3} $WsmEco {/g' -f "} $ExpandFile {"}
-           Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
-        End
-        If $WSMECOStringToCheck == 2 Then
-        Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $WSMECOStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
-           Quit
-        End
-        If $WSMECOStringToCheck == 1 Then
-        Begin
-           Do {InfoStoreAdd wsm.eco } $WsmEco
-           Set $WriteWSMECOCmd = {echo 'InfoStoreAdd wsm.eco } $WsmEco {' >> '} $ExpandFile {'}
-           Set $WriteWSMECO = (GetOutput $WriteWSMECOCmd 1 -1)
-        End
-     End
-     5 :
-     Begin
-        If $Fvwm3DskConfVal == 1 Then
-        Begin
-           Set $Fvwm3DskConf = {global}
-        End
-        If $Fvwm3DskConfVal == 2 Then
-        Begin
-           Set $Fvwm3DskConf = {per-monitor}
-        End
-        If $Fvwm3DskConfVal == 3 Then
-        Begin
-           Set $Fvwm3DskConf = {shared}
-        End
-
-        Set $DskConfStringToCheckCmd = {egrep -q '^(#)?([[:space:]]+)?InfoStoreAdd[[:space:]]+desktopconfiguration' '} $ExpandFile {' ; echo $?}
-        Set $DskConfStringToCheck = (GetOutput $DskConfStringToCheckCmd 1 -1)
-        If $DskConfStringToCheck == 0 Then
-        Begin
-           Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
-           Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
-           Set $WriteDskConfCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\(#\([[:space:]]\+\)\?\)\?\(\([[:space:]]\+\)\?InfoStoreAdd[[:space:]]\+desktopconfiguration[[:space:]]\+\)\(\(global\|per-monitor\|shared\)\+\([[:space:]]\+\)\?\)/\3} $Fvwm3DskConf {/g' -f "} $ExpandFile {"}
-           Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
-        End
-        If $DskConfStringToCheck == 2 Then
-        Begin
-           Do {f_Notifier "Config Set Error" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error] } $DskConfStringToCheck { $[gt.occured while checking config file] } $ExpandFile {."}
-           Quit
-        End
-        If $DskConfStringToCheck == 1 Then
-        Begin
-           Do {InfoStoreAdd desktopconfiguration } $Fvwm3DskConf
-           Do {Schedule 100 DesktopConfiguration $[infostore.desktopconfiguration]}
-           Set $WriteDskConfCmd = {echo 'InfoStoreAdd desktopconfiguration } $Fvwm3DskConf {' >> '} $ExpandFile {'}
-           Set $WriteDskConf = (GetOutput $WriteDskConfCmd 1 -1)
-        End
      End
 End
 

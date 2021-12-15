@@ -102,6 +102,7 @@ Begin
 
    # Key bindings
    Key Escape A 123 1 {KeyClose}
+   Key Return C 122 2 {KeyOk}
    Key Q C 123 1 {KeyClose}
    Key F1 A 124 1 {KeyHelp}
    Key Help A 124 1 {KeyHelp}
@@ -1824,6 +1825,10 @@ Widget 122
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 122 2
+      End
+      2 :
       Begin
          If $CopySysToUserBeforeChanges == 1 Then
          Begin

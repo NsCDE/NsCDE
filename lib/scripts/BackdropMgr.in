@@ -72,6 +72,7 @@ Begin
 
    # Keybindings
    Key Q C 18 1 {KeyClose}
+   Key Return C 16 1 {KeyOk}
    Key P A 11 1 {KeyPreview}
    Key Down A 5 3 {KeyDown}
    Key Up A 5 3 {KeyUp}
@@ -809,6 +810,10 @@ Widget 16
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 16 1
+      End
+      1 :
       Begin
          If $Performed == 0 Then
          Begin
