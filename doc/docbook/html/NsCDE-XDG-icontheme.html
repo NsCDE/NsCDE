@@ -1,0 +1,74 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>17.3. NsCDE Icon Theme</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-XDG.html" title="17. NsCDE and Cross Desktop Group (Free Desktop) Specifications and Standards"><link rel="prev" href="NsCDE-XDG-menus.html" title="17.2. NsCDE Applications Menu"><link rel="next" href="NsCDE-XDG-autostart.html" title="17.4. Application autostart"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.3. NsCDE Icon Theme</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-XDG-menus.html">Prev</a> </td><th width="60%" align="center">17. NsCDE and Cross Desktop Group (Free Desktop) Specifications and Standards</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-XDG-autostart.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-XDG-icontheme"></a>17.3. NsCDE Icon Theme</h3></div></div></div><p>
+NsCDE Icon theme was initially based on MATE desktop environment theme, so here and there,
+some non-CDE icon for objects without equivalent in CDE can be found. Apart from CDE
+icons, there are some old Netscape icons, many just created in style of CDE and made to
+visually fit in the picture. Speciality of this Icon theme, which is uncommon to Free
+Desktop icon themes is that part or the icons are processed by the
+<a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">NsCDE Color Style Manager</a> to put current color palette
+theme into the parts of the icon to fit more nicely into applications. GTK based applications
+often use this, while Qt applications somehow escape precedence or
+<code class="filename">$HOME/.icons/NsCDE</code> icon hierarchy.
+</p><p>
+NsCDE Icon Theme is produced exclusively in PNG image format and the following sizes:
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>16x16</em></span>:
+smallest pictograms - used by some programs for menus, small toolbars and helper symbols,
+used also by the NsCDE FVWM WindowList and such.
+</p></li><li class="listitem"><p><span class="emphasis"><em>22x22</em></span>:
+Also used by programs for toolbars, used by most file managers for small icon or detailed
+list view.
+</p></li><li class="listitem"><p><span class="emphasis"><em>24x24</em></span>:
+Similar as 22x22: used by programs for toolbars and small decoration, can be configured for
+file managers bigger view while some use them by default, for compact or detailed view of
+files. Used also as fallback for notifications. Used by
+<a class="link" href="basics_using_menus_preface.html#basics_applications_submenu" title="3.4.6.1. Applications Submenu">Applications Menu</a> submenu of the
+<a class="link" href="basics_using_menus_preface.html#basics_workspace_menu" title="3.4.6. Workspace Menu">Workspace Menu:</a>.
+</p></li><li class="listitem"><p><span class="emphasis"><em>32x32</em></span>:
+Used in NsCDE Front Panel Subpanels. Can be used by file managers for side panel icons, also
+used by desktop notifications. May be used for file manager's simple "icon view".
+</p></li><li class="listitem"><p><span class="emphasis"><em>48x48</em></span>:
+Biggest full set in NsCDE Icon Theme. Used by window icons on workspaces, as well as main
+Front Panel frame. Often used for file manager's simple "icon view".
+</p></li></ul></div><p>
+</p><p>
+Icon contexts or groups are standard, similar or the same as with the most other XDG
+compatible icon themes:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>actions</em></span>: For various buttons, toolbars and ... actions</p></li><li class="listitem"><p><span class="emphasis"><em>apps</em></span>: default and individual application icons conforming to this theme</p></li><li class="listitem"><p><span class="emphasis"><em>categories</em></span>: categories of applications - see menu group desctiption above</p></li><li class="listitem"><p><span class="emphasis"><em>devices</em></span>: removable media, system devices, parts of the workstation to control</p></li><li class="listitem"><p><span class="emphasis"><em>mimetypes</em></span>: MIME types of files on the filesystem, textual, binary, directories, special ...</p></li><li class="listitem"><p><span class="emphasis"><em>places</em></span>: Usually thematic directory, computer, network and various storage types and databases symbols</p></li><li class="listitem"><p><span class="emphasis"><em>status</em></span>: Indicators for warnings, errors, notifications, statuses of various controls and similar</p></li></ul></div><p>
+</p><p>
+Icon theme is set by the initial NsCDE bootstrap procedure in the following places:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+FVWM: Used internally in ImagePath by default. Note: NsCDE uses also old style icon paths
+to NsCDE/CDE icons configured in this same ImagePath
+</p></li><li class="listitem"><p>
+Qt5: <code class="filename">$HOME/.config/qt5ct/qt5ct.conf</code>
+</p></li><li class="listitem"><p>
+GTK2: <code class="filename">$HOME/.gtkrc-2.0</code>
+</p></li><li class="listitem"><p>
+GTK3: <code class="filename">$HOME/.config/gtk-3.0/settings.ini
+</code></p></li></ul></div><p>
+
+Icon theme is not furthermore maintained (enforced) by the NsCDE style managers, so
+that any manual change in above mentioned places will result in icon theme change,
+which can be user's choice, but may give incomplete CDE experience while using NsCDE.
+From time to time, there can be individual applications which are overriding icon
+theme, but often can be configured in their preferences to use the "system" or
+explicitly configured NsCDE theme. This task cannot be handled by NsCDE, so user
+must take a step to integrate such applications to use NsCDE icons. Some
+applications cannot change their hardcoded forced icon theme, while for some,
+which are not followinf Free Desktop icon theme format, separate icons can be
+copied, linked or edited like drop-ins for special one-application only theme.
+Indexed search program (otherwise very nice) named "recoll" is one example of
+the latest description: it cannot use any Free Desktop icon theme or part of
+it by default.
+</p><p>
+Icon theme usually resides in <code class="filename">/usr/share/icons</code>,
+as <code class="filename">NsCDE</code> directory, but it can also be found as
+<code class="filename">/usr/local/share/icons</code> on BSD systems, or in
+some other system path such as <code class="filename">/opt/sfw/share/icons</code>
+or <code class="filename">/usr/pkg/share/icons</code> XDG variable
+<code class="varname">XDG_DATA_DIRS</code> content directs various graphical toolkits to search
+icon themes and icons in configured paths. If NsCDE is installed in some non-standard
+place which is not hardcoded in toolkits and is not defined in
+<code class="varname">XDG_DATA_DIRS</code>, icon theme will fall back to hicolor or system's
+default, which can result in pretty ugly visual experience.
+</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-XDG-menus.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-XDG.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-XDG-autostart.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">17.2. NsCDE Applications Menu </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 17.4. Application autostart</td></tr></table></div></body></html>

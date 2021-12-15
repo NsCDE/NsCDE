@@ -8322,6 +8322,315 @@ likely use <command>$NSCDE_TOOLSDIR/palette_colorgen</command> in some way.
 
 </sect1>
 
+<sect1 id="NsCDE-XDG">
+<title>NsCDE and Cross Desktop Group (Free Desktop) Specifications and Standards</title>
+<para>
+NsCDE is the hybrid desktop environment built around FVWM and other free software
+components. Among other things, NsCDE is partially using XDG or Free Desktop concepts
+and subsystems such as icon theme format, application menus, application ".desktop"
+launcher files, mime types, preffered applications and partially/optionally autostart
+facility. NsCDE provides it's own menu layout and application grouping, as well as
+icon theme which brings CDE icons in their new format and some new sizes. Furthermore,
+NsCDE maintains it's own ".desktop" files for launching two types of applications:
+it's own FVWM or FvwmScript based applications and third party, user configured
+preferences for default applications under their generic names. NsCDE also provides
+XDG compatible X Display Manager entries for it's own startup during the user login.
+</para>
+<para>
+NsCDE partially uses XDG base directory paths defined and found by their variable
+names <varname>XDG_DATA_DIRS</varname>, <varname>XDG_CONFIG_DIRS</varname> from the
+<filename>$NSCDE_DATADIR/fvwm/Main.fvwmconf</filename>, then user dirs as
+<varname>XDG_PICTURES_DIR</varname> (for dropping screenshots) etc. It defines
+<varname>XDG_SESSION_DESKTOP</varname> and <varname>XDG_CURRENT_DESKTOP</varname> to
+<emphasis>NsCDE</emphasis>, and very important <varname>XDG_MENU_PREFIX</varname> to
+<emphasis>nscde-</emphasis>.
+</para>
+<para>
+What is not used are paths such as $HOME/.config for NsCDE user's config, and some
+other XDG facilities such as <varname>XDG_MUSIC_DIR</varname>, <varname>XDG_DOWNLOAD_DIR</varname>
+and such, simply because they are of no use to NsCDE as desktop environment. All this
+is configured and can be reconfigured by the user in <filename>$HOME/.config/user-dirs.dirs</filename>.
+</para>
+
+<sect2 id="NsCDE-XDG-apps">
+<title>Desktop Application Entries</title>
+<para>
+NsCDE provides ".desktop" files which are installed in <filename class="directory">/usr/share/applications</filename>,
+<filename class="directory">/usr/local/share/applications</filename> or some other path on the system. This files
+are visible by their friendly name (Name= directive in .desktop file) on
+<link linkend="basics_workspace_menu">Workspace Menu</link>, <link linkend="NsCDE-SubpanelMgr">Subpanels Manager</link>
+and <link linkend="NsCDE-FpIconMgr"> Front Panel Icon Manager</link>. This applications, and their grouping with other
+applications can also be found in <emphasis>application manager</emphasis> mode of the file manager, if
+<link linkend="NsCDE-Missing-Parts">file manager</link> supports this.
+</para>
+<para>
+There are two kings of NsCDE ".desktop" files:
+
+<itemizedlist>
+<listitem><para>NsCDE own FVWM or FvwmScript Applications</para></listitem>
+<listitem><para>Application Defaults choosen by the user or autodiscovered by the NsCDE with their generic names</para></listitem>
+</itemizedlist>
+
+</para>
+
+<sect3 id="NsCDE-XDG-apps-own">
+<title>NsCDE Own XDG Desktop Application Definitions</title>
+<para>
+The following list contains NsCDE's own application launchers. There should be
+known that none of this applications can be called outside of FVWM, and often
+not even outside of NsCDE: apart from FvwmConsole(1) and <guimenuitem>Watch Errors</guimenuitem>
+terminal wrapped applications, all other are written in FvwmScript(1), and they
+often depend on other NsCDE components to work fully and properly.
+
+<itemizedlist>
+<listitem><para>NsCDE-Exec.desktop: <link linkend="NsCDE-ExecDialog">NsCDE Exec Dialog</link></para></listitem>
+<listitem><para>NsCDE-FvwmConsole.desktop: FvwmConsole(1)</para></listitem>
+<listitem><para>NsCDE-GWM.desktop: <link linkend="NsCDE-GWM">Graphical Workspace Manager (GWM)</link></para></listitem>
+<listitem><para>NsCDE-NProcMgr.desktop: <link linkend="NsCDE-NProcMgr">NsCDE Process Manager</link> </para></listitem>
+<listitem><para>NsCDE-StyleMgr.desktop: <link linkend="NsCDE-StyleMgr">Style Manager Main Launcher</link> </para></listitem>
+<listitem><para>NsCDE-Sysinfo.desktop: <link linkend="NsCDE-SysInfo">Sysinfo Dialog</link> </para></listitem>
+<listitem><para>NsCDE-SystemAction.desktop: <link linkend="NsCDE-SysActionDialog">System Action Dialog</link></para></listitem>
+<listitem><para>NsCDE-WatchErrors.desktop: <link linkend="NsCDE-Logging">NsCDE/FVWM and X11 logs and standar error output</link></para></listitem>
+<listitem><para>NsCDE-WsPgMgr.desktop: <link linkend="NsCDE-WsPgMgr">NsCDE Workspaces and Pager Manager</link> </para></listitem>
+</itemizedlist>
+</para>
+
+</sect3>
+
+<sect3 id="NsCDE-XDG-apps-defaults">
+<title>NsCDE Defaults XDG Desktop Applications</title>
+<para>
+The following entries will work only under NsCDE, they will call <command>nscde_fvwmclnt</command>
+to execute configured or autodiscovered default applications such as WWW browser, terminal, file
+manager, task manager, calclulator etc ...
+
+<itemizedlist>
+
+<listitem><para>
+NsCDE-AppMgr.desktop: This will display File Manager in Application Manager mode of operation if
+file manager supports this.
+</para></listitem>
+<listitem><para>
+NsCDE-Calculator.desktop: This will search internal catalog of apps or display configured calculator
+application as <varname>$[infostore.calculator]</varname>
+</para></listitem>
+<listitem><para>
+NsCDE-Editor.desktop: This will search internal catalog of apps or display configured editor application
+as <varname>$[infostore.xeditor]</varname>
+often choosen are Gvim, Emacs, Mousepad etc ...
+</para></listitem>
+<listitem><para>
+NsCDE-FileMgr.desktop: This will search internal catalog of apps or display configured file manager
+application as <varname>$[infostore.filemgr]</varname>
+</para></listitem>
+<listitem><para>
+NsCDE-MailReader.desktop: This will search internal catalog of apps or display configured mail reader
+application as <varname>$[infostore.mailreader]</varname>
+</para></listitem>
+<listitem><para>
+NsCDE-PrintMgr.desktop: This will search internal catalog of apps or display configured printer
+manager application as <varname>$[infostore.printmgr]</varname> often, this will default to CUPS
+web interface, called as <emphasis>http://localhost:631</emphasis>
+</para></listitem>
+<listitem><para>
+NsCDE-TaskMgr.desktop: This will try to find top, topas, prstat, qps, xfce4-taskmanager, lxtask, or any
+other system process list application, or simply open default configured. It's internal variable is
+$[infostore.taskmgr].
+</para></listitem>
+<listitem><para>
+NsCDE-Terminal.desktop: This will try to find terminal emulator applications, or use configured
+default from <filename>$FVWM_USERDIR/NsCDE.conf</filename>. It operates under the internal variable
+$[infostore.terminal].
+</para></listitem>
+<listitem><para>
+NsCDE-Volumectrl.desktop: Try to find some usable audio mixer. This is often OS dependent, but will
+accept also standalone applications from other desktop environments. Infostore variable is
+$[infostore.volumectrl].
+</para></listitem>
+<listitem><para>
+NsCDE-WebBrowser.desktop: One of the most important: find usable web browser, or launch configured
+one: $[infostore.browser].
+</para></listitem>
+</itemizedlist>
+
+</para>
+</sect3>
+
+</sect2>
+
+<sect2 id="NsCDE-XDG-menus">
+<title>NsCDE Applications Menu</title>
+<para>
+Applications Menu is often installed in <filename class="directory">/etc/xdg/menus</filename> or
+<filename class="directory">/usr/local/etc/xdg/menus</filename> often on BSD system under the name
+<filename>nscde-applications.menu</filename>. Applications Menu uses NsCDE ".directory" files in
+<filename class="directory">/usr/share/desktop-directories</filename> to define groups of
+applications. The following groups are configured and added in the NsCDE Applications Menu tree:
+<itemizedlist>
+<listitem><para><emphasis>desktop-settings</emphasis></para></listitem>
+<listitem><para><emphasis>development</emphasis></para></listitem>
+<listitem><para><emphasis>education</emphasis></para></listitem>
+<listitem><para><emphasis>games</emphasis></para></listitem>
+<listitem><para><emphasis>graphics</emphasis></para></listitem>
+<listitem><para><emphasis>information</emphasis></para></listitem>
+<listitem><para><emphasis>internet</emphasis></para></listitem>
+<listitem><para><emphasis>multimedia</emphasis></para></listitem>
+<listitem><para><emphasis>office</emphasis></para></listitem>
+<listitem><para><emphasis>other</emphasis></para></listitem>
+<listitem><para><emphasis>science</emphasis></para></listitem>
+<listitem><para><emphasis>settings</emphasis></para></listitem>
+<listitem><para><emphasis>sysconf</emphasis></para></listitem>
+<listitem><para><emphasis>system</emphasis></para></listitem>
+<listitem><para><emphasis>utilities</emphasis></para></listitem>
+<listitem><para><emphasis>utility-accessibility</emphasis></para></listitem>
+</itemizedlist>
+</para>
+<para>
+This sections or groups are self-descriptive, and thankfuly to their translations in other
+DE products, localized to many languages.
+</para>
+</sect2>
+
+<sect2 id="NsCDE-XDG-icontheme">
+<title>NsCDE Icon Theme</title>
+<para>
+NsCDE Icon theme was initially based on MATE desktop environment theme, so here and there,
+some non-CDE icon for objects without equivalent in CDE can be found. Apart from CDE
+icons, there are some old Netscape icons, many just created in style of CDE and made to
+visually fit in the picture. Speciality of this Icon theme, which is uncommon to Free
+Desktop icon themes is that part or the icons are processed by the
+<link linkend="NsCDE-ColorMgr">NsCDE Color Style Manager</link> to put current color palette
+theme into the parts of the icon to fit more nicely into applications. GTK based applications
+often use this, while Qt applications somehow escape precedence or
+<filename class="directory">$HOME/.icons/NsCDE</filename> icon hierarchy.
+</para>
+<para>
+NsCDE Icon Theme is produced exclusively in PNG image format and the following sizes:
+
+<itemizedlist>
+<listitem><para><emphasis>16x16</emphasis>:
+smallest pictograms - used by some programs for menus, small toolbars and helper symbols,
+used also by the NsCDE FVWM WindowList and such.
+</para></listitem>
+<listitem><para><emphasis>22x22</emphasis>:
+Also used by programs for toolbars, used by most file managers for small icon or detailed
+list view.
+</para></listitem>
+<listitem><para><emphasis>24x24</emphasis>:
+Similar as 22x22: used by programs for toolbars and small decoration, can be configured for
+file managers bigger view while some use them by default, for compact or detailed view of
+files. Used also as fallback for notifications. Used by
+<link linkend="basics_applications_submenu">Applications Menu</link> submenu of the
+<link linkend="basics_workspace_menu">Workspace Menu:</link>.
+</para></listitem>
+<listitem><para><emphasis>32x32</emphasis>:
+Used in NsCDE Front Panel Subpanels. Can be used by file managers for side panel icons, also
+used by desktop notifications. May be used for file manager's simple "icon view".
+</para></listitem>
+<listitem><para><emphasis>48x48</emphasis>:
+Biggest full set in NsCDE Icon Theme. Used by window icons on workspaces, as well as main
+Front Panel frame. Often used for file manager's simple "icon view".
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Icon contexts or groups are standard, similar or the same as with the most other XDG
+compatible icon themes:
+<itemizedlist>
+<listitem><para><emphasis>actions</emphasis>: For various buttons, toolbars and ... actions</para></listitem>
+<listitem><para><emphasis>apps</emphasis>: default and individual application icons conforming to this theme</para></listitem>
+<listitem><para><emphasis>categories</emphasis>: categories of applications - see menu group desctiption above</para></listitem>
+<listitem><para><emphasis>devices</emphasis>: removable media, system devices, parts of the workstation to control</para></listitem>
+<listitem><para><emphasis>mimetypes</emphasis>: MIME types of files on the filesystem, textual, binary, directories, special ...</para></listitem>
+<listitem><para><emphasis>places</emphasis>: Usually thematic directory, computer, network and various storage types and databases symbols</para></listitem>
+<listitem><para><emphasis>status</emphasis>: Indicators for warnings, errors, notifications, statuses of various controls and similar</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Icon theme is set by the initial NsCDE bootstrap procedure in the following places:
+<itemizedlist>
+<listitem><para>
+FVWM: Used internally in ImagePath by default. Note: NsCDE uses also old style icon paths
+to NsCDE/CDE icons configured in this same ImagePath
+</para></listitem>
+<listitem><para>
+Qt5: <filename>$HOME/.config/qt5ct/qt5ct.conf</filename>
+</para></listitem>
+<listitem><para>
+GTK2: <filename>$HOME/.gtkrc-2.0</filename>
+</para></listitem>
+<listitem><para>
+GTK3: <filename>$HOME/.config/gtk-3.0/settings.ini
+</filename></para></listitem>
+</itemizedlist>
+
+Icon theme is not furthermore maintained (enforced) by the NsCDE style managers, so
+that any manual change in above mentioned places will result in icon theme change,
+which can be user's choice, but may give incomplete CDE experience while using NsCDE.
+From time to time, there can be individual applications which are overriding icon
+theme, but often can be configured in their preferences to use the "system" or
+explicitly configured NsCDE theme. This task cannot be handled by NsCDE, so user
+must take a step to integrate such applications to use NsCDE icons. Some
+applications cannot change their hardcoded forced icon theme, while for some,
+which are not followinf Free Desktop icon theme format, separate icons can be
+copied, linked or edited like drop-ins for special one-application only theme.
+Indexed search program (otherwise very nice) named "recoll" is one example of
+the latest description: it cannot use any Free Desktop icon theme or part of
+it by default.
+</para>
+
+<para>
+Icon theme usually resides in <filename class="directory">/usr/share/icons</filename>,
+as <filename class="directory">NsCDE</filename> directory, but it can also be found as
+<filename class="directory">/usr/local/share/icons</filename> on BSD systems, or in
+some other system path such as <filename class="directory">/opt/sfw/share/icons</filename>
+or <filename class="directory">/usr/pkg/share/icons</filename> XDG variable
+<varname>XDG_DATA_DIRS</varname> content directs various graphical toolkits to search
+icon themes and icons in configured paths. If NsCDE is installed in some non-standard
+place which is not hardcoded in toolkits and is not defined in
+<varname>XDG_DATA_DIRS</varname>, icon theme will fall back to hicolor or system's
+default, which can result in pretty ugly visual experience.
+</para>
+
+</sect2>
+
+<sect2 id="NsCDE-XDG-autostart">
+<title>Application autostart</title>
+<para>
+Free Desktop standards autostart facility user <filename class="directory">/etc/xdg/autostart</filename>
+or <filename class="directory">/usr/local/etc/xdg/autostart</filename> to find system wide autostart
+entries, and user's own <filename class="directory">$HOME/.config/autostart</filename> to find and
+execute user's explicitly defined autostart entries. This ".desktop" files have "Desktop Entry" section
+where everything is defined to start the application. Applications autostarted in such way are
+usually applets and tray icons, or even background user-level daemons: that is, services, their
+controls and indicators mainly. Apart from XDG autostart facility, for ordinary screen oriented
+programs (but also other things possibly) NsCDE user it's own <filename>$FVWM_USERDIR/Init.fvwmconf</filename>
+where applications, their workspace, page, order and conditions can be programmed by the user
+to satisfy initial state of the environment upon successful login. Autostarter for XDG is
+also conditionally started from there.
+</para>
+<para>
+If standalone freedesktop autostarter <command>dex</command> (sometimes called "dex-autostart")
+is installed, it will be used by <filename>$FVWM_USERDIR/Init.fvwmconf</filename> function
+<function>CommonInitFunction</function> in local mode: it will read and start ".desktop" files
+in the <filename class="directory">$HOME/.config/autostart</filename> directory.
+</para>
+<para>
+In other words, NsCDE does not use, look or start anything from <filename class="directory">/etc/xdg/autostart</filename>
+or <filename class="directory">/usr/local/etc/xdg/autostart</filename>, or some other possible
+system XDG autostart directory. If user wants applications to be autostarted, they must be written,
+put or copied into it's own <filename class="directory">$HOME/.config/autostart</filename>. This
+is due to the fact there can be a plenty of unwanted applications, often put there by the default
+desktop environments of Linux distributions, default installations of non-user programs and such.
+In other words, user can "pick" from system's autostart, or symlink to that items wanted or
+needed for one's setup and usage.
+</para>
+</sect2>
+
+</sect1>
+
 <sect1 id="NsCDE-Additional-Software">
 <title>Additional recommended software</title>
 <para>
@@ -8416,7 +8725,7 @@ NsCDE has a ready drop-in theme called (of course) NsCDE in
 installed as <filename>$FVWM_USERDIR/libexec/colormgr.local</filename>.
 </para>
 <para>
-If standalone freedesktop autostarter <command>dex-autostart</command> (sometimes called "dex")
+If standalone freedesktop autostarter <command>dex</command> (sometimes called "dex-autostart")
 is installed, it will be used by default <filename>Init.fvwmconf</filename> function
 <function>CommonInitFunction</function> in local mode: it will read and start ".desktop" files
 in the <filename class="directory">$HOME/.config/autostart</filename> directory.
