@@ -1502,7 +1502,7 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
             command or appropriate part of NsCDE documentation if
             the entry is the NsCDE component. Failing this, it
             will display this document. Documentation is displayed
-            as HTML in the default www browser.
+            as HTML in the default documentation browser.
        Figure 14. Front Panel Launcher Context Menu
        [fig_fp_ctx_menu.png]
      * In addition to iconification, Front Panel can be shaded to
@@ -1744,11 +1744,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
      * Rename: Rename the current item on the subpanel
      * Delete: Delete the current item from the subpanel (warning
        message will appear before deletion is finally performed)
-     * Help: Display relevant documentation in a browser: this
-       will try to find a matching man page for the subpanel's
-       entry command or appropriate part of NsCDE documentation if
-       the entry is the NsCDE component. Failing this, it will
-       display this document.
+     * Help: Display relevant documentation in a documentation
+       browser: this will try to find a matching man page for the
+       subpanel's entry command or appropriate part of NsCDE
+       documentation if the entry is the NsCDE component. Failing
+       this, it will display this document.
 
    Figure 18. Front Panel Item Context Menu
 
@@ -1855,8 +1855,8 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        [fig_wsp_rename.png]
        [fig_wsp_renamed.png]
      * If Sun type keyboard is in use, Help key above WSM will
-       bring this help text in browser. On PC keyboard, F1 has the
-       same function.
+       bring this help text in documentation browser. On PC
+       keyboard, F1 has the same function.
      * Addition: right mouse button on workspace button brings
        contextual menu. From this menu, the following items can be
        selected:
@@ -1942,8 +1942,8 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
    by the user.
 
    If Sun type keyboard is in use, Help key above Month Day Applet
-   will bring this help text in browser. On PC keyboard, F1 has
-   the same function.
+   will bring this help text in documentation browser. On PC
+   keyboard, F1 has the same function.
      __________________________________________________________
 
 4.6. Front Panel Clock - fpclock
@@ -2012,9 +2012,9 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    this menu. For example, to call urxvt -e mutt or something like
    that.
 
-   Key F1 will bring this help text in browser. If Sun type
-   keyboard is in use, Help key above Check Mail Applet has the
-   same function as F1 on PC.
+   Key F1 will bring this help text in documentation browser. If
+   Sun type keyboard is in use, Help key above Check Mail Applet
+   has the same function as F1 on PC.
      __________________________________________________________
 
 4.8. FpLite
@@ -2053,9 +2053,9 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    python script getla1 from the $NSCDE_TOOLSDIR/libexec to obtain
    1-minute load data.
 
-   Key F1 will bring this help text in browser. If Sun type
-   keyboard is in use, Help key above FpLite has the same function
-   as F1 on PC.
+   Key F1 will bring this help text in documentation browser. If
+   Sun type keyboard is in use, Help key above FpLite has the same
+   function as F1 on PC.
      __________________________________________________________
 
 5. GUI Tools
@@ -3988,6 +3988,8 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * InfoStoreAdd taskmgr Task manager of choice
      * InfoStoreAdd printmgr Printer manager of choice
      * InfoStoreAdd browser WWW Browser of choice
+     * InfoStoreAdd docsbrowser Documentation Browser of choice -
+       xdg-open or defaults to browser
      * InfoStoreAdd mailreader Mail application of choice
      * InfoStoreAdd terminal terminal - emulator app of choice by
        default commented out and figured out by the list of known
@@ -5593,8 +5595,8 @@ Silent Key Tab A S -
    reasons. It is advised that after this setup
    $FVWM_USERDIR/NsCDE.conf is opened and further edited, for
    example InfoStoreAdd internal FVWM variables for terminal,
-   browser, taskmgr, printmgr to user's favorite programs for
-   mentioned functions.
+   browser, docsbrowser, taskmgr, printmgr to user's favorite
+   programs for mentioned functions.
 
    Layout of the $FVWM_USERDIR after the initial setup should look
    like this:
@@ -5931,7 +5933,8 @@ Standards
    The following entries will work only under NsCDE, they will
    call nscde_fvwmclnt to execute configured or autodiscovered
    default applications such as WWW browser, terminal, file
-   manager, task manager, calclulator etc ...
+   manager, task manager, documentation browser, calclulator etc
+   ...
 
      * NsCDE-AppMgr.desktop: This will display File Manager in
        Application Manager mode of operation if file manager
@@ -5968,6 +5971,10 @@ Standards
      * NsCDE-WebBrowser.desktop: One of the most important: find
        usable web browser, or launch configured one:
        $[infostore.browser].
+     * NsCDE-DocsBrowser.desktop: Browser for displaying NsCDE
+       documentation: by default it is xdg-open or
+       $[infostore.browser]. It can be set to khelpcenter or
+       chromium in user's $FVWM_USERDIR/NsCDE.conf.
      __________________________________________________________
 
 17.2. NsCDE Applications Menu

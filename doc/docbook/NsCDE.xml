@@ -1894,7 +1894,8 @@ resetting user's configuration for it), and
 <listitem><para>
 <guimenuitem>Help</guimenuitem> will try to find matching man page for a button's command or
 appropriate part of NsCDE documentation if the entry is the NsCDE component. Failing this,
-it will display this document. Documentation is displayed as HTML in the default www browser.
+it will display this document. Documentation is displayed as HTML in the default
+documentation browser.
 </para></listitem>
 
 </orderedlist>
@@ -2263,9 +2264,9 @@ Delete: Delete the current item from the subpanel (warning message will appear b
 deletion is finally performed)
 </para></listitem>
 <listitem><para>
-Help: Display relevant documentation in a browser: this will try to find a matching man page
-for the subpanel's entry command or appropriate part of NsCDE documentation if the entry is
-the NsCDE component. Failing this, it will display this document.
+Help: Display relevant documentation in a documentation browser: this will try to find a matching
+man page for the subpanel's entry command or appropriate part of NsCDE documentation if the entry
+is the NsCDE component. Failing this, it will display this document.
 </para></listitem>
 </itemizedlist>
 
@@ -2417,9 +2418,9 @@ the popup menu.
 
 </para></listitem>
 <listitem><para>
-If Sun type keyboard is in use, <keysym>Help</keysym> key above
-WSM will bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the
-same function.
+If Sun type keyboard is in use, <keysym>Help</keysym> key above WSM will bring
+this help text in documentation browser. On PC keyboard, <keysym>F1</keysym>
+has the same function.
 </para></listitem>
 <listitem><para>
 Addition: right mouse button on workspace button brings contextual menu. From
@@ -2566,8 +2567,8 @@ in <filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> to call a program conf
 </para>
 
 <para>
-If Sun type keyboard is in use, <keysym>Help</keysym> key above Month Day Applet will
-bring this help text in browser. On PC keyboard, <keysym>F1</keysym> has the same function.
+If Sun type keyboard is in use, <keysym>Help</keysym> key above Month Day Applet will bring this help
+text in documentation browser. On PC keyboard, <keysym>F1</keysym> has the same function.
 </para>
 </sect2>
 
@@ -2652,7 +2653,7 @@ to change or add entries on this menu. For example, to call <command>urxvt -e</c
 like that.
 </para>
 <para>
-Key <keysym>F1</keysym> will bring this help text in browser.
+Key <keysym>F1</keysym> will bring this help text in documentation browser.
 If Sun type keyboard is in use, <keysym>Help</keysym> key above
 Check Mail Applet has the same function as F1 on PC.
 </para>
@@ -2701,7 +2702,7 @@ FpLite FvwmScript app uses little portable python script <emphasis>getla1</empha
 <filename class="directory">$NSCDE_TOOLSDIR/libexec</filename> to obtain 1-minute load data.
 </para>
 <para>
-Key <keysym>F1</keysym> will bring this help text in browser. If Sun type keyboard is in use,
+Key <keysym>F1</keysym> will bring this help text in documentation browser. If Sun type keyboard is in use,
 <keysym>Help</keysym> key above FpLite has the same function as F1 on PC.
 </para>
 </sect2>
@@ -5620,6 +5621,7 @@ Some of the important FVWM Infostore variables which can be set in the <filename
 <listitem><para>InfoStoreAdd taskmgr <varname>Task manager of choice</varname></para></listitem>
 <listitem><para>InfoStoreAdd printmgr <varname>Printer manager of choice</varname></para></listitem>
 <listitem><para>InfoStoreAdd browser <varname>WWW Browser of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd docsbrowser <varname>Documentation Browser of choice - xdg-open or defaults to browser</varname></para></listitem>
 <listitem><para>InfoStoreAdd mailreader <varname>Mail application of choice</varname></para></listitem>
 <listitem><para>InfoStoreAdd terminal <varname>terminal</varname> - emulator app of choice by default commented out and figured out by the list of known terminals. It can be set here.</para></listitem>
 <listitem><para>InfoStoreAdd sandboxmode 0|1 - reduced NsCDE for embedded Xephyr X jails</para></listitem>
@@ -8017,8 +8019,8 @@ This is default since NsCDE 1.0. Setup script after the finish will ask user to 
 informative and/or diagnostic reasons. It is advised that after this setup
 <filename>$FVWM_USERDIR/NsCDE.conf</filename> is opened and further edited, for example
 InfoStoreAdd internal FVWM variables for <varname>terminal</varname>, <varname>browser</varname>,
-<varname>taskmgr</varname>, <varname>printmgr</varname> to user's favorite programs for mentioned
-functions.
+<varname>docsbrowser</varname>, <varname>taskmgr</varname>, <varname>printmgr</varname> to
+user's favorite programs for mentioned functions.
 </para>
 
 <para>
@@ -8423,7 +8425,7 @@ often depend on other NsCDE components to work fully and properly.
 <para>
 The following entries will work only under NsCDE, they will call <command>nscde_fvwmclnt</command>
 to execute configured or autodiscovered default applications such as WWW browser, terminal, file
-manager, task manager, calclulator etc ...
+manager, task manager, documentation browser, calclulator etc ...
 
 <itemizedlist>
 
@@ -8471,6 +8473,10 @@ $[infostore.volumectrl].
 <listitem><para>
 NsCDE-WebBrowser.desktop: One of the most important: find usable web browser, or launch configured
 one: $[infostore.browser].
+</para></listitem>
+<listitem><para>
+NsCDE-DocsBrowser.desktop: Browser for displaying NsCDE documentation: by default it is xdg-open or
+$[infostore.browser]. It can be set to khelpcenter or chromium in user's <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
 </para></listitem>
 </itemizedlist>
 
