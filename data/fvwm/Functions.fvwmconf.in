@@ -689,8 +689,10 @@ AddToFunc f_FrontPanelPropsMenu
     AddToMenu m_FrontPanelPropsMenu "$[gt.Delete Subpanel]" \
     f_FrontPanelManageSubpanels $0 -d
 + I AddToMenu m_FrontPanelPropsMenu "" Nop
-+ I Test (!EnvMatch infostore.fp_help_line SPECIAL:*) \
++ I Test (!EnvMatch infostore.fp_help_line SPECIAL:*, !EnvMatch infostore.docsbrowser.rawman 1) \
     AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -fp "$[infostore.fp_help_line]"'
++ I Test (!EnvMatch infostore.fp_help_line SPECIAL:*, EnvMatch infostore.docsbrowser.rawman 1) \
+    AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -rfp "$[infostore.fp_help_line]"'
 + I Test (EnvMatch infostore.fp_help_line SPECIAL:NSCDE_DOCS) \
     AddToMenu m_FrontPanelPropsMenu "$[gt.Help]" f_DisplayURL "$[gt.Documentation]" html/index.html
 + I ChangeMenuStyle CommonAppMenu m_FrontPanelPropsMenu
@@ -722,7 +724,8 @@ AddToFunc f_SubpanelPropsMenu
   "Exec exec $[NSCDE_TOOLSDIR]/subpanel_menuitem_props -p $0 -s $1 -t \"$2\" -n \"$[infostore.inputform.text]\" -a rename" "Nop"
 + I AddToMenu m_SubpanelPropsMenu "$[gt.Delete]" Exec exec $[NSCDE_TOOLSDIR]/subpanel_menuitem_props -p $0 -s $1 -t "$2" -d
 + I AddToMenu m_SubpanelPropsMenu "" Nop
-+ I AddToMenu m_SubpanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -subp $0 $1'
++ I Test (!EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_SubpanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -subp $0 $1'
++ I Test (EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_SubpanelPropsMenu "$[gt.Help]" PipeRead '$[NSCDE_TOOLSDIR]/fpdoc -rsubp $0 $1'
 + I ChangeMenuStyle CommonAppMenu m_SubpanelPropsMenu
 + I Popup m_SubpanelPropsMenu mouse -0m -0m
 

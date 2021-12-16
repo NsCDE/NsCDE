@@ -40,9 +40,19 @@ function find_cmd_in_subpanel
 
 if [ "$Mode" == "-fp" ]; then
    Str="$@"
+   RawMan=0
+elif [ "$Mode" == "-rfp" ]; then
+   Str="$@"
+   RawMan=1
 elif [ "$Mode" == "-subp" ]; then
    SubpanelNo="$1"
    LineInSubpanel="$2"
+   RawMan=0
+   find_cmd_in_subpanel
+elif [ "$Mode" == "-rsubp" ]; then
+   SubpanelNo="$1"
+   LineInSubpanel="$2"
+   RawMan=1
    find_cmd_in_subpanel
 else
    echo "Error: ${0##*/}: Unknown mode of operation."
@@ -125,8 +135,18 @@ function view_man_page
    ;;
    esac
 
-   echo "Exec exec \$[infostore.browser] ${TMPDIR}/${Unique}_man_page_${Str}.html"
+   echo "Exec exec \$[infostore.docsbrowser] ${TMPDIR}/${Unique}_man_page_${Str}.html"
    echo "Schedule 10000 Exec exec rm -f ${TMPDIR}/${Unique}_man_page_${Str}.html"
+}
+
+function view_raw_man_page
+{
+   locate_man_candidate
+   if (($? != 0)); then
+      return 1
+   fi
+
+   echo "Exec exec \$[infostore.docsbrowser] man:${Str}"
 }
 
 function man_path
@@ -245,8 +265,15 @@ function locate_man_candidate
    return 1
 }
 
-view_man_page
-if (($? != 0)); then
+if (($RawMan == 0)); then
+   view_man_page
+   MANRET=$?
+else
+   view_raw_man_page
+   MANRET=$?
+fi
+
+if (($MANRET != 0)); then
    FinalStr=$(echo "$SaveStr" | sed 's/Exec exec//g')
    find_in_nscde_manual "$FinalStr"
    if (($? != 0)); then

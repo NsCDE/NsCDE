@@ -87,6 +87,7 @@ InfoStoreAdd stalonetray.pos.placement "-0 -0 ewmhiwa"
 InfoStoreAdd gkrellm.pos.placement "-0 +0 ewmhiwa"
 InfoStoreAdd nprocmgr.actionval 1
 InfoStoreAdd nprocmgr.confval 1
+InfoStoreAdd docsbrowser.rawman 0
 Test (x xscreensaver) InfoStoreAdd nscde_use_xscreensaver 1
 Test (!x xscreensaver) InfoStoreAdd nscde_use_xscreensaver 0
 Test (x stalonetray) InfoStoreAdd nscde_use_stalonetray 1
@@ -273,6 +274,8 @@ AddToFunc StartFunction
 # + I Test (!EnvIsSet infostore.afrmilisecs) InfoStoreAdd afrmilisecs 200
 + I Test (EnvMatch infostore.autoraisefocus 1) Module FvwmAuto $[infostore.afrmilisecs] -mfocus
 + I Test (EnvMatch infostore.iconbox 1) Module FvwmIconMan NsCDEIconBox
++ I Test (EnvMatch infostore.docsbrowser khelpcenter) InfoStoreAdd docsbrowser.rawman 1
++ I Test (EnvMatch infostore.docsbrowser yelp) InfoStoreAdd docsbrowser.rawman 1
 + I Test (!EnvMatch FVWM_IS_FVWM3 1) Schedule 600 ModuleSynchronous FvwmBacker
 + I Test (EnvMatch FVWM_IS_FVWM3 1, EnvMatch infostore.desktopconfiguration "global") Schedule 600 ModuleSynchronous FvwmBacker
 + I Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.desktopconfiguration "global") Schedule 600 f_SetFvwm3NonGlobalBackground
