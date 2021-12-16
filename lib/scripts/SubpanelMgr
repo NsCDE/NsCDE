@@ -98,6 +98,10 @@ Begin
    Key Escape A 22 1 {KeyClose}
    Key F1 A 23 1 {KeyHelp}
    Key Help A 23 1 {KeyHelp}
+   Key Insert A 5 2 {KeyInsert}
+   Key Delete A 6 2 {KeyDelete}
+   Key 0xff53 A 5 2 {KeyInsert}
+   Key 0xff51 A 6 2 {KeyDelete}
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
@@ -360,6 +364,10 @@ Widget 5
       Case message of
       SingleClic :
       Begin
+         SendSignal 5 2
+      End
+      2 :
+      Begin
          If $FocusOnList == {Applications} Then
          Begin
             ChangeIcon 5 NsCDE/ArrowRightP.xpm
@@ -481,6 +489,10 @@ Widget 6
    Main
       Case message of
       SingleClic :
+      Begin
+         SendSignal 6 2
+      End
+      2 :
       Begin
          # Remove entries from a panel.
          If $FocusOnList == {Subpanel} Then

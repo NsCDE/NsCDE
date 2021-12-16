@@ -101,6 +101,8 @@ Begin
    Key Q C 33 1 {KeyClose}
    Key Return C 31 1 {KeyOk}
    Key P A 4 1 {KeyPreview}
+   Key M A 19 4 {KeyModColor}
+   Key C A 20 4 {KeyNumColors}
    Key Down A 3 2 {KeyDown}
    Key Up A 3 2 {KeyUp}
    Key F1 A 34 1 {KeyHelp}
@@ -827,14 +829,7 @@ Widget 19
       Case message of
       SingleClic :
       Begin
-         If $SelectedColorset <> 0 Then
-         Begin
-            Do {Module FvwmScript ModifyColor } $SelectedColorset { } (GetBack $WidgetOfColorset)
-         End
-         Else
-         Begin
-            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Info.xpm" "Select one of the base colors of the current palette which you want to modify."}
-         End
+         SendSignal 19 4
       End
       # Called from ModifyColor Module to change color
       1 :
@@ -922,6 +917,17 @@ Widget 19
             Quit
          End
       End
+      4 :
+      Begin
+         If $SelectedColorset <> 0 Then
+         Begin
+            Do {Module FvwmScript ModifyColor } $SelectedColorset { } (GetBack $WidgetOfColorset)
+         End
+         Else
+         Begin
+            Do {f_Notifier "Color Style Manager" "Dismiss" "NsCDE/Info.xpm" "Select one of the base colors of the current palette which you want to modify."}
+         End
+      End
 End
 
 Widget 20
@@ -992,6 +998,10 @@ Widget 20
          Begin
             Set $WsmVariantArg = {}
          End
+      End
+      4 :
+      Begin
+         Do {f_ToggleFvwmModule FvwmScript NColorsDialog } $Ncolors { } (StrCopy $FpVariantArg 2 2) { } (StrCopy $WsmVariantArg 2 2)
       End
 End
 

@@ -74,6 +74,9 @@ Begin
    Key Q C 18 1 {KeyClose}
    Key Return C 16 1 {KeyOk}
    Key P A 11 1 {KeyPreview}
+   Key C A 10 1 {KeyLoadCustomPalette}
+   Key A A 12 2 {KeyAdd}
+   Key A C 6 1 {KeyAllWsp}
    Key Down A 5 3 {KeyDown}
    Key Up A 5 3 {KeyUp}
    Key F1 A 19 1 {KeyHelp}
@@ -360,6 +363,17 @@ Widget 6
       SingleClic :
       Begin
       End
+      1 :
+      Begin
+         If (GetValue 6) == 0 Then
+         Begin
+            ChangeValue 6 1
+         End
+         Else
+         Begin
+            ChangeValue 6 0
+         End
+      End
 End
 
 Widget 7
@@ -519,9 +533,13 @@ Widget 10
       Case message of
       SingleClic :
       Begin
-         Do {Module FvwmScript PaletteDialog}
+         SendSignal 10 1
       End
       1 :
+      Begin
+         Do {Module FvwmScript PaletteDialog}
+      End
+      2 :
       Begin
          Set $CurrentPalette = (LastString)
          If $CurrentPalette == {DEFAULT} Then
@@ -717,6 +735,11 @@ Widget 12
                Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Selected file does not appear to be in the suitable image format for setting desktop background."}
             End
          End
+      End
+      2 :
+      Begin
+         Set $ARG={FilePicker }
+         Set $BROWSER=(LaunchScript $ARG )
       End
 End
 
