@@ -1416,8 +1416,13 @@ AddToFunc f_GWM
 + I All ("GWMPager", CirculateHit) KillModule FvwmPager GWMPager
 + I All ("GWM", CirculateHit) Break 1
 + I Exec exec mkdir -p "$[FVWM_USERDIR]/tmp"
-+ I Exec exec $[NSCDE_TOOLSDIR]/FvwmScripts/GWM -w $[vp.width] -h $[vp.height] \
-    -f $[infostore.glob_pg.desk_scale] -d $[infostore.desknum] -c "" -s > $[FVWM_USERDIR]/tmp/GWM
++ I Test (!EnvMatch FVWM_IS_FVWM3 1) Exec exec $[NSCDE_TOOLSDIR]/FvwmScripts/GWM \
+    -w $[vp.width] -h $[vp.height] -f $[infostore.glob_pg.desk_scale] \
+    -d $[infostore.desknum] -c "" -s > $[FVWM_USERDIR]/tmp/GWM
++ I Test (EnvMatch FVWM_IS_FVWM3 1) Exec exec $[NSCDE_TOOLSDIR]/FvwmScripts/GWM \
+    -w $[monitor.$[monitor.current].width] -h $[monitor.$[monitor.current].height] \
+    -f $[infostore.glob_pg.desk_scale] -d $[infostore.desknum] \
+    -c "" -s > $[FVWM_USERDIR]/tmp/GWM
 + I Schedule 260 Module FvwmScript $[FVWM_USERDIR]/tmp/GWM
 
 # Iconify non-iconic group of iconifiable windows on the current screen/desk/page
