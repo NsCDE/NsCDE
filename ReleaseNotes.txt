@@ -1,3 +1,78 @@
+NsCDE 2.0 release notes
+=======================
+
+This release is a turning point. All code and data is reorganized
+to conform to the FHS standard. NsCDE now uses standard autoconf
+and automake. Installation is universal weather started under
+FVWM 2 or FVWM 3.
+
+- Renamed most of the python and shell tools and helpers the are now
+  located in libexec/NsCDE or lib/NsCDE depending on the system defaults
+- Renamed FVWM configurations, stripped from unnecessary NsCDE- prefix
+  new system of extensions indicated kind of file (see docs)
+- Data, configs and commands completely reorganized to conform to FHS
+  standard and be more suitable for packaging and system integration
+- Made FVWM major version runtime detectable, there is no more
+  separate installation parameters
+- Added Front Panel Icon Manager application
+- Added Front Panel context menu option to move launchers left or right
+- Added Rename option to subpanels items context menu
+- Introduced autoconf and automake for build and install process
+- Made RPM, Debian and Arch example packaging instructions and files
+- Never ending CSS fixes for Firefox and Thunderbird as damaging of their
+  look continues by the Mozilla
+- 1.x to 2.x migration procedure introduced at 1st login to the NsCDE 2.0
+  all data in ~/.NsCDE is renamed and key things renamed to work again
+  old ~/.NsCDE is saved as tarball in user's home
+- Context menus Help on Front Panel and Subpanels are now mostly content
+  aware: they will display proper NsCDE documentation for NsCDE items
+  and will try to find man pages for the rest applications, display them
+  as HTML in browser, or directly if appropriate help reader is installed
+- Uniformly rework and harden .desktop files in share/applications
+- Smarter detection of XDG data and config paths during autoconf configure
+- Huge documentation update, added more instructions, whole chapters,
+  figures and illustrations with descriptions and examples
+- bootstrap: add example Xset.conf and .xscreensaver if they are missing
+- Fine tuned fontsets for larger resolutions
+- Added more key bindings in FvwmScript applications
+- Added more icons to icon theme to fix the missing gaps
+- Front Panel button 8 now displays application manager instead of editor if
+  compatible file manager capable of doing it is found
+- Front Panel position can be now configured in ~/.NsCDE.conf
+- Update locale
+- Added more 3rd party integrations in config_templates/colormgr.local
+- Enhance confit_templates/fontmgr.local with new examples, install it
+  during bootstrap procedure
+- Really fix and test font sync to qt5ct.conf
+- Correct screen calculation for GWM under FVWM3 in multi monitor mode
+- Fixed internal non-fatal syntax errors in WSM
+- Minor typo and bug fixes which were found during the process of FHS-ing
+
+See ChangeLog or "git log" for a complete list of changes.
+
+
+NsCDE 1.4 release notes
+=======================
+
+This release contains minor and cosmetic fixes. It is the last of the
+1.x series. New one will be 2.0.
+
+- Firefox and Thunderbird CSS fixes and updates
+- Fixed some hardcoded paths
+- FpLite to AppFinder for more autodetection hits
+- Typos in some backdrops XPM fixed
+- OSD colors for some volume managers in GTK theme fixed
+- Minor syntax error bug in WSM fixed
+- CheckMailApplet consolidated functionality
+- Added some icons and icon symlinks in icon theme
+- Some X resources fixes in Color Style Manager templates
+- NProcmgr popup refresh fix
+- Fix IconSize calculations of WindowMgr
+- Fix missing comma in NsCDE-Style.conf near IconFill
+- Fix docs for exec/rofi keybinding
+- Fix StyleMgr Help Menu distance on some systems
+
+
 NsCDE 1.3 release notes
 =======================
 
