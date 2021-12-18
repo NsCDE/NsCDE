@@ -86,3 +86,16 @@ autoreconf -ivf
 - Rename Subpanel Items feature
 - Input checking
 
+* Tue Dec 21 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-4
+- Release NsCDE 2.0
+- Fix Qt5 qt5ct.conf new fonts handling
+- Update fontsets for higher resolutions
+- Add more handy key bindings into style managers
+- Documentation now has descriptions of XDG subsystems in NsCDE
+- Support for more terminal emulators in colormgr.local and fontmgr.local
+- Illustrated documentation
+- Smart XDG paths from configure.ac
+- Front Panel and Subpanels smart contextual Help
+- Correct screen calculation for GWM under FVWM3 with multiple monitors
+- Misc minor fixes
+
