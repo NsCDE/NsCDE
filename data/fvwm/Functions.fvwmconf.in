@@ -607,14 +607,13 @@ AddToFunc f_KeyFromSubpanelToFP
 # We must call fvwm-menu-desktop here to regenerate local icon cache just in case
 DestroyFunc f_RefreshSubpanel
 AddToFunc f_RefreshSubpanel
-+ I Exec exec fvwm-menu-desktop --mini-icon-dir $[FVWM_USERDIR]/icons --enable-mini-icons -s 32 --theme NsCDE --include-items none > /dev/null 2>&1
++ I PipeRead "fvwm-menu-desktop --mini-icon-dir $[FVWM_USERDIR]/icons --enable-mini-icons -s 32 --theme NsCDE --include-items none > /dev/null 2>&1"
 + I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -w > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen 2> /dev/null"
 + I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen 2> /dev/null"
 + I f_ReadCfg Subpanels
-+ I KillModule FvwmButtons $0
-+ I SendToModule FrontPanel PressButton $0
++ I Schedule 200 KillModule FvwmButtons $0
 + I Schedule 800 SendToModule FrontPanel PressButton $0
-+ I Test (!EnvMatch HAS_WINDOWNAME 1) Schedule 3200 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper
++ I Test (!EnvMatch HAS_WINDOWNAME 1, !EnvMatch FVWM_IS_FVWM3 1) Schedule 3200 Exec exec $[NSCDE_TOOLSDIR]/xdowrapper
 
 # Called from fp_manage_subpanels with nscde_fvwmclnt
 DestroyFunc f_ReloadSwitchedSubpanels
@@ -2357,6 +2356,8 @@ AddToFunc f_RofiSetup
   -c 's/__ROFI_DEFAULT_FONT__/$[infostore.rofi_def_font]/g; s/__ROFI_MONO_FONT__/$[infostore.rofi_mono_font]/g; s/__ROFI_LARGE_FONT__/$[infostore.rofi_large_font]/g' \
   -f $[FVWM_USERDIR]/tmp/NsCDE.rasi
 + I Schedule 800 Exec exec mv -f $[FVWM_USERDIR]/tmp/NsCDE.rasi $[FVWM_USERDIR]/NsCDE.rasi
++ I Test (!f $[HOME]/.config/rofi/config) \
+    Exec exec @KSH@ -c "mkdir -p $[HOME]/.config/rofi && cp -f $[NSCDE_DATADIR]/config_templates/rofi_config $[HOME]/.config/rofi/config"
 + I InfoStoreRemove rofi_def_font
 + I InfoStoreRemove rofi_mono_font
 + I InfoStoreRemove rofi_large_font

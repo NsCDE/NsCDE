@@ -120,7 +120,11 @@ function manage_entry
          restentries=$(($entryid + 1))
          entryidminusone=$(($entryid - 1))
 
-         firstpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         if (($entrybefore > 0)); then
+            firstpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         else
+            firstpart=""
+         fi
          secondpart=$(echo "$entrypart" | sed -n "${entryid}p")
          thirdpart=$(echo "$entrypart" | sed -n "${entryafter},${entryidminusone}p")
          restpart=$(echo "$entrypart" | sed -n "${restentries},\$p")
@@ -129,7 +133,9 @@ function manage_entry
          echo ""
          echo "$subpinfopart"
 
-         echo "$firstpart"
+         if (($entrybefore > 0)); then
+            echo "$firstpart"
+         fi
          echo "$secondpart"
          echo "$thirdpart"
 
