@@ -996,7 +996,10 @@ AddToFunc f_ShowGlobalPager
 + I All (GWM, CirculateHit) Break 1
 + I All (CurrentPage, LocalPager, CirculateHit, !Iconic) Iconify True
 + I All (WspLocPager, CirculateHit) KillModule FvwmPager WspLocPager
-+ I PipeRead "$[NSCDE_TOOLSDIR]/FvwmScripts/GWM -w $[vp.width] -h $[vp.height] -f $[infostore.glob_pg.desk_scale] -d $[infostore.desknum] -c -"
++ I Test (!EnvMatch FVWM_IS_FVWM3 1) PipeRead \
+  "$[NSCDE_TOOLSDIR]/FvwmScripts/GWM -w $[vp.width] -h $[vp.height] -f $[infostore.glob_pg.desk_scale] -d $[infostore.desknum] -c -"
++ I Test (EnvMatch FVWM_IS_FVWM3 1) PipeRead \
+  "$[NSCDE_TOOLSDIR]/FvwmScripts/GWM -w $[monitor.$[monitor.current].width] -h $[monitor.$[monitor.current].height] -f $[infostore.glob_pg.desk_scale] -d $[infostore.desknum] -c -"
 + I Wait GWMPager
 + I All ("GWMPager", CirculateHit, !Transient) $[0-]
 + I All ("GWMPager", CirculateHit, !Transient) f_OverScreen GWMPager PlaceAgain

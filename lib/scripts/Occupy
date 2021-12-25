@@ -1013,7 +1013,7 @@ Widget 10
          If $UniMonitorNo <> $InitialMonitorNo Then
          Begin
             # Ugly, but we need to know monitor name for FVWM3.
-            Set $MonitorNameCmd = {echo -ne '} $Monitors {' | sed 's/|/\n/g' | egrep -n '' | sed 's/:/ /' | sed 's/^[[:digit:]] //'}
+            Set $MonitorNameCmd = {echo '} $Monitors {' | tr '|' '\n' | egrep -n '' | sed 's/:/ /' | sed 's/^[[:digit:]] //'}
             Set $MonitorName = (GetOutput $MonitorNameCmd (GetValue 6) -1)
 
             If $GoWithWindow == 0 Then
