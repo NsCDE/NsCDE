@@ -482,8 +482,13 @@ install-data-local:
 	install -m 644 NsCDE.txt $(DESTDIR)$(docdir)/
 	install -d -m 755 $(DESTDIR)$(docdir)/html/
 	@for hh in $(srcdir)/html/*; do \
-                echo "Installing $$hh in $(DESTDIR)$(docdir)/html" ; \
+		echo "Installing $$hh in $(DESTDIR)$(docdir)/html" ; \
 		install -m 644 $$hh $(DESTDIR)$(docdir)/$$hh ; \
+	done
+	install -d -m 755 $(DESTDIR)$(docdir)/html/img/
+	@for ii in $(srcdir)/img/*; do \
+		echo "Installing $$ii in $(DESTDIR)$(docdir)/html/img" ; \
+		install -m 644 $$ii $(DESTDIR)$(docdir)/html/$$ii ; \
 	done
 
 uninstall-local:
