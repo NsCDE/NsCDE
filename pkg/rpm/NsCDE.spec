@@ -75,17 +75,6 @@ autoreconf -ivf
 
 
 %changelog
-* Tue Nov 9 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0
-- First RPM package, working example
-
-* Fri Dec 3 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-3
-- Introduce Front Panel Icon Manager
-- Update docs and locales
-- Misc minor fixes
-- Move Front Panel icons feature
-- Rename Subpanel Items feature
-- Input checking
-
 * Tue Dec 21 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-4
 - Release NsCDE 2.0
 - Fix Qt5 qt5ct.conf new fonts handling
@@ -98,4 +87,15 @@ autoreconf -ivf
 - Front Panel and Subpanels smart contextual Help
 - Correct screen calculation for GWM under FVWM3 with multiple monitors
 - Misc minor fixes
+
+* Fri Dec 3 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-3
+- Introduce Front Panel Icon Manager
+- Update docs and locales
+- Misc minor fixes
+- Move Front Panel icons feature
+- Rename Subpanel Items feature
+- Input checking
+
+* Tue Nov 9 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0
+- First RPM package, working example
 
