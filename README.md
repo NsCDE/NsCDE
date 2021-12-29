@@ -19,6 +19,10 @@ Video Presentations and guides:
 Set of 12 NsCDE video presentations (commented and titled screen captures) on
 NsCDE Youtube channel.
 
+- https://www.youtube.com/playlist?list=PLpVwwj0aIJjcaTFrZ5FLokl-kAMwmBxux
+Set of newer 7 NsCDE video presentations, describing features implemented in
+the last two years and for NsCDE 2.X
+
 Author will like to apologize for bad english in docs. A rand() function putting
 articles (the, a, an) will probably be more accurate.
 
