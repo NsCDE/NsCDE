@@ -79,7 +79,7 @@ Begin
    While $btnname < $MaxDeskNo Do
    Begin
       Set $btnname = (Add $btnname 1) 
-      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' "} $ConfFile {" | cut -d":" -f3 | tail -1}
+      Set $NameDeskOut = {egrep '^WSP:} $btnname {:.*' "} $ConfFile {" 2>/dev/null | cut -d":" -f3 | tail -1}
       Set $NameDesk = (GetOutput $NameDeskOut 1 -1)
 
       If $NameDesk == {} Then

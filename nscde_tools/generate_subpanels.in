@@ -119,7 +119,8 @@ do
    echo ""
 
    id=1
-   egrep -v '^#' $spactfile | egrep "^S${subpn},ENTRY,.*,.*,.*,.*" | while IFS="," read subp esign title check iconfile cmdargs
+   egrep -v '^#' $spactfile | ${NSCDE_TOOLSDIR}/ised -c 's/\\"/\\\\\\"/g' -o -f - | egrep "^S${subpn},ENTRY,.*,.*,.*,.*" | \
+   while IFS="," read subp esign title check iconfile cmdargs
    do
       subp="${subp##*S}"
       newid="Btn-${subpn}-${id}"
