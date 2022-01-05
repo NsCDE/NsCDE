@@ -75,6 +75,9 @@ autoreconf -ivf
 
 
 %changelog
+* Wed Jan 5 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.0-5
+- Fix generate_subpanels backslash and quoting
+
 * Tue Dec 21 2021 Hegel3DReloaded <nscde@protonmail.com> - 2.0-4
 - Release NsCDE 2.0
 - Fix Qt5 qt5ct.conf new fonts handling
