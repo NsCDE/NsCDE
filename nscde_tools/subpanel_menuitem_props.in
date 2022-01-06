@@ -232,13 +232,19 @@ function manage_entry
          entryafter=$(($entryid + 1))
 
          firstpart=$(echo "$entrypart" | sed -n "${entryid}p")
-         secondpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         if (($entrybefore > 0)); then
+            secondpart=$(echo "$entrypart" | sed -n "1,${entrybefore}p")
+         else
+            secondpart=""
+         fi
          restpart=$(echo "$entrypart" | sed -n "${entryafter},\$p")
 
          echo "$restoffile"
          echo ""
          echo "$subpinfopart"
-         echo "$secondpart"
+         if (($entrybefore > 0)); then
+            echo "$secondpart"
+         fi
          echo "$restpart"
          echo "$firstpart"
       fi
