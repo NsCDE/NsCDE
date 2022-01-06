@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -75,6 +75,10 @@ autoreconf -ivf
 
 
 %changelog
+* Thu Jan 6 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.0-6
+- Fix system Subpanels.actions S10 help backspaces
+- Fix move first item to the end double copy on the subpanels
+
 * Wed Jan 5 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.0-5
 - Fix generate_subpanels backslash and quoting
 
