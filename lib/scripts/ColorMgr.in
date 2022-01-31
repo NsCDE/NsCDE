@@ -845,14 +845,18 @@ Widget 19
          Set $PreModPaletteValue = (GetValue 3)
          Set $CustomExistedBefore = (GetOutput {ls "$FVWM_USERDIR/palettes/Custom.dp" > /dev/null 2>&1; echo $?} 1 1)
 
-         # Compose new palette and call id Custom.dp:
+         # Compose new palette and call it Custom.dp.
+         # Useless echo of widget numbers after appending into __colors.tmp is here
+         # to workaround FvwmScript For implementation which somehow truncates same
+         # Rpart Gpart and Bpart values if they follow one after another - $w will
+         # give difference (numbers 10 - 17). Stupid bug ...
          For $w = 10 To 17 Do
          Begin
             Set $CS = (GetBack $w)
             Set $Rpart = (StrCopy $CS 1 2) (StrCopy $CS 1 2)
             Set $Gpart = (StrCopy $CS 3 4) (StrCopy $CS 3 4)
             Set $Bpart = (StrCopy $CS 5 6) (StrCopy $CS 5 6)
-            Set $FillPaletteCmd = {echo '#} $Rpart $Gpart $Bpart {' >> $FVWM_USERDIR/tmp/__colors.tmp}
+            Set $FillPaletteCmd = {echo '#} $Rpart $Gpart $Bpart {' >> "$FVWM_USERDIR/tmp/__colors.tmp"; echo "} $w {" > /dev/null}
             Set $FillPalette = (GetOutput $FillPaletteCmd 1 -1)
          End
          Set $RightReorderCmd = {(sed -n '1p;3p;5p;7p' "$FVWM_USERDIR/tmp/__colors.tmp" ; sed -n '2p;4p;6p;8p' "$FVWM_USERDIR/tmp/__colors.tmp") > "$FVWM_USERDIR/palettes/Custom.dp"}
@@ -864,6 +868,7 @@ Widget 19
          Set $CurrentModifiedPalette = (GetOutput {$NSCDE_TOOLSDIR/colormgr -N "Custom.dp"} 1 1)
          ChangeValue 3 $CurrentModifiedPalette
          SendSignal 3 1
+         Set $CurrentModifiedPalette = {}
       End
       2 :
       Begin
