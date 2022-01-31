@@ -288,6 +288,9 @@ Widget 3
          Set $FullColorCmd = {$NSCDE_TOOLSDIR/colormgr -c } $Ncolors { -f } $PalettePath
          Set $FullColor = (GetOutput $FullColorCmd 1 -1)
          ChangeIcon 18 $FullColor
+
+         # Click on the list will set performed to 0 if apply has been hit before
+         Set $Performed = 0
       End
       2 :
       Begin
