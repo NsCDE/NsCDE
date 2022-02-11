@@ -204,6 +204,7 @@ AC_CHECK_PROGS(XPROP, xprop, "no")
 AC_CHECK_PROGS(XDPYINFO, xdpyinfo, "no")
 AC_CHECK_PROGS(XTERM, xterm, "no")
 AC_CHECK_PROGS(GETTEXT, gettext, "no")
+AC_CHECK_PROGS(MSGFMT, msgfmt, "no")
 AC_CHECK_PROGS(XDOTOOL, xdotool, "no")
 
 AC_CHECK_PROGS(XSCSVR, xscreensaver, "no")
@@ -235,6 +236,7 @@ AC_SUBST(KSH)
 # Dependencies failures
 AS_IF([test x"$SED" = x"no"], [AC_MSG_ERROR([No sed detected.])])
 AS_IF([test x"$KSH" = x"no"], [AC_MSG_ERROR([Please install AT&T ksh 93 package before continuing.])])
+AS_IF([test x"$MSGFMT" = x"no"], [AC_MSG_ERROR([No msgfmt(1) detected. Please install msgfmt(1) tool.])])
 
 # Dependencies warnings
 AS_IF([test x"$FVWM" = x"no"], [AC_MSG_WARN([No FVWM detected. FVWM 2 or 3 is essential for NsCDE runtime.])])
