@@ -28,6 +28,7 @@ fg=[0,0,0,0,0,0,0,0,0]
 bs=[0,0,0,0,0,0,0,0,0]
 ts=[0,0,0,0,0,0,0,0,0]
 sel=[0,0,0,0,0,0,0,0,0]
+disb=[0,0,0,0,0,0,0,0,0]
 
 # Exact Motif color values from Xm.h
 XmCOLOR_LITE_SEL_FACTOR=15
@@ -127,15 +128,22 @@ def CalculateColorsForDarkBackground(bg_color):
     sel_color=[0,0,0]
     bs_color=[0,0,0]
     ts_color=[0,0,0]
+    disabled_fg_color=[0,0,0]
     brightness=Brightness(bg_color)
-    if brightness > XmFOREGROUND_THRESHOLD:
-        fg_color[0]= 0 
-        fg_color[1]= 0 
-        fg_color[2]= 0
+    if (brightness > XmFOREGROUND_THRESHOLD):
+        fg_color[0] = 0 
+        fg_color[1] = 0 
+        fg_color[2] = 0
+        disabled_fg_color[0] = 32768
+        disabled_fg_color[1] = 32768
+        disabled_fg_color[2] = 32768
     else:
-        fg_color[0]= XmMAX_SHORT 
-        fg_color[1]= XmMAX_SHORT 
-        fg_color[2]= XmMAX_SHORT
+        fg_color[0] = XmMAX_SHORT 
+        fg_color[1] = XmMAX_SHORT 
+        fg_color[2] = XmMAX_SHORT
+        disabled_fg_color[0] = 45800
+        disabled_fg_color[1] = 45800
+        disabled_fg_color[2] = 45800
     color_value = bg_color[0] 
     color_value += XmCOLOR_DARK_SEL_FACTOR * (XmMAX_SHORT - color_value) / 100.0 
     sel_color[0] = color_value
@@ -163,22 +171,29 @@ def CalculateColorsForDarkBackground(bg_color):
     color_value = bg_color[2]
     color_value += XmCOLOR_DARK_TS_FACTOR * (XmMAX_SHORT - color_value) / 100.0 
     ts_color[2] = color_value
-    return fg_color,sel_color,bs_color,ts_color
+    return (fg_color,sel_color,bs_color,ts_color,disabled_fg_color)
 
 def CalculateColorsForLightBackground(bg_color):
     fg_color=[0,0,0]
     sel_color=[0,0,0]
     bs_color=[0,0,0]
     ts_color=[0,0,0]
+    disabled_fg_color=[0,0,0]
     brightness=Brightness(bg_color)
     if (brightness > XmFOREGROUND_THRESHOLD):
         fg_color[0] = 0
         fg_color[1] = 0
         fg_color[2] = 0
+        disabled_fg_color[0] = 32768
+        disabled_fg_color[1] = 32768
+        disabled_fg_color[2] = 32768
     else:
         fg_color[0] = XmMAX_SHORT
         fg_color[1] = XmMAX_SHORT
         fg_color[2] = XmMAX_SHORT
+        disabled_fg_color[0] = 45800
+        disabled_fg_color[1] = 45800
+        disabled_fg_color[2] = 45800
     color_value = bg_color[0]
     color_value -= (color_value * XmCOLOR_LITE_SEL_FACTOR) / 100.0
     sel_color[0] = color_value
@@ -206,22 +221,29 @@ def CalculateColorsForLightBackground(bg_color):
     color_value = bg_color[2]
     color_value -= (color_value * XmCOLOR_LITE_TS_FACTOR) / 100.0
     ts_color[2] = color_value
-    return (fg_color,sel_color,bs_color,ts_color)
+    return (fg_color,sel_color,bs_color,ts_color,disabled_fg_color)
 
 def CalculateColorsForMediumBackground(bg_color):
     fg_color=[0,0,0]
     sel_color=[0,0,0]
     bs_color=[0,0,0]
     ts_color=[0,0,0]
+    disabled_fg_color=[0,0,0]
     brightness=Brightness(bg_color)
     if (brightness > XmFOREGROUND_THRESHOLD):
         fg_color[0] = 0
         fg_color[1] = 0
         fg_color[2] = 0
+        disabled_fg_color[0] = 32768
+        disabled_fg_color[1] = 32768
+        disabled_fg_color[2] = 32768
     else:
         fg_color[0] = XmMAX_SHORT
         fg_color[1] = XmMAX_SHORT
         fg_color[2] = XmMAX_SHORT
+        disabled_fg_color[0] = 45800
+        disabled_fg_color[1] = 45800
+        disabled_fg_color[2] = 45800
     f = XmCOLOR_LO_SEL_FACTOR + (brightness * ( XmCOLOR_HI_SEL_FACTOR - XmCOLOR_LO_SEL_FACTOR ) / XmMAX_SHORT)
     color_value = bg_color[0]
     color_value -= (color_value * f) / 100.0
@@ -252,7 +274,7 @@ def CalculateColorsForMediumBackground(bg_color):
     color_value = bg_color[2]
     color_value += f * ( XmMAX_SHORT - color_value ) / 100.0
     ts_color[2] = color_value
-    return (fg_color,sel_color,bs_color,ts_color)
+    return (fg_color,sel_color,bs_color,ts_color,disabled_fg_color)
 
 
 def rgbToHex(rgb):
@@ -274,23 +296,24 @@ def initcolors(palette,endrange):
 
     for a in range(1,endrange):
         if endrange == 9:
-            color16=encode16bpp(palette[a-1])
+            color16 = encode16bpp(palette[a-1])
         else:
-            color16=encode16bpp(palette)
-        bg_color=bbpToRGB(color16)
-        backgroundbrightness=Brightness(bg_color)
-        if backgroundbrightness< XmCOLOR_DARK_THRESHOLD:
-            (fg_color,sel_color,bs_color,ts_color)= CalculateColorsForDarkBackground(bg_color)
-        elif backgroundbrightness> XmCOLOR_LITE_THRESHOLD:
-            (fg_color,sel_color,bs_color,ts_color)= CalculateColorsForLightBackground(bg_color)
+            color16 = encode16bpp(palette)
+        bg_color = bbpToRGB(color16)
+        backgroundbrightness = Brightness(bg_color)
+        if backgroundbrightness < XmCOLOR_DARK_THRESHOLD:
+            (fg_color,sel_color,bs_color,ts_color,disabled_fg_color) = CalculateColorsForDarkBackground(bg_color)
+        elif backgroundbrightness > XmCOLOR_LITE_THRESHOLD:
+            (fg_color,sel_color,bs_color,ts_color,disabled_fg_color) = CalculateColorsForLightBackground(bg_color)
         else:
-            (fg_color,sel_color,bs_color,ts_color)= CalculateColorsForMediumBackground(bg_color)
+            (fg_color,sel_color,bs_color,ts_color,disabled_fg_color) = CalculateColorsForMediumBackground(bg_color)
         # bg[a]=encode16bpp(palette[a-1])
         bg[a]=color16
         fg[a]=rgbToHex(fg_color)
         bs[a]=rgbToHex(bs_color)
         ts[a]=rgbToHex(ts_color)
         sel[a]=rgbToHex(sel_color)
+        disb[a]=rgbToHex(disabled_fg_color)
     if use_4_colors:
         equal_colors_ab(5,2)
         equal_colors_ab(6,2)
@@ -304,6 +327,7 @@ def round_colors_6():
         bs[a]='#'+bs[a][1:3]+bs[a][5:7]+bs[a][9:11]
         ts[a]='#'+ts[a][1:3]+ts[a][5:7]+ts[a][9:11]
         sel[a]='#'+sel[a][1:3]+sel[a][5:7]+sel[a][9:11]
+        disb[a]='#'+disb[a][1:3]+disb[a][5:7]+disb[a][9:11]
 
 def readPalette(filename):
     with open(filename) as f:lines=f.read().splitlines() 
@@ -370,6 +394,7 @@ def genfvwmcolorset(palettefile,ncolors,fpvariant,wsmvariant):
     bsg=bs
     fgg=fg
     selg=sel
+    disg=disb
     basename=os.path.basename(palettefile)
     palettename=basename.split(".dp")
     lines=''
@@ -406,7 +431,7 @@ Colorset 2 fg {fgg[1]}, bg {bgg[1]}, hi {tsg[1]}, sh {bsg[1]}, fgsh {selg[1]}, P
 Colorset 4 fg {fgg[2]}, bg {selg[2]}, hi {tsg[2]}, sh {bsg[2]}, fgsh {bsg[2]}, Plain, NoShape
 
 # Grayed / disabled menu
-Colorset 5 fg grey40, bg {bgg[2]}
+Colorset 5 fg {disg[2]}, bg {bgg[2]}
 
 # Menu prelight for colorset 22 (Page Manager)
 Colorset 6 fg {fgg[6]}, bg {selg[6]}, hi {tsg[6]}, sh {bsg[6]}, fgsh {bsg[6]}, Plain, NoShape
@@ -648,6 +673,7 @@ def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
     bsg=bs
     fgg=fg
     selg=sel
+    disbg=disb
     basename=os.path.basename(palettefile)
 
     replacement_dict = {'NSCDE_BG_COLOR_1':bgg[1], 'NSCDE_BG_COLOR_2':bgg[2],
@@ -656,24 +682,24 @@ def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
                         'NSCDE_BG_COLOR_7':bgg[7], 'NSCDE_BG_COLOR_8':bgg[8],
                         'NSCDE_FG_COLOR_1':fgg[1], 'NSCDE_FG_COLOR_2':fgg[2],
                         'NSCDE_FG_COLOR_3':fgg[3], 'NSCDE_FG_COLOR_4':fgg[4],
-                        'NSCDE_FG_COLOR_5':fgg[5], 'NSCDE_FG_COLOR_5':fgg[5],
-                        'NSCDE_FG_COLOR_6':fgg[6], 'NSCDE_FG_COLOR_6':fgg[6],
+                        'NSCDE_FG_COLOR_5':fgg[5], 'NSCDE_FG_COLOR_6':fgg[6],
                         'NSCDE_FG_COLOR_7':fgg[7], 'NSCDE_FG_COLOR_8':fgg[8],
                         'NSCDE_TS_COLOR_1':tsg[1], 'NSCDE_TS_COLOR_2':tsg[2],
                         'NSCDE_TS_COLOR_3':tsg[3], 'NSCDE_TS_COLOR_4':tsg[4],
-                        'NSCDE_TS_COLOR_5':tsg[5], 'NSCDE_TS_COLOR_5':tsg[5],
-                        'NSCDE_TS_COLOR_6':tsg[6], 'NSCDE_TS_COLOR_6':tsg[6],
+                        'NSCDE_TS_COLOR_5':tsg[5], 'NSCDE_TS_COLOR_6':tsg[6],
                         'NSCDE_TS_COLOR_7':tsg[7], 'NSCDE_TS_COLOR_8':tsg[8],
                         'NSCDE_BS_COLOR_1':bsg[1], 'NSCDE_BS_COLOR_2':bsg[2],
                         'NSCDE_BS_COLOR_3':bsg[3], 'NSCDE_BS_COLOR_4':bsg[4],
-                        'NSCDE_BS_COLOR_5':bsg[5], 'NSCDE_BS_COLOR_5':bsg[5],
-                        'NSCDE_BS_COLOR_6':bsg[6], 'NSCDE_BS_COLOR_6':bsg[6],
+                        'NSCDE_BS_COLOR_5':bsg[5], 'NSCDE_BS_COLOR_6':bsg[6],
                         'NSCDE_BS_COLOR_7':bsg[7], 'NSCDE_BS_COLOR_8':bsg[8],
                         'NSCDE_SEL_COLOR_1':selg[1], 'NSCDE_SEL_COLOR_2':selg[2],
                         'NSCDE_SEL_COLOR_3':selg[3], 'NSCDE_SEL_COLOR_4':selg[4],
-                        'NSCDE_SEL_COLOR_5':selg[5], 'NSCDE_SEL_COLOR_5':selg[5],
-                        'NSCDE_SEL_COLOR_6':selg[6], 'NSCDE_SEL_COLOR_6':selg[6],
-                        'NSCDE_SEL_COLOR_7':selg[7], 'NSCDE_SEL_COLOR_8':selg[8]}
+                        'NSCDE_SEL_COLOR_5':selg[5], 'NSCDE_SEL_COLOR_6':selg[6],
+                        'NSCDE_SEL_COLOR_7':selg[7], 'NSCDE_SEL_COLOR_8':selg[8],
+                        'NSCDE_DISABLED_FG_COLOR_1':disbg[1], 'NSCDE_DISABLED_FG_COLOR_2':disbg[2],
+                        'NSCDE_DISABLED_FG_COLOR_3':disbg[3], 'NSCDE_DISABLED_FG_COLOR_4':disbg[4],
+                        'NSCDE_DISABLED_FG_COLOR_5':disbg[5], 'NSCDE_DISABLED_FG_COLOR_6':disbg[6],
+                        'NSCDE_DISABLED_FG_COLOR_7':disbg[7], 'NSCDE_DISABLED_FG_COLOR_8':disbg[8]}
 
     # Single file mode
     try:

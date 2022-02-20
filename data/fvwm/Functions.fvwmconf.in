@@ -587,8 +587,8 @@ AddToFunc f_RestoreFrontPanel
 + I Test (EnvMatch infostore.fp_needs_ptr 1) All (FvwmButtons,FrontPanel,CirculateHit,!HasPointer,!Shaded) WarpToWindow 50 50
 + I Test (EnvMatch infostore.fp_needs_ptr 1) InfoStoreAdd fp_needs_ptr 0
 + I All (FvwmButtons,FrontPanel,CirculateHit,!HasPointer) InfoStoreAdd fp_needs_ptr 1
-+ I Test (EnvMatch FVWM_IS_FVWM3 1) f_SendToWSM
-+ I Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 1500 f_SendToPGM
++ I Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToWSM
++ I Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToPGM
 
 DestroyFunc f_KeyFromFpToSubanel
 AddToFunc f_KeyFromFpToSubanel
