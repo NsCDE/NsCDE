@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ColorMgr}
 WindowLocaleTitle {Style Manager - Color}
-WindowSize 448 546
+WindowSize 448 580
 Colorset 22
 
 Init
@@ -137,6 +137,7 @@ Begin
    ChangeFont 27 $SmallFont
    ChangeFont 28 $SmallFont
    ChangeFont 29 $ExtraSmallFont
+   ChangeFont 35 $SmallFont
 
    Set $GtkStr = {00}
    Set $Gtk2Str = 0
@@ -154,6 +155,7 @@ Begin
    ChangeLocaleTitle 27 (GetTitle 27)
    ChangeLocaleTitle 28 (GetTitle 28)
    ChangeLocaleTitle 29 (GetTitle 29)
+   ChangeLocaleTitle 35 (GetTitle 35)
 
    # Get FVWM3 DesktopConfiguratio mode
    # Default is global and fvwm2
@@ -1030,7 +1032,7 @@ End
 
 Widget 22
    Property
-   Size 432 116
+   Size 432 150
    Position 8 370
    Type Rectangle
 End
@@ -1140,6 +1142,27 @@ Widget 28
          If (GetValue 28) == 1 Then
          Begin
             ChangeValue 25 1
+            ChangeValue 35 0
+         End
+      End
+End
+
+Widget 35
+   Property
+   Size 60 24
+   Position 16 452
+   Type CheckBox
+   Flags NoReliefString Left
+   Value 0
+   Title { Use Qt5 NsCDE Kvantum Engine}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 35) == 1 Then
+         Begin
+            ChangeValue 28 0
          End
       End
 End
@@ -1147,7 +1170,7 @@ End
 Widget 29
    Property
    Size 60 24
-   Position 16 452
+   Position 16 486
    Type CheckBox
    Flags NoReliefString Left
    Value 1
@@ -1163,14 +1186,14 @@ End
 Widget 30
    Property
    Size 442 1
-   Position 3 494
+   Position 3 528
    Type Rectangle
 End
 
 Widget 31
    Property
    Size 90 26
-   Position 16 506
+   Position 16 540
    Type PushButton
    Flags NoReliefString
    LocaleTitle {OK}
@@ -1213,7 +1236,7 @@ End
 Widget 32
    Property
    Size 90 26
-   Position 125 506
+   Position 125 540
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Apply}
@@ -1467,6 +1490,95 @@ Widget 32
                End
                Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2} 1 -1)
                Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+
+               Set $Qt5CtColorsApplyCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v false}
+               Set $Qt5CtColorsApply = (GetOutput $Qt5CtColorsApplyCmd 1 -1)
+
+               Set $Qt5CtQssRemoveCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v '@Invalid()'}
+               Set $Qt5CtQssRemove = (GetOutput $Qt5CtQssRemoveCmd 1 -1)
+            End
+
+            If (GetValue 35) == 1 Then
+            Begin
+               Set $CheckDotConfigExist = (GetOutput {ls -1d "$HOME/.config/qt5ct" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckDotConfigExist <> 0 Then
+               Begin
+                  Set $MkDotConf = (GetOutput {mkdir -p "$HOME/.config/qt5ct"} 1 -1)
+               End
+               Set $CheckKvantumConfigDirExist = (GetOutput {ls -1d "$HOME/.config/Kvantum/NsCDE" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckKvantumConfigDirExist <> 0 Then
+               Begin
+                  Set $MkKvantumDirConf = (GetOutput {mkdir -p "$HOME/.config/Kvantum/NsCDE"} 1 -1)
+               End
+
+               Set $GeneralKvantumConfig = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE} 1 -1)
+
+               Set $NsCDEKvConfigCmd = {$NSCDE_TOOLSDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl"}
+                                    { -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.kvconfig"}
+               Set $NsCDEKvConfig = (GetOutput $NsCDEKvConfigCmd 1 -1)
+
+               Set $NsCDEKvSvgCmd = {$NSCDE_TOOLSDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl"}
+                                    { -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.svg"}
+               Set $NsCDEKvSvg = (GetOutput $NsCDEKvSvgCmd 1 -1)
+
+               Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v kvantum} 1 -1)
+               Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+
+               Set $CheckQt5CtColorsDirExist = (GetOutput {ls -1d "$HOME/.config/qt5ct/colors" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckQt5CtColorsDirExist <> 0 Then
+               Begin
+                  Set $MkQt5ColorsDir = (GetOutput {mkdir -p "$HOME/.config/qt5ct/colors"} 1 -1)
+               End
+
+               Set $Qt5ColorsConfCmd = {$NSCDE_TOOLSDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl"}
+                                    { -s -c > "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"}
+               Set $Qt5ColorsConf = (GetOutput $Qt5ColorsConfCmd 1 -1)
+
+               Set $Qt5CtColorsConfCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k color_scheme_path -v "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"}
+               Set $Qt5CtColorsConf = (GetOutput $Qt5CtColorsConfCmd 1 -1)
+
+               Set $Qt5CtColorsApplyCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v true}
+               Set $Qt5CtColorsApply = (GetOutput $Qt5CtColorsApplyCmd 1 -1)
+
+               Set $CheckQt5CtQssDirExist = (GetOutput {ls -1d "$HOME/.config/qt5ct/qss" > /dev/null 2>&1; echo $?} 1 -1)
+               If $CheckQt5CtQssDirExist <> 0 Then
+               Begin
+                  Set $MkQt5QssDir = (GetOutput {mkdir -p "$HOME/.config/qt5ct/qss"} 1 -1)
+               End
+
+               Set $QssConfCmd = {$NSCDE_TOOLSDIR/palette_colorgen -n } $Ncolors { -p } $PalettePath { -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl"}
+                                    { -s -c > "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+               Set $QssConf = (GetOutput $QssConfCmd 1 -1)
+
+               Set $QssQt5CtConfStatusCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets > /dev/null 2>&1; echo $?}
+               Set $QssQt5CtConfStatus = (GetOutput $QssQt5CtConfStatusCmd 1 1)
+               Set $QssQt5CtConfOutputCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets}
+               Set $QssQt5CtConfOutput = (GetOutput $QssQt5CtConfOutputCmd 1 -1)
+               Set $QssQt5CtConfCheck1Cmd = {echo '} $QssQt5CtConfOutput {' | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?}
+               Set $QssQt5CtConfCheck2Cmd = {echo '} $QssQt5CtConfOutput {' | egrep -q '@Invalid\(\)'; echo $?}
+               Set $QssQt5CtConfCheck1 = (GetOutput $QssQt5CtConfCheck1Cmd 1 1)
+               Set $QssQt5CtConfCheck2 = (GetOutput $QssQt5CtConfCheck2Cmd 1 1)
+               If $QssQt5CtConfCheck1 <> 0 Then
+               Begin
+                  If $QssQt5CtConfCheck2 == 0 Then
+                  Begin
+                     Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                     Set $WriteQss = (GetOutput $WriteQssCmd 1 -1)
+                  End
+                  Else
+                  Begin
+                     If $QssQt5CtConfStatus == 3 Then
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                        Set $WriteQss = (GetOutput $WriteQssCmd 1 -1)
+                     End
+                     Else
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "} $QssQt5CtConfOutput {,$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                        Set $WriteQss = (GetOutput $WriteQssCmd 1 -1)
+                     End
+                  End
+               End
             End
 
             If (GetValue 29) == 1 Then
@@ -1510,7 +1622,7 @@ End
 Widget 33
    Property
    Size 90 26
-   Position 234 506
+   Position 234 540
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
@@ -1550,7 +1662,7 @@ End
 Widget 34
    Property
    Size 90 26
-   Position 344 506
+   Position 344 540
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
