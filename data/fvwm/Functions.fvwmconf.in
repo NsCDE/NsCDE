@@ -1575,7 +1575,7 @@ AddToFunc f_SetFvwm3NonGlobalBackground
 + I Test (EnvIsSet infostore.monitor9.name) \
     InfoStoreAdd monitorbackdata "$[infostore.monitorbackdata]+$[infostore.fvwmdesk.$[monitor.$[infostore.monitor9.name].desk].back]"
 + I Test (f $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png) \
-    Exec exec fvwm-root -r $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png
+    Exec exec $[infostore.rootsetcmd] $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png
 + I Test (!f $[FVWM_USERDIR]/backer/bgcache/$[infostore.monitordata]/$[infostore.monitorbackdata].png) \
     Exec exec $[NSCDE_TOOLSDIR]/xrandr_backer "$[infostore.monitordata]" "$[infostore.monitorbackdata]"
 
