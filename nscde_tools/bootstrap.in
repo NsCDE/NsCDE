@@ -229,10 +229,29 @@ function setup_nscde
 
    # Misc paths
    if (($VERBOSE == 1)); then
-      locale_making_additiona_subdirectories=$(gettext -s "Making additional subdirectories in")
-      echo "$locale_making_additiona_subdirectories ${FVWM_USERDIR} ..."
+      locale_making_additional_subdirectories=$(gettext -s "Making additional subdirectories in")
+      echo "$locale_making_additional_subdirectories ${FVWM_USERDIR} ..."
    fi
    mkdir -p ${FVWM_USERDIR}/{palettes,templates,fontsets,backdrops,photos}
+
+   # Backup user dot files which were maybe existing before this setup
+   backup_datestr=$(date +%d-%m-%Y_%H-%M-%S)
+   locale_making_backing_up_dot_files=$(gettext -s "Backing up pre-NsCDE GTK and Qt config files as ")
+   have_old_dot_file=0
+   cd "$HOME"
+   for dotfile in .gtkrc-2.0 .config/gtk-3.0/settings.ini .config/qt5ct/qt5ct.conf .icons/default/index.themea .config/Trolltech.conf
+   do
+      if [ -r "$dotfile" ]; then
+         have_old_dot_file=1
+         backup_dot_files+=" $dotfile"
+      fi
+   done
+   if (($have_old_dot_file != 0)); then
+      echo -ne "$locale_making_backing_up_dot_files"
+      echo "gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar"
+      tar cpf gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar $backup_dot_files
+   fi
+   cd - > /dev/null
 
    # Disable "fancy" curors
    if [ ! -e "$HOME/.icons/default/index.theme" ]; then
