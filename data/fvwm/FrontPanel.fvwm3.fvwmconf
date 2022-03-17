@@ -21,6 +21,7 @@ f_FpConfigLaunchers
 #
 # Global parameters
 #
+Test (EnvMatch infostore.desknum 0) InfoStoreAdd FP.WSM.Width 79
 Test (EnvMatch infostore.desknum 2) InfoStoreAdd FP.WSM.Width 211
 Test (EnvMatch infostore.desknum 4) InfoStoreAdd FP.WSM.Width 343
 Test (EnvMatch infostore.desknum 6) InfoStoreAdd FP.WSM.Width 475
@@ -290,16 +291,16 @@ Test (EnvMatch infostore.lscrn.sls 1, !EnvMatch infostore.pgm 1x1) \
  Action (Mouse 1) Menu m_GoToPage Window o+8 -112m, \
  Action (Mouse 2) f_FrontPanelAction FpPGM M2 30, \
  Action (Mouse 3) Menu m_FrontPanelPGMMenu mouse -0m -0m)
-Test (!EnvMatch infostore.lscrn.sls 1, EnvMatch infostore.pgm 1x1) \
+Test (!EnvMatch infostore.desknum 0, EnvMatch infostore.pgm 1x1) \
 *FrontPanel: (2x1+0-0, Frame 0, Id FpPGM, Colorset 23, PressColorset 25, Icon NsCDE/Wsm.xpm, \
  Action (Mouse 1) f_MoveCursorAndExec 0 -22 f_ShowGlobalPager Move screen c 50-50w -88p, \
  Action (Mouse 2) f_FrontPanelAction FpPGM M2 30, \
  Action (Mouse 3) Menu m_FrontPanelPGMMenu mouse -0m -0m)
-Test (EnvMatch infostore.lscrn.sls 1, EnvMatch infostore.pgm 1x1) \
-*FrontPanel: (2x1+0-0, Frame 0, Id FpPGM, Colorset 23, PressColorset 25, Icon NsCDE/Wsm.xpm, \
- Action (Mouse 1) f_MoveCursorAndExec 0 -22 f_ShowGlobalPager Move screen c 50-50w -88p, \
- Action (Mouse 2) f_FrontPanelAction FpPGM M2 30, \
- Action (Mouse 3) Menu m_FrontPanelPGMMenu mouse -0m -0m)
+Test (EnvMatch infostore.desknum 0, EnvMatch infostore.pgm 1x1) \
+*FrontPanel: (2x1+0-0, Frame 0, Id FpPGM, Colorset 23, PressColorset 25, Icon NsCDE/None.xpm, \
+ Action (Mouse 1) Nop, \
+ Action (Mouse 2) Nop, \
+ Action (Mouse 3) Nop)
 
 # Workspace Manager in the middle
 *FrontPanel: ($[infostore.FP.WSM.GeoW]x2+2+0, Frame 0, Id FpWSM, Colorset 23, \
