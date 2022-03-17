@@ -2,7 +2,7 @@ Not so Common Desktop Environment (NsCDE) Manual
 
 M. Z.
 
-   This manual describes version 2.0 of NsCDE.
+   This manual describes version 2.1 of NsCDE.
 
    Copyright © 2019, 2020, 2021, 2022 M. Z.
 
@@ -245,7 +245,9 @@ M. Z.
    CDE-compatible backdrops and palettes and misc pieces for
    integration like CSS theme for Firefox and Thunderbird, and
    stand alone integrated desktop-making parts like stalonetray,
-   dunst, xsettingsd, xscreensaver etc.
+   dunst, xsettingsd, xscreensaver etc. Since NsCDE 2.1 for Qt5
+   there is a experimental Kvantum SVG based NsCDE engine as an
+   alternative for Qt5 gtk2 engine.
      __________________________________________________________
 
 1.2. Why NsCDE?
@@ -2443,6 +2445,8 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * GTK3 (default)
      * Qt4 (default)
      * Qt5 (default)
+     * Qt5 Kvatnum (not yet default, alternative to Qt5 gtk2
+       engine)
      * User's $FVWM_USERDIR/libexec/colormgr.local script if
        exists, called with the path of the applied palette and
        number of colors.
@@ -2455,6 +2459,13 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    engine in ~/.config/Trolltech.conf and
    ~/.config/qt5ct/qt5ct.conf for colors from the new palette to
    be used.
+
+   Since NsCDE 2.1, Qt5 (but not Qt4) can use Kvantum based engine
+   for integration with the rest of NsCDE and other widgets. This
+   can be selected in Color Style Manager as an alternative to
+   gtk2 bridge engine. It has somewhat finer tuned and polished
+   look, however it has also still some problems in QDialog based
+   widgets when scrollbars are used there.
 
    GTK2 and GTK3 are heavy work part. Here, we are using work
    derived from one CDE theme for XFCE desktop and GTK2 + GTK3,
@@ -3495,7 +3506,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    name). This change will be written immediately WITHOUT pressing
    OK button. Name of the workspace will be changed across all
    NsCDE and FVWM (WSM, Occupy Workspace/Page/Monitor, menus etc).
-   In NsCDE, there are 4 options for workspaces: 2, 4, 6 and 8
+   In NsCDE, there are 5 options for workspaces: 0, 2, 4, 6 and 8
    model. FVWM itself however supports much larger number, but in
    NsCDE care must be taken about presentation of this workspaces
    in various applets and tools. Nevertheless, theoretically even
@@ -5378,6 +5389,10 @@ Silent Key Tab A S -
        must be set, and be set to qt5ct value in order to run
        qt5ct configurator. This variable is set by default from
        the $FVWM_USERDIR/NsCDE.conf.
+       If Qt5 Kvantum engine is desired for use with Color Style
+       Manager, qt5-style-kvantum must be installed and available,
+       otherwise selecting alternative Qt5 integration based on
+       Kvantum engine will not work.
      * Recommended fonts for as close as possible CDE look are
        DejaVu Serif for variable, and DejaVu Sans Mono for
        monospaced fonts. Check should be made if this fonts are
@@ -5736,6 +5751,12 @@ Silent Key Tab A S -
    something like that name) is installed:
    platformthemes/libqgtk2.so is needed.
 
+   As from NsCDE 2.1, Qt5 has an alternative Kvantum based engine
+   which can be selected instead of default gtk2 based one. It is
+   independent from gtk2 style plugin, but qt5-style-kvantum (or
+   similar system dependent package name) must be installed for
+   this to work.
+
    All integrations of this type: GTK2, GTK3, QT4 and QT5 are
    turned on in the Color Style Manager.
      __________________________________________________________
@@ -6070,6 +6091,11 @@ Standards
      * Qt5: $HOME/.config/qt5ct/qt5ct.conf
      * GTK2: $HOME/.gtkrc-2.0
      * GTK3: $HOME/.config/gtk-3.0/settings.ini
+
+   During the initial NsCDE setup (bootstrap), if any of this
+   files is found, it will be backed up in the user's home
+   directory as a tar(1) file
+   "gtk+qt-dot-files-before-nscde-changes-<datestr>.tar.
 
    Icon theme is not furthermore maintained (enforced) by the
    NsCDE style managers, so that any manual change in above

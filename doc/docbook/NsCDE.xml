@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "2.0">
-<!ENTITY date "December 2021">
+<!ENTITY appversion "2.1">
+<!ENTITY date "March 2022">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -94,7 +94,8 @@ which can also extend to Qt4 and Qt5 with gtk engine of Qt, X settings which are
 the same theme rules, icon theme, python programs, converters and generators, korn shell
 scripts, CDE-compatible backdrops and palettes and misc pieces for integration like CSS theme
 for Firefox and Thunderbird, and stand alone integrated desktop-making parts like stalonetray,
-dunst, xsettingsd, xscreensaver etc.
+dunst, xsettingsd, xscreensaver etc. Since NsCDE 2.1 for Qt5 there is a experimental Kvantum
+SVG based NsCDE engine as an alternative for Qt5 gtk2 engine.
 </para>
 </sect2>
 
@@ -3336,6 +3337,9 @@ options. This are:
  Qt5 (default)
 </para></listitem>
 <listitem><para>
+ Qt5 Kvatnum (not yet default, alternative to Qt5 gtk2 engine)
+</para></listitem>
+<listitem><para>
  User's <filename>$FVWM_USERDIR/libexec/colormgr.local</filename> script if exists, called with
   the path of the applied palette and number of colors.
 </para></listitem>
@@ -3348,6 +3352,12 @@ Qt/Qt5 integration is easy, since this toolkits can use their <emphasis>GTK</emp
 integrate self with GTK theme. All that Color Style Manager has to do is to
 define GTK engine in <filename>~/.config/Trolltech.conf</filename> and
 <filename>~/.config/qt5ct/qt5ct.conf</filename> for colors from the new palette to be used.
+</para>
+<para>
+Since NsCDE 2.1, Qt5 (but not Qt4) can use Kvantum based engine for integration with the
+rest of NsCDE and other widgets. This can be selected in Color Style Manager as an alternative
+to gtk2 bridge engine. It has somewhat finer tuned and polished look, however it has also still
+some problems in QDialog based widgets when scrollbars are used there.
 </para>
 <para>
 GTK2 and GTK3 are heavy work part. Here, we are using work derived from one
@@ -4987,8 +4997,8 @@ Manager. When clicked, every button becomes editable field and it's name can
 be changed (pres <keysym>return</keysym> on the text field after writing new name).
 This change will be written immediately WITHOUT pressing <guibutton>OK</guibutton> button.
 Name of the workspace will be changed across all NsCDE and FVWM (WSM, Occupy
-Workspace/Page/Monitor, menus etc). In NsCDE, there are 4 options for workspaces:
-2, 4, 6 and 8 model. FVWM itself however supports much larger number, but in NsCDE care
+Workspace/Page/Monitor, menus etc). In NsCDE, there are 5 options for workspaces:
+0, 2, 4, 6 and 8 model. FVWM itself however supports much larger number, but in NsCDE care
 must be taken about presentation of this workspaces in various applets and tools.
 Nevertheless, theoretically even in NsCDE with maximum number of workspaces
 multiplied with maximum number of pages, user can get 128 working screens
@@ -7743,6 +7753,11 @@ Same goes for Qt5.
 Notice about Qt5: <varname>QT_QPA_PLATFORMTHEME</varname> environment variable must be
 set, and be set to <varname>qt5ct</varname> value in order to run <command>qt5ct</command> configurator.
 This variable is set by default from the <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+</para>
+<para>
+If Qt5 Kvantum engine is desired for use with <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, <emphasis>qt5-style-kvantum</emphasis>
+must be installed and available, otherwise selecting alternative Qt5 integration based on Kvantum
+engine will not work.
 </para></listitem>
 
 <listitem><para>
@@ -8211,6 +8226,12 @@ For Qt5 integration, make sure <emphasis>qt5-qtstyleplugins</emphasis> (or somet
 that name) is installed: <filename>platformthemes/libqgtk2.so</filename> is needed.
 </para>
 <para>
+As from NsCDE 2.1, Qt5 has an alternative Kvantum based engine which can be
+selected instead of default gtk2 based one. It is independent from gtk2 style
+plugin, but <emphasis>qt5-style-kvantum</emphasis> (or similar system dependent
+package name) must be installed for this to work.
+</para>
+<para>
 All integrations of this type: GTK2, GTK3, QT4 and QT5 are turned on in the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 </para>
@@ -8593,6 +8614,11 @@ GTK3: <filename>$HOME/.config/gtk-3.0/settings.ini
 </filename></para></listitem>
 </itemizedlist>
 
+During the initial NsCDE setup (bootstrap), if any of this files is found, it will be backed up in the
+user's home directory as a tar(1) file "gtk+qt-dot-files-before-nscde-changes-&lt;datestr&gt;.tar.
+</para>
+
+<para>
 Icon theme is not furthermore maintained (enforced) by the NsCDE style managers, so
 that any manual change in above mentioned places will result in icon theme change,
 which can be user's choice, but may give incomplete CDE experience while using NsCDE.
