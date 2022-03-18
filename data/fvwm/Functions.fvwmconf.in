@@ -1964,7 +1964,10 @@ AddToFunc f_SubpanelWindowMenu
 DestroyFunc f_WindowOpsFPBtn1
 AddToFunc f_WindowOpsFPBtn1
 + I DestroyMenu recreate $0
-+ I f_WindowOpsBasic $0 Nop
++ I AddToMenu $0 "$[gt.&Refresh]		$[infostore.km_regenwin]" f_RegenerateWindow
++ I Test (EnvMatch FVWM_IS_FVWM3 1) AddToMenu $0 "$[gt.&Move]		$[infostore.km_move]" f_MoveFP
++ I Test (!EnvMatch FVWM_IS_FVWM3 1) AddToMenu $0 "$[gt.&Move]		$[infostore.km_move]" Move
++ I AddToMenu $0 "$[gt.&Size]		$[infostore.km_resize]" f_StatefulResize
 + I AddToMenu $0 "$[gt.Reposi&tion]		$[infostore.km_raisefp]" f_RestoreFrontPanel WindowShade Off
 + I AddToMenu $0 "$[gt.&Iconify]		$[infostore.km_iconify]" Iconify
 + I ThisWindow (!Shaded, CirculateHit) AddToMenu $0 "$[gt.S&hade]		$[infostore.km_raiseshadefp]" f_RestoreFrontPanel WindowShade South
