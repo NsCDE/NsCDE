@@ -50,6 +50,35 @@ AddToFunc f_MoveRaiseLower
 + H Raise
 + H Move
 
+# For fvwm3 only - change EwmhBaseStruts when Front Panel is moved
+# across monitors with mouse. Test for FVWM3 is still here because
+# NsCDE-patched FVWM2 uses fvwm3 Front Panel config.
+DestroyFunc f_MoveRaiseLowerFP
+AddToFunc f_MoveRaiseLowerFP
++ I InfoStoreAdd current_fp_monitor $[monitor.current]
++ M Move
++ M Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 500 Test (!EnvMatch infostore.current_fp_monitor $[monitor.current]) f_SwitchEwmhBaseStruts $[monitor.current]
++ M Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToWSM
++ C RaiseLower
++ D Raise
++ D Move
++ D Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 500 Test (!EnvMatch infostore.current_fp_monitor $[monitor.current]) f_SwitchEwmhBaseStruts $[monitor.current]
++ D Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToWSM
++ H Raise
++ H Move
++ H Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 500 Test (!EnvMatch infostore.current_fp_monitor $[monitor.current]) f_SwitchEwmhBaseStruts $[monitor.current]
++ H Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToWSM
+
+# For fvwm3 only - change EwmhBaseStruts when Front Panel is moved
+# across monitors with mouse. Test for FVWM3 is still here because
+# NsCDE-patched FVWM2 uses fvwm3 Front Panel config.
+DestroyFunc f_MoveFP
+AddToFunc f_MoveFP
++ I InfoStoreAdd current_fp_monitor $[monitor.current]
++ I Move
++ I Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 500 Test (!EnvMatch infostore.current_fp_monitor $[monitor.current]) f_SwitchEwmhBaseStruts $[monitor.current]
++ I Test (EnvMatch FVWM_IS_FVWM3 1, !EnvMatch infostore.lscrn.cnt 1) NoWindow f_SendToWSM
+
 # Called from Mouse bindings
 # RaiswLower + custom action as $0
 DestroyFunc f_RaiseLowerX
@@ -1955,7 +1984,8 @@ AddToFunc f_WindowOpsFPBtn1
 DestroyFunc f_WindowOpsFPHandle
 AddToFunc f_WindowOpsFPHandle
 + I DestroyMenu recreate $0
-+ I AddToMenu $0 "$[gt.&Move]"	Move
++ I Test (!EnvMatch FVWM_IS_FVWM3 1) AddToMenu $0 "$[gt.&Move]"	Move
++ I Test (EnvMatch FVWM_IS_FVWM3 1) AddToMenu $0 "$[gt.&Move]"	MoveFP
 + I AddToMenu $0 "$[gt.&Iconify]"	Iconify
 + I ThisWindow (!Overlapped, CirculateHit) AddToMenu $0 "$[gt.&Lower]" RaiseLower
 + I ThisWindow (Overlapped, CirculateHit) AddToMenu $0 "$[gt.R&aise]" RaiseLower
