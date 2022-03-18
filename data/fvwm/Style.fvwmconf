@@ -97,10 +97,10 @@ Style FrontPanel NoTitle, Sticky, Icon NsCDE/DtWsSwitch.l.xpm, \
  CirculateSkip, NoHandles, BorderWidth 4, \
  IconBox screen c 1 1 -92 -4, IconFill bottom right, \
  WindowShadeSteps 1p, WindowShadeBusy, WindowListSkip, \
- ClickToFocus, UseDecor FpDecor, StartsOnScreen c, \
- InitialMapCommand Move $[infostore.frontpanel.pos.placement], \
+ ClickToFocus, UseDecor FpDecor, StartsOnScreen p, \
+ InitialMapCommand Move screen p $[infostore.frontpanel.pos.placement], \
  MaxWindowSize 100 136p, EWMHPlacementIgnoreWorkingArea, \
- PositionPlacement $[infostore.frontpanel.pos.placement]
+ PositionPlacement screen p $[infostore.frontpanel.pos.placement]
 
 # Subpanels of FrontPanel. UseDecor handles visual appereance of the titlebars
 # of subpanels to match thickness of the CDE - this breaks slightly when if/when
@@ -124,9 +124,11 @@ Style "GIMP Startup" NoTitle, NoHandles, !Borders
 Style Gkrellm Sticky, WindowListSkip, NoTitle, ClickToFocus, CirculateSkip, PositionPlacement $[infostore.gkrellm.pos.placement]
 Style Gkrellm_conf Slippery, WindowListHit, Title, CirculateHit
 Style Pidgin IconifyWindowGroups
-Style stalonetray NoHandles, BorderWidth 4, StaysOnBottom, MoveByProgramMethod IgnoreGravity, PositionPlacement $[infostore.stalonetray.pos.placement]
 Style WatchWinMgrErrors Icon NsCDE/DtErrors.l.pm, MiniIcon NsCDE/DtErrors.t.pm
 Style FvwmConsole Handles, Button 2, Button 4, Icon NsCDE/FvwmCons.l.xpm, MiniIcon NsCDE/FvwmCons.t.xpm
+Style stalonetray NoHandles, BorderWidth 4, StaysOnBottom, MoveByProgramMethod IgnoreGravity, \
+ PositionPlacement screen p $[infostore.stalonetray.pos.placement], \
+ InitialMapCommand Move screen p $[infostore.stalonetray.pos.placement]
 
 #############
 # Menu Styles

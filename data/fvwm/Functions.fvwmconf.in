@@ -568,6 +568,7 @@ AddToFunc f_RestartFrontPanel
 + I ModuleSynchronous Timeout 5 FvwmButtons FrontPanel
 + I f_SendToPGM
 + I Test (EnvMatch infostore.wsmcolored 1) Schedule 100 SendToModule FrontPanel ChangeButton FpWSM Colorset 22
++ I Test (EnvMatch FVWM_IS_FVWM3 1) f_SwitchEwmhBaseStruts $[monitor.current]
 
 DestroyFunc f_RestoreFrontPanel
 AddToFunc f_RestoreFrontPanel
@@ -583,6 +584,7 @@ AddToFunc f_RestoreFrontPanel
 + I All (FvwmButtons,FrontPanel,CirculateHit) RaiseLower
 + I All (FvwmButtons,FrontPanel,CirculateHit) Resize $[infostore.FP.Columns]p 79p
 + I All (FvwmButtons,FrontPanel,CirculateHit) AnimatedMove $[infostore.frontpanel.pos.placement]
++ I Test (EnvMatch FVWM_IS_FVWM3 1) f_SwitchEwmhBaseStruts $[monitor.current]
 + I All (FvwmButtons,FrontPanel,CirculateHit) Focus
 + I Test (EnvMatch infostore.fp_needs_ptr 1) All (FvwmButtons,FrontPanel,CirculateHit,!HasPointer,!Shaded) WarpToWindow 50 50
 + I Test (EnvMatch infostore.fp_needs_ptr 1) InfoStoreAdd fp_needs_ptr 0
@@ -918,6 +920,13 @@ AddToFunc f_AutoRefreshWindow
 #####################
 # Misc core functions
 #####################
+
+# For FVWM3 when FrontPanel changes screen
+# $0: RandR name of the screen or $[monitor.xyz] macro
+DestroyFunc f_SwitchEwmhBaseStruts
+AddToFunc f_SwitchEwmhBaseStruts
++ I EwmhBaseStruts 0 0 0 0
++ I EwmhBaseStruts screen $0 0 0 0 86
 
 # Called from share/NsCDE/fvwm/Main.fvwmconf during startup
 # This is "init script" for Local Pager

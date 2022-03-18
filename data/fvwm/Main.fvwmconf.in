@@ -52,7 +52,8 @@ ClickTime $[infostore.menudclicktm]
 DefaultIcon NsCDE/Noicon.xpm
 BusyCursor ModuleSynchronous True
 Test (EnvMatch FVWM_IS_FVWM3 1) DesktopConfiguration global
-EwmhBaseStruts 0 0 0 86
+Test (!EnvMatch FVWM_IS_FVWM3 1) EwmhBaseStruts 0 0 0 86
+Test (EnvMatch FVWM_IS_FVWM3 1) EwmhBaseStruts screen $[monitor.primary] 0 0 0 86
 
 # Defined here as a fallback before f_ReadMainConfig which
 # may be missing this, and if pageshowrootpager is enabled
@@ -83,7 +84,7 @@ InfoStoreAdd pagematrixY 2
 InfoStoreAdd desklastpage 1
 InfoStoreAdd pageraisefp 1
 InfoStoreAdd pageshowrootpager 1
-InfoStoreAdd frontpanel.pos.placement "screen c 50-50w -0p ewmhiwa"
+InfoStoreAdd frontpanel.pos.placement "50-50w -0p ewmhiwa"
 InfoStoreAdd stalonetray.pos.placement "-0 -0 ewmhiwa"
 InfoStoreAdd gkrellm.pos.placement "-0 +0 ewmhiwa"
 InfoStoreAdd nprocmgr.actionval 1
