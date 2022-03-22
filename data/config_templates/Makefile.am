@@ -30,3 +30,4 @@ install-data-hook:
 	-cp -r $(srcdir)/Xdefaults.fontdefs $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xdefaults.mouse $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xsettingsd.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/colormgr.addons $(DESTDIR)$(NSCDE_DATADIR)/config_templates/

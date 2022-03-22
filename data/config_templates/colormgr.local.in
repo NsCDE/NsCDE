@@ -6,271 +6,38 @@
 # Licence: GPLv3
 #
 
-PPATH="$1"
-NCOLORS="$2"
+# Do not remove this two variables, otherwise Color Style Manager does not
+# know color number and palette path, and will be unable to do anything
+# useful or meaningful.
+export PPATH="$1"
+export NCOLORS="$2"
 
-# Firefox: fill the path to /home/USER/.mozilla/firefox/profile.xxx/chrome if you use it.
-FIREFOX_CHROMEDIR=""
+# Firefox: fill the path to /home/USER/.mozilla/firefox/profile.xxx if you use it.
+# If empty, thunderbird CSS will not be integrated with NsCDE.
+export FIREFOX_PROFILEDIR=""
 # Firefox version tested are Firefox ESR 78.x.y, Firefox 91, 91.1.0 ESR, 91 and 92.
 # Use "ff7x_" for Firefox 7x and 8x versions, and "ff9x_" for 91, 92 and newer.
-FIREFOX_MAJVER_PFX="ff9x_"
+# Default is "ff9x_"
+export FIREFOX_MAJVER_PFX="ff9x_"
 
-# Thunderbird: fill the path to /home/USER/.thunerbird/profile.xxx/chrome if you use it.
-THUNDERBIRD_CHROMEDIR=""
+# Thunderbird: fill the path to /home/USER/.thunerbird/profile.xxx if you use it.
+# If empty, thunderbird CSS will not be integrated with NsCDE.
+export THUNDERBIRD_PROFILEDIR=""
 
-if [ -z $PPATH ]; then
-   PPATH=$NSCDE_DATADIR/palettes/Broica.dp
-fi
+# All "do_*" functions are working from here, do not remove this if you
+# want to use predefined colormgr addons.
+. ${NSCDE_DATADIR}/config_templates/colormgr.addons
 
-if [ -z $NCOLORS ]; then
-   NCOLORS=8
-fi
+# Defaults: integrate if application is found. Except for
+# Firefox and Thunderbird where profile directories must
+# be explicitly defined by the user.
+whence -q gkrellm && do_gkrellm
+whence -q mate-terminal && do_mate_terminal
+whence -q konsole && do_konsole
+whence -q konsole && do_qterminal
+whence -q xfce4-terminal && do_xfce4_terminal
+# do_firefox
+# do_thunderbird
 
-# Gkrellm
-if [ -d "$NSCDE_DATADIR/config_templates/Gkrellm" ] && $(whence -q gkrellm); then
-   cd "$NSCDE_DATADIR/config_templates/Gkrellm" || exit 1
-   if [ ! -d "${HOME}/.gkrellm2/themes/NsCDE" ]; then
-      mkdir -p "${HOME}/.gkrellm2/themes/NsCDE"
-   fi
-
-   for dir in net timer host uptime clock cal mem sensors apm
-   do
-      if [ ! -d "${HOME}/.gkrellm2/themes/NsCDE/$dir" ]; then
-         mkdir -p "${HOME}/.gkrellm2/themes/NsCDE/$dir"
-      fi
-   done
-
-   for pm in *.xpm
-   do
-      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
-   done
-
-   for pm in timer/*.xpm net/*.xpm host/*.xpm uptime/*.xpm clock/*.xpm cal/*.xpm mem/*.xpm sensors/*.xpm apm/*.xpm
-   do
-      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $pm -c | convert - ${HOME}/.gkrellm2/themes/NsCDE/$(echo "$pm" | sed 's/\.xpm/\.png/g')
-   done
-
-   cp -f gkrellmrc ${HOME}/.gkrellm2/themes/NsCDE/
-
-   # Run this only on first setup
-   if [ "x$IVF" == "x1" ]; then
-      if [ ! -f "${HOME}/.gkrellm2/theme_config" ]; then
-         echo "${HOME}/.gkrellm2/themes/NsCDE" > "${HOME}/.gkrellm2/theme_config"
-         echo "0" >> "${HOME}/.gkrellm2/theme_config"
-         echo "DejaVu Serif Semi-Condensed 11" >> "${HOME}/.gkrellm2/theme_config"
-         echo "DejaVu Serif Semi-Condensed 10" >> "${HOME}/.gkrellm2/theme_config"
-         echo "DejaVu Serif Semi-Condensed 9" >> "${HOME}/.gkrellm2/theme_config"
-         echo "100" >> "${HOME}/.gkrellm2/theme_config"
-      fi
-
-      if [ ! -f "${HOME}/.gkrellm2/user-config" ]; then
-         echo 'decorated 1' > "${HOME}/.gkrellm2/user-config"
-         echo 'skip_taskbar 1' >> "${HOME}/.gkrellm2/user-config"
-         echo 'skip_pager 1' >> "${HOME}/.gkrellm2/user-config"
-         echo 'chart_width 80' >> "${HOME}/.gkrellm2/user-config"
-         echo 'sticky_state 1' >> "${HOME}/.gkrellm2/user-config"
-         echo 'save_position 1' >> "${HOME}/.gkrellm2/user-config"
-         echo 'hostname_short 1' >> "${HOME}/.gkrellm2/user-config"
-      fi
-   fi
-fi
-
-# mate-terminal
-whence -q mate-terminal
-if (($? == 0)); then
-   TEMP1=$(mktemp -t "XXXXXXXXX.dconfgen1.XXXXXXXX")
-   echo dconf write /org/mate/terminal/profiles/default/background-color \"\'NSCDE_BG_COLOR_4\'\" > $TEMP1
-   echo dconf write /org/mate/terminal/profiles/default/foreground-color \"\'NSCDE_FG_COLOR_4\'\" >> $TEMP1
-   echo dconf write /org/mate/terminal/profiles/default/bold-color-same-as-fg true >> $TEMP1
-   echo dconf write /org/mate/terminal/profiles/default/use-theme-colors false >> $TEMP1
-   TEMP2=$(mktemp -t "XXXXXXXXX.dconfgen2.XXXXXXXX")
-   $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-    -i $TEMP1 -c > $TEMP2
-   chmod 0755 $TEMP2
-   sh $TEMP2
-   sleep 1
-   rm -f $TEMP1 $TEMP2
-fi
-
-# KDE konsole
-whence -q konsole
-if (($? == 0)); then
-   if [ ! -d "$HOME/.local/share/konsole" ]; then
-      mkdir -p "$HOME/.local/share/konsole"
-   fi
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Blur -v False
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Description -v NsCDE
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k ColorRandomization -v false
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s General -k Opacity -v 1
-   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^bg_color_4" | cut -d" " -f2)
-   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^fg_color_4" | cut -d" " -f2)
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s Background -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s BackgroundFaint -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s BackgroundIntense -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s Foreground -k Color -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s ForegroundFaint -k Color -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.colorscheme -s ForegroundIntense -k Color -v $FG_COLOR_4
-
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s General -k DimWhenInactive -v false
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s General -k Name -v NsCDE
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.local/share/konsole/NsCDE.profile -s Appearance -k ColorScheme -v NsCDE
-
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/konsolerc -s "Desktop Entry" -k DefaultProfile -v NsCDE.profile
-fi
-
-# Q terminal
-whence -q qterminal
-if (($? == 0)); then
-   if [ ! -d "$HOME/.config/qterminal.org/color-schemes" ]; then
-      mkdir -p "$HOME/.config/qterminal.org/color-schemes"
-   fi
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Blur -v False
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Description -v NsCDE
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k ColorRandomization -v false
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s General -k Opacity -v 1
-   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^bg_color_4" | cut -d" " -f2)
-   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -s -l | egrep "^fg_color_4" | cut -d" " -f2)
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s Background -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s BackgroundFaint -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s BackgroundIntense -k Color -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s Foreground -k Color -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s ForegroundFaint -k Color -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/color-schemes/NsCDE.colorscheme -s ForegroundIntense -k Color -v $FG_COLOR_4
-
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/qterminal.ini -s General -k colorScheme -v NsCDE
-fi
-
-# xfce4-terminal
-whence -q xfce4-terminal
-if (($? == 0)); then
-   BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^bg_color_4" | cut -d" " -f2)
-   FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^fg_color_4" | cut -d" " -f2)
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorBackground -v $BG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorForeground -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorSelectionBackground -v $FG_COLOR_4
-   ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorSelectionForeground -v $BG_COLOR_4
-fi
-
-# Firefox
-function do_firefox
-{
-   if [ "x$FIREFOX_CHROMEDIR" != "x" ]; then
-      mkdir -p "$FIREFOX_CHROMEDIR"
-
-      # Chrome
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/userChrome.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo "@import url(\"${NSCDE_DATADIR}/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeChrome.css\");" >> \
-          ${FIREFOX_CHROMEDIR}/userChrome.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo "@import url(\"${NSCDE_DATADIR}/integration/firefox/nscdeIcons.css\");" >> \
-          ${FIREFOX_CHROMEDIR}/userChrome.css
-      fi
-
-      # Content
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
-      if (($? > 0)); then
-         echo '@import url("nscdeColordefs.css");' >> ${FIREFOX_CHROMEDIR}/userContent.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeContent\.css(.)?\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/userContent.css 2>/dev/null
-      if (($? > 0)); then
-         echo '@import url("nscdeContent.css");' >> ${FIREFOX_CHROMEDIR}/userContent.css
-      fi
-
-      # Colorgen
-      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $NSCDE_DATADIR/integration/firefox/nscdeColordefs.tmpl \
-       -s -c > ${FIREFOX_CHROMEDIR}/nscdeColordefs.css
-      ln -sf  $NSCDE_DATADIR/integration/firefox/${FIREFOX_MAJVER_PFX}nscdeContent.css \
-       ${FIREFOX_CHROMEDIR}/nscdeContent.css
-
-      # Prefs
-      egrep -q '^([[:space:]]+)?user_pref\("toolkit\.legacyUserProfileCustomizations\.stylesheets",([[:space:]]+)?true\)([[:space:]]+)?;' \
-       ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
-      if (($? > 0)); then
-         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${FIREFOX_CHROMEDIR}/../user.js
-      fi
-   fi
-}
-
-whence -q firefox
-if (($? == 0)); then
-  do_firefox
-fi
-
-whence -q firefox-esr
-if (($? == 0)); then
-  do_firefox
-fi
-
-# Thunderbird
-function do_thunderbird
-{
-   if [ "x$THUNDERBIRD_CHROMEDIR" != "x" ]; then
-      mkdir -p "$THUNDERBIRD_CHROMEDIR"
-
-      # Chrome
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo '@import url("nscdeColordefs.css");' >> ${THUNDERBIRD_CHROMEDIR}/userChrome.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeChrome.css\");" >> \
-          ${THUNDERBIRD_CHROMEDIR}/userChrome.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
-      if (($? > 0)); then
-         echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeIcons.css\");" >> \
-          ${THUNDERBIRD_CHROMEDIR}/userChrome.css
-      fi
-
-      # Content
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?nscdeColordefs\.css(.)?\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
-      if (($? > 0)); then
-         echo '@import url("nscdeColordefs.css");' >> ${THUNDERBIRD_CHROMEDIR}/userContent.css
-      fi
-      egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?.*nscdeContent\.css(.)?\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
-      if (($? > 0)); then
-         echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeContent.css\");" >> \
-          ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
-      fi
-
-      # Colorgen
-      $NSCDE_TOOLSDIR/palette_colorgen -p $PPATH -n $NCOLORS \
-       -i $NSCDE_DATADIR/integration/thunderbird/nscdeColordefs.tmpl \
-       -s -c > ${THUNDERBIRD_CHROMEDIR}/nscdeColordefs.css
-
-      # Prefs
-      egrep -q '^([[:space:]]+)?user_pref\("toolkit\.legacyUserProfileCustomizations\.stylesheets",([[:space:]]+)?true\)([[:space:]]+)?;' \
-       ${THUNDERBIRD_CHROMEDIR}/../user.js 2>/dev/null
-      if (($? > 0)); then
-         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${THUNDERBIRD_CHROMEDIR}/../user.js
-      fi
-
-   fi
-}
-
-whence -q thunderbird
-if (($? == 0)); then
-  do_thunderbird
-fi
+# Add here your own local hooks freely ...
 
