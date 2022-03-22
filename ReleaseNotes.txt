@@ -1,3 +1,35 @@
+NsCDE 2.1 release notes
+=======================
+This release fixes some glitches and bugs accumulated during the
+transition from 1.X to 2.0, but it has also some new features:
+
+- Qt5 widgets now have dinamically generated Kvantum engine
+  which can be choosen in Color Style Manager as alternative to
+  the gtk2 connector oriented engine. This works well, but
+  glitches may still be expected even after tests with many
+  Qt5 and modern KDE applications. It will improve during the
+  time. It is perfectly usable.
+- Key bindings set mechanism introduced. For now, there is only
+  one set defined: default (nscde). This enabled NsCDE in future
+  versions to implement standard key binding sets as IBM CUA
+  standard or some other custom set.
+- Color templates for Konsole and Qterminal - Qt5 based terminals
+- New colormgr.local is simplified and can call functions from
+  the <prefix>/share/NsCDE/config_templates/colormgr.addons.
+- FVWM3: EwmhBaseStruts now follows Front Panel if it is moved
+  across monitors.
+- FVWM3: default root setter fvwm-root can be replaced by specifying
+  InfoStore variable rootsetcmd in user's ~/.NsCDE/NsCDE.conf
+- Sysinfo dialog now correctly displays NsCDE version after update
+  and dynamic restart of FVWM.
+- Initial bootstrap wizard backs up user's GUI widget configurations
+  such as gtkrc and qt5ct.conf if they exist before changing them.
+- Fix some polkit agents start/restart
+- Updated documentation
+
+See ChangeLog or "git log" for a complete list of changes.
+
+
 NsCDE 2.0 release notes
 =======================
 
