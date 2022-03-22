@@ -374,7 +374,7 @@ This files are:
 <itemizedlist>
 <listitem><para><link linkend="AppMenus_conf">AppMenus.conf</link> - default per application addons for Window Operations menu on the 1st titlebar button</para></listitem>
 <listitem><para><link linkend="FrontPanel_actions">FrontPanel.actions</link> - read by FVWM functions called when FrontPanel controls and buttons are used</para></listitem>
-<listitem><para><link linkend="Keymenu_actions">Keymenu.actions</link> - Part of the FVWM NsCDE keybindings which have menu hints written on menus</para></listitem>
+<listitem><para><link linkend="Keymenu_actions">Keymenu-&lt;keybtype&gt;.actions</link> - Part of the FVWM NsCDE keybindings which have menu hints written on menus</para></listitem>
 <listitem><para><link linkend="Subpanels_actions">Subpanels.actions</link> - From this file, Subpanels.fvwmconf is generated.</para></listitem>
 <listitem><para><link linkend="NsCDE-WSM_conf">WSM.conf</link> - Workspace Manager and Graphical Workspace Manager configuration file</para></listitem>
 </itemizedlist>
@@ -5381,7 +5381,7 @@ as a desktop-building material and tool, and merely configuring
 aspects for end use are wastly blurred and cannot be really
 distinguished and separated in that strict categories. This system of
 configurations is arranged in some logical and consistent way. For
-example, keyboard shortcuts in Keybindings.fvwmconf, FvwmBacker
+example, keyboard shortcuts in Keybindings.&lt;keybtype&gt;, FvwmBacker
 configuration in Backer.fvwmconf, (generated) colorsets in
 Colorset.fvwmgen etc.
 </para>
@@ -5931,9 +5931,22 @@ Silent Key Tab A S -
 </programlisting>
 </para>
 <para>
-For explanation what is the context, and what modifier, see FVWM explanation
-(copied from original default FVWM config and extended a bit). Namely:
+For explanation what is the context, and what modifier, see FVWM documentation (man page).
 </para>
+<para>
+NsCDE 2.1 and above implements alternative sets of key bindings. Default set named <emphasis>nscde</emphasis>
+is applied by default, unless overriden in <filename>$FVWM_USERDIR/NsCDE.conf</filename> with InfoStore variable
+<varname>keybtype</varname>. This mechanism is still experimental, in NsCDE 2.1 and the only implemented set
+of keybindings is <varname>nscde</varname>. The following section lists and explains key bindings implemented
+in that set. In future versions of NsCDE, IBM CUA compliant set is planned as an alternatice choice to default
+set of keybindings.
+</para>
+
+<sect3 id="Keybindings_nscde">
+<title>Keybindings.nscde</title>
+<para>
+
+This subsection explains key bindings implemented in default "nscde" set of key bindings.
 
 <itemizedlist>
 <listitem><para>
@@ -6179,7 +6192,7 @@ focus to free up space on the screen.
 </para></listitem>
 
 <listitem><para>
-  <keysym>XF86AudioLowerVolume</keysym> and <keysym>XF86AudioRaiseVolume</keysym> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <filename>$NSCDE_DATADIR/fvwm/Keybindings.fvwmconf</filename> for f_Mixer options and interaction.
+  <keysym>XF86AudioLowerVolume</keysym> and <keysym>XF86AudioRaiseVolume</keysym> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <filename>$NSCDE_DATADIR/fvwm/Keybindings.&lt;keybtype&gt;</filename> for f_Mixer options and interaction.
 </para></listitem>
 
 <listitem><para>
@@ -6197,7 +6210,7 @@ Pressend second time just once, it will dismiss Local Pager
   Occupy Workspace dialog for window moving between the desks.
   </para>
   <para>
-  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
   for automatic description on menus.
 </para></listitem>
 
@@ -6207,7 +6220,7 @@ Pressend second time just once, it will dismiss Local Pager
     Occupy Page dialog for window moving between the desks.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6218,7 +6231,7 @@ Pressend second time just once, it will dismiss Local Pager
    only when multiple monitors are detected by NsCDE and FVWM.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6226,7 +6239,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Alt+F1</keysym> regenerates and refreshes the window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6234,7 +6247,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Meta+F1</keysym> Calls xrefresh(1) command to refresh the X11 display
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6242,7 +6255,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Alt+F2</keysym> iconifies (deiconifies if in icon context)
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6250,7 +6263,7 @@ Pressend second time just once, it will dismiss Local Pager
   <keysym>Meta+F2</keysym> "shades" or rolls up the window to titlebar only view
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6261,7 +6274,7 @@ Pressend second time just once, it will dismiss Local Pager
   window with FVWM <command>PlaceAgain</command> command
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6270,7 +6283,7 @@ Pressend second time just once, it will dismiss Local Pager
   mouse pointer currently resides, together with frame
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6279,7 +6292,7 @@ Pressend second time just once, it will dismiss Local Pager
     and enter
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6288,7 +6301,7 @@ Pressend second time just once, it will dismiss Local Pager
 directions and place it again on page
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6297,7 +6310,7 @@ directions and place it again on page
 directions and place it again on page
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6306,7 +6319,7 @@ directions and place it again on page
     and enter
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6317,7 +6330,7 @@ directions and place it again on page
   <keysym>Meta+Shift+F5</keysym> combinations will put window back from sticky state
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6327,7 +6340,7 @@ directions and place it again on page
   Pressing again the same combination toggles this state back
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6337,7 +6350,7 @@ directions and place it again on page
   Pressing again the same combination toggles this state back
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6345,7 +6358,7 @@ directions and place it again on page
   <keysym>Alt+F6</keysym> raises or lowers the window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6357,7 +6370,7 @@ directions and place it again on page
   grow and maximized states. This is a cyclic keybinding in a "shrink" direction.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6375,7 +6388,7 @@ directions and place it again on page
   stretched and maximized state. This is a cyclic keybinding in a "grow" direction.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6390,7 +6403,7 @@ directions and place it again on page
   <keysym>Alt+F9</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6404,7 +6417,7 @@ directions and place it again on page
   <keysym>Alt+F10</keysym> deletes a window (see fvwm(1))
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6412,7 +6425,7 @@ directions and place it again on page
   <keysym>Meta+F10</keysym> closes a window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6420,7 +6433,7 @@ directions and place it again on page
   <keysym>Meta+Alt+F10</keysym> forcefully destroys a window
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6428,7 +6441,7 @@ directions and place it again on page
   <keysym>Alt+F11</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6436,7 +6449,7 @@ directions and place it again on page
   <keysym>Meta+F11</keysym> is empty
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6445,7 +6458,7 @@ directions and place it again on page
   variable in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6453,7 +6466,7 @@ directions and place it again on page
   <keysym>Meta+F12</keysym> invokes default terminal app ($[infostore.terminal])
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6462,7 +6475,7 @@ directions and place it again on page
   information for a current window in the GeoDB.ini
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6482,7 +6495,7 @@ directions and place it again on page
  <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6492,7 +6505,7 @@ directions and place it again on page
  <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6501,7 +6514,7 @@ directions and place it again on page
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6510,7 +6523,7 @@ directions and place it again on page
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6521,7 +6534,7 @@ directions and place it again on page
     button on the borders of the frame has the same effect
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6533,7 +6546,7 @@ directions and place it again on page
     itself.
     </para>
     <para>
-    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu.actions</filename>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
     for automatic description on menus.
 </para></listitem>
 
@@ -6559,10 +6572,14 @@ Front Panel or Subpanels documentation.
 
 </itemizedlist>
 
+</para>
+
+</sect3>
+
 </sect2>
 
 <sect2 id="Keymenu_actions">
-<title>Keymenu.actions</title>
+<title>Keymenu-&lt;keybtype&gt;.actions</title>
 <para>
 This file is not FVWM configuration file. It is written manually (with editor), and read by the
 <command>$NSCDE_TOOLSDIR/keymenu</command> command which will generate infostore variables with
@@ -6570,8 +6587,11 @@ descriptive keyboard shortcut names which are used in NsCDE menus from
 <filename>Menus.fvwmconf</filename> and <filename>Functions.fvwmconf</filename>, and additionaly,
 use the whole line after the keyword in the first column with "Silent Key" prefix to dinamically
 generate this part of keybindings which are separated from
-<filename>Keybindings.fvwmconf</filename> and processed specially because they definition must
-automatically match keyboard binding description in various menus.
+<filename>Keybindings.fvwmconf</filename> (<filename>Keybindings.&lt;keybindings set&gt;</filename>)
+and processed specially because they definition must automatically match keyboard binding description
+in various menus. The "&lt;keybtype&gt;" represents keybindings set called from default
+<filename>Main.fvwmconf</filename> or <filename>$FVWM_USERDIR/NsCDE.conf</filename> with
+variable <varname>keybtype</varname>. Default is "nscde".
 </para>
 <para>
 The syntax of this file is simple: first column is the keyword which becomes infostore
@@ -6587,14 +6607,15 @@ on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym
 description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
 </para>
 <para>
-File Keymenu.actions is processed by <command>$NSCDE_TOOLSDIR/keymenu</command> script.
+File Keymenu-&lt;keybtype&gt;.actions is processed by <command>$NSCDE_TOOLSDIR/keymenu</command> script.
 This script generates FVWM infostore variables used in menus, and executes FVWM "Key" commands
-producing dynamic keybindings which are described in menus.
+producing dynamic keybindings which are described in menus. Additionally, it will read user's
+<filename>$FVWM_USERDIR/Keymenu.actions</filename> if that file exists.
 </para>
 <para>
 For a list of keybindings that are "dynamic", that is, not defined in
-<filename>Keybindings.fvwmconf</filename>, but in <filename>Keymenu.actions</filename>, see
-notices in section about <link linkend="Keybindings_fvwmconf">Keybindings.fvwmconf</link>.
+<filename>Keybindings.&lt;keybtype&gt;</filename>, but in <filename>Keymenu-&lt;keybtype&gt;.actions</filename>, see
+notices in section about <link linkend="Keybindings_nscde">Keybindings.nscde</link>.
 </para>
 
 </sect2>
@@ -6746,7 +6767,7 @@ For a more detailed guide about important menus, how to invoke and use them, see
 <title>Mousebindings.fvwmconf</title>
 <para>
  File <filename>Mousebindings.fvwmconf</filename> is done in similar manner as the
-  <filename>Keybindings.fvwmconf</filename>. Can be overridden (.fvwmconf) or
+  <filename>Keybindings.&lt;keybtype&gt;</filename>. Can be overridden (.fvwmconf) or
   extended (.fvwmlocal) just like (almost) any NsCDE conf file.
   See fvwm(1) for "Mouse" commands. Here commands invoked with pointer
   are defined. As it is the case with key bindings, mouse actions are too far more in

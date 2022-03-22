@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.16. Keybindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="8. Configuration files explained"><link rel="prev" href="Init_fvwmconf.html" title="8.15. Init.fvwmconf"><link rel="next" href="Keymenu_actions.html" title="8.17. Keymenu.actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.16. Keybindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><th width="60%" align="center">8. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Keybindings_fvwmconf"></a>8.16. Keybindings.fvwmconf</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.16. Keybindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="8. Configuration files explained"><link rel="prev" href="Init_fvwmconf.html" title="8.15. Init.fvwmconf"><link rel="next" href="Keymenu_actions.html" title="8.17. Keymenu-&lt;keybtype&gt;.actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.16. Keybindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><th width="60%" align="center">8. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Keybindings_fvwmconf"></a>8.16. Keybindings.fvwmconf</h3></div></div></div><p>
 According to the old CDE documentation, there are couple of key bindings known under CDE,
 but that documentation also assumes Motif application bindings and X resource configuration,
 which is far from universally applicable in today's world. That said, while GTK and Qt
@@ -31,8 +31,18 @@ Silent Key Tab A S -
 
 </pre><p>
 </p><p>
-For explanation what is the context, and what modifier, see FVWM explanation
-(copied from original default FVWM config and extended a bit). Namely:
+For explanation what is the context, and what modifier, see FVWM documentation (man page).
+</p><p>
+NsCDE 2.1 and above implements alternative sets of key bindings. Default set named <span class="emphasis"><em>nscde</em></span>
+is applied by default, unless overriden in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with InfoStore variable
+<code class="varname">keybtype</code>. This mechanism is still experimental, in NsCDE 2.1 and the only implemented set
+of keybindings is <code class="varname">nscde</code>. The following section lists and explains key bindings implemented
+in that set. In future versions of NsCDE, IBM CUA compliant set is planned as an alternatice choice to default
+set of keybindings.
+</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Keybindings_nscde"></a>8.16.1. Keybindings.nscde</h4></div></div></div><p>
+
+This subsection explains key bindings implemented in default "nscde" set of key bindings.
+
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
   cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>,
   <span class="keysym">left</span> and <span class="keysym">right</span> with ctrl modifier are
@@ -178,7 +188,7 @@ focus to free up space on the screen.
   Sun <span class="keysym">Open</span> same as <span class="keysym">Alt+F12</span> invokes Exec dialog or Rofi launcher
   if configured with nscde_use_rofi infostore variable in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
 </p></li><li class="listitem"><p>
-  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_DATADIR/fvwm/Keybindings.fvwmconf</code> for f_Mixer options and interaction.
+  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_DATADIR/fvwm/Keybindings.&lt;keybtype&gt;</code> for f_Mixer options and interaction.
 </p></li><li class="listitem"><p>
   <span class="keysym">XF86AudioMute</span> key on Sun keyboards will mute the sound. Function f_Mixer expects PulseAudio system. See previous item for possible alternatives.
 </p></li><li class="listitem"><p>
@@ -189,14 +199,14 @@ Pressend second time just once, it will dismiss Local Pager
   sides, title bar and icon (ovoids root window context!) calls
   Occupy Workspace dialog for window moving between the desks.
   </p><p>
-  Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+  Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
   for automatic description on menus.
 </p></li><li class="listitem"><p>
  Key <span class="keysym">Alt+Space</span> in the context of the window, frame corners, frame
     sides, title bar and icon (ovoids root window context!) calls
     Occupy Page dialog for window moving between the desks.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   Key <span class="keysym">Meta+Alt+Space</span> in the context of the window, frame corners, frame
@@ -204,27 +214,27 @@ Pressend second time just once, it will dismiss Local Pager
    Occupy Monitor dialog for window moving between the monitors. This key binding is available
    only when multiple monitors are detected by NsCDE and FVWM.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F1</span> regenerates and refreshes the window
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F1</span> Calls xrefresh(1) command to refresh the X11 display
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F2</span> iconifies (deiconifies if in icon context)
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F2</span> "shades" or rolls up the window to titlebar only view
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F3</span> Repositions the window according to saved geometry
@@ -232,37 +242,37 @@ Pressend second time just once, it will dismiss Local Pager
   is no record for a window in <code class="filename">GeoDB.ini</code>, places again
   window with FVWM <span class="command"><strong>PlaceAgain</strong></span> command
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F3</span> Centers the window in the middle of the screen where
   mouse pointer currently resides, together with frame
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F4</span> enters resize mode which can be finished with cursors keys
     and enter
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
 <span class="keysym">Meta+F4</span> will resize and enlarge any resizable focused window by 25 pixels in all
 directions and place it again on page
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
 <span class="keysym">Meta+Shift+F4</span> will resize and shrink any resizable focused window by 25 pixels in all
 directions and place it again on page
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F5</span> enters move mode which can be finished with cursors keys
     and enter
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F5</span> In the context of the window and it's frames places that
@@ -270,26 +280,26 @@ directions and place it again on page
   Pressing this key combination again, or pressing <span class="keysym">Meta+Alt+F5</span> plus
   <span class="keysym">Meta+Shift+F5</span> combinations will put window back from sticky state
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+F5</span> In the context of the window and it's frames places that
   window in a state sticky across workspaces. That is, it occupies all workspaces, but not pages
   Pressing again the same combination toggles this state back
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Shift+F5</span> In the context of the window and it's frames places that
   window in a state sticky across pages. That is, it occupies all pages, but not workspaces
   Pressing again the same combination toggles this state back
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F6</span> raises or lowers the window
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F7</span> maximizes window 100% (whole screen + decorations);
@@ -298,7 +308,7 @@ directions and place it again on page
   window into normal state. We can say how window is cycling between maximized, stretched,
   grow and maximized states. This is a cyclic keybinding in a "shrink" direction.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F7</span> Works like <span class="keysym">Alt+F7</span>, but selects every second
@@ -311,7 +321,7 @@ directions and place it again on page
   window into normal state. We can say how window is cycling between normal, grow,
   stretched and maximized state. This is a cyclic keybinding in a "grow" direction.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
    <span class="keysym">Meta+F8</span> is the same as <span class="keysym">Meta+F7</span>. This variant is
@@ -321,7 +331,7 @@ directions and place it again on page
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F9</span> is empty
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F9</span> in the context of the known terminal application windows
@@ -330,44 +340,44 @@ directions and place it again on page
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F10</span> deletes a window (see fvwm(1))
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F10</span> closes a window
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+F10</span> forcefully destroys a window
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F11</span> is empty
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F11</span> is empty
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Alt+F12</span> invokes Exec dialog or Rofi launcher if configured with nscde_use_rofi infostore
   variable in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+F12</span> invokes default terminal app ($[infostore.terminal])
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+G</span> Calls Window Geometry Manager dialog which saves geometry
   information for a current window in the GeoDB.ini
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Alt+F</span> in the context of a window, frame, or corner, puts a current window
@@ -380,26 +390,26 @@ directions and place it again on page
  Screenshots in PNG format are saved in <code class="filename">XDG_PICTURES_DIR</code> or
  <code class="varname">$HOME</code> if <code class="filename">XDG_PICTURES_DIR</code> is not defined.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Meta+Control+Print</span> pops cross cursor to pick selected screen area for screenshot.
  Screenshots in PNG format are saved in <code class="filename">XDG_PICTURES_DIR</code> or
  <code class="varname">$HOME</code> if <code class="filename">XDG_PICTURES_DIR</code> is not defined.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Shift+Print</span> takes a screenshot of the root window with 3 seconds delay.
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Control+Print</span> pops cross cursor to pick selected screen area for screenshot.
  Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Shift+Escape</span> will do the same as <span class="keysym">Ctrl+Escape,</span> but Front Panel is
@@ -407,7 +417,7 @@ directions and place it again on page
     this key sequence again will unshade the Front Panel. Middle mouse
     button on the borders of the frame has the same effect
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
   <span class="keysym">Ctrl+Escape</span> will raise Front Panel and reposition it to it's default
@@ -416,7 +426,7 @@ directions and place it again on page
     keys to function on subpanels and <span class="keysym">Ctrl+Return</span> on icons of the Front Panel
     itself.
     </p><p>
-    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu.actions</code>
+    Dynamic: defined in <code class="filename">$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</code>
     for automatic description on menus.
 </p></li><li class="listitem"><p>
 In the context of the Front Panel, <span class="keysym">Meta+ 1-10</span> will pop up subpanels 1 to 10
@@ -430,4 +440,6 @@ under the pointer and execute FvwmButton action defined in configuration of that
 </p></li><li class="listitem"><p>
 In the context of the Front Panel and any Subpanel, Sun <span class="keysym">Help</span> key will display
 Front Panel or Subpanels documentation.
-</p></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8.15. Init.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.17. Keymenu.actions</td></tr></table></div></body></html>
+</p></li></ul></div><p>
+
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8.15. Init.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.17. Keymenu-&lt;keybtype&gt;.actions</td></tr></table></div></body></html>

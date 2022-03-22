@@ -151,7 +151,10 @@ M. Z.
         8.14. Ident.fvwmconf
         8.15. Init.fvwmconf
         8.16. Keybindings.fvwmconf
-        8.17. Keymenu.actions
+
+              8.16.1. Keybindings.nscde
+
+        8.17. Keymenu-<keybtype>.actions
         8.18. Main.fvwmconf
         8.19. Menus.fvwmconf
         8.20. Mousebindings.fvwmconf
@@ -493,8 +496,8 @@ M. Z.
        Operations menu on the 1st titlebar button
      * FrontPanel.actions - read by FVWM functions called when
        FrontPanel controls and buttons are used
-     * Keymenu.actions - Part of the FVWM NsCDE keybindings which
-       have menu hints written on menus
+     * Keymenu-<keybtype>.actions - Part of the FVWM NsCDE
+       keybindings which have menu hints written on menus
      * Subpanels.actions - From this file, Subpanels.fvwmconf is
        generated.
      * WSM.conf - Workspace Manager and Graphical Workspace
@@ -3780,7 +3783,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    cannot be really distinguished and separated in that strict
    categories. This system of configurations is arranged in some
    logical and consistent way. For example, keyboard shortcuts in
-   Keybindings.fvwmconf, FvwmBacker configuration in
+   Keybindings.<keybtype>, FvwmBacker configuration in
    Backer.fvwmconf, (generated) colorsets in Colorset.fvwmgen etc.
 
    All this configurations are included from the Main.fvwmconf.
@@ -4288,8 +4291,23 @@ Silent Key Tab A S -
 
 
    For explanation what is the context, and what modifier, see
-   FVWM explanation (copied from original default FVWM config and
-   extended a bit). Namely:
+   FVWM documentation (man page).
+
+   NsCDE 2.1 and above implements alternative sets of key
+   bindings. Default set named nscde is applied by default, unless
+   overriden in $FVWM_USERDIR/NsCDE.conf with InfoStore variable
+   keybtype. This mechanism is still experimental, in NsCDE 2.1
+   and the only implemented set of keybindings is nscde. The
+   following section lists and explains key bindings implemented
+   in that set. In future versions of NsCDE, IBM CUA compliant set
+   is planned as an alternatice choice to default set of
+   keybindings.
+     __________________________________________________________
+
+8.16.1. Keybindings.nscde
+
+   This subsection explains key bindings implemented in default
+   "nscde" set of key bindings.
 
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
@@ -4433,7 +4451,7 @@ Silent Key Tab A S -
        This works by default on systems on which pactl(1)
        PulseAudio tool is installed. On other systems, f_Mixer
        function has to be redefined. See
-       $NSCDE_DATADIR/fvwm/Keybindings.fvwmconf for f_Mixer
+       $NSCDE_DATADIR/fvwm/Keybindings.<keybtype> for f_Mixer
        options and interaction.
      * XF86AudioMute key on Sun keyboards will mute the sound.
        Function f_Mixer expects PulseAudio system. See previous
@@ -4445,85 +4463,102 @@ Silent Key Tab A S -
        frame sides, title bar and icon (ovoids root window
        context!) calls Occupy Workspace dialog for window moving
        between the desks.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Key Alt+Space in the context of the window, frame corners,
        frame sides, title bar and icon (ovoids root window
        context!) calls Occupy Page dialog for window moving
        between the desks.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Key Meta+Alt+Space in the context of the window, frame
        corners, frame sides, title bar and icon (ovoids root
        window context!) calls Occupy Monitor dialog for window
        moving between the monitors. This key binding is available
        only when multiple monitors are detected by NsCDE and FVWM.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F1 regenerates and refreshes the window
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F1 Calls xrefresh(1) command to refresh the X11
        display
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F2 iconifies (deiconifies if in icon context)
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F2 "shades" or rolls up the window to titlebar only
        view
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F3 Repositions the window according to saved geometry
        (see Geometry Manager), or if there is no record for a
        window in GeoDB.ini, places again window with FVWM
        PlaceAgain command
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F3 Centers the window in the middle of the screen
        where mouse pointer currently resides, together with frame
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F4 enters resize mode which can be finished with
        cursors keys and enter
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F4 will resize and enlarge any resizable focused
        window by 25 pixels in all directions and place it again on
        page
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Shift+F4 will resize and shrink any resizable focused
        window by 25 pixels in all directions and place it again on
        page
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F5 enters move mode which can be finished with cursors
        keys and enter
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F5 In the context of the window and it's frames places
        that window in a full sticky state. That is, it occupies
        all workspaces and pages. Pressing this key combination
        again, or pressing Meta+Alt+F5 plus Meta+Shift+F5
        combinations will put window back from sticky state
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Alt+F5 In the context of the window and it's frames
        places that window in a state sticky across workspaces.
        That is, it occupies all workspaces, but not pages Pressing
        again the same combination toggles this state back
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Shift+F5 In the context of the window and it's frames
        places that window in a state sticky across pages. That is,
        it occupies all pages, but not workspaces Pressing again
        the same combination toggles this state back
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F6 raises or lowers the window
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F7 maximizes window 100% (whole screen + decorations);
        when pressed again it maximizes to 86% (stretch), third
        press will put window in the grow state (Maximized on page
@@ -4531,8 +4566,9 @@ Silent Key Tab A S -
        window into normal state. We can say how window is cycling
        between maximized, stretched, grow and maximized states.
        This is a cyclic keybinding in a "shrink" direction.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F7 Works like Alt+F7, but selects every second
        operation. In practice, from restored state goes to
        stretched and back, and from grow state goes to fully
@@ -4544,47 +4580,57 @@ Silent Key Tab A S -
        into normal state. We can say how window is cycling between
        normal, grow, stretched and maximized state. This is a
        cyclic keybinding in a "grow" direction.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F8 is the same as Meta+F7. This variant is presented
        on Window Operations menu for actions when going towards
        bigger maximized state, while Meta+F7 is presented for
        actions which are shrinking back.
      * Alt+F9 is empty
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F9 in the context of the known terminal application
        windows scratches the window to some 75%x72% of the screen,
        which is also a menu option in this windows called Wide
        Terminal
      * Alt+F10 deletes a window (see fvwm(1))
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F10 closes a window
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Alt+F10 forcefully destroys a window
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F11 is empty
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F11 is empty
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Alt+F12 invokes Exec dialog or Rofi launcher if configured
        with nscde_use_rofi infostore variable in the
        $FVWM_USERDIR/NsCDE.conf
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+F12 invokes default terminal app
        ($[infostore.terminal])
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Alt+G Calls Window Geometry Manager dialog which saves
        geometry information for a current window in the GeoDB.ini
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Alt+F in the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
        this keybinding again, restores a window.
@@ -4595,40 +4641,46 @@ Silent Key Tab A S -
        3 seconds delay. Screenshots in PNG format are saved in
        XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is not
        defined.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Meta+Control+Print pops cross cursor to pick selected
        screen area for screenshot. Screenshots in PNG format are
        saved in XDG_PICTURES_DIR or $HOME if XDG_PICTURES_DIR is
        not defined.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Shift+Print takes a screenshot of the root window with 3
        seconds delay. Screenshots in PNG format are saved into
        clipboard for pasting into compatible X11 applications.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Control+Print pops cross cursor to pick selected screen
        area for screenshot. Screenshots in PNG format are saved
        into clipboard for pasting into compatible X11
        applications.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Shift+Escape will do the same as Ctrl+Escape, but Front
        Panel is after repositioning shaded to bottom border of the
        screen. Invoking this key sequence again will unshade the
        Front Panel. Middle mouse button on the borders of the
        frame has the same effect
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * Ctrl+Escape will raise Front Panel and reposition it to
        it's default place on the screen. If key combination is
        pressed for the second time, focus and pointer focus will
        be transferred to the Front Panel, enabling Meta+[0-9] keys
        to function on subpanels and Ctrl+Return on icons of the
        Front Panel itself.
-       Dynamic: defined in $NSCDE_DATADIR/defaults/Keymenu.actions
-       for automatic description on menus.
+       Dynamic: defined in
+       $NSCDE_DATADIR/defaults/Keymenu-nscde.actions for automatic
+       description on menus.
      * In the context of the Front Panel, Meta+ 1-10 will pop up
        subpanels 1 to 10 and warp pointer to it
      * In the context of the any subpanel, Meta + 1-10 will pop
@@ -4642,7 +4694,7 @@ Silent Key Tab A S -
        documentation.
      __________________________________________________________
 
-8.17. Keymenu.actions
+8.17. Keymenu-<keybtype>.actions
 
    This file is not FVWM configuration file. It is written
    manually (with editor), and read by the $NSCDE_TOOLSDIR/keymenu
@@ -4652,9 +4704,12 @@ Silent Key Tab A S -
    additionaly, use the whole line after the keyword in the first
    column with "Silent Key" prefix to dinamically generate this
    part of keybindings which are separated from
-   Keybindings.fvwmconf and processed specially because they
-   definition must automatically match keyboard binding
-   description in various menus.
+   Keybindings.fvwmconf (Keybindings.<keybindings set>) and
+   processed specially because they definition must automatically
+   match keyboard binding description in various menus. The
+   "<keybtype>" represents keybindings set called from default
+   Main.fvwmconf or $FVWM_USERDIR/NsCDE.conf with variable
+   keybtype. Default is "nscde".
 
    The syntax of this file is simple: first column is the keyword
    which becomes infostore variable (km_xrefresh as
@@ -4670,14 +4725,17 @@ Silent Key Tab A S -
    "Key" will become Alt+F3 description right of the (De)Shade
    item on titlebar left button popdown menu.
 
-   File Keymenu.actions is processed by $NSCDE_TOOLSDIR/keymenu
-   script. This script generates FVWM infostore variables used in
-   menus, and executes FVWM "Key" commands producing dynamic
-   keybindings which are described in menus.
+   File Keymenu-<keybtype>.actions is processed by
+   $NSCDE_TOOLSDIR/keymenu script. This script generates FVWM
+   infostore variables used in menus, and executes FVWM "Key"
+   commands producing dynamic keybindings which are described in
+   menus. Additionally, it will read user's
+   $FVWM_USERDIR/Keymenu.actions if that file exists.
 
    For a list of keybindings that are "dynamic", that is, not
-   defined in Keybindings.fvwmconf, but in Keymenu.actions, see
-   notices in section about Keybindings.fvwmconf.
+   defined in Keybindings.<keybtype>, but in
+   Keymenu-<keybtype>.actions, see notices in section about
+   Keybindings.nscde.
      __________________________________________________________
 
 8.18. Main.fvwmconf
@@ -4771,9 +4829,9 @@ Silent Key Tab A S -
 8.20. Mousebindings.fvwmconf
 
    File Mousebindings.fvwmconf is done in similar manner as the
-   Keybindings.fvwmconf. Can be overridden (.fvwmconf) or extended
-   (.fvwmlocal) just like (almost) any NsCDE conf file. See
-   fvwm(1) for "Mouse" commands. Here commands invoked with
+   Keybindings.<keybtype>. Can be overridden (.fvwmconf) or
+   extended (.fvwmlocal) just like (almost) any NsCDE conf file.
+   See fvwm(1) for "Mouse" commands. Here commands invoked with
    pointer are defined. As it is the case with key bindings, mouse
    actions are too far more in NsCDE than in original CDE. The
    syntax is described at the top of the file.
