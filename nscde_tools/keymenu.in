@@ -6,6 +6,15 @@
 # Licence: GPLv3
 #
 
+KeybindingsType="$2"
+
+if [ "x${KeybindingsType}" == "x" ]; then
+   echo "NsCDE: KeybindingsType was empty, using default: nscde." >&2
+   KeybindingsType="nscde"
+else
+   echo "NsCDE: Using KeybindingsType ${2}." >&2
+fi
+
 function config_for_menu
 {
    LINE="$1"
@@ -61,7 +70,7 @@ function enlist_kms
       UserLines=""
    fi
 
-   SysLines=$(awk '{ print $1 }' < $NSCDE_DATADIR/defaults/Keymenu.actions)
+   SysLines=$(awk '{ print $1 }' < $NSCDE_DATADIR/defaults/Keymenu-${KeybindingsType}.actions)
 
    IFS="$OIFS"
    KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | egrep "^km_" | sort -u)
@@ -74,7 +83,7 @@ function fill_lines
    else
       UserLines=""
    fi
-   SysLines=$(<$NSCDE_DATADIR/defaults/Keymenu.actions)
+   SysLines=$(<$NSCDE_DATADIR/defaults/Keymenu-${KeybindingsType}.actions)
 }
 
 while getopts m:k:b:a Option

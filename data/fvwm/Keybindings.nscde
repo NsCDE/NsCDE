@@ -1,0 +1,206 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+#######################
+# Keyboard key bindings
+#######################
+
+###################################################################
+# Contexts:
+#     R = Root Window                 rrrrrrrrrrrrrrrrrrrrrr
+#     W = Application Window          rIrrrr<---------^rrrrr
+#     F = Frame Corners               rrrrrr[13TTTT642]rrrrr
+#     S = Frame Sides                 rIrrrr[wwwwwwwww]rrrrr
+#     T = Title Bar                   rrrrrr[wwwwwwwww]rrrrr
+#     I = Icon                        rIrrrrv_________>rrrrr
+#                                     rrrrrrrrrrrrrrrrrrrrrr
+#
+#     Numbers are buttons: [1 3 5 7 9  TTTTT  0 8 6 4 2]
+#
+# Modifiers: (A)ny, (C)ontrol, (S)hift, (M)eta, (N)othing
+# Note: Meta is usually alt, and real meta (windows key on PC)
+# is mod4, that is "4".
+#
+# Format: Key <X>  <Context> <Modifier> <Action>
+#
+# Silent supresses any errors (such as keyboards with no Menu key).
+###################################################################
+
+######
+# Keys
+######
+
+### Navigate first four desks with Ctrl+cursorkey
+Silent Key Left A C Scroll -100 0
+Silent Key Right A C Scroll 100 0
+Silent Key Up A C Scroll 0 -100
+Silent Key Down A C Scroll 0 100
+
+### Move viewport by 4% with Meta+cursorkey
+Silent Key Left A 4 Scroll -4 0
+Silent Key Right A 4 Scroll 4 0
+Silent Key Up A 4 Scroll 0 -4
+Silent Key Down A 4 Scroll 0 4
+
+### Move cursor by 1% with Shift+cursorkey
+Silent Key Left A S CursorMove -1 0
+Silent Key Right A S CursorMove +1 +0
+Silent Key Up A S CursorMove +0 -1
+Silent Key Down A S CursorMove +0 +1
+
+### Raise overlapped windows in cycle on the current page
+Silent Key Up RWFST M f_FlipOverlappedFocusLR Next
+Silent Key Down RWFST M f_FlipOverlappedFocusLR Prev
+
+### Browse Icons
+Silent Key I RWFST M4 f_BrowseIcons Next
+Silent Key I I M4 f_BrowseIcons Next !
+Silent Key Up I A f_BrowseIcons Next
+Silent Key Down I A f_BrowseIcons Next
+Silent Key I I N Iconify off
+
+### Menu Key calls
+Silent Key Menu A N f_DoubleBindKey wspmenu Menu MenuFvwmRoot
+Silent Key ISO_Level3_Shift A M Menu MenuFvwmRoot
+Silent Key Menu A 4 Menu m_WindowOpsRootWin
+Silent Key ISO_Level3_Shift A 4 Menu m_WindowOpsRootWin
+Silent Key Menu A M4 f_DoubleBindKey pgmmenu f_ShowFPPGMenu
+Silent Key U A M4 f_ShowFPPGMenu
+Silent Key M I M4 Menu m_IconOps
+
+### Cycling focus on pages and workspaces, focus
+Silent Key N A M4 f_SwitchFocus Next CurrentPage
+Silent Key B A M4 f_SwitchFocus Prev CurrentPage
+Silent Key N A S4 f_SwitchFocus Next CurrentDesk
+Silent Key B A S4 f_SwitchFocus Prev CurrentDesk
+Silent Key J WFSTI M4 ThisWindow (!Iconic, Focused, !HasPointer) WarpToWindow 50 50
+
+### Combinations with a Space
+Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
+
+### Insert and BackSpace for focusing prev and next window
+Silent Key Insert A M4 Next (AcceptsFocus) Focus
+Silent Key BackSpace A M4 Prev (AcceptsFocus) Focus
+Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A S f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
+
+### Meta+FX key combinations which does not appar in menus (Keymenu.actions)
+Silent Key F4 A 4 f_ZoomInResize
+Silent Key F4 A S4 f_ZoomOutResize
+Silent Key F12 A 4 Exec exec $[infostore.terminal]
+Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
+Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_Rofi run
+
+### Tab combinations
+Silent Key Tab A S f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
+Silent Key Tab A M Scroll 0 100000
+Silent Key Tab A 4 f_GotoDesk 1 1 0 $[infostore.fvwmdesknum]
+Silent Key Tab A S4 f_GotoDesk -1 1 0 $[infostore.fvwmdesknum]
+
+### Lock the screen
+Silent Key L A M4 Exec exec xscreensaver-command -lock
+
+### Turn on monitors as a last resort
+Silent Key X A M4 Exec exec xrandr --auto
+
+### Show / Restore Workspace
+Silent Key W A M4 NoWindow f_CleanRestoreWorkspace
+
+### Press Button 1 on Window - Window Operations Contextual Menu
+Silent Key M WFST M4 Menu m_WindowOpsStandard Button1 0 o-6
+
+### Call occupy
+Silent Key O WFSTI M4 None (Occupy) Current f_SendToOccupy wsp nogo
+
+### Tile Windows
+Silent Key R A M4 f_TileWindows
+Silent Key H A M4 f_TileWindows -h
+
+### Last item from subpanels
+Silent Key E A M4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
+Silent Key Redo A 4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
+
+### Call GWM with Meta+Alt+Home
+Silent Key Home A M4 f_ToggleFvwmFunc GWM Raise f_GWM
+
+### Combinations with escape
+Silent Key Escape A 4 Next (CurrentPage, AcceptsFocus, !Focused, !FrontPanel, !FvwmPager) Focus
+Silent Key Escape A M f_WinLists
+
+### Special Keys not found on all machines. For example Sun Type 6 etc ...
+
+# XF86PowerOff without modifiers will call SysActionDialog with suspend (S3) option selected
+Silent Key XF86PowerOff A A f_RunQuickScriptDialog SysActionDialog 6
+
+# XF86PowerOff with Ctrl is calling SysActionDialog with shutdown option selected
+Silent Key XF86PowerOff A C f_RunQuickScriptDialog SysActionDialog 4
+
+# XF86PowerOff with Alt is calling SysActionDialog with reboot option selected
+Silent Key XF86PowerOff A M f_RunQuickScriptDialog SysActionDialog 5
+
+# XF86PowerOff with Meta is calling SysActionDialog with logout option selected
+Silent Key XF86PowerOff A 4 f_RunQuickScriptDialog SysActionDialog 1
+
+# Sun Keyboard Help button 
+Silent PointerKey Help R N f_DoubleBindKey sunhelp None (*NsCDE.pdf*) f_DisplayURL \"$[gt.All Documentation (pdf)]\" NsCDE.pdf
+
+# SunFront key
+Silent Key SunFront A A RaiseLower
+
+# Sun Find key
+Silent Key Find A A f_Find
+
+# Sun Properties Key
+Silent PointerKey SunProps R N f_ToggleFvwmModule FvwmScript StyleMgr
+Silent PointerKey SunProps A 4 f_ToggleFvwmModule FvwmScript StyleMgr
+
+# Sun Open Key
+Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key XF86Open A A f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
+Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key XF86Open A A f_Rofi run
+
+# Sun volume keys
+Silent Key XF86AudioLowerVolume A A f_Mixer -lower 1
+Silent Key XF86AudioRaiseVolume A A f_Mixer -raise 1
+Silent Key XF86AudioLowerVolume A C f_Mixer -lower 10
+Silent Key XF86AudioRaiseVolume A C f_Mixer -raise 10
+Silent Key XF86AudioMute A A f_Mixer -mute
+
+### Front Panel context keybindings
+Silent PointerKey (FrontPanel) 1 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel1
+Silent PointerKey (FrontPanel) 2 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel2
+Silent PointerKey (FrontPanel) 3 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel3
+Silent PointerKey (FrontPanel) 4 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel4
+Silent PointerKey (FrontPanel) 5 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel5
+Silent PointerKey (FrontPanel) 6 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel6
+Silent PointerKey (FrontPanel) 7 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel7
+Silent PointerKey (FrontPanel) 8 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel8
+Silent PointerKey (FrontPanel) 9 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel9
+Silent PointerKey (FrontPanel) 0 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel10
+Silent PointerKey (FrontPanel) Return WFST 4 FakeClick depth 0 press 1 wait 50 release 1
+Silent PointerKey (FrontPanel) Help WFST N f_DisplayURL "$[gt.Front Panel Help]" html/NsCDE-applets-docks-panels.html
+Silent PointerKey (FrontPanel) Space WFST M4 SendToModule FrontPanel PressButton PanelMenu
+
+Silent Key (NsCDE-Subpanel1) 1 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel1
+Silent Key (NsCDE-Subpanel2) 2 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel2
+Silent Key (NsCDE-Subpanel3) 3 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel3
+Silent Key (NsCDE-Subpanel4) 4 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel4
+Silent Key (NsCDE-Subpanel5) 5 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel5
+Silent Key (NsCDE-Subpanel6) 6 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel6
+Silent Key (NsCDE-Subpanel7) 7 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel7
+Silent Key (NsCDE-Subpanel8) 8 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel8
+Silent Key (NsCDE-Subpanel9) 9 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel9
+Silent Key (NsCDE-Subpanel10) 0 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel10
+Silent Key (NsCDE-Subpanel*) Return WFST 4 FakeClick depth 0 press 1 wait 50 release 1
+Silent PointerKey (NsCDE-Subpanel*) Help WFST N f_DisplayURL "$[gt.Subpanels Help]" html/NsCDE-Subpanels.html
+
+### Terminal context keybindings
+InfoStoreAdd km_wideterm_static "Meta+F9"
+Silent Key (*Term*) F9 A 4 f_WideTerm
+Silent Key (*term*) F9 A 4 f_WideTerm
+Silent Key (*terminal*) F9 A 4 f_WideTerm
+
+### LocalPager context: Dismiss LocalPager on this keybindings if it is under the pointer
+Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A S All (LocalPager) f_HideLocalPager
+
