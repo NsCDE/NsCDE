@@ -51,9 +51,6 @@ set to look almost as Dtterm, but with richer menu and better UTF-8
 handling, the bad thing is that configuration if not done via GUI or configuration file but is
 stored in binary DCONF registry, and registry editor like <span class="command"><strong>dconf-editor</strong></span> or
 or dconf <span class="command"><strong>gsettings</strong></span> must be used for non-interactive or CLI editing.
-See the example in <code class="filename">$NSCDE_ROOT/share/examples/colormgr.local.example</code>
-on how to integrate <span class="command"><strong>mate-terminal</strong></span> with a
-<a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>.
 Second (if not first) best choice is <span class="command"><strong>Urxvt</strong></span>, but since it does not have a menu nor a
 real tabs, tmux(1), screen(1) or possibly tabbed(1) can be used for the same functionality.
 Suggestions for more dtterm-like alternative are welcome.
@@ -78,8 +75,10 @@ NsCDE has a ready drop-in theme called (of course) NsCDE in
 <code class="filename">share/config_templates</code> and it can be put in user's
 <code class="filename">~/.gkrellm2/themes</code> and integrated with
 <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> with the
-<code class="filename">$NSCDE_DATADIR/config_templates/colormgr.local</code> which is by default
-installed as <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>.
+<code class="filename">$NSCDE_DATADIR/config_templates/colormgr.addons</code> which is by default
+called from user's <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>, or the
+whole code definition is in user's colormgr.local if NsCDE has been installed prior to
+version 2.1.
 </p><p>
 If standalone freedesktop autostarter <span class="command"><strong>dex</strong></span> (sometimes called "dex-autostart")
 is installed, it will be used by default <code class="filename">Init.fvwmconf</code> function

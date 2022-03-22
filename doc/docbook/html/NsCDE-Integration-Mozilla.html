@@ -3,17 +3,19 @@ From version 1.3 and further, NsCDE contains CSS code and icons which can be use
 <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> while applying new color style and theme,
 to generate colorsets also for either or both Firefox and Thunderbird.
 </p><p>
-For this to work, appropriate code or the whole <code class="filename">colormgr.local</code> from
-<code class="filename">$NSCDE_DATADIR/config_templates/colormgr.local</code> must be adapted into
-<code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>. Shell variable
-<code class="varname">FIREFOX_CHROMEDIR</code> should contain path to the
-<code class="filename">~/.mozilla/firefox/__PROFILE__/chrome.</code>,
+For this to work, appropriate function code definitions from the <code class="filename">colormgr.local</code>
+must be sourced from <code class="filename">$NSCDE_DATADIR/config_templates/colormgr.addons</code> and
+functions <code class="function">do_firefox</code> and/or <code class="function">do_thunderbird</code> must be
+uncommented in <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code>. Shell variable
+<code class="varname">FIREFOX_PROFILEDIR</code> should contain path to the
+<code class="filename">~/.mozilla/firefox/&lt;profilename&gt;.</code>,
 <code class="varname">FIREFOX_MAJVER_PFX</code> should be either "7x" or "9x" depending of major version
 of the Firefox is installed and used on the system. Firefox 8x belongs to 9x code base. The same
-as for <code class="varname">FIREFOX_CHROMEDIR</code>, variable <code class="varname">THUNDERBIRD_CHROMEDIR</code> should
+as for <code class="varname">FIREFOX_PROFILEDIR</code>, variable <code class="varname">THUNDERBIRD_PROFILEDIR</code> should
 point to chrome directory of user's thunderbird profile. If chrome subdirectory in the user's profile
-directory does not exist, it will be created by the <code class="filename">colormgr.local</code>. This will make
-appropriate entiries in <code class="filename">userChrome.css</code> and <code class="filename">userContent.css</code> to
+directory does not exist, it will be created by the above mentioned "do_" functions from
+<code class="filename">colormgr.addons</code>. This will make appropriate entiries in
+<code class="filename">userChrome.css</code> and <code class="filename">userContent.css</code> to
 import <code class="filename">nscdeChrome.css</code>, <code class="filename">nscdeIcons.css</code> and
 <code class="filename">nscdeContent.css</code> from the <code class="filename">$NSCDE_DATADIR/integration/firefox</code>
 and/or from <code class="filename">$NSCDE_DATADIR/integration/thunderbird</code>.

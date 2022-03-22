@@ -1,11 +1,11 @@
 Name:		NsCDE
-Version:	2.0
-Release:	6%{?dist}
+Version:	2.1
+Release:	4%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
 URL:		https://github.com/NsCDE
-Source0:	https://github.com/NsCDE/NsCDE/releases/download/2.0/NsCDE-2.0.tar.gz
+Source0:	https://github.com/NsCDE/NsCDE/releases/download/2.1/NsCDE-2.1.tar.gz
 
 BuildRequires:  ksh
 BuildRequires:  gcc
@@ -76,6 +76,16 @@ autoreconf -ivf
 
 
 %changelog
+* Tue Mar 22 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.1-4
+- New colormgr.local / colormgr.addons scheme
+- Introduce key binding sets
+- Backup old gtk and qt configs during bootstrap
+- Optionally specify alternative root setter for fvwm3 non-global monitors
+- Inject new NSCDE_VERSION on restart after upgrade
+- Various fixes
+- Qt5 Kvantum engine support
+- Update docs
+
 * Thu Jan 6 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.0-6
 - Fix system Subpanels.actions S10 help backspaces
 - Fix move first item to the end double copy on the subpanels

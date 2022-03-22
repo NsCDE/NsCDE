@@ -5291,7 +5291,9 @@ Silent Key Tab A S -
        automatically.
      * libexec/ directory:
        If created, colormgr.local script can be written and put
-       here, as well as fontmgr.local and other user's hooks.
+       here, as well as fontmgr.local and other user's hooks. This
+       is done with reasonable defaults for colormgr.local during
+       the initial setup of the new NsCDE profile.
      * palettes/ directory:
        User can put custom palette files here, and they can than
        be selected by the Color Style Manager and processed for a
@@ -5831,25 +5833,27 @@ Silent Key Tab A S -
    while applying new color style and theme, to generate colorsets
    also for either or both Firefox and Thunderbird.
 
-   For this to work, appropriate code or the whole colormgr.local
-   from $NSCDE_DATADIR/config_templates/colormgr.local must be
-   adapted into $FVWM_USERDIR/libexec/colormgr.local. Shell
-   variable FIREFOX_CHROMEDIR should contain path to the
-   ~/.mozilla/firefox/__PROFILE__/chrome., FIREFOX_MAJVER_PFX
-   should be either "7x" or "9x" depending of major version of the
-   Firefox is installed and used on the system. Firefox 8x belongs
-   to 9x code base. The same as for FIREFOX_CHROMEDIR, variable
-   THUNDERBIRD_CHROMEDIR should point to chrome directory of
+   For this to work, appropriate function code definitions from
+   the colormgr.local must be sourced from
+   $NSCDE_DATADIR/config_templates/colormgr.addons and functions
+   do_firefox and/or do_thunderbird must be uncommented in
+   $FVWM_USERDIR/libexec/colormgr.local. Shell variable
+   FIREFOX_PROFILEDIR should contain path to the
+   ~/.mozilla/firefox/<profilename>., FIREFOX_MAJVER_PFX should be
+   either "7x" or "9x" depending of major version of the Firefox
+   is installed and used on the system. Firefox 8x belongs to 9x
+   code base. The same as for FIREFOX_PROFILEDIR, variable
+   THUNDERBIRD_PROFILEDIR should point to chrome directory of
    user's thunderbird profile. If chrome subdirectory in the
    user's profile directory does not exist, it will be created by
-   the colormgr.local. This will make appropriate entiries in
-   userChrome.css and userContent.css to import nscdeChrome.css,
-   nscdeIcons.css and nscdeContent.css from the
-   $NSCDE_DATADIR/integration/firefox and/or from
-   $NSCDE_DATADIR/integration/thunderbird. File nscdeColordefs.css
-   will be generated in the chrome dir with color mappings to the
-   current NsCDE theme. This wile is also imported in
-   userChrome.css and userContent.css.
+   the above mentioned "do_" functions from colormgr.addons. This
+   will make appropriate entiries in userChrome.css and
+   userContent.css to import nscdeChrome.css, nscdeIcons.css and
+   nscdeContent.css from the $NSCDE_DATADIR/integration/firefox
+   and/or from $NSCDE_DATADIR/integration/thunderbird. File
+   nscdeColordefs.css will be generated in the chrome dir with
+   color mappings to the current NsCDE theme. This wile is also
+   imported in userChrome.css and userContent.css.
 
    If the option "Run $FVWM_USERDIR/libexec/colormgr.local (if
    exists)" is not turned off in the Color Style Manager while
@@ -5923,14 +5927,21 @@ ntent.css
    applications which do not use X resources, and neither GTK nor
    Qt, but have support for some level of customization of this
    resources. Also "skins" for programs like smplayer, audacious
-   and Gkrellm can be processed from custom colormgr.local.
+   and Gkrellm can be processed from custom colormgr.local. Many
+   of the programs are already defined in the
+   $NSCDE_DATADIR/config_templates/colormgr.addons and will be
+   enabled by default, or can be enabled in installed example
+   $FVWM_USERDIR/libexec/colormgr.local.
 
    In the directory $NSCDE_DATADIR/config_templates/Gkrellm is the
-   complete NsCDE theme for the Gkrellm. File
-   $NSCDE_ROOT/share/examples/colormgr.local.example can be used
-   for this integration. There are also examples for Gkrellm and
-   mate-terminal. Local script colormgr.local will most likely use
-   $NSCDE_TOOLSDIR/palette_colorgen in some way.
+   complete NsCDE theme for the Gkrellm. In the
+   $NSCDE_DATADIR/config_templates/colormgr.addons there are
+   already ready made functions for Gkrellm, mate-terminal,
+   konsole, qterminal, xfce4-terminal, firefox and thunderbird.
+   User's additions for further integrating programs into Motif
+   and CDE like NsCDE scheme can be added into user's
+   $FVWM_USERDIR/libexec/colormgr.local, contributions are also
+   very welcome.
      __________________________________________________________
 
 17. NsCDE and Cross Desktop Group (Free Desktop) Specifications and
@@ -6292,13 +6303,11 @@ Standards
    is that configuration if not done via GUI or configuration file
    but is stored in binary DCONF registry, and registry editor
    like dconf-editor or or dconf gsettings must be used for
-   non-interactive or CLI editing. See the example in
-   $NSCDE_ROOT/share/examples/colormgr.local.example on how to
-   integrate mate-terminal with a Color Style Manager. Second (if
-   not first) best choice is Urxvt, but since it does not have a
-   menu nor a real tabs, tmux(1), screen(1) or possibly tabbed(1)
-   can be used for the same functionality. Suggestions for more
-   dtterm-like alternative are welcome.
+   non-interactive or CLI editing. Second (if not first) best
+   choice is Urxvt, but since it does not have a menu nor a real
+   tabs, tmux(1), screen(1) or possibly tabbed(1) can be used for
+   the same functionality. Suggestions for more dtterm-like
+   alternative are welcome.
 
    File manager? Since author does not use them very much, there
    is no some strong suggestion. Maybe Krusader from KDE is a best
@@ -6323,8 +6332,11 @@ Standards
    ready drop-in theme called (of course) NsCDE in
    share/config_templates and it can be put in user's
    ~/.gkrellm2/themes and integrated with Color Style Manager with
-   the $NSCDE_DATADIR/config_templates/colormgr.local which is by
-   default installed as $FVWM_USERDIR/libexec/colormgr.local.
+   the $NSCDE_DATADIR/config_templates/colormgr.addons which is by
+   default called from user's
+   $FVWM_USERDIR/libexec/colormgr.local, or the whole code
+   definition is in user's colormgr.local if NsCDE has been
+   installed prior to version 2.1.
 
    If standalone freedesktop autostarter dex (sometimes called
    "dex-autostart") is installed, it will be used by default
