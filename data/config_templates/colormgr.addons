@@ -247,3 +247,24 @@ function do_thunderbird
    fi
 }
 
+function do_kcalc
+{
+   eval $(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep '^(bg|fg)_color_(1|3|6|7|8) #' | sed 's/ /="/g;s/$/&"/g')
+
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k ConstantsButtonsColor -v $bg_color_1
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k ConstantsFontsColor -v $fg_color_1
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k FunctionButtonsColor -v $bg_color_8
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k FunctionFontsColor -v $fg_color_8
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k HexButtonsColor -v $bg_color_3
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k HexFontsColor -v $fg_color_3
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k MemoryButtonsColor -v $bg_color_6
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k MemoryFontsColor -v $fg_color_6
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k NumberButtonsColor -v $bg_color_3
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k NumberFontsColor -v $fg_color_3
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k OperationButtonsColor -v $bg_color_7
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k OperationFontsColor -v $fg_color_7
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k StatButtonsColor -v $bg_color_8
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k StatFontsColor -v $fg_color_8
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k BackColor -v $bg_color_7
+   ${NSCDE_TOOLSDIR}/confset -t ini -c "${HOME}/.config/kcalcrc" -s Colors -k ForeColor -v $fg_color_7
+}
