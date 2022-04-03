@@ -8455,15 +8455,15 @@ terminal wrapped applications, all other are written in FvwmScript(1), and they
 often depend on other NsCDE components to work fully and properly.
 
 <itemizedlist>
-<listitem><para>NsCDE-Exec.desktop: <link linkend="NsCDE-ExecDialog">NsCDE Exec Dialog</link></para></listitem>
-<listitem><para>NsCDE-FvwmConsole.desktop: FvwmConsole(1)</para></listitem>
-<listitem><para>NsCDE-GWM.desktop: <link linkend="NsCDE-GWM">Graphical Workspace Manager (GWM)</link></para></listitem>
-<listitem><para>NsCDE-NProcMgr.desktop: <link linkend="NsCDE-NProcMgr">NsCDE Process Manager</link> </para></listitem>
-<listitem><para>NsCDE-StyleMgr.desktop: <link linkend="NsCDE-StyleMgr">Style Manager Main Launcher</link> </para></listitem>
-<listitem><para>NsCDE-Sysinfo.desktop: <link linkend="NsCDE-SysInfo">Sysinfo Dialog</link> </para></listitem>
-<listitem><para>NsCDE-SystemAction.desktop: <link linkend="NsCDE-SysActionDialog">System Action Dialog</link></para></listitem>
-<listitem><para>NsCDE-WatchErrors.desktop: <link linkend="NsCDE-Logging">NsCDE/FVWM and X11 logs and standar error output</link></para></listitem>
-<listitem><para>NsCDE-WsPgMgr.desktop: <link linkend="NsCDE-WsPgMgr">NsCDE Workspaces and Pager Manager</link> </para></listitem>
+<listitem><para>nscde-exec.desktop: <link linkend="NsCDE-ExecDialog">NsCDE Exec Dialog</link></para></listitem>
+<listitem><para>nscde-fvwmconsole.desktop: FvwmConsole(1)</para></listitem>
+<listitem><para>nscde-gwm.desktop: <link linkend="NsCDE-GWM">Graphical Workspace Manager (GWM)</link></para></listitem>
+<listitem><para>nscde-nprocmgr.desktop: <link linkend="NsCDE-NProcMgr">NsCDE Process Manager</link> </para></listitem>
+<listitem><para>nscde-stylemgr.desktop: <link linkend="NsCDE-StyleMgr">Style Manager Main Launcher</link> </para></listitem>
+<listitem><para>nscde-sysinfo.desktop: <link linkend="NsCDE-SysInfo">Sysinfo Dialog</link> </para></listitem>
+<listitem><para>nscde-systemaction.desktop: <link linkend="NsCDE-SysActionDialog">System Action Dialog</link></para></listitem>
+<listitem><para>nscde-watcherrors.desktop: <link linkend="NsCDE-Logging">NsCDE/FVWM and X11 logs and standar error output</link></para></listitem>
+<listitem><para>nscde-wspgmgr.desktop: <link linkend="NsCDE-WsPgMgr">NsCDE Workspaces and Pager Manager</link> </para></listitem>
 </itemizedlist>
 </para>
 
@@ -9222,9 +9222,12 @@ normal titlebar) file manager, but question remains how to send enumerated apps 
 file manager view to Front Panel subpanels or as submenu. Probably external drag and drop
 applet which can be swallowed in subpanels to accept drop with middle mouse move and edit
 subpanel configuration? This will than replace Subpanels Manager app, but it must also have
-functions for editing, deleting etc ... In the time of writing this, only two file managers
-were known to support <emphasis>menu://applications/</emphasis> pseudo path: PCManFM and
-PCManFM-qt. If one of this are found on the system it will be defined as
+functions for editing, deleting etc ... In the time of writing this, file managers supporting
+this functionality with <emphasis>menu://applications/</emphasis> pseudo path are known to be
+PCManFM and PCManFM-qt. Any KDE KIO based application with the right set of plugins installed
+on the system can serve as a application manager. For example, file managers Dolphin, Krusader
+and Konqueror are known to use <emphasis>programs:</emphasis> pseudo path.
+If some of above mentioned applications are found on the system it will be defined as
 <varname>$[infostore.appmgr]</varname> and placed on the Front Panel's eighth launcher
 instead of icon for default editor.
 

@@ -6,7 +6,7 @@ dnl Author: Hegel3DReloaded
 dnl Licence: GPLv3
 dnl
 
-AC_INIT([NsCDE], 2.1, [nscde@protonmail.com])
+AC_INIT([NsCDE], 2.2, [nscde@protonmail.com])
 
 AC_CONFIG_AUX_DIR(ac-aux)
 

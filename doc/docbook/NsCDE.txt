@@ -6005,16 +6005,16 @@ Standards
    often depend on other NsCDE components to work fully and
    properly.
 
-     * NsCDE-Exec.desktop: NsCDE Exec Dialog
-     * NsCDE-FvwmConsole.desktop: FvwmConsole(1)
-     * NsCDE-GWM.desktop: Graphical Workspace Manager (GWM)
-     * NsCDE-NProcMgr.desktop: NsCDE Process Manager
-     * NsCDE-StyleMgr.desktop: Style Manager Main Launcher
-     * NsCDE-Sysinfo.desktop: Sysinfo Dialog
-     * NsCDE-SystemAction.desktop: System Action Dialog
-     * NsCDE-WatchErrors.desktop: NsCDE/FVWM and X11 logs and
+     * nscde-exec.desktop: NsCDE Exec Dialog
+     * nscde-fvwmconsole.desktop: FvwmConsole(1)
+     * nscde-gwm.desktop: Graphical Workspace Manager (GWM)
+     * nscde-nprocmgr.desktop: NsCDE Process Manager
+     * nscde-stylemgr.desktop: Style Manager Main Launcher
+     * nscde-sysinfo.desktop: Sysinfo Dialog
+     * nscde-systemaction.desktop: System Action Dialog
+     * nscde-watcherrors.desktop: NsCDE/FVWM and X11 logs and
        standar error output
-     * NsCDE-WsPgMgr.desktop: NsCDE Workspaces and Pager Manager
+     * nscde-wspgmgr.desktop: NsCDE Workspaces and Pager Manager
      __________________________________________________________
 
 17.1.2. NsCDE Defaults XDG Desktop Applications
@@ -6706,11 +6706,16 @@ export FVWM_BIN=fvwm
        mouse move and edit subpanel configuration? This will than
        replace Subpanels Manager app, but it must also have
        functions for editing, deleting etc ... In the time of
-       writing this, only two file managers were known to support
-       menu://applications/ pseudo path: PCManFM and PCManFM-qt.
-       If one of this are found on the system it will be defined
-       as $[infostore.appmgr] and placed on the Front Panel's
-       eighth launcher instead of icon for default editor.
+       writing this, file managers supporting this functionality
+       with menu://applications/ pseudo path are known to be
+       PCManFM and PCManFM-qt. Any KDE KIO based application with
+       the right set of plugins installed on the system can serve
+       as a application manager. For example, file managers
+       Dolphin, Krusader and Konqueror are known to use programs:
+       pseudo path. If some of above mentioned applications are
+       found on the system it will be defined as
+       $[infostore.appmgr] and placed on the Front Panel's eighth
+       launcher instead of icon for default editor.
        Figure 70. PCManFM as Application Manager
        [fig_appmgr.png]
      * Action builder (dtaction) - not likely ever. Use FvwmScript
