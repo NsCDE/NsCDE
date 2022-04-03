@@ -461,7 +461,7 @@ uninstall-am:
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/applications
-	-cp -r $(srcdir)/applications/NsCDE-*.desktop $(DESTDIR)$(datarootdir)/applications/
+	-cp -r $(srcdir)/applications/nscde-*.desktop $(DESTDIR)$(datarootdir)/applications/
 	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/desktop-directories
 	-cp -r $(srcdir)/desktop-directories/nscde-*.directory $(DESTDIR)$(datarootdir)/desktop-directories/
 	$(mkinstalldirs) $(DESTDIR)$(datarootdir)/icons
@@ -473,7 +473,7 @@ install-data-hook:
 
 uninstall-hook:
 	test -d $(DESTDIR)$(datarootdir)/applications && \
-	(cd $(DESTDIR)$(datarootdir)/applications && rm -f NsCDE-*.desktop)
+	(cd $(DESTDIR)$(datarootdir)/applications && rm -f nscde-*.desktop)
 	test -d $(DESTDIR)$(datarootdir)/desktop-directories && \
 	(cd $(DESTDIR)$(datarootdir)/desktop-directories && rm -f nscde-*.directory)
 	test -d $(DESTDIR)$(datarootdir)/icons && \
