@@ -1,11 +1,11 @@
 Name:		NsCDE
-Version:	2.1
-Release:	4%{?dist}
+Version:	2.2
+Release:	3%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
 URL:		https://github.com/NsCDE
-Source0:	https://github.com/NsCDE/NsCDE/releases/download/2.1/NsCDE-2.1.tar.gz
+Source0:	https://github.com/NsCDE/NsCDE/releases/download/2.2/NsCDE-2.2.tar.gz
 
 BuildRequires:  ksh
 BuildRequires:  gcc
