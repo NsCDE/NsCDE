@@ -293,6 +293,7 @@ AddToFunc StartFunction
 + I f_Stalonetray start
 + I f_Dunst start
 + I f_PolkitAgent
++ I All (FrontPanel,CirculateHit) Move $[infostore.frontpanel.pos.placement]
 + I Test (!EnvMatch infostore.pgm 1x1) Schedule 800 f_SendToPGM
 + I Test (r $[FVWM_USERDIR]/tmp) Exec exec rm -f $[FVWM_USERDIR]/tmp/*_man_page_*.html
 + I f_FvwmVersionCheck
@@ -320,7 +321,7 @@ AddToFunc RestartFunction
 + I Echo NsCDE: Executing RestartFunction
 + I All (Iconic, State 3) WindowStyle IconBackgroundColorset 54
 + I All (Iconic, State 4) WindowStyle IconBackgroundColorset 56
-+ I All (FrontPanel,CirculateHit) PlaceAgain
++ I All (FrontPanel,CirculateHit) Move $[infostore.frontpanel.pos.placement]
 + I Schedule 2000 f_Upgrader
 + I f_UserRestartFunction
 
