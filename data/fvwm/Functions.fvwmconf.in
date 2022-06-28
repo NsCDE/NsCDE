@@ -595,6 +595,8 @@ AddToFunc f_RestartFrontPanel
 + I PipeRead "$[NSCDE_TOOLSDIR]/fpseticon pre"
 + I f_Readcfg FrontPanel
 + I ModuleSynchronous Timeout 5 FvwmButtons FrontPanel
++ I Wait FrontPanel
++ I All (FrontPanel,CirculateHit) Move $[infostore.frontpanel.pos.placement]
 + I f_SendToPGM
 + I Test (EnvMatch infostore.wsmcolored 1) Schedule 100 SendToModule FrontPanel ChangeButton FpWSM Colorset 22
 + I Test (EnvMatch FVWM_IS_FVWM3 1) f_SwitchEwmhBaseStruts $[monitor.current]
