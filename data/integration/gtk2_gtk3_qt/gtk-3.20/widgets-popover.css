@@ -1,0 +1,1970 @@
+/*
+ This file is a part of the NsCDE - Not so Common Desktop Environment
+ */
+
+/* 4. widgets on top of popover widget CSS part */
+
+/* generic bg color in cde is beige, but in dialogs everyting is green (for default palette Broica.dp, the menu color)) */
+/* So I define all styles with and without string 'messagedialog' prepended and in process.py generate two */
+/* groups from that, one without string, one with 'dialog' prepended, where colors ..._gen are repalced by ..._menu */
+/* also set > * to green menu color. hmm how to do this betterly? */
+
+/* furthermore, 1px is replaced by borderwidth for all bevels (default 1px). Maybe use this later for scaling */
+
+/* QUICK RECAP: */
+/* margin is space around the object, padding is space inside the object */
+
+/* __allopts */
+*
+{
+	-GtkTreeView-expander-size: 11;
+}
+
+/* __window */
+window
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* count this as a 'popup dialog' so all green 'menu' color (in default color palette) */
+/* __popover */
+popover
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 2px;
+	padding: 2px;
+	padding: 2px 4px 2px 4px;
+}
+
+/* __messagedialog */
+/* messagedialog background etc? no effect whatsoever */
+dialog > *,
+popover > *,
+messagedialog > *
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* the actual 'dialog' widget apparently sits inside a 'non=dialog' widget, so even if I style everyting */
+/* that is dialog to green, it still gets a beige border. so cant set dialogs to green this way */
+/* So.. put all .backgrounds to green.... */
+/* __background */
+.background 
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* and then put the not(dialog) backgrounds back to beige again MUAHHAHAHAHA */
+/* omg this actually works hahahaha */
+/* but better would be to set green the stupid border but how? */
+popover *:not(popover):not(dialog).background
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+popover .background 
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* __fallbackstyle */
+popover .gtkstyle-fallback
+{
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+popover .gtkstyle-fallback:selected
+{
+	background-color: @sel_menu;
+	color: @fg_menu;
+}
+
+/* __alldisabled */
+popover *:disabled 
+{
+	/* text shadow for disabled items */
+	/* text-shadow: 1px 1px 0px white ; */
+	/* dim disabled icons. */
+	  -gtk-icon-effect: dim;
+	/* exactly like in cde: */
+	color: @bs_menu;
+	text-shadow: 1px 1px @ts_menu;
+}
+
+/* for focus */
+/* I think cde does this orange line instead of dashed black (for default palette) */
+/* __all */
+popover * 
+{
+	outline-color: @bg_hi;
+	outline-color: @bg_hi;
+	outline-style: solid;
+	outline-offset: 2px;
+	outline-width: 1px;
+	/* depreciated but how to set it then? */
+	/* -GtkProgressBar-min-horizontal-bar-height: 15; */
+	/* -GtkProgressBar-min-vertical-bar-width: 15; */
+}
+
+/* __outline */
+popover button,
+popover tab
+{
+	outline-offset: 2px;
+}
+
+/* __menubar */
+popover menubar
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	/* some extra space on the left of the menubar */
+	padding-left: 8px;
+}
+
+/* add some extra space to menuitem in the menubar, so the popped up menu will appear glued */
+/* to the inset menuitem like in cde. The menuitem and menuitem:hover need to have the same */
+/* geometry for the menutiem not to 'move' when going from normal to inset state */
+popover menubar > menuitem
+{
+	/* margin: 5px 5px 0px 5px; */
+	margin: 2px 2px 0px 2px;
+	padding-bottom: 4px;
+}
+
+popover menubar > menuitem:hover
+{
+	/* margin: 5px 5px 0px 5px; */
+	margin: 2px 2px 0px 2px;
+	padding-bottom: 4px;
+}
+
+/* both items in menubar and menus */
+popover menuitem
+{
+	/* these 'invisible' borders need to be here to prevent the menus from 'moving' when they */
+	/* change into hovered inset state */
+	border-top-color: @bg_menu;
+	border-left-color: @bg_menu;
+	border-right-color: @bg_menu;
+	border-bottom-color: @bg_menu;
+	background-color: @bg_menu;
+	border-style: solid;
+	padding: 2px;
+	color: @fg_menu;
+	border-width: 1px;
+}
+
+popover menuitem:hover
+{
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	padding: 2px;
+	border-width: 1px;
+}
+
+/* the entire popup menu, border around it */
+/* __menus */
+popover menu
+{
+	/* in cde the hovered menuitem has some padding around it (ie empty space in the menu bar) */
+	/* and the menu sits directly below that, with no space. But here the menu pops up at the */
+	/* bottom of the menubar. So we need vertical offset. But that doesnt seem to work. */
+	/* So for now, add extra bottom padding to the menuitem in the menubar, so the hovered menu reaches */
+	/* all the way down to the bottom of the menubar */
+	/* vertical-offset: -2px; */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bs_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 1px;
+}
+
+/* __toolbar */
+popover toolbar
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px;
+}
+
+popover toolbar button
+{
+	margin: 0px 0px 0px 5px;
+	padding: 4px;
+}
+
+/* __statusbar */
+popover statusbar 
+{
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-width: 1px;
+	border-style: solid;
+}
+
+/* __buttons */
+popover button
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	/* padding: 2px 5px 2px 5px; */
+	padding: 3px 5px 3px 5px;
+}
+
+popover button:active,
+popover button:checked
+{
+	/* inset */
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px 3px 3px 3px;
+}
+
+/* its not drawing in 3.16 */
+/* __checkbuttons */
+popover check
+{
+	min-width: 11px;
+	min-height: 11px;
+	background-image: url("../img2/colorset6/checkButton.png");
+	background-size: 11px 11px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* __checkbuttonchecked */
+popover check:checked
+{
+	min-width: 11px;
+	min-height: 11px;
+	background-image: url("../img2/colorset6/checkButtonPressed.png");
+	background-size: 11px 11px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* __checkbuttoninmenu */
+popover menuitem check
+{
+	min-width: 11px;
+	min-height: 11px;
+	background-image: url("../img2/colorset6/checkButton.png");
+	background-size: 11px 11px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* __checkbuttoninmenuchecked */
+popover menuitem check:checked
+{
+	min-width: 11px;
+	min-height: 11px;
+	background-image: url("../img2/colorset6/checkButtonPressed.png");
+	background-size: 11px 11px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* radius + width -> circle */
+/* __radiobuttons */
+popover radio 
+{
+	min-width: 14px;
+	min-height: 14px;
+	background-image: url("../img2/colorset6/radioButton.png");
+	background-size: 14px 14px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* __radiobuttonchecked */
+popover radio:checked
+{
+	min-width: 14px;
+	min-height: 14px;
+	background-image: url("../img2/colorset6/radioButtonPressed.png");
+	background-size: 14px 14px;
+	background-repeat: no-repeat;
+	background-position: center;
+	/* default displays a black dot here when selected. In CDE we then only see a background */
+	/* (bg_color_1) of the 'active window title' color. So set icon to empty */
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* __radiobuttoninmenu */
+popover menuitem radio 
+{
+	min-width: 14px;
+	min-height: 14px;
+	background-image: url("../img2/colorset6/radioButton.png");
+	background-size: 14px 14px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* __radiobuttoninmenuchecked  */
+popover menuitem radio:checked
+{
+	min-width: 14px;
+	min-height: 14px;
+	background-image: url("../img2/colorset6/radioButtonPressed.png");
+	background-size: 14px 14px;
+	background-repeat: no-repeat;
+	background-position: center;
+	-gtk-icon-source: url("null.jpg");
+}
+
+/* what is this??? */
+/* padding gives edge around around gtk3-demo well there it is */
+/* and also around xfce terminal. BUT the actual borders (top right etc) */
+/* oh wait in the terminal it is drawn, but in gucharmap it is not drawn */
+/* other borderstyles are also not drawn (groove/inset) */
+/* but cde terminal has such a border, so keep, adding some of the old day clunkyness */
+
+/* __stack */
+popover stack 
+{
+	/* outset (not drawn for mysterious reason) */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-width: 1px;
+	padding: 6px;
+}
+
+/* __notebook  totally different in 3.16 and 3.20 */
+popover notebook,
+popover notebook header 
+{
+	background: @bg_menu; 
+}
+
+popover notebook header tab > label,
+popover notebook label 
+{
+	padding: 0px 0px; 
+}
+
+/* header on top */
+popover notebook header.right tab:not(:checked) 
+{
+	margin: 0px 2px 0px -1px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @sel_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.right tab:first-child:not(:checked) 
+{
+	/* margin: 0px 2px -1px -1px; */
+	margin: 0px 2px 0px -1px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+}
+
+/* Want: 1 solid line between the unchecked tabs, NO DOUBLE line in case the checked tab */
+/* is next to an unchecked tab. So we have to use negative top margin for checked tab to */
+/* cover the line of the unchecked tab above it. BUT then the checked tab is different in */
+/* length from the first-child checked tab and the entire widget MOVES when switchinb */
+/* between first child and 2nd child. But we can not set first child top margin to -1 */
+/* becaus then it sticks out 1px form the top of the entire widget. So for first child */
+/* set top margin to 0 and set BOTTOM margin to -1px. Then the sum is equal for all states */
+popover notebook header.right tab:checked 
+{
+	margin: -1px 0px 0px -1px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @bg_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.right tab:first-child:checked 
+{
+	margin: 0px 0px -1px -1px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @bg_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.left tab:not(:checked) 
+{
+	margin: 0px -1px 0px 2px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @sel_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.left tab:first-child:not(:checked) 
+{
+	/* margin: 0px 2px -1px -1px; */
+	margin: 0px -1px 0px 2px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @bs_menu;
+}
+
+/* Want: 1 solid line between the unchecked tabs, NO DOUBLE line in case the checked tab */
+/* is next to an unchecked tab. So we have to use negative top margin for checked tab to */
+/* cover the line of the unchecked tab above it. BUT then the checked tab is different in */
+/* length from the first-child checked tab and the entire widget MOVES when switchinb */
+/* between first child and 2nd child. But we can not set first child top margin to -1 */
+/* becaus then it sticks out 1px form the top of the entire widget. So for first child */
+/* set top margin to 0 and set BOTTOM margin to -1px. Then the sum is equal for all states */
+popover notebook header.left tab:checked 
+{
+	margin: -1px -1px 0px 0px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bg_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.left tab:first-child:checked 
+{
+	margin: 0px -1px -1px 0px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bg_menu;
+	border-bottom-color: @bs_menu;
+}
+
+popover notebook header.bottom tab:not(:checked) 
+{
+	margin: -1px 0px 2px 0px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	border-left-color: @sel_menu;
+}
+
+popover notebook header.bottom tab:first-child:not(:checked) 
+{
+	/* margin: 0px 2px -1px -1px; */
+	margin: -1px 0px 2px 0px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	border-left-color: @ts_menu;
+}
+
+popover notebook header.bottom tab:checked 
+{
+	margin: -1px 0px 0px -1px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @bg_menu;
+	border-bottom-color: @bs_menu;
+	border-left-color: @ts_menu;
+}
+
+popover notebook header.bottom tab:first-child:checked 
+{
+	margin: -1px -1px 0px 0px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @bg_menu;
+	border-bottom-color: @bs_menu;
+	border-left-color: @ts_menu;
+}
+
+popover notebook header.top tab:not(:checked) 
+{
+	margin: 2px 0px -1px 0px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	border-left-color: @sel_menu;
+}
+
+popover notebook header.top tab:first-child:not(:checked) 
+{
+	/* margin: 0px 2px -1px -1px; */
+	margin: 2px 0px -1px 0px;
+	background-color: @sel_menu;
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	border-left-color: @ts_menu;
+}
+
+popover notebook header.top tab:checked 
+{
+	margin: 0px 0px -1px -1px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @ts_menu;
+	border-bottom-color: @bg_menu;
+	border-left-color: @ts_menu;
+}
+
+popover notebook header.top tab:first-child:checked 
+{
+	margin: 0px -1px -1px 0px;
+	/* margin: 0 0 -1px -1px; */
+	box-shadow: inset -3px 0 @theme_selected_bg_color;
+	/* border-left: 1px solid @bg_menu; */
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-right-color: @bs_menu;
+	border-top-color: @ts_menu;
+	border-bottom-color: @bg_menu;
+	border-left-color: @ts_menu;
+}
+
+popover   notebook > stack:not(:only-child) 
+{
+	background-color: @bg_menu; 
+	border-style: solid;
+	border-width: 1px;
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+}
+
+/* arrows for going left/right if there are more tabs than fit in the header */
+popover notebook > header.top > tabs > arrow.up
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	min-width: 20px;
+	min-height: 20px;
+	background-image: url("../img2/colorset6/smallArrowRight.png");
+	background-size: 12px 13px;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: transparent;
+}
+
+popover notebook > header.top > tabs > arrow.down
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	min-width: 20px;
+	min-height: 20px;
+	background-image: url("../img2/colorset6/smallArrowLeft.png");
+	background-size: 12px 13px;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: transparent;
+	/* the selected tab has margin -1 to hide bla bla see above. But this makes it */
+	/* sit to close to the arrowbutton in the headerbar. So give that a margin of 1 */
+	margin: 0px 1px 0px 0px;
+}
+
+/* buttons on a non active tab appear flat eg in xfce terminal */
+popover tab,
+popover tab button
+{
+	/* inset */
+	border-top-color: @sel_menu;
+	border-left-color: @sel_menu;
+	border-right-color: @sel_menu;
+	border-bottom-color: @sel_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px;
+}
+
+popover tab:checked,
+popover tab:checked button
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+}
+
+/* something like a setup wizard widget */
+/* __assistant */
+popover assistant .sidebar 
+{
+	background-color: @bg_menu;
+	color:@fg_menu;
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	border-style: solid;
+	border-width: 1px;
+}
+
+popover assistant .sidebar label 
+{
+	padding: 6px 12px;
+}
+
+popover assistant .sidebar label.highlight 
+{
+	background-color: @sel_menu;
+}
+
+/* 3.16 dialog .notebook code here (keep file lines synced) */
+/* thingie around the entire tab thing */
+
+/* files in filedialog actual treeview */
+/* on a per line basis */
+/* __treeview */
+popover treeview.view
+{
+	background-color: @bg_text;
+	color: @fg_text;
+}
+
+/* the 'time' 'size' 'name' buttons above that */
+/* __treeviewbutton */
+popover treeview.view button 
+{
+	border-top-color: @ts_text;
+	border-left-color: @ts_text;
+	border-right-color: @bs_text;
+	border-bottom-color: @bs_text;
+	background-color: @bg_text;
+	color: @fg_text;
+	border-style: solid;
+	border-width: 1px;
+	padding: 2px;
+	padding: 2px 4px 2px 4px;
+}
+
+/* for borders this has effect on the calendar thing and ONE other view. the other ones stay flat */
+/* funnyly for the background color it DOES take effect */
+/* aha apparently the calandar is a single text entry thing or somehting. */
+/* if this border is drawn eg each line of text in the file browser window gets a separate border. */
+/* so no drawe border here */
+popover *.view
+{
+	/* inset */
+	/* border-top-color: @bs_text; */
+	/* border-left-color: @bs_text; */
+	/* border-right-color: @ts_text; */
+	/* border-bottom-color: @ts_text; */
+	background-color: @bg_text;
+	color: @fg_text;
+	border-style: solid;
+	border-width: 0px;
+}
+
+/* so do for calendar separately. text col is wrong why?todo */
+/* is set below using blabla text see _text */
+/* text color: */
+/* __calendar */
+popover calendar,
+/* border around the entire thing: */
+popover calendar.view
+{
+	/* inset */
+	border-top-color: @bs_text;
+	border-left-color: @bs_text;
+	border-right-color: @ts_text;
+	border-bottom-color: @ts_text;
+	background-color: @bg_text;
+	color: @fg_text;
+	border-style: solid;
+	border-width: 1px;
+}
+
+/* special color for icon (file browsers and such) */
+/* =darker normal color instead of the blue (for default Broica.dp palette) */
+/* __iconview */
+popover iconview.view {
+	/* inset */
+	/* border-top-color: @bs_menu; */
+	/* border-left-color: @bs_menu; */
+	/* border-right-color: @ts_menu; */
+	/* border-bottom-color: @ts_menu; */
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: none;
+}
+
+popover iconview.view:selected,
+popover iconview.view:selected:focus,
+popover iconview.view:active
+{
+	background-color: shade(@sel_menu, 0.90);
+}
+
+/* lists and such */
+/* but PER CELL so how draw inset around ENTIRE view? */
+/* __view */
+popover view 
+{
+	color: @fg_text;
+	background-color: @bg_text;
+}
+
+popover view:selected
+{
+	color: @fg_text;
+	background-color: @sel_text;
+}
+
+/* __sidebar */
+popover .sidebar,
+popover .sidebar view,
+popover .sidebar > view,
+popover .sidebar scrolledwindow 
+{
+	color: @fg_text;
+	background-color: @bg_menu;
+	/* color: mix(@theme_fg_color, @theme_bg_color, 0.1); */
+}
+
+popover sidebar 
+{
+	color: @fg_text;
+	background-color: @sel_menu;
+}
+
+/* none of these seems to do anything */
+popover sidebar:selected,
+popover sidebar:active,
+popover sidebar row:selected, 
+popover sidebar row:selected label
+{
+	color: @fg_text;
+	background-color: @bs_menu;
+}
+
+/* combobox without entry ('option menu') css: */
+/* combobox */
+/* ├── box.linked */
+/* │   ╰── button.combo */
+/* │       ╰── box */
+/* │           ├── cellview */
+/* │           ╰── arrow */
+/* ╰── window.popup */
+/* combobox with entry css: */
+/* combobox */
+/* ├── box.linked */
+/* │   ├── entry.combo */
+/* │   ╰── button.combo */
+/* │       ╰── box */
+/* │           ╰── arrow */
+/* ╰── window.popup */
+/* in cde there are widgets combobox and optionmenu (like in pre-gtk3) The first */
+/* have a list inside them and are bg_color_5, the second have a menu and are */
+/* bg_color_6. Gtk3 has only one kind of combobox but there are 2 ways of */
+/* displaying it: default as menu, and 'as-list'.  Also there are 2 ways the */
+/* widget looks: with or without entry. Without entry I make into a 'optionmenu', */
+/* with entry I make into a list To differentiate we select the cases in which */
+/* button is first child: Unfortunately it is not possible (afaik) to select the */
+/* combobox vs combobox with entry themselves, so I cant make one popup a menu and */
+/* the other a list.. damn. I can only select the button and change that. (it used */
+/* to be possible pre gtk 3.20 and gtk2, but not anymore */
+/* SO LET BOTH DISPLAY A LIST: */
+/* __combox */
+popover combobox
+{
+	/* with this, both comboboxes: (combobox and comboboxentry) appear either */
+	/* as menu or as list. But we want one to appear as menu and the other as list */
+	-GtkComboBox-appears-as-list: 1;
+}
+
+/* these ones appear green, like optionmenu in cde */
+/* __comboboxoptionmenu */
+popover combobox button:first-child
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	/* MY COMBOBOX BUTTON ARROW (BELOW) HAS HEIGHT 6. SO TO CENTER IT VERTICALLY */
+	/* WITHOUT HALF PIXEL DRAWING (BLURRYNESS), THE ENCLOSING BOX HAS TO HAVE AN */
+	/* EVEN NUMBER OF PIXELS: (AND NOW DONT PICK A DIFFERENT FONT OR DPI) */
+	min-height: 24px;
+}
+
+/* __comboboxbuttonarrowbeam */
+popover combobox button:first-child arrow
+{
+	min-width: 15px;
+	min-height: 6px;
+	background-image: url("../img2/colorset6/comboBoxBeam.png");
+	background-size: 15px 6px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* the one with entry: */
+/* __comboboxbutton */
+popover combobox button
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	min-height: 23px;
+	/* this makes the arrow NOT center horizontally */
+	/* min-width: 23px; */
+}
+
+/* __comboxbuttonarrow */
+popover combobox button arrow {
+	min-width: 17px;
+	min-height: 19px;
+	background-image: url("../img2/colorset6/arrowBeamDown.png");
+	background-size: 17px 19px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* list of widgets, not list of text items if that makes sense */
+/* __list */
+popover list {
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+popover list-row:selected {
+	background-color: @sel_menu;
+	color: @fg_menu;
+}
+
+/* spinbutton.horizontal */
+/* ├── undershoot.left */
+/* ├── undershoot.right */
+/* ├── entry */
+/* │   ╰── ... */
+/* ├── button.down */
+/* ╰── button.up */
+/* spinbutton.vertical */
+/* ├── undershoot.left */
+/* ├── undershoot.right */
+/* ├── button.up */
+/* ├── entry */
+/* │   ╰── ... */
+/* ╰── button.down */
+/* combobox entry, text line thing, spinner number field, search box etc */
+/* all single line I think, so we can put a border inset around */
+/* todo only for spinbutton text has wrong color... */
+/* text appeared black first. why need to do this separately ('entry' text fg was already white)? */
+/* __spinbutton */
+popover spinbutton
+{
+	color: @fg_text;
+	background-color: @bg_text;
+}
+
+/* tekst +- tekent eroverheen */
+popover spinbutton.horizontal button.up,
+popover spinbutton.vertical button.up
+{
+	/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+	/* FOR THE IMAGE TO DISPLAY SHARP CENTERED, WE MUST HAVE A CONTAINER WITH THE SAME */
+	/* PARITY AS THE IMAGE (IE BOTH EVEN OR BOTH ODD). UNFORTUNATELY WE DONT CONTROL THIS */
+	/* ENTIRELY, AND IT CAN CHANGE WHEN FONT/DPI SETTINGS CHANGE... SO .. HMM. WHAT TO DO */
+	/* I JUST PICK VALUES THAT WORK AND IF IT DOESNT WORK ON A DIFFERENT SETUP, THE USER */
+	/* HAS TO TWEAK THE DPI SETTINGS */
+	/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+	min-width: 19px;
+	min-height: 19px;
+	background-size: 15px 15px;
+	background-image: url("../img2/colorset6/arrowUp.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	/* this dont do nothn. Button has no icon */
+	/*-gtk-icon-source: url("../img2/colorset6/arrowUp.png"); */
+	/* there is a +- 9ere dont want. So put color to transparent (bg color will */
+	/* still draw on top) */
+	/* color:@bg_menu; */
+	color: transparent;
+}
+
+popover spinbutton.horizontal button.up:active,
+popover spinbutton.vertical button.up:active
+{
+	min-width: 19px;
+	min-height: 19px;
+	/* this was the small arrow from the original spinbutton in gtk2 */
+	/* background-image: url("../img2/colorset6/spinButtonUp.png"); */
+	background-image: url("../img2/colorset6/arrowUpPressed.png");
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: transparent;
+}
+
+popover spinbutton.horizontal button.down,
+popover spinbutton.vertical button.down
+{
+	min-width: 19px;
+	min-height: 19px;
+	background-image: url("../img2/colorset6/arrowDown.png");
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: transparent;
+}
+
+popover spinbutton.horizontal button.down:active,
+popover spinbutton.vertical button.down:active
+{
+	min-width: 19px;
+	min-height: 19px;
+	background-image: url("../img2/colorset6/arrowDownPressed.png");
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: transparent;
+}
+
+/* __entry */
+popover entry 
+{
+	/* inset */
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @bg_text;
+	color: @fg_text;
+	border-style: solid;
+	border-width: 1px;
+	padding: 4px;
+}
+
+/* selected text entry.selected.focus.selection:focussed: selection selected focussed::.selectified.focus.fuckus */
+/* this is doing nothing wtf... */
+popover entry selection,
+popover entry .selection,
+popover entry.selection,
+popover entry selected,
+popover entry:selected,
+popover entry:selected:focus
+{
+	background-color: @sel_text;
+}
+
+/* and this??? */
+/* hmm I dont know */
+/* the 'placeholder'text (filled in automatically) appears dark grey. Not white. WHY */
+popover entry > *
+{
+	color: @fg_text;
+}
+
+/* these stacked windows of items like in synaptic */
+/* __expander */
+popover expander arrow {
+	min-width: 16px;
+	min-height: 16px;
+	-gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+}
+popover expander arrow:dir(rtl) {
+	-gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
+}
+popover expander arrow:checked {
+	-gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+}
+
+/* Firefox adress bar */
+popover label.separator {
+  color: @bs_text;
+}
+
+/*_text */
+/* __textcolors */
+popover .view text:selected:focus,
+popover iconview text:selected:focus,
+popover textview text:selected:focus,
+popover .view text:selected,
+popover iconview text:selected,
+popover textview text:selected, 
+popover .view text selection:focus, 
+popover iconview text selection:focus, 
+popover .view text selection, 
+popover iconview text selection,
+popover textview text selection:focus,
+popover textview text selection, 
+popover flowbox flowboxchild:selected, 
+popover spinbutton:not(.vertical) selection:focus, 
+popover spinbutton:not(.vertical) selection,
+popover .view:selected:focus,
+popover iconview:selected:focus,
+popover .view:selected,
+popover iconview:selected,
+popover entry selection:focus,
+popover entry selection,
+popover modelbutton.flat:selected,
+popover popover.background checkbutton:selected,
+popover popover.background radiobutton:selected,
+popover .menuitem.button.flat:selected,
+popover treeview.view:selected:focus,
+popover treeview.view:selected,
+popover row:selected,
+popover calendar:selected,
+semicolondummy
+{
+	/* its inverted like in the style of olld crt green monitors. But this must only for text to be */
+	background-color: @fg_text;
+	color: @bg_text;
+}
+
+/* disabled must be _text color but etched with shadow */
+popover .view text:disabled,
+popover iconview text:disabled,
+popover textview text:disabled,
+popover .view text:disabled,
+popover iconview text:disabled,
+popover textview text:disabled, 
+popover .view text:disabled, 
+popover iconview text:disabled, 
+popover .view text:disabled, 
+popover iconview text:disabled,
+popover textview text:disabled,
+popover textview text:disabled,
+popover flowbox flowboxchild:disabled, 
+popover spinbutton:not(.vertical):disabled, 
+popover spinbutton:not(.vertical):disabled,
+popover .view:disabled,
+popover iconview:disabled,
+popover .view:disabled,
+popover iconview:disabled,
+popover entry:disabled,
+popover entry:disabled,
+popover modelbutton.flat:disabled,
+popover popover.background checkbutton:disabled,
+popover popover.background radiobutton:disabled,
+popover .menuitem.button.flat:disabled,
+popover treeview.view:disabled,
+popover treeview.view:disabled,
+popover row:disabled,
+popover calendar:disabled,
+semicolondummy
+{
+	/* etched in: text with dark fg and light bg */
+	color: @bs_text;
+	text-shadow: 1px 1px @ts_text;
+}
+
+/* was zum foik ees dees */
+/* in file dialog the lines of wheres the files are */
+/* __cell */
+popover .cell
+{
+	border-width: 0;
+	border-radius: 0;
+	background-color: @bg_text;
+	color: @fg_text;
+	/* this needs to be here for the lines not to overlap: */
+	padding: 0px;
+}
+
+popover .cell:selected,
+popover .cell:selected:focus {
+	background-color: @sel_text;
+	color: @fg_text;
+}
+
+/* this row is not inside text thingies but .. yes where? normal bg */
+/* in file dialog he side pane onthe left with 'places' */
+/* __row */
+popover row { 
+	padding: 4px;
+}
+
+popover row:selected,
+popover row:selected:hover,
+popover row:selected:focus 
+{
+	border-style: none;
+	border-color: @bs_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+}
+
+/* both h and v */
+/* __scrollbar */
+popover scrollbar slider 
+{
+/* this seems to determine the width of the scrollbar */
+/* experimentally verified. I hope the laws of nature dont change the next release of gtk */
+/* this is width WITHOUT border The cde button image is width 11. slider must */
+/* be same size so inside width of slider must be 9 */
+	min-width: 9px;
+	min-height: 9px;
+	border-top: 1px solid @ts_menu;
+	border-left: 1px solid @ts_menu;
+	border-right: 1px solid @bs_menu;
+	border-bottom: 1px solid @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* __scrollbartrough */
+popover scrollbar.vertical trough 
+{
+	/* width of the inside=width of cde button image */
+	min-width: 11px;
+	min-height: 11px;
+	/* inset */
+	border-top: 0px solid @bs_menu;
+	border-bottom: 0px solid @bs_menu;
+	border-left: 1px solid @bs_menu;
+	border-right: 1px solid @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+}
+
+/* __scrollbarvbuttonup */
+popover scrollbar.vertical button.up 
+{
+	border-left: 1px solid @bs_menu;
+	border-top: 1px solid @bs_menu;
+	border-right: 1px solid @ts_menu;
+	border-bottom: 0px solid @sel_menu;
+	margin: 0px 0px 0px 0px;
+	/* the one line format doesnt work?? */
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 11px;
+	min-width: 11px;
+	-gtk-icon-source: url("../img/arrowup.png");
+	/* does this actually work : NO */
+	/* -gtk-icon-source: -gtk-recolor(url('../img/arrowup.png'), success blue, error rgb(255,0,0)); */
+	/* -gtk-icon-source: -gtk-recolor(url('../img/arrowup.png')); */
+}
+
+/* __scrollbarvbuttonupactive */
+popover .scrollbar.vertical .button.up:active
+{
+	-gtk-icon-source: url("../img/arrowuppressed.png");
+}
+
+/* __scrollbarvbuttondown */
+popover scrollbar.vertical button.down 
+{
+	border-left: 1px solid @bs_menu;
+	border-right: 1px solid @ts_menu;
+	border-top: 0px solid @bs_menu;
+	border-bottom: 1px solid @ts_menu;
+	margin: 0px 0px 0px 0px;
+	/* the one line format doesnt work?? */
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 11px;
+	min-width: 11px;
+	-gtk-icon-source: url("../img/arrowdown.png");
+}
+
+/* __scrollbarvbuttondownactive */
+popover scrollbar.vertical button.down:active
+{
+	-gtk-icon-source: url("../img/arrowdownpressed.png");
+}
+
+/* __scrollbarhtrough */
+popover scrollbar.horizontal trough 
+{
+	/* width of the inside=width of cde button image */
+	min-width: 11px;
+	min-height: 11px;
+	/* inset */
+	border-top: 1px solid @bs_menu;
+	border-bottom: 1px solid @ts_menu;
+	border-left: 0px solid @bs_menu;
+	border-right: 0px solid @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+}
+
+/* __scrollbarhbuttondown */
+popover scrollbar.horizontal button.down
+{
+	border-left: 0px solid @ts_menu;
+	border-top: 1px solid @bs_menu;
+	border-right: 1px solid @ts_menu;
+	border-bottom: 1px solid @ts_menu;
+	margin: 0px 0px 0px 0px;
+	/* the one line format doesnt work?? */
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 11px;
+	min-width: 11px;
+	-gtk-icon-source: url("../img/arrowright.png");
+}
+
+/* __scrollbarhbuttondownactive */
+popover scrollbar.horizontal button.down:active
+{
+	-gtk-icon-source: url("../img/arrowrightpressed.png");
+}
+
+/* __scrollbarhbuttonup */
+popover scrollbar.horizontal button.up
+{
+	border-left: 1px solid @bs_menu;
+	border-top: 1px solid @bs_menu;
+	border-right: 0px solid @ts_menu;
+	border-bottom: 1px solid @ts_menu;
+	margin: 0px 0px 0px 0px;
+	/* the one line format doesnt work?? */
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 11px;
+	min-width: 11px;
+	-gtk-icon-source: url("../img/arrowleft.png");
+}
+
+/* __scrollbarhbuttonupactive */
+popover scrollbar.horizontal button.up:active
+{
+	-gtk-icon-source: url("../img/arrowleftpressed.png");
+}
+
+/* for firefox? vrom macos theme */
+popover XXscrollbar button
+{
+	background-color: @bg_menu;
+	background-color: @sel_menu;
+}
+
+/* the movable things like scrollbar without scroll area */
+/* this is the thing where the slider sits in */
+/* __scaletrough */
+popover scale trough 
+{
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	min-width: 13px;
+	min-height: 13px;
+}
+
+popover scale.horizontal trough
+{
+	/* prevent slider from sliding across the edge */
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+popover scale.vertical trough
+{
+	/* prevent slider from sliding across the edge */
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* __scaleslider */
+popover scale slider 
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+}
+
+/* set the sliders to elongated rectangle ,similar to cde (default is square) */
+/* slider determines the width of the scale (height for horizontal) */
+/* NOTE transparent png here seems to be rendered differently from scrollbar button: */
+/* opacity is 48 there. Here the shadow color is renderend lighter */
+/* so make less transparent */
+/* __scalehslider */
+popover scale.horizontal slider
+{
+	min-width: 28px;
+	min-height: 11px;
+	background-image: url("../img/sliderseparatorvertical.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	/* aha, here overlay DOES work, unlike in scrollbar. So use normal */
+	/* that seems to be closest to the shadow/hilight colors calculated in cde/motif */
+	/* background-blend-mode: overlay; */
+}
+
+/* __scalevslider */
+popover scale.vertical slider
+{
+	min-height: 28px;
+	/* INTERNAL width. With border around that of 1 px, for the total */
+	/* width to be 13 (fit in trough) this as to be 11: */
+	min-width: 11px;
+	background-image: url("../img/sliderseparatorhorizontal.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	/* background-blend-mode: overlay; */
+	/*-gtk-icon-source: url("../img/sliderseparatorvertical.png"); */
+}
+
+/* __scalemark */
+popover scale.mark
+{
+	background-color: @bs_menu;
+	color: @bs_menu;
+	min-height: 4px;
+	min-width: 1px;
+}
+
+popover scale.horizontal mark 
+{
+	background-color: @bs_menu;
+	min-height: 4px;
+	min-width: 1px;
+}
+
+/* __scalevmark */
+popover scale.vertical mark 
+{
+	background-color: @bs_menu;
+	min-height: 1px;
+	min-width: 4px;
+}
+
+/* __tooltip */
+popover tooltip 
+{
+	background-color: @sel_menu;
+	border-color: @bg_hi;
+	border-style: solid;
+	border-width: 2px; 
+}
+
+/* what is this supposed to be. Fake window title?? I have a window manager */
+/* this sucks */
+/* __headerbar */
+headerbar
+{
+        border-top-color: @ts_menu;
+        border-left-color: @ts_menu;
+        border-right-color: @bs_menu;
+        border-bottom-color: @bs_menu;
+        background-color: @bg_menu;
+        color: @fg_menu;
+        border-style: solid;
+        border-width: 1px;
+        border-width: 2px;
+        padding: 0px;
+        min-height: 0px;
+
+}
+
+.header-bar *,
+headerbar button
+{
+        border-width: 0px;
+        background-color: @bg_menu;
+        color: @fg_menu;
+        margin-top: 0px; /* same as headerbar side padding for nicer proportions */
+        margin-bottom: 0px;
+
+}
+
+/* some of the bg_menu show through so */
+headerbar *,
+headerbar *:active,
+headerbar *:checked,
+headerbar *:hover
+{
+        background-color: @bg_menu;
+        color: @fg_menu;
+}
+
+/* __menuitemarrow */
+menu menuitem arrow,
+.menu menuitem arrow,
+popover .context-menu .menuitem arrow 
+{ 
+	 min-height: 16px;
+	 min-width: 16px;
+}
+
+/* now set the appropriate icons */
+/* __menuitemarrowright */
+popover menu menuitem arrow:dir(ltr),
+popover .menu menuitem arrow:dir(ltr),
+popover .context-menu menuitem arrow:dir(ltr) 
+{
+	/* the iconsource way of displaying makes the image look fuzzy */
+	 /*-gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); */
+	/*-gtk-icon-source: url("../img/menuarrowright.png"); */
+	 margin-left: 10px; 
+	/* hm here it works as it should, no blurring / smudging */
+	min-width: 15px;
+	min-height: 15px;
+	background-image: url("../img2/colorset6/arrowRight.png");
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* __menuitemarrowleft */
+popover menu menuitem:hover arrow:dir(ltr),
+popover .menu menuitem:hover arrow:dir(ltr),
+popover .context-menu menuitem:hover arrow:dir(ltr)
+{
+	 margin-left: 10px; 
+	/* hm here it works as it should, no blurring / smudging */
+	min-width: 15px;
+	min-height: 15px;
+	background-image: url("../img2/colorset6/arrowRightPressed.png");
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* small progressbar in entry behind text?? */
+/* did pop up in totally random places (ie button and scrollbarbutton of oppup message) */
+/* __entryprogress */
+popover entry progress
+{
+	border-width: 1px;
+	border-color:#ffffff;
+	box-shadow: none;
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* special case inside text area. but how to do this generally? cant enter every special case */
+/* __treeviewcheck */
+popover treeview.view check
+{
+	border-top-color: @bs_text;
+	border-left-color: @bs_text;
+	border-right-color: @ts_text;
+	border-bottom-color: @ts_text;
+	color: @fg_text;
+	border-style: solid;
+	border-width: 1px;
+	background-color: @sel_text;
+}
+
+/* little progressbar in tranmission ie a prog bar inside a text line */
+/* __treeviewprogressbar */
+popover treeview.view.progressbar
+{
+	/* inset */
+	border-top-color: @bs_text;
+	border-left-color: @bs_text;
+	border-right-color: @ts_text;
+	border-bottom-color: @ts_text;
+	border-style: solid;
+	border-width: 1px;
+	background-color: @sel_text;
+	color: @fg_text;
+}
+
+/* Note that there are 2 nested borders: progresbar border with trough border inside */
+/* so dont draw border around entire progressbar, only around trough */
+/* progress percentage will then appear 'outside' */
+/* __progressbar */
+popover progressbar
+{
+	border-style: none;
+	border-width: 1px;
+	background-color: @bg_menu;
+	color: @fg_menu;
+}
+
+/* the part where the sliding thing is sliding in */
+/* __progressbartrough */
+popover progressbar trough 
+{
+	/* inset */
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	border-style: solid;
+	border-width: 1px;
+	background-color: @bg_menu;
+	/* this is the INTERNAL width. Border is drawn around */
+}
+
+/* sometimes the vertical bar displayed as a little square.. so set minimal width/height */
+popover progressbar.horizontal trough
+{
+	min-width: 40px;
+	min-height: 13px;
+}
+
+popover progressbar.vertical trough
+{
+	min-width: 13px;
+	min-height: 40px;
+}
+
+/* this is the thing that grows as progress increases, inside the trough. */
+/* In cde this is a simple color field with color sel_color_5 */
+/* __progressbarprogress */
+popover progressbar progress
+{
+	border-style: none;
+	border-width: 10px;
+	background-color: @sel_menu;
+	min-width: 13px;
+	min-height: 13px;
+}
+
+/* __separatorvertical */
+popover separator.vertical 
+{
+        margin: 0px;
+        padding: 0px;
+        border-left: 1px solid @bs_menu;
+        border-right: 1px solid @ts_menu;
+}
+
+/* __separatorhorizontal */
+popover separator.horizontal 
+{
+        margin: 0px;
+        padding: 0px;
+        border-top: 1px solid @bs_menu;
+        border-bottom: 1px solid @ts_menu;
+}
+
+/* HOOOO THIS ACTUALLY WORKS HAHAHAHA */
+/* movable separator between widgets eg like between the gimp tools. */
+/* In cde, this is a separator line and a little button on top of that */
+/* (horizontal: on the right, vertical: on the bottom) */
+/* To make this, eg in horizontal case, I have a transparent image of */
+/* 16x12 with the double horizontal line (bottomshadow/topshadow) in */
+/* the center. The transparent pixels are for padding. This way the */
+/* button image can be put on top, without the horizontal line scaling */
+/* to the entire width of the button. The button also has transparent */
+/* pixels on the right for padding (and left also if we change our mind later). */
+/* The background pos. can then be set to 'right'. */
+/* Note that the min-height of the separator has to be a bit smaller than */
+/* the background image height, otherwise we see some repeating in the */
+/* vertical direction too, whereas for the horizontal separtor we only want */
+/* repeating in the x direction. */
+/* Also the parity of the button and separator minheight must be the same */
+/* for centering to work properly (and not be drawn on half pixel and be drawn fuzzy) */
+/* Vertical separator similarly */
+/* __panedseparators */
+/* this separator is HORIZONTAL */
+popover paned.vertical > separator
+{
+	background-image: url("../img2/colorset6/handleButtonHorizontal.png"),	url("../img2/colorset6/handleSeparatorHorizontal.png");
+	background-repeat: no-repeat, 						repeat;
+	background-size: 24px 8px, 						16px,12px;
+	background-position: right,							center;
+	min-height: 10px;
+}
+/* this separator is VERTICAL */
+popover paned.horizontal > separator
+{
+	background-image: url("../img2/colorset6/handleButtonVertical.png"),	url("../img2/colorset6/handleSeparatorVertical.png");
+	background-repeat: no-repeat, 						repeat;
+	background-size: 8px 24px, 						12px,16px;
+	background-position: bottom,							center;
+	min-width: 10px;
+}
+
+/* __frameborder */
+popover frame > border {
+	border-width: 1px;
+	border-style: solid;
+	border-color: @bs_menu;
+	border-right-color: @bs_menu;
+
+	border-width: 4px;
+	border-image: url("../img2/colorset6/frameStandAlone.png") 4 4 4 4;
+}
+
+/* __frameflatborder */
+popover frame.flat > border,
+popover frame > border.flat,
+popover statusbar frame > border {
+	border: none;
+}
+
+/* was zum fook is this? */
+/* make id red for now so maybe find out some nice day */
+/* __scrolledwindow */
+popover scrolledwindow frame
+{
+	border-width: 1px;
+	border-style: solid;
+	border-color: shade(@bg_menu,0.80);
+	/* border-color: #ff0000; */
+}
+
+/* avoid double borders when a viewport is */
+/* packed into a scrolledwindow */
+/* __scrolledwindowviewportframe */
+scrolledwindow viewport frame
+{
+	border-style: none;
+}
+
+/* THIS IS IT THE FRECKING FRAME AROUND LISTS AND SUCH! */
+/* needs margin !! */
+/* see also .view */
+popover scrolledwindow
+{
+	border-style: solid;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	border-width: 1px;
+	margin: 1px;
+}
+
+/* what is this */
+/* __viewport */
+popover viewport 
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	/* inset */
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 4px;
+}
+
+/* kind of clock like wait animation */
+/* __spinner */
+popover spinner 
+{
+	color: @fg_menu;
+}
+
+popover spinner:checked 
+{
+	color: @fg_menu;
+}
+
+/* kind of a ... bar. See gtk3-demo */
+/* __infobar */
+popover infobar 
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 4px;
+}
+
+/* like in synaptic the left thing */
+/* __stacksidebarviewport */
+popover stacksidebar viewport 
+{
+	border-width: 1px; 
+	border-style: solid;
+	border-color: @ts_menu;
+	background-color: @bg_menu;
+}
+
+popover stacksidebar row 
+{
+	padding: 3px;
+	background-color: @bg_menu;
+}
+
+popover stacksidebar row:selected 
+{
+	color: @fg_menu;
+	background-color: @sel_menu;
+}
+
+popover stacksidebar row:selected label 
+{
+	color: @fg_menu;
+}
+
+/* __assistantsidebar */
+popover assistant sidebar label 
+{
+	padding: 4px 2px 4px 2px;
+}
+
+popover assistant sidebar label.highlight 
+{
+	background-color: @sel_menu; 
+	color: @fg_menu;
+}
+
+popover assistant sidebar 
+{
+	border-width: 1px;
+	border-style: solid;
+	border-color: @bs_menu;
+}
+
+/* an on-off switch */
+/* __switch */
+popover switch
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0px;
+}
+
+/* .switch .slider */
+/* text not visible */
+
+/* __switchslider */
+popover switch slider
+{
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0px;
+}
+
+/* __colorchooser */
+popover colorswatch:selected {
+	/* inset */
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px;
+	margin: 0px;
+	/* padding: 2px 4px 2px 4px; */
+}
+
+popover colorswatch
+{
+	/* outset */
+	border-top-color: @ts_menu;
+	border-left-color: @ts_menu;
+	border-right-color: @bs_menu;
+	border-bottom-color: @bs_menu;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px;
+	margin: 0px;
+	/* padding: 2px 4px 2px 4px; */
+}
+
+popover colorchooser {
+	/* now this looks cde-ish */
+	/* double inset frame */
+	border-style: solid;
+	border-width: 4px;
+	border-image: url("../img2/colorset6/frameStandAlone.png") 4 4 4 4;
+	background-color: @bg_menu;
+	color: @fg_menu;
+	padding: 8px;
+}
+
+/* make look the same as in gtk2 */
+popover button.color 
+{
+	padding: 4px 27px 4px 27px;
+}
+
+popover button.color colorswatch
+{
+	padding: 0px;
+	border-top-color: @bs_menu;
+	border-left-color: @bs_menu;
+	border-right-color: @ts_menu;
+	border-bottom-color: @ts_menu;
+	background-color: @sel_menu;
+	color: @fg_menu;
+	border-style: solid;
+	border-width: 1px;
+}
+
