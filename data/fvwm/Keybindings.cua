@@ -67,8 +67,8 @@ Silent Key Menu A N f_DoubleBindKey wspmenu Menu MenuFvwmRoot
 Silent Key Escape A S Menu MenuFvwmRoot
 Silent Key Menu A 4 Menu m_WindowOpsRootWin
 Silent Key Escape A 4 Menu m_WindowOpsRootWin
-Silent Key Menu A M4 f_DoubleBindKey pgmmenu f_ShowFPPGMenu
-Silent Key M RWFST 4 f_DoubleBindKey pgmmenu f_ShowFPPGMenu
+Silent Key Menu A M4 f_ShowFPPGMenu
+Silent Key M RWFST S4 f_ShowFPPGMenu
 Silent Key M I M4 Menu m_IconOps
 
 ### Cycling focus on pages and workspaces, focus
@@ -84,7 +84,7 @@ Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
 ### Insert and BackSpace for focusing prev and next window
 Silent Key Right A M4 Next (AcceptsFocus) Focus
 Silent Key Left A M4 Prev (AcceptsFocus) Focus
-Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A M f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
+Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A 4 f_KeyShowLocalPager AnimatedMove m-5 m-6
 
 ### Meta+FX key combinations which does not appar in menus (Keymenu.actions)
 Silent Key F8 A 4 f_ZoomInResize
@@ -94,7 +94,7 @@ Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_ToggleFvwmFunc 
 Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_Rofi run
 
 ### Tab combinations
-Silent Key BackSpace A 4 f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
+Silent Key BackSpace A M4 f_ShowGlobalPager AnimatedMove m-50w m-50w
 Silent Key Tab A M Scroll 0 100000
 Silent Key Tab A 4 f_GotoDesk 1 1 0 $[infostore.fvwmdesknum]
 Silent Key Tab A S4 f_GotoDesk -1 1 0 $[infostore.fvwmdesknum]
@@ -144,7 +144,7 @@ Silent Key XF86PowerOff A M f_RunQuickScriptDialog SysActionDialog 5
 Silent Key XF86PowerOff A 4 f_RunQuickScriptDialog SysActionDialog 1
 
 # Sun Keyboard Help button 
-Silent PointerKey Help R N f_DoubleBindKey sunhelp None (*NsCDE.pdf*) f_DisplayURL \"$[gt.All Documentation (pdf)]\" NsCDE.pdf
+Silent PointerKey Help R N None (*NsCDE.pdf*) f_DisplayURL \"$[gt.All Documentation (pdf)]\" NsCDE.pdf
 
 # SunFront key
 Silent Key SunFront A A RaiseLower
@@ -202,5 +202,7 @@ Silent Key (*term*) F2 A 4 f_WideTerm
 Silent Key (*terminal*) F2 A 4 f_WideTerm
 
 ### LocalPager context: Dismiss LocalPager on this keybindings if it is under the pointer
-Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A M All (LocalPager) f_HideLocalPager
+Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A 4 All (LocalPager) f_HideLocalPager
 
+### GWMPager context: Dismiss GWMPager on this keybindings if it is under the pointer
+Silent PointerKey (GWMPager) BackSpace A M4 All (GWMPager) KillModule FvwmPager GWMPager
