@@ -1,0 +1,53 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+# Syntax: km_keyword + rest of the line like FVWM "Key" configuration
+
+km_occupyworkspace Space WFSTI 4 None (Occupy) Current f_SendToOccupy wsp nogo
+km_occupypage Space WFSTI M Test (!EnvMatch infostore.pgm 1x1) None (Occupy) Current f_SendToOccupy pg nogo
+km_occupymonitor Space WFSTI M4 Test (EnvMatch infostore.lscrn.sls 1) None (Occupy) Current f_SendToOccupy mon nogo
+
+km_regenwin F5 A M f_RegenerateWindow
+km_wrefresh F5 A 4 Exec exec xrefresh -solid '#088000'
+
+km_iconify F9 A M Iconify
+km_windowshade F9 A 4 WindowShade
+
+km_reposwin F3 A M f_RepositionWindow
+km_centerwindow F3 A 4 f_CenterWindow
+
+km_resize F8 A M f_StatefulResize
+
+km_move F7 A M Move
+km_sticktoggle F7 A 4 Stick toggle
+km_stickwspacetoggle F7 A M4 StickAcrossDesks toggle
+km_stickpagetoggle F7 A S4 StickAcrossPages toggle
+
+km_raiselower F6 A M RaiseLower
+
+km_max_100 F11 A M f_ExtendedRestoreMaximize shrink 11 8 9 10 "ewmhiwa true" false "grow grow true" true
+km_max_0 F11 A 4 f_StatefulRestoreMaximizeJump
+
+km_max_88 F10 A M f_ExtendedRestoreMaximize grow 9 10 11 8 "grow grow true" true "ewmhiwa true" false
+km_max_101 F10 A 4 f_StatefulRestoreMaximizeJump
+
+km_delete F4 A 4 Delete
+km_close F4 A M Close
+km_destroy F4 A M4 Destroy
+
+km_savegeom G A M4 f_SaveGeometry
+km_fullscreen F WFST M4 Maximize fullscreen
+km_identify D WFSTI M4 Module FvwmIdent
+km_toggletitle T WFST M4 f_ToggleWindowStyle Title
+
+km_rootscreenshot Print A CM f_RootScreenShot 200
+km_areascreenshot Print A SM f_AreaScreenShot 250
+km_clprootscreenshot Print A N f_ClipboardRootScreenShot 200
+km_clpareascreenshot Print A S f_ClipboardAreaScreenShot 250
+
+km_raiseshadefp Tab A S f_RestoreFrontPanel WindowShade South
+km_raisefp Tab A C f_RestoreFrontPanel WindowShade Off
+
