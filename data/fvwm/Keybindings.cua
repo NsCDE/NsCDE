@@ -84,7 +84,7 @@ Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
 ### Insert and BackSpace for focusing prev and next window
 Silent Key Right A M4 Next (AcceptsFocus) Focus
 Silent Key Left A M4 Prev (AcceptsFocus) Focus
-Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A S f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
+Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A M f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
 
 ### Meta+FX key combinations which does not appar in menus (Keymenu.actions)
 Silent Key F8 A 4 f_ZoomInResize
@@ -94,7 +94,7 @@ Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_ToggleFvwmFunc 
 Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_Rofi run
 
 ### Tab combinations
-Silent Key Tab A CS f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
+Silent Key BackSpace A 4 f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
 Silent Key Tab A M Scroll 0 100000
 Silent Key Tab A 4 f_GotoDesk 1 1 0 $[infostore.fvwmdesknum]
 Silent Key Tab A S4 f_GotoDesk -1 1 0 $[infostore.fvwmdesknum]
@@ -202,5 +202,5 @@ Silent Key (*term*) F2 A 4 f_WideTerm
 Silent Key (*terminal*) F2 A 4 f_WideTerm
 
 ### LocalPager context: Dismiss LocalPager on this keybindings if it is under the pointer
-Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A S All (LocalPager) f_HideLocalPager
+Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A M All (LocalPager) f_HideLocalPager
 
