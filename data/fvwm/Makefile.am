@@ -29,7 +29,8 @@ CONFS = NsCDE.conf \
 	Ident.fvwmconf \
 	Init.fvwmconf \
 	Keybindings.fvwmconf \
-	Keybindings.nscde \
+	Keybindings.nscde1x \
+	Keybindings.cua \
 	LocalPager.fvwmconf \
 	Menus.fvwmconf \
 	Monitors.fvwmconf \
