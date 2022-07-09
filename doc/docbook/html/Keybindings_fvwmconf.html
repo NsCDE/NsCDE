@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.16. Keybindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="8. Configuration files explained"><link rel="prev" href="Init_fvwmconf.html" title="8.15. Init.fvwmconf"><link rel="next" href="Keymenu_actions.html" title="8.17. Keymenu-&lt;keybtype&gt;.actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.16. Keybindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><th width="60%" align="center">8. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Keybindings_fvwmconf"></a>8.16. Keybindings.fvwmconf</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8.16. Keybindings.fvwmconf</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Configuration-Files.html" title="8. Configuration files explained"><link rel="prev" href="Init_fvwmconf.html" title="8.15. Init.fvwmconf"><link rel="next" href="Keymenu_actions.html" title="8.17. Keymenu-&lt;kbd_bind_set&gt;.actions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.16. Keybindings.fvwmconf</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><th width="60%" align="center">8. Configuration files explained</th><td width="20%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Keybindings_fvwmconf"></a>8.16. Keybindings.fvwmconf</h3></div></div></div><p>
 According to the old CDE documentation, there are couple of key bindings known under CDE,
 but that documentation also assumes Motif application bindings and X resource configuration,
 which is far from universally applicable in today's world. That said, while GTK and Qt
@@ -33,12 +33,13 @@ Silent Key Tab A S -
 </p><p>
 For explanation what is the context, and what modifier, see FVWM documentation (man page).
 </p><p>
-NsCDE 2.1 and above implements alternative sets of key bindings. Default set named <span class="emphasis"><em>nscde</em></span>
+NsCDE 2.1 and above implements alternative sets of key bindings. Default set named <span class="emphasis"><em>nscde1x</em></span>
 is applied by default, unless overriden in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with InfoStore variable
-<code class="varname">keybtype</code>. This mechanism is still experimental, in NsCDE 2.1 and the only implemented set
-of keybindings is <code class="varname">nscde</code>. The following section lists and explains key bindings implemented
-in that set. In future versions of NsCDE, IBM CUA compliant set is planned as an alternatice choice to default
-set of keybindings.
+<code class="varname">kbd_bind_set</code>. This mechanism was still experimental in NsCDE 2.1 and the only implemented set
+of keybindings was <code class="varname">nscde</code> (nscde1x in NsCDE 2.2). The following section lists and explains key
+bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as an alternative
+choice to default set of keybindings. In the future nscde1x key binding set will be deprecated and cua will
+become default.
 </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Keybindings_nscde"></a>8.16.1. Keybindings.nscde</h4></div></div></div><p>
 
 This subsection explains key bindings implemented in default "nscde" set of key bindings.
@@ -188,7 +189,7 @@ focus to free up space on the screen.
   Sun <span class="keysym">Open</span> same as <span class="keysym">Alt+F12</span> invokes Exec dialog or Rofi launcher
   if configured with nscde_use_rofi infostore variable in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
 </p></li><li class="listitem"><p>
-  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_DATADIR/fvwm/Keybindings.&lt;keybtype&gt;</code> for f_Mixer options and interaction.
+  <span class="keysym">XF86AudioLowerVolume</span> and <span class="keysym">XF86AudioRaiseVolume</span> on Sun type 6 or 7 keyboards will lower and raise sound volume by 1 percent, or by 10 percent if combined with Ctrl modifier. This works by default on systems on which pactl(1) PulseAudio tool is installed. On other systems, f_Mixer function has to be redefined. See <code class="filename">$NSCDE_DATADIR/fvwm/Keybindings.&lt;kbd_bind_set&gt;</code> for f_Mixer options and interaction.
 </p></li><li class="listitem"><p>
   <span class="keysym">XF86AudioMute</span> key on Sun keyboards will mute the sound. Function f_Mixer expects PulseAudio system. See previous item for possible alternatives.
 </p></li><li class="listitem"><p>
@@ -442,4 +443,4 @@ In the context of the Front Panel and any Subpanel, Sun <span class="keysym">Hel
 Front Panel or Subpanels documentation.
 </p></li></ul></div><p>
 
-</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8.15. Init.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.17. Keymenu-&lt;keybtype&gt;.actions</td></tr></table></div></body></html>
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8.15. Init.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.17. Keymenu-&lt;kbd_bind_set&gt;.actions</td></tr></table></div></body></html>

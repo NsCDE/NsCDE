@@ -2,7 +2,7 @@ Not so Common Desktop Environment (NsCDE) Manual
 
 M. Z.
 
-   This manual describes version 2.1 of NsCDE.
+   This manual describes version 2.2 of NsCDE.
 
    Copyright © 2019, 2020, 2021, 2022 M. Z.
 
@@ -154,7 +154,7 @@ M. Z.
 
               8.16.1. Keybindings.nscde
 
-        8.17. Keymenu-<keybtype>.actions
+        8.17. Keymenu-<kbd_bind_set>.actions
         8.18. Main.fvwmconf
         8.19. Menus.fvwmconf
         8.20. Mousebindings.fvwmconf
@@ -496,7 +496,7 @@ M. Z.
        Operations menu on the 1st titlebar button
      * FrontPanel.actions - read by FVWM functions called when
        FrontPanel controls and buttons are used
-     * Keymenu-<keybtype>.actions - Part of the FVWM NsCDE
+     * Keymenu-<kbd_bind_set>.actions - Part of the FVWM NsCDE
        keybindings which have menu hints written on menus
      * Subpanels.actions - From this file, Subpanels.fvwmconf is
        generated.
@@ -3783,7 +3783,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    cannot be really distinguished and separated in that strict
    categories. This system of configurations is arranged in some
    logical and consistent way. For example, keyboard shortcuts in
-   Keybindings.<keybtype>, FvwmBacker configuration in
+   Keybindings.<kbd_bind_set>, FvwmBacker configuration in
    Backer.fvwmconf, (generated) colorsets in Colorset.fvwmgen etc.
 
    All this configurations are included from the Main.fvwmconf.
@@ -4294,14 +4294,16 @@ Silent Key Tab A S -
    FVWM documentation (man page).
 
    NsCDE 2.1 and above implements alternative sets of key
-   bindings. Default set named nscde is applied by default, unless
-   overriden in $FVWM_USERDIR/NsCDE.conf with InfoStore variable
-   keybtype. This mechanism is still experimental, in NsCDE 2.1
-   and the only implemented set of keybindings is nscde. The
-   following section lists and explains key bindings implemented
-   in that set. In future versions of NsCDE, IBM CUA compliant set
-   is planned as an alternatice choice to default set of
-   keybindings.
+   bindings. Default set named nscde1x is applied by default,
+   unless overriden in $FVWM_USERDIR/NsCDE.conf with InfoStore
+   variable kbd_bind_set. This mechanism was still experimental in
+   NsCDE 2.1 and the only implemented set of keybindings was nscde
+   (nscde1x in NsCDE 2.2). The following section lists and
+   explains key bindings implemented in that set. In version 2.2
+   of NsCDE, IBM CUA compliant set is implemented as an
+   alternative choice to default set of keybindings. In the future
+   nscde1x key binding set will be deprecated and cua will become
+   default.
      __________________________________________________________
 
 8.16.1. Keybindings.nscde
@@ -4451,7 +4453,7 @@ Silent Key Tab A S -
        This works by default on systems on which pactl(1)
        PulseAudio tool is installed. On other systems, f_Mixer
        function has to be redefined. See
-       $NSCDE_DATADIR/fvwm/Keybindings.<keybtype> for f_Mixer
+       $NSCDE_DATADIR/fvwm/Keybindings.<kbd_bind_set> for f_Mixer
        options and interaction.
      * XF86AudioMute key on Sun keyboards will mute the sound.
        Function f_Mixer expects PulseAudio system. See previous
@@ -4694,7 +4696,7 @@ Silent Key Tab A S -
        documentation.
      __________________________________________________________
 
-8.17. Keymenu-<keybtype>.actions
+8.17. Keymenu-<kbd_bind_set>.actions
 
    This file is not FVWM configuration file. It is written
    manually (with editor), and read by the $NSCDE_TOOLSDIR/keymenu
@@ -4707,9 +4709,9 @@ Silent Key Tab A S -
    Keybindings.fvwmconf (Keybindings.<keybindings set>) and
    processed specially because they definition must automatically
    match keyboard binding description in various menus. The
-   "<keybtype>" represents keybindings set called from default
+   "<kbd_bind_set>" represents keybindings set called from default
    Main.fvwmconf or $FVWM_USERDIR/NsCDE.conf with variable
-   keybtype. Default is "nscde".
+   kbd_bind_set. Default is "nscde1x".
 
    The syntax of this file is simple: first column is the keyword
    which becomes infostore variable (km_xrefresh as
@@ -4725,7 +4727,7 @@ Silent Key Tab A S -
    "Key" will become Alt+F3 description right of the (De)Shade
    item on titlebar left button popdown menu.
 
-   File Keymenu-<keybtype>.actions is processed by
+   File Keymenu-<kbd_bind_set>.actions is processed by
    $NSCDE_TOOLSDIR/keymenu script. This script generates FVWM
    infostore variables used in menus, and executes FVWM "Key"
    commands producing dynamic keybindings which are described in
@@ -4733,9 +4735,9 @@ Silent Key Tab A S -
    $FVWM_USERDIR/Keymenu.actions if that file exists.
 
    For a list of keybindings that are "dynamic", that is, not
-   defined in Keybindings.<keybtype>, but in
-   Keymenu-<keybtype>.actions, see notices in section about
-   Keybindings.nscde.
+   defined in Keybindings.<kbd_bind_set>, but in
+   Keymenu-<kbd_bind_set>.actions, see notices in section about
+   Keybindings.nscde1x.
      __________________________________________________________
 
 8.18. Main.fvwmconf
@@ -4829,7 +4831,7 @@ Silent Key Tab A S -
 8.20. Mousebindings.fvwmconf
 
    File Mousebindings.fvwmconf is done in similar manner as the
-   Keybindings.<keybtype>. Can be overridden (.fvwmconf) or
+   Keybindings.<kbd_bind_set>. Can be overridden (.fvwmconf) or
    extended (.fvwmlocal) just like (almost) any NsCDE conf file.
    See fvwm(1) for "Mouse" commands. Here commands invoked with
    pointer are defined. As it is the case with key bindings, mouse
