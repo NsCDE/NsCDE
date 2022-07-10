@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-KeyboardMgr}
 WindowLocaleTitle {Style Manager - Keyboard}
-WindowSize 460 350
+WindowSize 460 370
 Colorset 22
 
 Init
@@ -28,26 +28,33 @@ Begin
    ChangeFont 4 $DefFont
    ChangeFont 6 $DefFont
    ChangeFont 8 $DefFont
-   ChangeFont 14 $DefFont
+   ChangeFont 10 $DefFont
+   ChangeFont 11 $DefFont
 
    Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 16} 1 -1)
-   ChangeFont 11 $BtnFont
-   ChangeFont 12 $BtnFont
    ChangeFont 13 $BtnFont
    ChangeFont 14 $BtnFont
+   ChangeFont 15 $BtnFont
+   ChangeFont 16 $BtnFont
 
    Set $HScrollBarFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11.5} 1 -1)
    ChangeFont 5 $HScrollBarFont
    ChangeFont 7 $HScrollBarFont
    ChangeFont 9 $HScrollBarFont
 
+   # Obtain Key Binding Set
+   Do {SendToModule KeyboardMgr SendString 1 1 $[infostore.kbd_bind_set]}
+
    # Key bindings
-   Key Escape A 14 1 {KeyClose}
-   Key Return M 11 1 {KeyApply}
-   Key Return C 12 1 {KeySave}
-   Key Q C 14 1 {KeyClose}
-   Key F1 A 13 1 {KeyHelp}
-   Key Help A 13 1 {KeyHelp}
+   Key Escape A 16 1 {KeyClose}
+   Key Return M 13 1 {KeyApply}
+   Key Return C 14 1 {KeySave}
+   Key Q C 16 1 {KeyClose}
+   Key F1 A 15 1 {KeyHelp}
+   Key Help A 15 1 {KeyHelp}
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
@@ -56,7 +63,7 @@ End
 
 Widget 1
 Property
-   Position 10 4
+   Position 10 0
    Flags NoReliefString NoFocus
    Type ItemDraw
    Title {}
@@ -65,6 +72,19 @@ Property
       Case message of
       SingleClic :
       Begin
+      End
+      1 :
+      Begin
+         Set $KeyBindingSet = (LastString)
+         Set $InitialKeyBindingSet = $KeyBindingSet
+         If $KeyBindingSet == {nscde1x} Then
+         Begin
+            ChangeValue 11 1
+         End
+         If $KeyBindingSet == {cua} Then
+         Begin
+            ChangeValue 11 2
+         End
       End
 End
 
@@ -89,13 +109,14 @@ Property
          ShowWidget 5
          ShowWidget 6
          ShowWidget 7
-         WarpPointer 12
+         WarpPointer 14
+         ChangeValue 11 1
       End
 End
 
 Widget 3
    Property
-   Position 10 68
+   Position 10 58
    Flags NoReliefString
    Type CheckBox
    Title { Auto Repeat                                }
@@ -123,7 +144,7 @@ End
 
 Widget 4
    Property
-   Position 8 120
+   Position 8 106
    Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
@@ -139,7 +160,7 @@ End
 Widget 5
    Property
    Size 328 1
-   Position 120 100
+   Position 120 86
    Flags NoReliefString
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -154,7 +175,7 @@ End
 
 Widget 6
    Property
-   Position 8 180
+   Position 8 166
    Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
@@ -170,7 +191,7 @@ End
 Widget 7
    Property
    Size 328 1
-   Position 120 160
+   Position 120 146
    Flags NoReliefString
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -186,7 +207,7 @@ End
 
 Widget 8
    Property
-   Position 8 242
+   Position 8 228
    Size 106 0
    Flags NoReliefString NoFocus Right
    Type ItemDraw
@@ -202,7 +223,7 @@ End
 Widget 9
    Property
    Size 328 1
-   Position 120 224
+   Position 120 208
    Flags NoReliefString
    Type HScrollBar
    Font "xft:::pixelsize=14"
@@ -218,9 +239,13 @@ End
 
 Widget 10
    Property
-   Size 452 0
-   Position 2 296
-   Type Rectangle
+   Size 106 0
+   Position 0 282
+   Type ItemDraw
+   Value 0
+   Flags NoReliefString NoFocus Right
+   LocaleTitle {Key Binding Set    }
+   Font "xft:::pixelsize=15"
    Main
       Case message of
       SingleClic :
@@ -230,8 +255,50 @@ End
 
 Widget 11
    Property
+   Size 500 2
+   Position 140 278
+   Type PopupMenu
+   Value 0
+   Flags NoReliefString
+   Title { nscde1x | cua }
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 11 (GetValue 11)
+         End
+
+         If (GetValue 11) == 1 Then
+         Begin
+            Set $KeyBindingSet = {nscde1x}
+         End
+         If (GetValue 11) == 2 Then
+         Begin
+            Set $KeyBindingSet = {cua}
+         End
+      End
+End
+
+Widget 12
+   Property
+   Size 452 0
+   Position 2 320
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 13
+   Property
    Size 100 0
-   Position 10 310
+   Position 10 332
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Apply}
@@ -240,7 +307,7 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         SendSignal 11 1
+         SendSignal 13 1
       End
       1 :
       Begin
@@ -252,10 +319,10 @@ Widget 11
       End
 End
 
-Widget 12
+Widget 14
    Property
    Size 100 0
-   Position 123 310
+   Position 123 332
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Save}
@@ -264,7 +331,7 @@ Widget 12
       Case message of
       SingleClic :
       Begin
-         SendSignal 12 1
+         SendSignal 14 1
       End
       1 :
       Begin
@@ -291,14 +358,32 @@ Widget 12
             WriteToFile $FILE {xset r off c } (GetValue 9)
          End
          Do {Exec chmod +x } $FILE
+
+         If $InitialKeyBindingSet <> $KeyBindingSet Then
+         Begin
+            Set $CheckKeyBindingSet = (GetOutput {egrep -q '^([[:space:]]+)?InfoStoreAdd kbd_bind_set .*' "$FVWM_USERDIR/NsCDE.conf"; echo $?} 1 -1)
+            If $CheckKeyBindingSet == 0 Then
+            Begin
+               Set $WriteKbdBindingSetCmd = {$NSCDE_TOOLSDIR/ised -c 's/^\([[:space:]]\+\)\?InfoStoreAdd kbd_bind_set\([[:space:]]\+\)\([[:alnum:]]\+\)\([[:space:]]\+\)\?\(#.*\)\?/\1InfoStoreAdd kbd_bind_set } $KeyBindingSet {\4\5/g' -f "$FVWM_USERDIR/NsCDE.conf"}
+               Set $WriteKbdBindingSet = (GetOutput $WriteKbdBindingSetCmd 1 -1)
+            End
+            If $CheckKeyBindingSet == 1 Then
+            Begin
+               Set $WriteKbdBindingSetCmd = {@KSH@ -c 'echo -ne "\n# Key Binding Set\nInfoStoreAdd kbd_bind_set } $KeyBindingSet {\n" >> "$FVWM_USERDIR/NsCDE.conf"'}
+               Set $WriteKbdBindingSet = (GetOutput $WriteKbdBindingSetCmd 1 -1)
+            End
+
+            Do {Restart}
+         End
+
          Quit
-     End
+      End
 End
 
-Widget 13
+Widget 15
    Property
    Size 100 0
-   Position 235 310
+   Position 235 332
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Help}
@@ -307,7 +392,7 @@ Widget 13
       Case message of
       SingleClic :
       Begin
-         SendSignal 13 1
+         SendSignal 15 1
       End
       1 :
       Begin
@@ -315,10 +400,10 @@ Widget 13
       End
 End
 
-Widget 14
+Widget 16
    Property
    Size 100 0
-   Position 348 310
+   Position 348 332
    Flags NoReliefString
    Type PushButton
    LocaleTitle {Dismiss}
@@ -327,7 +412,7 @@ Widget 14
       Case message of
       SingleClic :
       Begin
-         SendSignal 14 1
+         SendSignal 16 1
       End
       1 :
       Begin

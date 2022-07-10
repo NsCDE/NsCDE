@@ -774,6 +774,7 @@ enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
 with_xsessiondir
+with_python_shebang
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1424,6 +1425,9 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-xsessiondir=DIR  NsCDE X Display Manager file goes here.
+  --with-python-shebang=STRING 
+                          What to use as Python 3.X shebang (without @%:@! at the
+                          beginning.)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4223,6 +4227,17 @@ else
 fi
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking python shebang" >&5
+$as_echo_n "checking python shebang... " >&6; }
+
+@%:@ Check whether --with-python-shebang was given.
+if test "${with_python_shebang+set}" = set; then :
+  withval=$with_python_shebang; PYTHON=$withval
+else
+  PYTHON=""
+fi
+
+
 # Custom check to expand full path
 
 
@@ -6576,7 +6591,7 @@ fi
 OS_PLUS_MACHINE_ARCH=`uname -sm | tr ' ' '_'`
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile doc/Makefile doc/docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf data/config_templates/Makefile data/config_templates/fontmgr.local data/config_templates/colormgr.local data/config_templates/Dunst.conf data/config_templates/dot_xscreensaver lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fpdoc nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/migrate_nscde_1x_2x nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
+ac_config_files="$ac_config_files Makefile src/Makefile src/colorpicker/Makefile src/XOverrideFontCursor/Makefile src/pclock/Makefile src/pclock/src/Makefile doc/Makefile doc/docbook/Makefile po/Makefile bin/Makefile bin/nscde bin/nscde_fvwmclnt data/Makefile data/fvwm/Makefile data/fvwm/Main.fvwmconf data/fvwm/Functions.fvwmconf data/config_templates/Makefile data/config_templates/fontmgr.local data/config_templates/colormgr.local data/config_templates/Dunst.conf data/config_templates/dot_xscreensaver lib/Makefile lib/fvwm-modules/Makefile lib/fvwm-modules/FvwmScript lib/python/Makefile lib/python/Globals.py lib/python/MiscFun.py lib/python/MotifColors.py lib/python/Opts.py lib/python/ThemeGtk.py lib/python/Theme.py lib/scripts/Makefile lib/scripts/BackdropMgr lib/scripts/ColorMgr lib/scripts/ExecDialog lib/scripts/FontMgr lib/scripts/PowerSaveMgr lib/scripts/KeyboardMgr lib/scripts/SubpanelSettings lib/scripts/Sysinfo xdg/Makefile xdg/xsessions/nscde.desktop nscde_tools/Makefile nscde_tools/acpimgr nscde_tools/appfinder nscde_tools/backdropmgr nscde_tools/bootstrap nscde_tools/colormgr nscde_tools/colorpicker nscde_tools/fontmgr nscde_tools/fpclock nscde_tools/fpexec nscde_tools/fpdoc nscde_tools/fp_manage_subpanel nscde_tools/fpseticon nscde_tools/generate_app_menus nscde_tools/generate_subpanels nscde_tools/getdpi nscde_tools/getfont nscde_tools/get_logical_screens nscde_tools/ised nscde_tools/keymenu nscde_tools/mkpagemenu nscde_tools/migrate_nscde_1x_2x nscde_tools/strip_icon_path nscde_tools/subpanel_menuitem_props nscde_tools/var_append nscde_tools/xdowrapper nscde_tools/xrandr_backer nscde_tools/colorconv nscde_tools/confget nscde_tools/confset nscde_tools/geticon nscde_tools/getla1 nscde_tools/palette_colorgen nscde_tools/sysinfo nscde_tools/themegen nscde_tools/usleep nscde_tools/FvwmScripts/Makefile nscde_tools/FvwmScripts/GWM nscde_tools/FvwmScripts/Notifier nscde_tools/FvwmScripts/Splash"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7357,6 +7372,7 @@ do
     "lib/scripts/ExecDialog") CONFIG_FILES="$CONFIG_FILES lib/scripts/ExecDialog" ;;
     "lib/scripts/FontMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/FontMgr" ;;
     "lib/scripts/PowerSaveMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/PowerSaveMgr" ;;
+    "lib/scripts/KeyboardMgr") CONFIG_FILES="$CONFIG_FILES lib/scripts/KeyboardMgr" ;;
     "lib/scripts/SubpanelSettings") CONFIG_FILES="$CONFIG_FILES lib/scripts/SubpanelSettings" ;;
     "lib/scripts/Sysinfo") CONFIG_FILES="$CONFIG_FILES lib/scripts/Sysinfo" ;;
     "xdg/Makefile") CONFIG_FILES="$CONFIG_FILES xdg/Makefile" ;;

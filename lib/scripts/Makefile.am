@@ -7,7 +7,7 @@
 nscdescriptdir = $(NSCDE_LIBDIR)/scripts
 
 DYNSCRIPTS = BackdropMgr ColorMgr ExecDialog FontMgr PowerSaveMgr \
-	SubpanelSettings Sysinfo
+	SubpanelSettings Sysinfo KeyboardMgr
 
 FVWMSCRIPTS = ActionForm BackdropMgr BeepMgr CheckMailApplet ChoiceForm \
 	ColorMgr ExecDialog FilePicker FontMgr FpLite GeometryMgr \

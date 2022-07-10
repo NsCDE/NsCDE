@@ -102,7 +102,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = BackdropMgr ColorMgr ExecDialog FontMgr \
-	PowerSaveMgr SubpanelSettings Sysinfo
+	PowerSaveMgr KeyboardMgr SubpanelSettings Sysinfo
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -155,8 +155,9 @@ DATA = $(nscdescript_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/BackdropMgr.in $(srcdir)/ColorMgr.in \
 	$(srcdir)/ExecDialog.in $(srcdir)/FontMgr.in \
-	$(srcdir)/Makefile.in $(srcdir)/PowerSaveMgr.in \
-	$(srcdir)/SubpanelSettings.in $(srcdir)/Sysinfo.in
+	$(srcdir)/KeyboardMgr.in $(srcdir)/Makefile.in \
+	$(srcdir)/PowerSaveMgr.in $(srcdir)/SubpanelSettings.in \
+	$(srcdir)/Sysinfo.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -305,7 +306,7 @@ top_srcdir = @top_srcdir@
 xsessiondir = @xsessiondir@
 nscdescriptdir = $(NSCDE_LIBDIR)/scripts
 DYNSCRIPTS = BackdropMgr ColorMgr ExecDialog FontMgr PowerSaveMgr \
-	SubpanelSettings Sysinfo
+	SubpanelSettings Sysinfo KeyboardMgr
 
 FVWMSCRIPTS = ActionForm BackdropMgr BeepMgr CheckMailApplet ChoiceForm \
 	ColorMgr ExecDialog FilePicker FontMgr FpLite GeometryMgr \
@@ -358,6 +359,8 @@ ExecDialog: $(top_builddir)/config.status $(srcdir)/ExecDialog.in
 FontMgr: $(top_builddir)/config.status $(srcdir)/FontMgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 PowerSaveMgr: $(top_builddir)/config.status $(srcdir)/PowerSaveMgr.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+KeyboardMgr: $(top_builddir)/config.status $(srcdir)/KeyboardMgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 SubpanelSettings: $(top_builddir)/config.status $(srcdir)/SubpanelSettings.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@

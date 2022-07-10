@@ -83,6 +83,12 @@ AS_IF([test "$PYTHON" != ":"],
             [AM_PYTHON_CHECK_VERSION([$PYTHON],[$REQUIRED_PYTHON_VERSION],[:],
                                      [PYTHON=":"])])
 
+AC_MSG_CHECKING(python shebang)
+AC_ARG_WITH([python-shebang],
+	AC_HELP_STRING([--with-python-shebang=STRING],[What to use as Python 3.X shebang (without #! at the beginning.)]),
+	[PYTHON=$withval],
+	[PYTHON=""])
+
 # Custom check to expand full path
 AC_DEFUN([RECURSIVE_EVAL],
 	[_lcl_receval="$1"
@@ -372,6 +378,7 @@ AC_OUTPUT(
 	lib/scripts/ExecDialog
 	lib/scripts/FontMgr
 	lib/scripts/PowerSaveMgr
+	lib/scripts/KeyboardMgr
 	lib/scripts/SubpanelSettings
 	lib/scripts/Sysinfo
 
