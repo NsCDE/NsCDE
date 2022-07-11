@@ -6,10 +6,6 @@
 
 # Syntax: km_keyword + rest of the line like FVWM "Key" configuration
 
-km_occupyworkspace Space WFSTI 4 None (Occupy) Current f_SendToOccupy wsp nogo
-km_occupypage Space WFSTI M Test (!EnvMatch infostore.pgm 1x1) None (Occupy) Current f_SendToOccupy pg nogo
-km_occupymonitor Space WFSTI M4 Test (EnvMatch infostore.lscrn.sls 1) None (Occupy) Current f_SendToOccupy mon nogo
-
 km_regenwin F1 A M f_RegenerateWindow
 km_wrefresh F1 A 4 Exec exec xrefresh -solid '#088000'
 
@@ -41,10 +37,9 @@ km_destroy F10 A M4 Destroy
 km_alt_f11 F11 A M Nop
 km_meta_f11 F11 A 4 Nop
 
-km_savegeom G A M4 f_SaveGeometry
-km_fullscreen F WFST M4 Maximize fullscreen
-km_identify D WFSTI M4 Module FvwmIdent
-km_toggletitle T WFST M4 f_ToggleWindowStyle Title
+km_occupyworkspace Space WFSTI 4 None (Occupy) Current f_SendToOccupy wsp nogo
+km_occupypage Space WFSTI M Test (!EnvMatch infostore.pgm 1x1) None (Occupy) Current f_SendToOccupy pg nogo
+km_occupymonitor Space WFSTI M4 Test (EnvMatch infostore.lscrn.sls 1) None (Occupy) Current f_SendToOccupy mon nogo
 
 km_rootscreenshot Print A S4 f_RootScreenShot 200
 km_areascreenshot Print A C4 f_AreaScreenShot 250
@@ -53,3 +48,9 @@ km_clpareascreenshot Print A C f_ClipboardAreaScreenShot 250
 
 km_raiseshadefp Escape A S f_RestoreFrontPanel WindowShade South
 km_raisefp Escape A C f_RestoreFrontPanel WindowShade Off
+
+km_savegeom G A M4 f_SaveGeometry
+km_fullscreen F WFST M4 Maximize fullscreen
+km_identify D WFSTI M4 Module FvwmIdent
+km_toggletitle T WFST M4 f_ToggleWindowStyle Title
+

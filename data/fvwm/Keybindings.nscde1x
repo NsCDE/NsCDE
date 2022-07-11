@@ -51,83 +51,105 @@ Silent Key Right A S CursorMove +1 +0
 Silent Key Up A S CursorMove +0 -1
 Silent Key Down A S CursorMove +0 +1
 
-### Raise overlapped windows in cycle on the current page
-Silent Key Up RWFST M f_FlipOverlappedFocusLR Next
-Silent Key Down RWFST M f_FlipOverlappedFocusLR Prev
-
-### Browse Icons
-Silent Key I RWFST M4 f_BrowseIcons Next
-Silent Key I I M4 f_BrowseIcons Next !
-Silent Key Up I A f_BrowseIcons Next
-Silent Key Down I A f_BrowseIcons Next
-Silent Key I I N Iconify off
-
-### Menu Key calls
-Silent Key Menu A N f_DoubleBindKey wspmenu Menu MenuFvwmRoot
-Silent Key ISO_Level3_Shift A M Menu MenuFvwmRoot
-Silent Key Menu A 4 Menu m_WindowOpsRootWin
-Silent Key ISO_Level3_Shift A 4 Menu m_WindowOpsRootWin
-Silent Key Menu A M4 f_DoubleBindKey pgmmenu f_ShowFPPGMenu
-Silent Key U A M4 f_ShowFPPGMenu
-Silent Key M I M4 Menu m_IconOps
-
-### Cycling focus on pages and workspaces, focus
-Silent Key N A M4 f_SwitchFocus Next CurrentPage
-Silent Key B A M4 f_SwitchFocus Prev CurrentPage
-Silent Key N A S4 f_SwitchFocus Next CurrentDesk
-Silent Key B A S4 f_SwitchFocus Prev CurrentDesk
-Silent Key J WFSTI M4 ThisWindow (!Iconic, Focused, !HasPointer) WarpToWindow 50 50
-
-### Combinations with a Space
-Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
-
-### Insert and BackSpace for focusing prev and next window
-Silent Key Insert A M4 Next (AcceptsFocus) Focus
-Silent Key BackSpace A M4 Prev (AcceptsFocus) Focus
-Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A S f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
-
-### Meta+FX key combinations which does not appar in menus (Keymenu.actions)
-Silent Key F4 A 4 f_ZoomInResize
-Silent Key F4 A S4 f_ZoomOutResize
-Silent Key F12 A 4 Exec exec $[infostore.terminal]
-Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
-Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_Rofi run
-
-### Tab combinations
-Silent Key Tab A S f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
+### Browsing pages and workspaces
 Silent Key Tab A M Scroll 0 100000
 Silent Key Tab A 4 f_GotoDesk 1 1 0 $[infostore.fvwmdesknum]
 Silent Key Tab A S4 f_GotoDesk -1 1 0 $[infostore.fvwmdesknum]
 
-### Lock the screen
-Silent Key L A M4 Exec exec xscreensaver-command -lock
+### Focus operations on one Page, Pages or Workspaces
+# Raise previous or next overlapped windows in cycle on the current page
+Silent Key Up RWFST M f_FlipOverlappedFocusLR Next
+Silent Key Down RWFST M f_FlipOverlappedFocusLR Prev
 
-### Turn on monitors as a last resort
-Silent Key X A M4 Exec exec xrandr --auto
+# Switching focus on the current page
+Silent Key N A M4 f_SwitchFocus Next CurrentPage
+Silent Key B A M4 f_SwitchFocus Prev CurrentPage
 
-### Show / Restore Workspace
-Silent Key W A M4 NoWindow f_CleanRestoreWorkspace
+# Cycling focus on the current workspace
+Silent Key N A S4 f_SwitchFocus Next CurrentDesk
+Silent Key B A S4 f_SwitchFocus Prev CurrentDesk
 
-### Press Button 1 on Window - Window Operations Contextual Menu
-Silent Key M WFST M4 Menu m_WindowOpsStandard Button1 0 o-6
+# Warp pointer to the middle of the focused window
+Silent Key J WFSTI M4 ThisWindow (!Iconic, Focused, !HasPointer) WarpToWindow 50 50
 
-### Call occupy
-Silent Key O WFSTI M4 None (Occupy) Current f_SendToOccupy wsp nogo
+# General next and previous window focus
+Silent Key Insert A M4 Next (AcceptsFocus) Focus
+Silent Key BackSpace A M4 Prev (AcceptsFocus) Focus
 
-### Tile Windows
-Silent Key R A M4 f_TileWindows
-Silent Key H A M4 f_TileWindows -h
+# Cycling focus on the current page
+Silent Key Escape A 4 Next (CurrentPage, AcceptsFocus, !Focused, !FrontPanel, !FvwmPager) FlipFocus
 
-### Last item from subpanels
-Silent Key E A M4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
-Silent Key Redo A 4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
+### Call Window List
+Silent Key Escape A M f_WinLists
 
-### Call GWM with Meta+Alt+Home
+### Icon operations
+# Browse icons
+Silent Key I RWFST M4 f_BrowseIcons Next
+Silent Key I I M4 f_BrowseIcons Next !
+Silent Key Up I A f_BrowseIcons Next
+Silent Key Down I A f_BrowseIcons Next
+
+# De-iconify with 'I' on icon
+Silent Key I I N Iconify off
+
+# Two ways to call icon menu
+Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
+Silent Key M I M4 Menu m_IconOps
+
+### Menu calls: at least two combinations for all keyboards
+Silent Key Menu A N f_DoubleBindKey wspmenu Menu MenuFvwmRoot
+Silent Key ISO_Level3_Shift A M Menu MenuFvwmRoot
+Silent Key Menu A 4 Menu m_WindowOpsRootWin
+Silent Key ISO_Level3_Shift A 4 Menu m_WindowOpsRootWin
+Silent Key Menu A M4 f_ShowFPPGMenu
+Silent Key U A M4 f_ShowFPPGMenu
+
+### Zooming in and out the window, basically resize operation
+Silent Key F4 A 4 f_ZoomInResize
+Silent Key F4 A S4 f_ZoomOutResize
+
+# Exec or Rofi and Terminal with F12
+Silent Key F12 A 4 Exec exec $[infostore.terminal]
+Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
+Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key F12 A M f_Rofi run
+
+### Calling GWM and Pagers
+
+# Call Graphical Workspace Manager (GWM)
 Silent Key Home A M4 f_ToggleFvwmFunc GWM Raise f_GWM
 
-### Combinations with escape
-Silent Key Escape A 4 Next (CurrentPage, AcceptsFocus, !Focused, !FrontPanel, !FvwmPager) Focus
-Silent Key Escape A M f_WinLists
+# Call Local Pager
+Test (!EnvMatch infostore.pgm 1x1) Silent Key BackSpace A S f_DoubleBindKey localpager f_KeyShowLocalPager AnimatedMove m-5 m-6
+
+# Call Global Pager
+Silent Key Tab A S f_DoubleBindKey globalpager f_ShowGlobalPager AnimatedMove m-50w m-50w
+
+# LocalPager context: Dismiss LocalPager on this keybindings if it is under the pointer
+Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A S All (LocalPager) f_HideLocalPager
+
+# GWMPager context: Dismiss GWMPager on this keybindings if it is under the pointer
+Silent PointerKey (GWMPager) Tab A S All (GWMPager) KillModule FvwmPager GWMPager
+
+### Various operations called with combinations Meta+Alt+<key>
+
+# Lock the screen
+Silent Key L A M4 Exec exec xscreensaver-command -lock
+
+# Turn on monitors as a last resort
+Silent Key X A M4 Exec exec xrandr --auto
+
+# Show / Restore Workspace
+Silent Key W A M4 NoWindow f_CleanRestoreWorkspace
+
+# Press Button 1 on Window - Window Operations Contextual Menu
+Silent Key M WFST M4 Menu m_WindowOpsStandard Button1 0 o-6
+
+# Call Occupy Dialog without window context (pick-mode)
+Silent Key O WFSTI M4 None (Occupy) Current f_SendToOccupy wsp nogo
+
+# Tile Windows vertically and horizontally
+Silent Key R A M4 f_TileWindows
+Silent Key H A M4 f_TileWindows -h
 
 ### Special Keys not found on all machines. For example Sun Type 6 etc ...
 
@@ -168,6 +190,11 @@ Silent Key XF86AudioRaiseVolume A C f_Mixer -raise 10
 Silent Key XF86AudioMute A A f_Mixer -mute
 
 ### Front Panel context keybindings
+
+# Last item from subpanels
+Silent Key E A M4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
+Silent Key Redo A 4 SendToModule $[infostore.last_subpanel] PressButton $[infostore.subpanel_$[infostore.last_subpanel]_last_sel_id]
+
 Silent PointerKey (FrontPanel) 1 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel1
 Silent PointerKey (FrontPanel) 2 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel2
 Silent PointerKey (FrontPanel) 3 WFS 4 f_KeyFromFpToSubanel NsCDE-Subpanel3
@@ -195,14 +222,8 @@ Silent Key (NsCDE-Subpanel10) 0 WFS 4 f_KeyFromSubpanelToFP NsCDE-Subpanel10
 Silent Key (NsCDE-Subpanel*) Return WFST 4 FakeClick depth 0 press 1 wait 50 release 1
 Silent PointerKey (NsCDE-Subpanel*) Help WFST N f_DisplayURL "$[gt.Subpanels Help]" html/NsCDE-Subpanels.html
 
-### Terminal context keybindings
+### Terminal context special keybindings
 InfoStoreAdd km_wideterm_static "Meta+F9"
 Silent Key (*Term*) F9 A 4 f_WideTerm
 Silent Key (*term*) F9 A 4 f_WideTerm
 Silent Key (*terminal*) F9 A 4 f_WideTerm
-
-### LocalPager context: Dismiss LocalPager on this keybindings if it is under the pointer
-Test (!EnvMatch infostore.pgm 1x1) Silent PointerKey (LocalPager) BackSpace A S All (LocalPager) f_HideLocalPager
-
-### GWMPager context: Dismiss GWMPager on this keybindings if it is under the pointer
-Silent PointerKey (GWMPager) Tab A S All (GWMPager) KillModule FvwmPager GWMPager
