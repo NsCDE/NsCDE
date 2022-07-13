@@ -91,6 +91,7 @@ Silent Key Down I A f_BrowseIcons Next
 
 # De-iconify with 'I' on icon
 Silent Key I I N Iconify off
+Silent PointerKey XF86Open I N Iconify off
 
 # Two ways to call icon menu
 Silent Key Space I A FakeClick depth 3 press 1 wait 50 release 1
@@ -172,15 +173,15 @@ Silent PointerKey Help R N None (*NsCDE.pdf*) f_DisplayURL \"$[gt.All Documentat
 Silent Key SunFront A A RaiseLower
 
 # Sun Find key
-Silent Key Find A A f_Find
+Silent PointerKey Find R A f_Find
 
 # Sun Properties Key
 Silent PointerKey SunProps R N f_ToggleFvwmModule FvwmScript StyleMgr
 Silent PointerKey SunProps A 4 f_ToggleFvwmModule FvwmScript StyleMgr
 
 # Sun Open Key
-Test (!EnvMatch infostore.nscde_use_rofi 1) Silent Key XF86Open A A f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
-Test (EnvMatch infostore.nscde_use_rofi 1) Silent Key XF86Open A A f_Rofi run
+Test (!EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open R N f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
+Test (EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open R N f_Rofi run
 
 # Sun volume keys
 Silent Key XF86AudioLowerVolume A A f_Mixer -lower 1
