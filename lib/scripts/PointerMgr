@@ -12,10 +12,8 @@ Font xft::size=11
 
 Init
 Begin
-   Set $userid = (GetOutput {id -un} 1 -1)
-   Set $hostname = (GetOutput {hostname -s} 1 -1)
-   Set $tmpFile = {/tmp/._FvwmScript-PointerMgr.tmp.} $userid {.} $hostname
-   Set $clickOne = 0
+   # Defaults
+   Set $ClickOne = 0
 
    Set $xsetfile = (GetOutput {echo $FVWM_USERDIR/Xset.conf} -1 1)
    Set $XSETFILE = $xsetfile
@@ -105,9 +103,6 @@ Begin
    ChangeFont 19 $DefFontBtn
    ChangeFont 20 $DefFontBtn
 
-   # Initial state
-   Set $NotClicked = 1
-
    # Key bindings
    Key Escape A 20 1 {KeyClose}
    Key Q C 20 1 {KeyClose}
@@ -139,48 +134,35 @@ Widget 2
       Case message of
       SingleClic :
       Begin
-         If $clickOne == 0 Then
+         If $ClickOne == 0 Then
          Begin
-            Do {Exec cp /dev/null "} $tmpFile {"}
-            Set $counter = {while $($NSCDE_TOOLSDIR/usleep } (GetValue 11) {00); do echo $$$$ >> "} $tmpFile {" ; done}
-            Do {Exec } $counter
-            Set $clickOne = 1
-         End
-         Else
-         Begin
-            If $clickOne == 1 Then
-            Set $countOut = {wc -l "} $tmpFile {"}
-            Set $count = (GetOutput $countOut 1 1)
-            If $count <= 2 Then
+            If $IconChanged == 1 Then
             Begin
-               If $NotClicked == 1 Then
-               Begin
-                  ChangeIcon 2 NsCDE/Mouse-Setup-Clicked.xpm
-                  Set $NotClicked = 0
-               End
-               Else
-               Begin
-                  ChangeIcon 2 NsCDE/Mouse-Setup.xpm
-                  Set $NotClicked = 1
-               End
-               Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
-               Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+               ChangeIcon 2 NsCDE/Mouse-Setup.xpm
+               Do {InfoStoreRemove double-click-interval}
+               Do {Deschedule 0x999a}
+               Set $IconChanged = 0
             End
             Else
             Begin
-               Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
-               Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && > "} $tmpFile {"}
+               # Add 2 milliseconds as a burden of internal processing
+               Do {InfoStoreAdd double-click-interval 1}
+               Do {Schedule } (Add (GetValue 11) 2) { 0x999a InfoStoreRemove double-click-interval}
+               Set $ClickOne = 1
             End
-            Set $clickOne = 0
+         End
+         Else
+         Begin
+            Do {Test (EnvMatch infostore.double-click-interval 1) SendToModule PointerMgr SendString 2 1 chicon}
+            Set $ClickOne = 0
          End
    End
    1 :
    Begin
-      If (LastString) == {aide} Then
+      If (LastString) == {chicon} Then
       Begin
          ChangeIcon 2 NsCDE/Mouse-Setup-Clicked.xpm
-         Set $NotClicked = 0
-         Do {Exec rm -f "} $tmpFile {"}
+         Set $IconChanged = 1
       End
    End
 End
@@ -231,11 +213,10 @@ Widget 6
          ChangeValue 13 60
          ChangeValue 15 8
          Do {Exec xset m 60/20 8}
-         Do {Exec xmodmap -e "pointer = 1 2 3"}
+         Do {Exec xmodmap -e "pointer = 1 2 3 4 5"}
          Do {MenuStyle * DoubleClickTime 450}
          Do {ClickTime 450}
          WarpPointer 18
-         ChangeColorset 18 21
       End
 End
 
@@ -266,7 +247,6 @@ Widget 8
       Case message of
       SingleClic :
       Begin
-         ChangeColorset 18 21
          ChangeValue 8 1
          ChangeValue 9 0
       End
@@ -284,7 +264,6 @@ Widget 9
       Case message of
       SingleClic :
       Begin
-         ChangeColorset 18 21
          ChangeValue 9 1
          ChangeValue 8 0
       End
@@ -319,23 +298,8 @@ Widget 11
       Case message of
       SingleClic :
       Begin
-         ChangeColorset 18 21
-         # ChangeIcon 2 NsCDE/Mouse-Setup.xpm
-         # Set $NotClicked = 1
-         Set $clickOne = 0
-
-         Set $existOut = {"$(cat } $tmpFile {)" 2>/dev/null}
-         Set $exist = (GetOutput $existOut 1 -1)
-
-         If $exist == {} Then
-         Begin
-            Do {Nop}
-         End
-         Else
-         Begin
-            Do {Exec kill $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && > } $tmpFile
-            Do {Exec kill -9 $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && > } $tmpFile
-         End
+         ChangeIcon 2 NsCDE/Mouse-Setup.xpm
+         Set $ClickOne = 0
       End
 End
 
@@ -367,7 +331,6 @@ Widget 13
       Case message of
       SingleClic :
       Begin
-         ChangeColorset 18 21
       End
 End
 
@@ -399,7 +362,6 @@ Widget 15
       Case message of
       SingleClic :
       Begin
-         ChangeColorset 18 21
       End
 End
 
@@ -435,13 +397,15 @@ Widget 17
 
          Do {MenuStyle * DoubleClickTime } (GetValue 11)
          Do {ClickTime } (GetValue 11)
-         Do {Exec kill $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
-         Do {Exec kill -9 $(head -1 } $tmpFile { 2>/dev/null) 2>/dev/null && rm -f } $tmpFile
 
          If (GetValue 8) == 1 Then
-            Do {Exec xmodmap -e "pointer = 1 2 3"}
+         Begin
+            Do {Exec xmodmap -e "pointer = 1 2 3 4 5"}
+         End
          Else
-            Do {Exec xmodmap -e "pointer = 3 2 1"}
+         Begin
+            Do {Exec xmodmap -e "pointer = 3 2 1 4 5"}
+         End
       End
 End
 
@@ -543,8 +507,6 @@ Widget 18
          End
 
          Do {Exec chmod +x "} $XSETFILE {"}
-         Do {Exec kill $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && rm -f "} $tmpFile {"}
-         Do {Exec kill -9 $(head -1 "} $tmpFile {" 2>/dev/null) 2>/dev/null && rm -f "} $tmpFile {"}
 
          Quit
       End
@@ -586,8 +548,6 @@ Widget 20
       End
       1 :
       Begin
-         Do {Exec kill `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile
-         Do {Exec kill -9 `head -1 } $tmpFile { 2>/dev/null` 2>/dev/null && rm -f } $tmpFile
          Quit
       End
 End
