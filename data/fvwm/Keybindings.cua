@@ -167,13 +167,15 @@ Silent Key XF86PowerOff A M f_RunQuickScriptDialog SysActionDialog 5
 Silent Key XF86PowerOff A 4 f_RunQuickScriptDialog SysActionDialog 1
 
 # Sun Keyboard Help button 
-Silent PointerKey Help R N None (*NsCDE.pdf*) f_DisplayURL \"$[gt.All Documentation (pdf)]\" NsCDE.pdf
+Silent PointerKey Help R N None (*NsCDE.pdf*) f_DisplayURL "$[gt.All Documentation (pdf)]" NsCDE.pdf
+Silent PointerKey Help A 4 None (*NsCDE.pdf*) f_DisplayURL "$[gt.All Documentation (pdf)]" NsCDE.pdf
 
 # SunFront key
 Silent Key SunFront A A RaiseLower
 
 # Sun Find key
 Silent PointerKey Find R A f_Find
+Silent PointerKey Find A 4 f_Find
 
 # Sun Properties Key
 Silent PointerKey SunProps R N f_ToggleFvwmModule FvwmScript StyleMgr
@@ -182,6 +184,8 @@ Silent PointerKey SunProps A 4 f_ToggleFvwmModule FvwmScript StyleMgr
 # Sun Open Key
 Test (!EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open R N f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
 Test (EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open R N f_Rofi run
+Test (!EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open A 4 f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
+Test (EnvMatch infostore.nscde_use_rofi 1) Silent PointerKey XF86Open A 4 f_Rofi run
 
 # Sun volume keys
 Silent Key XF86AudioLowerVolume A A f_Mixer -lower 1

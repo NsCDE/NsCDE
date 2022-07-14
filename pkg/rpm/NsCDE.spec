@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.2
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -76,6 +76,9 @@ autoreconf -ivf
 
 
 %changelog
+* Mon Jul 14 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.5
+- Works on keybindings continued
+
 * Mon Jul 11 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.4
 - Works on CUA keybinding set
 
