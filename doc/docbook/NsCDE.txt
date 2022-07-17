@@ -152,7 +152,8 @@ M. Z.
         8.15. Init.fvwmconf
         8.16. Keybindings.fvwmconf
 
-              8.16.1. Keybindings.nscde
+              8.16.1. Keybindings.nscde1x
+              8.16.2. Keybindings.cua
 
         8.17. Keymenu-<kbd_bind_set>.actions
         8.18. Main.fvwmconf
@@ -4306,10 +4307,10 @@ Silent Key Tab A S -
    default.
      __________________________________________________________
 
-8.16.1. Keybindings.nscde
+8.16.1. Keybindings.nscde1x
 
-   This subsection explains key bindings implemented in default
-   "nscde" set of key bindings.
+   This subsection explains key bindings implemented in old and
+   deprecated "nscde1x" set of key bindings.
 
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
@@ -4366,13 +4367,11 @@ Silent Key Tab A S -
        of GWM (Graphical Workspace Manager) which shows matrix of
        pages and workspaces. This keybinding works in any context,
        but it must be called twice to avoid accidental invocation.
-       When Global Pager is visible, calling it second time will
-       replace it's window with full version of standard GWM
-       window tool until it is not closed with a third invocation
-       of this same keybinding. In stripped down semi-transient
-       mode, this pager, if not called as full GWM, disappears
-       shortly after losing mouse focus to free up space on the
-       screen.
+       When Global Pager is visible, calling it second time while
+       focused will close Global Pager. In it's stripped down
+       semi-transient mode, this pager, if not called as full GWM
+       will disappear shortly after losing mouse focus, to free up
+       space on the screen.
        Figure 60. Global Pager
        [fig_globalpager.png]
      * Alt+Tab is cycling trough pages of the active page of the
@@ -4694,6 +4693,267 @@ Silent Key Tab A S -
      * In the context of the Front Panel and any Subpanel, Sun
        Help key will display Front Panel or Subpanels
        documentation.
+     __________________________________________________________
+
+8.16.2. Keybindings.cua
+
+   This subsection describes key bindings implemented in "cua"
+   (Common User Access) standard set of key bindings.
+
+     * Control modifier with cursor keys is moving viewport from
+       page to page in any context:
+          + Ctrl+Up - move viewport one whole page up
+          + Ctrl+Down - move viewport one whole page down
+          + Ctrl+Left - move viewport one whole page left
+          + Ctrl+Right - move viewport one whole page right
+     * Meta modifier with cursor keys is moving viewport page by 4
+       percent of the screen in any context:
+          + Meta+Up - move viewport up by 4%
+          + Meta+Down - move viewport down by 4%
+          + Meta+Left - move viewport left by 4%
+          + Meta+Right - move viewport right by 4%
+     * Cursor keys with modifiers Control, Shift and Meta pressed
+       together are moving pointer by 1% in any context:
+          + Control+Shift+Meta+Up - move mouse pointer by 1% of
+            the screen up
+          + Control+Shift+Meta+Down - move mouse pointer by 1% of
+            the screen down
+          + Control+Shift+Meta+Left - move mouse pointer by 1% of
+            the screen left
+          + Control+Shift+Meta+Right - move mouse pointer by 1% of
+            the screen right
+     * Pressing Alt+Tab in any context scrolls one page down, then
+       wraps up on the lowest page and continues to the right.
+     * Pressing Meta+Tab in any context moves viewport to the next
+       workspace
+     * Pressing Shift+Meta+Tab in any context moves viewport to
+       the previous workspace
+     * To raise and focus next overlapped window on the current
+       page, press Alt+Up in any context, apart from icons.
+     * To raise and focus previous overlapped window on the
+       current page, press Alt+Down in any context, apart from
+       icons.
+     * To focus next window on the current page, and move pointer
+       to the middle of that window, press Alt+Right in any
+       context.
+     * To focus next window on the current page, and move pointer
+       to the middle of that window, press Alt+Right in any
+       context.
+     * To focus previous window on the current page, and move
+       pointer to the middle of that window, press Alt+Left in any
+       context.
+     * To focus next window on the current workspace, and move
+       pointer to the middle of that window, press Shift+Right in
+       any context.
+     * To focus previous window on the current workspace, and warp
+       pointer to the middle of that window, press Shift+Left in
+       any context.
+     * To move pointer in the middle of the focused window if
+       pointer is outside that window, press Meta+Alt+J in any
+       context.
+     * To focus next window on the any workspace or page, press
+       Meta+Alt+Right in any context.
+     * To focus previous window on the any workspace or page,
+       press Meta+Alt+Left in any context.
+     * To cycle focus of the windows on the current page, press
+       Alt+Escape in any context.
+     * To pop Window List menu for the current workspace, press
+       Ctrl+Escape in any context. Pressing cursor keys Up, Tab or
+       Tab in the context of Window List menu, moves up, down and
+       then cycles on the first/last item menu item focus.
+       Pressing Escape key in the context of Window List menu will
+       open extended Window List where windows of all workspaces
+       are visible, and separated by the names of workspaces as
+       non-clickable menu subtitles. Pressing Escape or Escape for
+       the third time in the context of the Window List menu, pops
+       down Window List Menu. Pressing Return key on any
+       selectable Window List menu item, selects and focuses that
+       window and pops down Window List Menu.
+     * To shift focus on the icons of the current workspace, press
+       Meta+Alt+I in any context apart from icons themselves. In
+       the context of icons, this key binding moves focus to the
+       next icon if there is no un-iconified windows on the
+       current page, or shifts focus to the first un-iconified
+       window if such exists on the current page.
+     * While the focus is on icons, pressing keys Up or Down
+       browses workspace icons by shifting focus between them back
+       and forth.
+     * Pressing I or SunOpen key in the context of icons,
+       deiconifies currently focused icon.
+     * Pressing Space+I or Meta+Alt+M keys in the context of
+       icons, pops up icons menu, where many operations common for
+       iconified windows can be find and called.
+     * To pop up Workspace Menu in any context, press Menu (or
+       Compose) key fast twice in a row. The same function has the
+       Shift+Escape key binding, but pressed once.
+     * To pop up Window Operations Menu in any context, press
+       Meta+Menu (or Meta+Compose) key binding. Key binding
+       Meta+Escape has the same function.
+     * To pop up current workspace Local Pager and Front Pager
+       Page Manager Menu in the same time, press Meta+Alt+Menu.
+       Key binding Meta+Shift+M in any context apart from icons,
+       does the same function. While Front Pager Page Manager Menu
+       and Local Pager are popped up, keys Up, Down or Tab are
+       selecting pages on the menu and cycling trough them.
+       Pressing Return key, selects a page, while Local Pager will
+       indicate this change and dissapear after a few (or
+       configured) number of seconds.
+     * To resize (or zoom in) currently focused window by 50
+       pixels in all directions, press Meta+F8. Window will be
+       placed on it's default position and enlarged by mentioned
+       amount of pixels in all directions.
+     * To resize (or zoom out) currently focused window by 50
+       pixels in all directions, press Shift+Meta+F8. Window will
+       be placed on it's default position and shrinked by
+       mentioned amount of pixels in all directions.
+     * To open a new default terminal window, press Meta+F12 in
+       any context.
+     * To open built in "Exec" launcher, or advanced Rofi launcher
+       if configured, press Alt+F12. This same action can be
+       performed on Sun keyboard by pressing SunOpen (XF86Open)
+       key in the context of the root window, or with Meta+SunOpen
+       in any context.
+     * To open Graphical Workspace Manager or "GWM", press
+       Meta+Alt+Home key binding. Keys Control+Q if pressed in the
+       context of GWM window, will dismiss GWM.
+     * To open Local Pager, press Meta+Backspace in any context.
+       Pressing Meta+Backspace again (but in the context of Local
+       Pager) dismisses Local Pager.
+     * To open Global Pager, press MetaAlt+Backspace in any
+       context. Pressing Meta+Alt+Backspace again dismisses Global
+       Pager.
+     * To lock the screen if X Screen Saver is enabled, press
+       Meta+Alt+L.
+     * Combination of keys Meta+Alt+X calls xrandr --auto".
+     * To clean up current page or viewport, press Meta+Alt+F5.
+       This will iconify and hide (almost) all objects on the
+       screen. Pressing Meta+Alt+F5 puts back all windows which
+       were affected with Meta+Alt+F5 on that same screen in the
+       first run - a toggle action.
+     * To pop Window Operations Menu of the currently focused
+       window, press Meta+Alt+M in the context of that window or
+       it's decorations. This will press first leftmost button on
+       the window's title bar and show pop down Windows Operations
+       Menu.
+     * To open Occupy Workspace dialog for the currently focused
+       window, press Meta+Alt+O key binding.
+     * To tile windows vertically (move and resize in maximize
+       mode) on the current page, press Meta+Alt+R key binding.
+       Pressing it again will restore all affected windows to
+       their default positions, but maximized windows will be in
+       the restored state.
+     * To tile windows horizontally (move and resize in maximize
+       mode) on the current page, press Meta+Alt+H key binding.
+       Pressing it again will restore all affected windows to
+       their default positions, but maximized windows will be in
+       the restored state.
+     * XF86PowerOff on Sun keyboards (most upper right) and some
+       other keyboards opens System Action Dialog with system
+       suspend (S3) option selected. For this to work, ACPI action
+       needs to be configured on the system to give FVWM window
+       manager control. Otherwise, this will likely initiate
+       direct system shutdown.
+     * Ctrl+XF86PowerOff opens System Action Dialog with system
+       shutdown option selected. For this to work, ACPI action
+       needs to be configured on the system. Otherwise, this will
+       likely initiate direct system shutdown.
+     * Alt+XF86PowerOff opens System Action Dialog with system
+       reboot option selected. For this to work, ACPI action needs
+       to be configured on the system. Otherwise, this will likely
+       initiate direct system shutdown.
+     * Meta+XF86PowerOff opens System Action Dialog with X Session
+       logout option selected. For this to work, ACPI action needs
+       to be configured on the system. Otherwise, this will likely
+       initiate direct system shutdown.
+     * Help key on Sun keyboards if pressed, in the pointer
+       context of the root window will call PDF viewer (if any)
+       with complete (this) NsCDE documentation.
+     * Meta+Help key on Sun keyboards if pressed, in any context
+       will call PDF viewer (if any) with complete (this) NsCDE
+       documentation.
+     * Sun Find key on Sun keyboards in the context of the root
+       window opens f_Find NsCDE FVWM function which needs defined
+       by the user to be useful.
+     * Sun Meta+Find key on Sun keyboards in any context opens
+       f_Find NsCDE FVWM function which needs defined by the user
+       to be useful.
+     * To open NsCDE Style Manager, press Props key in the context
+       of the root window, or Meta+Props in any context. This
+       opens Style Manager (StlyeMgr) window. Pressing this keys
+       combinations while Style Manager is opened, closes Style
+       Manager.
+     * To control audio volume, on some keyboards (such as Sun
+       keyboards), press volume up or volume down keys. They are
+       called XF86AudioLowerVolume, XF86AudioRaiseVolume and
+       XF86AudioMute by the Xorg X server. The following actions
+       can be performed:
+          + To raise volume by 1%, press XF86AudioRaiseVolume in
+            any context.
+          + To lower volume by 1%, press XF86AudioLowerVolume in
+            any context.
+          + To raise volume by 10%, press
+            Control+XF86AudioRaiseVolume in any context.
+          + To lower volume by 10%, press
+            Control+XF86AudioLowerVolume in any context.
+          + To mute sound complitely, press XF86AudioMute in any
+            context.
+     * To open last pressed item on the any subpanel of the Front
+       Panel in any context, press Meta+Alt+E. The same function
+       can be called on Sun keyboards by pressing Meta+Again (or
+       Meta+Redo) key binding.
+     * To simulate pointer button 1 click on the Front Panel,
+       press Meta+Return in the context of the Front Panel icon.
+     * Key binding Help in the context of the Front Panel will
+       display help pages (documentation) for the Front Panel.
+     * Pressing Meta+Alt+M in the context of the Front Panel will
+       open Front Panel Operations Menu by clicking leftmost top
+       button just like in any other window or subpanel.
+     * To open subpanels 1-5 and 6-10, press Meta+<number> in the
+       context (focus) of the Front Panel.
+     * To close subpanels 1-5 and 6-10, press Meta+<number> in the
+       context (focus) of the subpanel that is opened. The
+       subpanel will pop down to launcher on the Front Panel.
+     * To simulate pointer button 1 click on the Front Panel,
+       press Meta+Return in the context of the opened subpanel
+       with pointer above selected item.
+     * Key binding Help in the context of the Front Panel will
+       display help pages (documentation) for the Subpanels of the
+       Front Panel.
+     * To enlarge terminal to be wide and occupy ~70-80% of the
+       screen, press Meta+F2 in the context of the current
+       terminal. Terminals recognized by the NsCDE are the those
+       which have string "*Term*", "*term*" or "*terminal*" as a
+       name, X11 class or resource name.
+     * To reposition a window as if it is just opened, or to be
+       put on the configured place together with geometry
+       rescaling, press Alt+F3.
+     * To reposition a window to the center of the screen, press
+       Meta+F3.
+     * To close a focused window, press Alt+F4.
+     * To forcibly close non-responding or erratic focused window,
+       press Meta+Alt+F4.
+     * To regenerate, refresh and redraw a focused window, press
+       Alt+F5 in its context.
+     * To refresh the current window and the whole screen, press
+       Meta+F5.
+     * To raise covered, overlapped window, or to lower it behind
+       another one, depending on current situation, press Alt+F6.
+     * To start interactive move of the currently focused window,
+       press Alt+F7. While selected, window can be moved with
+       left, right, up and down cursor keys. Key Escape cancels
+       the operation.
+     * To make window sticky across all pages and workspaces,
+       press Meta+F7.
+     * To make window sticky across all workspaces, press
+       Meta+Alt+F7.
+     * To make window sticky across all pages of the current
+       workspace, press Meta+Shift+F7.
+     * To enter interactive window resize, press Alt+F8. Window
+       can be resized by left, right, up and down cursor keys. Key
+       Escape cancels the operation.
+     * To iconify the currently focused window, press Alt+F9.
+     * To shade the currently focused window to the size of the
+       title bar, press Meta+F9.
      __________________________________________________________
 
 8.17. Keymenu-<kbd_bind_set>.actions

@@ -40,9 +40,9 @@ of keybindings was <code class="varname">nscde</code> (nscde1x in NsCDE 2.2). Th
 bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as an alternative
 choice to default set of keybindings. In the future nscde1x key binding set will be deprecated and cua will
 become default.
-</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Keybindings_nscde"></a>8.16.1. Keybindings.nscde</h4></div></div></div><p>
+</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Keybindings_nscde"></a>8.16.1. Keybindings.nscde1x</h4></div></div></div><p>
 
-This subsection explains key bindings implemented in default "nscde" set of key bindings.
+This subsection explains key bindings implemented in old and deprecated "nscde1x" set of key bindings.
 
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
   cursor keys <span class="keysym">up</span>, <span class="keysym">down</span>,
@@ -113,10 +113,9 @@ Key <span class="keysym">Meta+Alt+BackSpace</span> will give a focus to the prev
   <span class="keysym">Shift+Tab</span>Calls visual GlobalPager, a stripped down version of GWM (Graphical
 Workspace Manager) which shows matrix of pages and workspaces. This keybinding works in any
 context, but it must be called twice to avoid accidental invocation. When Global Pager is
-visible, calling it second time will replace it's window with full version of standard GWM window
-tool until it is not closed with a third invocation of this same keybinding. In stripped down
-semi-transient mode, this pager, if not called as full GWM, disappears shortly after losing mouse
-focus to free up space on the screen.
+visible, calling it second time while focused will close Global Pager. In it's stripped down
+semi-transient mode, this pager, if not called as full GWM will disappear shortly after losing mouse
+focus, to free up space on the screen.
 
 </p><div class="figure"><a name="fig_globalpager"></a><p class="title"><b>Figure 60. Global Pager</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_globalpager.png" alt="Global Pager"></div></div></div><p><br class="figure-break">
 
@@ -441,6 +440,274 @@ under the pointer and execute FvwmButton action defined in configuration of that
 </p></li><li class="listitem"><p>
 In the context of the Front Panel and any Subpanel, Sun <span class="keysym">Help</span> key will display
 Front Panel or Subpanels documentation.
+</p></li></ul></div><p>
+
+</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Keybindings_cua"></a>8.16.2. Keybindings.cua</h4></div></div></div><p>
+
+This subsection describes key bindings implemented in "cua" (Common User Access) standard set of key bindings.
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+Control modifier with cursor keys is moving viewport from page to page in any context:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+<span class="keysym">Ctrl+Up</span> - move viewport one whole page up
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Down</span> - move viewport one whole page down
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Left</span> - move viewport one whole page left
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+Right</span> - move viewport one whole page right
+</p></li></ul></div><p>
+</p></li><li class="listitem"><p>
+Meta modifier with cursor keys is moving viewport page by 4 percent of the screen in any context:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+<span class="keysym">Meta+Up</span> - move viewport up by 4%
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+Down</span> - move viewport down by 4%
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+Left</span> - move viewport left by 4%
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+Right</span> - move viewport right by 4%
+</p></li></ul></div><p>
+</p></li><li class="listitem"><p>
+Cursor keys with modifiers Control, Shift and Meta pressed together are moving pointer by 1% in any context:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+<span class="keysym">Control+Shift+Meta+Up</span> - move mouse pointer by 1% of the screen up
+</p></li><li class="listitem"><p>
+<span class="keysym">Control+Shift+Meta+Down</span> - move mouse pointer by 1% of the screen down
+</p></li><li class="listitem"><p>
+<span class="keysym">Control+Shift+Meta+Left</span> - move mouse pointer by 1% of the screen left
+</p></li><li class="listitem"><p>
+<span class="keysym">Control+Shift+Meta+Right</span> - move mouse pointer by 1% of the screen right
+</p></li></ul></div><p>
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">Alt+Tab</span> in any context scrolls one page down, then wraps up on the lowest page and continues to the right.
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">Meta+Tab</span> in any context moves viewport to the next workspace
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">Shift+Meta+Tab</span> in any context moves viewport to the previous workspace
+</p></li><li class="listitem"><p>
+To raise and focus next overlapped window on the current page, press <span class="keysym">Alt+Up</span> in any
+context, apart from icons.
+</p></li><li class="listitem"><p>
+To raise and focus previous overlapped window on the current page, press <span class="keysym">Alt+Down</span> in any
+context, apart from icons.
+</p></li><li class="listitem"><p>
+To focus next window on the current page, and move pointer to the middle of that window,
+press <span class="keysym">Alt+Right</span> in any context.
+</p></li><li class="listitem"><p>
+To focus next window on the current page, and move pointer to the middle of that window,
+press <span class="keysym">Alt+Right</span> in any context.
+</p></li><li class="listitem"><p>
+To focus previous window on the current page, and move pointer to the middle of that window,
+press <span class="keysym">Alt+Left</span> in any context.
+</p></li><li class="listitem"><p>
+To focus next window on the current workspace, and move pointer to the middle of that window,
+press <span class="keysym">Shift+Right</span> in any context.
+</p></li><li class="listitem"><p>
+To focus previous window on the current workspace, and warp pointer to the middle of that window,
+press <span class="keysym">Shift+Left</span> in any context.
+</p></li><li class="listitem"><p>
+To move pointer in the middle of the focused window if pointer is outside that window,
+press <span class="keysym">Meta+Alt+J</span> in any context.
+</p></li><li class="listitem"><p>
+To focus next window on the any workspace or page, press <span class="keysym">Meta+Alt+Right</span> in any context.
+</p></li><li class="listitem"><p>
+To focus previous window on the any workspace or page, press <span class="keysym">Meta+Alt+Left</span> in any context.
+</p></li><li class="listitem"><p>
+To cycle focus of the windows on the current page, press <span class="keysym">Alt+Escape</span> in any context.
+</p></li><li class="listitem"><p>
+To pop Window List menu for the current workspace, press <span class="keysym">Ctrl+Escape</span> in any context.
+Pressing cursor keys <span class="keysym">Up</span>, <span class="keysym">Tab</span> or <span class="keysym">Tab</span> in the context of
+Window List menu, moves up, down and then cycles on the first/last item menu item focus. Pressing
+<span class="keysym">Escape</span> key in the context of Window List menu will open extended Window List where
+windows of all workspaces are visible, and separated by the names of workspaces as non-clickable
+menu subtitles. Pressing <span class="keysym">Escape</span> or <span class="keysym">Escape</span> for the third time in the
+context of the Window List menu, pops down Window List Menu. Pressing <span class="keysym">Return</span> key
+on any selectable Window List menu item, selects and focuses that window and pops down Window List Menu.
+</p></li><li class="listitem"><p>
+To shift focus on the icons of the current workspace, press <span class="keysym">Meta+Alt+I</span> in any context
+apart from icons themselves. In the context of icons, this key binding moves focus to the next icon if
+there is no un-iconified windows on the current page, or shifts focus to the first un-iconified window
+if such exists on the current page.
+</p></li><li class="listitem"><p>
+While the focus is on icons, pressing keys <span class="keysym">Up</span> or <span class="keysym">Down</span> browses workspace
+icons by shifting focus between them back and forth.
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">I</span> or <span class="keysym">SunOpen</span> key in the context of icons, deiconifies currently
+focused icon.
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">Space+I</span> or <span class="keysym">Meta+Alt+M</span> keys in the context of icons, pops up
+icons menu, where many operations common for iconified windows can be find and called.
+</p></li><li class="listitem"><p>
+To pop up Workspace Menu in any context, press <span class="keysym">Menu</span> (or <span class="keysym">Compose</span>) key
+fast twice in a row. The same function has the <span class="keysym">Shift+Escape</span> key binding, but pressed
+once.
+</p></li><li class="listitem"><p>
+To pop up Window Operations Menu in any context, press <span class="keysym">Meta+Menu</span> (or <span class="keysym">Meta+Compose</span>)
+key binding. Key binding <span class="keysym">Meta+Escape</span> has the same function.
+</p></li><li class="listitem"><p>
+To pop up current workspace Local Pager and Front Pager Page Manager Menu in the same time, press <span class="keysym">Meta+Alt+Menu</span>.
+Key binding <span class="keysym">Meta+Shift+M</span> in any context apart from icons, does the same function. While Front Pager Page Manager
+Menu and Local Pager are popped up, keys <span class="keysym">Up</span>, <span class="keysym">Down</span> or <span class="keysym">Tab</span> are selecting pages
+on the menu and cycling trough them. Pressing <span class="keysym">Return</span> key, selects a page, while Local Pager will indicate this
+change and dissapear after a few (or configured) number of seconds.
+</p></li><li class="listitem"><p>
+To resize (or zoom in) currently focused window by 50 pixels in all directions, press <span class="keysym">Meta+F8</span>.
+Window will be placed on it's default position and enlarged by mentioned amount of pixels in all directions.
+</p></li><li class="listitem"><p>
+To resize (or zoom out) currently focused window by 50 pixels in all directions, press <span class="keysym">Shift+Meta+F8</span>.
+Window will be placed on it's default position and shrinked by mentioned amount of pixels in all directions.
+</p></li><li class="listitem"><p>
+To open a new default terminal window, press <span class="keysym">Meta+F12</span> in any context.
+</p></li><li class="listitem"><p>
+To open built in "Exec" launcher, or advanced Rofi launcher if configured, press <span class="keysym">Alt+F12</span>.
+This same action can be performed on Sun keyboard by pressing <span class="keysym">SunOpen</span> (XF86Open) key in
+the context of the root window, or with <span class="keysym">Meta+SunOpen</span> in any context.
+</p></li><li class="listitem"><p>
+To open Graphical Workspace Manager or "GWM", press <span class="keysym">Meta+Alt+Home</span> key binding. Keys
+<span class="keysym">Control+Q</span> if pressed in the context of  GWM window, will dismiss GWM.
+</p></li><li class="listitem"><p>
+To open Local Pager, press <span class="keysym">Meta+Backspace</span> in any context. Pressing <span class="keysym">Meta+Backspace</span>
+again (but in the context of Local Pager) dismisses Local Pager.
+</p></li><li class="listitem"><p>
+To open Global Pager, press <span class="keysym">MetaAlt+Backspace</span> in any context. Pressing <span class="keysym">Meta+Alt+Backspace</span>
+again dismisses Global Pager.
+</p></li><li class="listitem"><p>
+To lock the screen if X Screen Saver is enabled, press <span class="keysym">Meta+Alt+L</span>.
+</p></li><li class="listitem"><p>
+Combination of keys <span class="keysym">Meta+Alt+X</span> calls <span class="command"><strong>xrandr --auto</strong></span>".
+</p></li><li class="listitem"><p>
+To clean up current page or viewport, press <span class="keysym">Meta+Alt+F5</span>. This will iconify
+and hide (almost) all objects on the screen. Pressing <span class="keysym">Meta+Alt+F5</span> puts
+back all windows which were affected with <span class="keysym">Meta+Alt+F5</span> on that same screen
+in the first run - a toggle action.
+</p></li><li class="listitem"><p>
+To pop Window Operations Menu of the currently focused window, press <span class="keysym">Meta+Alt+M</span> in
+the context of that window or it's decorations. This will press first leftmost button on the window's
+title bar and show pop down Windows Operations Menu.
+</p></li><li class="listitem"><p>
+To open <span class="emphasis"><em>Occupy Workspace</em></span> dialog for the currently focused window, press
+<span class="keysym">Meta+Alt+O</span> key binding.
+</p></li><li class="listitem"><p>
+To tile windows vertically (move and resize in maximize mode) on the current page, press
+<span class="keysym">Meta+Alt+R</span> key binding. Pressing it again will restore all affected windows
+to their default positions, but maximized windows will be in the restored state.
+</p></li><li class="listitem"><p>
+To tile windows horizontally (move and resize in maximize mode) on the current page, press
+<span class="keysym">Meta+Alt+H</span> key binding. Pressing it again will restore all affected windows
+to their default positions, but maximized windows will be in the restored state.
+</p></li><li class="listitem"><p>
+<span class="keysym">XF86PowerOff</span> on Sun keyboards (most upper right) and some other keyboards opens
+<a class="link" href="NsCDE-SysActionDialog.html" title="5.17. System Action Dialog">System Action Dialog</a> with system suspend (S3) option
+selected. For this to work, ACPI action needs to be configured on the system to give FVWM window
+manager control. Otherwise, this will likely initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+<span class="keysym">Ctrl+XF86PowerOff</span> opens System Action Dialog with system shutdown option selected.
+For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
+initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+<span class="keysym">Alt+XF86PowerOff</span> opens System Action Dialog with system reboot option selected. For
+this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate
+direct system shutdown.
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+XF86PowerOff</span> opens System Action Dialog with X Session logout option selected.
+For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
+initiate direct system shutdown.
+</p></li><li class="listitem"><p>
+<span class="keysym">Help</span> key on Sun keyboards if pressed, in the pointer context of the root window will
+call PDF viewer (if any) with complete (this) NsCDE documentation.
+</p></li><li class="listitem"><p>
+<span class="keysym">Meta+Help</span> key on Sun keyboards if pressed, in any context will
+call PDF viewer (if any) with complete (this) NsCDE documentation.
+</p></li><li class="listitem"><p>
+Sun <span class="keysym">Find</span> key on Sun keyboards in the context of the root window opens
+<span class="emphasis"><em>f_Find</em></span> NsCDE FVWM function which needs defined by the user to be useful.
+</p></li><li class="listitem"><p>
+Sun <span class="keysym">Meta+Find</span> key on Sun keyboards in any context opens
+<span class="emphasis"><em>f_Find</em></span> NsCDE FVWM function which needs defined by the user to be useful.
+</p></li><li class="listitem"><p>
+To open NsCDE Style Manager, press <span class="keysym">Props</span> key in the context of the root window,
+or <span class="keysym">Meta+Props</span> in any context. This opens <a class="link" href="NsCDE-GUI-Tools.html#NsCDE-StyleMgr" title="5.1. Style Manager">Style Manager (StlyeMgr)</a>
+window. Pressing this keys combinations while Style Manager is opened, closes Style Manager.
+</p></li><li class="listitem"><p>
+To control audio volume, on some keyboards (such as Sun keyboards), press volume up or volume down keys. They are
+called <span class="keysym">XF86AudioLowerVolume</span>, <span class="keysym">XF86AudioRaiseVolume</span> and <span class="keysym">XF86AudioMute</span>
+by the Xorg X server. The following actions can be performed:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+To raise volume by 1%, press <span class="keysym">XF86AudioRaiseVolume</span> in any context.
+</p></li><li class="listitem"><p>
+To lower volume by 1%, press <span class="keysym">XF86AudioLowerVolume</span> in any context.
+</p></li><li class="listitem"><p>
+To raise volume by 10%, press <span class="keysym">Control+XF86AudioRaiseVolume</span> in any context.
+</p></li><li class="listitem"><p>
+To lower volume by 10%, press <span class="keysym">Control+XF86AudioLowerVolume</span> in any context.
+</p></li><li class="listitem"><p>
+To mute sound complitely, press <span class="keysym">XF86AudioMute</span> in any context.
+</p></li></ul></div><p>
+</p></li><li class="listitem"><p>
+To open last pressed item on the any subpanel of the Front Panel in any context, press
+<span class="keysym">Meta+Alt+E</span>. The same function can be called on Sun keyboards by pressing
+<span class="keysym">Meta+Again</span> (or <span class="keysym">Meta+Redo</span>) key binding.
+</p></li><li class="listitem"><p>
+To simulate pointer button 1 click on the Front Panel, press <span class="keysym">Meta+Return</span>
+in the context of the Front Panel icon.
+</p></li><li class="listitem"><p>
+Key binding <span class="keysym">Help</span> in the context of the Front Panel will display help
+pages (documentation) for the Front Panel.
+</p></li><li class="listitem"><p>
+Pressing <span class="keysym">Meta+Alt+M</span> in the context of the Front Panel will open
+Front Panel Operations Menu by clicking leftmost top button just like in any other
+window or subpanel.
+</p></li><li class="listitem"><p>
+To open subpanels 1-5 and 6-10, press <span class="keysym">Meta+&lt;number&gt;</span> in the context
+(focus) of the Front Panel.
+</p></li><li class="listitem"><p>
+To close subpanels 1-5 and 6-10, press <span class="keysym">Meta+&lt;number&gt;</span> in the context
+(focus) of the subpanel that is opened. The subpanel will pop down to launcher on the
+Front Panel.
+</p></li><li class="listitem"><p>
+To simulate pointer button 1 click on the Front Panel, press <span class="keysym">Meta+Return</span>
+in the context of the opened subpanel with pointer above selected item.
+</p></li><li class="listitem"><p>
+Key binding <span class="keysym">Help</span> in the context of the Front Panel will display help
+pages (documentation) for the Subpanels of the Front Panel.
+</p></li><li class="listitem"><p>
+To enlarge terminal to be wide and occupy ~70-80% of the screen, press <span class="keysym">Meta+F2</span>
+in the context of the current terminal. Terminals recognized by the NsCDE are the those which
+have string "*Term*", "*term*" or "*terminal*" as a name, X11 class or resource name.
+</p></li><li class="listitem"><p>
+To reposition a window as if it is just opened, or to be put on the configured place together with
+geometry rescaling, press <span class="keysym">Alt+F3</span>.
+</p></li><li class="listitem"><p>
+To reposition a window to the center of the screen, press <span class="keysym">Meta+F3</span>.
+</p></li><li class="listitem"><p>
+To close a focused window, press <span class="keysym">Alt+F4</span>.
+</p></li><li class="listitem"><p>
+To forcibly close non-responding or erratic focused window, press <span class="keysym">Meta+Alt+F4</span>.
+</p></li><li class="listitem"><p>
+To regenerate, refresh and redraw a focused window, press <span class="keysym">Alt+F5</span> in its context.
+</p></li><li class="listitem"><p>
+To refresh the current window and the whole screen, press <span class="keysym">Meta+F5</span>.
+</p></li><li class="listitem"><p>
+To raise covered, overlapped window, or to lower it behind another one, depending
+on current situation, press <span class="keysym">Alt+F6</span>.
+</p></li><li class="listitem"><p>
+To start interactive move of the currently focused window, press <span class="keysym">Alt+F7</span>.
+While selected, window can be moved with left, right, up and down cursor keys. Key
+Escape cancels the operation.
+</p></li><li class="listitem"><p>
+To make window sticky across all pages and workspaces, press <span class="keysym">Meta+F7</span>.
+</p></li><li class="listitem"><p>
+To make window sticky across all workspaces, press <span class="keysym">Meta+Alt+F7</span>.
+</p></li><li class="listitem"><p>
+To make window sticky across all pages of the current workspace, press <span class="keysym">Meta+Shift+F7</span>.
+</p></li><li class="listitem"><p>
+To enter interactive window resize, press <span class="keysym">Alt+F8</span>. Window can be resized by left,
+right, up and down cursor keys. Key Escape cancels the operation.
+</p></li><li class="listitem"><p>
+To iconify the currently focused window, press <span class="keysym">Alt+F9</span>.
+</p></li><li class="listitem"><p>
+To shade the currently focused window to the size of the title bar, press <span class="keysym">Meta+F9</span>.
 </p></li></ul></div><p>
 
 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="Init_fvwmconf.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Configuration-Files.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="Keymenu_actions.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8.15. Init.fvwmconf </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8.17. Keymenu-&lt;kbd_bind_set&gt;.actions</td></tr></table></div></body></html>
