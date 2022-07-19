@@ -3796,7 +3796,7 @@ Key Bindings:
 <sect2 id="NsCDE-KeyboardMgr">
 <title>Keyboard Style Manager</title>
 <para>
-Keyboard Style Manager tool can be used to set (xset) 4 values:
+Keyboard Style Manager tool can be used to set four xset(1) values, and to change default Key Binding Set.
 <itemizedlist>
 <listitem><para>
 Auto Repeat on/off: Sets characters to repeat when you hold down their keys
@@ -3818,8 +3818,14 @@ and their values, minimal and maximal allowed values are (or should be in most c
 in GUI as they are in command line tool.
 </para>
 <para>
+Pop down menu "Key Binding Set" lets user choose between "cua" and "nscde1x" key binding
+implementations. See <link linkend="NsCDE-Key-Bindings-CUA">Common User Access (CUA) Key Bindings</link> and
+<link linkend="NsCDE-Key-Bindings-NsCDE1x">NsCDE 1.X Key Bindings</link>. Changing this setting and applying
+changes will restart FVWM window manager.
+</para>
+<para>
 <guibutton>Default</guibutton> button will set auto repeat to on, start rate to 512, repeat delay to
-16 and click volume to 50.
+16 and click volume to 50. Set of key bindings will be set to "cua".
 </para>
 <para>
 <guibutton>Apply</guibutton> button applies setting in runtime, while <guibutton>Save</guibutton>
@@ -3828,13 +3834,13 @@ button writes <filename>$FVWM_USERDIR/Xset.conf</filename> file which is a gener
 </para>
 
 <figure id="fig_keyboardmgr">
-  <title>Font Style Manager</title>
+  <title>Keyboard Style Manager</title>
   <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_keyboardmgr.png" format="PNG" scale="100"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="img/fig_keyboardmgr.png" format="EPS" scale="60"/>
+      <imagedata fileref="img/fig_keyboardmgr.png" format="EPS" scale="68"/>
     </imageobject>
   </mediaobject>
 </figure>
@@ -5370,533 +5376,10 @@ for desks on different monitors.
 </para>
 </sect1>
 
-<sect1 id="NsCDE-Configuration-Files">
-<title>Configuration files explained</title>
-<abstract>
+<sect1 id="NsCDE-Bindings">
+<title>Keyboard and Mouse Bindings</title>
 <para>
-As pointed above, NsCDE has a number of configuration files.
-Approximately 75% of them are the FVWM configurations, where a line
-between using FVWM directives for it's core and modular functionality
-as a desktop-building material and tool, and merely configuring
-aspects for end use are wastly blurred and cannot be really
-distinguished and separated in that strict categories. This system of
-configurations is arranged in some logical and consistent way. For
-example, keyboard shortcuts in Keybindings.&lt;kbd_bind_set&gt;, FvwmBacker
-configuration in Backer.fvwmconf, (generated) colorsets in
-Colorset.fvwmgen etc.
-</para>
-<para>
-All this configurations are included from the Main.fvwmconf.
-This is the starting FVWM configuration which sets core options
-and safe defaults, and reads the rest of the configuration files
-which are included there. It defines StartFunction which starts
-all additional modules and calls important things during start
-or restart of the Window Manager. System Wide configuration files
-are located in $NSCDE_DATADIR/fvwm and $NSCDE_DATADIR/defaults,
-while user local hooks or user complete overrides are stored in
-<filename class="directory">$FVWM_USERDIR</filename>.
-</para>
-</abstract>
-<para>
-This is default list of system-wide configurations:
-</para>
 
-<sect2 id="FrontPanel_actions">
-<title>FrontPanel.actions</title>
-<para>
-A non-FVWM file. Lines in this file are default actions and icons for Front Panel.
-This file is parsed by the <command>fpexec</command> and <command>fpseticon</command>
-shell script tools. All or individual entries from this file can be overridden by
-creating <filename>$FVWM_USERDIR/FrontPanel.actions</filename> file. This is a
-CSV-like file (comma is a field separator), and it defines buttons of the
-Front Panel, their actions and icons.
-</para>
-<para>
-File format is:
-<itemizedlist>
-<listitem><para>Button Number (Btn1, Btn2, BtnN ...)</para></listitem>
-<listitem><para>Icon path (FVWM relative from ImagePath)</para></listitem>
-<listitem><para>Mouse Button (3 mouse buttons for 3 different actions if needed)</para></listitem>
-<listitem><para>Program executable to check for or <emphasis>NOCHK</emphasis> for check
- avoidance</para></listitem>
-<listitem><para>Actions (commands) with options and arguments to the end of the line</para></listitem>
-</itemizedlist>
-</para>
-<para>
-If Icon Path field is <varname>__APPLET__</varname> for mouse button 1, then in the check/nocheck
-field an applet program may be defined for FvwmButtons based Front Panel to be swallowed instead
-of an icon. In this field, direct FvwmButtons(1) syntax must be manually written with this exceptions:
-</para>
-<itemizedlist>
-<listitem><para>Comma (,) must be replaced with a pipe (|)</para></listitem>
-<listitem><para>Double quotes (") must be escaped by the two backslashed (\\)</para></listitem>
-</itemizedlist>
-<para>
-If the swallowed applet has it's own action on mouse buttons clicks, then declaration of the
-applet must be prefixed with a <varname>ActionIgnoresClientWindow</varname>. In this case,
-last filed with the actions can be "Nop" because Front Panel will not accept this clicks
-(it may accept them if possible transparent area around applet exists and is clicked). If
-the applet is not clickable, a standard FVWM Action or command can be put in the last field
-to make a click on the applet useful.
-</para>
-<para>
-Here is the example of the custom swallowed applet. This one was initially created for the
-Window Maker window manager:
-
-<programlisting>
-<![CDATA[
-   Btn10,__APPLET__,M1,
-   "ActionIgnoresClientWindow| Swallow (Respawn) \\"WmstickynotesApplet\\" 
-   \\"Exec exec wmstickynotes\\"",Nop
-
-   Btn10,,M2,FVWM,Nop
-
-   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
-]]>
-</programlisting>
-
-<figure id="fig_cust_applet">
-  <title>Visual: resulting applet on the Front Panel</title>
-    <mediaobject>
-    <imageobject role="html">
-      <imagedata fileref="img/fig_cust_applet.png" format="PNG" scale="100"/>
-    </imageobject>
-    <imageobject role="fo">
-      <imagedata fileref="img/fig_cust_applet.png" format="EPS" scale="60"/>
-    </imageobject>
-  </mediaobject>
-</figure>
-
-</para>
-
-<para>
-Here is the example of the custom swallowed applet which does not accept mouse clicks:
-
-<programlisting>
-<![CDATA[
-   Btn10,__APPLET__,M1,
-   "Swallow (Respawn) \\"MyFavoriteApplet\\" 
-   \\"Exec exec mfa -s\\"",Exec exec vlc
-
-   Btn10,,M2,FVWM,Nop
-
-   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 VLC
-]]>
-</programlisting>
-
-</para>
-
-<para>
-This example is replacing standard Front Panel Clock with Solaris Globe Icon based
-Front Panel clock, using the same pclock program as standard one, but with a
-slightly different options:
-
-<programlisting>
-<![CDATA[
-   Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
-   \\"Exec exec $NSCDE_TOOLSDIR/$(uname -s)_$(uname -m)/fpclock
-   -H red -S white --hands-width=4
-   --hour-hand-length=15 --minute-hand-length=20
-   --second-hand-length=22 -w 
-   -B $NSCDE_DATADIR/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
-
-   Btn1,,M2,FVWM,Nop
-
-   Btn1,,M3,FVWM,f_FrontPanelPropsMenu 1 Browser
-]]>
-</programlisting>
-
-</para>
-
-<para>
-Notice that button definition for mouse M1 (first line) is split in 3 lines in this examples,
-but in the <filename>FrontPanel.actions</filename> must be written as one line.
-</para>
-
-<para>
-After editing this file (system-wide or user's) nothing needs to be
-reloaded because file is read from the <function>f_FrontPanelAction</function> function
-on every click on every icon on the Front Panel. There is no GUI tool for fully managing this
-file yet, but currently, <guimenuitem>Copy to Main Panel</guimenuitem> action from the submenu
-will edit <filename>FrontPanel.actions</filename> and put choosen entry there, binding it to
-the choosen button. Options <guimenuitem>Move Button Left</guimenuitem> and
-<guimenuitem>Move Button Right</guimenuitem> from the contextual menu of icons on the main
-panel will push icons and their subpanels (if enabled) left or right, implicitly editing
-<filename>FrontPanel.actions</filename> in that way.
-</para>
-</sect2>
-
-<sect2 id="AppMenus_conf">
-<title>AppMenus.conf</title>
-<para>
-This file defines which custom menu entries will be appended on the Window Options menu when
-this menu is called by titlebar button 1. This is for example used by all known terminal
-applications to implement <guimenuitem>Wide Terminal</guimenuitem> menu entry. By default,
-<command>Watch Errors</command> and <command>Fvwm Diagnostic Console</command> have appended
-appropriate entries for conveniently call each other. Also, some of the known File Managers
-has this entry for opening new window of the same type. Entries in this file are the following
-comma separated values (syntax):
-<itemizedlist>
-<listitem><para>X11 Window Class</para></listitem>
-<listitem><para>X11 Window Resource</para></listitem>
-<listitem><para>Menu item title (and optionally keyboard shortcut after two TAB's)</para></listitem>
-<listitem><para>FVWM Exec or function command, module or action to be executed</para></listitem>
-</itemizedlist>
-</para>
-<para>
-This file exists as the <filename>$NSCDE_DATADIR/defaults/AppMenus.conf</filename>, but it can be
-extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename> file.
-</para>
-
-</sect2>
-
-<sect2 id="NsCDE-Animate_fvwmconf">
-<title>Animate.fvwmconf / Animate.fvwmgen</title>
-<para>
-FVWM Animate Module configuration. Animate module is started by NsCDE by
-default automatically, but with <emphasis>None</emphasis> as a default effect. This can be
-reconfigured by the user in private <filename>$FVWM_USERDIR/Animate.fvwmgen</filename> with Window Style Manager,
-or in static manual configuration <filename>$[FVWM_USERDIR]Animate.fvwmconf</filename>.
-No effect (None) is choosen as default for increased CDE similarity, because CDE doesn't have iconification
-animation effects.
-</para>
-</sect2>
-
-<sect2 id="Backdrops_fvwmgen">
-<title>Backdrops.fvwmgen</title>
-<para>
-This file defines 8 colorsets for all (maximal) 8 desktops as a <emphasis>TiledPixmap</emphasis>
-colorset type. In the system configuration, static non-generated configuration (.fvwmconf) defines
-pre-generated default backdrops of default <emphasis>Broica</emphasis> color scheme. When user
-makes the first change with <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>,
-user's private copy of this file is created in <varname>$FVWM_USERDIR</varname>. In NsCDE,
-colorsets 31 - 38 are reserved for backdrops (or png, xpm photos).
-</para>
-</sect2>
-
-<sect2 id="Backer_fvwmconf">
-<title>Backer.fvwmconf</title>
-<para>
-Rarely needed in <varname>$FVWM_USERDIR</varname>. FvwmBacker(1) configuration which defines
-8 maximum desks and refers them to 8 colorsets from 31 - 38. Option
-<option>RetainPixmap</option> is defined in case user wants to use X compositor such as
-compton(1) with NsCDE.
-</para>
-</sect2>
-
-<sect2 id="Colorset_fvwmgen">
-<title>Colorset.fvwmgen</title>
-<para>
-Definition of all colorsets minus colorsets 31 - 38 which are reserved for the
-backdrops. System-wide file has predefined color values for default color scheme (Broica),
-while user's file in <varname>$FVWM_USERDIR</varname> is created on first change made with
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>. Apart from FVWM colorsets, this
-file exports in environment two variables: <varname>NSCDE_PALETTE</varname> with the name
-of the color palette used in generation of the file, and
-<varname>NSCDE_PALETTE_NCOLORS</varname> which is either 4 or 8, depending which color
-variant has been used in <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
-</para>
-</sect2>
-
-<sect2 id="NsCDE_conf">
-<title>NsCDE.conf</title>
-<para>
-This file defines various FVWM and NsCDE defaults. NsCDE.conf can be considered as
-the main user's configuration file. System wide configuration are static defaults
-which can be loaded by <link linkend="NsCDE-WindowMgr">Window Style Manager</link>
-or by erasing user's copy of the file. User's copy of the <filename>NsCDE.conf</filename>
-contains all options (minus FvwmAnimate) from
-<link linkend="NsCDE-WindowMgr">Window Style Manager's</link> set of options,
-but it has some options such as FVWM <emphasis>infostore</emphasis> variables for
-default terminal and file manager applications, graphical editor, and
-such. Infostore variables <varname>desknum</varname>,
-<varname>pagematrixX</varname> and <varname>pagematrixY</varname> are managed by
-the Workspace and Pages Manager while <varname>menudclicktm</varname> infostore
-variable is managed by the Pointer Style Manager. In <filename>NsCDE.conf</filename>,
-defaults for page edges, focus, icons, and such are defined. See <xref linkend="NsCDE-WindowMgr"/>
-and fvwm(1) for details. Since this is read by FVWM, user can set in this file local
-variables and additional configuration options if needful, which are not covered in
-other parts of the configuration. While applications are taking great care with long
-regexp lines to parse and write this file, if edited manually, user is advised to keep it
-clean: use proper capitalization as it is described in fvwm(1), without line breaks and
-if possible, surplus spaces and tabs. Comments are allowed as usual: as lines which
-begins with <emphasis>#</emphasis> sign.
-</para>
-<para>
-Some of the important FVWM Infostore variables which can be set in the <filename>NsCDE.conf</filename> are:
-<itemizedlist>
-<listitem><para>InfoStoreAdd filemgr <varname>file manager of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd xeditor <varname>GUI text editor of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd calculator <varname>GUI calculator of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd taskmgr <varname>Task manager of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd printmgr <varname>Printer manager of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd browser <varname>WWW Browser of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd docsbrowser <varname>Documentation Browser of choice - xdg-open or defaults to browser</varname></para></listitem>
-<listitem><para>InfoStoreAdd mailreader <varname>Mail application of choice</varname></para></listitem>
-<listitem><para>InfoStoreAdd terminal <varname>terminal</varname> - emulator app of choice by default commented out and figured out by the list of known terminals. It can be set here.</para></listitem>
-<listitem><para>InfoStoreAdd sandboxmode 0|1 - reduced NsCDE for embedded Xephyr X jails</para></listitem>
-<listitem><para>InfoStoreAdd desklastpage 0|1 - remember last visited page on desk</para></listitem>
-<listitem><para>InfoStoreAdd wsmcolored 0|1 - additional menu color around Workspace Manager like in some versions of CDE</para></listitem>
-<listitem><para>InfoStoreAdd nscde_use_xscreensaver 0|1</para></listitem>
-<listitem><para>InfoStoreAdd nscde_use_stalonetray 0|1</para></listitem>
-<listitem><para>InfoStoreAdd nscde_use_dunst 0|1</para></listitem>
-<listitem><para>InfoStoreAdd nscde_use_rofi 0|1</para></listitem>
-<listitem><para>InfoStoreAdd nscde_use_xsettingsd 0|1</para></listitem>
-<listitem><para>InfoStoreAdd wsm.eco 0|1</para></listitem>
-<listitem><para>InfoStoreAdd frontpanel.pos.placement <varname>screen c 50-50w -0p ewmhiwa</varname></para></listitem>
-<listitem><para>InfoStoreAdd stalonetray.pos.placement <varname>-0 -0 ewmhiwa</varname></para></listitem>
-<listitem><para>InfoStoreAdd gkrellm.pos.placement <varname>-0 +0 ewmhiwa</varname></para></listitem>
-<listitem><para>InfoStoreAdd polkit.agent <varname>Path of the choosen PolicyKit Agent</varname></para></listitem>
-<listitem><para>InfoStoreAdd loc_pg.desk_scale <varname>Zoom factor of the Local Pager</varname></para></listitem>
-<listitem><para>InfoStoreAdd glob_pg.desk_scale <varname>Zoom factor of the Global Pager</varname></para></listitem>
-<listitem><para>InfoStoreAdd windowlist.fontsize <varname>small | medium | large</varname></para></listitem>
-<listitem><para>InfoStoreAdd windowlist.title.fontsize <varname>small | medium | large</varname></para></listitem>
-<listitem><para>InfoStoreAdd fvwm3_default_logging <varname>0|1</varname> weather to log FVWM3 messages by default
-from the startup</para></listitem>
-<listitem><para>InfoStoreAdd xlogcmd <varname>custom-command</varname> if <filename>$HOME/.xsession-errors</filename>
-is not in use, for example <varname>"journalctl -u gdm -n 300 -f"</varname></para></listitem>
-<listitem><para>InfoStoreAdd rootpagerposition <varname>"screen c 50-50w +10p"</varname> - where to put local pager on page change if enabled</para></listitem>
-<listitem><para>InfoStoreAdd desktopconfiguration global|per-monitor|shared - for FVWM3</para></listitem>
-</itemizedlist>
-Further, common system environment variables are provided already set, or for optional uncommenting
-if needed or desirable:
-<itemizedlist>
-<listitem><para><varname>QT_QPA_PLATFORMTHEME</varname> - set to "qt5ct"</para></listitem>
-<listitem><para><varname>HAS_WINDOWNAME 1</varname> - uncomment and set it to 1 if FVWM is patched with additional
-FvwmButtons NsCDE patches. On FVWM3, this is default</para></listitem>
-<listitem><para><varname>GTK_OVERLAY_SCROLLING 0</varname> - handy to turn off irritating blinking of scrollbar
-area in GTK3 applications</para></listitem>
-<listitem><para><varname>SetEnv GTK_CSD 0</varname> - if you have misfortune to must use some of the GNOME 3
-applications and have gtk3-nocsd installed</para></listitem>
-<listitem><para><varname>f_VarAppend : LD_PRELOAD /usr/local/lib/libgtk3-nocsd.so.0</varname> - if you have
-misfortune to must use some of the GNOME 3 applications and have gtk3-nocsd installed</para></listitem>
-<listitem><para><varname>SetEnv NSCDE_REDRAW_WORKAROUND 1</varname> - Uncomment this if you are having problems
-with FvwmScript PopupMenu widgets under compton, compton-ng or picom in the form of not refreshing their part
-of the screen.</para></listitem>
-</itemizedlist>
-</para>
-</sect2>
-
-<sect2 id="Event_fvwmconf">
-<title>Event.fvwmconf</title>
-<para>
-FvwmEvent(1) module configuration. In this file a single instance of the
-FvwmEvent called <option>MainLoop</option> is defined. It passes ID (Window ID, desk
-etc ... depending on context) for window manager actions. <option>Cmd</option> option is
-empty: FVWM functions are used for all defined actions. The following events are observed
-and reacted by functions Currently:
-
-<itemizedlist>
-<listitem><para><option>new_desk</option></para></listitem>
-<listitem><para><option>new_page</option></para></listitem>
-<listitem><para><option>add_window</option></para></listitem>
-<listitem><para><option>destroy_window</option></para></listitem>
-<listitem><para><option>focus_change</option></para></listitem>
-<listitem><para><option>enter_window</option></para></listitem>
-<listitem><para><option>leave_window</option></para></listitem>
-<listitem><para><option>configure_window</option></para></listitem>
-<listitem><para><option>iconify</option></para></listitem>
-<listitem><para><option>deiconify</option></para></listitem>
-<listitem><para><option>res_class</option></para></listitem>
-<listitem><para><option>map</option></para></listitem>
-</itemizedlist>
-
-Event Functions from <filename>Functions.fvwmconf</filename> are triggered on the events above.
-This serves Workspace Manager, Page Manager (PGM) and window placement functions in an
-important way. If redefined or disabled, things will start to break. It can be extended by
-the user to suit the needs in <filename>$NSCDE_USERDIR/Event.fvwmlocal</filename>, but here
-also care must be taken, because complex functions, or calling slow and/or resource hungry
-commands from that functions can make FVWM (and hence NsCDE) dramatically slow and even unstable.
-</para>
-</sect2>
-
-<sect2 id="Font-DPIdpi_fvwmgen">
-<title>Font-&lt;NSCDE_FONT_DPI&gt;dpi.fvwmgen</title>
-<para>
-... where "DPI" ($NSCDE_FONT_DPI) is by default hardcoded to 96.
-</para>
-<para>
-This files are regular files in the system-wide configuration, but may be symbolic links to some
-system wide or local fontset in <filename class="directory">$FVWM_USERDIR</filename> when generated
-by <link linkend="NsCDE-FontMgr">Font Style Manager</link>.
-</para>
-<para>
-Font sizes in this config are defined as infostore variables and used across
-FVWM config files, they are provided to FvwmScript programs with
-<command>getfont</command> wrapper. Font sizes are in points. While defining
-them in pixels (pixelsize=) will be easier, and all this care about DPI will
-not be needed, integration with GTK2 and GTK3 in best of my knowledge and
-research does not provide a way to define fonts in pixel sizes, so either
-font sizes in points or unsure recalculation (again based on DPI) will be
-needed while writing gtk settings.
-</para>
-</sect2>
-
-<sect2 id="Form_fvwmconf">
-<title>Form.fvwmconf</title>
-<para>
-Defaults for fonts, colorsets, cursors etc of FVWM form module. FvwmForm is
-reading this. FvwmForm is not used actively by NsCDE anymore, This file and
-definitions in it are provided only to enforce colors and fonts in accordance
-with the current NsCDE theme if any custom installation decides to use forms
-again.
-</para>
-</sect2>
-
-<sect2 id="FrontPanel_fvwmconf">
-<title>FrontPanel.fvwmX.fvwmconf</title>
-<para>
-Main NsCDE Front Panel configuration file. Here, FvwmButtons is configured under
-the alias <option>*FrontPanel</option>. Special care is taken to place most of
-configurable parts out of this file, so it doesn't have to be forked into
-<varname>$FVWM_USERDIR</varname>, but this option nevertheless exists. Here, all
-geometry, buttons, subpanels, default icons, frames and widgets are written and
-put in place. This configuration, together with swallowed WSM (Workspace
-Manager) is probably the most recognizable part of the setup which provides us
-with familiar and desired CDE look - a Front Panel. FvwButtons FrontPanel
-configuration is non-trivial, but it is very trustworthy mimicking the original.
-Icon actions which user wants to change here can be overridden with
-<filename>FrontPanel.actions</filename> file and Subpanels which are also
-described here. Swallowed apps and "widgets" are in most part already described
-in sections above.
-</para>
-<para>
-In NsCDE 2.0, FrontPanel has double configuration: in two separate configuration
-files. One is for fvwm2 (<filename>FrontPanel.fvwm2.fvwmconf</filename>) and the
-second for fvwm3 (<filename>FrontPanel.fvwm3.fvwmconf</filename>) a "front" file
-<filename>FrontPanel.fvwmconf</filename> contains the code for auto detection of
-FVWM (patched fvwm2 will use fvwm3 file if detected).
-</para>
-</sect2>
-
-<sect2 id="Functions_fvwmconf">
-<title>Functions.fvwmconf</title>
-<para>
-Another important part of the configuration. Almost all FVWM functions are defined
-here, except 5-6 of core functions in <filename>Main.fvwmconf</filename> which are
-reading the rest of the configuration. They are sorted in logical groups and are
-used widely in almost every part of the configuration, and particularly from the
-FvwmScript scripts. Main groups of NsCDE FVWM functions are:
-</para>
-<itemizedlist>
-<listitem><para>Core Window Operation Functions</para></listitem>
-<listitem><para>Front Panel functions</para></listitem>
-<listitem><para>Misc core functions</para></listitem>
-<listitem><para>Functions called from FvwmEvent <option>MainLoop</option></para></listitem>
-<listitem><para>Functions for generating menus</para></listitem>
-<listitem><para>Placeholders for functions aimed for user to override</para></listitem>
-<listitem><para>Functions used in NsCDE FvwmScripts</para></listitem>
-<listitem><para>Upgrade Functions</para></listitem>
-</itemizedlist>
-<para>
-For a FVWM function description see fvwm(1), in this file there is a plethora of
-examples, and for user usage is the most interesting part placeholders for
-functions which are here merely for programs to not complain about missing them
-and which should be overridden in user's local extension
-<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> - this extension file will
-be read by the main configuration immediately after processing
-<filename>Functions.fvwmconf</filename>. This functions are:
-</para>
-<itemizedlist>
-<listitem><para>
-  <function>f_CheckMail</function>: called by CheckMailApplet on the FrontPanel on click
-  and periodically. This is the place where some script can be called
-  and with SendToModule to "1 1" (widget 1, routine 1) icon of empty
-  mailbox will be changed to the icon of the full mailbox.
-</para></listitem>
-<listitem><para>
-  <function>f_Calendar</function>: called by MonthDayApplet on click. Can be used to call
-  external calendar application, to focus Thunderbird with lightning
-  extension or whatever user finds useful.
-</para></listitem>
-<listitem><para>
-  <function>f_Mixer</function>: unused currently.
-</para></listitem>
-<listitem><para>
-  <function>f_AddCustomToRootMenu</function>: add custom entries in a convenient point of
-  the root menu which is called by the right mouse button on the root
-  window.
-</para></listitem>
-<listitem><para>
-  <function>f_UserChangeDesk</function>: called when current active workspace changes
-</para></listitem>
-<listitem><para>
-  <function>f_UserChangePage</function>: called when current active page changes
-</para></listitem>
-<listitem><para>
-  <function>f_UserRestartFunction</function>: hook called when NsCDE restarts
-</para></listitem>
-<listitem><para>
-  <function>f_UserEnterWindow</function>: hook called when window is entered
-</para></listitem>
-<listitem><para>
-  <function>f_UserLeaveWindow</function>: hook called when focus leaves window
-</para></listitem>
-</itemizedlist>
-<para>
-Another useful function is conditional execution function <function>f_WarpOrExec</function>.
-It takes 3+ arguments. First is the window name or class (or icon, resource) name, second is
-the binary to check in <varname>$PATH</varname>>, and 3rd to the rest of the command line is
-what to execute with all arguments included. If window with name from arg1 is already
-present on <varname>$DISPLAY</varname>, it will not be executed, but pointer will be simply
-pointed to that window. If window was iconified, or function called from another workspace
-or page, window will be deiconified, and workspace and/or current page changed to one where
-existing window is residing.
-</para>
-<para>
-It is pointless and bad idea for this file to be overridden by the local copy of the
-<emphasis>conf</emphasis> (fvwmconf, not fvwmlocal) file, because a lot of things
-depends on this functions. Regular update of NsCDE software version will almost certain
-make setup with missing or incompatible functions.
-</para>
-</sect2>
-
-<sect2 id="IconMan_fvwmconf">
-<title>IconMan.fvwmconf</title>
-<para>
-If <guilabel>Use Icon Box</guilabel> option is selected in the
-<link linkend="NsCDE-WindowMgr">Window Style Manager</link>,
-infostore variable <varname>iconbox</varname> will be defined as non-zero, and
-FvwmIconMan(1) module will be started on login from the <filename>Main.fvwmconf</filename>.
-This file, <filename>IconMan.fvwmconf</filename> contains default configuration of that
-module.
-</para>
-</sect2>
-
-<sect2 id="Ident_fvwmconf">
-<title>Ident.fvwmconf</title>
-<para>
-Module FvwmIdent(1) is called either from a small menu which can be popped up with middle pointer
-click on a titlebar, or from the root window version of the <guilabel>Window Options</guilabel>
-menu. This is FvwmIdent's configuration file. It simply defines colorset and font for the
-FvwmIdent's module window.
-</para>
-</sect2>
-
-<sect2 id="Init_fvwmconf">
-<title>Init.fvwmconf</title>
-<para>
-Most probable candidate for copying to <varname>$FVWM_USERDIR</varname>. Here are defined
-start, quit and restart function (sessionless and session-managed) which are internally
-recognized by FVWM during certain important actions. <function>InitFunction</function> or
-<function>SessionInitFunction</function> is the place to put all programs and actions user
-wants to be executed during NsCDE startup. In system-wide default configuration there are
-already conditionally defined some probable applications and there are hints and examples
-for user to customize this further.
-</para>
-</sect2>
-
-<sect2 id="Keybindings_fvwmconf">
-<title>Keybindings.fvwmconf</title>
-<para>
-According to the old CDE documentation, there are couple of key bindings known under CDE,
-but that documentation also assumes Motif application bindings and X resource configuration,
-which is far from universally applicable in today's world. That said, while GTK and Qt
-applicatios have it's own key bindings, NsCDE tries to combine a bit of CDE legacy with
-a huge number of new functions, originally not present in CDE. Hence, we have a rich set
-of keybindings for almost any action in NsCDE.
-</para>
-<para>
 NsCDE is using 4 modifier keys in single and multi-modifier combinations with other keys
 to implement key bindings. This modifiers are:
 <itemizedlist>
@@ -5906,14 +5389,14 @@ to implement key bindings. This modifiers are:
 <listitem><para>Alt</para></listitem>
 </itemizedlist>
 In combinations with escape, function keys, tab, backspace, home, menu, letters, numbers
-and other keys, NsCDE builds rich set of keyboard shortcuts also called keybindings which
-tries to achieve some golden middle between ergonomics position on the keyboard for often
-used ones, and logical grouping for easy memorizing actions.
+and other keys, NsCDE builds rich set of keyboard shortcuts also called keybindings in the
+FVWM terminology
 </para>
 <para>
-Keybindings can be partially or complitely overriden by the user's writing
-<filename>$FVWM_USERDIR/Keybindings.fvwmconf</filename> (override) or
-<filename>$FVWM_USERDIR/Keybindings.fvwmlocal</filename> (extend, paritally override).
+Keybindings can be partially or complitely overriden by the user's creation and writing
+of <filename>$FVWM_USERDIR/Keybindings.fvwmconf</filename> (override) or extended by
+adding custom key bindings into <filename>$FVWM_USERDIR/Keybindings.fvwmlocal</filename>
+(Redefinition of key also overrides here).
 Key bindings which are described with their <emphasis>Mod+Key</emphasis> items on menus
 can be extended or overwritten in <filename>$FVWM_USERDIR/Keymenu.actions</filename>.
 </para>
@@ -5933,21 +5416,689 @@ Silent Key Tab A S -
 <para>
 For explanation what is the context, and what modifier, see FVWM documentation (man page).
 </para>
+
+<sect2 id="NsCDE-Key-Bindings-CUA">
+<title>Common User Access (CUA) Key Bindings</title>
 <para>
-NsCDE 2.1 and above implements alternative sets of key bindings. Default set named <emphasis>nscde1x</emphasis>
-is applied by default, unless overriden in <filename>$FVWM_USERDIR/NsCDE.conf</filename> with InfoStore variable
-<varname>kbd_bind_set</varname>. This mechanism was still experimental in NsCDE 2.1 and the only implemented set
-of keybindings was <varname>nscde</varname> (nscde1x in NsCDE 2.2). The following section lists and explains key
-bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as an alternative
-choice to default set of keybindings. In the future nscde1x key binding set will be deprecated and cua will
-become default.
+
+NsCDE 2.1 and above implements multiple sets of key bindings. As of NsCDE 2.2,
+set named <emphasis>cua</emphasis> is applied by default, unless overriden in
+<filename>$FVWM_USERDIR/NsCDE.conf</filename> with InfoStore variable
+<varname>kbd_bind_set</varname>. This can also be configured with
+<link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link>. This
+subsection describes key bindings implemented in "cua" (Common User Access)
+standard set of key bindings.
+
+<itemizedlist>
+
+<listitem><para>
+Control modifier with cursor keys is moving viewport from page to page in any context:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Up</keysym> - move viewport one whole page up
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Down</keysym> - move viewport one whole page down
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Left</keysym> - move viewport one whole page left
+</para></listitem>
+<listitem><para>
+<keysym>Ctrl+Right</keysym> - move viewport one whole page right
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+
+<listitem><para>
+Meta modifier with cursor keys is moving viewport page by 4 percent of the screen in any context:
+<itemizedlist>
+<listitem><para>
+<keysym>Meta+Up</keysym> - move viewport up by 4%
+</para></listitem>
+<listitem><para>
+<keysym>Meta+Down</keysym> - move viewport down by 4%
+</para></listitem>
+<listitem><para>
+<keysym>Meta+Left</keysym> - move viewport left by 4%
+</para></listitem>
+<listitem><para>
+<keysym>Meta+Right</keysym> - move viewport right by 4%
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+
+<listitem><para>
+Cursor keys with modifiers Control, Shift and Meta pressed together are moving pointer by 1% in any context:
+<itemizedlist>
+<listitem><para>
+<keysym>Control+Shift+Meta+Up</keysym> - move mouse pointer by 1% of the screen up
+</para></listitem>
+<listitem><para>
+<keysym>Control+Shift+Meta+Down</keysym> - move mouse pointer by 1% of the screen down
+</para></listitem>
+<listitem><para>
+<keysym>Control+Shift+Meta+Left</keysym> - move mouse pointer by 1% of the screen left
+</para></listitem>
+<listitem><para>
+<keysym>Control+Shift+Meta+Right</keysym> - move mouse pointer by 1% of the screen right
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>Alt+Tab</keysym> in any context scrolls one page down, then wraps up on the lowest page and continues to the right.
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>Meta+Tab</keysym> in any context moves viewport to the next workspace
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>Shift+Meta+Tab</keysym> in any context moves viewport to the previous workspace
+</para></listitem>
+
+<listitem><para>
+To raise and focus next overlapped window on the current page, press <keysym>Alt+Up</keysym> in any
+context, apart from icons.
+</para></listitem>
+
+<listitem><para>
+To raise and focus previous overlapped window on the current page, press <keysym>Alt+Down</keysym> in any
+context, apart from icons.
+</para></listitem>
+
+<listitem><para>
+To focus next window on the current page, and move pointer to the middle of that window,
+press <keysym>Alt+Right</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus next window on the current page, and move pointer to the middle of that window,
+press <keysym>Alt+Right</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus previous window on the current page, and move pointer to the middle of that window,
+press <keysym>Alt+Left</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus next window on the current workspace, and move pointer to the middle of that window,
+press <keysym>Shift+Right</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus previous window on the current workspace, and warp pointer to the middle of that window,
+press <keysym>Shift+Left</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To move pointer in the middle of the focused window if pointer is outside that window,
+press <keysym>Meta+Alt+J</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus next window on the any workspace or page, press <keysym>Meta+Alt+Right</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To focus previous window on the any workspace or page, press <keysym>Meta+Alt+Left</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To cycle focus of the windows on the current page, press <keysym>Alt+Escape</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To pop Window List menu for the current workspace, press <keysym>Ctrl+Escape</keysym> in any context.
+Pressing cursor keys <keysym>Up</keysym>, <keysym>Tab</keysym> or <keysym>Tab</keysym> in the context of
+Window List menu, moves up, down and then cycles on the first/last item menu item focus. Pressing
+<keysym>Escape</keysym> key in the context of Window List menu will open extended Window List where
+windows of all workspaces are visible, and separated by the names of workspaces as non-clickable
+menu subtitles. Pressing <keysym>Escape</keysym> or <keysym>Escape</keysym> for the third time in the
+context of the Window List menu, pops down Window List Menu. Pressing <keysym>Return</keysym> key
+on any selectable Window List menu item, selects and focuses that window and pops down Window List Menu.
+</para></listitem>
+
+<listitem><para>
+To shift focus on the icons of the current workspace, press <keysym>Meta+Alt+I</keysym> in any context
+apart from icons themselves. In the context of icons, this key binding moves focus to the next icon if
+there is no un-iconified windows on the current page, or shifts focus to the first un-iconified window
+if such exists on the current page.
+</para></listitem>
+
+<listitem><para>
+While the focus is on icons, pressing keys <keysym>Up</keysym> or <keysym>Down</keysym> browses workspace
+icons by shifting focus between them back and forth.
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>I</keysym> or <keysym>SunOpen</keysym> key in the context of icons, deiconifies currently
+focused icon.
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>Space+I</keysym> or <keysym>Meta+Alt+M</keysym> keys in the context of icons, pops up
+icons menu, where many operations common for iconified windows can be find and called.
+</para></listitem>
+
+<listitem><para>
+To pop up Workspace Menu in any context, press <keysym>Menu</keysym> (or <keysym>Compose</keysym>) key
+fast twice in a row. The same function has the <keysym>Shift+Escape</keysym> key binding, but pressed
+once.
+</para></listitem>
+
+<listitem><para>
+To pop up Window Operations Menu in any context, press <keysym>Meta+Menu</keysym> (or <keysym>Meta+Compose</keysym>)
+key binding. Key binding <keysym>Meta+Escape</keysym> has the same function.
+</para></listitem>
+
+<listitem><para>
+To pop up current workspace Local Pager and Front Pager Page Manager Menu in the same time, press <keysym>Meta+Alt+Menu</keysym>.
+Key binding <keysym>Meta+Shift+M</keysym> in any context apart from icons, does the same function. While Front Pager Page Manager
+Menu and Local Pager are popped up, keys <keysym>Up</keysym>, <keysym>Down</keysym> or <keysym>Tab</keysym> are selecting pages
+on the menu and cycling trough them. Pressing <keysym>Return</keysym> key, selects a page, while Local Pager will indicate this
+change and dissapear after a few (or configured) number of seconds.
+</para></listitem>
+
+<listitem><para>
+To resize (or zoom in) currently focused window by 50 pixels in all directions, press <keysym>Meta+F8</keysym>.
+Window will be placed on it's default position and enlarged by mentioned amount of pixels in all directions.
+</para></listitem>
+
+<listitem><para>
+To resize (or zoom out) currently focused window by 50 pixels in all directions, press <keysym>Shift+Meta+F8</keysym>.
+Window will be placed on it's default position and shrinked by mentioned amount of pixels in all directions.
+</para></listitem>
+
+<listitem><para>
+To open a new default terminal window, press <keysym>Meta+F12</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To open built in "Exec" launcher, or advanced Rofi launcher if configured, press <keysym>Alt+F12</keysym>.
+This same action can be performed on Sun keyboard by pressing <keysym>SunOpen</keysym> (XF86Open) key in
+the context of the root window, or with <keysym>Meta+SunOpen</keysym> in any context.
+</para></listitem>
+
+<listitem><para>
+To open Graphical Workspace Manager or "GWM", press <keysym>Meta+Alt+Home</keysym> key binding. Keys
+<keysym>Control+Q</keysym> if pressed in the context of  GWM window, will dismiss GWM.
+</para></listitem>
+
+<listitem><para>
+To open Local Pager, press <keysym>Meta+Backspace</keysym> in any context. Pressing <keysym>Meta+Backspace</keysym>
+again (but in the context of Local Pager) dismisses Local Pager.
+</para></listitem>
+
+<listitem><para>
+To open Global Pager, press <keysym>MetaAlt+Backspace</keysym> in any context. Pressing <keysym>Meta+Alt+Backspace</keysym>
+again dismisses Global Pager.
+</para></listitem>
+
+<listitem><para>
+To lock the screen if X Screen Saver is enabled, press <keysym>Meta+Alt+L</keysym>.
+</para></listitem>
+
+<listitem><para>
+Combination of keys <keysym>Meta+Alt+X</keysym> calls <command>xrandr --auto</command>".
+</para></listitem>
+
+<listitem><para>
+To clean up current page or viewport, press <keysym>Meta+Alt+F5</keysym>. This will iconify
+and hide (almost) all objects on the screen. Pressing <keysym>Meta+Alt+F5</keysym> puts
+back all windows which were affected with <keysym>Meta+Alt+F5</keysym> on that same screen
+in the first run - a toggle action.
+</para></listitem>
+
+<listitem><para>
+To pop Window Operations Menu of the currently focused window, press <keysym>Meta+Alt+M</keysym> in
+the context of that window or it's decorations. This will press first leftmost button on the window's
+title bar and show pop down Windows Operations Menu.
+</para></listitem>
+
+<listitem><para>
+To open <emphasis>Occupy Workspace</emphasis> dialog for the currently focused window, press
+<keysym>Meta+Alt+O</keysym> key binding.
+</para></listitem>
+
+<listitem><para>
+To tile windows vertically (move and resize in maximize mode) on the current page, press
+<keysym>Meta+Alt+R</keysym> key binding. Pressing it again will restore all affected windows
+to their default positions, but maximized windows will be in the restored state.
+</para></listitem>
+
+<listitem><para>
+To tile windows horizontally (move and resize in maximize mode) on the current page, press
+<keysym>Meta+Alt+H</keysym> key binding. Pressing it again will restore all affected windows
+to their default positions, but maximized windows will be in the restored state.
+</para></listitem>
+
+<listitem><para>
+<keysym>XF86PowerOff</keysym> on Sun keyboards (most upper right) and some other keyboards opens
+<link linkend="NsCDE-SysActionDialog">System Action Dialog</link> with system suspend (S3) option
+selected. For this to work, ACPI action needs to be configured on the system to give FVWM window
+manager control. Otherwise, this will likely initiate direct system shutdown.
+</para></listitem>
+
+<listitem><para>
+<keysym>Ctrl+XF86PowerOff</keysym> opens System Action Dialog with system shutdown option selected.
+For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
+initiate direct system shutdown.
+</para></listitem>
+
+<listitem><para>
+<keysym>Alt+XF86PowerOff</keysym> opens System Action Dialog with system reboot option selected. For
+this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate
+direct system shutdown.
+</para></listitem>
+
+<listitem><para>
+<keysym>Meta+XF86PowerOff</keysym> opens System Action Dialog with X Session logout option selected.
+For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
+initiate direct system shutdown.
+</para></listitem>
+
+<listitem><para>
+<keysym>Help</keysym> key on Sun keyboards if pressed, in the pointer context of the root window will
+call PDF viewer (if any) with complete (this) NsCDE documentation.
+</para></listitem>
+
+<listitem><para>
+<keysym>Meta+Help</keysym> key on Sun keyboards if pressed, in any context will
+call PDF viewer (if any) with complete (this) NsCDE documentation.
+</para></listitem>
+
+<listitem><para>
+Sun <keysym>Find</keysym> key on Sun keyboards in the context of the root window opens
+<emphasis>f_Find</emphasis> NsCDE FVWM function which needs defined by the user to be useful.
+</para></listitem>
+
+<listitem><para>
+Sun <keysym>Meta+Find</keysym> key on Sun keyboards in any context opens
+<emphasis>f_Find</emphasis> NsCDE FVWM function which needs defined by the user to be useful.
+</para></listitem>
+
+<listitem><para>
+To open NsCDE Style Manager, press <keysym>Props</keysym> key in the context of the root window,
+or <keysym>Meta+Props</keysym> in any context. This opens <link linkend="NsCDE-StyleMgr">Style Manager (StlyeMgr)</link>
+window. Pressing this keys combinations while Style Manager is opened, closes Style Manager.
+</para></listitem>
+
+<listitem><para>
+To control audio volume, on some keyboards (such as Sun keyboards), press volume up or volume down keys. They are
+called <keysym>XF86AudioLowerVolume</keysym>, <keysym>XF86AudioRaiseVolume</keysym> and <keysym>XF86AudioMute</keysym>
+by the Xorg X server. The following actions can be performed:
+<itemizedlist>
+<listitem><para>
+To raise volume by 1%, press <keysym>XF86AudioRaiseVolume</keysym> in any context.
+</para></listitem>
+<listitem><para>
+To lower volume by 1%, press <keysym>XF86AudioLowerVolume</keysym> in any context.
+</para></listitem>
+<listitem><para>
+To raise volume by 10%, press <keysym>Control+XF86AudioRaiseVolume</keysym> in any context.
+</para></listitem>
+<listitem><para>
+To lower volume by 10%, press <keysym>Control+XF86AudioLowerVolume</keysym> in any context.
+</para></listitem>
+<listitem><para>
+To mute sound complitely, press <keysym>XF86AudioMute</keysym> in any context.
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+
+<listitem><para>
+To open last pressed item on the any subpanel of the Front Panel in any context, press
+<keysym>Meta+Alt+E</keysym>. The same function can be called on Sun keyboards by pressing
+<keysym>Meta+Again</keysym> (or <keysym>Meta+Redo</keysym>) key binding.
+</para></listitem>
+
+<listitem><para>
+To simulate pointer button 1 click on the Front Panel, press <keysym>Meta+Return</keysym>
+in the context of the Front Panel icon.
+</para></listitem>
+
+<listitem><para>
+Key binding <keysym>Help</keysym> in the context of the Front Panel will display help
+pages (documentation) for the Front Panel.
+</para></listitem>
+
+<listitem><para>
+Pressing <keysym>Meta+Alt+M</keysym> in the context of the Front Panel will open
+Front Panel Operations Menu by clicking leftmost top button just like in any other
+window or subpanel.
+</para></listitem>
+
+<listitem><para>
+To open subpanels 1-5 and 6-10, press <keysym>Meta+&lt;number&gt;</keysym> in the context
+(focus) of the Front Panel.
+</para></listitem>
+
+<listitem><para>
+To close subpanels 1-5 and 6-10, press <keysym>Meta+&lt;number&gt;</keysym> in the context
+(focus) of the subpanel that is opened. The subpanel will pop down to launcher on the
+Front Panel.
+</para></listitem>
+
+<listitem><para>
+To simulate pointer button 1 click on the Front Panel, press <keysym>Meta+Return</keysym>
+in the context of the opened subpanel with pointer above selected item.
+</para></listitem>
+
+<listitem><para>
+Key binding <keysym>Help</keysym> in the context of the Front Panel will display help
+pages (documentation) for the Subpanels of the Front Panel.
+</para></listitem>
+
+<listitem><para>
+To enlarge terminal to be wide and occupy ~70-80% of the screen, press <keysym>Meta+F2</keysym>
+in the context of the current terminal. Terminals recognized by the NsCDE are the those which
+have string "*Term*", "*term*" or "*terminal*" as a name, X11 class or resource name.
+</para></listitem>
+
+<listitem><para>
+To reposition a window as if it is just opened, or to be put on the configured place together with
+geometry rescaling, press <keysym>Alt+F3</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To reposition a window to the center of the screen, press <keysym>Meta+F3</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To close a focused window, press <keysym>Alt+F4</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To forcibly close non-responding or erratic focused window, press <keysym>Meta+Alt+F4</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To regenerate, refresh and redraw a focused window, press <keysym>Alt+F5</keysym> in its context.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To refresh the current window and the whole screen, press <keysym>Meta+F5</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To raise covered, overlapped window, or to lower it behind another one, depending
+on current situation, press <keysym>Alt+F6</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To start interactive move of the currently focused window, press <keysym>Alt+F7</keysym>.
+While selected, window can be moved with left, right, up and down cursor keys. Key
+Escape cancels the operation.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To make window sticky across all pages and workspaces, press <keysym>Meta+F7</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To make window sticky across all workspaces, press <keysym>Meta+Alt+F7</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To make window sticky across all pages of the current workspace, press <keysym>Meta+Shift+F7</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To enter interactive window resize, press <keysym>Alt+F8</keysym>. Window can be resized by left,
+right, up and down cursor keys. Key Escape cancels the operation.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To iconify the currently focused window, press <keysym>Alt+F9</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+To shade the currently focused window to the size of the title bar, press <keysym>Meta+F9</keysym>.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Alt+F10</keysym> grows window up to the first obstacle on page,
+  when pressed again, it maximizes window ~ 86% - avoids Front Panel; when pressed further,
+  it maximizes to 100% (whole screen + decorations); third call to Alt+F10 restores
+  window into it's normal state. We can say how window is cycling between <emphasis>normal</emphasis>,
+  <emphasis>grow</emphasis>, <emphasis>stretched</emphasis> and <emphasis>maximized</emphasis> state.
+  This is a cyclic keybinding in a "grow" direction.
+  </para>
+  <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-cua.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+   <keysym>Meta+F10</keysym> is the same as <keysym>Meta+F10</keysym>. This variant is
+   presented on Window Operations menu for actions when going towards bigger maximized
+   state, while <keysym>Meta+F7</keysym> is presented for actions which are shrinking
+   back.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Alt+F11</keysym> maximizes window 100% (whole screen + decorations);
+  when pressed again it maximizes to 86% (stretch), third press will put window
+  in the grow state (Maximized on page up to the first obstacle), while third press should
+  put window into normal state. We can say how window is cycling between <emphasis>normal</emphasis>,
+  <emphasis>grow</emphasis>, <emphasis>stretched</emphasis> and <emphasis>maximized</emphasis> state.
+  This is a cyclic keybinding in a "shrink" direction.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+F11</keysym> Works like <keysym>Alt+F11</keysym>, but selects every second
+  operation. In practice, from restored state goes to stretched and back, and from grow
+  state goes to fully maximized and back.
+</para></listitem>
+
+<listitem><para>
+  Key <keysym>Meta+Space</keysym> in the context of the window, frame corners, frame
+  sides, title bar and icon (avoids root window context!) calls
+  <link linkend="NsCDE-Occupy">Occupy Workspace</link> dialog for moving window between
+  the workspaces.
+  </para>
+  <para>
+  Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+  for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+ Key <keysym>Alt+Space</keysym> in the context of the window, frame corners, frame
+    sides, title bar and icon (ovoids root window context!) calls
+    <link linkend="NsCDE-Occupy">Occupy Page</link> dialog for window moving between the desks.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  Key <keysym>Meta+Alt+Space</keysym> in the context of the window, frame corners, frame
+   sides, title bar and icon (ovoids root window context!) calls
+   <link linkend="NsCDE-Occupy">Occupy Monitor</link> dialog for window moving between the
+   monitors. This key binding is available only when multiple monitors are detected by
+   NsCDE and FVWM.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Ctrl+Alt+Print</keysym> takes a screenshot of the root window with 3 seconds delay.
+ Screenshots in PNG format are saved in <filename class="directory">XDG_PICTURES_DIR</filename> or
+ <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Shift+Alt+Print</keysym> pops cross cursor to pick selected screen area for screenshot.
+ Screenshots in PNG format are saved in <filename class="directory">XDG_PICTURES_DIR</filename> or
+ <varname>$HOME</varname> if <filename class="directory">XDG_PICTURES_DIR</filename> is not defined.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Print</keysym> without any modifiers and in any context, takes a screenshot of the root
+  window with 3 seconds delay. Screenshots in PNG format are saved into clipboard for pasting into
+  compatible X11 applications.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Shift+Print</keysym> pops cross cursor to pick selected screen area for screenshot.
+ Screenshots in PNG format are saved into clipboard for pasting into compatible X11 applications.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Shift+Backspace</keysym> will do the same as <keysym>Ctrl+Backspace,</keysym> but Front Panel
+    after repositioning is shaded to bottom border of the screen. Invoking this key sequence again will
+    unshade the Front Panel. Middle mouse button on the borders of the frame has the same effect.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Ctrl+Backspace</keysym> in any context will raise Front Panel and reposition
+  it to it's default place on the screen. If key combination is pressed for the second time,
+  focus and pointer focus will be transferred to the Front Panel, enabling <keysym>Meta+[0-9]</keysym>
+  keys to function on subpanels and <keysym>Ctrl+Return</keysym> on icons of the Front Panel itself.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Alt+G</keysym> Displays Window <link linkend="NsCDE-GeometryMgr">Window Geometry Manager</link>
+  dialog which saves geometry information for a current window in the <filename>$FVWM_USERDIR/GeoDB.ini</filename>
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Alt+F</keysym> In the context of a window, frame, or corner, puts a current window
+  into a real fullscreen mode. Calling this keybinding again, restores a window.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Alt+D</keysym> In the context of a window opens FVWM Ident module which presents
+  dialog with various X11 and window manager attributes on the screen
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+<listitem><para>
+  <keysym>Meta+Alt+T</keysym> In the context of a window or it's decorations removes title bar
+  of that window leaving only content, borders and corners. Pressing this combination again
+  in the context of the title-less window restores it's Title Bar in place.
+    </para>
+    <para>
+    Dynamic: defined in <filename>$NSCDE_DATADIR/defaults/Keymenu-nscde.actions</filename>
+    for automatic description on menus.
+</para></listitem>
+
+</itemizedlist>
+
 </para>
+</sect2>
 
-<sect3 id="Keybindings_nscde">
-<title>Keybindings.nscde1x</title>
+<sect2 id="NsCDE-Key-Bindings-NsCDE1x">
+<title>NsCDE 1.X Key Bindings</title>
 <para>
-
-This subsection explains key bindings implemented in old and deprecated "nscde1x" set of key bindings.
+This subsection explains key bindings implemented in the deprecated "nscde1x" set of key bindings. For those
+who are using mentioned set, this subsection applies as documentation of key bindings.
+</para>
+<para>
+This mechanism was still experimental in NsCDE 2.1 and the only implemented set
+of keybindings was <varname>nscde1x</varname> (called "nscde" in NsCDE 2.1). The following section lists and explains
+key bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as an new default
+choice to old "nscde1x" set of keybindings.
 
 <itemizedlist>
 <listitem><para>
@@ -6573,649 +6724,12 @@ Front Panel or Subpanels documentation.
 </itemizedlist>
 
 </para>
-
-</sect3>
-
-<sect3 id="Keybindings_cua">
-<title>Keybindings.cua</title>
-<para>
-
-This subsection describes key bindings implemented in "cua" (Common User Access) standard set of key bindings.
-
-<itemizedlist>
-
-<listitem><para>
-Control modifier with cursor keys is moving viewport from page to page in any context:
-<itemizedlist>
-<listitem><para>
-<keysym>Ctrl+Up</keysym> - move viewport one whole page up
-</para></listitem>
-<listitem><para>
-<keysym>Ctrl+Down</keysym> - move viewport one whole page down
-</para></listitem>
-<listitem><para>
-<keysym>Ctrl+Left</keysym> - move viewport one whole page left
-</para></listitem>
-<listitem><para>
-<keysym>Ctrl+Right</keysym> - move viewport one whole page right
-</para></listitem>
-</itemizedlist>
-</para></listitem>
-
-<listitem><para>
-Meta modifier with cursor keys is moving viewport page by 4 percent of the screen in any context:
-<itemizedlist>
-<listitem><para>
-<keysym>Meta+Up</keysym> - move viewport up by 4%
-</para></listitem>
-<listitem><para>
-<keysym>Meta+Down</keysym> - move viewport down by 4%
-</para></listitem>
-<listitem><para>
-<keysym>Meta+Left</keysym> - move viewport left by 4%
-</para></listitem>
-<listitem><para>
-<keysym>Meta+Right</keysym> - move viewport right by 4%
-</para></listitem>
-</itemizedlist>
-</para></listitem>
-
-<listitem><para>
-Cursor keys with modifiers Control, Shift and Meta pressed together are moving pointer by 1% in any context:
-<itemizedlist>
-<listitem><para>
-<keysym>Control+Shift+Meta+Up</keysym> - move mouse pointer by 1% of the screen up
-</para></listitem>
-<listitem><para>
-<keysym>Control+Shift+Meta+Down</keysym> - move mouse pointer by 1% of the screen down
-</para></listitem>
-<listitem><para>
-<keysym>Control+Shift+Meta+Left</keysym> - move mouse pointer by 1% of the screen left
-</para></listitem>
-<listitem><para>
-<keysym>Control+Shift+Meta+Right</keysym> - move mouse pointer by 1% of the screen right
-</para></listitem>
-</itemizedlist>
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>Alt+Tab</keysym> in any context scrolls one page down, then wraps up on the lowest page and continues to the right.
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>Meta+Tab</keysym> in any context moves viewport to the next workspace
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>Shift+Meta+Tab</keysym> in any context moves viewport to the previous workspace
-</para></listitem>
-
-<listitem><para>
-To raise and focus next overlapped window on the current page, press <keysym>Alt+Up</keysym> in any
-context, apart from icons.
-</para></listitem>
-
-<listitem><para>
-To raise and focus previous overlapped window on the current page, press <keysym>Alt+Down</keysym> in any
-context, apart from icons.
-</para></listitem>
-
-<listitem><para>
-To focus next window on the current page, and move pointer to the middle of that window,
-press <keysym>Alt+Right</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus next window on the current page, and move pointer to the middle of that window,
-press <keysym>Alt+Right</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus previous window on the current page, and move pointer to the middle of that window,
-press <keysym>Alt+Left</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus next window on the current workspace, and move pointer to the middle of that window,
-press <keysym>Shift+Right</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus previous window on the current workspace, and warp pointer to the middle of that window,
-press <keysym>Shift+Left</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To move pointer in the middle of the focused window if pointer is outside that window,
-press <keysym>Meta+Alt+J</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus next window on the any workspace or page, press <keysym>Meta+Alt+Right</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To focus previous window on the any workspace or page, press <keysym>Meta+Alt+Left</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To cycle focus of the windows on the current page, press <keysym>Alt+Escape</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To pop Window List menu for the current workspace, press <keysym>Ctrl+Escape</keysym> in any context.
-Pressing cursor keys <keysym>Up</keysym>, <keysym>Tab</keysym> or <keysym>Tab</keysym> in the context of
-Window List menu, moves up, down and then cycles on the first/last item menu item focus. Pressing
-<keysym>Escape</keysym> key in the context of Window List menu will open extended Window List where
-windows of all workspaces are visible, and separated by the names of workspaces as non-clickable
-menu subtitles. Pressing <keysym>Escape</keysym> or <keysym>Escape</keysym> for the third time in the
-context of the Window List menu, pops down Window List Menu. Pressing <keysym>Return</keysym> key
-on any selectable Window List menu item, selects and focuses that window and pops down Window List Menu.
-</para></listitem>
-
-<listitem><para>
-To shift focus on the icons of the current workspace, press <keysym>Meta+Alt+I</keysym> in any context
-apart from icons themselves. In the context of icons, this key binding moves focus to the next icon if
-there is no un-iconified windows on the current page, or shifts focus to the first un-iconified window
-if such exists on the current page.
-</para></listitem>
-
-<listitem><para>
-While the focus is on icons, pressing keys <keysym>Up</keysym> or <keysym>Down</keysym> browses workspace
-icons by shifting focus between them back and forth.
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>I</keysym> or <keysym>SunOpen</keysym> key in the context of icons, deiconifies currently
-focused icon.
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>Space+I</keysym> or <keysym>Meta+Alt+M</keysym> keys in the context of icons, pops up
-icons menu, where many operations common for iconified windows can be find and called.
-</para></listitem>
-
-<listitem><para>
-To pop up Workspace Menu in any context, press <keysym>Menu</keysym> (or <keysym>Compose</keysym>) key
-fast twice in a row. The same function has the <keysym>Shift+Escape</keysym> key binding, but pressed
-once.
-</para></listitem>
-
-<listitem><para>
-To pop up Window Operations Menu in any context, press <keysym>Meta+Menu</keysym> (or <keysym>Meta+Compose</keysym>)
-key binding. Key binding <keysym>Meta+Escape</keysym> has the same function.
-</para></listitem>
-
-<listitem><para>
-To pop up current workspace Local Pager and Front Pager Page Manager Menu in the same time, press <keysym>Meta+Alt+Menu</keysym>.
-Key binding <keysym>Meta+Shift+M</keysym> in any context apart from icons, does the same function. While Front Pager Page Manager
-Menu and Local Pager are popped up, keys <keysym>Up</keysym>, <keysym>Down</keysym> or <keysym>Tab</keysym> are selecting pages
-on the menu and cycling trough them. Pressing <keysym>Return</keysym> key, selects a page, while Local Pager will indicate this
-change and dissapear after a few (or configured) number of seconds.
-</para></listitem>
-
-<listitem><para>
-To resize (or zoom in) currently focused window by 50 pixels in all directions, press <keysym>Meta+F8</keysym>.
-Window will be placed on it's default position and enlarged by mentioned amount of pixels in all directions.
-</para></listitem>
-
-<listitem><para>
-To resize (or zoom out) currently focused window by 50 pixels in all directions, press <keysym>Shift+Meta+F8</keysym>.
-Window will be placed on it's default position and shrinked by mentioned amount of pixels in all directions.
-</para></listitem>
-
-<listitem><para>
-To open a new default terminal window, press <keysym>Meta+F12</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To open built in "Exec" launcher, or advanced Rofi launcher if configured, press <keysym>Alt+F12</keysym>.
-This same action can be performed on Sun keyboard by pressing <keysym>SunOpen</keysym> (XF86Open) key in
-the context of the root window, or with <keysym>Meta+SunOpen</keysym> in any context.
-</para></listitem>
-
-<listitem><para>
-To open Graphical Workspace Manager or "GWM", press <keysym>Meta+Alt+Home</keysym> key binding. Keys
-<keysym>Control+Q</keysym> if pressed in the context of  GWM window, will dismiss GWM.
-</para></listitem>
-
-<listitem><para>
-To open Local Pager, press <keysym>Meta+Backspace</keysym> in any context. Pressing <keysym>Meta+Backspace</keysym>
-again (but in the context of Local Pager) dismisses Local Pager.
-</para></listitem>
-
-<listitem><para>
-To open Global Pager, press <keysym>MetaAlt+Backspace</keysym> in any context. Pressing <keysym>Meta+Alt+Backspace</keysym>
-again dismisses Global Pager.
-</para></listitem>
-
-<listitem><para>
-To lock the screen if X Screen Saver is enabled, press <keysym>Meta+Alt+L</keysym>.
-</para></listitem>
-
-<listitem><para>
-Combination of keys <keysym>Meta+Alt+X</keysym> calls <command>xrandr --auto</command>".
-</para></listitem>
-
-<listitem><para>
-To clean up current page or viewport, press <keysym>Meta+Alt+F5</keysym>. This will iconify
-and hide (almost) all objects on the screen. Pressing <keysym>Meta+Alt+F5</keysym> puts
-back all windows which were affected with <keysym>Meta+Alt+F5</keysym> on that same screen
-in the first run - a toggle action.
-</para></listitem>
-
-<listitem><para>
-To pop Window Operations Menu of the currently focused window, press <keysym>Meta+Alt+M</keysym> in
-the context of that window or it's decorations. This will press first leftmost button on the window's
-title bar and show pop down Windows Operations Menu.
-</para></listitem>
-
-<listitem><para>
-To open <emphasis>Occupy Workspace</emphasis> dialog for the currently focused window, press
-<keysym>Meta+Alt+O</keysym> key binding.
-</para></listitem>
-
-<listitem><para>
-To tile windows vertically (move and resize in maximize mode) on the current page, press
-<keysym>Meta+Alt+R</keysym> key binding. Pressing it again will restore all affected windows
-to their default positions, but maximized windows will be in the restored state.
-</para></listitem>
-
-<listitem><para>
-To tile windows horizontally (move and resize in maximize mode) on the current page, press
-<keysym>Meta+Alt+H</keysym> key binding. Pressing it again will restore all affected windows
-to their default positions, but maximized windows will be in the restored state.
-</para></listitem>
-
-<listitem><para>
-<keysym>XF86PowerOff</keysym> on Sun keyboards (most upper right) and some other keyboards opens
-<link linkend="NsCDE-SysActionDialog">System Action Dialog</link> with system suspend (S3) option
-selected. For this to work, ACPI action needs to be configured on the system to give FVWM window
-manager control. Otherwise, this will likely initiate direct system shutdown.
-</para></listitem>
-
-<listitem><para>
-<keysym>Ctrl+XF86PowerOff</keysym> opens System Action Dialog with system shutdown option selected.
-For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
-initiate direct system shutdown.
-</para></listitem>
-
-<listitem><para>
-<keysym>Alt+XF86PowerOff</keysym> opens System Action Dialog with system reboot option selected. For
-this to work, ACPI action needs to be configured on the system. Otherwise, this will likely initiate
-direct system shutdown.
-</para></listitem>
-
-<listitem><para>
-<keysym>Meta+XF86PowerOff</keysym> opens System Action Dialog with X Session logout option selected.
-For this to work, ACPI action needs to be configured on the system. Otherwise, this will likely
-initiate direct system shutdown.
-</para></listitem>
-
-<listitem><para>
-<keysym>Help</keysym> key on Sun keyboards if pressed, in the pointer context of the root window will
-call PDF viewer (if any) with complete (this) NsCDE documentation.
-</para></listitem>
-
-<listitem><para>
-<keysym>Meta+Help</keysym> key on Sun keyboards if pressed, in any context will
-call PDF viewer (if any) with complete (this) NsCDE documentation.
-</para></listitem>
-
-<listitem><para>
-Sun <keysym>Find</keysym> key on Sun keyboards in the context of the root window opens
-<emphasis>f_Find</emphasis> NsCDE FVWM function which needs defined by the user to be useful.
-</para></listitem>
-
-<listitem><para>
-Sun <keysym>Meta+Find</keysym> key on Sun keyboards in any context opens
-<emphasis>f_Find</emphasis> NsCDE FVWM function which needs defined by the user to be useful.
-</para></listitem>
-
-<listitem><para>
-To open NsCDE Style Manager, press <keysym>Props</keysym> key in the context of the root window,
-or <keysym>Meta+Props</keysym> in any context. This opens <link linkend="NsCDE-StyleMgr">Style Manager (StlyeMgr)</link>
-window. Pressing this keys combinations while Style Manager is opened, closes Style Manager.
-</para></listitem>
-
-<listitem><para>
-To control audio volume, on some keyboards (such as Sun keyboards), press volume up or volume down keys. They are
-called <keysym>XF86AudioLowerVolume</keysym>, <keysym>XF86AudioRaiseVolume</keysym> and <keysym>XF86AudioMute</keysym>
-by the Xorg X server. The following actions can be performed:
-<itemizedlist>
-<listitem><para>
-To raise volume by 1%, press <keysym>XF86AudioRaiseVolume</keysym> in any context.
-</para></listitem>
-<listitem><para>
-To lower volume by 1%, press <keysym>XF86AudioLowerVolume</keysym> in any context.
-</para></listitem>
-<listitem><para>
-To raise volume by 10%, press <keysym>Control+XF86AudioRaiseVolume</keysym> in any context.
-</para></listitem>
-<listitem><para>
-To lower volume by 10%, press <keysym>Control+XF86AudioLowerVolume</keysym> in any context.
-</para></listitem>
-<listitem><para>
-To mute sound complitely, press <keysym>XF86AudioMute</keysym> in any context.
-</para></listitem>
-</itemizedlist>
-</para></listitem>
-
-<listitem><para>
-To open last pressed item on the any subpanel of the Front Panel in any context, press
-<keysym>Meta+Alt+E</keysym>. The same function can be called on Sun keyboards by pressing
-<keysym>Meta+Again</keysym> (or <keysym>Meta+Redo</keysym>) key binding.
-</para></listitem>
-
-<listitem><para>
-To simulate pointer button 1 click on the Front Panel, press <keysym>Meta+Return</keysym>
-in the context of the Front Panel icon.
-</para></listitem>
-
-<listitem><para>
-Key binding <keysym>Help</keysym> in the context of the Front Panel will display help
-pages (documentation) for the Front Panel.
-</para></listitem>
-
-<listitem><para>
-Pressing <keysym>Meta+Alt+M</keysym> in the context of the Front Panel will open
-Front Panel Operations Menu by clicking leftmost top button just like in any other
-window or subpanel.
-</para></listitem>
-
-<listitem><para>
-To open subpanels 1-5 and 6-10, press <keysym>Meta+&lt;number&gt;</keysym> in the context
-(focus) of the Front Panel.
-</para></listitem>
-
-<listitem><para>
-To close subpanels 1-5 and 6-10, press <keysym>Meta+&lt;number&gt;</keysym> in the context
-(focus) of the subpanel that is opened. The subpanel will pop down to launcher on the
-Front Panel.
-</para></listitem>
-
-<listitem><para>
-To simulate pointer button 1 click on the Front Panel, press <keysym>Meta+Return</keysym>
-in the context of the opened subpanel with pointer above selected item.
-</para></listitem>
-
-<listitem><para>
-Key binding <keysym>Help</keysym> in the context of the Front Panel will display help
-pages (documentation) for the Subpanels of the Front Panel.
-</para></listitem>
-
-<listitem><para>
-To enlarge terminal to be wide and occupy ~70-80% of the screen, press <keysym>Meta+F2</keysym>
-in the context of the current terminal. Terminals recognized by the NsCDE are the those which
-have string "*Term*", "*term*" or "*terminal*" as a name, X11 class or resource name.
-</para></listitem>
-
-<listitem><para>
-To reposition a window as if it is just opened, or to be put on the configured place together with
-geometry rescaling, press <keysym>Alt+F3</keysym>.
-</para></listitem>
-
-<listitem><para>
-To reposition a window to the center of the screen, press <keysym>Meta+F3</keysym>.
-</para></listitem>
-
-<listitem><para>
-To close a focused window, press <keysym>Alt+F4</keysym>.
-</para></listitem>
-
-<listitem><para>
-To forcibly close non-responding or erratic focused window, press <keysym>Meta+Alt+F4</keysym>.
-</para></listitem>
-
-<listitem><para>
-To regenerate, refresh and redraw a focused window, press <keysym>Alt+F5</keysym> in its context.
-</para></listitem>
-
-<listitem><para>
-To refresh the current window and the whole screen, press <keysym>Meta+F5</keysym>.
-</para></listitem>
-
-<listitem><para>
-To raise covered, overlapped window, or to lower it behind another one, depending
-on current situation, press <keysym>Alt+F6</keysym>.
-</para></listitem>
-
-<listitem><para>
-To start interactive move of the currently focused window, press <keysym>Alt+F7</keysym>.
-While selected, window can be moved with left, right, up and down cursor keys. Key
-Escape cancels the operation.
-</para></listitem>
-
-<listitem><para>
-To make window sticky across all pages and workspaces, press <keysym>Meta+F7</keysym>.
-</para></listitem>
-
-<listitem><para>
-To make window sticky across all workspaces, press <keysym>Meta+Alt+F7</keysym>.
-</para></listitem>
-
-<listitem><para>
-To make window sticky across all pages of the current workspace, press <keysym>Meta+Shift+F7</keysym>.
-</para></listitem>
-
-<listitem><para>
-To enter interactive window resize, press <keysym>Alt+F8</keysym>. Window can be resized by left,
-right, up and down cursor keys. Key Escape cancels the operation.
-</para></listitem>
-
-<listitem><para>
-To iconify the currently focused window, press <keysym>Alt+F9</keysym>.
-</para></listitem>
-
-<listitem><para>
-To shade the currently focused window to the size of the title bar, press <keysym>Meta+F9</keysym>.
-</para></listitem>
-
-</itemizedlist>
-
-</para>
-
-</sect3>
-
 </sect2>
 
-<sect2 id="Keymenu_actions">
-<title>Keymenu-&lt;kbd_bind_set&gt;.actions</title>
+<sect2 id="NsCDE-Mouse-Bindings">
+<title>Mouse (Pointer) Bindings</title>
 <para>
-This file is not FVWM configuration file. It is written manually (with editor), and read by the
-<command>$NSCDE_TOOLSDIR/keymenu</command> command which will generate infostore variables with
-descriptive keyboard shortcut names which are used in NsCDE menus from
-<filename>Menus.fvwmconf</filename> and <filename>Functions.fvwmconf</filename>, and additionaly,
-use the whole line after the keyword in the first column with "Silent Key" prefix to dinamically
-generate this part of keybindings which are separated from
-<filename>Keybindings.fvwmconf</filename> (<filename>Keybindings.&lt;keybindings set&gt;</filename>)
-and processed specially because they definition must automatically match keyboard binding description
-in various menus. The "&lt;kbd_bind_set&gt;" represents keybindings set called from default
-<filename>Main.fvwmconf</filename> or <filename>$FVWM_USERDIR/NsCDE.conf</filename> with
-variable <varname>kbd_bind_set</varname>. Default is "nscde1x".
-</para>
-<para>
-The syntax of this file is simple: first column is the keyword which becomes infostore
-variable (km_xrefresh as <varname>$[infostore.km_xrefresh]</varname>), and the rest columns of
-every line is FVWM "Key" sintax which is paired with "Silent Key" prefix during initialization
-with <function>f_KeyMenu -a</function> from <filename>Main.fvwmconf</filename>.
-</para>
-<para>
-Every line, or dynamic keybinding can be overriden here if (re)defined in user's
-<filename>$FVWM_USERDIR/Keymenu.actions</filename>: whole file or just choosen keybindings.
-The goal is to get their descriptions (after functions and menus reload) automatically in place
-on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym>Alt+F3</keysym>
-description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
-</para>
-<para>
-File Keymenu-&lt;kbd_bind_set&gt;.actions is processed by <command>$NSCDE_TOOLSDIR/keymenu</command> script.
-This script generates FVWM infostore variables used in menus, and executes FVWM "Key" commands
-producing dynamic keybindings which are described in menus. Additionally, it will read user's
-<filename>$FVWM_USERDIR/Keymenu.actions</filename> if that file exists.
-</para>
-<para>
-For a list of keybindings that are "dynamic", that is, not defined in
-<filename>Keybindings.&lt;kbd_bind_set&gt;</filename>, but in <filename>Keymenu-&lt;kbd_bind_set&gt;.actions</filename>, see
-notices in section about <link linkend="Keybindings_nscde">Keybindings.nscde1x</link>.
-</para>
-
-</sect2>
-
-<sect2 id="Main_fvwmconf">
-<title>Main.fvwmconf</title>
-<para>
-  Core configuration. This file is read as first initialization upon starting FVWM Window Manager.
-  In fact, FVWM is invoked with <option>-f /path/to/Main.fvwmconf</option> to read it instead of
-  default FVWM system configuration or user's <filename>~/.fvwm/config</filename>.
-  This invocation and configuration in <filename>Main.fvwmconf</filename>
-  changes everything: it avoids <filename class="directory">~/.fvwm</filename> if user has a plain (normal)
-  FVWM setup, defines and redefines FVWM internal variables and sets
-  <varname>NSCDE_ROOT</varname>, configures some core FVWM options (like <option>DefaultIcon</option>),
-  defines main FVWM <command>Read</command> command wrapper <function>f_ReadCfg</function>,
-  sets desktop names, reads <filename>NsCDE.conf</filename> depending if user has it, or system-wide one,
-  defines <function>StartFunction</function>, <option>DesktopSize</option>, and
-  then reads most of the files described in this documents, composing NsCDE FVWM configuration.
-  Care must be taken NOT to read this file with <function>f_ReadCfg</function>, because it
-  will end up in the endless CPU hogging loop because <function>f_ReadCfg</function> will be
-  destroyed and recreated during it's own execution. This file should never be overridden
-  in <varname>$FVWM_USERDIR</varname>. It is the init(8) of the NsCDE system.
-</para>
-</sect2>
-
-<sect2 id="Menus_fvwmconf">
-<title>Menus.fvwmconf</title>
-<para>
-In NsCDE, there is a bunch of the menus. Root menus, contextual menus,
-and even menus called or dinamically generated from the FvwmScript(1)
-scripts.
-</para>
-
-<itemizedlist>
-<listitem><para>
-  <guimenuitem>MenuFvwmRoot</guimenuitem> built-in root menu of FVWM. As in CDE, menu of such
-    type, it is called with a right click on the root window.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_Applications</guimenuitem> - main and dynamically generated menu with a FVWM python
-    script <command>fvwm-menu-desktop</command> (contains flat list of apps and icons for Front
-    Panel's subpanels). It reads <filename>/etc/xdg/menus/&lt;desk&gt;-applications.menu</filename>
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_QuickMenu</guimenuitem> beneath m_Applications. Empty by default. Intended to be
-    destroyed and recreated by the user (<filename>Menus.fvwmlocal</filename>) with own
-    favorites.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_NsCDEHelpMenu</guimenuitem> beneath Quick Menu. Contains links to this documentation
-  in PDF and HTML forms.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_NsCDEMenu</guimenuitem> on the top of generated Applications menu.
-  Contains entries to various the NsCDE internal tools.
-  in PDF and HTML forms.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_MoveToPage</guimenuitem>: invoked from the 1st titlebar button. Moves window to
-    the specified page on desk
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_MoveToWorkspace</guimenuitem>: as
-  <guimenuitem>m_MoveToPage</guimenuitem>, but moves across desks. Invoked
-    with middle pointer on the 1st titlebar button
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_ControlFrontPanelMenu</guimenuitem>: Front Panel specific functions. Invoked
-    from the left top control panel menu button on right pointer click
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_DeiconifyOnPage</guimenuitem>: submenu of the main icon menu invoked with the
-    1st pointer click on desktop icon, deiconify window on another page
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_FrontPanelWinMenu</guimenuitem>: Front Panel flavor of the
-  <emphasis>Window Operations</emphasis>
-    menu. Invoked from the top left menu button of the Front Panel
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_IconM2</guimenuitem>: calls small menu with FvwmIdent, xwininfo and xprop if
-    icon is clicked with a middle pointer button
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_IconOps</guimenuitem>: main icon menu invoked with a click on the icon. Contains
-    Icon flavor of the "Window Operations" menu, submenus (see above)
-    and deiconify action
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_SubpanelWindowOps</guimenuitem>: a Subpanel flavor of the Window Operations
-    menu. Invoked from the Subpanel's titlebar left (and only) button
-    contains also contextual actions <guilabel>Refresh Subpanel</guilabel> and
-    <guilabel>Subpanel Settings</guilabel>
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_TitleBarM2</guimenuitem>: Middle pointer click on titlebar. Invokes a small
-    menu which gives FvwmIdent, xwininfo, xprop, and two to four types of screenshot of the window.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_WindowOpsStandard</guimenuitem>: main menu of <emphasis>Window Operations</emphasis>
-    invoked with a mouse
-    click on left titlebar button. It has extended (<guimenuitem>More ...</guimenuitem>) and
-    reduced (<guimenuitem>Less ...</guimenuitem>) version.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_WindowOpsExtended</guimenuitem>: changes <guimenuitem>m_WindowOpsStandard</guimenuitem>
-    from default reduced, to extended view (<guimenuitem>More ...</guimenuitem> option on
-    Window Operation menu)
-</para></listitem>
-
-<listitem><para>
-<guimenuitem>m_RootMenu</guimenuitem>: Small root menu with options to call
-Invoked with a click on the root window. It has menu items for invoking
-workspace-local window list, global window list, local pager, global pager, Window Options
-menu, and to refresh all windows on the screen.
-</para></listitem>
-
-<listitem><para>
-  <guimenuitem>m_WindowOpsRootWin</guimenuitem>: Standalone root window version of the Window
-    Operations menu intended for a general and tricky circumstances. It is invoked from the
-    m_RootMenu, and keybindings <keysym>Ctrl+Meta+Space</keysym> and <keysym>Meta+Menu</keysym>.
-</para></listitem>
-
-</itemizedlist>
-
-<para>
-For a more detailed guide about important menus, how to invoke and use them, see section
-<link linkend="basics_using_menus_preface">Using Menus</link>.
-</para>
-
-</sect2>
-
-<sect2 id="Mousebindings_fvwmconf">
-<title>Mousebindings.fvwmconf</title>
-<para>
- File <filename>Mousebindings.fvwmconf</filename> is done in similar manner as the
-  <filename>Keybindings.&lt;kbd_bind_set&gt;</filename>. Can be overridden (.fvwmconf) or
-  extended (.fvwmlocal) just like (almost) any NsCDE conf file.
-  See fvwm(1) for "Mouse" commands. Here commands invoked with pointer
-  are defined. As it is the case with key bindings, mouse actions are too far more in
-  NsCDE than in original CDE. The syntax is described at the top of the file.
-</para>
-<para>
-  Actions are:
+  This are mouse bindings used in NsCDE:
 </para>
 
 <itemizedlist>
@@ -7402,6 +6916,744 @@ action on the same object deiconifies a window
 </para></listitem>
 
 </itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="NsCDE-Configuration-Files">
+<title>Configuration files explained</title>
+<abstract>
+<para>
+As pointed above, NsCDE has a number of configuration files.
+Approximately 75% of them are the FVWM configurations, where a line
+between using FVWM directives for it's core and modular functionality
+as a desktop-building material and tool, and merely configuring
+aspects for end use are wastly blurred and cannot be really
+distinguished and separated in that strict categories. This system of
+configurations is arranged in some logical and consistent way. For
+example, keyboard shortcuts in Keybindings.&lt;kbd_bind_set&gt;, FvwmBacker
+configuration in Backer.fvwmconf, (generated) colorsets in
+Colorset.fvwmgen etc.
+</para>
+<para>
+All this configurations are included from the Main.fvwmconf.
+This is the starting FVWM configuration which sets core options
+and safe defaults, and reads the rest of the configuration files
+which are included there. It defines StartFunction which starts
+all additional modules and calls important things during start
+or restart of the Window Manager. System Wide configuration files
+are located in $NSCDE_DATADIR/fvwm and $NSCDE_DATADIR/defaults,
+while user local hooks or user complete overrides are stored in
+<filename class="directory">$FVWM_USERDIR</filename>.
+</para>
+</abstract>
+<para>
+This is default list of system-wide configurations:
+</para>
+
+<sect2 id="FrontPanel_actions">
+<title>FrontPanel.actions</title>
+<para>
+A non-FVWM file. Lines in this file are default actions and icons for Front Panel.
+This file is parsed by the <command>fpexec</command> and <command>fpseticon</command>
+shell script tools. All or individual entries from this file can be overridden by
+creating <filename>$FVWM_USERDIR/FrontPanel.actions</filename> file. This is a
+CSV-like file (comma is a field separator), and it defines buttons of the
+Front Panel, their actions and icons.
+</para>
+<para>
+File format is:
+<itemizedlist>
+<listitem><para>Button Number (Btn1, Btn2, BtnN ...)</para></listitem>
+<listitem><para>Icon path (FVWM relative from ImagePath)</para></listitem>
+<listitem><para>Mouse Button (3 mouse buttons for 3 different actions if needed)</para></listitem>
+<listitem><para>Program executable to check for or <emphasis>NOCHK</emphasis> for check
+ avoidance</para></listitem>
+<listitem><para>Actions (commands) with options and arguments to the end of the line</para></listitem>
+</itemizedlist>
+</para>
+<para>
+If Icon Path field is <varname>__APPLET__</varname> for mouse button 1, then in the check/nocheck
+field an applet program may be defined for FvwmButtons based Front Panel to be swallowed instead
+of an icon. In this field, direct FvwmButtons(1) syntax must be manually written with this exceptions:
+</para>
+<itemizedlist>
+<listitem><para>Comma (,) must be replaced with a pipe (|)</para></listitem>
+<listitem><para>Double quotes (") must be escaped by the two backslashed (\\)</para></listitem>
+</itemizedlist>
+<para>
+If the swallowed applet has it's own action on mouse buttons clicks, then declaration of the
+applet must be prefixed with a <varname>ActionIgnoresClientWindow</varname>. In this case,
+last filed with the actions can be "Nop" because Front Panel will not accept this clicks
+(it may accept them if possible transparent area around applet exists and is clicked). If
+the applet is not clickable, a standard FVWM Action or command can be put in the last field
+to make a click on the applet useful.
+</para>
+<para>
+Here is the example of the custom swallowed applet. This one was initially created for the
+Window Maker window manager:
+
+<programlisting>
+<![CDATA[
+   Btn10,__APPLET__,M1,
+   "ActionIgnoresClientWindow| Swallow (Respawn) \\"WmstickynotesApplet\\" 
+   \\"Exec exec wmstickynotes\\"",Nop
+
+   Btn10,,M2,FVWM,Nop
+
+   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
+]]>
+</programlisting>
+
+<figure id="fig_cust_applet">
+  <title>Visual: resulting applet on the Front Panel</title>
+    <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_cust_applet.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_cust_applet.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
+</para>
+
+<para>
+Here is the example of the custom swallowed applet which does not accept mouse clicks:
+
+<programlisting>
+<![CDATA[
+   Btn10,__APPLET__,M1,
+   "Swallow (Respawn) \\"MyFavoriteApplet\\" 
+   \\"Exec exec mfa -s\\"",Exec exec vlc
+
+   Btn10,,M2,FVWM,Nop
+
+   Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 VLC
+]]>
+</programlisting>
+
+</para>
+
+<para>
+This example is replacing standard Front Panel Clock with Solaris Globe Icon based
+Front Panel clock, using the same pclock program as standard one, but with a
+slightly different options:
+
+<programlisting>
+<![CDATA[
+   Btn1,__APPLET__,M1,"Swallow (Respawn) \\"pclock\\"
+   \\"Exec exec $NSCDE_TOOLSDIR/$(uname -s)_$(uname -m)/fpclock
+   -H red -S white --hands-width=4
+   --hour-hand-length=15 --minute-hand-length=20
+   --second-hand-length=22 -w 
+   -B $NSCDE_DATADIR/icons/NsCDE/SDtEarth.l.xpm\\",Exec exec firefox
+
+   Btn1,,M2,FVWM,Nop
+
+   Btn1,,M3,FVWM,f_FrontPanelPropsMenu 1 Browser
+]]>
+</programlisting>
+
+</para>
+
+<para>
+Notice that button definition for mouse M1 (first line) is split in 3 lines in this examples,
+but in the <filename>FrontPanel.actions</filename> must be written as one line.
+</para>
+
+<para>
+After editing this file (system-wide or user's) nothing needs to be
+reloaded because file is read from the <function>f_FrontPanelAction</function> function
+on every click on every icon on the Front Panel. There is no GUI tool for fully managing this
+file yet, but currently, <guimenuitem>Copy to Main Panel</guimenuitem> action from the submenu
+will edit <filename>FrontPanel.actions</filename> and put choosen entry there, binding it to
+the choosen button. Options <guimenuitem>Move Button Left</guimenuitem> and
+<guimenuitem>Move Button Right</guimenuitem> from the contextual menu of icons on the main
+panel will push icons and their subpanels (if enabled) left or right, implicitly editing
+<filename>FrontPanel.actions</filename> in that way.
+</para>
+</sect2>
+
+<sect2 id="AppMenus_conf">
+<title>AppMenus.conf</title>
+<para>
+This file defines which custom menu entries will be appended on the Window Options menu when
+this menu is called by titlebar button 1. This is for example used by all known terminal
+applications to implement <guimenuitem>Wide Terminal</guimenuitem> menu entry. By default,
+<command>Watch Errors</command> and <command>Fvwm Diagnostic Console</command> have appended
+appropriate entries for conveniently call each other. Also, some of the known File Managers
+has this entry for opening new window of the same type. Entries in this file are the following
+comma separated values (syntax):
+<itemizedlist>
+<listitem><para>X11 Window Class</para></listitem>
+<listitem><para>X11 Window Resource</para></listitem>
+<listitem><para>Menu item title (and optionally keyboard shortcut after two TAB's)</para></listitem>
+<listitem><para>FVWM Exec or function command, module or action to be executed</para></listitem>
+</itemizedlist>
+</para>
+<para>
+This file exists as the <filename>$NSCDE_DATADIR/defaults/AppMenus.conf</filename>, but it can be
+extended by creating and writing <filename>$FVWM_USERDIR/AppMenus.conf</filename> file.
+</para>
+
+</sect2>
+
+<sect2 id="NsCDE-Animate_fvwmconf">
+<title>Animate.fvwmconf / Animate.fvwmgen</title>
+<para>
+FVWM Animate Module configuration. Animate module is started by NsCDE by
+default automatically, but with <emphasis>None</emphasis> as a default effect. This can be
+reconfigured by the user in private <filename>$FVWM_USERDIR/Animate.fvwmgen</filename> with Window Style Manager,
+or in static manual configuration <filename>$[FVWM_USERDIR]Animate.fvwmconf</filename>.
+No effect (None) is choosen as default for increased CDE similarity, because CDE doesn't have iconification
+animation effects.
+</para>
+</sect2>
+
+<sect2 id="Backdrops_fvwmgen">
+<title>Backdrops.fvwmgen</title>
+<para>
+This file defines 8 colorsets for all (maximal) 8 desktops as a <emphasis>TiledPixmap</emphasis>
+colorset type. In the system configuration, static non-generated configuration (.fvwmconf) defines
+pre-generated default backdrops of default <emphasis>Broica</emphasis> color scheme. When user
+makes the first change with <link linkend="NsCDE-BackdropMgr">Backdrop Style Manager</link>,
+user's private copy of this file is created in <varname>$FVWM_USERDIR</varname>. In NsCDE,
+colorsets 31 - 38 are reserved for backdrops (or png, xpm photos).
+</para>
+</sect2>
+
+<sect2 id="Backer_fvwmconf">
+<title>Backer.fvwmconf</title>
+<para>
+Rarely needed in <varname>$FVWM_USERDIR</varname>. FvwmBacker(1) configuration which defines
+8 maximum desks and refers them to 8 colorsets from 31 - 38. Option
+<option>RetainPixmap</option> is defined in case user wants to use X compositor such as
+compton(1) with NsCDE.
+</para>
+</sect2>
+
+<sect2 id="Colorset_fvwmgen">
+<title>Colorset.fvwmgen</title>
+<para>
+Definition of all colorsets minus colorsets 31 - 38 which are reserved for the
+backdrops. System-wide file has predefined color values for default color scheme (Broica),
+while user's file in <varname>$FVWM_USERDIR</varname> is created on first change made with
+<link linkend="NsCDE-ColorMgr">Color Style Manager</link>. Apart from FVWM colorsets, this
+file exports in environment two variables: <varname>NSCDE_PALETTE</varname> with the name
+of the color palette used in generation of the file, and
+<varname>NSCDE_PALETTE_NCOLORS</varname> which is either 4 or 8, depending which color
+variant has been used in <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
+</para>
+</sect2>
+
+<sect2 id="NsCDE_conf">
+<title>NsCDE.conf</title>
+<para>
+This file defines various FVWM and NsCDE defaults. NsCDE.conf can be considered as
+the main user's configuration file. System wide configuration are static defaults
+which can be loaded by <link linkend="NsCDE-WindowMgr">Window Style Manager</link>
+or by erasing user's copy of the file. User's copy of the <filename>NsCDE.conf</filename>
+contains all options (minus FvwmAnimate) from
+<link linkend="NsCDE-WindowMgr">Window Style Manager's</link> set of options,
+but it has some options such as FVWM <emphasis>infostore</emphasis> variables for
+default terminal and file manager applications, graphical editor, and
+such. Infostore variables <varname>desknum</varname>,
+<varname>pagematrixX</varname> and <varname>pagematrixY</varname> are managed by
+the Workspace and Pages Manager while <varname>menudclicktm</varname> infostore
+variable is managed by the Pointer Style Manager. In <filename>NsCDE.conf</filename>,
+defaults for page edges, focus, icons, and such are defined. See <xref linkend="NsCDE-WindowMgr"/>
+and fvwm(1) for details. Since this is read by FVWM, user can set in this file local
+variables and additional configuration options if needful, which are not covered in
+other parts of the configuration. While applications are taking great care with long
+regexp lines to parse and write this file, if edited manually, user is advised to keep it
+clean: use proper capitalization as it is described in fvwm(1), without line breaks and
+if possible, surplus spaces and tabs. Comments are allowed as usual: as lines which
+begins with <emphasis>#</emphasis> sign.
+</para>
+<para>
+Some of the important FVWM Infostore variables which can be set in the <filename>NsCDE.conf</filename> are:
+<itemizedlist>
+<listitem><para>InfoStoreAdd filemgr <varname>file manager of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd xeditor <varname>GUI text editor of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd calculator <varname>GUI calculator of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd taskmgr <varname>Task manager of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd printmgr <varname>Printer manager of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd browser <varname>WWW Browser of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd docsbrowser <varname>Documentation Browser of choice - xdg-open or defaults to browser</varname></para></listitem>
+<listitem><para>InfoStoreAdd mailreader <varname>Mail application of choice</varname></para></listitem>
+<listitem><para>InfoStoreAdd terminal <varname>terminal</varname> - emulator app of choice by default commented out and figured out by the list of known terminals. It can be set here.</para></listitem>
+<listitem><para>InfoStoreAdd sandboxmode 0|1 - reduced NsCDE for embedded Xephyr X jails</para></listitem>
+<listitem><para>InfoStoreAdd desklastpage 0|1 - remember last visited page on desk</para></listitem>
+<listitem><para>InfoStoreAdd wsmcolored 0|1 - additional menu color around Workspace Manager like in some versions of CDE</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_xscreensaver 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_stalonetray 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_dunst 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_rofi 0|1</para></listitem>
+<listitem><para>InfoStoreAdd nscde_use_xsettingsd 0|1</para></listitem>
+<listitem><para>InfoStoreAdd wsm.eco 0|1</para></listitem>
+<listitem><para>InfoStoreAdd frontpanel.pos.placement <varname>screen c 50-50w -0p ewmhiwa</varname></para></listitem>
+<listitem><para>InfoStoreAdd stalonetray.pos.placement <varname>-0 -0 ewmhiwa</varname></para></listitem>
+<listitem><para>InfoStoreAdd gkrellm.pos.placement <varname>-0 +0 ewmhiwa</varname></para></listitem>
+<listitem><para>InfoStoreAdd polkit.agent <varname>Path of the choosen PolicyKit Agent</varname></para></listitem>
+<listitem><para>InfoStoreAdd loc_pg.desk_scale <varname>Zoom factor of the Local Pager</varname></para></listitem>
+<listitem><para>InfoStoreAdd glob_pg.desk_scale <varname>Zoom factor of the Global Pager</varname></para></listitem>
+<listitem><para>InfoStoreAdd windowlist.fontsize <varname>small | medium | large</varname></para></listitem>
+<listitem><para>InfoStoreAdd windowlist.title.fontsize <varname>small | medium | large</varname></para></listitem>
+<listitem><para>InfoStoreAdd fvwm3_default_logging <varname>0|1</varname> weather to log FVWM3 messages by default
+from the startup</para></listitem>
+<listitem><para>InfoStoreAdd xlogcmd <varname>custom-command</varname> if <filename>$HOME/.xsession-errors</filename>
+is not in use, for example <varname>"journalctl -u gdm -n 300 -f"</varname></para></listitem>
+<listitem><para>InfoStoreAdd rootpagerposition <varname>"screen c 50-50w +10p"</varname> - where to put local pager on page change if enabled</para></listitem>
+<listitem><para>InfoStoreAdd desktopconfiguration global|per-monitor|shared - for FVWM3</para></listitem>
+</itemizedlist>
+Further, common system environment variables are provided already set, or for optional uncommenting
+if needed or desirable:
+<itemizedlist>
+<listitem><para><varname>QT_QPA_PLATFORMTHEME</varname> - set to "qt5ct"</para></listitem>
+<listitem><para><varname>HAS_WINDOWNAME 1</varname> - uncomment and set it to 1 if FVWM is patched with additional
+FvwmButtons NsCDE patches. On FVWM3, this is default</para></listitem>
+<listitem><para><varname>GTK_OVERLAY_SCROLLING 0</varname> - handy to turn off irritating blinking of scrollbar
+area in GTK3 applications</para></listitem>
+<listitem><para><varname>SetEnv GTK_CSD 0</varname> - if you have misfortune to must use some of the GNOME 3
+applications and have gtk3-nocsd installed</para></listitem>
+<listitem><para><varname>f_VarAppend : LD_PRELOAD /usr/local/lib/libgtk3-nocsd.so.0</varname> - if you have
+misfortune to must use some of the GNOME 3 applications and have gtk3-nocsd installed</para></listitem>
+<listitem><para><varname>SetEnv NSCDE_REDRAW_WORKAROUND 1</varname> - Uncomment this if you are having problems
+with FvwmScript PopupMenu widgets under compton, compton-ng or picom in the form of not refreshing their part
+of the screen.</para></listitem>
+</itemizedlist>
+</para>
+</sect2>
+
+<sect2 id="Event_fvwmconf">
+<title>Event.fvwmconf</title>
+<para>
+FvwmEvent(1) module configuration. In this file a single instance of the
+FvwmEvent called <option>MainLoop</option> is defined. It passes ID (Window ID, desk
+etc ... depending on context) for window manager actions. <option>Cmd</option> option is
+empty: FVWM functions are used for all defined actions. The following events are observed
+and reacted by functions Currently:
+
+<itemizedlist>
+<listitem><para><option>new_desk</option></para></listitem>
+<listitem><para><option>new_page</option></para></listitem>
+<listitem><para><option>add_window</option></para></listitem>
+<listitem><para><option>destroy_window</option></para></listitem>
+<listitem><para><option>focus_change</option></para></listitem>
+<listitem><para><option>enter_window</option></para></listitem>
+<listitem><para><option>leave_window</option></para></listitem>
+<listitem><para><option>configure_window</option></para></listitem>
+<listitem><para><option>iconify</option></para></listitem>
+<listitem><para><option>deiconify</option></para></listitem>
+<listitem><para><option>res_class</option></para></listitem>
+<listitem><para><option>map</option></para></listitem>
+</itemizedlist>
+
+Event Functions from <filename>Functions.fvwmconf</filename> are triggered on the events above.
+This serves Workspace Manager, Page Manager (PGM) and window placement functions in an
+important way. If redefined or disabled, things will start to break. It can be extended by
+the user to suit the needs in <filename>$NSCDE_USERDIR/Event.fvwmlocal</filename>, but here
+also care must be taken, because complex functions, or calling slow and/or resource hungry
+commands from that functions can make FVWM (and hence NsCDE) dramatically slow and even unstable.
+</para>
+</sect2>
+
+<sect2 id="Font-DPIdpi_fvwmgen">
+<title>Font-&lt;NSCDE_FONT_DPI&gt;dpi.fvwmgen</title>
+<para>
+... where "DPI" ($NSCDE_FONT_DPI) is by default hardcoded to 96.
+</para>
+<para>
+This files are regular files in the system-wide configuration, but may be symbolic links to some
+system wide or local fontset in <filename class="directory">$FVWM_USERDIR</filename> when generated
+by <link linkend="NsCDE-FontMgr">Font Style Manager</link>.
+</para>
+<para>
+Font sizes in this config are defined as infostore variables and used across
+FVWM config files, they are provided to FvwmScript programs with
+<command>getfont</command> wrapper. Font sizes are in points. While defining
+them in pixels (pixelsize=) will be easier, and all this care about DPI will
+not be needed, integration with GTK2 and GTK3 in best of my knowledge and
+research does not provide a way to define fonts in pixel sizes, so either
+font sizes in points or unsure recalculation (again based on DPI) will be
+needed while writing gtk settings.
+</para>
+</sect2>
+
+<sect2 id="Form_fvwmconf">
+<title>Form.fvwmconf</title>
+<para>
+Defaults for fonts, colorsets, cursors etc of FVWM form module. FvwmForm is
+reading this. FvwmForm is not used actively by NsCDE anymore, This file and
+definitions in it are provided only to enforce colors and fonts in accordance
+with the current NsCDE theme if any custom installation decides to use forms
+again.
+</para>
+</sect2>
+
+<sect2 id="FrontPanel_fvwmconf">
+<title>FrontPanel.fvwmX.fvwmconf</title>
+<para>
+Main NsCDE Front Panel configuration file. Here, FvwmButtons is configured under
+the alias <option>*FrontPanel</option>. Special care is taken to place most of
+configurable parts out of this file, so it doesn't have to be forked into
+<varname>$FVWM_USERDIR</varname>, but this option nevertheless exists. Here, all
+geometry, buttons, subpanels, default icons, frames and widgets are written and
+put in place. This configuration, together with swallowed WSM (Workspace
+Manager) is probably the most recognizable part of the setup which provides us
+with familiar and desired CDE look - a Front Panel. FvwButtons FrontPanel
+configuration is non-trivial, but it is very trustworthy mimicking the original.
+Icon actions which user wants to change here can be overridden with
+<filename>FrontPanel.actions</filename> file and Subpanels which are also
+described here. Swallowed apps and "widgets" are in most part already described
+in sections above.
+</para>
+<para>
+In NsCDE 2.0, FrontPanel has double configuration: in two separate configuration
+files. One is for fvwm2 (<filename>FrontPanel.fvwm2.fvwmconf</filename>) and the
+second for fvwm3 (<filename>FrontPanel.fvwm3.fvwmconf</filename>) a "front" file
+<filename>FrontPanel.fvwmconf</filename> contains the code for auto detection of
+FVWM (patched fvwm2 will use fvwm3 file if detected).
+</para>
+</sect2>
+
+<sect2 id="Functions_fvwmconf">
+<title>Functions.fvwmconf</title>
+<para>
+Another important part of the configuration. Almost all FVWM functions are defined
+here, except 5-6 of core functions in <filename>Main.fvwmconf</filename> which are
+reading the rest of the configuration. They are sorted in logical groups and are
+used widely in almost every part of the configuration, and particularly from the
+FvwmScript scripts. Main groups of NsCDE FVWM functions are:
+</para>
+<itemizedlist>
+<listitem><para>Core Window Operation Functions</para></listitem>
+<listitem><para>Front Panel functions</para></listitem>
+<listitem><para>Misc core functions</para></listitem>
+<listitem><para>Functions called from FvwmEvent <option>MainLoop</option></para></listitem>
+<listitem><para>Functions for generating menus</para></listitem>
+<listitem><para>Placeholders for functions aimed for user to override</para></listitem>
+<listitem><para>Functions used in NsCDE FvwmScripts</para></listitem>
+<listitem><para>Upgrade Functions</para></listitem>
+</itemizedlist>
+<para>
+For a FVWM function description see fvwm(1), in this file there is a plethora of
+examples, and for user usage is the most interesting part placeholders for
+functions which are here merely for programs to not complain about missing them
+and which should be overridden in user's local extension
+<filename>$FVWM_USERDIR/Functions.fvwmlocal</filename> - this extension file will
+be read by the main configuration immediately after processing
+<filename>Functions.fvwmconf</filename>. This functions are:
+</para>
+<itemizedlist>
+<listitem><para>
+  <function>f_CheckMail</function>: called by CheckMailApplet on the FrontPanel on click
+  and periodically. This is the place where some script can be called
+  and with SendToModule to "1 1" (widget 1, routine 1) icon of empty
+  mailbox will be changed to the icon of the full mailbox.
+</para></listitem>
+<listitem><para>
+  <function>f_Calendar</function>: called by MonthDayApplet on click. Can be used to call
+  external calendar application, to focus Thunderbird with lightning
+  extension or whatever user finds useful.
+</para></listitem>
+<listitem><para>
+  <function>f_Mixer</function>: unused currently.
+</para></listitem>
+<listitem><para>
+  <function>f_AddCustomToRootMenu</function>: add custom entries in a convenient point of
+  the root menu which is called by the right mouse button on the root
+  window.
+</para></listitem>
+<listitem><para>
+  <function>f_UserChangeDesk</function>: called when current active workspace changes
+</para></listitem>
+<listitem><para>
+  <function>f_UserChangePage</function>: called when current active page changes
+</para></listitem>
+<listitem><para>
+  <function>f_UserRestartFunction</function>: hook called when NsCDE restarts
+</para></listitem>
+<listitem><para>
+  <function>f_UserEnterWindow</function>: hook called when window is entered
+</para></listitem>
+<listitem><para>
+  <function>f_UserLeaveWindow</function>: hook called when focus leaves window
+</para></listitem>
+</itemizedlist>
+<para>
+Another useful function is conditional execution function <function>f_WarpOrExec</function>.
+It takes 3+ arguments. First is the window name or class (or icon, resource) name, second is
+the binary to check in <varname>$PATH</varname>>, and 3rd to the rest of the command line is
+what to execute with all arguments included. If window with name from arg1 is already
+present on <varname>$DISPLAY</varname>, it will not be executed, but pointer will be simply
+pointed to that window. If window was iconified, or function called from another workspace
+or page, window will be deiconified, and workspace and/or current page changed to one where
+existing window is residing.
+</para>
+<para>
+It is pointless and bad idea for this file to be overridden by the local copy of the
+<emphasis>conf</emphasis> (fvwmconf, not fvwmlocal) file, because a lot of things
+depends on this functions. Regular update of NsCDE software version will almost certain
+make setup with missing or incompatible functions.
+</para>
+</sect2>
+
+<sect2 id="IconMan_fvwmconf">
+<title>IconMan.fvwmconf</title>
+<para>
+If <guilabel>Use Icon Box</guilabel> option is selected in the
+<link linkend="NsCDE-WindowMgr">Window Style Manager</link>,
+infostore variable <varname>iconbox</varname> will be defined as non-zero, and
+FvwmIconMan(1) module will be started on login from the <filename>Main.fvwmconf</filename>.
+This file, <filename>IconMan.fvwmconf</filename> contains default configuration of that
+module.
+</para>
+</sect2>
+
+<sect2 id="Ident_fvwmconf">
+<title>Ident.fvwmconf</title>
+<para>
+Module FvwmIdent(1) is called either from a small menu which can be popped up with middle pointer
+click on a titlebar, or from the root window version of the <guilabel>Window Options</guilabel>
+menu. This is FvwmIdent's configuration file. It simply defines colorset and font for the
+FvwmIdent's module window.
+</para>
+</sect2>
+
+<sect2 id="Init_fvwmconf">
+<title>Init.fvwmconf</title>
+<para>
+Most probable candidate for copying to <varname>$FVWM_USERDIR</varname>. Here are defined
+start, quit and restart function (sessionless and session-managed) which are internally
+recognized by FVWM during certain important actions. <function>InitFunction</function> or
+<function>SessionInitFunction</function> is the place to put all programs and actions user
+wants to be executed during NsCDE startup. In system-wide default configuration there are
+already conditionally defined some probable applications and there are hints and examples
+for user to customize this further.
+</para>
+</sect2>
+
+<sect2 id="Keybindings_fvwmconf">
+<title>Keybindings.fvwmconf</title>
+<para>
+This file is a kind of a wrapper. According to the value of the <varname>$[infostore.kbd_bind_set]</varname>
+it will read either <filename>Keybindings.cua</filename> or <filename>Keybindings.nscde1x</filename> file,
+as well as menu-bounded keybindings from the <filename>$NSCDE_DATADIR/defaults/Keymenu-cua.actions</filename> or
+<filename>$NSCDE_DATADIR/defaults/Keymenu-nscde1x.actions</filename>. This are the two sets of key bindings: "nscde1x"
+implements non-standard and arbitrary choice key bindings used until NsCDE 2.1, while "cua" implements IBM Common
+User Access rules, which are more in compliance with other environments and also CDE. According to the old CDE
+documentation, there are only couple of key bindings known under CDE if we condider window manager and DE, not the
+Motif and X resources of individual applications. In both this sets of key bindings, NsCDE tries to combine a CDE
+legacy with a number of new functions and shortcuts, originally not present in CDE. It is recommended to use more
+standard and more structured new "cua" set of key bindings. For a describtion of all key bindings, see chapter
+<link linkend="NsCDE-Key-Bindings-CUA">Common User Access (CUA) Key Bindings</link> or
+<link linkend="NsCDE-Key-Bindings-NsCDE1x">NsCDE 1.X Key Bindings</link>.
+</para>
+
+</sect2>
+
+<sect2 id="Keymenu_actions">
+<title>Keymenu-&lt;kbd_bind_set&gt;.actions</title>
+<para>
+This file is not FVWM configuration file. It is written manually (with editor), and read by the
+<command>$NSCDE_TOOLSDIR/keymenu</command> command which will generate infostore variables with
+descriptive keyboard shortcut names which are used in NsCDE menus from
+<filename>Menus.fvwmconf</filename> and <filename>Functions.fvwmconf</filename>, and additionaly,
+use the whole line after the keyword in the first column with "Silent Key" prefix to dinamically
+generate this part of keybindings which are separated from
+<filename>Keybindings.fvwmconf</filename> (<filename>Keybindings.&lt;keybindings set&gt;</filename>)
+and processed specially because they definition must automatically match keyboard binding description
+in various menus. The "&lt;kbd_bind_set&gt;" represents keybindings set called from default
+<filename>Main.fvwmconf</filename> or <filename>$FVWM_USERDIR/NsCDE.conf</filename> with
+variable <varname>kbd_bind_set</varname>. Default is "nscde1x".
+</para>
+<para>
+The syntax of this file is simple: first column is the keyword which becomes infostore
+variable (km_xrefresh as <varname>$[infostore.km_xrefresh]</varname>), and the rest columns of
+every line is FVWM "Key" sintax which is paired with "Silent Key" prefix during initialization
+with <function>f_KeyMenu -a</function> from <filename>Main.fvwmconf</filename>.
+</para>
+<para>
+Every line, or dynamic keybinding can be overriden here if (re)defined in user's
+<filename>$FVWM_USERDIR/Keymenu.actions</filename>: whole file or just choosen keybindings.
+The goal is to get their descriptions (after functions and menus reload) automatically in place
+on menus. For example, "F3 A M" configuration for FVWM "Key" will become <keysym>Alt+F3</keysym>
+description right of the <guilabel>(De)Shade</guilabel> item on titlebar left button popdown menu.
+</para>
+<para>
+File Keymenu-&lt;kbd_bind_set&gt;.actions is processed by <command>$NSCDE_TOOLSDIR/keymenu</command> script.
+This script generates FVWM infostore variables used in menus, and executes FVWM "Key" commands
+producing dynamic keybindings which are described in menus. Additionally, it will read user's
+<filename>$FVWM_USERDIR/Keymenu.actions</filename> if that file exists.
+</para>
+<para>
+For a list of keybindings that are "dynamic", that is, not defined in
+<filename>Keybindings.&lt;kbd_bind_set&gt;</filename>, but in <filename>Keymenu-&lt;kbd_bind_set&gt;.actions</filename>, see
+notices in section about <link linkend="NsCDE-Key-Bindings-NsCDE1x">NsCDE 1.X Key Bindings</link> or
+<link linkend="NsCDE-Key-Bindings-CUA">Common User Access (CUA) Key Bindings</link>.
+</para>
+
+</sect2>
+
+<sect2 id="Mousebindings_fvwmconf">
+<title>Mousebindings.fvwmconf</title>
+<para>
+ File <filename>Mousebindings.fvwmconf</filename> is made in similar manner as the
+  <filename>Keybindings.&lt;kbd_bind_set&gt;</filename>. Can be overridden (.fvwmconf) or
+  extended (.fvwmlocal) just like (almost) any NsCDE conf file. See fvwm(1) for "Mouse"
+  commands. Here commands invoked with pointer are defined. As it is the case with key
+  bindings, mouse actions are too far more in NsCDE than in original CDE. The syntax is
+  described at the top of the file.
+</para>
+<para>
+  Default set of mouse bindings in NsCDE is described in the chapter about <link linkend="NsCDE-Mouse-Bindings">Mouse Bindings</link>.
+</para>
+</sect2>
+
+<sect2 id="Main_fvwmconf">
+<title>Main.fvwmconf</title>
+<para>
+  Core configuration. This file is read as first initialization upon starting FVWM Window Manager.
+  In fact, FVWM is invoked with <option>-f /path/to/Main.fvwmconf</option> to read it instead of
+  default FVWM system configuration or user's <filename>~/.fvwm/config</filename>.
+  This invocation and configuration in <filename>Main.fvwmconf</filename>
+  changes everything: it avoids <filename class="directory">~/.fvwm</filename> if user has a plain (normal)
+  FVWM setup, defines and redefines FVWM internal variables and sets
+  <varname>NSCDE_ROOT</varname>, configures some core FVWM options (like <option>DefaultIcon</option>),
+  defines main FVWM <command>Read</command> command wrapper <function>f_ReadCfg</function>,
+  sets desktop names, reads <filename>NsCDE.conf</filename> depending if user has it, or system-wide one,
+  defines <function>StartFunction</function>, <option>DesktopSize</option>, and
+  then reads most of the files described in this documents, composing NsCDE FVWM configuration.
+  Care must be taken NOT to read this file with <function>f_ReadCfg</function>, because it
+  will end up in the endless CPU hogging loop because <function>f_ReadCfg</function> will be
+  destroyed and recreated during it's own execution. This file should never be overridden
+  in <varname>$FVWM_USERDIR</varname>. It is the init(8) of the NsCDE system.
+</para>
+</sect2>
+
+<sect2 id="Menus_fvwmconf">
+<title>Menus.fvwmconf</title>
+<para>
+In NsCDE, there is a bunch of the menus. Root menus, contextual menus,
+and even menus called or dinamically generated from the FvwmScript(1)
+scripts.
+</para>
+
+<itemizedlist>
+<listitem><para>
+  <guimenuitem>MenuFvwmRoot</guimenuitem> built-in root menu of FVWM. As in CDE, menu of such
+    type, it is called with a right click on the root window.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_Applications</guimenuitem> - main and dynamically generated menu with a FVWM python
+    script <command>fvwm-menu-desktop</command> (contains flat list of apps and icons for Front
+    Panel's subpanels). It reads <filename>/etc/xdg/menus/&lt;desk&gt;-applications.menu</filename>
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_QuickMenu</guimenuitem> beneath m_Applications. Empty by default. Intended to be
+    destroyed and recreated by the user (<filename>Menus.fvwmlocal</filename>) with own
+    favorites.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_NsCDEHelpMenu</guimenuitem> beneath Quick Menu. Contains links to this documentation
+  in PDF and HTML forms.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_NsCDEMenu</guimenuitem> on the top of generated Applications menu.
+  Contains entries to various the NsCDE internal tools.
+  in PDF and HTML forms.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_MoveToPage</guimenuitem>: invoked from the 1st titlebar button. Moves window to
+    the specified page on desk
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_MoveToWorkspace</guimenuitem>: as
+  <guimenuitem>m_MoveToPage</guimenuitem>, but moves across desks. Invoked
+    with middle pointer on the 1st titlebar button
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_ControlFrontPanelMenu</guimenuitem>: Front Panel specific functions. Invoked
+    from the left top control panel menu button on right pointer click
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_DeiconifyOnPage</guimenuitem>: submenu of the main icon menu invoked with the
+    1st pointer click on desktop icon, deiconify window on another page
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_FrontPanelWinMenu</guimenuitem>: Front Panel flavor of the
+  <emphasis>Window Operations</emphasis>
+    menu. Invoked from the top left menu button of the Front Panel
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_IconM2</guimenuitem>: calls small menu with FvwmIdent, xwininfo and xprop if
+    icon is clicked with a middle pointer button
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_IconOps</guimenuitem>: main icon menu invoked with a click on the icon. Contains
+    Icon flavor of the "Window Operations" menu, submenus (see above)
+    and deiconify action
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_SubpanelWindowOps</guimenuitem>: a Subpanel flavor of the Window Operations
+    menu. Invoked from the Subpanel's titlebar left (and only) button
+    contains also contextual actions <guilabel>Refresh Subpanel</guilabel> and
+    <guilabel>Subpanel Settings</guilabel>
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_TitleBarM2</guimenuitem>: Middle pointer click on titlebar. Invokes a small
+    menu which gives FvwmIdent, xwininfo, xprop, and two to four types of screenshot of the window.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_WindowOpsStandard</guimenuitem>: main menu of <emphasis>Window Operations</emphasis>
+    invoked with a mouse
+    click on left titlebar button. It has extended (<guimenuitem>More ...</guimenuitem>) and
+    reduced (<guimenuitem>Less ...</guimenuitem>) version.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_WindowOpsExtended</guimenuitem>: changes <guimenuitem>m_WindowOpsStandard</guimenuitem>
+    from default reduced, to extended view (<guimenuitem>More ...</guimenuitem> option on
+    Window Operation menu)
+</para></listitem>
+
+<listitem><para>
+<guimenuitem>m_RootMenu</guimenuitem>: Small root menu with options to call
+Invoked with a click on the root window. It has menu items for invoking
+workspace-local window list, global window list, local pager, global pager, Window Options
+menu, and to refresh all windows on the screen.
+</para></listitem>
+
+<listitem><para>
+  <guimenuitem>m_WindowOpsRootWin</guimenuitem>: Standalone root window version of the Window
+    Operations menu intended for a general and tricky circumstances. It is invoked from the
+    m_RootMenu, and keybindings <keysym>Ctrl+Meta+Space</keysym> and <keysym>Meta+Menu</keysym>.
+</para></listitem>
+
+</itemizedlist>
+
+<para>
+For a more detailed guide about important menus, how to invoke and use them, see section
+<link linkend="basics_using_menus_preface">Using Menus</link>.
+</para>
 
 </sect2>
 

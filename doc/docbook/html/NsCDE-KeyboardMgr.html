@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5.8. Keyboard Style Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="5. GUI Tools"><link rel="prev" href="NsCDE-FontMgr.html" title="5.7. Font Style Manager"><link rel="next" href="NsCDE-Occupy.html" title="5.9. Occupy Workspace, Occupy Page and Occupy Monitor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.8. Keyboard Style Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-FontMgr.html">Prev</a> </td><th width="60%" align="center">5. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Occupy.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-KeyboardMgr"></a>5.8. Keyboard Style Manager</h3></div></div></div><p>
-Keyboard Style Manager tool can be used to set (xset) 4 values:
+Keyboard Style Manager tool can be used to set four xset(1) values, and to change default Key Binding Set.
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 Auto Repeat on/off: Sets characters to repeat when you hold down their keys
 </p></li><li class="listitem"><p>
@@ -14,13 +14,18 @@ This values are standard xset(1) <span class="emphasis"><em>r</em></span> and <s
 and their values, minimal and maximal allowed values are (or should be in most cases) the same
 in GUI as they are in command line tool.
 </p><p>
+Pop down menu "Key Binding Set" lets user choose between "cua" and "nscde1x" key binding
+implementations. See <a class="link" href="NsCDE-Bindings.html#NsCDE-Key-Bindings-CUA" title="8.1. Common User Access (CUA) Key Bindings">Common User Access (CUA) Key Bindings</a> and
+<a class="link" href="NsCDE-Key-Bindings-NsCDE1x.html" title="8.2. NsCDE 1.X Key Bindings">NsCDE 1.X Key Bindings</a>. Changing this setting and applying
+changes will restart FVWM window manager.
+</p><p>
 <span class="guibutton">Default</span> button will set auto repeat to on, start rate to 512, repeat delay to
-16 and click volume to 50.
+16 and click volume to 50. Set of key bindings will be set to "cua".
 </p><p>
 <span class="guibutton">Apply</span> button applies setting in runtime, while <span class="guibutton">Save</span>
 button writes <code class="filename">$FVWM_USERDIR/Xset.conf</code> file which is a generated
 <span class="command"><strong>xset</strong></span> command batch executed during startup.
-</p><div class="figure"><a name="fig_keyboardmgr"></a><p class="title"><b>Figure 36. Font Style Manager</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_keyboardmgr.png" alt="Font Style Manager"></div></div></div><br class="figure-break"><p>
+</p><div class="figure"><a name="fig_keyboardmgr"></a><p class="title"><b>Figure 36. Keyboard Style Manager</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_keyboardmgr.png" alt="Keyboard Style Manager"></div></div></div><br class="figure-break"><p>
 Key Bindings:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 <span class="keysym">Ctrl+Return</span>: Perform a change. Like if <span class="guibutton">OK</span> was pressed.

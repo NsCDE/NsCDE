@@ -77,11 +77,11 @@ Property
       Begin
          Set $KeyBindingSet = (LastString)
          Set $InitialKeyBindingSet = $KeyBindingSet
-         If $KeyBindingSet == {nscde1x} Then
+         If $KeyBindingSet == {cua} Then
          Begin
             ChangeValue 11 1
          End
-         If $KeyBindingSet == {cua} Then
+         If $KeyBindingSet == {nscde1x} Then
          Begin
             ChangeValue 11 2
          End
@@ -260,7 +260,7 @@ Widget 11
    Type PopupMenu
    Value 0
    Flags NoReliefString
-   Title { nscde1x | cua }
+   Title { cua | nscde1x }
    Font "xft:::pixelsize=14"
    Main
       Case message of
@@ -274,11 +274,11 @@ Widget 11
 
          If (GetValue 11) == 1 Then
          Begin
-            Set $KeyBindingSet = {nscde1x}
+            Set $KeyBindingSet = {cua}
          End
          If (GetValue 11) == 2 Then
          Begin
-            Set $KeyBindingSet = {cua}
+            Set $KeyBindingSet = {nscde1x}
          End
       End
 End
