@@ -836,10 +836,11 @@ M. Z.
 
 3.3.1.2. Keyboard
 
-   Press Ctrl+Escape twice: first time to focus Front Panel, then
-   second time to get mouse pointer into the middle of Workspace
-   Manager. Press the TAB key to move between WSM buttons. When
-   pointer is above workspace you want to display. Press Return.
+   Press Ctrl+Backspace twice: first time to focus Front Panel,
+   then second time to get mouse pointer into the middle of
+   Workspace Manager. Press the TAB key to move between WSM
+   buttons. When pointer is above workspace you want to display.
+   Press Return.
      __________________________________________________________
 
 3.3.2. Relocating a Window into Other Workspaces
@@ -881,14 +882,14 @@ M. Z.
 
 3.3.3.2. Keyboard
 
-   Press Ctrl+Escape twice: first time to focus Front Panel, then
-   second time to get mouse pointer into the middle of Workspace
-   Manager. Press the TAB key to position pointer above workspace
-   intended for renaming. Press Return to select (and change) the
-   workspace. Press the Press the Ctrl+Space. The button becomes a
-   text field. Edit the workspace's name in the text field. Once
-   the workspace is renamed, press Ctrl+Return to convert text
-   field back into button.
+   Press Ctrl+Backspace twice: first time to focus Front Panel,
+   then second time to get mouse pointer into the middle of
+   Workspace Manager. Press the TAB key to position pointer above
+   workspace intended for renaming. Press Return to select (and
+   change) the workspace. Press the Press the Ctrl+Space. The
+   button becomes a text field. Edit the workspace's name in the
+   text field. Once the workspace is renamed, press Ctrl+Return to
+   convert text field back into button.
      __________________________________________________________
 
 3.4. Using Menus
@@ -1084,7 +1085,7 @@ M. Z.
      * By clicking on the screen backdrop with mouse button 2
        while holding Ctrl modifier: this will bring up detailed
        informative Window List with window geometry information.
-     * By pressing key binding Alt+Escape once for Window List of
+     * By pressing key binding Ctrl+Escape once for Window List of
        the current menu, then second Escape while Window List is
        active to get full list of all applications on all
        workspaces, and the third Escape will popdown and dismiss
@@ -1146,9 +1147,9 @@ M. Z.
    Local Pager (showing only the current workspace and it's pages
    if enabled)
 
-   Local Window List (obtained also with Alt+Escape)
+   Local Window List (obtained also with Ctrl+Escape)
 
-   Global Window List (obtained also with Alt+Escape+Escape)
+   Global Window List (obtained also with Ctrl+Escape+Escape)
 
    Window Operations entry which opens Standalone Window
    Operations as submenu
@@ -1165,7 +1166,7 @@ M. Z.
    the screen, but only those which were iconified by this
    function and restore Front Panel in it's default width, height
    and position. Notice that Front Panel can be rolled down and
-   restored also with the Shift+Escape.
+   restored also with the Shift+Backspace.
      __________________________________________________________
 
 3.4.6. Workspace Menu
@@ -1514,11 +1515,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        Figure 14. Front Panel Launcher Context Menu
        [fig_fp_ctx_menu.png]
      * In addition to iconification, Front Panel can be shaded to
-       the bottom edge of the screen with Shift-Esc action, and
-       put back in it's place with the same key binding when it is
-       called again. Shade direction of the Front Panel is the
-       opposite one from ordinary windows - they are rolled from
-       the bottom up.
+       the bottom edge of the screen with Shift+Backspace action,
+       and put back in it's place with the same key binding when
+       it is called again. Shade direction of the Front Panel is
+       the opposite one from ordinary windows - they are rolled
+       from the bottom up.
      * Iconification is by default to bottom right screen edge,
        leaving last 96px space to the right for Stalonetray the
        while all other programs are by default iconified in the
@@ -2882,9 +2883,9 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    [fig_gwm.png]
 
    This tool can be called from Root Menu, from
-   Applications->NsCDE submenu of the Workspace Menu, Shift+Tab
-   (second call) and Meta+Alt+Home keybindings, and by default
-   from the 7th Subpanel of the Front Panel (Desktop Settings).
+   Applications->NsCDE submenu of the Workspace Menu,
+   Meta+Alt+Home keybindings, and by default from the 7th Subpanel
+   of the Front Panel (Desktop Settings).
 
    GWM enables user to see all of the NsCDE workspaces and pages,
    navigate pages and workspaces with mouse, select windows with
@@ -5391,7 +5392,7 @@ Silent Key Tab A S -
      * m_WindowOpsRootWin: Standalone root window version of the
        Window Operations menu intended for a general and tricky
        circumstances. It is invoked from the m_RootMenu, and
-       keybindings Ctrl+Meta+Space and Meta+Menu.
+       keybindings Meta+Escape and Meta+Menu.
 
    For a more detailed guide about important menus, how to invoke
    and use them, see section Using Menus.
@@ -5417,15 +5418,13 @@ Silent Key Tab A S -
    in NsCDE.conf is by default 0. If enabled (1), when active page
    or workspace changes, visual FvwmPager(1) will be shown in the
    center of the screen near the top of it by default. On
-   Ctrl+Compose (Ctrl+Menu) and/or Shift+ISO_Level3_Shift (Right
-   Alt), pager will move to the position of the pointer, it will
-   eventually disappear from the screen after 1 second, 3 seconds,
-   5 seconds, 8 seconds, or 10 seconds if it looses the focus, or
-   it can be dismissed by pressing the same key combination once
-   more while pointer is above pager. Local pager can also be
-   called with Shift+Backspace keys. Local pager's initial
-   appearing position on the active screen can be controled with
-   rootpagerposition FVWM InfoStore variable in the
+   Meta+Backspace, pointer will move to the position of the pager,
+   it will eventually disappear from the screen after 1 second, 3
+   seconds, 5 seconds, 8 seconds, or 10 seconds if it looses the
+   pointer focus, or it can be dismissed by pressing the same key
+   combination once more while pointer is above pager. Local
+   pager's initial appearing position on the active screen can be
+   controled with rootpagerposition FVWM InfoStore variable in the
    $FVWM_USERDIR/NsCDE.conf. There, a timeout can also be set with
    rootpagertimeout variable; rootpagertimeout is in milliseconds.
      __________________________________________________________
@@ -6101,7 +6100,7 @@ Silent Key Tab A S -
      * Visual Pager NsCDE addon Option
      * Disable or enable XscreenSaver
      * Disable or enable use of the XSETTINGS xsettingsd daemon
-     * Disable or enable use of Rofi Launcher on Meta+F1 if
+     * Disable or enable use of Rofi Launcher on Alt+F12 if
        installed
      * Enable NsCDE to remember last used page on workspace if
        selected
@@ -6873,8 +6872,8 @@ Standards
    NsCDE must be restarted again to get things right.
 
    Front Panel will appear on the primary screen, but can be moved
-   to other screens by Ctrl+Escape pressed while pointer is on the
-   desired screen. This does not work always well when logical
+   to other screens by Ctrl+Backspace pressed while pointer is on
+   the desired screen. This does not work always well when logical
    screens are of different resolution and it is specially visible
    when making third mouse click on the Workspace Manager buttons
    which can be popped down below the screen instead of up to be

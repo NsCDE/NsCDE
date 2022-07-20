@@ -896,7 +896,7 @@ Click the workspace's button in the Workspace Manager on the Front Panel.
 <sect4 id="basics_display_workspace_keyboard">
 <title>Keyboard</title>
 <para>
-Press <keysym>Ctrl+Escape</keysym> twice: first time to focus Front Panel, then second time to
+Press <keysym>Ctrl+Backspace</keysym> twice: first time to focus Front Panel, then second time to
 get mouse pointer into the middle of Workspace Manager. Press the TAB key to
 move between WSM buttons. When pointer is above workspace you want to display.
 Press <keysym>Return</keysym>.
@@ -952,7 +952,7 @@ keyboard to convert text field back to button.
 <sect4 id="basics_rename_workspace_keyboard">
 <title>Keyboard</title>
 <para>
-Press <keysym>Ctrl+Escape</keysym> twice: first time to focus Front Panel,
+Press <keysym>Ctrl+Backspace</keysym> twice: first time to focus Front Panel,
 then second time to get mouse pointer into the middle of Workspace Manager.
 Press the TAB key to position pointer above workspace intended for renaming.
 Press <keysym>Return</keysym> to select (and change) the workspace. Press the
@@ -1273,7 +1273,7 @@ By clicking on the screen backdrop with mouse button 2 while holding
 Window List with window geometry information.
 </para></listitem>
 <listitem><para>
-By pressing key binding <keysym>Alt+Escape</keysym> once for Window List of the current
+By pressing key binding <keysym>Ctrl+Escape</keysym> once for Window List of the current
 menu, then second <keysym>Escape</keysym> while Window List is active to get full list
 of all applications on all workspaces, and the third <keysym>Escape</keysym> will popdown
 and dismiss the Window List.
@@ -1361,11 +1361,11 @@ This menu contains entries which are calling:
 </para>
 
 <para>
-<guimenuitem>Local Window List</guimenuitem> (obtained also with <keysym>Alt+Escape</keysym>)
+<guimenuitem>Local Window List</guimenuitem> (obtained also with <keysym>Ctrl+Escape</keysym>)
 </para>
 
 <para>
-<guimenuitem>Global Window List</guimenuitem> (obtained also with <keysym>Alt+Escape+Escape</keysym>)
+<guimenuitem>Global Window List</guimenuitem> (obtained also with <keysym>Ctrl+Escape+Escape</keysym>)
 </para>
 
 <para>
@@ -1394,7 +1394,7 @@ This menu contains entries which are calling:
 screen, rolldown and shade front panel into thin border which. Calling this function again will
 deiconify windows on the screen, but only those which were iconified by this function and restore
 Front Panel in it's default width, height and position. Notice that Front Panel can be rolled down
-and restored also with the <keysym>Shift+Escape</keysym>.
+and restored also with the <keysym>Shift+Backspace</keysym>.
 </para>
 
 </sect3>
@@ -1917,7 +1917,7 @@ documentation browser.
 
 <listitem><para>
 In addition to iconification, Front Panel can be shaded to the bottom edge of the screen with
-<keysym>Shift-Esc</keysym> action, and put back in it's place with the same key binding when
+<keysym>Shift+Backspace</keysym> action, and put back in it's place with the same key binding when
 it is called again. Shade direction of the Front Panel is the opposite one from ordinary
 windows - they are rolled from the bottom up.
 </para></listitem>
@@ -3967,8 +3967,8 @@ options.
 
 <para>
 This tool can be called from Root Menu, from Applications->NsCDE submenu of the Workspace Menu,
-<keysym>Shift+Tab</keysym> (second call) and <keysym>Meta+Alt+Home</keysym> keybindings, and by default
-from the 7th Subpanel of the Front Panel (Desktop Settings).
+<keysym>Meta+Alt+Home</keysym> keybindings, and by default from the 7th Subpanel of the
+Front Panel (Desktop Settings).
 </para>
 <para>
 GWM enables user to see all of the NsCDE workspaces and pages, navigate pages and workspaces with
@@ -7736,7 +7736,7 @@ menu, and to refresh all windows on the screen.
 <listitem><para>
   <guimenuitem>m_WindowOpsRootWin</guimenuitem>: Standalone root window version of the Window
     Operations menu intended for a general and tricky circumstances. It is invoked from the
-    m_RootMenu, and keybindings <keysym>Ctrl+Meta+Space</keysym> and <keysym>Meta+Menu</keysym>.
+    m_RootMenu, and keybindings <keysym>Meta+Escape</keysym> and <keysym>Meta+Menu</keysym>.
 </para></listitem>
 
 </itemizedlist>
@@ -7777,13 +7777,11 @@ Pager which is showing only a current workspace. It's windows and pages on thish
 reside. This pager is meant to be primary of informational nature. Infostore variable
 <varname>pageraisefp</varname> in <filename>NsCDE.conf</filename> is by default 0.
 If enabled (1), when active page or workspace changes, visual FvwmPager(1) will be shown
-in the center of the screen near the top of it by default. On <keysym>Ctrl+Compose</keysym>
-(<keysym>Ctrl+Menu</keysym>) and/or <keysym>Shift+ISO_Level3_Shift</keysym> (Right Alt),
-pager will move to the position of the pointer, it will eventually disappear from the
+in the center of the screen near the top of it by default. On <keysym>Meta+Backspace</keysym>,
+pointer will move to the position of the pager, it will eventually disappear from the
 screen after 1 second, 3 seconds, 5 seconds, 8 seconds, or 10 seconds if it looses the
-focus, or it can be dismissed by pressing the same key combination once more while
-pointer is above pager. Local pager can also be called with
-<keysym>Shift+Backspace</keysym> keys. Local pager's initial appearing position on the
+pointer focus, or it can be dismissed by pressing the same key combination once more while
+pointer is above pager. Local pager's initial appearing position on the
 active screen can be controled with <varname>rootpagerposition</varname> FVWM
 InfoStore variable in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>. There, a timeout
 can also be set with <varname>rootpagertimeout</varname> variable; rootpagertimeout is
@@ -8795,7 +8793,7 @@ the terminal which will run automatically and will set up the following:
 <listitem><para>Visual Pager NsCDE addon Option</para></listitem>
 <listitem><para>Disable or enable XscreenSaver</para></listitem>
 <listitem><para>Disable or enable use of the XSETTINGS xsettingsd daemon</para></listitem>
-<listitem><para>Disable or enable use of Rofi Launcher on <keysym>Meta+F1</keysym> if installed</para></listitem>
+<listitem><para>Disable or enable use of Rofi Launcher on <keysym>Alt+F12</keysym> if installed</para></listitem>
 <listitem><para>Enable NsCDE to remember last used page on workspace if selected</para></listitem>
 <listitem><para>Enable FVWM3 diagnostic logging by default or not</para></listitem>
 <listitem><para>Configure favorite X file manager, if desired</para></listitem>
@@ -9648,7 +9646,7 @@ restarted again to get things right.
 </para>
 <para>
 Front Panel will appear on the primary screen, but can be moved to other
-screens by <keysym>Ctrl+Escape</keysym> pressed while pointer is on the
+screens by <keysym>Ctrl+Backspace</keysym> pressed while pointer is on the
 desired screen. This does not work always well when logical screens are
 of different resolution and it is specially visible when making third
 mouse click on the Workspace Manager buttons which can be popped down
