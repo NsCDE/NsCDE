@@ -42,12 +42,14 @@ openbsd*)
 *)
         ;;
 esac
+AC_MSG_RESULT($host_os)
 
 AC_MSG_CHECKING(xsessiondir)
 AC_ARG_WITH([xsessiondir],
-	AC_HELP_STRING([--with-xsessiondir=DIR],[NsCDE X Display Manager file goes here.]),
+	AC_HELP_STRING([--with-xsessiondir=DIR],[Where tu put NsCDE X Display Manager file to be found by display manager.]),
 	[XSESSDIR=$withval],
 	[XSESSDIR=""])
+AC_MSG_RESULT($XSESSDIR)
 
 AC_SUBST(xsessiondir)
 
@@ -75,6 +77,16 @@ fi
 AC_SUBST(XDG_DATA_PATH_BOOL)
 AC_SUBST(XDG_CONFIG_PATH_BOOL)
 
+AC_MSG_CHECKING(custom python shebang)
+AC_ARG_WITH([python-shebang],
+	AC_HELP_STRING([--with-python-shebang="STRING"],[How to call Python 3 in python scripts
+                      (specified WITHOUT hash and exclamation mark). This disables python 3
+                      autodetection and fully trusts what is provided by the user.
+                      One example of this option can be: "/usr/bin/env python3". ]),
+	[PYTHON_SHEBANG=$withval],
+	[PYTHON_SHEBANG=""])
+AC_MSG_RESULT($PYTHON_SHEBANG)
+
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
 AC_SUBST(REQUIRED_PYTHON_VERSION)
@@ -82,6 +94,10 @@ AC_PATH_PROG([PYTHON],[python3],[:])
 AS_IF([test "$PYTHON" != ":"],
             [AM_PYTHON_CHECK_VERSION([$PYTHON],[$REQUIRED_PYTHON_VERSION],[:],
                                      [PYTHON=":"])])
+
+if test "x$PYTHON_SHEBANG" != "x"; then
+	PYTHON="$PYTHON_SHEBANG"
+fi
 
 # Custom check to expand full path
 AC_DEFUN([RECURSIVE_EVAL],
@@ -99,16 +115,21 @@ AC_DEFUN([RECURSIVE_EVAL],
 # https://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_python_module.m4
 AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
 AC_DEFUN([AX_PYTHON_MODULE],[
-    if test -z $PYTHON;
-    then
-        if test -z "$3";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "$3";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON="$3"
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     AC_MSG_CHECKING($PYTHON_NAME module: $1)
     $PYTHON -c "import $1" 2>/dev/null
     if test $? -eq 0;

@@ -774,6 +774,7 @@ enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
 with_xsessiondir
+with_python_shebang
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1423,7 +1424,14 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-xsessiondir=DIR  NsCDE X Display Manager file goes here.
+  --with-xsessiondir=DIR  Where tu put NsCDE X Display Manager file to be
+                          found by display manager.
+  --with-python-shebang="STRING"
+                          How to call Python 3 in python scripts (specified
+                          WITHOUT hash and exclamation mark). This disables
+                          python 3 autodetection and fully trusts what is
+                          provided by the user. One example of this option can
+                          be: "/usr/bin/env python3".
 
 Some influential environment variables:
   CC          C compiler command
@@ -4120,6 +4128,8 @@ fi
 *)
         ;;
 esac
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
+$as_echo "$host_os" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking xsessiondir" >&5
 $as_echo_n "checking xsessiondir... " >&6; }
@@ -4131,6 +4141,8 @@ else
   XSESSDIR=""
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $XSESSDIR" >&5
+$as_echo "$XSESSDIR" >&6; }
 
 
 
@@ -4157,6 +4169,19 @@ fi
 
 
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking custom python shebang" >&5
+$as_echo_n "checking custom python shebang... " >&6; }
+
+# Check whether --with-python-shebang was given.
+if test "${with_python_shebang+set}" = set; then :
+  withval=$with_python_shebang; PYTHON_SHEBANG=$withval
+else
+  PYTHON_SHEBANG=""
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON_SHEBANG" >&5
+$as_echo "$PYTHON_SHEBANG" >&6; }
 
 PYTHON=
 REQUIRED_PYTHON_VERSION=3.0
@@ -4221,6 +4246,10 @@ sys.exit(sys.hexversion < minverhex)"
 else
   PYTHON=":"
 fi
+fi
+
+if test "x$PYTHON_SHEBANG" != "x"; then
+	PYTHON="$PYTHON_SHEBANG"
 fi
 
 # Custom check to expand full path
@@ -5983,16 +6012,21 @@ fi
 
 # Python modules
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: xdg" >&5
 $as_echo_n "checking $PYTHON_NAME module: xdg... " >&6; }
     $PYTHON -c "import xdg" 2>/dev/null
@@ -6019,16 +6053,21 @@ $as_echo "$as_me: WARNING: Python 3 module xdg is required for NsCDE runtime." >
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: yaml" >&5
 $as_echo_n "checking $PYTHON_NAME module: yaml... " >&6; }
     $PYTHON -c "import yaml" 2>/dev/null
@@ -6055,16 +6094,21 @@ $as_echo "$as_me: WARNING: Python 3 module yaml is required for NsCDE runtime." 
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: os" >&5
 $as_echo_n "checking $PYTHON_NAME module: os... " >&6; }
     $PYTHON -c "import os" 2>/dev/null
@@ -6091,16 +6135,21 @@ $as_echo "$as_me: WARNING: Python 3 module os is required for NsCDE runtime." >&
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: re" >&5
 $as_echo_n "checking $PYTHON_NAME module: re... " >&6; }
     $PYTHON -c "import re" 2>/dev/null
@@ -6127,16 +6176,21 @@ $as_echo "$as_me: WARNING: Python 3 module re is required for NsCDE runtime." >&
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: shutil" >&5
 $as_echo_n "checking $PYTHON_NAME module: shutil... " >&6; }
     $PYTHON -c "import shutil" 2>/dev/null
@@ -6163,16 +6217,21 @@ $as_echo "$as_me: WARNING: Python 3 module shutil is required for NsCDE runtime.
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: subprocess" >&5
 $as_echo_n "checking $PYTHON_NAME module: subprocess... " >&6; }
     $PYTHON -c "import subprocess" 2>/dev/null
@@ -6199,16 +6258,21 @@ $as_echo "$as_me: WARNING: Python 3 module subprocess is required for NsCDE runt
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: sys" >&5
 $as_echo_n "checking $PYTHON_NAME module: sys... " >&6; }
     $PYTHON -c "import sys" 2>/dev/null
@@ -6235,16 +6299,21 @@ $as_echo "$as_me: WARNING: Python 3 module sys is required for NsCDE runtime." >
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: fnmatch" >&5
 $as_echo_n "checking $PYTHON_NAME module: fnmatch... " >&6; }
     $PYTHON -c "import fnmatch" 2>/dev/null
@@ -6271,16 +6340,21 @@ $as_echo "$as_me: WARNING: Python 3 module fnmatch is required for NsCDE runtime
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: getopt" >&5
 $as_echo_n "checking $PYTHON_NAME module: getopt... " >&6; }
     $PYTHON -c "import getopt" 2>/dev/null
@@ -6307,16 +6381,21 @@ $as_echo "$as_me: WARNING: Python 3 module getopt is required for NsCDE runtime.
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: time" >&5
 $as_echo_n "checking $PYTHON_NAME module: time... " >&6; }
     $PYTHON -c "import time" 2>/dev/null
@@ -6343,16 +6422,21 @@ $as_echo "$as_me: WARNING: Python 3 module time is required for NsCDE runtime." 
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: platform" >&5
 $as_echo_n "checking $PYTHON_NAME module: platform... " >&6; }
     $PYTHON -c "import platform" 2>/dev/null
@@ -6379,16 +6463,21 @@ $as_echo "$as_me: WARNING: Python 3 module platform is required for NsCDE runtim
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: psutil" >&5
 $as_echo_n "checking $PYTHON_NAME module: psutil... " >&6; }
     $PYTHON -c "import psutil" 2>/dev/null
@@ -6415,16 +6504,21 @@ $as_echo "$as_me: WARNING: Python 3 module psutil is required for NsCDE runtime.
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: pwd" >&5
 $as_echo_n "checking $PYTHON_NAME module: pwd... " >&6; }
     $PYTHON -c "import pwd" 2>/dev/null
@@ -6451,16 +6545,21 @@ $as_echo "$as_me: WARNING: Python 3 module pwd is required for NsCDE runtime." >
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: socket" >&5
 $as_echo_n "checking $PYTHON_NAME module: socket... " >&6; }
     $PYTHON -c "import socket" 2>/dev/null
@@ -6487,16 +6586,21 @@ $as_echo "$as_me: WARNING: Python 3 module socket is required for NsCDE runtime.
 fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: PyQt5" >&5
 $as_echo_n "checking $PYTHON_NAME module: PyQt5... " >&6; }
     $PYTHON -c "import PyQt5" 2>/dev/null
@@ -6518,16 +6622,21 @@ $as_echo "no" >&6; }
     fi
 
 
-    if test -z $PYTHON;
-    then
-        if test -z "";
-        then
+   if test "x$PYTHON_SHEBANG" == "x";
+   then
+      if test -z $PYTHON;
+      then
+         if test -z "";
+         then
             PYTHON="python3"
-        else
+         else
             PYTHON=""
-        fi
+         fi
     fi
     PYTHON_NAME=`basename $PYTHON`
+   else
+      PYTHON_NAME="$PYTHON_SHEBANG"
+   fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking $PYTHON_NAME module: PyQt4" >&5
 $as_echo_n "checking $PYTHON_NAME module: PyQt4... " >&6; }
     $PYTHON -c "import PyQt4" 2>/dev/null
