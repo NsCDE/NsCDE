@@ -115,7 +115,7 @@ AC_DEFUN([RECURSIVE_EVAL],
 # https://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_python_module.m4
 AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
 AC_DEFUN([AX_PYTHON_MODULE],[
-   if test "x$PYTHON_SHEBANG" == "x";
+   if test "x$PYTHON_SHEBANG" = "x";
    then
       if test -z $PYTHON;
       then
