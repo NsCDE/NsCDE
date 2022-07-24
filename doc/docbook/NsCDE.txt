@@ -3787,19 +3787,52 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 8. Keyboard and Mouse Bindings
 
+   This section describes what individual actions with keyboard
+   and mouse on different elements od the windows and other parts
+   of NsCDE are performing. Key and mouse bindings can be combined
+   or keyboard-only or mouse-only actions. First two subsections
+   of this section are describing two different sets of key
+   bindings implemented in NsCDE, while the third one explains the
+   actions performed by mouse alone, or in combination with some
+   key modifiers. Key and Mouse bindings are extendable or can be
+   overriden by user locally, as pretty much everything in NsCDE
+   and FVWM. All this bindings are made to be ergonomically easy
+   to use, remember and speed up everyday's work under NsCDE.
+   Additionally, new "cua" key binding set implements IBM standard
+   Common User Access rules which is used on almost all general
+   purpose systems today, so the user may find it easier to adopt
+   and more logical to map action to keys. Note that using
+   keyboard or setup without modifier 4 defined will degrade key
+   bindings usage, hence having a keyboard (or a X server software
+   setup with xmodmap(1) is a must for extended key bindings usage
+   of NsCDE. This goes generally for X11 environment, as well as
+   for mouse with at least 3 buttons.
+
+   Key and Mouse bindings can be applied globally, independent of
+   context, or in the context of some screen element. This
+   contexts are:
+
+     * A - Any context
+     * R - Root Window (Backdrop of the screen)
+     * W - Application Window
+     * F - Window Borders
+     * S - Window Border Corners
+     * T - Title Bar
+     * I - Icon
+
    NsCDE is using 4 modifier keys in single and multi-modifier
    combinations with other keys to implement key bindings. This
    modifiers are:
 
      * Control
      * Shift
-     * Meta (often called Super)
+     * Meta (sometimes called Super) - Mod4
      * Alt
 
    In combinations with escape, function keys, tab, backspace,
    home, menu, letters, numbers and other keys, NsCDE builds rich
    set of keyboard shortcuts also called keybindings in the FVWM
-   terminology
+   terminology.
 
    Keybindings can be partially or complitely overriden by the
    user's creation and writing of
@@ -3807,8 +3840,14 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    adding custom key bindings into
    $FVWM_USERDIR/Keybindings.fvwmlocal (Redefinition of key also
    overrides here). Key bindings which are described with their
-   Mod+Key items on menus can be extended or overwritten in
-   $FVWM_USERDIR/Keymenu.actions.
+   Mod+Key items on some menus (like Window Operation Menu) can be
+   extended or overwritten in $FVWM_USERDIR/Keymenu.actions. Care
+   must be taken when composing custom key bindings not to
+   override common application shortcuts or to make some keys,
+   letters and numbers on the keyboard unusable in normal writing
+   contexts. Examples of such shortcuts are Ctrl+Q which in 85%
+   cases closes the application, or Alt+Shift which is often
+   switching between keyboard layouts under the X server.
 
    Notice when there is a reference to the "Menu" key this means
    also "Compose" on some keyboards.
@@ -3819,18 +3858,23 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 Silent Key Tab A S -
 
 
-   For explanation what is the context, and what modifier, see
-   FVWM documentation (man page).
+   For more information about bindings context, modifiers,
+   PointerKey concept and the rest, see FVWM documentation (man
+   page).
      __________________________________________________________
 
 8.1. Common User Access (CUA) Key Bindings
 
    NsCDE 2.1 and above implements multiple sets of key bindings.
-   As of NsCDE 2.2, set named cua is applied by default, unless
-   overriden in $FVWM_USERDIR/NsCDE.conf with InfoStore variable
-   kbd_bind_set. This can also be configured with Keyboard Style
-   Manager. This subsection describes key bindings implemented in
-   "cua" (Common User Access) standard set of key bindings.
+   As of NsCDE 2.2, set named cua or Common User Access is applied
+   by default, unless overriden in $FVWM_USERDIR/NsCDE.conf with
+   InfoStore variable kbd_bind_set. This can also be configured
+   with Keyboard Style Manager. References to the key bindings in
+   all other parts of this documentation are reffering to "cua"
+   model.
+
+   This subsection describes key bindings implemented in "cua"
+   (Common User Access) standard set of key bindings.
 
      * Control modifier with cursor keys is moving viewport from
        page to page in any context:
@@ -3955,7 +3999,7 @@ Silent Key Tab A S -
        Pager) dismisses Local Pager.
        Figure 60. Local Pager
        [fig_localpager.png]
-     * To open Global Pager, press MetaAlt+Backspace in any
+     * To open Global Pager, press Meta+Alt+Backspace in any
        context. Pressing Meta+Alt+Backspace again dismisses Global
        Pager.
        Figure 61. Global Pager
@@ -4266,15 +4310,17 @@ Silent Key Tab A S -
 
    This subsection explains key bindings implemented in the
    deprecated "nscde1x" set of key bindings. For those who are
-   using mentioned set, this subsection applies as documentation
-   of key bindings.
+   using this set, this subsection applies as documentation of key
+   bindings.
 
    This mechanism was still experimental in NsCDE 2.1 and the only
-   implemented set of keybindings was nscde1x (called "nscde" in
-   NsCDE 2.1). The following section lists and explains key
-   bindings implemented in that set. In version 2.2 of NsCDE, IBM
-   CUA compliant set is implemented as an new default choice to
-   old "nscde1x" set of keybindings.
+   implemented set of keybindings was this one - nscde1x (called
+   "nscde" in NsCDE 2.1). The following section lists and explains
+   key bindings implemented in that set. In version 2.2 of NsCDE,
+   IBM CUA compliant set is implemented as an new default choice
+   to old "nscde1x" set of keybindings. Please bear in mind that
+   references to the key bindings in all other parts of this
+   documentation are reffering to "cua" model, not this one.
 
      * cursor keys up, down, left and right with ctrl modifier are
        moving viewport from page to page in any context.
@@ -5301,10 +5347,11 @@ Silent Key Tab A S -
    File Mousebindings.fvwmconf is made in similar manner as the
    Keybindings.<kbd_bind_set>. Can be overridden (.fvwmconf) or
    extended (.fvwmlocal) just like (almost) any NsCDE conf file.
-   See fvwm(1) for "Mouse" commands. Here commands invoked with
-   pointer are defined. As it is the case with key bindings, mouse
-   actions are too far more in NsCDE than in original CDE. The
-   syntax is described at the top of the file.
+   See fvwm(1) for "Mouse" commands. Here, commands invoked with
+   pointer are defined. As it is the case with a Key Bindings,
+   there are considerable more mouse actions in NsCDE than in
+   original CDE. The syntax is described at the top of the file,
+   similar to this of Key Bindings.
 
    Default set of mouse bindings in NsCDE is described in the
    chapter about Mouse Bindings.

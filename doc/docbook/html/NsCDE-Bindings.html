@@ -1,18 +1,41 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>8. Keyboard and Mouse Bindings</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="prev" href="NsCDE-Backdrops-Palettes-Fonts.html" title="7. Backdrops, Palettes and Fonts"><link rel="next" href="NsCDE-Key-Bindings-NsCDE1x.html" title="8.2. NsCDE 1.X Key Bindings"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8. Keyboard and Mouse Bindings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Backdrops-Palettes-Fonts.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Key-Bindings-NsCDE1x.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="NsCDE-Bindings"></a>8. Keyboard and Mouse Bindings</h2></div></div></div><p>
-
+This section describes what individual actions with keyboard and mouse on different elements
+od the windows and other parts of NsCDE are performing. Key and mouse bindings can be combined
+or keyboard-only or mouse-only actions. First two subsections of this section are describing
+two different sets of key bindings implemented in NsCDE, while the third one explains the
+actions performed by mouse alone, or in combination with some key modifiers. Key and Mouse
+bindings are extendable or can be overriden by user locally, as pretty much everything in
+NsCDE and FVWM. All this bindings are made to be ergonomically easy to use, remember and
+speed up everyday's work under NsCDE. Additionally, new "cua" key binding set implements
+IBM standard <span class="emphasis"><em>Common User Access</em></span> rules which is used on almost all
+general purpose systems today, so the user may find it easier to adopt and more logical
+to map action to keys. Note that using keyboard or setup without modifier 4 defined will
+degrade key bindings usage, hence having a keyboard (or a X server software setup with
+xmodmap(1) is a must for extended key bindings usage of NsCDE. This goes generally for
+X11 environment, as well as for mouse with at least 3 buttons.
+</p><p>
+Key and Mouse bindings can be applied globally, independent of context, or in the context
+of some screen element. This contexts are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A - Any context</p></li><li class="listitem"><p>R - Root Window (Backdrop of the screen)</p></li><li class="listitem"><p>W - Application Window</p></li><li class="listitem"><p>F - Window Borders</p></li><li class="listitem"><p>S - Window Border Corners</p></li><li class="listitem"><p>T - Title Bar</p></li><li class="listitem"><p>I - Icon</p></li></ul></div><p>
+</p><p>
 NsCDE is using 4 modifier keys in single and multi-modifier combinations with other keys
 to implement key bindings. This modifiers are:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Control</p></li><li class="listitem"><p>Shift</p></li><li class="listitem"><p>Meta (often called Super)</p></li><li class="listitem"><p>Alt</p></li></ul></div><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Control</p></li><li class="listitem"><p>Shift</p></li><li class="listitem"><p>Meta (sometimes called Super) - Mod4</p></li><li class="listitem"><p>Alt</p></li></ul></div><p>
 In combinations with escape, function keys, tab, backspace, home, menu, letters, numbers
 and other keys, NsCDE builds rich set of keyboard shortcuts also called keybindings in the
-FVWM terminology
+FVWM terminology.
 </p><p>
 Keybindings can be partially or complitely overriden by the user's creation and writing
 of <code class="filename">$FVWM_USERDIR/Keybindings.fvwmconf</code> (override) or extended by
 adding custom key bindings into <code class="filename">$FVWM_USERDIR/Keybindings.fvwmlocal</code>
-(Redefinition of key also overrides here).
-Key bindings which are described with their <span class="emphasis"><em>Mod+Key</em></span> items on menus
-can be extended or overwritten in <code class="filename">$FVWM_USERDIR/Keymenu.actions</code>.
+(Redefinition of key also overrides here). Key bindings which are described with their
+<span class="emphasis"><em>Mod+Key</em></span> items on some menus (like Window Operation Menu) can be
+extended or overwritten in <code class="filename">$FVWM_USERDIR/Keymenu.actions</code>. Care
+must be taken when composing custom key bindings not to override common application
+shortcuts or to make some keys, letters and numbers on the keyboard unusable in normal
+writing contexts. Examples of such shortcuts are <span class="keysym">Ctrl+Q</span> which in 85%
+cases closes the application, or <span class="keysym">Alt+Shift</span> which is often switching
+between keyboard layouts under the X server.
 </p><p>
 Notice when there is a reference to the "Menu" key this means also "Compose" on some
 keyboards.
@@ -25,15 +48,18 @@ Silent Key Tab A S -
 
 </pre><p>
 </p><p>
-For explanation what is the context, and what modifier, see FVWM documentation (man page).
+For more information about bindings context, modifiers, PointerKey concept and the rest, see FVWM
+documentation (man page).
 </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Key-Bindings-CUA"></a>8.1. Common User Access (CUA) Key Bindings</h3></div></div></div><p>
 
-NsCDE 2.1 and above implements multiple sets of key bindings. As of NsCDE 2.2,
-set named <span class="emphasis"><em>cua</em></span> is applied by default, unless overriden in
-<code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with InfoStore variable
-<code class="varname">kbd_bind_set</code>. This can also be configured with
-<a class="link" href="NsCDE-KeyboardMgr.html" title="5.8. Keyboard Style Manager">Keyboard Style Manager</a>. This
-subsection describes key bindings implemented in "cua" (Common User Access)
+NsCDE 2.1 and above implements multiple sets of key bindings. As of NsCDE 2.2, set
+named  <span class="emphasis"><em>cua</em></span> or <span class="emphasis"><em>Common User Access</em></span> is applied
+by default, unless overriden in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with
+InfoStore variable <code class="varname">kbd_bind_set</code>. This can also be configured with
+<a class="link" href="NsCDE-KeyboardMgr.html" title="5.8. Keyboard Style Manager">Keyboard Style Manager</a>. References to the
+key bindings in all other parts of this documentation are reffering to "cua" model.
+</p><p>
+This subsection describes key bindings implemented in "cua" (Common User Access)
 standard set of key bindings.
 
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -166,7 +192,7 @@ again (but in the context of Local Pager) dismisses Local Pager.
 </p><div class="figure"><a name="fig_localpager_2"></a><p class="title"><b>Figure 60. Local Pager</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_localpager.png" alt="Local Pager"></div></div></div><p><br class="figure-break">
 
 </p></li><li class="listitem"><p>
-To open Global Pager, press <span class="keysym">MetaAlt+Backspace</span> in any context. Pressing <span class="keysym">Meta+Alt+Backspace</span>
+To open Global Pager, press <span class="keysym">Meta+Alt+Backspace</span> in any context. Pressing <span class="keysym">Meta+Alt+Backspace</span>
 again dismisses Global Pager.
 
 </p><div class="figure"><a name="fig_globalpager_2"></a><p class="title"><b>Figure 61. Global Pager</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_globalpager.png" alt="Global Pager"></div></div></div><p><br class="figure-break">

@@ -5379,26 +5379,59 @@ for desks on different monitors.
 <sect1 id="NsCDE-Bindings">
 <title>Keyboard and Mouse Bindings</title>
 <para>
-
+This section describes what individual actions with keyboard and mouse on different elements
+od the windows and other parts of NsCDE are performing. Key and mouse bindings can be combined
+or keyboard-only or mouse-only actions. First two subsections of this section are describing
+two different sets of key bindings implemented in NsCDE, while the third one explains the
+actions performed by mouse alone, or in combination with some key modifiers. Key and Mouse
+bindings are extendable or can be overriden by user locally, as pretty much everything in
+NsCDE and FVWM. All this bindings are made to be ergonomically easy to use, remember and
+speed up everyday's work under NsCDE. Additionally, new "cua" key binding set implements
+IBM standard <emphasis>Common User Access</emphasis> rules which is used on almost all
+general purpose systems today, so the user may find it easier to adopt and more logical
+to map action to keys. Note that using keyboard or setup without modifier 4 defined will
+degrade key bindings usage, hence having a keyboard (or a X server software setup with
+xmodmap(1) is a must for extended key bindings usage of NsCDE. This goes generally for
+X11 environment, as well as for mouse with at least 3 buttons.
+</para>
+<para>
+Key and Mouse bindings can be applied globally, independent of context, or in the context
+of some screen element. This contexts are:
+<itemizedlist>
+<listitem><para>A - Any context</para></listitem>
+<listitem><para>R - Root Window (Backdrop of the screen)</para></listitem>
+<listitem><para>W - Application Window</para></listitem>
+<listitem><para>F - Window Borders</para></listitem>
+<listitem><para>S - Window Border Corners</para></listitem>
+<listitem><para>T - Title Bar</para></listitem>
+<listitem><para>I - Icon</para></listitem>
+</itemizedlist>
+</para>
+<para>
 NsCDE is using 4 modifier keys in single and multi-modifier combinations with other keys
 to implement key bindings. This modifiers are:
 <itemizedlist>
 <listitem><para>Control</para></listitem>
 <listitem><para>Shift</para></listitem>
-<listitem><para>Meta (often called Super)</para></listitem>
+<listitem><para>Meta (sometimes called Super) - Mod4</para></listitem>
 <listitem><para>Alt</para></listitem>
 </itemizedlist>
 In combinations with escape, function keys, tab, backspace, home, menu, letters, numbers
 and other keys, NsCDE builds rich set of keyboard shortcuts also called keybindings in the
-FVWM terminology
+FVWM terminology.
 </para>
 <para>
 Keybindings can be partially or complitely overriden by the user's creation and writing
 of <filename>$FVWM_USERDIR/Keybindings.fvwmconf</filename> (override) or extended by
 adding custom key bindings into <filename>$FVWM_USERDIR/Keybindings.fvwmlocal</filename>
-(Redefinition of key also overrides here).
-Key bindings which are described with their <emphasis>Mod+Key</emphasis> items on menus
-can be extended or overwritten in <filename>$FVWM_USERDIR/Keymenu.actions</filename>.
+(Redefinition of key also overrides here). Key bindings which are described with their
+<emphasis>Mod+Key</emphasis> items on some menus (like Window Operation Menu) can be
+extended or overwritten in <filename>$FVWM_USERDIR/Keymenu.actions</filename>. Care
+must be taken when composing custom key bindings not to override common application
+shortcuts or to make some keys, letters and numbers on the keyboard unusable in normal
+writing contexts. Examples of such shortcuts are <keysym>Ctrl+Q</keysym> which in 85%
+cases closes the application, or <keysym>Alt+Shift</keysym> which is often switching
+between keyboard layouts under the X server.
 </para>
 <para>
 Notice when there is a reference to the "Menu" key this means also "Compose" on some
@@ -5414,19 +5447,24 @@ Silent Key Tab A S -
 </programlisting>
 </para>
 <para>
-For explanation what is the context, and what modifier, see FVWM documentation (man page).
+For more information about bindings context, modifiers, PointerKey concept and the rest, see FVWM
+documentation (man page).
 </para>
 
 <sect2 id="NsCDE-Key-Bindings-CUA">
 <title>Common User Access (CUA) Key Bindings</title>
 <para>
 
-NsCDE 2.1 and above implements multiple sets of key bindings. As of NsCDE 2.2,
-set named <emphasis>cua</emphasis> is applied by default, unless overriden in
-<filename>$FVWM_USERDIR/NsCDE.conf</filename> with InfoStore variable
-<varname>kbd_bind_set</varname>. This can also be configured with
-<link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link>. This
-subsection describes key bindings implemented in "cua" (Common User Access)
+NsCDE 2.1 and above implements multiple sets of key bindings. As of NsCDE 2.2, set
+named  <emphasis>cua</emphasis> or <emphasis>Common User Access</emphasis> is applied
+by default, unless overriden in <filename>$FVWM_USERDIR/NsCDE.conf</filename> with
+InfoStore variable <varname>kbd_bind_set</varname>. This can also be configured with
+<link linkend="NsCDE-KeyboardMgr">Keyboard Style Manager</link>. References to the
+key bindings in all other parts of this documentation are reffering to "cua" model.
+</para>
+
+<para>
+This subsection describes key bindings implemented in "cua" (Common User Access)
 standard set of key bindings.
 
 <itemizedlist>
@@ -5658,7 +5696,7 @@ again (but in the context of Local Pager) dismisses Local Pager.
 </para></listitem>
 
 <listitem><para>
-To open Global Pager, press <keysym>MetaAlt+Backspace</keysym> in any context. Pressing <keysym>Meta+Alt+Backspace</keysym>
+To open Global Pager, press <keysym>Meta+Alt+Backspace</keysym> in any context. Pressing <keysym>Meta+Alt+Backspace</keysym>
 again dismisses Global Pager.
 
 <figure id="fig_globalpager_2">
@@ -6170,13 +6208,14 @@ To shade the currently focused window to the size of the title bar, press <keysy
 <title>NsCDE 1.X Key Bindings</title>
 <para>
 This subsection explains key bindings implemented in the deprecated "nscde1x" set of key bindings. For those
-who are using mentioned set, this subsection applies as documentation of key bindings.
+who are using this set, this subsection applies as documentation of key bindings.
 </para>
 <para>
-This mechanism was still experimental in NsCDE 2.1 and the only implemented set
-of keybindings was <varname>nscde1x</varname> (called "nscde" in NsCDE 2.1). The following section lists and explains
-key bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as an new default
-choice to old "nscde1x" set of keybindings.
+This mechanism was still experimental in NsCDE 2.1 and the only implemented set of keybindings was this
+one - <varname>nscde1x</varname> (called "nscde" in NsCDE 2.1). The following section lists and explains
+key bindings implemented in that set. In version 2.2 of NsCDE, IBM CUA compliant set is implemented as
+an new default choice to old "nscde1x" set of keybindings. Please bear in mind that references to the
+key bindings in all other parts of this documentation are reffering to "cua" model, not this one.
 
 <itemizedlist>
 <listitem><para>
@@ -7596,9 +7635,9 @@ notices in section about <link linkend="NsCDE-Key-Bindings-NsCDE1x">NsCDE 1.X Ke
  File <filename>Mousebindings.fvwmconf</filename> is made in similar manner as the
   <filename>Keybindings.&lt;kbd_bind_set&gt;</filename>. Can be overridden (.fvwmconf) or
   extended (.fvwmlocal) just like (almost) any NsCDE conf file. See fvwm(1) for "Mouse"
-  commands. Here commands invoked with pointer are defined. As it is the case with key
-  bindings, mouse actions are too far more in NsCDE than in original CDE. The syntax is
-  described at the top of the file.
+  commands. Here, commands invoked with pointer are defined. As it is the case with a Key
+  Bindings, there are considerable more mouse actions in NsCDE than in original CDE.
+  The syntax is described at the top of the file, similar to this of Key Bindings.
 </para>
 <para>
   Default set of mouse bindings in NsCDE is described in the chapter about <link linkend="NsCDE-Mouse-Bindings">Mouse Bindings</link>.
