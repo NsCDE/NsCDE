@@ -74,7 +74,7 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
-* Mon Jul 24 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.6
+* Sun Jul 24 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.6
 - Add kcalc colors tom match dtcalc (colormgr.local)
 - Fix rofi and dunst themes to work with new versions of programs
 - NsCDE .desktop files renamed to conform to standards
@@ -99,7 +99,7 @@ autoreconf -ivf
 - More Firefox CSS updates
 - Documentation updates for all of the above
 
-* Mon Jul 14 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.5
+* Thu Jul 14 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.5
 - Works on keybindings continued
 
 * Mon Jul 11 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.4
