@@ -28,7 +28,7 @@ function find_colors
       if [ "x$palfile" != "x" ]; then
          $NSCDE_TOOLSDIR/palette_colorgen \
           -n ${NSCDE_PALETTE_NCOLORS} \
-          -p ${NSCDE_DATADIR}/palettes/${NSCDE_PALETTE}.dp -sl | \
+          -p ${palfile} -sl | \
           egrep '(ts|bs)_color_3' | while IFS=" " read name value
          do
             eval "${name}"="${value}"
