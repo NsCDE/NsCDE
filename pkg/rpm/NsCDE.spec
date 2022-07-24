@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.2
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -57,7 +57,6 @@ autoreconf -ivf
 %configure --prefix=/usr --sysconfdir=/etc
 %make_build
 
-
 %install
 %make_install
 
@@ -74,8 +73,32 @@ autoreconf -ivf
 %{_datadir}/%{name}/
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
-
 %changelog
+* Mon Jul 24 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.6
+- Add kcalc colors tom match dtcalc (colormgr.local)
+- Fix rofi and dunst themes to work with new versions of programs
+- NsCDE .desktop files renamed to conform to standards
+- Front Panel on top of the screen possibility implemented. This
+  can be achieved with "InfoStoreAdd frontpanel.on.top 1" in
+  ~/.NsCDE/NsCDE.conf.
+- Icon theme updates
+- CSS: support firefox 100+
+- Consolidate GTK2 and GTK3 engine css files, add some fixes
+  and match colors more correctly
+- Added Common User Access (CUA) key bindings. This is now
+  default key binding set in NsCDE. Old key bindings scheme
+  now called "nscde1x" can be used in ~/.NsCDE/NsCDE.conf
+  with the "InfoStoreAdd kbd_bind_set nscde1x" - this can also
+  be configured now with Keyboard Style Manager
+- Keyboard Style Manager addons, Mouse Style Manager fixes
+- Building: add --with-python-shebang="STRING" in configure
+  to allow user to override strange alternatives managers on
+  some systems
+- Reorganize f_PolkitAgent to be more portable and stable
+- Kvantum: Reshape in more Motif style Qt5 Combo Box
+- More Firefox CSS updates
+- Documentation updates for all of the above
+
 * Mon Jul 14 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.5
 - Works on keybindings continued
 
