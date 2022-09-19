@@ -1847,10 +1847,12 @@ AddToFunc f_WindowOpsBasicCtx
     AddToMenu $0 "$[gt.R&aise]		$[infostore.km_raiselower]" RaiseLower
 
 # Dynamic icon options for static menus
+# 19. 9. 2022. Schedule 250 for "Iconify Off" is here just to avoid
+# fvwm freezing on some systems with broken patch for X libraries
 DestroyFunc f_IconOpsBasicCtx
 AddToFunc f_IconOpsBasicCtx
 + I DestroyMenu recreate $0
-+ I ThisWindow (Iconic, CirculateHit) AddToMenu $0 "$[gt.De&iconify]		$[infostore.km_iconify]" Iconify Off
++ I ThisWindow (Iconic, CirculateHit) AddToMenu $0 "$[gt.De&iconify]		$[infostore.km_iconify]" Schedule 250 Iconify Off
 + I Test (!EnvMatch infostore.pgm 1x1) AddToMenu $0 "$[gt.Deiconify On Page ...]" Popup m_DeiconifyOnPage
 + I AddToMenu $0 "" Nop
 + I AddToMenu $0 "$[gt.&Move]		$[infostore.km_move]" Move
