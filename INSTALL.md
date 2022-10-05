@@ -91,6 +91,21 @@ instead. (optional)
 
 ### Known system specific package dependencies
 
+- All systems
+Installing `NsCDE` with autoconf/automake `make install` requires some
+development packages:
+
+- `autoconf` and `automake`
+- X11 development headers (`libx11-dev` on Debian and friends)
+- Xext development headers (`libxext-dev` on Debian and friends)
+- XPM development headers (`libxpm-dev` on Debian and friends)
+- ... and of course, C compiler (gcc, clang ...)
+- `make` tool
+
+On RPM based Linux distributions, this packages are often called
+`libX11-devel`, `libXext-devel` and `libXpm-devel`.
+
+
 - Arch / Artix / Manjaro
 ``` sh
 # Use your AUR helper of choice (e. g. trizen) to install the package
