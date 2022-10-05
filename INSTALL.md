@@ -91,8 +91,9 @@ instead. (optional)
 
 ### Known system specific package dependencies
 
-- All systems
-Installing `NsCDE` with autoconf/automake `make install` requires some
+All systems
+
+# Installing `NsCDE` with autoconf/automake `make install` requires some
 development packages:
 
 - `autoconf` and `automake`
