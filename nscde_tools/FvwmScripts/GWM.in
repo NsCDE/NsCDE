@@ -604,7 +604,8 @@ Widget 1
       Begin
          If (LastString) == {Quit} Then
          Begin
-            Do {KillModule FvwmPager GWMPager}
+            # Avoid unnecessary shut of swallowed GWMPager because FvwmScript then core dumps
+            # Do {KillModule FvwmPager GWMPager}
             Do {Schedule 100 SendToModule GWMOptions SendString 19 1 Exit}
             Do {Schedule 250 SendToModule $[FVWM_USERDIR]/tmp/GWM SendString 1 2 QExit}
          End
