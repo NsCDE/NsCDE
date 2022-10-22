@@ -316,10 +316,12 @@ AddToFunc f_OverScreen
 + I All ($0,CurrentPage,State 7) $[1-]
 + I All ($0,CurrentPage,State 7) State 7 false
 
+# Schedule - because of Xorg bug introduced late in 2022
+# Freezes fvwm 2
 DestroyFunc f_DeiconifyOnPage
 AddToFunc f_DeiconifyOnPage
-+ I Iconify False
-+ I MoveToPage $0 $1
++ I Schedule 400 Iconify False
++ I Schedule 600 MoveToPage $0 $1
 
 DestroyFunc f_MoveToPage
 AddToFunc f_MoveToPage
@@ -1852,7 +1854,7 @@ AddToFunc f_WindowOpsBasicCtx
 DestroyFunc f_IconOpsBasicCtx
 AddToFunc f_IconOpsBasicCtx
 + I DestroyMenu recreate $0
-+ I ThisWindow (Iconic, CirculateHit) AddToMenu $0 "$[gt.De&iconify]		$[infostore.km_iconify]" Schedule 250 Iconify Off
++ I ThisWindow (Iconic, CirculateHit) AddToMenu $0 "$[gt.De&iconify]		$[infostore.km_iconify]" Schedule 300 Iconify Off
 + I Test (!EnvMatch infostore.pgm 1x1) AddToMenu $0 "$[gt.Deiconify On Page ...]" Popup m_DeiconifyOnPage
 + I AddToMenu $0 "" Nop
 + I AddToMenu $0 "$[gt.&Move]		$[infostore.km_move]" Move
