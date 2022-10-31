@@ -22,10 +22,10 @@ BuildRequires:  glibc-devel
 Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-psutil qt5ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-Requires: python3-yaml PyQt5 qt5-qtstyleplugins dex-autostart
+Requires: python3-yaml PyQt5 qt5-qtstyleplugins dex-autostart groff-base
 %endif
 %if 0%{?suse_version}
-Requires: python3-qt5 python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex
+Requires: python3-qt5 python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex groff-full
 %endif
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
@@ -74,6 +74,10 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Mon Oct 31 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.3-1
+- Start with 2.3
+- Add groff-full / groff-base as dependency for panel and subpanel help
+
 * Sun Jul 24 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.2.6
 - Add kcalc colors tom match dtcalc (colormgr.local)
 - Fix rofi and dunst themes to work with new versions of programs
