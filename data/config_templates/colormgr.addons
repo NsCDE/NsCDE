@@ -186,6 +186,11 @@ function do_firefox
    if (($? > 0)); then
       echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${FIREFOX_CHROMEDIR}/../user.js
    fi
+   egrep -q '^([[:space:]]+)?user_pref\("browser\.newtabpage\.activity-stream\.improvesearch\.handoffToAwesomebar",([[:space:]]+)?false\)([[:space:]]+)?;' \
+    ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+   if (($? > 0)); then
+      echo 'user_pref("browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", false);' >> ${FIREFOX_CHROMEDIR}/../user.js
+   fi
 }
 
 # Thunderbird
@@ -211,13 +216,13 @@ function do_thunderbird
    egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeChrome\.css(.)?\)([[:space:]]+)?;' \
     ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
    if (($? > 0)); then
-      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeChrome.css\");" >> \
+      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/${THUNDERBIRD_MAJVER_PFX}nscdeChrome.css\");" >> \
        ${THUNDERBIRD_CHROMEDIR}/userChrome.css
    fi
    egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\(.*nscdeIcons\.css(.)?\)([[:space:]]+)?;' \
     ${THUNDERBIRD_CHROMEDIR}/userChrome.css 2>/dev/null
    if (($? > 0)); then
-      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeIcons.css\");" >> \
+      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/${THUNDERBIRD_MAJVER_PFX}nscdeIcons.css\");" >> \
        ${THUNDERBIRD_CHROMEDIR}/userChrome.css
    fi
 
@@ -230,7 +235,7 @@ function do_thunderbird
    egrep -q '^([[:space:]]+)?@import([[:space:]]+)url\((.)?.*nscdeContent\.css(.)?\)([[:space:]]+)?;' \
     ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
    if (($? > 0)); then
-      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/nscdeContent.css\");" >> \
+      echo "@import url(\"${NSCDE_DATADIR}/integration/thunderbird/${THUNDERBIRD_MAJVER_PFX}nscdeContent.css\");" >> \
        ${THUNDERBIRD_CHROMEDIR}/userContent.css 2>/dev/null
    fi
 
