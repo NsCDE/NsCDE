@@ -344,6 +344,10 @@ tabs {
   margin: 1px !important;
 }
 
+#alltabs-button {
+    list-style-image: url("nsicons/arrow-down.png") !important;
+}
+
 .tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true], [multiselected]) {
   background-color: var(--nscde-bg-color-5) !important;
 }
@@ -692,10 +696,11 @@ td > input,
   padding: calc(var(--toolbarbutton-inner-padding) - 2px) !important;
 }
 
+#PersonalToolbar,
 #PersonalToolbar > :first-child + toolbarspring {
-  background-position: left 4px;
-  background-repeat: no-repeat;
-  background-image: -moz-element(#statuspanel);
+  background-position: left 2px bottom 2px !important;
+  background-repeat: no-repeat !important;
+  background-image: -moz-element(#statuspanel) !important;
   max-width: none !important;
   width: 60ch;
 }
@@ -843,19 +848,25 @@ treecol, .treecol-image {
 }
 
 #statuspanel {
-  height: 32px !important;
+  height: 28px !important;
   width: auto !important;
   max-width: 75% !important;
-  bottom: 0px !important;
+  bottom: -1000px !important;
   left: 0px !important;
   padding: 0px !important;
   transition-duration: 0s !important;
   transition-delay: 0s !important;
   transition-property: none !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
 }
 
 #statuspanel-inner {
-  height: 30px !important;
+  height: 20px !important;
   margin-left: 2px !important;
   margin-right: 0px !important;
   margin-top: 1px !important;
@@ -864,19 +875,15 @@ treecol, .treecol-image {
   font-size: inherit;
   color: inherit !important;
   background-color: var(--toolbar-accent-color) !important;
-  border-top: 1px solid var(--nscde-bs-color-5) !important;
-  border-left: 1px solid var(--nscde-bs-color-5) !important;
-  border-right: 1px solid var(--nscde-ts-color-5) !important;
-  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
 }
 
 #statuspanel-label {
   top: 0px !important;
   margin-top: 0px !important;
   margin-bottom: 4px !important;
-  margin-left: 8px !important;
+  margin-left: 4px !important;
   border: none !important;
-  padding: 0px !important;
+  padding: 4px !important;
   background: transparent !important;
 }
 
@@ -1187,6 +1194,14 @@ menubar > menu {
 .panel-arrowbox+slot {
   box-shadow: none !important;
   margin: 0px !important;
+}
+
+.findbar-find-previous {
+  list-style-image: url("nsicons/arrow-left.png") !important;
+}
+
+.findbar-find-next {
+  list-style-image: url("nsicons/arrow-right.png") !important;
 }
 
 input.findbar-textbox {
