@@ -137,9 +137,10 @@ sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
 
 - FreeBSD/ DragonflyBSD/ GhostBSD/ MidnightBSD
 ``` sh
-sudo pkg install ksh2020 xorg ImageMagic6/7 xscreensaver \ 
-    py37-yaml py37-qt5 qt5ct qt5-style-plugins 
-    stalonetray xterm pyhon3 py37-xdg libstroke xsettingsd \ 
+su
+pkg install wget ksh93 xorg ImageMagic7 xscreensaver \ 
+    py39-yaml py39-qt5 qt5ct qt5-style-plugins 
+    stalonetray xterm pyhon3 py39-xdg libstroke xsettingsd \ 
     fvwm3 p5-File-MimeInfo gkrellm2 rofi
 ```
 
