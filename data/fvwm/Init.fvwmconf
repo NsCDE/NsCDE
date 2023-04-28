@@ -10,7 +10,6 @@ Test (!x $[infostore.terminal]) f_FindApp terminal terminal
 # Notice: Common default for Init and Session function
 DestroyFunc CommonInitFunction
 AddToFunc CommonInitFunction
-+ I Test (x pnmixer, !f "$[HOME]/.config/autostart/pnmixer.desktop", EnvMatch infostore.nscde_use_stalonetray 1) Exec exec pnmixer
 + I Test (x dex-autostart) Exec exec dex-autostart -e NsCDE --term $[infostore.terminal] -s $[HOME]/.config/autostart -a
 + I Test (!x dex-autostart, x dex) Exec exec dex -e NsCDE --term $[$infostore.terminal] -s $[HOME]/.config/autostart -a
 
