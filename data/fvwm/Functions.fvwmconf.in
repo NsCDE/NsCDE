@@ -1203,7 +1203,8 @@ AddToFunc f_Xscreensaver
 + I Test (EnvMatch infostore.xsc_cmd -cont) SendToModule FrontPanel ChangeButton FpLock Icon NsCDE/FpLock.xpm
 + I Test (EnvMatch infostore.xsc_cmd -cont) InfoStoreAdd xsc_status "Alck_enabledO"
 + I Test (EnvMatch infostore.xsc_cmd -lock) Exec exec xscreensaver-command $0
-+ I Test (EnvMatch infostore.xsc_cmd -prefs) Exec exec xscreensaver-command $0
++ I Test (EnvMatch infostore.xsc_cmd -prefs, !X xscreensaver-settings) Exec exec xscreensaver-command $0
++ I Test (EnvMatch infostore.xsc_cmd -prefs, X xscreensaver-settings) Exec exec xscreensaver-settings
 + I Test (EnvMatch infostore.xsc_cmd -restart) Exec exec pkill -u $[USER] xscreensaver
 + I Test (EnvMatch infostore.xsc_cmd -restart) Schedule 1000 Exec exec xscreensaver -no-splash
 + I Test (EnvMatch infostore.xsc_cmd -restart) Schedule 1200 InfoStoreAdd xsc_status "Alck_enabledO"
