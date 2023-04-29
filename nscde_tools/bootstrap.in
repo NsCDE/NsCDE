@@ -318,6 +318,17 @@ function setup_nscde
       fi
    fi
 
+   # Weird gsettings idiocy
+   whence -q gsettings
+   if (($? == 0)); then
+      gcolorscheme=$(gsettings get org.gnome.desktop.interface color-scheme)
+      if (($? == 0)); then
+         if [ "$gcolorscheme" != "'default'" ]; then
+            gsettings set org.gnome.desktop.interface color-scheme default
+         fi
+      fi
+   fi
+
    # Gtk2 and Gtk3 themes
    if [ ! -e "$HOME/.themes/NsCDE" ]; then
       if (($VERBOSE == 1)); then

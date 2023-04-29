@@ -1366,6 +1366,20 @@ Widget 32
                Begin
                   Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
                End
+
+               # Handle stupid light/dark/default override of the theme
+               Set $CheckGsettings = (GetOutput {@KSH@ -c "whence -q gsettings; echo $?"} 1 -1)
+               If $CheckGsettings == 0 Then
+               Begin
+                  Set $CheckGsettingsColorScheme = (GetOutput {gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null} 1 -1)
+                  If $CheckGsettingsColorScheme <> {} Then
+                  Begin
+                     If $CheckGsettingsColorScheme <> {'default'} Then
+                     Begin
+                        Set $GsettingsColorScheme = (GetOutput {gsettings set org.gnome.desktop.interface color-scheme default} 1 -1)
+                     End
+                  End
+               End
             End
 
             If $GtkStr == {10} Then
@@ -1444,6 +1458,19 @@ Widget 32
                   Set $DoGtkrc3b = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE} 1 -1)
                End
 
+               # Handle stupid light/dark/default override of the theme
+               Set $CheckGsettings = (GetOutput {@KSH@ -c "whence -q gsettings; echo $?"} 1 -1)
+               If $CheckGsettings == 0 Then
+               Begin
+                  Set $CheckGsettingsColorScheme = (GetOutput {gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null} 1 -1)
+                  If $CheckGsettingsColorScheme <> {} Then
+                  Begin
+                     If $CheckGsettingsColorScheme <> {'default'} Then
+                     Begin
+                        Set $GsettingsColorScheme = (GetOutput {gsettings set org.gnome.desktop.interface color-scheme default} 1 -1)
+                     End
+                  End
+               End
             End
 
             If $GtkStr == {00} Then
