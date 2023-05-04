@@ -231,6 +231,27 @@ treechildren::-moz-tree-image(query, OrganizerQuery_downloads__v) {
   list-style-image: url("nsicons/bookmark.png") !important;
 }
 
+/* urlBar icons */
+#tracking-protection-icon-box,
+#identity-icon-box,
+#tracking-protection-icon,
+#identity-icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+#identity-box[pageproxystate="valid"].verifiedDomain #identity-icon, #identity-box[pageproxystate="valid"].mixedActiveBlocked #identity-icon {
+  list-style-image: url("nsicons/nsLockLocked.png") !important;
+}
+
+#identity-box[pageproxystate="valid"].notSecure #identity-icon {
+  list-style-image: url("nsicons/nsLockUnlocked.png") !important;
+}
+
+#urlbar-input-container[pageproxystate="valid"] > #tracking-protection-icon-container > #tracking-protection-icon-box > #tracking-protection-icon {
+  list-style-image: url("nsicons/nsSiteInfo.png") !important;
+}
+
 /* Statusbar icons */
 #sidebar-switcher-bookmarks > .toolbarbutton-icon,
 #sidebar-box[sidebarcommand="viewBookmarksSidebar"] > #sidebar-header > #sidebar-switcher-target > #sidebar-icon {
