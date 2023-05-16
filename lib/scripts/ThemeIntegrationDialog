@@ -1,0 +1,420 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-ColorMgr}
+WindowLocaleTitle { Color Theme System Integration }
+WindowSize 550 366
+Colorset 22
+
+Init
+Begin
+   # Dynamic colorset for disabled items - based on CS22
+   Do {Colorset 59 fg $[shadow.cs22], bg $[bg.cs22], hi $[hilight.cs22], sh $[shadow.cs22], Plain, NoShape}
+
+   # Fonts
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   ChangeFont 3 $SmallFont
+   ChangeFont 4 $DefaultFont
+   ChangeFont 5 $DefaultFont
+   ChangeFont 6 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 8 $DefaultFont
+   ChangeFont 9 $DefaultFont
+   ChangeFont 10 $DefaultFont
+   ChangeFont 11 $DefaultFont
+   ChangeFont 12 $DefaultFont
+   ChangeFont 13 $DefaultFont
+   ChangeFont 15 $DefaultFont
+   ChangeFont 16 $DefaultFont
+   ChangeFont 17 $DefaultFont
+
+   # Put proper local titles on widgets
+   ChangeLocaleTitle 3 { Configure Widget and Program Integrations }
+   ChangeLocaleTitle 4 { Screen Backdrops}
+   ChangeLocaleTitle 5 { X Resources}
+   ChangeLocaleTitle 6 { GTK2 Theme}
+   ChangeLocaleTitle 7 { GTK3 Theme}
+   ChangeLocaleTitle 8 { Qt4 Theme}
+   ChangeLocaleTitle 9 { Qt5 Theme (GTK3 Engine)}
+   ChangeLocaleTitle 10 { Qt5 Theme (Kvantum Engine)}
+   ChangeLocaleTitle 11 { Qt6 Theme (Kvantum Engine)}
+   ChangeLocaleTitle 12 { GTK4 Theme (Not Yet Implemented)}
+   ChangeLocaleTitle 13 { Run $FVWM_USERDIR/libexec/colormgr.local}
+   ChangeLocaleTitle 15 {OK}
+   ChangeLocaleTitle 16 {Cancel}
+   ChangeLocaleTitle 17 {Help}
+
+   # Initial integration string
+   Set $IntegrationString = {1111101101}
+
+   # Poll out from string single integrations
+   Set $SetBackdrops = (StrCopy $IntegrationString 1 1)
+   Set $SetXresources = (StrCopy $IntegrationString 2 2)
+   Set $SetGtk2 = (StrCopy $IntegrationString 3 3)
+   Set $SetGtk3 = (StrCopy $IntegrationString 4 4)
+   Set $SetQt4 = (StrCopy $IntegrationString 5 5)
+   Set $SetQt5Gtk = (StrCopy $IntegrationString 6 6)
+   Set $SetQt5Kv = (StrCopy $IntegrationString 7 7)
+   Set $SetQt6Kv = (StrCopy $IntegrationString 8 8)
+   Set $SetGtk4 = (StrCopy $IntegrationString 9 9)
+   Set $SetColormgrLocal = (StrCopy $IntegrationString 10 10)
+
+   # Put values on check boxes
+   ChangeValue 4 $SetBackdrops
+   ChangeValue 5 $SetXresources
+   ChangeValue 6 $SetGtk2
+   ChangeValue 7 $SetGtk3
+   ChangeValue 8 $SetQt4
+   ChangeValue 9 $SetQt5Gtk
+   ChangeValue 10 $SetQt5Kv
+   ChangeValue 11 $SetQt6Kv
+   ChangeValue 12 $SetGtk4
+
+   # Check if we have $FVWM_USERDIR/libexec/colormgr.local
+   # If we don't have it, disable checkbox 13
+   Set $ColormgrLocalExistance = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/colormgr.local" >/dev/null 2>&1; echo $?} 1 1)
+   If $ColormgrLocalExistance == 0 Then
+   Begin
+      ChangeValue 13 $SetColormgrLocal
+   End
+   Else
+   Begin
+      ChangeColorset 13 59
+      ChangeValue 13 0
+      ChangeLocaleTitle 13 { Run $FVWM_USERDIR/libexec/colormgr.local (missing script)}
+   End
+
+   # GTK4 - not yet implemented - disabled colorset
+   ChangeColorset 12 59
+
+   # Keybindings
+   Key Q C 16 1 {KeyClose}
+   Key Escape A 16 1 {KeyClose}
+   Key Return C 15 1 {KeyPerform}
+   Key F1 A 17 1 {KeyHelp}
+   Key Help A 17 1 {KeyHelp}
+
+   If (GetScriptArgument 1) == {on-ok} Then
+   Begin
+      Set $PerformRestartSignal = 1
+   End
+End
+
+Widget 1
+   Property
+   Size 20 32
+   Position 10 4
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {}
+   Icon NsCDE/DtColor.l.pm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+Property
+   Size 534 244
+   Position 8 64
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Subtitle
+Widget 3
+Property
+   Size 200 24
+   Position 26 51
+   Type ItemDraw
+   Font "xft:::pixelsize=14"
+   Flags NoReliefString Left NoFocus
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Backdrops
+Widget 4
+Property
+   Position 20 88
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# X resources
+Widget 5
+Property
+   Position 280 88
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK2
+Widget 6
+Property
+   Position 20 124
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK 3
+Widget 7
+   Property
+   Size 180 0
+   Position 280 124
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 7) == 0 Then
+         Begin
+            ChangeValue 9 0
+         End
+      End
+End
+
+# Qt4
+Widget 8
+   Property
+   Size 180 0
+   Position 20 160
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Qt5 GTK
+Widget 9
+   Property
+   Size 180 0
+   Position 280 160
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 9) == 1 Then
+         Begin
+            ChangeValue 7 1
+            ChangeValue 10 0
+         End
+      End
+End
+
+# Qt5 Kvantum
+Widget 10
+   Property
+   Size 180 0
+   Position 20 196
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 10) == 1 Then
+         Begin
+            ChangeValue 9 0
+         End
+      End
+End
+
+# Qt6 Kvantum
+Widget 11
+   Property
+   Size 180 0
+   Position 280 196
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK 4
+Widget 12
+   Property
+   Size 180 0
+   Position 20 232
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 12) == 1 Then
+         Begin
+            ChangeValue 12 0
+         End
+      End
+End
+
+# Colormgr.local
+Widget 13
+   Property
+   Size 200 0
+   Position 20 268
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $ColormgrLocalExistance <> 0 Then
+         Begin
+            If (GetValue 13) == 1 Then
+            Begin
+               ChangeValue 13 0
+            End
+         End
+      End
+End
+
+Widget 14
+Property
+   Size 540 0
+   Position 4 318
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+# Ok button
+Widget 15
+Property
+   Size 90 20
+   Position 12 328
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 15 1
+      End
+      1 :
+      Begin
+         # Send to ColorMgr integration string
+         Do {SendToModule ColorMgr SendString 21 2 } (GetValue 4) (GetValue 5) (GetValue 6) (GetValue 7) (GetValue 8) (GetValue 9) (GetValue 10) (GetValue 11) (GetValue 12) (GetValue 13)
+         If $PerformRestartSignal == 1 Then
+         Begin
+            Do {SendToModule ColorMgr SendString 32 2 1}
+         End
+         Quit
+      End
+End
+
+# Cancel button
+Widget 16
+Property
+   Size 90 20
+   Position 196 328
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 16 1
+      End
+      1 :
+      Begin
+         # Tell ColorMgr no action has been done
+         Do {SendToModule ColorMgr SendString 32 2 0}
+         Quit
+      End
+End
+
+# Help button
+Widget 17
+Property
+   Size 90 20
+   Position 382 328
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 17 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.Color Style Manager]" html/NsCDE-ColorMgr.html}
+      End
+End
+
