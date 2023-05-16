@@ -104,6 +104,7 @@ menupopup {
   border-radius: 0px !important;
   margin-left: 0px !important;
   margin-top: -2px !important;
+  --panel-shadow-margin: 0px !important; /* WTF idea ... */
 }
 
 menupopup > menu, menupopup > menuitem {
@@ -381,7 +382,29 @@ input,
 }
 
 #urlbar {
+  --urlbar-box-bgcolor: var(--nscde-bg-color-5) !important;
   --urlbar-box-hover-bgcolor: var(--nscde-bg-color-5) !important;
+  --urlbar-box-focus-bgcolor: var(--nscde-bg-color-5) !important;
+}
+
+.urlbar-page-action {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+.urlbar-page-action:is([open],[checked],:active) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
 }
 
 .urlbarView,
@@ -407,20 +430,12 @@ input,
 #star-button {
   background-color: var(--nscde-bg-color-5) !important;
   color: var(--nscde-fg-color-5) !important;
-  border-top: 1px solid var(--nscde-ts-color-5) !important;
-  border-left: 1px solid var(--nscde-ts-color-5) !important;
-  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
-  border-right: 1px solid var(--nscde-bs-color-5) !important;
 }
 
 #pageActionButton:is([open],[checked],:active),
 #star-button:is([open],[checked],:active) {
   background-color: var(--nscde-sel-color-5) !important;
   color: var(--nscde-fg-color-5) !important;
-  border-top: 1px solid var(--nscde-bs-color-5) !important;
-  border-left: 1px solid var(--nscde-bs-color-5) !important;
-  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
-  border-right: 1px solid var(--nscde-ts-color-5) !important;
 }
 
 #tracking-protection-icon-container {
@@ -737,8 +752,14 @@ td > input,
   width: 24px !important;
 }
 
+/* Pre 112 code for separate reload and stop buttons */
 #reload-button, #stop-button {
   display: -moz-box !important;
+}
+
+/* 112+ requires this to show both, reload and stop buttons */
+#reload-button:not([displaystop]) + #stop-button, #reload-button[displaystop] {
+  display: flex !important;
 }
 
 #context-navigation > .menuitem-iconic > .menu-iconic-left > .menu-iconic-icon {
@@ -932,13 +953,24 @@ treecol, .treecol-image {
   --uc-titlebar-padding: 0px;
 }
 
+#TabsToolbar > [flex] {
+  background-color: var(--nscde-bg-color-5) !important;
+}
+
 #toolbar-menubar[autohide="true"] > .titlebar-buttonbox-container,
 #TabsToolbar > .titlebar-buttonbox-container {
   position: fixed;
   display: block;
-  top: var(--uc-titlebar-padding, 0px);
+  top: 0px;
   right:0;
   height: 40px;
+}
+
+@supports -moz-bool-pref("userchrome.force-window-controls-on-left.enabled") {
+  .titlebar-buttonbox-container {
+    left:0;
+    right: unset !important;
+  }
 }
 
 :root[uidensity="compact"] #TabsToolbar > .titlebar-buttonbox-container {
@@ -946,7 +978,7 @@ treecol, .treecol-image {
 }
 
 #toolbar-menubar[inactive] > .titlebar-buttonbox-container {
-  opacity: 0
+  opacity: 0;
 }
 
 #navigator-toolbox {
@@ -957,15 +989,22 @@ treecol, .treecol-image {
   height: 100%;
 }
 
-#titlebar{
-  -moz-box-ordinal-group: 2;
+#titlebar {
+  -moz-box-ordinal-group: 2; /* Firefox <112 compatibility */
+  order: 2;
   -moz-appearance: none !important;
   --tabs-navbar-shadow-size: 0px;
+  --uc-menubar-vertical-overlap: 19px; /* for hide_tabs_with_one_tab_w_window_controls.css compatibility */
 }
 
 .titlebar-placeholder,
 #TabsToolbar .titlebar-spacer {
   display: none;
+}
+
+/* Re-order window and tab notification boxes */
+#navigator-toolbox > div {
+  display: contents;
 }
 
 /* Also hide the toolbox bottom border which isn't at bottom with this setup */
@@ -975,7 +1014,8 @@ treecol, .treecol-image {
 
 @media (-moz-gtk-csd-close-button) {
   .titlebar-button {
-    -moz-box-orient: vertical
+    -moz-box-orient: vertical;
+    flex-direction: column;
   }
 }
 
@@ -983,9 +1023,8 @@ treecol, .treecol-image {
 toolbox#navigator-toolbox > toolbar#nav-bar.browser-toolbar {
   animation: none;
 }
-#navigator-toolbox:hover #TabsToolbar
-{
-  animation: slidein ease-out 48ms 1
+#navigator-toolbox:hover #TabsToolbar {
+  animation: slidein ease-out 48ms 1;
 }
 
 /* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/tabs_on_bottom_menubar_on_top_patch.css
@@ -1203,6 +1242,11 @@ menubar > menu {
   margin: 0px !important;
 }
 
+.browserContainer > findbar {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
 .findbar-find-previous {
   list-style-image: url("nsicons/arrow-left.png") !important;
 }
@@ -1220,5 +1264,22 @@ input.findbar-textbox {
 
 input.findbar-textbox:focus {
   border: 1px solid var(--nscde-bg-color-1) !important;
+}
+
+#window-modal-dialog > .dialogOverlay > .dialogBox:not(.spotlightBox) {
+   border-radius: 0px !important;
+}
+
+/* Ctrl + Q */
+/* This should be --nscde-bg-color-6, but shomehow we cannot get
+ * buttons and labels to inherit the color. Pity.
+ */
+#commonDialogWindow {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#unified-extensions-button {
+  display: none !important;
 }
 
