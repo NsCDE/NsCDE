@@ -32,11 +32,11 @@
 #define HAND_COLOR "black"
 #define SECOND_HAND_COLOR "red"
 
-#define HAND_WIDTH 3
+#define HAND_WIDTH 4
 #define SECOND_HAND_WIDTH 0
 
-#define HOUR_HAND_LENGTH 15
-#define MINUTE_HAND_LENGTH 20
+#define HOUR_HAND_LENGTH 16
+#define MINUTE_HAND_LENGTH 22
 #define SECOND_HAND_LENGTH 22
 
 #endif

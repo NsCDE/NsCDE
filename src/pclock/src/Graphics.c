@@ -21,7 +21,10 @@
   Email: Alexander@Kourakos.com
     Web: http://www.kourakos.com/~awk/pclock/
 *******************************************************************************
-******************************************************************************/
+*******************************************************************************
+modified by Jos van Riswick to more resemble the CDE front panel clock 
+*******************************************************************************
+*******************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,7 +54,8 @@ static GC gc;
 static Atom wm_delete_window;
 static Pixel back_pixel, hand_pixel, second_hand_pixel;
 static Pixmap back_pm, mask_pm, all_pm;
-static int old_hour = 0, old_minute = 0, old_second = 0;
+static int old_hour = 0, old_minute = 0;
+static double old_second;
 
 /*****************************************************************************/
 
@@ -202,12 +206,16 @@ UpdateClock(void)
 {
   int h = old_hour, m = old_minute, s;
   struct tm *time_struct;
-  time_t curtime;
-  double angle;
-  int hx, hy, mx, my, sx, sy;
+  struct timeval tv;
+  double angle, wsa, wca;
+  int hx, hy, mx, my, sx, sy, hx1, hy1, hx2, hy2, mx1, my1, mx2, my2;
 
-  curtime = time(NULL);
-  time_struct = localtime(&curtime);
+  XPoint reye[] = {{0,0},{0,80},{25,0}};
+
+  time_struct = localtime(&tv);
+
+  /* Fill in tv */
+  gettimeofday(&tv, NULL);
 
   h = time_struct->tm_hour;
   m = time_struct->tm_min;
@@ -223,21 +231,55 @@ UpdateClock(void)
 
   XCopyArea(display, back_pm, all_pm, gc, 0, 0, SIZE, SIZE, 0, 0);
 
+  /* hour hand */
   angle = (M_PI / 6.0) * (double) h + (M_PI / 360.0) * (double) m;
+  wsa =  option.hand_width * sin(angle);
+  wca =  option.hand_width * cos(angle);
+
   hx = (SIZE / 2) + (int) ((double) option.hour_hand_length * sin(angle));
   hy = (SIZE / 2) - (int) ((double) option.hour_hand_length * cos(angle));
 
+  hx1 = (SIZE / 2) + (int) (-wsa+wca);
+  hy1 = (SIZE / 2) + (int) (+wca+wsa);
+  hx2 = (SIZE / 2) + (int) (-wsa-wca);
+  hy2 = (SIZE / 2) + (int) (+wca-wsa);
+
+  /* triangle shaped hand */
+  reye[0].x=hx;
+  reye[0].y=hy;
+  reye[1].x=hx1;
+  reye[1].y=hy1;
+  reye[2].x=hx2;
+  reye[2].y=hy2;
+
+  XFillPolygon(display,all_pm,gc,reye,3,Convex,CoordModeOrigin);
+
+  /* minute hand */
   angle = (M_PI / 30.0) * (double) m;
+  wsa =  option.hand_width * sin(angle);
+  wca =  option.hand_width * cos(angle);
+
   mx = (SIZE / 2) + (int) ((double) option.minute_hand_length * sin(angle));
   my = (SIZE / 2) - (int) ((double) option.minute_hand_length * cos(angle));
 
-  XSetLineAttributes(display, gc, option.hand_width, LineSolid, CapRound,
-                     JoinRound);
-  XDrawLine(display, all_pm, gc, SIZE / 2, SIZE / 2, hx, hy);
-  XDrawLine(display, all_pm, gc, SIZE / 2, SIZE / 2, mx, my);
+  mx1 = (SIZE / 2) + (int) (-wsa+wca);
+  my1 = (SIZE / 2) + (int) (+wca+wsa);
+  mx2 = (SIZE / 2) + (int) (-wsa-wca);
+  my2 = (SIZE / 2) + (int) (+wca-wsa);
 
+  /* triangle shaped hand */
+  reye[0].x=mx;
+  reye[0].y=my;
+  reye[1].x=mx1;
+  reye[1].y=my1;
+  reye[2].x=mx2;
+  reye[2].y=my2;
+  
+  XFillPolygon(display,all_pm,gc,reye,3,Convex,CoordModeOrigin);
+
+  /* second hand */
   if (option.show_seconds) {
-    angle = (M_PI / 30.0) * (double) s;
+    angle = (M_PI / 30.0) * s;
     sx = (SIZE / 2) + (int) ((double) option.second_hand_length * sin(angle));
     sy = (SIZE / 2) - (int) ((double) option.second_hand_length * cos(angle));
 
