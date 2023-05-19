@@ -6,6 +6,8 @@
 # Licence: GPLv3
 #
 
+BaseName="${0##*/}"
+
 if [ ! -d "$NSCDE_TOOLSDIR" ]; then
    echo "Error: NSCDE_TOOLSDIR is not defined."
    exit 10
@@ -28,8 +30,15 @@ function main
 
 function Usage
 {
-   echo "Usage: ${0##*/} <options> ..."
-   exit 1
+   echo "Usage: ${BaseName} [ -p <Palette Name> ] [ -n <No of Colors> ] [ -5 | -8 ] [ -w ] [ -m ]"
+   echo "               [ -b ] [ -x ] [ -g <gtk2,gtk3,gtk4> ] [ -q qt4,qt5gtk|qt5kvantum,qt6 ]"
+   echo "               [ -l ] [ -r ] [ -h ]"
+
+   if [ "$1" == "Err" ]; then
+      exit 1
+   else
+      exit 0
+   fi
 }
 
 function reload
@@ -154,11 +163,11 @@ do
 done
 
 if [ "x$palette_name" == "x" ]; then
-   Usage
+   Usage Err
 fi
 
 if [ "x$ncolors" == "x" ]; then
-   Usage
+   Usage Err
 fi
 
 if [ "x$do_backdrops" == "x1" ]; then
