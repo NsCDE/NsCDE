@@ -72,6 +72,7 @@ Begin
    Do {SendToModule ColorMgr SendString 20 2 $[infostore.fp_8color_variant]}
 
    # Default Front Panel Variant
+   Set $WsmRoutineCalled = 0
    Do {SendToModule ColorMgr SendString 20 3 $[infostore.wsmcolored]}
 
    Set $Palettes = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p} 1 -1)
@@ -1019,10 +1020,20 @@ Widget 20
       Begin
          If (LastString) == {1} Then
          Begin
+            If $WsmRoutineCalled <> 1 Then
+            Begin
+               Set $WsmRoutineCalled = 1
+               Set $WsmVariantArgInitial = {-w}
+            End
             Set $WsmVariantArg = {-w}
          End
          Else
          Begin
+            If $WsmRoutineCalled <> 1 Then
+            Begin
+               Set $WsmRoutineCalled = 1
+               Set $WsmVariantArgInitial = {}
+            End
             Set $WsmVariantArg = {}
          End
       End
@@ -1285,7 +1296,7 @@ Widget 32
       # Don't call directly, call with 32 1
       3 :
       Begin
-         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and NsCDE restarted.]" 5000}
+         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new color theme loaded.]" 5000}
 
          # Build palette and program bits
          Set $PerformPaletteChangeCmd = {$NSCDE_TOOLSDIR/colormgr } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
@@ -1297,10 +1308,6 @@ Widget 32
          Begin
             Set $PerformXresourceChangeCmd = {$NSCDE_TOOLSDIR/colormgr -e -c } $Ncolors { -g } $PalNumToName { -X}
             Set $PerformXresourceChange = (GetOutput $PerformXresourceChangeCmd 2 -1)
-
-            # Reload X resources immediately.
-            Set $ReloadXresourcesCmd = {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults}
-            Set $ReloadXresources = (GetOutput $ReloadXresourcesCmd 1 -1)
          End
 
          If $SetBackdrops == 1 Then
@@ -1733,6 +1740,53 @@ Widget 32
             Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
          End
 
+         SendSignal 32 4
+      End
+      4 :
+      Begin
+         # Reload things with new configuration
+
+         # Reread new colorset
+         Do {f_Readcfg Colorset}
+
+         # Handle Front Panel artefacts
+         Do {Schedule 600 SendToModule FrontPanel ChangeButton FpLock Icon "NsCDE/FpLock.xpm" PressIcon "NsCDE/FpLockP.xpm"}
+         If $WsmVariantArgInitial <> $WsmVariantArg Then
+         Begin
+            If $WsmVariantArg == {-w} Then
+            Begin
+               Do {InfoStoreAdd wsmcolored 1}
+               Do {Schedule 650 SendToModule FrontPanel ChangeButton FpWSM Colorset 22}
+               Do {Schedule 700 SendToModule $[infostore.WSM] SendString 30 1 wsmcolored]}
+            End
+            Else
+            Begin
+               Do {InfoStoreAdd wsmcolored 0}
+               Do {Schedule 650 SendToModule FrontPanel ChangeButton FpWSM Colorset 23}
+               Do {Schedule 700 SendToModule $[infostore.WSM] SendString 30 1 wsmclassic}
+            End
+         End
+
+         # Reread backdrops
+         If $SetBackdrops == 1 Then
+         Begin
+            Do {f_Readcfg Backdrops}
+
+            If $Fvwm3DesktopNonGlobalMode == 1 Then
+            Begin
+               Do {f_CleanupBackgroundCache}
+               Do {f_SetupMonitorData}
+               Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
+            End
+         End
+
+         # Reload Xresources
+         If $SetXresources == 1 Then
+         Begin
+            # Reload X resources
+            Set $ReloadXresources = (GetOutput {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults} 1 -1)
+         End
+
          # Reload Xsettingsd if it is used
          If $CheckUseXsettingsd == 1 Then
          Begin
@@ -1742,22 +1796,13 @@ Widget 32
             Begin
                Set $SetXstEntry = (GetOutput {$NSCDE_TOOLSDIR/ised -c 's/\(^Net\/ThemeName[[:space:]]\+\).*/\1"NsCDE"/g' -f $FVWM_USERDIR/Xsettingsd.conf} 1 -1)
 	       End
-            Do {Schedule 250 f_Xsettingsd start}
+            Do {Schedule 1250 f_Xsettingsd start}
          End
 
-         # Reread new configurations
-         Do {f_Readcfg Backdrops}
-         Do {f_Readcfg Colorset}
+         # Final touch
+         Do {Test (x xrefresh) Schedule 2000 Exec exec xrefresh}
 
-         If $Fvwm3DesktopNonGlobalMode == 1 Then
-         Begin
-            Do {f_CleanupBackgroundCache}
-            Do {f_SetupMonitorData}
-            Do {Schedule 120 f_SetFvwm3NonGlobalBackground}
-         End
-
-         # Restart NsCDE with new theme
-         Do {Schedule 750 Restart}
+         # Quit, no restart.
          Quit
       End
 End
