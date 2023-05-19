@@ -405,6 +405,7 @@ AC_OUTPUT(
 	nscde_tools/appfinder
 	nscde_tools/backdropmgr
 	nscde_tools/bootstrap
+	nscde_tools/chtheme
 	nscde_tools/colormgr
 	nscde_tools/colorpicker
 	nscde_tools/fontmgr

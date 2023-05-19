@@ -101,13 +101,14 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = acpimgr appfinder backdropmgr bootstrap colormgr \
-	colorpicker fontmgr fpclock fpexec fpdoc fp_manage_subpanel \
-	fpseticon generate_app_menus generate_subpanels getdpi getfont \
-	get_logical_screens ised keymenu mkpagemenu \
-	migrate_nscde_1x_2x strip_icon_path subpanel_menuitem_props \
-	var_append xdowrapper xrandr_backer colorconv confget confset \
-	geticon getla1 palette_colorgen sysinfo themegen usleep
+CONFIG_CLEAN_FILES = acpimgr appfinder backdropmgr bootstrap chtheme \
+	colormgr colorpicker fontmgr fpclock fpexec fpdoc \
+	fp_manage_subpanel fpseticon generate_app_menus \
+	generate_subpanels getdpi getfont get_logical_screens ised \
+	keymenu mkpagemenu migrate_nscde_1x_2x strip_icon_path \
+	subpanel_menuitem_props var_append xdowrapper xrandr_backer \
+	colorconv confget confset geticon getla1 palette_colorgen \
+	sysinfo themegen usleep
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -195,9 +196,10 @@ CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/acpimgr.in \
 	$(srcdir)/appfinder.in $(srcdir)/backdropmgr.in \
-	$(srcdir)/bootstrap.in $(srcdir)/colorconv.in \
-	$(srcdir)/colormgr.in $(srcdir)/colorpicker.in \
-	$(srcdir)/confget.in $(srcdir)/confset.in $(srcdir)/fontmgr.in \
+	$(srcdir)/bootstrap.in $(srcdir)/chtheme.in \
+	$(srcdir)/colorconv.in $(srcdir)/colormgr.in \
+	$(srcdir)/colorpicker.in $(srcdir)/confget.in \
+	$(srcdir)/confset.in $(srcdir)/fontmgr.in \
 	$(srcdir)/fp_manage_subpanel.in $(srcdir)/fpclock.in \
 	$(srcdir)/fpdoc.in $(srcdir)/fpexec.in $(srcdir)/fpseticon.in \
 	$(srcdir)/generate_app_menus.in \
@@ -389,6 +391,7 @@ SCRIPTINS = \
 	appfinder \
 	backdropmgr \
 	bootstrap \
+	chtheme \
 	colorconv \
 	colormgr \
 	colorpicker \
@@ -462,6 +465,8 @@ appfinder: $(top_builddir)/config.status $(srcdir)/appfinder.in
 backdropmgr: $(top_builddir)/config.status $(srcdir)/backdropmgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 bootstrap: $(top_builddir)/config.status $(srcdir)/bootstrap.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+chtheme: $(top_builddir)/config.status $(srcdir)/chtheme.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 colormgr: $(top_builddir)/config.status $(srcdir)/colormgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@

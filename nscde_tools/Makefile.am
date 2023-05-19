@@ -13,6 +13,7 @@ SCRIPTINS = \
 	appfinder \
 	backdropmgr \
 	bootstrap \
+	chtheme \
 	colorconv \
 	colormgr \
 	colorpicker \
