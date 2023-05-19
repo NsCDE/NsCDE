@@ -1590,14 +1590,15 @@ Widget 32
                                  { -s -c > "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
             Set $QssConf = (GetOutput $QssConfCmd 1 -1)
 
-            Set $QssQt5CtConfStatusCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets > /dev/null 2>&1; echo $?}
-            Set $QssQt5CtConfStatus = (GetOutput $QssQt5CtConfStatusCmd 1 1)
-            Set $QssQt5CtConfOutputCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets}
-            Set $QssQt5CtConfOutput = (GetOutput $QssQt5CtConfOutputCmd 1 -1)
+            Set $QssQt5CtConfCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets 2>/dev/null; echo $?}
+            Set $QssQt5CtConfOutput = (GetOutput $QssQt5CtConfCmd 1 -1)
+            Set $QssQt5CtConfStatus = (GetOutput $QssQt5CtConfCmd 2 1)
+
             Set $QssQt5CtConfCheck1Cmd = {echo '} $QssQt5CtConfOutput {' | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?}
             Set $QssQt5CtConfCheck2Cmd = {echo '} $QssQt5CtConfOutput {' | egrep -q '@Invalid\(\)'; echo $?}
             Set $QssQt5CtConfCheck1 = (GetOutput $QssQt5CtConfCheck1Cmd 1 1)
             Set $QssQt5CtConfCheck2 = (GetOutput $QssQt5CtConfCheck2Cmd 1 1)
+
             If $QssQt5CtConfCheck1 <> 0 Then
             Begin
                If $QssQt5CtConfCheck2 == 0 Then
@@ -1614,7 +1615,14 @@ Widget 32
                   End
                   Else
                   Begin
-                     Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "} $QssQt5CtConfOutput {,$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                     If $QssQt5CtConfOutput <> {} Then
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "} $QssQt5CtConfOutput {,$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                     End
+                     Else
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"}
+                     End
                      Set $WriteQss = (GetOutput $WriteQssCmd 1 -1)
                   End
                End
@@ -1674,14 +1682,15 @@ Widget 32
                                  { -s -c > "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"}
             Set $QssConf = (GetOutput $QssConfCmd 1 -1)
 
-            Set $QssQt6CtConfStatusCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets > /dev/null 2>&1; echo $?}
-            Set $QssQt6CtConfStatus = (GetOutput $QssQt6CtConfStatusCmd 1 1)
-            Set $QssQt6CtConfOutputCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets}
-            Set $QssQt6CtConfOutput = (GetOutput $QssQt6CtConfOutputCmd 1 -1)
+            Set $QssQt6CtConfCmd = {$NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt6ct.conf" -s Interface -k stylesheets 2>/dev/null; echo $?}
+            Set $QssQt6CtConfOutput = (GetOutput $QssQt6CtConfCmd 1 -1)
+            Set $QssQt6CtConfStatus = (GetOutput $QssQt6CtConfCmd 2 1)
+
             Set $QssQt6CtConfCheck1Cmd = {echo '} $QssQt6CtConfOutput {' | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?}
             Set $QssQt6CtConfCheck2Cmd = {echo '} $QssQt6CtConfOutput {' | egrep -q '@Invalid\(\)'; echo $?}
             Set $QssQt6CtConfCheck1 = (GetOutput $QssQt6CtConfCheck1Cmd 1 1)
             Set $QssQt6CtConfCheck2 = (GetOutput $QssQt6CtConfCheck2Cmd 1 1)
+
             If $QssQt6CtConfCheck1 <> 0 Then
             Begin
                If $QssQt6CtConfCheck2 == 0 Then
@@ -1698,7 +1707,14 @@ Widget 32
                   End
                   Else
                   Begin
-                     Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "} $QssQt6CtConfOutput {,$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"}
+                     If $QssQt6CtConfOutput <> {} Then
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "} $QssQt6CtConfOutput {,$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"}
+                     End
+                     Else
+                     Begin
+                        Set $WriteQssCmd = {$NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"}
+                     End
                      Set $WriteQss = (GetOutput $WriteQssCmd 1 -1)
                   End
                End
