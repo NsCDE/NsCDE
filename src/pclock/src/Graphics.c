@@ -206,16 +206,13 @@ UpdateClock(void)
 {
   int h = old_hour, m = old_minute, s;
   struct tm *time_struct;
-  struct timeval tv;
+  time_t curtime;
   double angle, wsa, wca;
   int hx, hy, mx, my, sx, sy, hx1, hy1, hx2, hy2, mx1, my1, mx2, my2;
 
+  curtime = time(NULL);
+  time_struct = localtime(&curtime);
   XPoint reye[] = {{0,0},{0,80},{25,0}};
-
-  time_struct = localtime(&tv);
-
-  /* Fill in tv */
-  gettimeofday(&tv, NULL);
 
   h = time_struct->tm_hour;
   m = time_struct->tm_min;
