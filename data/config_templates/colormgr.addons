@@ -221,6 +221,8 @@ function do_firefox
     ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
    if (($? > 0)); then
       echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> ${FIREFOX_CHROMEDIR}/../user.js
+      $NSCDE_TOOLSDIR/ised -c '/.*browser.uiCustomization.state.*/d' -f ${FIREFOX_CHROMEDIR}/../prefs.js
+      echo 'user_pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"unified-extensions-area\":[],\"nav-bar\":[\"sidebar-button\",\"back-button\",\"forward-button\",\"history-panelmenu\",\"bookmarks-menu-button\",\"home-button\",\"print-button\",\"find-button\",\"urlbar-container\",\"panic-button\",\"stop-reload-button\",\"unified-extensions-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"new-tab-button\",\"tabbrowser-tabs\",\"alltabs-button\"],\"PersonalToolbar\":[\"zoom-controls\",\"screenshot-button\",\"downloads-button\"]},\"seen\":[\"save-to-pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"nav-bar\",\"PersonalToolbar\",\"toolbar-menubar\",\"TabsToolbar\"],\"currentVersion\":19,\"newElementCount\":5}");' >> ${FIREFOX_CHROMEDIR}/../prefs.js
    fi
    egrep -q '^([[:space:]]+)?user_pref\("browser\.newtabpage\.activity-stream\.improvesearch\.handoffToAwesomebar",([[:space:]]+)?false\)([[:space:]]+)?;' \
     ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
