@@ -1375,13 +1375,12 @@ AddToFunc f_FirstSetup
 + I Exec exec '@KSH@ -c echo "Xft.dpi: 96" | xrdb -merge'
 + I Exec exec xrandr --dpi 96
 + I SetEnv DPI 96
-+ I SetEnv IVF 1
 + I Schedule 250 Exec exec \
     xterm -g 94x26 \
           -fa "scalable=true:spacing=mono:size=16" \
           -bg '#68006f008200' -fg '#ffffffffffff' \
           -title "NsCDE Setup" -name "nscde-setup" \
-          -e "$[NSCDE_TOOLSDIR]/bootstrap"
+          -e "$[NSCDE_TOOLSDIR]/bootstrap" -r
 + I Test (EnvMatch FVWM_IS_FVWM3 1) Schedule 1800 All ("nscde-setup", CirculateHit) Maximize fullscreen
 + I Test (!EnvMatch FVWM_IS_FVWM3 1, Version >= 2.6.8) Schedule 1800 All ("nscde-setup", CirculateHit) Maximize fullscreen
 + I Test (!EnvMatch FVWM_IS_FVWM3 1, Version < 2.6.8) Schedule 1800 All ("nscde-setup", CirculateHit) Maximize ewmhiwa
