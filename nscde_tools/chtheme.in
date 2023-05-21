@@ -31,7 +31,7 @@ function main
 function backdrops
 {
    if [ "x$do_backdrops" == "x1" ]; then
-      /usr/lib/x86_64-linux-gnu/NsCDE/colormgr -c $ncolors -g $palette_name -b
+      $NSCDE_TOOLSDIR/colormgr -c $ncolors -g $palette_name -b
 
       if [ "$FVWM_IS_FVWM3" == "1" ]; then
          nscde_fvwmclnt 'Test (!EnvMatch infostore.desktopconfiguration global) f_CleanupBackgroundCache'
@@ -43,7 +43,7 @@ function backdrops
 function xfunc
 {
    if [ "x$do_x" == "x1" ]; then
-      /usr/lib/x86_64-linux-gnu/NsCDE/colormgr -c 8 -g $palette_name -X
+      $NSCDE_TOOLSDIR/colormgr -c 8 -g $palette_name -X
    fi
 }
 
@@ -280,8 +280,10 @@ function reload
    fi
 
    if [ "x$do_x" == "x1" ]; then
+      cd $HOME
       xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults
       nscde_fvwmclnt 'SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults'
+      cd -
    fi
 
    if [ "x$do_gtk3" == "x1" ] || [ "x$do_gtk2" == "x1" ]; then

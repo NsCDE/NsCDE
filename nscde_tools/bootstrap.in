@@ -745,8 +745,10 @@ function setup_nscde
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'EdgeThickness 1'
       whence -q xrandr && xrandr --dpi 96
    fi
-   $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec $[infostore.terminal]'
-   $NSCDE_ROOT/bin/nscde_fvwmclnt 'f_DisplayURL "$[gt.NsCDE Documentation]" NsCDE.pdf'
+   if [ "$mode" == "initial" ]; then
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec $[infostore.terminal]'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'f_DisplayURL "$[gt.NsCDE Documentation]" NsCDE.pdf'
+   fi
    $NSCDE_ROOT/bin/nscde_fvwmclnt 'Schedule 250 Restart'
    exit 0
 }

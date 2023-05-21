@@ -227,6 +227,21 @@ function do_firefox
    if (($? > 0)); then
       echo 'user_pref("browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar", false);' >> ${FIREFOX_CHROMEDIR}/../user.js
    fi
+   egrep -q '^([[:space:]]+)?user_pref\("browser\.toolbars\.bookmarks\.visibility",([[:space:]]+)?"?always"?\)([[:space:]]+)?;' \
+    ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+   if (($? > 0)); then
+      echo 'user_pref("browser.toolbars.bookmarks.visibility", "always");' >> ${FIREFOX_CHROMEDIR}/../user.js
+   fi
+   egrep -q '^([[:space:]]+)?user_pref\("browser\.tabs\.inTitlebar",([[:space:]]+)?0\)([[:space:]]+)?;' \
+    ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+   if (($? > 0)); then
+      echo 'user_pref("browser.tabs.inTitlebar", 0);' >> ${FIREFOX_CHROMEDIR}/../user.js
+   fi
+   egrep -q '^([[:space:]]+)?user_pref\("widget\.gtk\.overlay-scrollbars\.enabled",([[:space:]]+)?false\)([[:space:]]+)?;' \
+    ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+   if (($? > 0)); then
+      echo 'user_pref("widget.gtk.overlay-scrollbars.enabled", false);' >> ${FIREFOX_CHROMEDIR}/../user.js
+   fi
 }
 
 # Thunderbird
