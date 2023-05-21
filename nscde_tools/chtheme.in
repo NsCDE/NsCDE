@@ -356,25 +356,25 @@ do
          gtkvariants
       ;;
       q)
-         echo "$OPTARG" | cut -d"," -f1 | egrep -q '(qt4|False)'
+         echo "$OPTARG" | cut -d"," -f1 | egrep -q 'qt4'
          if (($? == 0)); then
             do_qt4=1
             themegen_arg_qt4=$(echo "$OPTARG" | cut -d"," -f1)
             qt4setup
          fi
-         echo "$OPTARG" | cut -d"," -f2 | egrep -q '(qt5g|False)'
+         echo "$OPTARG" | cut -d"," -f2 | egrep -q 'qt5g'
          if (($? == 0)); then
             do_qt5gtk=1
             themegen_arg_qt5=$(echo "$OPTARG" | cut -d"," -f2)
             qt5gtksetup
          fi
-         echo "$OPTARG" | cut -d"," -f2 | egrep -q '(qt5k|False)'
+         echo "$OPTARG" | cut -d"," -f2 | egrep -q 'qt5k'
          if (($? == 0)); then
             do_qt5kvantum=1
             themegen_arg_qt5=$(echo "$OPTARG" | cut -d"," -f2)
             qt5kvantumsetup
          fi
-         echo "$OPTARG" | cut -d"," -f3 | egrep -q '(qt6|False)'
+         echo "$OPTARG" | cut -d"," -f3 | egrep -q 'qt6'
          if (($? == 0)); then
             do_qt6=1
             themegen_arg_qt6=$(echo "$OPTARG" | cut -d"," -f3)
