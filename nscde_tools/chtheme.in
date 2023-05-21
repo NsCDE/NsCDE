@@ -28,11 +28,213 @@ function main
    fi
 }
 
+function backdrops
+{
+   if [ "x$do_backdrops" == "x1" ]; then
+      /usr/lib/x86_64-linux-gnu/NsCDE/colormgr -c $ncolors -g $palette_name -b
+
+      if [ "$FVWM_IS_FVWM3" == "1" ]; then
+         nscde_fvwmclnt 'Test (!EnvMatch infostore.desktopconfiguration global) f_CleanupBackgroundCache'
+         nscde_fvwmclnt 'Test (!EnvMatch infostore.desktopconfiguration global) f_SetupMonitorData'
+      fi
+   fi
+}
+
+function xfunc
+{
+   if [ "x$do_x" == "x1" ]; then
+      /usr/lib/x86_64-linux-gnu/NsCDE/colormgr -c 8 -g $palette_name -X
+   fi
+}
+
+function gtk2setup
+{
+   if [ "x$do_gtk2" == "x1" ]; then
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | egrep -q '^fg_color_4.* #ffffffffffff'
+      if (($? == 0)); then
+         $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'
+      else
+         $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '0'
+      fi
+      egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0"
+      if (($? != 0)); then
+         $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'
+      fi
+   
+      egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null
+      if (($? != 0)); then
+         $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'
+      fi
+   fi
+}
+
+function gtk3setup
+{
+   if [ "x$do_gtk3" == "x1" ]; then
+      mkdir -p "$HOME/.config/gtk-3.0"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | egrep -q '^fg_color_4.* #ffffffffffff'
+      if (($? == 0)); then
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1
+      else
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 0
+      fi
+   
+      egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini"
+      if (($? != 0)); then
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE
+      fi
+   
+      egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini"
+      if (($? != 0)); then
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE
+      fi
+   
+      whence -q gsettings
+      if (($? != 0)); then
+         COLOR_SCHEME=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)
+         if [ "x$COLOR_SCHEME" != "x'default'" ]; then
+            gsettings set org.gnome.desktop.interface color-scheme default
+         fi
+      fi
+   fi
+}
+
+function gtk4setup
+{
+   true
+}
+
+function gtkvariants
+{
+   $NSCDE_TOOLSDIR/themegen $palette_path $ncolors $themegen_arg_gtk2 $themegen_arg_gtk3 | egrep -v '^/'
+}
+
+function qt4setup
+{
+   if [ "x$do_qt4" == "x1" ]; then
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'
+   fi
+}
+
+function qt5gtksetup
+{
+   if [ "x$do_qt5gtk" == "x1" ]; then
+      if [ "x$do_qt5kvantum" != "x1" ]; then
+         mkdir -p $HOME/.config/qt5ct/{colors,qss}
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v false
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v '@Invalid()'
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
+         $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k menus_have_icons -v false
+      fi
+   fi
+}
+
+function qt5kvantumsetup
+{
+   if [ "x$do_qt5kvantum" == "x1" ]; then
+      mkdir -p $HOME/.config/qt5ct/{colors,qss}
+      mkdir -p "$HOME/.config/Kvantum/NsCDE"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.kvconfig"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.svg"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v kvantum
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
+      mkdir -p "$HOME/.config/qt5ct/colors"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl" -s -c > "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k color_scheme_path -v "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v true
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k menus_have_icons -v false
+      mkdir -p "$HOME/.config/qt5ct/qss"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl" -s -c > "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+   
+      STYLE5=$($NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets 2>/dev/null)
+      STYLE5Status=$?
+      STYLE5Check1=$(echo "$STYLE5" | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?)
+      STYLE5Check2=$(echo "$STYLE5" | egrep -q '@Invalid\(\)'; echo $?)
+   
+      if (($STYLE5Check1 != 0)); then
+         if (($STYLE5Check1 == 0)); then
+            $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+         else
+            if (($STYLE5Status != 0)); then
+               $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+               if (($STYLE5Status == 3)); then
+                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+               else
+                  if [ "x$STYLE5" != "x" ]; then
+                     $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$STYLE5,$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+                  else
+                     $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
+                  fi
+               fi
+            fi
+         fi
+      fi
+   fi
+}
+
+function qt6setup
+{
+   if [ "x$do_qt6" == "x1" ]; then
+      mkdir -p $HOME/.config/qt6ct/{colors,qss}
+      mkdir -p "$HOME/.config/Kvantum/NsCDE"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.kvconfig"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.svg"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k style -v kvantum
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k standard_dialogs -v gtk2
+      mkdir -p "$HOME/.config/qt6ct/colors"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl" -s -c > "$HOME/.config/qt6ct/colors/NsCDE-Kvantum.conf"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k color_scheme_path -v "$HOME/.config/qt6ct/colors/NsCDE-Kvantum.conf"
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k custom_palette -v true
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k icon_theme -v NsCDE
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k menus_have_icons -v false
+      mkdir -p "$HOME/.config/qt6ct/qss"
+      $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl" -s -c > "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+   
+      STYLE6=$($NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets 2>/dev/null)
+      STYLE6Status=$?
+      STYLE6Check1=$(echo "$STYLE6" | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?)
+      STYLE6Check2=$(echo "$STYLE6" | egrep -q '@Invalid\(\)'; echo $?)
+   
+      if (($STYLE6Check1 != 0)); then
+         if (($STYLE6Check1 == 0)); then
+            $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+         else
+            if (($STYLE6Status != 0)); then
+               $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+               if (($STYLE6Status == 3)); then
+                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+               else
+                  if [ "x$STYLE6" != "x" ]; then
+                     $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$STYLE6,$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+                  else
+                     $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
+                  fi
+               fi
+            fi
+         fi
+      fi
+   fi
+}
+
+function localsetup
+{
+   if [ "x$do_local" == "x1" ]; then
+      if [ -x "$FVWM_USERDIR/libexec/colormgr.local" ]; then
+         $FVWM_USERDIR/libexec/colormgr.local $palette_path $ncolors
+      fi
+   fi
+}
+
 function Usage
 {
    echo "Usage: ${BaseName} [ -p <Palette Name> ] [ -n <No of Colors> ] [ -5 | -8 ] [ -w ] [ -m ]"
-   echo "               [ -b ] [ -x ] [ -g <gtk2,gtk3,gtk4> ] [ -q qt4,qt5gtk|qt5kvantum,qt6 ]"
-   echo "               [ -l ] [ -r ] [ -h ]"
+   echo "               [ -b ] [ -x ] [ -g <gtk2|False,gtk3|False,gtk4|False> ] [ -q qt4,qt5g|qt5k,qt6 ]"
+   echo "               [ -l ] [ -r ] [ -R ] [ -h ]"
 
    if [ "$1" == "Err" ]; then
       exit 1
@@ -43,9 +245,21 @@ function Usage
 
 function reload
 {
+   if [ "x$1" == "xforce" ]; then
+      do_main=1
+      do_backdrops=1
+      do_x=1
+      do_gtk3=1
+      do_gtk2=1
+      do_qt4=1
+      do_qt5kvantum=1
+      do_qt6=1
+      do_local=1
+   fi
+
    if [ "x$do_main" == "x1" ]; then
       nscde_fvwmclnt 'f_ReadCfg Colorset'
-      pkill -u 1000 fpclock
+      pkill -u $(id -u) fpclock
       nscde_fvwmclnt 'SendToModule FrontPanel ChangeButton FpLock Icon "NsCDE/FpLock.xpm" PressIcon "NsCDE/FpLockP.xpm"'
       if [ "x$wsm_variant" != "x" ]; then
          nscde_fvwmclnt 'Schedule 1100 SendToModule FrontPanel ChangeButton FpWSM Colorset 22'
@@ -67,6 +281,7 @@ function reload
 
    if [ "x$do_x" == "x1" ]; then
       xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults
+      nscde_fvwmclnt 'SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults'
    fi
 
    if [ "x$do_gtk3" == "x1" ] || [ "x$do_gtk2" == "x1" ]; then
@@ -84,8 +299,7 @@ function reload
    whence -q xrefresh && xrefresh
 }
 
-
-while getopts p:n:58wmbxg:q:lrh Option
+while getopts p:n:58wmbxg:q:lrRh Option
 do
    case $Option in
       p)
@@ -114,47 +328,68 @@ do
       ;;
       b)
          do_backdrops=1
+         backdrops
       ;;
       x)
          do_x=1
+         xfunc
       ;;
       g)
-         echo "$OPTARG" | egrep -q 2
+         echo "$OPTARG" | cut -d"," -f1 | egrep -q '(gtk2|False)'
          if (($? == 0)); then
             do_gtk2=1
+            themegen_arg_gtk2=$(echo "$OPTARG" | cut -d"," -f1)
+            gtk2setup
          fi
-         echo "$OPTARG" | egrep -q 3
+         echo "$OPTARG" | cut -d"," -f2 | egrep -q '(gtk3|False)'
          if (($? == 0)); then
             do_gtk3=1
+            themegen_arg_gtk3=$(echo "$OPTARG" | cut -d"," -f2)
+            gtk3setup
          fi
-         echo "$OPTARG" | egrep -q 4
+         echo "$OPTARG" | cut -d"," -f3 | egrep -q '(gtk4|False)'
          if (($? == 0)); then
             do_gtk4=1
+            themegen_arg_gtk4=$(echo "$OPTARG" | cut -d"," -f3)
+            gtk4setup
          fi
+         gtkvariants
       ;;
       q)
-         echo "$OPTARG" | egrep -q 4
+         echo "$OPTARG" | cut -d"," -f1 | egrep -q '(qt4|False)'
          if (($? == 0)); then
             do_qt4=1
+            themegen_arg_qt4=$(echo "$OPTARG" | cut -d"," -f1)
+            qt4setup
          fi
-         echo "$OPTARG" | egrep -q 5gtk
+         echo "$OPTARG" | cut -d"," -f2 | egrep -q '(qt5g|False)'
          if (($? == 0)); then
             do_qt5gtk=1
+            themegen_arg_qt5=$(echo "$OPTARG" | cut -d"," -f2)
+            qt5gtksetup
          fi
-         echo "$OPTARG" | egrep -q 5kvantum
+         echo "$OPTARG" | cut -d"," -f2 | egrep -q '(qt5k|False)'
          if (($? == 0)); then
             do_qt5kvantum=1
+            themegen_arg_qt5=$(echo "$OPTARG" | cut -d"," -f2)
+            qt5kvantumsetup
          fi
-         echo "$OPTARG" | egrep -q 6
+         echo "$OPTARG" | cut -d"," -f3 | egrep -q '(qt6|False)'
          if (($? == 0)); then
-            do_qt6
+            do_qt6=1
+            themegen_arg_qt6=$(echo "$OPTARG" | cut -d"," -f3)
+            qt6setup
          fi
       ;;
       l)
          do_local=1
+         localsetup
       ;;
       r)
          reload
+      ;;
+      R)
+         reload force
       ;;
       h)
          Usage
@@ -169,172 +404,4 @@ fi
 if [ "x$ncolors" == "x" ]; then
    Usage Err
 fi
-
-if [ "x$do_backdrops" == "x1" ]; then
-   $NSCDE_TOOLSDIR/colormgr -c $ncolors -g $palette_name -b
-
-   if [ "$FVWM_IS_FVWM3" == "1" ]; then
-      nscde_fvwmclnt 'Test (!EnvMatch infostore.desktopconfiguration global) f_CleanupBackgroundCache'
-      nscde_fvwmclnt 'Test (!EnvMatch infostore.desktopconfiguration global) f_SetupMonitorData'
-   fi
-fi
-
-if [ "x$do_x" == "x1" ]; then
-   $NSCDE_TOOLSDIR/colormgr -c 8 -g $palette_name -X
-fi
-
-if [ "x$do_gtk2" == "x1" ]; then
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | egrep -q '^fg_color_4.* #ffffffffffff'
-   if (($? == 0)); then
-      $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'
-   else
-      $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '0'
-   fi
-   egrep -q "gtk-theme-name.*NsCDE" "$HOME/.gtkrc-2.0"
-   if (($? != 0)); then
-      $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-theme-name -v ' "NsCDE"'
-   fi
-
-   egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.gtkrc-2.0" 2>/dev/null
-   if (($? != 0)); then
-      $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-icon-theme-name -v ' "NsCDE"'
-   fi
-fi
-
-if [ "x$do_gtk3" == "x1" ]; then
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | egrep -q '^fg_color_4.* #ffffffffffff'
-   if (($? == 0)); then
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 1
-   else
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-application-prefer-dark-theme -v 0
-   fi
-
-   egrep -q "gtk-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini"
-   if (($? != 0)); then
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-theme-name -v NsCDE
-   fi
-
-   egrep -q "gtk-icon-theme-name.*NsCDE" "$HOME/.config/gtk-3.0/settings.ini"
-   if (($? != 0)); then
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-icon-theme-name -v NsCDE
-   fi
-
-   whence -q gsettings
-   if (($? != 0)); then
-      COLOR_SCHEME=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)
-      if [ "x$COLOR_SCHEME" != "x'default'" ]; then
-         gsettings set org.gnome.desktop.interface color-scheme default
-      fi
-   fi
-fi
-
-if [ "x$do_gtk2" == "x1" ] && [ "x$do_gtk3" == "x1" ]; then
-   $NSCDE_TOOLSDIR/themegen $palette_path $ncolors gtk2 gtk3 | egrep -v '^/'
-fi
-
-if [ "x$do_gtk2" != "x1" ] && [ "x$do_gtk3" == "x1" ]; then
-   $NSCDE_TOOLSDIR/themegen $palette_path $ncolors False gtk3 | egrep -v '^/'
-fi
-
-if [ "x$do_gtk2" == "x1" ] && [ "x$do_gtk3" != "x1" ]; then
-   $NSCDE_TOOLSDIR/themegen $palette_path $ncolors gtk2 False | egrep -v '^/'
-fi
-
-if [ "x$do_qt4" == "x1" ]; then
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'
-fi
-
-if [ "x$do_qt5gtk" == "x1" ]; then
-   if [ "x$do_qt5kvantum" != "x1" ]; then
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v false
-      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v '@Invalid()'
-   fi
-fi
-
-if [ "x$do_qt5kvantum" == "x1" ]; then
-   mkdir -p "$HOME/.config/Kvantum/NsCDE"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.kvconfig"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.svg"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v kvantum
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2
-   mkdir -p "$HOME/.config/qt5ct/colors"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl" -s -c > "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k color_scheme_path -v "$HOME/.config/qt5ct/colors/NsCDE-Kvantum.conf"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v true
-   mkdir -p "$HOME/.config/qt5ct/qss"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl" -s -c > "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-
-   STYLE5=$($NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets 2>/dev/null)
-   STYLE5Status=$?
-   STYLE5Check1=$(echo "$STYLE5" | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?)
-   STYLE5Check2=$(echo "$STYLE5" | egrep -q '@Invalid\(\)'; echo $?)
-
-   if (($STYLE5Check1 != 0)); then
-      if (($STYLE5Check1 == 0)); then
-         $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-      else
-         if (($STYLE5Status != 0)); then
-            $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-            if (($STYLE5Status == 3)); then
-               $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-            else
-               if [ "x$STYLE5" != "x" ]; then
-                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$STYLE5,$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-               else
-                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt5ct/qss/NsCDE-Kvantum.qss"
-               fi
-            fi
-         fi
-      fi
-   fi
-fi
-
-if [ "x$do_qt6" == "x1" ]; then
-   mkdir -p "$HOME/.config/Kvantum/NsCDE"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.kvconfig"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl" -s -c > "$HOME/.config/Kvantum/NsCDE/NsCDE.svg"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k style -v kvantum
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k standard_dialogs -v gtk2
-   mkdir -p "$HOME/.config/qt6ct/colors"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl" -s -c > "$HOME/.config/qt6ct/colors/NsCDE-Kvantum.conf"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k color_scheme_path -v "$HOME/.config/qt6ct/colors/NsCDE-Kvantum.conf"
-   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k custom_palette -v true
-   mkdir -p "$HOME/.config/qt6ct/qss"
-   $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl" -s -c > "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-
-   STYLE6=$($NSCDE_TOOLSDIR/confget -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets 2>/dev/null)
-   STYLE6Status=$?
-   STYLE6Check1=$(echo "$STYLE6" | egrep -q '\/qss\/NsCDE-Kvantum\.qss'; echo $?)
-   STYLE6Check2=$(echo "$STYLE6" | egrep -q '@Invalid\(\)'; echo $?)
-
-   if (($STYLE6Check1 != 0)); then
-      if (($STYLE6Check1 == 0)); then
-         $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-      else
-         if (($STYLE6Status != 0)); then
-            $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-            if (($STYLE6Status == 3)); then
-               $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-            else
-               if [ "x$STYLE6" != "x" ]; then
-                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$STYLE6,$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-               else
-                  $NSCDE_TOOLSDIR/confset -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k stylesheets -v "$HOME/.config/qt6ct/qss/NsCDE-Kvantum.qss"
-               fi
-            fi
-         fi
-      fi
-   fi
-fi
-
-if [ "x$do_local" == "x1" ]; then
-   if [ -x "$FVWM_USERDIR/libexec/colormgr.local" ]; then
-      $FVWM_USERDIR/libexec/colormgr.local $palette_path $ncolors
-   fi
-fi
-
 

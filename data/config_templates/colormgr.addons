@@ -18,6 +18,41 @@ if [ -z $NCOLORS ]; then
    NCOLORS=8
 fi
 
+function do_fix_xcursor
+{
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.icons/default/index.theme" -s "Icon Theme" -k Inherits -v dmz-aa
+}
+
+function do_fix_gtk2
+{
+   $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-button-images -v 0
+   $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-menu-images -v 0
+   $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-cursor-blink -v 0
+}
+
+function do_fix_gtk3
+{
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-cursor-theme-name -v dmz-aa
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-button-images -v 0
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-menu-images -v 0
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-cursor-blink -v 0
+}
+
+function do_fix_qt5
+{
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k show_shortcuts_in_context_menus -v true
+   $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k keyboard_scheme -v 5
+}
+
+function do_fix_qt6
+{
+   if [ -d "/usr/share/qt6" ] || [ -d "/usr/local/share/qt6" ] || [ -d "/usr/pkg/share/qt6" ]; then
+      mkdir -p $HOME/.config/qt6ct/{qss,colors}
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k show_shortcuts_in_context_menus -v true
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k keyboard_scheme -v 5
+   fi
+}
+
 # Gkrellm
 function do_gkrellm
 {
@@ -120,6 +155,7 @@ function do_qterminal
 # xfce4-terminal
 function do_xfce4_terminal
 {
+   mkdir -p $HOME/.config/xfce4/terminal
    BG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^bg_color_4" | cut -d" " -f2)
    FG_COLOR_4=$(${NSCDE_TOOLSDIR}/palette_colorgen -n $NCOLORS -p $PPATH -l | egrep "^fg_color_4" | cut -d" " -f2)
    ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/xfce4/terminal/terminalrc -s Configuration -k ColorBackground -v $BG_COLOR_4

@@ -1536,6 +1536,8 @@ Widget 32
             End
             Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2} 1 -1)
             Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+            Set $DoQt5Ct3 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE} 1 -1)
+            Set $DoQt5Ct4 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k menus_have_icons -v false} 1 -1)
 
             Set $Qt5CtColorsApplyCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k custom_palette -v false}
             Set $Qt5CtColorsApply = (GetOutput $Qt5CtColorsApplyCmd 1 -1)
@@ -1570,6 +1572,8 @@ Widget 32
 
             Set $DoQt5Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v kvantum} 1 -1)
             Set $DoQt5Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k standard_dialogs -v gtk2} 1 -1)
+            Set $DoQt5Ct3 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k icon_theme -v NsCDE} 1 -1)
+            Set $DoQt5Ct4 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Interface -k menus_have_icons -v false} 1 -1)
 
             Set $CheckQt5CtColorsDirExist = (GetOutput {ls -1d "$HOME/.config/qt5ct/colors" > /dev/null 2>&1; echo $?} 1 -1)
             If $CheckQt5CtColorsDirExist <> 0 Then
@@ -1662,6 +1666,8 @@ Widget 32
 
             Set $DoQt6Ct1 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k style -v kvantum} 1 -1)
             Set $DoQt6Ct2 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k standard_dialogs -v gtk3} 1 -1)
+            Set $DoQt6Ct3 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Appearance -k icon_theme -v NsCDE} 1 -1)
+            Set $DoQt6Ct4 = (GetOutput {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Interface -k menus_have_icons -v false} 1 -1)
 
             Set $CheckQt6CtColorsDirExist = (GetOutput {ls -1d "$HOME/.config/qt6ct/colors" > /dev/null 2>&1; echo $?} 1 -1)
             If $CheckQt6CtColorsDirExist <> 0 Then

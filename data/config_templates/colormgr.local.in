@@ -31,7 +31,8 @@ export THUNDERBIRD_PROFILEDIR=""
 export THUNDERBIRD_MAJVER_PFX="tb10X_"
 
 # All "do_*" functions are working from here, do not remove this if you
-# want to use predefined colormgr addons.
+# want to use predefined colormgr addons. Examine that script library
+# to learn what it does.
 . ${NSCDE_DATADIR}/config_templates/colormgr.addons
 
 # Defaults: integrate if application is found. Except for
@@ -45,6 +46,14 @@ whence -q xfce4-terminal && do_xfce4_terminal
 whence -q kcalc && do_kcalc
 # do_firefox
 # do_thunderbird
+
+# Fixes for Gtk2, Gtk3 and Qt5 icons in menus, cursors etc ... which may start
+# to differ from CDEish defaults.
+do_fix_xcursor
+do_fix_gtk2
+do_fix_gtk3
+do_fix_qt5
+do_fix_qt6
 
 # Add here your own local hooks freely ...
 

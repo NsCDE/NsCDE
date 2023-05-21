@@ -1363,6 +1363,8 @@ AddToFunc f_Reschedule
 # First Run Setup Function
 # Called from share/NsCDE/fvwm/Init.fvwmconf
 # from InitFunction and SessionInitFunction
+# Mangle DPI to give new user best possible
+# option that display is barely visible.
 DestroyFunc f_FirstSetup
 AddToFunc f_FirstSetup
 + I Test (!x xterm) f_Notifier \
@@ -1370,8 +1372,12 @@ AddToFunc f_FirstSetup
  "Error: Cannot continue with initial setup without xterm program. Aborting action."
 + I Test (!x xterm) Break
 + I EdgeThickness 0
++ I Exec exec '@KSH@ -c echo "Xft.dpi: 96" | xrdb -merge'
++ I Exec exec xrandr -s 1920x1080
++ I Exec exec xrandr --dpi 96
++ I SetEnv DPI 96
 + I SetEnv IVF 1
-+ I Exec exec \
++ I Schedule 250 Exec exec \
     xterm -g 94x26 \
           -fa "scalable=true:spacing=mono:size=16" \
           -bg '#68006f008200' -fg '#ffffffffffff' \
