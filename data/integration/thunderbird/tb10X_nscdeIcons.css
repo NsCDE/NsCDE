@@ -778,11 +778,20 @@ button[type="disclosure"][open="true"] {
 }
 
 /* ::::: format toolbar ::::: */
-
-#FormatToolbar > toolbarbutton {
+#FormatToolbar > toolbarbutton:not(#removeStylingButton, #AbsoluteFontSizeButton) {
   list-style-image: url("nsicons/format-buttons.png") !important;
 }
- 
+
+/* New format menu option. */
+#AbsoluteFontSizeButton, #AbsoluteFontSizeButton:active, #AbsoluteFontSizeButton[disabled="true"] {
+   list-style-image: url("nsicons/setfont.png") !important;
+}
+
+/* New format menu option. */
+#removeStylingButton, #removeStylingButton:active,#removeStylingButton[disabled="true"] {
+  list-style-image: url("nsicons/remove-styling.png") !important;
+}
+
 #DecreaseFontSizeButton {
   -moz-image-region: rect(0px 16px 16px 0px);
 }
@@ -997,7 +1006,7 @@ button[type="disclosure"][open="true"] {
   -moz-image-region: auto !important; /* cut off inheritance */
 }
 
-/* ::::: address book sidebar ::::: AAAAAAAAAAAAAAAAAAA */
+/* ::::: address book sidebar ::::: */
 
 .ab-closebutton {
   list-style-image: url("nsicons/close.png") !important;
