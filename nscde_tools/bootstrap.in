@@ -25,31 +25,37 @@ fi
 
 if [ -z $HOME ]; then
    gettext -s "Error: HOME is not set cannot continue."
+   sleep 3
    exit 3
 fi
 
 if [ -z $NSCDE_ROOT ]; then
    gettext -s "Error: NSCDE_ROOT is not set cannot continue."
+   sleep 3
    exit 4
 fi
 
 if [ ! -e "$NSCDE_ROOT" ]; then
    gettext -s "Error: NSCDE_ROOT does not exist. Cannot continue."
+   sleep 3
    exit 5
 fi
 
 if [ -z $NSCDE_TOOLSDIR ]; then
    gettext -s "Error: NSCDE_ROOT is not set cannot continue."
+   sleep 3
    exit 4
 fi
 
 if [ ! -e "$NSCDE_TOOLSDIR" ]; then
    gettext -s "Error: NSCDE_TOOLSDIR does not exist. Cannot continue."
+   sleep 3
    exit 5
 fi
 
 if [ -z $FVWM_USERDIR ]; then
    gettext -s "Error: FVWM_USERDIR is not set cannot continue."
+   sleep 3
    exit 6
 fi
 
@@ -160,7 +166,7 @@ function setup_nscde
       echo "gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar"
       tar cpf gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar $backup_dot_files
    fi
-   cd - > /dev/null
+   cd - >/dev/null 2>&1
 
    locale_integrate_gtk2_question=$(gettext -s "Do you want to enable NsCDE GTK2 theme integration?")
    echo -ne "$locale_integrate_gtk2_question (y|n)[y] \c"
@@ -217,7 +223,9 @@ function setup_nscde
    fi
 
    locale_integrate_qt5_gtk_question=$(gettext -s "Do you want to enable NsCDE Qt5 GTK engine theme integration?")
-   gettext -s "Do not use gtk3 engine if you have Qt5 Kvantum installed or available. It is newer and better."
+   echo ""
+   gettext -s "(Do not use Qt5 GTK engine if Qt5 Kvantum engine is available. Qt5 GTK engine is a legacy.)"
+   echo ""
    echo -ne "$locale_integrate_qt5_gtk_question (y|n)[n] \c"
    read ans
    if [ "x$ans" == "x" ]; then
@@ -261,7 +269,7 @@ function setup_nscde
       themeadd_qt5="$themeadd_qt5k"
    fi
 
-   locale_integrate_qt6_question=$(gettext -s "Do you want to enable NsCDE Qt6 Kvantum engine theme integration?")
+   locale_integrate_qt6_question=$(gettext -s "Do you want to enable NsCDE Qt6 theme integration?")
    echo -ne "$locale_integrate_qt6_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then

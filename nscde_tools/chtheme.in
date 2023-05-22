@@ -283,7 +283,7 @@ function reload
       cd $HOME
       xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults
       nscde_fvwmclnt 'SetEnv XAPPLRESDIR $[FVWM_USERDIR]/app-defaults'
-      cd -
+      cd - >/dev/null 2>&1
    fi
 
    if [ "x$do_gtk3" == "x1" ] || [ "x$do_gtk2" == "x1" ]; then
