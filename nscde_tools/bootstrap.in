@@ -544,6 +544,26 @@ function setup_nscde
       fi
    fi
 
+   whence -q picom
+   if (($? == 0)); then
+      locale_enable_picom_question=$(gettext -s "Do you want to enable Picom X Compositor?")
+      echo -ne "$locale_enable_picom_question (y|n)[n] \c"
+      read ans
+      if [ "x$ans" == "x" ]; then
+         ans="n"
+      fi
+      if [ "x$ans" == "xn" ]; then
+         echo "$locale_not_enabling nscde_use_picom --> 0"
+      elif [ "x$ans" == "xy" ]; then
+         echo "$locale_enabling nscde_use_picom --> 1"
+         cp -f "$NSCDE_DATADIR/config_templates/Picom.conf" "$FVWM_USERDIR/Picom.conf"
+         $NSCDE_TOOLSDIR/ised -c 's/InfoStoreAdd nscde_use_picom 0/InfoStoreAdd nscde_use_picom 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
+      else
+         gettext -s "Answer not understood."
+         echo "$locale_not_enabling nscde_use_picom --> 0"
+      fi
+   fi
+
    whence -q rofi
    if (($? == 0)); then
       locale_run_rofi_question=$(gettext -s "Do you want to run rofi launcher on Alt+F12 or built in Exec Dialog?")
