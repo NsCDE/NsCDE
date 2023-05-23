@@ -6,7 +6,7 @@
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-NProcMgr}
 WindowLocaleTitle { NsCDE Proces Management }
-WindowSize 502 708
+WindowSize 502 732
 Colorset 22
 
 Init
@@ -42,7 +42,9 @@ Begin
    ChangeFont 29 $ItemFont
    ChangeFont 49 $ItemFont
    ChangeFont 30 $ItemFont
+   ChangeFont 31 $ItemFont
    ChangeFont 60 $ItemFont
+   ChangeFont 61 $ItemFont
 
    ChangeFont 50 $DefaultFont
    ChangeFont 51 $DefaultFont
@@ -62,6 +64,7 @@ Begin
    ChangeLocaleTitle 28 {  Fvwm Backer}
    ChangeLocaleTitle 29 {  Icon Manager}
    ChangeLocaleTitle 30 {  Dunst Notifier}
+   ChangeLocaleTitle 31 {  Picom X Compositor}
 
    ChangeLocaleTitle 51 {      Recheck      |      Restart      |      Stop      |      Start      }
    ChangeTitle 53 { Animate|Backdrops|Backer|Colorset|Event|Font|Functions|IconMan|Ident|Keybindings|Menus|Mousebindings|LocalPager|WspLocPager|Script|Style}
@@ -120,6 +123,7 @@ Widget 1
          SendSignal 28 2
          Do {f_NProcMgrHandler 29 2 iconbox}
          Do {f_NProcMgrHandler 30 2 nscde_use_dunst}
+         Do {f_NProcMgrHandler 31 2 nscde_use_picom}
       End
       2 :
       Begin
@@ -145,6 +149,8 @@ Widget 1
             Do {f_NProcMgrHandler 29 2 iconbox}
          If (GetValue 30) == 1 Then
             Do {f_NProcMgrHandler 30 2 nscde_use_dunst}
+         If (GetValue 31) == 1 Then
+            Do {f_NProcMgrHandler 31 2 nscde_use_picom}
       End
       3 :
       Begin
@@ -192,7 +198,7 @@ Property
          Begin
             ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
          End
-         For $procwidget = 30 To 30 Do
+         For $procwidget = 30 To 31 Do
          Begin
             ChangeTitle (Add $procwidget 30) (Gettext {Checking ...})
          End
@@ -216,7 +222,7 @@ End
 
 Widget 3
 Property
-   Size 486 499
+   Size 486 530
    Position 8 58
    Type Rectangle
    Main
@@ -743,7 +749,7 @@ Property
    Position 20 462
    Type CheckBox
    Flags NoReliefString
-   Title {Dunst Notifier}
+   Title {   Dunst Notifier   }
    Font "xft:::pixelsize=16"
    Value 0
    Main
@@ -786,6 +792,57 @@ Property
       5 :
       Begin
          Do {f_Dunst start}
+      End
+End
+
+Widget 31
+Property
+   Position 20 500
+   Type CheckBox
+   Flags NoReliefString
+   Title {Picom X Compositor}
+   Font "xft:::pixelsize=16"
+   Value 0
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 31) == 1 Then
+         Begin
+            ChangeFont 61 $SelectFont
+         End
+         Else
+         Begin
+            ChangeFont 61 $DefaultFont
+         End
+      End
+      2 :
+      Begin
+         Set $EnableState31 = (LastString)
+
+         Set $PicomPid = (GetOutput {pgrep -u $(id -u) -xf 'picom --config .*\/Picom.conf' | egrep '^[[:digit:]]+$' | grep -v ^$$} 1 -1)
+         If $PicomPid == {} Then
+         Begin
+            Set $RunState31 = (Gettext {Not Running})
+         End
+         Else
+         Begin
+            Set $RunState31 = (Gettext {Running}) { (PID: } $PicomPid {)}
+         End
+         Set $PicomStateInfo = (Gettext $EnableState31) {, } $RunState31
+         ChangeLocaleTitle 61 $PicomStateInfo
+      End
+      3 :
+      Begin
+         Do {f_Picom restart}
+      End
+      4 :
+      Begin
+         Do {f_Picom stop}
+      End
+      5 :
+      Begin
+         Do {f_Picom start}
       End
 End
 
@@ -954,10 +1011,25 @@ Widget 60
       End
 End
 
+Widget 61
+   Property
+   Size 160 0
+   Position 210 500
+   Type ItemDraw
+   Flags NoReliefString Right NoFocus
+   Title {Enabled, Running (PID: XXXXXXX)}
+   Font "xft:::pixelsize=16"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
 Widget 50
    Property
    Size 286 0
-   Position 24 511
+   Position 24 547
    Type ItemDraw
    Flags NoReliefString Left NoFocus
    LocaleTitle {Action:}
@@ -972,7 +1044,7 @@ End
 Widget 51
 Property
    Size 256 20
-   Position 84 508
+   Position 84 544
    Type PopupMenu
    Flags NoReliefString Left
    Title {XXXXXXXXXXXX}
@@ -999,7 +1071,7 @@ End
 Widget 52
 Property
    Size 174 20
-   Position 294 508
+   Position 294 544
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Apply}
@@ -1022,7 +1094,7 @@ Property
                   ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
                End
             End
-            For $procwidget = 30 To 30 Do
+            For $procwidget = 30 To 31 Do
             Begin
                If (GetValue $procwidget) == 1 Then
                Begin
@@ -1042,7 +1114,7 @@ Property
                   ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
                End
             End
-            For $procwidget = 30 To 30 Do
+            For $procwidget = 30 To 31 Do
             Begin
                If (GetValue $procwidget) == 1 Then
                Begin
@@ -1063,7 +1135,7 @@ Property
                   ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
                End
             End
-            For $procwidget = 30 To 30 Do
+            For $procwidget = 30 To 31 Do
             Begin
                If (GetValue $procwidget) == 1 Then
                Begin
@@ -1084,7 +1156,7 @@ Property
                   ChangeTitle (Add $procwidget 20) (Gettext {Checking ...})
                End
             End
-            For $procwidget = 30 To 30 Do
+            For $procwidget = 30 To 31 Do
             Begin
                If (GetValue $procwidget) == 1 Then
                Begin
@@ -1105,8 +1177,8 @@ End
 
 Widget 4
 Property
-   Size 486 64
-   Position 8 577
+   Size 486 62
+   Position 8 606
    Type Rectangle
 Main
    Case message of
@@ -1118,7 +1190,7 @@ End
 Widget 5
    Property
    Size 104 0
-   Position 18 567
+   Position 18 596
    Type ItemDraw
    Flags NoReliefString NoFocus
    LocaleTitle {Configurations}
@@ -1132,7 +1204,7 @@ End
 Widget 53
 Property
    Size 200 20
-   Position 34 595
+   Position 34 624
    Type PopupMenu
    Flags NoReliefString Left
    Title {XXXXXXXXXXXX}
@@ -1158,7 +1230,7 @@ End
 Widget 54
 Property
    Size 224 20
-   Position 244 595
+   Position 244 624
    Type PushButton
    Flags NoReliefString
    Title {XXXXXXXXXXXXXXXX}
@@ -1217,7 +1289,7 @@ End
 Widget 6
 Property
    Size 490 0
-   Position 4 655
+   Position 4 678
    Type Rectangle
 Main
    Case message of
@@ -1229,7 +1301,7 @@ End
 Widget 7
 Property
    Size 160 20
-   Position 24 667
+   Position 24 691
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Close}
@@ -1249,7 +1321,7 @@ End
 Widget 8
 Property
    Size 160 20
-   Position 316 667
+   Position 316 691
    Type PushButton
    Flags NoReliefString
    LocaleTitle {Help}
