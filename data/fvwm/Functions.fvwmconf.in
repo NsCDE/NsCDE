@@ -1259,6 +1259,21 @@ AddToFunc f_Dunst
 + I Test (EnvMatch infostore.dunst_action status) PipeRead "echo Echo $(pgrep -u $[USER] dunst)"
 + I InfoStoreRemove dunst_action
 
+# Standalone X compositor picom support
+DestroyFunc f_Picom
+AddToFunc f_Picom
++ I Test (!EnvMatch infostore.nscde_use_picom 1) Break 1
++ I Test (!x picom) Break 1
++ I Test (EnvMatch infostore.nscde_use_picom 1, !r $[FVWM_USERDIR]/Picom.conf) \
+    Exec exec cp -f $[NSCDE_DATADIR]/config_templates/Picom.conf $[FVWM_USERDIR]/Picom.conf
++ I Test (!r $[FVWM_USERDIR]/Picom.conf) Break 1
++ I InfoStoreAdd picom_action $0
++ I Test (EnvMatch infostore.picom_action start) Exec exec @KSH@ -c 'pkill -u "$[USER]" picom; exec picom --config $[FVWM_USERDIR]/Picom.conf'
++ I Test (EnvMatch infostore.picom_action restart) Exec exec @KSH@ -c 'pkill -u "$[USER]" picom; exec picom --config $[FVWM_USERDIR]/Picom.conf'
++ I Test (EnvMatch infostore.picom_action stop) Exec exec pkill -u "$[USER]" picom
++ I Test (EnvMatch infostore.picom_action status) PipeRead "echo Echo $(pgrep -u $[USER] picom)"
++ I InfoStoreRemove picom_action
+
 # Policy Kit Authentication Agent - configured or best match
 # A killer and finder functions are separated because we need
 # a time to call new daemon which will not be killed as an old
@@ -1555,6 +1570,12 @@ AddToFunc f_ChangeDesk
 + I f_SendToWSM
 + I Test (EnvMatch infostore.desklastpage 1, !EnvMatch infostore.pgm 1x1) f_DeskLastPage
 + I Test (EnvMatch infostore.pageshowrootpager 1, !EnvMatch infostore.pgm 1x1) f_RepositionLocalPager
++ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.workspace.pager 1) \
+    None (GWMPager,CirculateHit) SendToModule FrontPanel PressButton FpPGM
++ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.workspace.pager 1) \
+    f_Reschedule Periodic $[infostore.rootpagertimeout] 141414 \
+    All (GWMPager, !HasPointer, CirculateHit, !Transient) \
+    f_DescheduleAfterAction 141414 KillModule FvwmPager GWMPager
 + I f_UserChangeDesk
 
 # FVWM3 internal function RandRFunc is run when a screen event occurs
