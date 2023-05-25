@@ -17,11 +17,12 @@ AC_PROG_CC
 AC_CANONICAL_HOST
 AC_MSG_CHECKING(platform)
 case "$host_os" in
-freebsd*|sunos*|dragonfly*)
+freebsd*|dragonfly*)
         AC_CHECK_PROGS(GSED, gsed, "no")
         AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
         CPPFLAGS="$CPPFLAGS -I/usr/local/include"
         LDFLAGS="$LDFLAGS -L/usr/local/lib"
+	ECHONE="echo -ne"
         ;;
 netbsd*)
         AC_CHECK_PROGS(GSED, gsed, "no")
@@ -30,6 +31,7 @@ netbsd*)
         AS_IF([test x"$GTAIL" = x"no"], [AC_MSG_WARN([You must have GNU tail (gtail) installed on ${host_os} for NsCDE runtime.])])
         CPPFLAGS="$CPPFLAGS -I/usr/X11R7/include -I/usr/pkg/include -I/usr/local/include"
         LDFLAGS="$LDFLAGS -L/usr/X11R7/lib -R/usr/X11R7/lib -L/usr/pkg/lib -R/usr/pkg/lib -L/usr/local/lib -R/usr/local/lib"
+	ECHONE="echo -ne"
         ;;
 openbsd*)
 	AC_CHECK_PROGS(GSED, gsed, "no")
@@ -38,8 +40,20 @@ openbsd*)
 	AS_IF([test x"$GMAKE" = x"no"], [AC_MSG_ERROR([You must have GNU make (gmake) installed. Native ${host_os} make is currently broken.])])
 	CPPFLAGS="$CPPFLAGS -I/usr/X11R6/include -I/usr/local/include"
 	LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -L/usr/local/lib"
+	ECHONE="echo -ne"
+	;;
+sunos*|solaris*)
+        AC_CHECK_PROGS(GSED, gsed, "no")
+        AS_IF([test x"$GSED" = x"no"], [AC_MSG_WARN([You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime.])])
+        CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+	ECHONE="printf"
+	;;
+linux*)
+	ECHONE="echo -ne"
 	;;
 *)
+	ECHONE="printf"
         ;;
 esac
 AC_MSG_RESULT($host_os)
@@ -56,6 +70,7 @@ AC_SUBST(xsessiondir)
 LOCALES="hr"
 AC_SUBST(LOCALES)
 
+AC_SUBST(ECHONE)
 AC_SUBST(SED)
 
 if test "$prefix" = /usr; then

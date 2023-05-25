@@ -149,8 +149,8 @@ function GeneratePaletteMenu
 
    for palette in $SysPalettes $UserPalettes
    do
-      echo -ne "${palette}|"
-   done | sed 's/|$/\n/g'
+      @ECHONE@ "${palette}|"
+   done | $NSCDE_TOOLSDIR/ised -c 's/|$/\n/g' -o -f -
 }
 
 # Generates Backdrop Menu for ColorMgr and BackdropMgr List widgets
@@ -160,8 +160,8 @@ function GenerateBackdropMenu
 
    for backdrop in $SysBackdrops $UserBackdrops
    do
-      echo -ne "${backdrop}|"
-   done | sed 's/|$/\n/g'
+      @ECHONE@ "${backdrop}|"
+   done | $NSCDE_TOOLSDIR/ised -c 's/|$/\n/g' -o -f -
 }
 
 # Generates Photo Menu for ColorMgr and BackdropMgr List widgets
@@ -171,8 +171,8 @@ function GeneratePhotoMenu
 
    for photo in $SysPhotos $UserPhotos
    do
-      echo -ne "${photo}|"
-   done | sed 's/|$/\n/g'
+      @ECHONE@ "${photo}|"
+   done | $NSCDE_TOOLSDIR/ised -c 's/|$/\n/g' -o -f -
 }
 
 # Takes Number from FvwmScript List widget and finds base name of the Palette

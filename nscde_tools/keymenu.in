@@ -33,10 +33,10 @@ function config_for_menu
       for m in $token_modifiers
       do
          case $m in
-            'M') echo -ne "Alt+" ;;
-            'S') echo -ne "Shift+" ;;
-            'C') echo -ne "Ctrl+" ;;
-            '4') echo -ne "Meta+" ;;
+            'M') @ECHONE@ "Alt+" ;;
+            'S') @ECHONE@ "Shift+" ;;
+            'C') @ECHONE@ "Ctrl+" ;;
+            '4') @ECHONE@ "Meta+" ;;
             'A') true ;;
             'N') true ;;
          esac
@@ -73,7 +73,7 @@ function enlist_kms
    SysLines=$(awk '{ print $1 }' < $NSCDE_DATADIR/defaults/Keymenu-${KeybindingsType}.actions)
 
    IFS="$OIFS"
-   KmsLines=$(echo -ne "${SysLines}\n${UserLines}\n" | egrep "^km_" | sort -u)
+   KmsLines=$(@ECHONE@ "${SysLines}\n${UserLines}\n" | egrep "^km_" | sort -u)
 }
 
 function fill_lines

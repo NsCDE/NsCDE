@@ -162,14 +162,14 @@ function setup_nscde
       fi
    done
    if (($have_old_dot_file != 0)); then
-      echo -ne "$locale_making_backing_up_dot_files"
+      @ECHONE@ "$locale_making_backing_up_dot_files"
       echo "gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar"
       tar cpf gtk+qt-dot-files-before-nscde-changes-${backup_datestr}.tar $backup_dot_files
    fi
    cd - >/dev/null 2>&1
 
    locale_integrate_gtk2_question=$(gettext -s "Do you want to enable NsCDE GTK2 theme integration?")
-   echo -ne "$locale_integrate_gtk2_question (y|n)[y] \c"
+   @ECHONE@ "$locale_integrate_gtk2_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -187,7 +187,7 @@ function setup_nscde
    fi
 
    locale_integrate_gtk3_question=$(gettext -s "Do you want to enable NsCDE GTK3 theme integration?")
-   echo -ne "$locale_integrate_gtk3_question (y|n)[y] \c"
+   @ECHONE@ "$locale_integrate_gtk3_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -205,7 +205,7 @@ function setup_nscde
    fi
 
    locale_integrate_qt4_question=$(gettext -s "Do you want to enable NsCDE Qt4 theme integration?")
-   echo -ne "$locale_integrate_qt4_question (y|n)[y] \c"
+   @ECHONE@ "$locale_integrate_qt4_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -226,7 +226,7 @@ function setup_nscde
    echo ""
    gettext -s "(Do not use Qt5 GTK engine if Qt5 Kvantum engine is available. Qt5 GTK engine is a legacy.)"
    echo ""
-   echo -ne "$locale_integrate_qt5_gtk_question (y|n)[n] \c"
+   @ECHONE@ "$locale_integrate_qt5_gtk_question (y|n)[n] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="n"
@@ -247,7 +247,7 @@ function setup_nscde
    fi
 
    locale_integrate_qt5_kvantum_question=$(gettext -s "Do you want to enable NsCDE Qt5 Kvantum engine theme integration?")
-   echo -ne "$locale_integrate_qt5_kvantum_question (y|n)[y] \c"
+   @ECHONE@ "$locale_integrate_qt5_kvantum_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -270,7 +270,7 @@ function setup_nscde
    fi
 
    locale_integrate_qt6_question=$(gettext -s "Do you want to enable NsCDE Qt6 theme integration?")
-   echo -ne "$locale_integrate_qt6_question (y|n)[y] \c"
+   @ECHONE@ "$locale_integrate_qt6_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -292,7 +292,7 @@ function setup_nscde
       locale_Writing=$(gettext -s "Writing")
       echo "$locale_Writing $HOME/.icons/default/index.theme ..."
       mkdir -p "$HOME/.icons/default"
-      echo -ne '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
+      @ECHONE@ '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
    else
       locale_setting_default_cursor_theme=$(gettext -s "Setting default cursor theme")
       echo "${HOME}/.icons/default/index.theme ${already_exists}. ${locale_setting_default_cursor_theme}."
@@ -391,7 +391,7 @@ function setup_nscde
    locale_enabled_by_default=$(gettext -s "Enabled by default:")
    locale_disabling=$(gettext -s "Disabling:")
    locale_enable_visual_pager_question=$(gettext -s "Do you want to enable NsCDE-specific visual pager preview on page/workspace change?")
-   echo -ne "$locale_enable_visual_pager_question (y|n)[y] \c"
+   @ECHONE@ "$locale_enable_visual_pager_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -407,7 +407,7 @@ function setup_nscde
    fi
 
    locale_remember_workspace_question=$(gettext -s "Do you want to remember last page on workspace when changing back to it?")
-   echo -ne "$locale_remember_workspace_question (y|n)[y] \c"
+   @ECHONE@ "$locale_remember_workspace_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -426,7 +426,7 @@ function setup_nscde
 
    if [ "x$FVWM_IS_FVWM3" == "x1" ]; then
       locale_enable_fvwm3_default_logging_question=$(gettext -s "Do you want to enable FVWM3 logging by default?")
-      echo -ne "$locale_enable_fvwm3_default_logging_question (y|n)[y] \c"
+      @ECHONE@ "$locale_enable_fvwm3_default_logging_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -447,9 +447,9 @@ function setup_nscde
    xscreensaver_found=$?
    if (($xscreensaver_found != 0)); then
       gettext -s "WARNING: Xscreensaver installation not found."
-      echo -ne "$locale_enable_xscreensaver_question (y|n)[n] \c"
+      @ECHONE@ "$locale_enable_xscreensaver_question (y|n)[n] \c"
    else
-      echo -ne "$locale_enable_xscreensaver_question (y|n)[y] \c"
+      @ECHONE@ "$locale_enable_xscreensaver_question (y|n)[y] \c"
    fi
    read ans
    if [ "x$ans" == "x" ]; then
@@ -462,7 +462,7 @@ function setup_nscde
    if [ "x$ans" == "xy" ]; then
       echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
       if [ ! -e "$HOME/.xscreensaver" ]; then
-         echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
+         @ECHONE@ "$HOME/.xscreensaver "; gettext -s "does not exist."
          gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
          cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
       fi
@@ -474,7 +474,7 @@ function setup_nscde
       gettext -s "Answer not understood."
       echo "$locale_enabled_by_default nscde_use_xscreensaver --> 1"
       if [ ! -e "$HOME/.xscreensaver" ]; then
-         echo -ne "$HOME/.xscreensaver "; gettext -s "does not exist."
+         @ECHONE@ "$HOME/.xscreensaver "; gettext -s "does not exist."
          gettext -s -n "Installing default .xscreensaver file as "; echo "$HOME/.xscreensaver."
          cp ${NSCDE_DATADIR}/config_templates/dot_xscreensaver "${HOME}/.xscreensaver"
       fi
@@ -490,7 +490,7 @@ function setup_nscde
    fi
 
    locale_enable_stalonetray_question=$(gettext -s "Do you want to enable Stalonetray Tray?")
-   echo -ne "$locale_enable_stalonetray_question (y|n)[y] \c"
+   @ECHONE@ "$locale_enable_stalonetray_question (y|n)[y] \c"
    read ans
    if [ "x$ans" == "x" ]; then
       ans="y"
@@ -508,7 +508,7 @@ function setup_nscde
    whence -q xsettingsd
    if (($? == 0)); then
       locale_enable_xsettingsd_question=$(gettext -s "Do you want to enable color scheme integration with XSETTINGS daemon xsettingsd?")
-      echo -ne "$locale_enable_xsettingsd_question (y|n)[y] \c"
+      @ECHONE@ "$locale_enable_xsettingsd_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -527,7 +527,7 @@ function setup_nscde
    whence -q dunst
    if (($? == 0)); then
       locale_enable_dunst_question=$(gettext -s "Do you want to enable dunst notification daemon?")
-      echo -ne "$locale_enable_dunst_question (y|n)[y] \c"
+      @ECHONE@ "$locale_enable_dunst_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -547,7 +547,7 @@ function setup_nscde
    whence -q picom
    if (($? == 0)); then
       locale_enable_picom_question=$(gettext -s "Do you want to enable Picom X Compositor?")
-      echo -ne "$locale_enable_picom_question (y|n)[n] \c"
+      @ECHONE@ "$locale_enable_picom_question (y|n)[n] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="n"
@@ -567,7 +567,7 @@ function setup_nscde
    whence -q rofi
    if (($? == 0)); then
       locale_run_rofi_question=$(gettext -s "Do you want to run rofi launcher on Alt+F12 or built in Exec Dialog?")
-      echo -ne "$locale_run_rofi_question (y|n)[y] \c"
+      @ECHONE@ "$locale_run_rofi_question (y|n)[y] \c"
       read ans
       if [ "x$ans" == "x" ]; then
          ans="y"
@@ -576,7 +576,7 @@ function setup_nscde
          echo "$locale_enabling nscde_use_rofi --> 1"
          $NSCDE_TOOLSDIR/ised -c 's/# InfoStoreAdd nscde_use_rofi 1/InfoStoreAdd nscde_use_rofi 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
          if [ ! -e "$HOME/.config/rofi/config" ] ; then
-            echo -ne "$HOME/.config/rofi/config "; gettext -s "does not exist."
+            @ECHONE@ "$HOME/.config/rofi/config "; gettext -s "does not exist."
             gettext -s -n "Installing default rofi config file as "; echo "$HOME/.config/rofi/config."
             mkdir -p $HOME/.config/rofi
             cp -f ${NSCDE_DATADIR}/config_templates/rofi_config "${HOME}/.config/rofi/config"
@@ -610,7 +610,7 @@ function setup_nscde
    locale_setting_filemgr=$(gettext -s "Setting X File Manager:")
    locale_setting_proposed_filemgr=$(gettext -s "Setting Proposed X File Manager:")
    locale_skipping_fm_set_later=$(gettext -s "Skipping File Manager selection. You can set it later in")
-   echo -ne "$locale_your_favorite_X_File_Manager_command [${fmsugestion}] \c"
+   @ECHONE@ "$locale_your_favorite_X_File_Manager_command [${fmsugestion}] \c"
    read ans
    if [ "x$ans" != "x" ]; then
       echo "$locale_setting_filemgr filemgr --> ${ans}"
@@ -662,7 +662,7 @@ function setup_nscde
    done
 
    locale_your_favorite_X_Text_Editor_command=$(gettext -s "Your favorite X Text Editor (command)?")
-   echo -ne "$locale_your_favorite_X_Text_Editor_command [$xedit_suggest] \c"
+   @ECHONE@ "$locale_your_favorite_X_Text_Editor_command [$xedit_suggest] \c"
    locale_setting_editor=$(gettext -s "Setting X Text Editor:")
    locale_setting_proposed_editor=$(gettext -s "Setting Proposed X Text Editor:")
    locale_skipping_ed_set_later=$(gettext -s "Skipping X Editor selection. You can set it later in")

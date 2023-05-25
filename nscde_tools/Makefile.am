@@ -38,6 +38,7 @@ SCRIPTINS = \
 	migrate_nscde_1x_2x \
 	palette_colorgen \
 	strip_icon_path \
+	style_managers.shlib \
 	subpanel_menuitem_props \
 	sysinfo \
 	themegen \
@@ -46,7 +47,7 @@ SCRIPTINS = \
 	xdowrapper \
 	xrandr_backer
 
-tools_SCRIPTS = $(SCRIPTINS) style_managers.shlib
+tools_SCRIPTS = $(SCRIPTINS)
 
 EXTRA_SCRIPTS =
 

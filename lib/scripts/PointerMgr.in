@@ -449,7 +449,7 @@ Widget 18
          End
          If $AppendToNsCDEConfFile == 1 Then
          Begin
-            Set $WriteNsCDECmd = {echo -ne "\n# Managed usually by PointerMgr\nInfoStoreAdd menudclicktm } (GetValue 11) {\n" >> "} $NSCDEFILE {"}
+            Set $WriteNsCDECmd = {@ECHONE@ "\n# Managed usually by PointerMgr\nInfoStoreAdd menudclicktm } (GetValue 11) {\n" >> "} $NSCDEFILE {"}
             Set $WriteNsCDE = (GetOutput $WriteNsCDECmd 1 -1)
          End
 
@@ -489,7 +489,7 @@ Widget 18
             End
             Else
             Begin
-               Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Mouse Style Manager\nNet/DoubleClickTime } (GetValue 11) {\n" >> "} $XSETTINGSFILE {"}
+               Set $WriteXSettingsdCmd = {@ECHONE@ "\n# Added by Mouse Style Manager\nNet/DoubleClickTime } (GetValue 11) {\n" >> "} $XSETTINGSFILE {"}
             End
             Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
             Do {Schedule 500 f_Xsettingsd start}

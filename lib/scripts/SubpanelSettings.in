@@ -390,7 +390,7 @@ Widget 14
 
          If $ExistanceEnsure == 0 Then
          Begin
-            Set $WriteNewSubpanelConfCmd = {@KSH@ -c 'echo -ne "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
+            Set $WriteNewSubpanelConfCmd = {@KSH@ -c '@ECHONE@ "\nS} $SubpanelNo {,NAME,} $NewSubpanelName
              {\nS} $SubpanelNo {,ENABLED,} $NewSubpanelEnabled
              {\nS} $SubpanelNo {,WIDTH,} $NewSubpanelWidth {\n" >> "} $UserSubpanelActionsFile {"'}
             Set $WriteNewSubpanelConf = (GetOutput $WriteNewSubpanelConfCmd 1 -1)

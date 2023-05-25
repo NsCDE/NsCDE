@@ -369,7 +369,7 @@ Widget 14
             End
             If $CheckKeyBindingSet == 1 Then
             Begin
-               Set $WriteKbdBindingSetCmd = {@KSH@ -c 'echo -ne "\n# Key Binding Set\nInfoStoreAdd kbd_bind_set } $KeyBindingSet {\n" >> "$FVWM_USERDIR/NsCDE.conf"'}
+               Set $WriteKbdBindingSetCmd = {@KSH@ -c '@ECHONE@ "\n# Key Binding Set\nInfoStoreAdd kbd_bind_set } $KeyBindingSet {\n" >> "$FVWM_USERDIR/NsCDE.conf"'}
                Set $WriteKbdBindingSet = (GetOutput $WriteKbdBindingSetCmd 1 -1)
             End
 

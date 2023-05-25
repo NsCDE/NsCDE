@@ -672,6 +672,7 @@ REQUIRED_PYTHON_VERSION
 XDG_CONFIG_PATH_BOOL
 XDG_DATA_PATH_BOOL
 SED
+ECHONE
 LOCALES
 xsessiondir
 GMAKE
@@ -3879,7 +3880,7 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking platform" >&5
 $as_echo_n "checking platform... " >&6; }
 case "$host_os" in
-freebsd*|sunos*|dragonfly*)
+freebsd*|dragonfly*)
         for ac_prog in gsed
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -3929,6 +3930,7 @@ $as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} 
 fi
         CPPFLAGS="$CPPFLAGS -I/usr/local/include"
         LDFLAGS="$LDFLAGS -L/usr/local/lib"
+	ECHONE="echo -ne"
         ;;
 netbsd*)
         for ac_prog in gsed
@@ -4027,6 +4029,7 @@ $as_echo "$as_me: WARNING: You must have GNU tail (gtail) installed on ${host_os
 fi
         CPPFLAGS="$CPPFLAGS -I/usr/X11R7/include -I/usr/pkg/include -I/usr/local/include"
         LDFLAGS="$LDFLAGS -L/usr/X11R7/lib -R/usr/X11R7/lib -L/usr/pkg/lib -R/usr/pkg/lib -L/usr/local/lib -R/usr/local/lib"
+	ECHONE="echo -ne"
         ;;
 openbsd*)
 	for ac_prog in gsed
@@ -4124,8 +4127,65 @@ fi
 fi
 	CPPFLAGS="$CPPFLAGS -I/usr/X11R6/include -I/usr/local/include"
 	LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -L/usr/local/lib"
+	ECHONE="echo -ne"
+	;;
+sunos*|solaris*)
+        for ac_prog in gsed
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GSED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GSED"; then
+  ac_cv_prog_GSED="$GSED" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GSED="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GSED=$ac_cv_prog_GSED
+if test -n "$GSED"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GSED" >&5
+$as_echo "$GSED" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GSED" && break
+done
+test -n "$GSED" || GSED=""no""
+
+        if test x"$GSED" = x"no"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&5
+$as_echo "$as_me: WARNING: You must have GNU sed (gsed) installed on ${host_os} for NsCDE runtime." >&2;}
+fi
+        CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+        LDFLAGS="$LDFLAGS -L/usr/local/lib"
+	ECHONE="printf"
+	;;
+linux*)
+	ECHONE="echo -ne"
 	;;
 *)
+	ECHONE="printf"
         ;;
 esac
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $host_os" >&5
@@ -4147,6 +4207,7 @@ $as_echo "$XSESSDIR" >&6; }
 
 
 LOCALES="hr"
+
 
 
 

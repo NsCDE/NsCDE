@@ -429,7 +429,7 @@ AddToFunc f_ScreenShot
 DestroyFunc f_XwinInfo
 AddToFunc f_XwinInfo
 + I Test (x xwininfo) Current Exec exec $[infostore.terminal] -e \
-    "@KSH@ -c 'echo -ne \"\033]0;X Window Info\007\"; xwininfo -all -id $[w.id] | less'"
+    "@KSH@ -c '@ECHONE@ \"\033]0;X Window Info\007\"; xwininfo -all -id $[w.id] | less'"
 + I TestRc (NoMatch) None ("NsCDE-Notifier.f_XwinInfo") f_Notifier \
  "XwinInfo Function Error" "Dismiss" "NsCDE/Error.xpm" \
  "$[gt.Error: Func:f_XwinInfo: No xwininfo(1) tool found in PATH] $[PATH]." "f_XwinInfo"
@@ -438,7 +438,7 @@ AddToFunc f_XwinInfo
 DestroyFunc f_Xprop
 AddToFunc f_Xprop
 + I Test (x xprop) Current Exec exec $[infostore.terminal] -e \
-    "@KSH@ -c 'echo -ne \"\033]0;X Window Properties\007\"; xprop -id $[w.id] | less'"
+    "@KSH@ -c '@ECHONE@ \"\033]0;X Window Properties\007\"; xprop -id $[w.id] | less'"
 + I TestRc (NoMatch) None ("NsCDE-Notifier.f_Xprop") f_Notifier \
  "X Prop Function Error" "Dismiss" "NsCDE/Error.xpm" \
  "$[gt.Error: Func:f_Xprop: No xprop(1) tool found in PATH] $[PATH]." "f_Xprop"
@@ -2268,12 +2268,12 @@ AddToFunc f_SendToOccupy
 + I PipeRead "echo InfoStoreAdd pagesmenu \\\"$($NSCDE_TOOLSDIR/mkpagemenu \
               $[infostore.pagematrixX] $[infostore.pagematrixY] pgname | \
               tr '\\n' '|' | sed 's/|$//g')\\\""
-+ I PipeRead "@KSH@ -c 'echo -ne \"InfoStoreAdd desksmenu \"; echo -ne \\\"; \
++ I PipeRead "@KSH@ -c '@ECHONE@ \"InfoStoreAdd desksmenu \"; @ECHONE@ \\\"; \
               for desk in {0..$[infostore.fvwmdesknum]}; \
-              do echo -ne "$[desk.name${desk}]"; \
+              do @ECHONE@ "$[desk.name${desk}]"; \
               [ ${desk} != $[infostore.fvwmdesknum] ] && \
-              echo -ne \"|\"; done; echo -ne \\\"'"
-+ I PipeRead "@KSH@ -c 'echo -ne \"InfoStoreAdd monitorsmenu \"; \
+              @ECHONE@ \"|\"; done; @ECHONE@ \\\"'"
++ I PipeRead "@KSH@ -c '@ECHONE@ \"InfoStoreAdd monitorsmenu \"; \
               echo $[infostore.active.monitors] | tr \" \" \"|\"'
 + I Test (EnvMatch FVWM_IS_FVWM3 1) Module FvwmScript Occupy 3 $0 \
     $[desk.n] $[page.nx] $[page.ny] $[infostore.monitor.$[monitor.current].idx] $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY] $[monitor.count] $1

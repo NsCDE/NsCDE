@@ -19,7 +19,7 @@ else
 fi
 
 if [ -f "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun" ] && [ "x$1" == "x-i" ]; then
-   $textn "File "; echo -ne "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun"; $text " exists."
+   $textn "File "; @ECHONE@ "$HOME/.NsCDE/.migrate_nscde_1x_2x_norun"; $text " exists."
    $text "This script is refusing to run in the interactive mode while that file exists."
    exit 0
 fi
@@ -59,7 +59,7 @@ function backup_current_dot_nscde
    if [ -d "$HOME/.NsCDE" ]; then
       confdir_size=$(du -ks "$HOME/.NsCDE" | awk '{ print $1 }')
       if (( $confdir_size > 204800 )); then
-         $textn "Error: your "; echo -ne "$HOME/.NsCDE "; $text "directory has more then 200 MB. Something appears to be"
+         $textn "Error: your "; @ECHONE@ "$HOME/.NsCDE "; $text "directory has more then 200 MB. Something appears to be"
          $text "wrong with your NsCDE profile. Examine your profile, or back it up manually, and"
          $text "rerun migration script without \"-i\" option."
          sleep 3
@@ -88,7 +88,7 @@ function backup_current_dot_nscde
             ;;
             esac
             if (($RETVAL1 == 0)); then
-               $textn "Backup copy of "; echo -ne "$HOME/.NsCDE "; $textn "saved as "; echo "$HOME/dot_NsCDE_${stamp}.tar."
+               $textn "Backup copy of "; @ECHONE@ "$HOME/.NsCDE "; $textn "saved as "; echo "$HOME/dot_NsCDE_${stamp}.tar."
                cd - > /dev/null
                if (($? != 0)); then
                   $textn "Error: cannot change directory back to "; echo "$HOME/.NsCDE"
@@ -96,7 +96,7 @@ function backup_current_dot_nscde
                   exit 5
                fi
             else
-               $textn "Error: backing up "; echo -ne "$HOME/.NsCDE"; $textn " exited with exit status "; echo "${RETVAL1}."
+               $textn "Error: backing up "; @ECHONE@ "$HOME/.NsCDE"; $textn " exited with exit status "; echo "${RETVAL1}."
                sleep 3
                exit 3
             fi
@@ -138,11 +138,11 @@ function rename_config_files
       new_oc="${new_oc2}"
 
       if [ -r "$HOME/.NsCDE/${oc}" ] [ -h "$HOME/.NsCDE/${oc}" ]; then
-         $textn "Renaming "; echo -ne "$oc"; $textn " to "; echo "$new_oc ..."
+         $textn "Renaming "; @ECHONE@ "$oc"; $textn " to "; echo "$new_oc ..."
          mv -f "$oc" "$new_oc"
          RETVAL=$?
          if (($RETVAL != 0)); then
-            $textn "Error: Renaming "; echo -ne "${oc}"; $textn " to "; echo -ne "${new_oc}"; $textn " returned error "; echo "${RETVAL}."
+            $textn "Error: Renaming "; @ECHONE@ "${oc}"; $textn " to "; @ECHONE@ "${new_oc}"; $textn " returned error "; echo "${RETVAL}."
 	    sleep 3
 	    exit 7
          fi
@@ -157,11 +157,11 @@ function rename_config_files
       new_og="${new_og2}"
 
       if [ -r "$HOME/.NsCDE/${og}" ] || [ -h "$HOME/.NsCDE/${og}" ]; then
-         $textn "Renaming "; echo -ne "$og"; $textn " to "; echo "$new_og ..."
+         $textn "Renaming "; @ECHONE@ "$og"; $textn " to "; echo "$new_og ..."
          mv -f "$og" "$new_og"
          RETVAL=$?
          if (($RETVAL != 0)); then
-            $textn "Error: Renaming "; echo -ne "${og}"; $textn " to "; echo -ne "${new_og}"; $textn " returned error "; echo "${RETVAL}."
+            $textn "Error: Renaming "; @ECHONE@ "${og}"; $textn " to "; @ECHONE@ "${new_og}"; $textn " returned error "; echo "${RETVAL}."
 	    sleep 3
 	    exit 7
          fi
@@ -176,11 +176,11 @@ function rename_config_files
       new_ol="${new_ol2}"
 
       if [ -r "$HOME/.NsCDE/${ol}" ] || [ -h "$HOME/.NsCDE/${ol}" ]; then
-         $textn "Renaming "; echo -ne "$ol"; $textn " to "; echo "$new_ol ..."
+         $textn "Renaming "; @ECHONE@ "$ol"; $textn " to "; echo "$new_ol ..."
          mv -f "$ol" "$new_ol"
          RETVAL=$?
          if (($RETVAL != 0)); then
-            $textn "Error: Renaming "; echo -ne "${ol}"; $textn " to "; echo -ne "${new_ol}"; $textn " returned error "; echo "${RETVAL}."
+            $textn "Error: Renaming "; @ECHONE@ "${ol}"; $textn " to "; @ECHONE@ "${new_ol}"; $textn " returned error "; echo "${RETVAL}."
 	    sleep 3
 	    exit 7
          fi
@@ -223,7 +223,7 @@ function rename_config_files
          base_fontset=$(readlink ${fo})
          if [ ! -f "fontsets/${base_fontset##*/}" ]; then
             if [ -f "${NSCDE_DATADIR}/fontsets/${base_fontset##*/}" ]; then
-              $textn "Relinking "; echo -ne "${fo}"; $textn " to "; echo "${NSCDE_DATADIR}/fontsets/${base_fontset##*/}."
+              $textn "Relinking "; @ECHONE@ "${fo}"; $textn " to "; echo "${NSCDE_DATADIR}/fontsets/${base_fontset##*/}."
               ln -sf "${NSCDE_DATADIR}/fontsets/${base_fontset##*/}" "${fo}"
             fi
          fi
@@ -499,21 +499,21 @@ function replace_confnames_in_files {
    for oce in $old_confs_escaped
    do
       oce_new=$(echo "${oce}" | sed 's/^NsCDE-//g; s/\.conf/\.fvwmconf/g')
-      $textn "Changing "; echo -ne "${oce/\\/}"; $textn " occurences to "; echo -ne "${oce_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
+      $textn "Changing "; @ECHONE@ "${oce/\\/}"; $textn " occurences to "; @ECHONE@ "${oce_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${oce}/${oce_new}/g" -f {} \;
    done
 
    for oge in $old_genconfs_escaped
    do
       oge_new=$(echo "${oge}" | sed 's/^NsCDE-//g; s/\.conf/\.fvwmgen/g')
-      $textn "Changing "; echo -ne "${oge/\\/}"; $textn " occurences to "; echo -ne "${oge_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
+      $textn "Changing "; @ECHONE@ "${oge/\\/}"; $textn " occurences to "; @ECHONE@ "${oge_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${oge}/${oge_new}/g" -f {} \;
    done
 
    for ole in $old_locals_escaped
    do
       ole_new=$(echo "${ole}" | sed 's/^NsCDE-//g; s/\.local/\.fvwmlocal/g')
-      $textn "Changing "; echo -ne "${ole/\\/}"; $textn " occurences to "; echo -ne "${ole_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
+      $textn "Changing "; @ECHONE@ "${ole/\\/}"; $textn " occurences to "; @ECHONE@ "${ole_new/\\/}"; $text " in all regular files inside ~/.NsCDE"
       find . -xdev -type f ! -name "*.xpm" ! -name "*.png" ! -name "*.pm" ! -name "*.log" ! -name .BGdefault ! -name .Exec-History ! -name "*.pid" -exec $ISED -c "s/${ole}/${ole_new}/g" -f {} \;
    done
 }
@@ -530,7 +530,7 @@ function walk_and_change_pathnames_in_files
 
    for ftp in $files_to_process
    do
-      $textn "Processing "; echo -ne "$ftp"; $text " with pathname replacements for NsCDE 2.0"
+      $textn "Processing "; @ECHONE@ "$ftp"; $text " with pathname replacements for NsCDE 2.0"
       replace_pathnames_in_files "$ftp"
    done
 
@@ -542,7 +542,7 @@ function walk_and_change_pathnames_in_files
       do
          echo "$fpicon" | egrep -q 'NsCDE\/'
          if (($? == 0)); then
-            $textn "Processing "; echo -ne "$fpicon"; $textn " for button "; echo "$Btn"
+            $textn "Processing "; @ECHONE@ "$fpicon"; $textn " for button "; echo "$Btn"
             if [ ! -f "$NSCDE_DATADIR/icons/$fpicon" ]; then
                fpicon_candidate=$(echo "$fpicon" | sed 's/SDt/Dt/g')
                if [ ! -f "$NSCDE_DATADIR/icons/$fpicon_candidate" ]; then
@@ -575,7 +575,7 @@ function walk_and_change_pathnames_in_files
       do
          echo "$subicon" | egrep -q '^NsCDE\/SDt.*\.pm'
          if (($? == 0)); then
-            $textn "Processing "; echo -ne "$subicon"; $textn " for entry "; echo "$name"
+            $textn "Processing "; @ECHONE@ "$subicon"; $textn " for entry "; echo "$name"
             if [ ! -f "$NSCDE_DATADIR/icons/$subicon" ]; then
                subicon_candidate=$(echo "$subicon" | sed 's/SDt/Dt/g')
                if [ ! -f "$NSCDE_DATADIR/icons/$subicon_candidate" ]; then

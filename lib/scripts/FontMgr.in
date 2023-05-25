@@ -1517,7 +1517,7 @@ Widget 26
                   End
                   Else
                   Begin
-                     Set $WriteXSettingsdCmd = {echo -ne "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
+                     Set $WriteXSettingsdCmd = {@ECHONE@ "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
                   End
                   Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
 
@@ -1533,7 +1533,7 @@ Widget 26
                      End
                      Else
                      Begin
-                        Set $WriteXSettingsdDpiCmd = {echo -ne "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
+                        Set $WriteXSettingsdDpiCmd = {@ECHONE@ "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
                      End
                      Set $WriteXSettingsdDpi = (GetOutput $WriteXSettingsdDpiCmd 1 -1)
                   End

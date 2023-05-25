@@ -7,12 +7,12 @@
 nscdescriptdir = $(NSCDE_LIBDIR)/scripts
 
 DYNSCRIPTS = BackdropMgr ColorMgr ExecDialog FontMgr PowerSaveMgr \
-	SubpanelSettings Sysinfo KeyboardMgr
+	SubpanelSettings Sysinfo KeyboardMgr PointerMgr
 
 FVWMSCRIPTS = ActionForm BackdropMgr BeepMgr CheckMailApplet ChoiceForm \
 	ColorMgr ExecDialog FilePicker FontMgr FpLite GeometryMgr \
 	GWMOptions InputForm KeyboardMgr ModifyColor MonthDayApplet \
-	NColorsDialog NProcMgr Occupy PaletteDialog PointerMgr \
+	NColorsDialog NProcMgr Occupy PaletteDialog \
 	PowerSaveMgr StyleMgr SubpanelMgr SubpanelSettings \
 	SysActionDialog Sysinfo WaitNotice WindowMgr WSM WSM-2 WSM-4 \
 	WSM-6 WSM-8 WsPgMgr FpIconMgr ThemeIntegrationDialog

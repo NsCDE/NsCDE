@@ -12,7 +12,7 @@ imgdirstr=""
 pass=0
 typeset -a mback=(${2//+/ })
 
-echo "$1" | sed 's/\+/\n/g' | while IFS="+" read mstring
+echo "$1" | $NSCDE_TOOLSDIR/ised -c 's/\+/\n/g' -o -f - | while IFS="+" read mstring
 do
    echo $mstring | while IFS="/" read mondata mdesk mbackinfo
    do
