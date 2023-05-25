@@ -25,7 +25,7 @@ Begin
    Set $AppListTmpFileCmd = {mktemp -t tmp.XXXXXXXX.AppLst.XXXXXXXX}
    Set $AppListTmpFile = (GetOutput $AppListTmpFileCmd 1 -1)
    Set $AppListToFileCmd = {fvwm-menu-desktop --mini-icon-dir "$FVWM_USERDIR/icons" --enable-mini-icons -s 48 --include-items none --theme NsCDE --desktop nscde | }
-                           { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -n '' | }
+                           { egrep '^\+ \".*\" Exec exec .*' | sort -u | grep -En '.*' | }
                            { $NSCDE_TOOLSDIR/ised -c 's/^\([[:digit:]]\+\):+ "\(.*\)" Exec exec \(.*\)/\1%\2\3/g' -o -f - | }
                            { $NSCDE_TOOLSDIR/ised -c "s/'/\"/g" -o -f - | }
                            { $NSCDE_TOOLSDIR/ised -c "s/\$NSCDE_ROOT/\$[NSCDE_ROOT]/g" -o -f - > "} $AppListTmpFile {"}

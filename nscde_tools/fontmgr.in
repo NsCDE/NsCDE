@@ -26,7 +26,7 @@ OIFS="$IFS"
 IFS=" "
 FONTS=$(fc-list -f '%{+family,style{%{=unparse}}}\n' | sort -u)
 FNAMES=$(echo "$FONTS" | awk -F: '{ print $1 }')
-FNUMS=$(echo "$FNAMES" | sort -u | grep -n '')
+FNUMS=$(echo "$FNAMES" | sort -u | grep -En '.*')
 
 function findfontsets
 {
@@ -74,7 +74,7 @@ function fontsetsmenu
 function getfontsetname
 {
    findfontsets
-   FontsetName=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -n '' | egrep "^${FontsetNum}:" | cut -d":" -f2)
+   FontsetName=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -En '.*' | egrep "^${FontsetNum}:" | cut -d":" -f2)
    echo $FontsetName
    if [ -s "$NSCDE_DATADIR/fontsets/${FontsetName}.fontset" ]; then
       echo "${NSCDE_DATADIR}/fontsets/"
@@ -86,7 +86,7 @@ function getfontsetname
 function getfontsetnum
 {
    findfontsets
-   FontsetNum=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -n '' | egrep "^[[:digit:]]+:${FontsetFindName}$" | cut -d":" -f1)
+   FontsetNum=$(echo "$SysFontsets" "$UserFontsets" | tr ' ' '\n' | grep -En '.*' | egrep "^[[:digit:]]+:${FontsetFindName}$" | cut -d":" -f1)
    echo $FontsetNum
 }
 
@@ -185,7 +185,7 @@ function splitfontstr
    # Get style and style number and print it
    # If style is specified wrongly in the fontset, select first on the list
    StylesFmt="list"
-   StylesOut=$(IFS=" " getfontstyles | grep -n '' | egrep "^[1-9]{1,}:${RevFontStyle}$" | cut -d":" -f1)
+   StylesOut=$(IFS=" " getfontstyles | grep -En '.*' | egrep "^[1-9]{1,}:${RevFontStyle}$" | cut -d":" -f1)
    if [ "x$StylesOut" != "x" ]; then
       echo $StylesOut
    else
