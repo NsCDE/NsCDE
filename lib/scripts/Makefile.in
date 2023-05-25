@@ -102,7 +102,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = BackdropMgr ColorMgr ExecDialog FontMgr \
-	PowerSaveMgr KeyboardMgr SubpanelSettings Sysinfo
+	PointerMgr PowerSaveMgr KeyboardMgr SubpanelSettings Sysinfo
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -156,8 +156,8 @@ am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/BackdropMgr.in $(srcdir)/ColorMgr.in \
 	$(srcdir)/ExecDialog.in $(srcdir)/FontMgr.in \
 	$(srcdir)/KeyboardMgr.in $(srcdir)/Makefile.in \
-	$(srcdir)/PowerSaveMgr.in $(srcdir)/SubpanelSettings.in \
-	$(srcdir)/Sysinfo.in
+	$(srcdir)/PointerMgr.in $(srcdir)/PowerSaveMgr.in \
+	$(srcdir)/SubpanelSettings.in $(srcdir)/Sysinfo.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -358,6 +358,8 @@ ColorMgr: $(top_builddir)/config.status $(srcdir)/ColorMgr.in
 ExecDialog: $(top_builddir)/config.status $(srcdir)/ExecDialog.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 FontMgr: $(top_builddir)/config.status $(srcdir)/FontMgr.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+PointerMgr: $(top_builddir)/config.status $(srcdir)/PointerMgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 PowerSaveMgr: $(top_builddir)/config.status $(srcdir)/PowerSaveMgr.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@

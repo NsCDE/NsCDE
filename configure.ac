@@ -407,6 +407,7 @@ AC_OUTPUT(
 	lib/scripts/ColorMgr
 	lib/scripts/ExecDialog
 	lib/scripts/FontMgr
+	lib/scripts/PointerMgr
 	lib/scripts/PowerSaveMgr
 	lib/scripts/KeyboardMgr
 	lib/scripts/SubpanelSettings
