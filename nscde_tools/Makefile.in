@@ -106,9 +106,9 @@ CONFIG_CLEAN_FILES = acpimgr appfinder backdropmgr bootstrap chtheme \
 	fp_manage_subpanel fpseticon generate_app_menus \
 	generate_subpanels getdpi getfont get_logical_screens ised \
 	keymenu mkpagemenu migrate_nscde_1x_2x strip_icon_path \
-	subpanel_menuitem_props var_append xdowrapper xrandr_backer \
-	colorconv confget confset geticon getla1 palette_colorgen \
-	sysinfo themegen usleep
+	subpanel_menuitem_props style_managers.shlib var_append \
+	xdowrapper xrandr_backer colorconv confget confset geticon \
+	getla1 palette_colorgen sysinfo themegen usleep
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -209,6 +209,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/acpimgr.in \
 	$(srcdir)/ised.in $(srcdir)/keymenu.in \
 	$(srcdir)/migrate_nscde_1x_2x.in $(srcdir)/mkpagemenu.in \
 	$(srcdir)/palette_colorgen.in $(srcdir)/strip_icon_path.in \
+	$(srcdir)/style_managers.shlib.in \
 	$(srcdir)/subpanel_menuitem_props.in $(srcdir)/sysinfo.in \
 	$(srcdir)/themegen.in $(srcdir)/usleep.in \
 	$(srcdir)/var_append.in $(srcdir)/xdowrapper.in \
@@ -507,6 +508,8 @@ migrate_nscde_1x_2x: $(top_builddir)/config.status $(srcdir)/migrate_nscde_1x_2x
 strip_icon_path: $(top_builddir)/config.status $(srcdir)/strip_icon_path.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 subpanel_menuitem_props: $(top_builddir)/config.status $(srcdir)/subpanel_menuitem_props.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+style_managers.shlib: $(top_builddir)/config.status $(srcdir)/style_managers.shlib.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 var_append: $(top_builddir)/config.status $(srcdir)/var_append.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@

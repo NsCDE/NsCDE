@@ -440,6 +440,7 @@ AC_OUTPUT(
 	nscde_tools/migrate_nscde_1x_2x
 	nscde_tools/strip_icon_path
 	nscde_tools/subpanel_menuitem_props
+	nscde_tools/style_managers.shlib
 	nscde_tools/var_append
 	nscde_tools/xdowrapper
 	nscde_tools/xrandr_backer
