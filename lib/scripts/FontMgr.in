@@ -162,31 +162,17 @@ Begin
    Set $QuitStarted = 0
 End
 
-# In PeriodicTasks be careful not to mess messages from two different dialogs.
-# MSG is the waiting for InputForm, while QUITMSG is the waiting for ChoiceForm
-# See Widget 26 - Save button - click and routine 3.
+# MSG is the waiting for InputForm here.
+# See Widget 26 - Save button - click and routine 1.
 PeriodicTasks
 Begin
-   If $QuitStarted == 0 Then
+   Set $MSG = (ReceivFromScript $INPUTFORM)
+   If $MSG <> {No message} Then
    Begin
-      Set $MSG = (ReceivFromScript $INPUTFORM)
-      # Do {Echo >>> >>> >>> INPUT-FORM MESSAGE: } $MSG
-      If $MSG <> {No message} Then
-      Begin
-        If $MSG <> {Go} Then
-        Begin
-           Do {Schedule 250 SendToModule FontMgr SendString 26 1 } $MSG
-        End
-      End
-   End
-   Else
-   Begin
-      Set $QUITMSG = (ReceivFromScript $QUITFORM)
-      # Do {Echo >>> >>> >>> QUIT-FORM MESSAGE: } $QUITMSG
-      If $QUITMSG <> {No message} Then
-      Begin
-         Do {SendToModule FontMgr SendString 26 4 } $QUITMSG
-      End
+     If $MSG <> {Go} Then
+     Begin
+        Do {Schedule 250 SendToModule FontMgr SendString 26 1 } $MSG
+     End
    End
 End
 
@@ -1551,28 +1537,17 @@ Widget 26
                Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
             End
 
-            # Spawn ChoiceForm to quit after saving changes
-            Set $QUITARG = {ChoiceForm "$[gt.Do you want to restart NsCDE with new font properties now?]" "$[gt.Yes]" "$[gt.No]" "$[gt.User Action Required]"}
-            Set $QUITFORM = (LaunchScript $QUITARG )
-            Set $QuitStarted = 1
+            # Just step to refresh part.
             SendSignal 26 4
       End
       4 :
       Begin
          # Finish
-         If (LastString) == {Go} Then
-         Begin
-            Do {Exec exec @KSH@ -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"}
-            Do {Test (EnvIsSet XFT_USE_DPI) SetEnv NSCDE_FONT_DPI $[XFT_USE_DPI]}
-            # Restart NsCDE here, give it a delay, not to kill "Do" until it is executed
-            Do {Schedule 380 Restart}
-            Quit
-         End
-         If (LastString) == {Cancel} Then
-         Begin
-            # On cancel, simply quit.
-            Quit
-         End
+         Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" }
+            {"$[gt.Not all applications have the ability to dinamically change their font. }
+            {Such applications may have to be restarted for effect to take place.]"}
+         Do {Schedule 100 f_FontMgrRefreshFonts}
+         Quit
       End
       5 :
       Begin

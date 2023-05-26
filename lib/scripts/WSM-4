@@ -153,6 +153,21 @@ Property
           Do {Schedule 10 InfoStoreAdd fplastpressed FpWSM}
           Do {f_UnclickScript 50 WSM-4 30 2 unclick}
        End
+       4 :
+       Begin
+          If (LastString) == {fontrefresh} Then
+          Begin
+             # Font size/type setup
+             Set $MainFontRegularOut = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s large -Z 16} 1 -1)
+             Set $MainFontRegular = {Shadow=1 0 SE:} $MainFontRegularOut
+             Set $btnname = 0
+             While $btnname < $DeskNo Do
+             Begin
+                Set $btnname = (Add $btnname 1)
+                ChangeFont $btnname $MainFontRegular
+             End
+          End
+       End
 End
 
 # Select frame around PushButton. Moved around and resized by routines in widget 30.
