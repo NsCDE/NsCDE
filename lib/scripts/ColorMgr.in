@@ -1773,6 +1773,26 @@ Widget 32
             End
          End
 
+         # Handle Front Panel small artefacts
+         Do {SendToModule FrontPanel ChangeButton PanelMenu Icon "NsCDE/FpMenu.xpm"}
+         Do {SendToModule FrontPanel ChangeButton PanelHandleLeft Icon "NsCDE/FpHandle.xpm"}
+         Do {SendToModule FrontPanel ChangeButton PanelIconify Icon "NsCDE/FpIconify.xpm"}
+         Do {SendToModule FrontPanel ChangeButton PanelHandleRight Icon "NsCDE/FpHandle.xpm"}
+
+         # Handle fvwm2 Front Panel small artefacts
+         If $IsFvwm3 <> {1} Then
+         Begin
+            For $fpid = 1 To 20 Do
+            Begin
+               Do {Test (EnvMatch infostore.NsCDE-Subpanel} $fpid
+                  {-enabled 1) SendToModule FrontPanel ChangeButton NsCDE-Subpanel} $fpid
+                  { Icon $[infostore.FP.LnchIcon]}
+               Do {Test (EnvMatch infostore.NsCDE-Subpanel} $fpid
+                  {-enabled 1) SendToModule FrontPanel ChangeButton NsCDE-Subpanel} $fpid
+                  { PressIcon $[infostore.FP.LnchPressIcon]}
+            End
+         End
+
          # Reread backdrops
          If $SetBackdrops == 1 Then
          Begin
