@@ -1793,6 +1793,11 @@ Widget 32
             Set $ReloadXresources = (GetOutput {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults} 1 -1)
          End
 
+         # Stalonetray, Dunst, Xscreensaver
+         Do {Test (EnvMatch infostore.nscde_use_stalonetray 1) f_Stalonetray restart}
+         Do {Test (EnvMatch infostore.nscde_use_dunst 1) f_Dunst restart}
+         Do {Test (EnvMatch infostore.nscde_use_xscreensaver 1) f_Xscreensaver -restart}
+
          # Reload Xsettingsd if it is used
          If $CheckUseXsettingsd == 1 Then
          Begin
