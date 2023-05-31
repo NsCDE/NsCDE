@@ -3,17 +3,19 @@ Upon the first (successful) start, <code class="filename">~/.NsCDE,</code> that 
 <code class="varname">$FVWM_USERDIR</code> is created, and only icons subdirectory is created as
 <span class="command"><strong>fvwm-menu-desktop</strong></span> is run. User will be presented with a first run NsCDE
 setup wizard in plain default xterm terminal emulator and with default color theme
-<span class="emphasis"><em>Broica</em></span> in 8 colors. If Gkrellm and pnmixer programs are installed, on
-the system and found, they will be run too. Stalonetray and Dunst will be run if installed
+<span class="emphasis"><em>Broica</em></span> in 8 colors. If Gkrellm program is installed, on
+the system and found, it will be run too. Stalonetray and Dunst will be run if installed
 and enabled by the user during the wizard process. Stalonetray and Dunst colors and fonts
 will be handled internally by Color Style Manager and Font Style Manager when theme or font
 is changed and the same goes for Gkrellm, rofi, Firefox, Thunderbird or any 3rd party program
-integrated with NsCDE color and font theme.
+integrated with NsCDE color and font theme. X compositor picom(1) is offered disabled by default,
+but if user decides to enable it on initial configuration or later, it will make one-time copy
+of modest example configuration file as <code class="filename">$FVWM_USERDIR/Picom.conf</code>.
 </p><p>
 Initial setup wizard is a simple script (<span class="command"><strong>$NSCDE_DATADIR/bootstrap</strong></span>) from
 the terminal which will run automatically and will set up the following:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>X resources in <code class="filename">~/.NsCDE</code></p></li><li class="listitem"><p>Default background color (pre-FvwmBacker) from default theme</p></li><li class="listitem"><p>Default <code class="filename">~/.NsCDE/NsCDE.conf</code></p></li><li class="listitem"><p>Default <code class="filename">~/.NsCDE/GeoDB.ini</code></p></li><li class="listitem"><p> <code class="filename">~/.icons/default/index.theme</code>
- (default X cursor scheme)</p></li><li class="listitem"><p> <code class="filename">~/.gtkrc-2.0</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/gtk-3.0/settings.ini</code> </p></li><li class="listitem"><p> <code class="filename">~/.themes/NsCDE</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/Trolltech.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/qt5ct/qt5ct.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/NsCDE/Stalonetray.conf if it does not exist yet</code> </p></li><li class="listitem"><p> <code class="filename">~/NsCDE/Dunst.conf if it does not exist yet</code> </p></li><li class="listitem"><p>Visual Pager NsCDE addon Option</p></li><li class="listitem"><p>Disable or enable XscreenSaver</p></li><li class="listitem"><p>Disable or enable use of the XSETTINGS xsettingsd daemon</p></li><li class="listitem"><p>Disable or enable use of Rofi Launcher on <span class="keysym">Alt+F12</span> if installed</p></li><li class="listitem"><p>Enable NsCDE to remember last used page on workspace if selected</p></li><li class="listitem"><p>Enable FVWM3 diagnostic logging by default or not</p></li><li class="listitem"><p>Configure favorite X file manager, if desired</p></li><li class="listitem"><p>Configure favorite X text editor, if desired</p></li></ul></div><div class="figure"><a name="fig_bootstrap"></a><p class="title"><b>Figure 71. NsCDE first time setup (bootstrap)</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_bootstrap.png" alt="NsCDE first time setup (bootstrap)"></div></div></div><br class="figure-break"><p>
+ (default X cursor scheme)</p></li><li class="listitem"><p> <code class="filename">~/.gtkrc-2.0</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/gtk-3.0/settings.ini</code> </p></li><li class="listitem"><p> <code class="filename">~/.themes/NsCDE</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/Trolltech.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/.config/qt5ct/qt5ct.conf</code> </p></li><li class="listitem"><p> <code class="filename">~/NsCDE/Stalonetray.conf if it does not exist yet</code> </p></li><li class="listitem"><p> <code class="filename">~/NsCDE/Dunst.conf if it does not exist yet</code> </p></li><li class="listitem"><p> <code class="filename">~/NsCDE/Picom.conf if it does not exist yet and if picom is enabled</code> </p></li><li class="listitem"><p>Visual Pager NsCDE addon Option</p></li><li class="listitem"><p>Disable or enable XscreenSaver</p></li><li class="listitem"><p>Disable or enable use of the XSETTINGS xsettingsd daemon</p></li><li class="listitem"><p>Disable or enable use of Rofi Launcher on <span class="keysym">Alt+F12</span> if installed</p></li><li class="listitem"><p>Enable NsCDE to remember last used page on workspace if selected</p></li><li class="listitem"><p>Enable FVWM3 diagnostic logging by default or not</p></li><li class="listitem"><p>Configure favorite X file manager, if desired</p></li><li class="listitem"><p>Configure favorite X text editor, if desired</p></li></ul></div><div class="figure"><a name="fig_bootstrap"></a><p class="title"><b>Figure 71. NsCDE first time setup (bootstrap)</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_bootstrap.png" alt="NsCDE first time setup (bootstrap)"></div></div></div><br class="figure-break"><p>
 There are more options in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> which can be edited
 after first setup finishes, and during the desktop operation.
 </p><p>
@@ -22,19 +24,12 @@ It will be skipped, but GTK and Qt theme integration files will be edited with
 <span class="command"><strong>$NSCDE_TOOLSDIR/confset</strong></span> to change theme and settings. This settings can
 be further edited with <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, or with the
 tools from other desktop environments. After <span class="command"><strong>bootstrap</strong></span> script finishes setup,
-<a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> will be run and user asked to confirm
-default theme or change it. <span class="emphasis"><em>Do not</em></span> avoid this step, because some program
-bits are not fully setup if local user configuration uses fallback bare defaults, (like a
-clock background) and must be generated in the
-<code class="filename">~/.NsCDE/icons/NsCDE</code> directory.
+default color (Broica) and font theme will be applied.
 </p><p>
-After <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager's</a> <span class="guibutton">OK</span> button
-is pressed, theme will be regenerated. Gtk and Qt themes will be regenerated only if their
-checkboxes in <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> are checked in.
-This is default since NsCDE 1.0. Setup script after the finish will ask user to press
-<span class="keysym">RETURN</span> to exit. This is for user's convenience to read output of the setup for
-informative and/or diagnostic reasons. It is advised that after this setup
-<code class="filename">$FVWM_USERDIR/NsCDE.conf</code> is opened and further edited, for example
+After the initial theme is applied, Gtk and Qt themes regenerated and integrated with NsCDE,
+bootstrap script will ask user to press <span class="keysym">RETURN</span> to exit. This is for user's
+convenience to read output of the setup for informative and/or diagnostic reasons. It is&#382;
+advised that after this setup <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> is further edited, for example
 InfoStoreAdd internal FVWM variables for <code class="varname">terminal</code>, <code class="varname">browser</code>,
 <code class="varname">docsbrowser</code>, <code class="varname">taskmgr</code>, <code class="varname">printmgr</code> to
 user's favorite programs for mentioned functions.

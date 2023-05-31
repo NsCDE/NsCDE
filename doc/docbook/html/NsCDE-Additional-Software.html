@@ -44,6 +44,16 @@ variable <code class="varname">nscde_use_dunst</code> set to 1, NsCDE will make 
 highly configurable and is Window Manager and Desktop Environment agnostic. Usage of
 dunst(1) is highly recommended.
 </p><p>
+If found, and if configured in <code class="filename">$FVWM_USERDIR/NsCDE.conf</code> with InfoStore
+variable <code class="varname">nscde_use_picom</code> set to 1, NsCDE will make fresh copy of
+<code class="filename">$FVWM_USERDIR/Picom.conf</code> if it doesn't already exist, and start
+<span class="emphasis"><em>picom(1)</em></span> X compositor. Picom is very configurable, and user can
+customize this file as per wishes and needs. Usage of picom(1) is not necessary, but
+it may fix some tearing issues or make many openings and moves on the desktop look more
+smooth. On the other hand, it may introduce bugs in rare cases, as invisible popdown menus
+poor screen refresh and some background artefacts. Bug conditions are depending on X
+server version, actual video driver, picom's own configuration and mix of this circumstances.
+</p><p>
 X Terminal program? <span class="command"><strong>Urxvt</strong></span>, <span class="command"><strong> xterm</strong></span>,
 <span class="command"><strong>mate-terminal</strong></span>, <span class="command"><strong> terminus</strong></span> ... user's choice
 as always. As a slight recommendation, <span class="command"><strong>mate-terminal</strong></span> from MATE DE can be

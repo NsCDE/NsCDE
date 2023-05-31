@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>17.2. Gtk2, Gtk3, Qt4 and Qt5</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Integrations.html" title="17. Integration with X resources and widgets"><link rel="prev" href="NsCDE-Integrations.html" title="17. Integration with X resources and widgets"><link rel="next" href="NsCDE-Integration-Mozilla.html" title="17.3. Mozilla: Firefox and Thunderbird"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.2. Gtk2, Gtk3, Qt4 and Qt5</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Integrations.html">Prev</a> </td><th width="60%" align="center">17. Integration with X resources and widgets</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Integration-Mozilla.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Integration-Gtk-Qt"></a>17.2. Gtk2, Gtk3, Qt4 and Qt5</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>17.2. Gtk2, Gtk3, Qt4, Qt5 and Qt6</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-Integrations.html" title="17. Integration with X resources and widgets"><link rel="prev" href="NsCDE-Integrations.html" title="17. Integration with X resources and widgets"><link rel="next" href="NsCDE-Integration-Mozilla.html" title="17.3. Mozilla: Firefox and Thunderbird"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.2. Gtk2, Gtk3, Qt4, Qt5 and Qt6</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-Integrations.html">Prev</a> </td><th width="60%" align="center">17. Integration with X resources and widgets</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-Integration-Mozilla.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-Integration-Gtk-Qt"></a>17.2. Gtk2, Gtk3, Qt4, Qt5 and Qt6</h3></div></div></div><p>
 <span class="command"><strong>$NSCDE_TOOLSDIR/themegen</strong></span> with
 <code class="filename">$NSCDE_LIBDIR/NsCDE/python</code> and with
 <code class="filename">$NSCDE_DATADIR/integration/gtk2_gtk3_qt</code>
-are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
+are parts of the optional Gtk2, Gtk3, Qt4, Qt5 and Qt6 integration suite. When run from the
 <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> or manually with the
 <span class="command"><strong>$NSCDE_TOOLSDIR/themegen</strong></span>, with proper options, this will produce
 <code class="filename">$HOME/.themes/NsCDE</code> directory with either or both
@@ -11,7 +11,7 @@ Gtk2 and Gtk3 themes. <code class="filename">$HOME/.gtkrc-2.0</code> and
 directory with <code class="option">gtk-theme-name</code> option. Excessive button images on menus
 and buttons will be turned off of course.
 </p><div class="figure"><a name="fig_audacious"></a><p class="title"><b>Figure 75. Example: Audacious with motified NsCDE theme: GTK engine for Qt5</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_audacious.png" alt="Example: Audacious with motified NsCDE theme: GTK engine for Qt5"></div></div></div><br class="figure-break"><p>
-If Qt4 and/or Qt5 integration is also selected in
+If Qt4 and/or Qt5 integration based on GTK2 engine is also selected in
 <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, files
 <code class="filename">$HOME/.config/Trolltech.conf</code> and
 <code class="filename">$HOME/.config/qt5ct/qt5ct.conf</code> will
@@ -21,11 +21,12 @@ Gtk2 theme in use is deciding what GTK2 Qt4 and Qt5 engine will display.
 For Qt5 integration, make sure <span class="emphasis"><em>qt5-qtstyleplugins</em></span> (or something like
 that name) is installed: <code class="filename">platformthemes/libqgtk2.so</code> is needed.
 </p><p>
-As from NsCDE 2.1, Qt5 has an alternative Kvantum based engine which can be
-selected instead of default gtk2 based one. It is independent from gtk2 style
-plugin, but <span class="emphasis"><em>qt5-style-kvantum</em></span> (or similar system dependent
-package name) must be installed for this to work.
+In NsCDE 2.1, Qt5 alternative Kvantum SVG based engine was introduced. It is independent
+from gtk2 style plugin, but <span class="emphasis"><em>qt5-style-kvantum</em></span> (or similar system
+dependent package name) must be installed for this to work. From NsCDE 2.3 upwards, Kvantum
+engine is default for Qt5 in <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, and
+the only one option for newer Qt6.
 </p><p>
-All integrations of this type: GTK2, GTK3, QT4 and QT5 are turned on in the
+All integrations of this type: GTK2, GTK3, QT4, QT5 and QT6 are turned on in the
 <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>.
 </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-Integrations.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-Integrations.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-Integration-Mozilla.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">17. Integration with X resources and widgets </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 17.3. Mozilla: Firefox and Thunderbird</td></tr></table></div></body></html>

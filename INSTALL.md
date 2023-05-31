@@ -83,6 +83,8 @@ instead. (optional)
 
 - `xclip` - recommended optional addon
 
+- `picom` - (X compositor) optional addon that may fix tearing issues
+
 - `python3`
 
 - `python34-pyxdg` or `python3-pyxdg` or `python36-pyxdg` or ... (`FVWM`)

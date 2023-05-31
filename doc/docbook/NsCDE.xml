@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "2.2">
-<!ENTITY date "Jul 2022">
+<!ENTITY appversion "2.3">
+<!ENTITY date "Jun 2023">
 <!ENTITY app "NsCDE">
 ]>
 
@@ -35,6 +35,7 @@
       <year>2020</year>
       <year>2021</year>
       <year>2022</year>
+      <year>2023</year>
       <holder>M. Z.</holder>
     </copyright>
 
@@ -95,7 +96,8 @@ the same theme rules, icon theme, python programs, converters and generators, ko
 scripts, CDE-compatible backdrops and palettes and misc pieces for integration like CSS theme
 for Firefox and Thunderbird, and stand alone integrated desktop-making parts like stalonetray,
 dunst, xsettingsd, xscreensaver etc. Since NsCDE 2.1 for Qt5 there is a experimental Kvantum
-SVG based NsCDE engine as an alternative for Qt5 gtk2 engine.
+SVG based NsCDE engine as an alternative for Qt5 gtk2 engine. From NsCDE 2.3 and newer, Kvantum
+SVG based engine is default choice for Qt5, and the only choice for new Qt6.
 </para>
 </sect2>
 
@@ -390,7 +392,7 @@ from <filename class="directory">$NSCDE_USERDIR</filename>. System file is only 
 
 <para>
 The rest of configuration is in <filename class="directory">$NSCDE_USERDIR</filename>. For example Dunst.conf,
-Stylonetray.conf, Xsettingsd.conf, NsCDE.radi (rofi), Xset.conf and Xdefaults. This files are either read by
+Stylonetray.conf, Xsettingsd.conf, Picom.conf, NsCDE.rasi (rofi), Xset.conf and Xdefaults. This files are either read by
 their programs which are called and configured/integrated by NsCDE, or by X server (Xset.conf, Xdefaults*).
 Various subdirectories contains additional data generated for the user or configured by the user. This
 parts of the configuration are described in more detail later in this document.
@@ -463,6 +465,8 @@ Helper Dialogs:
 <listitem><para>WaitNotice - FvwmScript</para></listitem>
 <listitem><para>Splash - FvwmScript</para></listitem>
 <listitem><para>NColorsDialog (<link linkend="NsCDE-ColorMgr">Color Style Manager</link> part) -
+ FvwmScript</para></listitem>
+<listitem><para>ThemeIntegrationDialog (<link linkend="NsCDE-ColorMgr">Color Style Manager</link> part) -
  FvwmScript</para></listitem>
 <listitem><para>PaletteDialog - (Backdrop Style Manager part) - FvwmScript</para></listitem>
 </itemizedlist>
@@ -896,7 +900,7 @@ Click the workspace's button in the Workspace Manager on the Front Panel.
 <sect4 id="basics_display_workspace_keyboard">
 <title>Keyboard</title>
 <para>
-Press <keysym>Ctrl+Backspace</keysym> twice: first time to focus Front Panel, then second time to
+Press <keysym>Ctrl+Backspace+Backspace</keysym> twice: first time to focus Front Panel, then second time to
 get mouse pointer into the middle of Workspace Manager. Press the TAB key to
 move between WSM buttons. When pointer is above workspace you want to display.
 Press <keysym>Return</keysym>.
@@ -952,7 +956,7 @@ keyboard to convert text field back to button.
 <sect4 id="basics_rename_workspace_keyboard">
 <title>Keyboard</title>
 <para>
-Press <keysym>Ctrl+Backspace</keysym> twice: first time to focus Front Panel,
+Press <keysym>Ctrl+Backspace+Backspace</keysym> twice: first time to focus Front Panel,
 then second time to get mouse pointer into the middle of Workspace Manager.
 Press the TAB key to position pointer above workspace intended for renaming.
 Press <keysym>Return</keysym> to select (and change) the workspace. Press the
@@ -1003,7 +1007,7 @@ Menus used by applications include:
 Menus that you "pull down" from an application's menu bar by clicking the menu's
 name or typing Alt and its mnemonic. A mnemonic is an underlined character in a
 menu or item name. This has really nothing with NsCDE, but depends on gui toolkit
-used to build application. Like GTK2, GTK3 or Qt4, Qt5 ...
+used to build application. Like GTK2, GTK3 or Qt4, Qt5, Qt6 ...
 </para></listitem>
 
 <listitem><para>
@@ -1394,7 +1398,7 @@ This menu contains entries which are calling:
 screen, rolldown and shade front panel into thin border which. Calling this function again will
 deiconify windows on the screen, but only those which were iconified by this function and restore
 Front Panel in it's default width, height and position. Notice that Front Panel can be rolled down
-and restored also with the <keysym>Shift+Backspace</keysym>.
+and restored also with the <keysym>Shift+Backspace+Backspace</keysym>.
 </para>
 
 </sect3>
@@ -1917,7 +1921,7 @@ documentation browser.
 
 <listitem><para>
 In addition to iconification, Front Panel can be shaded to the bottom edge of the screen with
-<keysym>Shift+Backspace</keysym> action, and put back in it's place with the same key binding when
+<keysym>Shift+Backspace+Backspace</keysym> action, and put back in it's place with the same key binding when
 it is called again. Shade direction of the Front Panel is the opposite one from ordinary
 windows - they are rolled from the bottom up.
 </para></listitem>
@@ -3402,6 +3406,9 @@ color scheme from the list
 <keysym>C</keysym>: Loads <link linkend="NsCDE-NColorsDialog">Number of Colors dialog</link>
 </para></listitem>
 <listitem><para>
+<keysym>I</keysym>: Loads <link linkend="NsCDE-ThemeIntegrationDialog">Color Theme System Integration dialog</link>
+</para></listitem>
+<listitem><para>
 <keysym>M</keysym>: Loads Modify Color dialog as if <guibutton>Modify</guibutton> was pressed
 </para></listitem>
 <listitem><para>
@@ -3490,6 +3497,16 @@ Key Bindings:
 </itemizedlist>
 </para>
 
+</sect3>
+
+<sect3 id="NsCDE-ThemeIntegrationDialog">
+<title>Color Theme System Integration</title>
+<para>
+A <link linkend="NsCDE-ColorMgr">Color Style Manager</link> part
+</para>
+<para>
+Helper dialog to select graphical widgets with which ...
+</para>
 </sect3>
 
 </sect2>
@@ -3585,7 +3602,7 @@ initially and after changing color theme with <link linkend="NsCDE-ColorMgr">Col
 Font management is the area where NsCDE and CDE are probably most different.
 Font Style Manager is completely NsCDE tool to set fonts for usage inside
 FVWM and external toolkits integration (X Resources/Motif, GTK2, GTK3,
-Qt4, Qt5 ...).
+Qt4, Qt5, Qt6 ...).
 </para>
 <para>
 NsCDE defines 15 fonts. Five groups with three members:
@@ -6116,7 +6133,7 @@ To shade the currently focused window to the size of the title bar, press <keysy
 </para></listitem>
 
 <listitem><para>
-  <keysym>Shift+Backspace</keysym> will do the same as <keysym>Ctrl+Backspace,</keysym> but Front Panel
+  <keysym>Shift+Backspace+Backspace</keysym> will do the same as <keysym>Ctrl+Backspace+Backspace,</keysym> but Front Panel
     after repositioning is shaded to bottom border of the screen. Invoking this key sequence again will
     unshade the Front Panel. Middle mouse button on the borders of the frame has the same effect.
     </para>
@@ -6126,7 +6143,7 @@ To shade the currently focused window to the size of the title bar, press <keysy
 </para></listitem>
 
 <listitem><para>
-  <keysym>Ctrl+Backspace</keysym> in any context will raise Front Panel and reposition
+  <keysym>Ctrl+Backspace+Backspace</keysym> in any context will raise Front Panel and reposition
   it to it's default place on the screen. If key combination is pressed for the second time,
   focus and pointer focus will be transferred to the Front Panel, enabling <keysym>Meta+[0-9]</keysym>
   keys to function on subpanels and <keysym>Ctrl+Return</keysym> on icons of the Front Panel itself.
@@ -8580,7 +8597,7 @@ for the first public release.
 </listitem>
 
 <listitem><para>
-<emphasis>Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins</emphasis>
+<emphasis>Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt6ct, qt5-qtstyleplugins</emphasis>
 (optional) There is a great chance this libraries and some useful programs using them are
 already installed on user's system. If Gtk and Qt integration is activated in
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, there is no point not to have it
@@ -8591,17 +8608,23 @@ Notice about Qt4 and Qt5: <command>qt4-config</command> (or <command>qt-config</
 and <command>qt5ct</command>: Although colors will be applied, for font setting to take effect,
 qtconfig-qt4 (or qtconfig) must be run, something changed back and forth, and then applied/saved
 - no matter that you will see fonts of your choice already selected. This can be considered a bug.
-Same goes for Qt5.
+Same goes for Qt5 sometimes, and sometimes it just works (later fixes?). Qt6 seems to be ok.
 </para>
 <para>
-Notice about Qt5: <varname>QT_QPA_PLATFORMTHEME</varname> environment variable must be
+Notice about Qt5 and Qt6: <varname>QT_QPA_PLATFORMTHEME</varname> environment variable must be
 set, and be set to <varname>qt5ct</varname> value in order to run <command>qt5ct</command> configurator.
-This variable is set by default from the <filename>$FVWM_USERDIR/NsCDE.conf</filename>.
+This variable is set by default from the <filename>$FVWM_USERDIR/NsCDE.conf</filename>. Qt6 <command>qt6ct</command>
+will work with value beeing either <varname>qt5ct</varname> or <varname>qt6ct</varname>. Seems that the same goes for Qt5 on
+newer systems with Qt6 installed.
 </para>
 <para>
 If Qt5 Kvantum engine is desired for use with <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, <emphasis>qt5-style-kvantum</emphasis>
-must be installed and available, otherwise selecting alternative Qt5 integration based on Kvantum
-engine will not work.
+must be installed and available, otherwise trying to use Qt5 integration based on Kvantum engine will
+not work. From NsCDE 2.3 upwards, Qt5 Kvantum engine is the default for Qt5.
+</para>
+<para>
+Qt6 requires Kvantum engine (for Qt6). Otherwise, <link linkend="NsCDE-ColorMgr">Color Style Manager</link> will produce
+non-working <filename>$HOME/.copnfig/qt6ct/qt6ct.conf</filename>, and look of the Qt6 applications will default.
 </para></listitem>
 
 <listitem><para>
@@ -8618,6 +8641,10 @@ used instead. (optional)
 
 <listitem><para>
 <command>Dunst</command> for notification daemon (optional)
+</para></listitem>
+
+<listitem><para>
+<command>Picom</command> as an stand alone X compositor (optional)
 </para></listitem>
 
 <listitem><para>
@@ -8803,12 +8830,14 @@ Upon the first (successful) start, <filename class="directory">~/.NsCDE,</filena
 <varname>$FVWM_USERDIR</varname> is created, and only icons subdirectory is created as
 <command>fvwm-menu-desktop</command> is run. User will be presented with a first run NsCDE
 setup wizard in plain default xterm terminal emulator and with default color theme
-<emphasis>Broica</emphasis> in 8 colors. If Gkrellm and pnmixer programs are installed, on
-the system and found, they will be run too. Stalonetray and Dunst will be run if installed
+<emphasis>Broica</emphasis> in 8 colors. If Gkrellm program is installed, on
+the system and found, it will be run too. Stalonetray and Dunst will be run if installed
 and enabled by the user during the wizard process. Stalonetray and Dunst colors and fonts
 will be handled internally by Color Style Manager and Font Style Manager when theme or font
 is changed and the same goes for Gkrellm, rofi, Firefox, Thunderbird or any 3rd party program
-integrated with NsCDE color and font theme.
+integrated with NsCDE color and font theme. X compositor picom(1) is offered disabled by default,
+but if user decides to enable it on initial configuration or later, it will make one-time copy
+of modest example configuration file as <filename>$FVWM_USERDIR/Picom.conf</filename>.
 </para>
 <para>
 Initial setup wizard is a simple script (<command>$NSCDE_DATADIR/bootstrap</command>) from
@@ -8829,6 +8858,7 @@ the terminal which will run automatically and will set up the following:
 <listitem><para> <filename>~/.config/qt5ct/qt5ct.conf</filename> </para></listitem>
 <listitem><para> <filename>~/NsCDE/Stalonetray.conf if it does not exist yet</filename> </para></listitem>
 <listitem><para> <filename>~/NsCDE/Dunst.conf if it does not exist yet</filename> </para></listitem>
+<listitem><para> <filename>~/NsCDE/Picom.conf if it does not exist yet and if picom is enabled</filename> </para></listitem>
 <listitem><para>Visual Pager NsCDE addon Option</para></listitem>
 <listitem><para>Disable or enable XscreenSaver</para></listitem>
 <listitem><para>Disable or enable use of the XSETTINGS xsettingsd daemon</para></listitem>
@@ -8862,21 +8892,14 @@ It will be skipped, but GTK and Qt theme integration files will be edited with
 <command>$NSCDE_TOOLSDIR/confset</command> to change theme and settings. This settings can
 be further edited with <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, or with the
 tools from other desktop environments. After <command>bootstrap</command> script finishes setup,
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link> will be run and user asked to confirm
-default theme or change it. <emphasis>Do not</emphasis> avoid this step, because some program
-bits are not fully setup if local user configuration uses fallback bare defaults, (like a
-clock background) and must be generated in the
-<filename class="directory">~/.NsCDE/icons/NsCDE</filename> directory.
+default color (Broica) and font theme will be applied.
 </para>
 
 <para>
-After <link linkend="NsCDE-ColorMgr">Color Style Manager's</link> <guibutton>OK</guibutton> button
-is pressed, theme will be regenerated. Gtk and Qt themes will be regenerated only if their
-checkboxes in <link linkend="NsCDE-ColorMgr">Color Style Manager</link> are checked in.
-This is default since NsCDE 1.0. Setup script after the finish will ask user to press
-<keysym>RETURN</keysym> to exit. This is for user's convenience to read output of the setup for
-informative and/or diagnostic reasons. It is advised that after this setup
-<filename>$FVWM_USERDIR/NsCDE.conf</filename> is opened and further edited, for example
+After the initial theme is applied, Gtk and Qt themes regenerated and integrated with NsCDE,
+bootstrap script will ask user to press <keysym>RETURN</keysym> to exit. This is for user's
+convenience to read output of the setup for informative and/or diagnostic reasons. It isž
+advised that after this setup <filename>$FVWM_USERDIR/NsCDE.conf</filename> is further edited, for example
 InfoStoreAdd internal FVWM variables for <varname>terminal</varname>, <varname>browser</varname>,
 <varname>docsbrowser</varname>, <varname>taskmgr</varname>, <varname>printmgr</varname> to
 user's favorite programs for mentioned functions.
@@ -9031,12 +9054,12 @@ by default in <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 </sect2>
 
 <sect2 id="NsCDE-Integration-Gtk-Qt">
-<title>Gtk2, Gtk3, Qt4 and Qt5</title>
+<title>Gtk2, Gtk3, Qt4, Qt5 and Qt6</title>
 <para>
 <command>$NSCDE_TOOLSDIR/themegen</command> with
 <filename class="directory">$NSCDE_LIBDIR/NsCDE/python</filename> and with
 <filename class="directory">$NSCDE_DATADIR/integration/gtk2_gtk3_qt</filename>
-are parts of the optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run from the
+are parts of the optional Gtk2, Gtk3, Qt4, Qt5 and Qt6 integration suite. When run from the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link> or manually with the
 <command>$NSCDE_TOOLSDIR/themegen</command>, with proper options, this will produce
 <filename class="directory">$HOME/.themes/NsCDE</filename> directory with either or both
@@ -9059,7 +9082,7 @@ and buttons will be turned off of course.
 </figure>
 
 <para>
-If Qt4 and/or Qt5 integration is also selected in
+If Qt4 and/or Qt5 integration based on GTK2 engine is also selected in
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, files
 <filename>$HOME/.config/Trolltech.conf</filename> and
 <filename>$HOME/.config/qt5ct/qt5ct.conf</filename> will
@@ -9070,13 +9093,14 @@ For Qt5 integration, make sure <emphasis>qt5-qtstyleplugins</emphasis> (or somet
 that name) is installed: <filename>platformthemes/libqgtk2.so</filename> is needed.
 </para>
 <para>
-As from NsCDE 2.1, Qt5 has an alternative Kvantum based engine which can be
-selected instead of default gtk2 based one. It is independent from gtk2 style
-plugin, but <emphasis>qt5-style-kvantum</emphasis> (or similar system dependent
-package name) must be installed for this to work.
+In NsCDE 2.1, Qt5 alternative Kvantum SVG based engine was introduced. It is independent
+from gtk2 style plugin, but <emphasis>qt5-style-kvantum</emphasis> (or similar system
+dependent package name) must be installed for this to work. From NsCDE 2.3 upwards, Kvantum
+engine is default for Qt5 in <link linkend="NsCDE-ColorMgr">Color Style Manager</link>, and
+the only one option for newer Qt6.
 </para>
 <para>
-All integrations of this type: GTK2, GTK3, QT4 and QT5 are turned on in the
+All integrations of this type: GTK2, GTK3, QT4, QT5 and QT6 are turned on in the
 <link linkend="NsCDE-ColorMgr">Color Style Manager</link>.
 </para>
 </sect2>
@@ -9456,6 +9480,9 @@ to NsCDE/CDE icons configured in this same ImagePath
 Qt5: <filename>$HOME/.config/qt5ct/qt5ct.conf</filename>
 </para></listitem>
 <listitem><para>
+Qt6: <filename>$HOME/.config/qt6ct/qt6ct.conf</filename>
+</para></listitem>
+<listitem><para>
 GTK2: <filename>$HOME/.gtkrc-2.0</filename>
 </para></listitem>
 <listitem><para>
@@ -9586,6 +9613,17 @@ highly configurable and is Window Manager and Desktop Environment agnostic. Usag
 dunst(1) is highly recommended.
 </para>
 <para>
+If found, and if configured in <filename>$FVWM_USERDIR/NsCDE.conf</filename> with InfoStore
+variable <varname>nscde_use_picom</varname> set to 1, NsCDE will make fresh copy of
+<filename>$FVWM_USERDIR/Picom.conf</filename> if it doesn't already exist, and start
+<emphasis>picom(1)</emphasis> X compositor. Picom is very configurable, and user can
+customize this file as per wishes and needs. Usage of picom(1) is not necessary, but
+it may fix some tearing issues or make many openings and moves on the desktop look more
+smooth. On the other hand, it may introduce bugs in rare cases, as invisible popdown menus
+poor screen refresh and some background artefacts. Bug conditions are depending on X
+server version, actual video driver, picom's own configuration and mix of this circumstances.
+</para>
+<para>
 X Terminal program? <command>Urxvt</command>, <command> xterm</command>,
 <command>mate-terminal</command>, <command> terminus</command> ... user's choice
 as always. As a slight recommendation, <command>mate-terminal</command> from MATE DE can be
@@ -9685,7 +9723,7 @@ restarted again to get things right.
 </para>
 <para>
 Front Panel will appear on the primary screen, but can be moved to other
-screens by <keysym>Ctrl+Backspace</keysym> pressed while pointer is on the
+screens by <keysym>Ctrl+Backspace+Backspace</keysym> pressed while pointer is on the
 desired screen. This does not work always well when logical screens are
 of different resolution and it is specially visible when making third
 mouse click on the Workspace Manager buttons which can be popped down

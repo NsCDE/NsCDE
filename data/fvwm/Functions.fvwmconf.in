@@ -1570,9 +1570,9 @@ AddToFunc f_ChangeDesk
 + I f_SendToWSM
 + I Test (EnvMatch infostore.desklastpage 1, !EnvMatch infostore.pgm 1x1) f_DeskLastPage
 + I Test (EnvMatch infostore.pageshowrootpager 1, !EnvMatch infostore.pgm 1x1) f_RepositionLocalPager
-+ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.workspace.pager 1) \
++ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.nopage.workspace.pager 1) \
     None (GWMPager,CirculateHit) SendToModule FrontPanel PressButton FpPGM
-+ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.workspace.pager 1) \
++ I Test (EnvMatch infostore.pgm 1x1, EnvMatch infostore.nopage.workspace.pager 1) \
     f_Reschedule Periodic $[infostore.rootpagertimeout] 141414 \
     All (GWMPager, !HasPointer, CirculateHit, !Transient) \
     f_DescheduleAfterAction 141414 KillModule FvwmPager GWMPager

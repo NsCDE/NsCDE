@@ -39,7 +39,7 @@ the <code class="filename">Theme.py</code> code, some png pixmaps are cut and co
 this API. With present job and lack of time, there was no time to do this without PyQt4 or PyQt5
 for the first public release.
 </p></li><li class="listitem"><p>
-<span class="emphasis"><em>Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt5-qtstyleplugins</em></span>
+<span class="emphasis"><em>Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt6ct, qt5-qtstyleplugins</em></span>
 (optional) There is a great chance this libraries and some useful programs using them are
 already installed on user's system. If Gtk and Qt integration is activated in
 <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, there is no point not to have it
@@ -49,15 +49,20 @@ Notice about Qt4 and Qt5: <span class="command"><strong>qt4-config</strong></spa
 and <span class="command"><strong>qt5ct</strong></span>: Although colors will be applied, for font setting to take effect,
 qtconfig-qt4 (or qtconfig) must be run, something changed back and forth, and then applied/saved
 - no matter that you will see fonts of your choice already selected. This can be considered a bug.
-Same goes for Qt5.
+Same goes for Qt5 sometimes, and sometimes it just works (later fixes?). Qt6 seems to be ok.
 </p><p>
-Notice about Qt5: <code class="varname">QT_QPA_PLATFORMTHEME</code> environment variable must be
+Notice about Qt5 and Qt6: <code class="varname">QT_QPA_PLATFORMTHEME</code> environment variable must be
 set, and be set to <code class="varname">qt5ct</code> value in order to run <span class="command"><strong>qt5ct</strong></span> configurator.
-This variable is set by default from the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>.
+This variable is set by default from the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>. Qt6 <span class="command"><strong>qt6ct</strong></span>
+will work with value beeing either <code class="varname">qt5ct</code> or <code class="varname">qt6ct</code>. Seems that the same goes for Qt5 on
+newer systems with Qt6 installed.
 </p><p>
 If Qt5 Kvantum engine is desired for use with <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, <span class="emphasis"><em>qt5-style-kvantum</em></span>
-must be installed and available, otherwise selecting alternative Qt5 integration based on Kvantum
-engine will not work.
+must be installed and available, otherwise trying to use Qt5 integration based on Kvantum engine will
+not work. From NsCDE 2.3 upwards, Qt5 Kvantum engine is the default for Qt5.
+</p><p>
+Qt6 requires Kvantum engine (for Qt6). Otherwise, <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> will produce
+non-working <code class="filename">$HOME/.copnfig/qt6ct/qt6ct.conf</code>, and look of the Qt6 applications will default.
 </p></li><li class="listitem"><p>
 Recommended fonts for as close as possible CDE look are <span class="emphasis"><em>DejaVu Serif</em></span> for
 variable, and <span class="emphasis"><em>DejaVu Sans Mono</em></span> for monospaced fonts. Check should be made
@@ -68,6 +73,8 @@ used instead. (optional)
 <span class="command"><strong>Stalonetray</strong></span> for "tray" facility (optional)
 </p></li><li class="listitem"><p>
 <span class="command"><strong>Dunst</strong></span> for notification daemon (optional)
+</p></li><li class="listitem"><p>
+<span class="command"><strong>Picom</strong></span> as an stand alone X compositor (optional)
 </p></li><li class="listitem"><p>
 <span class="command"><strong>xterm</strong></span>
 </p></li><li class="listitem"><p>

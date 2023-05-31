@@ -342,7 +342,7 @@ function setup_nscde
 
    # Qt6
    if [ "$themeadd_qt6" = "qt6" ]; then
-      if [ -d "/usr/share/qt6" ] || [ -d "/usr/local/share/qt6" ] || [ -d "/usr/pkg/share/qt6" ]; then
+      if [ -d "/usr/share/qt6" ] || [ -d "/usr/local/share/qt6" ] || [ -d "/usr/pkg/qt6" ]; then
          mkdir -p $HOME/.config/qt6ct/{qss,colors}
          gettext -s "Setting NsCDE parameters in qt6ct.conf."
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k general -v '"DejaVu Serif,10"'
