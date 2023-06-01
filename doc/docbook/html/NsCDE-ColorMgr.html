@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5.5. Color Style Manager</title><link rel="stylesheet" type="text/css" href="NsCDE.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="Not so Common Desktop Environment (NsCDE) Manual"><link rel="up" href="NsCDE-GUI-Tools.html" title="5. GUI Tools"><link rel="prev" href="NsCDE-XscreenSaver.html" title="5.4. Screen Style Manager (Xscreensaver)"><link rel="next" href="NsCDE-ExecDialog.html" title="5.6. Exec Dialog"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5.5. Color Style Manager</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="NsCDE-XscreenSaver.html">Prev</a> </td><th width="60%" align="center">5. GUI Tools</th><td width="20%" align="right"> <a accesskey="n" href="NsCDE-ExecDialog.html">Next</a></td></tr></table><hr></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="NsCDE-ColorMgr"></a>5.5. Color Style Manager</h3></div></div></div><p>
-With Backdrop Style Manager, this is probably the most important theme tool in (Ns)CDE. This tool
+With Backdrop Style Manager, this is probably the most important theme tool in NsCDE. This tool
 applies colors to the widgets, menus, applications and backdrops. As in CDE, it reads color
 information from the palette files in
 <code class="filename">$NSCDE_DATADIR/palettes</code> and
@@ -96,60 +96,6 @@ in 4-color mode) and generated XPM file with all 40 colors displayed.
 Button <span class="guibutton">Number of Colors</span> calls transient window where user can select 4 or 8
 color mode. System default on modern desktop is 8.
 </p><p>
-What is most important new feature in Color Style Manager are integration
-options. This are:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
- Own currently used backdrop synchronization (default)
-</p></li><li class="listitem"><p>
- X resources in <code class="filename">$FVWM_USERDIR/Xdefaults</code> (default)
-</p></li><li class="listitem"><p>
- GTK2 (default)
-</p></li><li class="listitem"><p>
- GTK3 (default)
-</p></li><li class="listitem"><p>
- Qt4 (default)
-</p></li><li class="listitem"><p>
- Qt5 (default)
-</p></li><li class="listitem"><p>
- Qt5 Kvatnum (not yet default, alternative to Qt5 gtk2 engine)
-</p></li><li class="listitem"><p>
- User's <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> script if exists, called with
-  the path of the applied palette and number of colors.
-</p></li></ul></div><p>
-The last integration is used to integrate what default widget integrations
-cannot reach. For example Gkrellm skin or some terminal preferences.
-Qt/Qt5 integration is easy, since this toolkits can use their <span class="emphasis"><em>GTK</em></span> engine to
-integrate self with GTK theme. All that Color Style Manager has to do is to
-define GTK engine in <code class="filename">~/.config/Trolltech.conf</code> and
-<code class="filename">~/.config/qt5ct/qt5ct.conf</code> for colors from the new palette to be used.
-</p><p>
-Since NsCDE 2.1, Qt5 (but not Qt4) can use Kvantum based engine for integration with the
-rest of NsCDE and other widgets. This can be selected in Color Style Manager as an alternative
-to gtk2 bridge engine. It has somewhat finer tuned and polished look, however it has also still
-some problems in QDialog based widgets when scrollbars are used there.
-</p><p>
-GTK2 and GTK3 are heavy work part. Here, we are using work derived from one
-CDE theme for XFCE desktop and GTK2 + GTK3, purified and adapted for NsCDE
-(see <a class="xref" href="NsCDE-Credits.html" title="24. Credits">Section 24, &#8220;Credits&#8221;</a>).
-This is written in python. If turned on, this will produce
-<code class="filename">$HOME/.themes/NsCDE</code>
-directory with the theme for GTK2 and GTK3, and will edit <code class="filename">$HOME/.gtkrc-2.0</code> and
-<code class="filename">$HOME/.config/gtk-3.0/settings.ini</code> to put or change
-<code class="varname">gtk-theme-name</code> value. If NsCDE palette with dark background 4 color is choosen,
-Color Style Manager will put <code class="varname">gtk-application-prefer-dark-theme</code> into
-<code class="filename">$HOME/.gtkrc-2.0</code> and <code class="filename">$HOME/.config/gtk-3.0/settings.ini</code>. If
-palette with light color 4 (used for text areas and text fields usually) is choosen, that variable
-will be removed from the both configuration files. When switching off from NsCDE to some other
-environment, care must be taken manually to handle <code class="varname">gtk-application-prefer-dark-theme</code>
-in configuration files if last palette in NsCDE was using dark background.
-</p><p>
-If <code class="varname">nscde_use_xsettingsd</code> is set to 1 in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
-after applying new color theme, user's X Settings in <code class="filename">$FVWM_USERDIR/Xsettingsd.conf</code> will
-be adjusted and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
-This option can be enabled by editing NsCDE.conf or during initial setup. NsCDE starts <span class="command"><strong>xsettingsd</strong></span>
-daemon with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be present if it was not
-installed by the initial setup procedure.
-</p><p>
 Key Bindings:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 <span class="keysym">Ctrl+Return</span>: Perform a change. Like if <span class="guibutton">OK</span> was pressed.
@@ -217,5 +163,82 @@ Key Bindings:
 </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="NsCDE-ThemeIntegrationDialog"></a>5.5.2. Color Theme System Integration</h4></div></div></div><p>
 A <a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a> part
 </p><p>
-Helper dialog to select graphical widgets with which ...
+What is most important new feature in Color Style Manager are integration
+options. This are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+ Own currently used backdrop synchronization (default)
+</p></li><li class="listitem"><p>
+ X resources in <code class="filename">$FVWM_USERDIR/Xdefaults</code> (default)
+</p></li><li class="listitem"><p>
+ GTK2 (default)
+</p></li><li class="listitem"><p>
+ GTK3 (default)
+</p></li><li class="listitem"><p>
+ Qt4 (default)
+</p></li><li class="listitem"><p>
+ Qt5 (GTK2 engine deprecated)
+</p></li><li class="listitem"><p>
+ Qt5 Kvatnum engine
+</p></li><li class="listitem"><p>
+ Qt6 Kvatnum engine
+</p></li><li class="listitem"><p>
+ User's <code class="filename">$FVWM_USERDIR/libexec/colormgr.local</code> script if exists, called with
+  the path of the applied palette and number of colors.
+</p></li></ul></div><p>
+The last integration is used to integrate what default widget integrations
+cannot reach. For example Gkrellm skin or some terminal preferences.
+Qt/Qt5 integration is easy, since this toolkits can use their <span class="emphasis"><em>GTK</em></span> engine to
+integrate self with GTK theme.
+</p><p>
+Since NsCDE 2.3, Qt5 (but not Qt4) is using Kvantum based engine for integration with the
+rest of NsCDE and other widgets. Qt6 is using Kvantum exclusively. Old GTK2 Qt5 engine
+in Color Style Manager can be selected as an alternative to Kvantum engine if Kvantum engine
+is not available on the system. Qt6 is different: it uses only Kvantum engine, so Qt6 Kvantum
+engine is mandatory for newer systems using Qt6. Kvantum NsCDE theming has somewhat finer tuned
+and polished look, however it has still some inconsistencies in QDialog based widgets when scrollbars
+are used there in them.
+</p><p>
+GTK2 and GTK3 are heavy work part. Here, we are using work derived from one
+CDE theme for XFCE desktop and GTK2 + GTK3, purified and adapted for NsCDE
+(see <a class="xref" href="NsCDE-Credits.html" title="24. Credits">Section 24, &#8220;Credits&#8221;</a>).
+This is written in python. If turned on, this will produce
+<code class="filename">$HOME/.themes/NsCDE</code>
+directory with the theme for GTK2 and GTK3, and will edit <code class="filename">$HOME/.gtkrc-2.0</code> and
+<code class="filename">$HOME/.config/gtk-3.0/settings.ini</code> to put or change
+<code class="varname">gtk-theme-name</code> value. If NsCDE palette with dark background 4 color is choosen,
+Color Style Manager will put <code class="varname">gtk-application-prefer-dark-theme</code> into
+<code class="filename">$HOME/.gtkrc-2.0</code> and <code class="filename">$HOME/.config/gtk-3.0/settings.ini</code>. If
+palette with light color 4 (used for text areas and text fields usually) is choosen, that variable
+will be removed from the both configuration files. When switching off from NsCDE to some other
+environment, care must be taken manually to handle <code class="varname">gtk-application-prefer-dark-theme</code>
+in configuration files if last palette in NsCDE was using dark background.
+</p><p>
+If <code class="varname">nscde_use_xsettingsd</code> is set to 1 in the <code class="filename">$FVWM_USERDIR/NsCDE.conf</code>
+after applying new color theme, user's X Settings in <code class="filename">$FVWM_USERDIR/Xsettingsd.conf</code> will
+be adjusted and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
+This option can be enabled by editing NsCDE.conf or during initial setup. NsCDE starts <span class="command"><strong>xsettingsd</strong></span>
+daemon with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be present if it was not
+installed by the initial setup procedure.
+</p><p>
+This Helper dialog serves to select graphical widgets which will be integrated with NsCDE. As said above,
+NsCDE provides it's own X resources for Athena and Motif programs, theme engines for GTK2, GTK3, Qt4, Qt5
+and Qt6, and also extension to various single programs with
+<code class="filename">$[FVWM_USERDIR]/libexec/colormgr.local</code> like calculators, terminal emulators,
+Firefox, Thunderbird etc. Default selection assumes average modern Linux or similar system with
+GTK2, GTK3, Qt4 and Qt5 present. However, it is on user to decide here what of all this to run
+by selecting or unselecting checkboxes of the particular integration point.
+</p><div class="figure"><a name="fig_colormgr_integration"></a><p class="title"><b>Figure 33. Color Style Manager: Number of Colors</b></p><div class="figure-contents"><div class="mediaobject"><img src="img/fig_colormgr_integration.png" alt="Color Style Manager: Number of Colors"></div></div></div><br class="figure-break"><p>
+If not opened by clicking on <span class="guibutton">Integration Options ...</span> during work with
+<a class="link" href="NsCDE-ColorMgr.html" title="5.5. Color Style Manager">Color Style Manager</a>, this dialog will be activated
+automatically when <span class="guibutton">OK</span> is selected Color Style Manager to remind user
+of this important part of look integration options of NsCDE.
+</p><p>
+Key Bindings:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<span class="keysym">Ctrl+Return</span>: Selects OK.
+</p></li><li class="listitem"><p>
+<span class="keysym">Escape</span>: Quits Dialog.
+</p></li><li class="listitem"><p>
+<span class="keysym">Sun Help and F1</span>: Displays this help text.
+</p></li></ul></div><p>
 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="NsCDE-XscreenSaver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="NsCDE-GUI-Tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="NsCDE-ExecDialog.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">5.4. Screen Style Manager (Xscreensaver) </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 5.6. Exec Dialog</td></tr></table></div></body></html>
