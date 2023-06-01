@@ -2,9 +2,9 @@ Not so Common Desktop Environment (NsCDE) Manual
 
 M. Z.
 
-   This manual describes version 2.2 of NsCDE.
+   This manual describes version 2.3 of NsCDE.
 
-   Copyright © 2019, 2020, 2021, 2022 M. Z.
+   Copyright © 2019, 2020, 2021, 2022, 2023 M. Z.
 
    [fig_nscde_logo.png]
 
@@ -95,6 +95,7 @@ M. Z.
         5.5. Color Style Manager
 
               5.5.1. Number Of Colors Dialog
+              5.5.2. Color Theme System Integration
 
         5.6. Exec Dialog
         5.7. Font Style Manager
@@ -183,7 +184,7 @@ M. Z.
    17. Integration with X resources and widgets
 
         17.1. Integration of X resources
-        17.2. Gtk2, Gtk3, Qt4 and Qt5
+        17.2. Gtk2, Gtk3, Qt4, Qt5 and Qt6
         17.3. Mozilla: Firefox and Thunderbird
         17.4. Custom application integration
 
@@ -253,7 +254,9 @@ M. Z.
    stand alone integrated desktop-making parts like stalonetray,
    dunst, xsettingsd, xscreensaver etc. Since NsCDE 2.1 for Qt5
    there is a experimental Kvantum SVG based NsCDE engine as an
-   alternative for Qt5 gtk2 engine.
+   alternative for Qt5 gtk2 engine. From NsCDE 2.3 and newer,
+   Kvantum SVG based engine is default choice for Qt5, and the
+   only choice for new Qt6.
      __________________________________________________________
 
 1.2. Why NsCDE?
@@ -513,13 +516,14 @@ M. Z.
    System file is only an example.
 
    The rest of configuration is in $NSCDE_USERDIR. For example
-   Dunst.conf, Stylonetray.conf, Xsettingsd.conf, NsCDE.radi
-   (rofi), Xset.conf and Xdefaults. This files are either read by
-   their programs which are called and configured/integrated by
-   NsCDE, or by X server (Xset.conf, Xdefaults*). Various
-   subdirectories contains additional data generated for the user
-   or configured by the user. This parts of the configuration are
-   described in more detail later in this document.
+   Dunst.conf, Stylonetray.conf, Xsettingsd.conf, Picom.conf,
+   NsCDE.rasi (rofi), Xset.conf and Xdefaults. This files are
+   either read by their programs which are called and
+   configured/integrated by NsCDE, or by X server (Xset.conf,
+   Xdefaults*). Various subdirectories contains additional data
+   generated for the user or configured by the user. This parts of
+   the configuration are described in more detail later in this
+   document.
      __________________________________________________________
 
 2.2. Applets and GUI Tools
@@ -579,6 +583,8 @@ M. Z.
      * WaitNotice - FvwmScript
      * Splash - FvwmScript
      * NColorsDialog (Color Style Manager part) - FvwmScript
+     * ThemeIntegrationDialog (Color Style Manager part) -
+       FvwmScript
      * PaletteDialog - (Backdrop Style Manager part) - FvwmScript
 
    External fit-in Programs:
@@ -836,8 +842,8 @@ M. Z.
 
 3.3.1.2. Keyboard
 
-   Press Ctrl+Backspace twice: first time to focus Front Panel,
-   then second time to get mouse pointer into the middle of
+   Press Ctrl+Backspace+Backspace twice: first time to focus Front
+   Panel, then second time to get mouse pointer into the middle of
    Workspace Manager. Press the TAB key to move between WSM
    buttons. When pointer is above workspace you want to display.
    Press Return.
@@ -882,8 +888,8 @@ M. Z.
 
 3.3.3.2. Keyboard
 
-   Press Ctrl+Backspace twice: first time to focus Front Panel,
-   then second time to get mouse pointer into the middle of
+   Press Ctrl+Backspace+Backspace twice: first time to focus Front
+   Panel, then second time to get mouse pointer into the middle of
    Workspace Manager. Press the TAB key to position pointer above
    workspace intended for renaming. Press Return to select (and
    change) the workspace. Press the Press the Ctrl+Space. The
@@ -922,7 +928,7 @@ M. Z.
        A mnemonic is an underlined character in a menu or item
        name. This has really nothing with NsCDE, but depends on
        gui toolkit used to build application. Like GTK2, GTK3 or
-       Qt4, Qt5 ...
+       Qt4, Qt5, Qt6 ...
      * The same goes for contextual menus that "pop up" when you
        click mouse button 3 in an application window.
      __________________________________________________________
@@ -1166,7 +1172,7 @@ M. Z.
    the screen, but only those which were iconified by this
    function and restore Front Panel in it's default width, height
    and position. Notice that Front Panel can be rolled down and
-   restored also with the Shift+Backspace.
+   restored also with the Shift+Backspace+Backspace.
      __________________________________________________________
 
 3.4.6. Workspace Menu
@@ -1515,11 +1521,11 @@ sudo $NSCDE_LIBDIR/acpimgr poweroff
        Figure 14. Front Panel Launcher Context Menu
        [fig_fp_ctx_menu.png]
      * In addition to iconification, Front Panel can be shaded to
-       the bottom edge of the screen with Shift+Backspace action,
-       and put back in it's place with the same key binding when
-       it is called again. Shade direction of the Front Panel is
-       the opposite one from ordinary windows - they are rolled
-       from the bottom up.
+       the bottom edge of the screen with
+       Shift+Backspace+Backspace action, and put back in it's
+       place with the same key binding when it is called again.
+       Shade direction of the Front Panel is the opposite one from
+       ordinary windows - they are rolled from the bottom up.
      * Iconification is by default to bottom right screen edge,
        leaving last 96px space to the right for Stalonetray the
        while all other programs are by default iconified in the
@@ -2321,9 +2327,9 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 5.5. Color Style Manager
 
    With Backdrop Style Manager, this is probably the most
-   important theme tool in (Ns)CDE. This tool applies colors to
-   the widgets, menus, applications and backdrops. As in CDE, it
-   reads color information from the palette files in
+   important theme tool in NsCDE. This tool applies colors to the
+   widgets, menus, applications and backdrops. As in CDE, it reads
+   color information from the palette files in
    $NSCDE_DATADIR/palettes and $FVWM_USERDIR/palettes. Palettes
    are the 16bpp color definitions (8 of them). This colors and
    border bg/fg/sel colors calculated from them are the base of
@@ -2443,65 +2449,6 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    transient window where user can select 4 or 8 color mode.
    System default on modern desktop is 8.
 
-   What is most important new feature in Color Style Manager are
-   integration options. This are:
-
-     * Own currently used backdrop synchronization (default)
-     * X resources in $FVWM_USERDIR/Xdefaults (default)
-     * GTK2 (default)
-     * GTK3 (default)
-     * Qt4 (default)
-     * Qt5 (default)
-     * Qt5 Kvatnum (not yet default, alternative to Qt5 gtk2
-       engine)
-     * User's $FVWM_USERDIR/libexec/colormgr.local script if
-       exists, called with the path of the applied palette and
-       number of colors.
-
-   The last integration is used to integrate what default widget
-   integrations cannot reach. For example Gkrellm skin or some
-   terminal preferences. Qt/Qt5 integration is easy, since this
-   toolkits can use their GTK engine to integrate self with GTK
-   theme. All that Color Style Manager has to do is to define GTK
-   engine in ~/.config/Trolltech.conf and
-   ~/.config/qt5ct/qt5ct.conf for colors from the new palette to
-   be used.
-
-   Since NsCDE 2.1, Qt5 (but not Qt4) can use Kvantum based engine
-   for integration with the rest of NsCDE and other widgets. This
-   can be selected in Color Style Manager as an alternative to
-   gtk2 bridge engine. It has somewhat finer tuned and polished
-   look, however it has also still some problems in QDialog based
-   widgets when scrollbars are used there.
-
-   GTK2 and GTK3 are heavy work part. Here, we are using work
-   derived from one CDE theme for XFCE desktop and GTK2 + GTK3,
-   purified and adapted for NsCDE (see Section 24). This is
-   written in python. If turned on, this will produce
-   $HOME/.themes/NsCDE directory with the theme for GTK2 and GTK3,
-   and will edit $HOME/.gtkrc-2.0 and
-   $HOME/.config/gtk-3.0/settings.ini to put or change
-   gtk-theme-name value. If NsCDE palette with dark background 4
-   color is choosen, Color Style Manager will put
-   gtk-application-prefer-dark-theme into $HOME/.gtkrc-2.0 and
-   $HOME/.config/gtk-3.0/settings.ini. If palette with light color
-   4 (used for text areas and text fields usually) is choosen,
-   that variable will be removed from the both configuration
-   files. When switching off from NsCDE to some other environment,
-   care must be taken manually to handle
-   gtk-application-prefer-dark-theme in configuration files if
-   last palette in NsCDE was using dark background.
-
-   If nscde_use_xsettingsd is set to 1 in the
-   $FVWM_USERDIR/NsCDE.conf after applying new color theme, user's
-   X Settings in $FVWM_USERDIR/Xsettingsd.conf will be adjusted
-   and xsettingsd(1) daemon restarted for settings in GTK and Qt
-   applications to be applied immediately. This option can be
-   enabled by editing NsCDE.conf or during initial setup. NsCDE
-   starts xsettingsd daemon with "-c
-   $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be
-   present if it was not installed by the initial setup procedure.
-
    Key Bindings:
 
      * Ctrl+Return: Perform a change. Like if OK was pressed.
@@ -2509,6 +2456,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * P: Like Preview was pressed. Previews currently selected
        color scheme from the list
      * C: Loads Number of Colors dialog
+     * I: Loads Color Theme System Integration dialog
      * M: Loads Modify Color dialog as if Modify was pressed
      * Up/Down: Goes one item on the color schemes list up or
        down.
@@ -2562,6 +2510,99 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
+5.5.2. Color Theme System Integration
+
+   A Color Style Manager part
+
+   What is most important new feature in Color Style Manager are
+   integration options. This are:
+
+     * Own currently used backdrop synchronization (default)
+     * X resources in $FVWM_USERDIR/Xdefaults (default)
+     * GTK2 (default)
+     * GTK3 (default)
+     * Qt4 (default)
+     * Qt5 (GTK2 engine deprecated)
+     * Qt5 Kvatnum engine
+     * Qt6 Kvatnum engine
+     * User's $FVWM_USERDIR/libexec/colormgr.local script if
+       exists, called with the path of the applied palette and
+       number of colors.
+
+   The last integration is used to integrate what default widget
+   integrations cannot reach. For example Gkrellm skin or some
+   terminal preferences. Qt/Qt5 integration is easy, since this
+   toolkits can use their GTK engine to integrate self with GTK
+   theme.
+
+   Since NsCDE 2.3, Qt5 (but not Qt4) is using Kvantum based
+   engine for integration with the rest of NsCDE and other
+   widgets. Qt6 is using Kvantum exclusively. Old GTK2 Qt5 engine
+   in Color Style Manager can be selected as an alternative to
+   Kvantum engine if Kvantum engine is not available on the
+   system. Qt6 is different: it uses only Kvantum engine, so Qt6
+   Kvantum engine is mandatory for newer systems using Qt6.
+   Kvantum NsCDE theming has somewhat finer tuned and polished
+   look, however it has still some inconsistencies in QDialog
+   based widgets when scrollbars are used there in them.
+
+   GTK2 and GTK3 are heavy work part. Here, we are using work
+   derived from one CDE theme for XFCE desktop and GTK2 + GTK3,
+   purified and adapted for NsCDE (see Section 24). This is
+   written in python. If turned on, this will produce
+   $HOME/.themes/NsCDE directory with the theme for GTK2 and GTK3,
+   and will edit $HOME/.gtkrc-2.0 and
+   $HOME/.config/gtk-3.0/settings.ini to put or change
+   gtk-theme-name value. If NsCDE palette with dark background 4
+   color is choosen, Color Style Manager will put
+   gtk-application-prefer-dark-theme into $HOME/.gtkrc-2.0 and
+   $HOME/.config/gtk-3.0/settings.ini. If palette with light color
+   4 (used for text areas and text fields usually) is choosen,
+   that variable will be removed from the both configuration
+   files. When switching off from NsCDE to some other environment,
+   care must be taken manually to handle
+   gtk-application-prefer-dark-theme in configuration files if
+   last palette in NsCDE was using dark background.
+
+   If nscde_use_xsettingsd is set to 1 in the
+   $FVWM_USERDIR/NsCDE.conf after applying new color theme, user's
+   X Settings in $FVWM_USERDIR/Xsettingsd.conf will be adjusted
+   and xsettingsd(1) daemon restarted for settings in GTK and Qt
+   applications to be applied immediately. This option can be
+   enabled by editing NsCDE.conf or during initial setup. NsCDE
+   starts xsettingsd daemon with "-c
+   $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be
+   present if it was not installed by the initial setup procedure.
+
+   This Helper dialog serves to select graphical widgets which
+   will be integrated with NsCDE. As said above, NsCDE provides
+   it's own X resources for Athena and Motif programs, theme
+   engines for GTK2, GTK3, Qt4, Qt5 and Qt6, and also extension to
+   various single programs with
+   $[FVWM_USERDIR]/libexec/colormgr.local like calculators,
+   terminal emulators, Firefox, Thunderbird etc. Default selection
+   assumes average modern Linux or similar system with GTK2, GTK3,
+   Qt4 and Qt5 present. However, it is on user to decide here what
+   of all this to run by selecting or unselecting checkboxes of
+   the particular integration point.
+
+   Figure 33. Color Style Manager: Number of Colors
+
+   [fig_colormgr_integration.png]
+
+   If not opened by clicking on Integration Options ... during
+   work with Color Style Manager, this dialog will be activated
+   automatically when OK is selected Color Style Manager to remind
+   user of this important part of look integration options of
+   NsCDE.
+
+   Key Bindings:
+
+     * Ctrl+Return: Selects OK.
+     * Escape: Quits Dialog.
+     * Sun Help and F1: Displays this help text.
+     __________________________________________________________
+
 5.6. Exec Dialog
 
    By default key binding for Exec Dialog is Alt+F12, and an entry
@@ -2574,7 +2615,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    down keys. Escape key closes dialog, enter executes, Ctrl+Enter
    executes in default terminal application.
 
-   Figure 33. Exec Dialog
+   Figure 34. Exec Dialog
 
    [fig_exec.png]
 
@@ -2608,7 +2649,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    seconds initially and after changing color theme with Color
    Style Manager.
 
-   Figure 34. Rofi Launcher
+   Figure 35. Rofi Launcher
 
    [fig_rofi.png]
      __________________________________________________________
@@ -2618,7 +2659,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    Font management is the area where NsCDE and CDE are probably
    most different. Font Style Manager is completely NsCDE tool to
    set fonts for usage inside FVWM and external toolkits
-   integration (X Resources/Motif, GTK2, GTK3, Qt4, Qt5 ...).
+   integration (X Resources/Motif, GTK2, GTK3, Qt4, Qt5, Qt6 ...).
 
    NsCDE defines 15 fonts. Five groups with three members:
 
@@ -2652,7 +2693,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    default, their checkboxes can be unselected if some of this
    widget integrations is not desirable by the user.
 
-   Figure 35. Font Style Manager
+   Figure 36. Font Style Manager
 
    [fig_fontmgr.png]
 
@@ -2731,9 +2772,11 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    will be asked to name a new fontset with the popup dialog. Name
    "custom" is the default proposal in the dialog, but it should
    be changed, because this name is predestinated to be rewritten
-   on the next Font Style Manager saving action. Further, user
-   will be asked to immediately restart FVWM, for changes to be
-   applied from all parts from the new configuration.
+   on the next Font Style Manager saving action. Most of the
+   visual changes should take effect immediately. GTK2/GTK3
+   programs included if xsettingsd(1) daemon is active and used.
+   Some programs will need to be reopened for new font to take
+   effect.
 
    Key Bindings:
 
@@ -2790,7 +2833,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    writes $FVWM_USERDIR/Xset.conf file which is a generated xset
    command batch executed during startup.
 
-   Figure 36. Keyboard Style Manager
+   Figure 37. Keyboard Style Manager
 
    [fig_keyboardmgr.png]
 
@@ -2830,7 +2873,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    detected by FVWM and NsCDE. OK performs an action, Dismiss
    quits Occupy tool without taking action.
 
-   Figure 37. Occupy Workspace, Page or Monitor
+   Figure 38. Occupy Workspace, Page or Monitor
 
    [fig_occupy_workspace.png]
 
@@ -2878,7 +2921,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    environment. It also implements some NsCDE and FVWM specific
    options.
 
-   Figure 38. Graphical Workspace Manager - GWM
+   Figure 39. Graphical Workspace Manager - GWM
 
    [fig_gwm.png]
 
@@ -2977,7 +3020,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        be written in pager windows frames with very small font
        instead of mini icons. Not default.
 
-   Figure 39. Graphical Workspace Manager: Options
+   Figure 40. Graphical Workspace Manager: Options
 
    [fig_gwmoptions.png]
 
@@ -3025,7 +3068,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    monitor resolutions are possible and saved under separate
    sections in $FVWM_USERDIR/GeoDB.ini.
 
-   Figure 40. Window Geometry Manager
+   Figure 41. Window Geometry Manager
 
    [fig_geometrymgr.png]
 
@@ -3077,7 +3120,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    pointer to Save button for actions to be written in config
    files.
 
-   Figure 41. Mouse Style Manager
+   Figure 42. Mouse Style Manager
 
    [fig_mousemgr.png]
 
@@ -3110,7 +3153,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    this settings on runtime, and point mouse to Save button for
    changes to be written.
 
-   Figure 42. Mouse Style Manager
+   Figure 43. Mouse Style Manager
 
    [fig_powermgr.png]
 
@@ -3133,7 +3176,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    functions cannot be easy implemented even if some file manager
    is taken to act as application manager.
 
-   Figure 43. Subpanel Manager
+   Figure 44. Subpanel Manager
 
    [fig_subpanelmgr.png]
 
@@ -3184,7 +3227,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    button regenerates subpanel, while Save button does this and
    also quits Subpanel Manager.
 
-   Figure 44. Configured Subpanel
+   Figure 45. Configured Subpanel
 
    [fig_subpanel.png]
 
@@ -3226,7 +3269,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    It reloads configuration of the given subpanel after applying
    changes and exiting with OK.
 
-   Figure 45. Subpanel Settings Dialog
+   Figure 46. Subpanel Settings Dialog
 
    [fig_subpanelsettings.png]
 
@@ -3240,7 +3283,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.16. Front Panel Icon Manager
 
-   Figure 46. Front Panel Icon Manager
+   Figure 47. Front Panel Icon Manager
 
    [fig_FpIconMgr1.png]
 
@@ -3263,7 +3306,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    the contextual menu called with mouse button 3 on the Front
    Panel's icon.
 
-   Figure 47. Front Panel Icon Manager: select an action
+   Figure 48. Front Panel Icon Manager: select an action
 
    [fig_FpIconMgr2.png]
 
@@ -3298,7 +3341,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    without pm-utils but with systemd(1) and FreeBSD with
    acpiconf(8) are supported in this moment.
 
-   Figure 48. Sytem Action Dialog
+   Figure 49. Sytem Action Dialog
 
    [fig_SysActionDialog.png]
 
@@ -3324,7 +3367,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.18. Sysinfo
 
-   Figure 49. System Information Dialog (Sysinfo)
+   Figure 50. System Information Dialog (Sysinfo)
 
    [fig_sysinfo.png]
    Well known Workstation Information info dialog. It doesn't have
@@ -3371,7 +3414,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.19.1. Configuration Section: Window Behavior
 
-   Figure 50. Window Style Manager: Window and Window Icons tabs
+   Figure 51. Window Style Manager: Window and Window Icons tabs
 
    [fig_windowmgr1.png]
 
@@ -3432,7 +3475,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.19.3. Configuration Section: Page Edges
 
-   Figure 51. Window Style Manager: Page Edges and Animation tabs
+   Figure 52. Window Style Manager: Page Edges and Animation tabs
 
    [fig_windowmgr2.png]
 
@@ -3509,7 +3552,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        Panel
      * Desktop Model on multi head monitor setup (FVWM3 only)
 
-   Figure 52. Workspaces and Pages Manager
+   Figure 53. Workspaces and Pages Manager
 
    [fig_wspgmgr.png]
 
@@ -3602,7 +3645,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    are refreshed. Check All Now button when pressed will refresh
    status for all items, selected or not.
 
-   Figure 53. NsCDE Process Manager
+   Figure 54. NsCDE Process Manager
 
    [fig_nprocmgr.png]
 
@@ -3622,7 +3665,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.1. ActionForm - FvwmScript
 
-   Figure 54. Action Form
+   Figure 55. Action Form
 
    [fig_action_form.png]
 
@@ -3643,7 +3686,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.3. FilePicker - FvwmScript
 
-   Figure 55. File Picker
+   Figure 56. File Picker
 
    [fig_file_picker.png]
 
@@ -3659,7 +3702,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.4. InputForm - FvwmScript
 
-   Figure 56. Input Form
+   Figure 57. Input Form
 
    [fig_input_form.png]
 
@@ -3680,7 +3723,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    clicked or receives return or escape key, it will dissapear
    immediately.
 
-   Figure 57. Wait Notice
+   Figure 58. Wait Notice
 
    [fig_wait_notice.png]
 
@@ -3690,7 +3733,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.6. Splash - FvwmScript
 
-   Figure 58. NsCDE Splash Screen
+   Figure 59. NsCDE Splash Screen
 
    [fig_splash.png]
 
@@ -3992,17 +4035,17 @@ Silent Key Tab A S -
      * To open Graphical Workspace Manager or "GWM", press
        Meta+Alt+Home key binding. Keys Control+Q if pressed in the
        context of GWM window, will dismiss GWM.
-       Figure 59. GWM - Graphical Workspace Manager
+       Figure 60. GWM - Graphical Workspace Manager
        [fig_gwm.png]
      * To open Local Pager, press Meta+Backspace in any context.
        Pressing Meta+Backspace again (but in the context of Local
        Pager) dismisses Local Pager.
-       Figure 60. Local Pager
+       Figure 61. Local Pager
        [fig_localpager.png]
      * To open Global Pager, press Meta+Alt+Backspace in any
        context. Pressing Meta+Alt+Backspace again dismisses Global
        Pager.
-       Figure 61. Global Pager
+       Figure 62. Global Pager
        [fig_globalpager.png]
      * To lock the screen if X Screen Saver is enabled, press
        Meta+Alt+L.
@@ -4090,7 +4133,7 @@ Silent Key Tab A S -
      * Pressing Meta+Alt+M in the context of the Front Panel will
        open Front Panel Operations Menu by clicking leftmost top
        button just like in any other window or subpanel.
-       Figure 62. Window Options Menu (cua)
+       Figure 63. Window Options Menu (cua)
        [fig_cua_menu.png]
      * To open subpanels 1-5 and 6-10, press Meta+<number> in the
        context (focus) of the Front Panel.
@@ -4257,20 +4300,21 @@ Silent Key Tab A S -
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-     * Shift+Backspace will do the same as Ctrl+Backspace, but
-       Front Panel after repositioning is shaded to bottom border
-       of the screen. Invoking this key sequence again will
-       unshade the Front Panel. Middle mouse button on the borders
-       of the frame has the same effect.
+     * Shift+Backspace+Backspace will do the same as
+       Ctrl+Backspace+Backspace, but Front Panel after
+       repositioning is shaded to bottom border of the screen.
+       Invoking this key sequence again will unshade the Front
+       Panel. Middle mouse button on the borders of the frame has
+       the same effect.
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-     * Ctrl+Backspace in any context will raise Front Panel and
-       reposition it to it's default place on the screen. If key
-       combination is pressed for the second time, focus and
-       pointer focus will be transferred to the Front Panel,
-       enabling Meta+[0-9] keys to function on subpanels and
-       Ctrl+Return on icons of the Front Panel itself.
+     * Ctrl+Backspace+Backspace in any context will raise Front
+       Panel and reposition it to it's default place on the
+       screen. If key combination is pressed for the second time,
+       focus and pointer focus will be transferred to the Front
+       Panel, enabling Meta+[0-9] keys to function on subpanels
+       and Ctrl+Return on icons of the Front Panel itself.
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
@@ -4280,7 +4324,7 @@ Silent Key Tab A S -
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-       Figure 63. Window Geometry Manager
+       Figure 64. Window Geometry Manager
        [fig_geometrymgr.png]
      * Meta+Alt+F In the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
@@ -4294,7 +4338,7 @@ Silent Key Tab A S -
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-       Figure 64. FVWM Ident Dialog
+       Figure 65. FVWM Ident Dialog
        [fig_fvwmident.png]
      * Meta+Alt+T In the context of a window or it's decorations
        removes title bar of that window leaving only content,
@@ -4382,7 +4426,7 @@ Silent Key Tab A S -
        semi-transient mode, this pager, if not called as full GWM
        will disappear shortly after losing mouse focus, to free up
        space on the screen.
-       Figure 65. Global Pager
+       Figure 66. Global Pager
        [fig_globalpager.png]
      * Alt+Tab is cycling trough pages of the active page of the
        current workspace from up to down and then right up to down
@@ -4405,7 +4449,7 @@ Silent Key Tab A S -
        frame sides and a title bar pops up Window Options context
        menu. In the context of an icon, it brings Icon Operations
        Menu, similar to Window Operations Menu.
-       Figure 66. Window Options Menu (nscde1x)
+       Figure 67. Window Options Menu (nscde1x)
        [fig_nscde1x_menu.png]
      * Key Meta+Alt+O - same as Meta+Space if called in the window
        context.
@@ -4792,7 +4836,7 @@ Silent Key Tab A S -
      * Control+ middle mouse click will call extended version of
        the WindowList with additional window info such as page
        number and window geometry.
-       Figure 67. Window List (Extended)
+       Figure 68. Window List (Extended)
        [fig_winlist_ext.png]
      * Left mouse button on border of the shaded Front Panel
        context will de-shade and reposition Front Panel
@@ -4878,7 +4922,7 @@ Silent Key Tab A S -
    Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
 
 
-   Figure 68. Visual: resulting applet on the Front Panel
+   Figure 69. Visual: resulting applet on the Front Panel
 
    [fig_cust_applet.png]
 
@@ -5455,7 +5499,7 @@ Silent Key Tab A S -
 
 9.22. LocalPager.fvwmconf
 
-   Figure 69. Local Pager
+   Figure 70. Local Pager
 
    [fig_localpager.png]
 
@@ -5949,7 +5993,7 @@ Silent Key Tab A S -
        pixmaps are cut and colored with functions from this API.
        With present job and lack of time, there was no time to do
        this without PyQt4 or PyQt5 for the first public release.
-     * Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct,
+     * Gtk2, Gtk3, Qt4, Qt5, qtconfig-qt4, qt5ct, qt6ct,
        qt5-qtstyleplugins (optional) There is a great chance this
        libraries and some useful programs using them are already
        installed on user's system. If Gtk and Qt integration is
@@ -5960,15 +6004,24 @@ Silent Key Tab A S -
        take effect, qtconfig-qt4 (or qtconfig) must be run,
        something changed back and forth, and then applied/saved -
        no matter that you will see fonts of your choice already
-       selected. This can be considered a bug. Same goes for Qt5.
-       Notice about Qt5: QT_QPA_PLATFORMTHEME environment variable
-       must be set, and be set to qt5ct value in order to run
-       qt5ct configurator. This variable is set by default from
-       the $FVWM_USERDIR/NsCDE.conf.
+       selected. This can be considered a bug. Same goes for Qt5
+       sometimes, and sometimes it just works (later fixes?). Qt6
+       seems to be ok.
+       Notice about Qt5 and Qt6: QT_QPA_PLATFORMTHEME environment
+       variable must be set, and be set to qt5ct value in order to
+       run qt5ct configurator. This variable is set by default
+       from the $FVWM_USERDIR/NsCDE.conf. Qt6 qt6ct will work with
+       value beeing either qt5ct or qt6ct. Seems that the same
+       goes for Qt5 on newer systems with Qt6 installed.
        If Qt5 Kvantum engine is desired for use with Color Style
        Manager, qt5-style-kvantum must be installed and available,
-       otherwise selecting alternative Qt5 integration based on
-       Kvantum engine will not work.
+       otherwise trying to use Qt5 integration based on Kvantum
+       engine will not work. From NsCDE 2.3 upwards, Qt5 Kvantum
+       engine is the default for Qt5.
+       Qt6 requires Kvantum engine (for Qt6). Otherwise, Color
+       Style Manager will produce non-working
+       $HOME/.copnfig/qt6ct/qt6ct.conf, and look of the Qt6
+       applications will default.
      * Recommended fonts for as close as possible CDE look are
        DejaVu Serif for variable, and DejaVu Sans Mono for
        monospaced fonts. Check should be made if this fonts are
@@ -5977,6 +6030,7 @@ Silent Key Tab A S -
        selected and used instead. (optional)
      * Stalonetray for "tray" facility (optional)
      * Dunst for notification daemon (optional)
+     * Picom as an stand alone X compositor (optional)
      * xterm
      * python3
      * python36-pyxdg or python3-pyxdg
@@ -6065,7 +6119,7 @@ Silent Key Tab A S -
    directory $PREFIX/share/doc/nscde/examples/ for MATE, KDE, LXDE
    and similar DE integrations and play with this if you like.
 
-   Figure 70. NsCDE Splash Screen
+   Figure 71. NsCDE Splash Screen
 
    [fig_splash.png]
      __________________________________________________________
@@ -6118,14 +6172,17 @@ Silent Key Tab A S -
    created as fvwm-menu-desktop is run. User will be presented
    with a first run NsCDE setup wizard in plain default xterm
    terminal emulator and with default color theme Broica in 8
-   colors. If Gkrellm and pnmixer programs are installed, on the
-   system and found, they will be run too. Stalonetray and Dunst
-   will be run if installed and enabled by the user during the
-   wizard process. Stalonetray and Dunst colors and fonts will be
-   handled internally by Color Style Manager and Font Style
-   Manager when theme or font is changed and the same goes for
-   Gkrellm, rofi, Firefox, Thunderbird or any 3rd party program
-   integrated with NsCDE color and font theme.
+   colors. If Gkrellm program is installed, on the system and
+   found, it will be run too. Stalonetray and Dunst will be run if
+   installed and enabled by the user during the wizard process.
+   Stalonetray and Dunst colors and fonts will be handled
+   internally by Color Style Manager and Font Style Manager when
+   theme or font is changed and the same goes for Gkrellm, rofi,
+   Firefox, Thunderbird or any 3rd party program integrated with
+   NsCDE color and font theme. X compositor picom(1) is offered
+   disabled by default, but if user decides to enable it on
+   initial configuration or later, it will make one-time copy of
+   modest example configuration file as $FVWM_USERDIR/Picom.conf.
 
    Initial setup wizard is a simple script
    ($NSCDE_DATADIR/bootstrap) from the terminal which will run
@@ -6144,6 +6201,8 @@ Silent Key Tab A S -
      * ~/.config/qt5ct/qt5ct.conf
      * ~/NsCDE/Stalonetray.conf if it does not exist yet
      * ~/NsCDE/Dunst.conf if it does not exist yet
+     * ~/NsCDE/Picom.conf if it does not exist yet and if picom is
+       enabled
      * Visual Pager NsCDE addon Option
      * Disable or enable XscreenSaver
      * Disable or enable use of the XSETTINGS xsettingsd daemon
@@ -6155,7 +6214,7 @@ Silent Key Tab A S -
      * Configure favorite X file manager, if desired
      * Configure favorite X text editor, if desired
 
-   Figure 71. NsCDE first time setup (bootstrap)
+   Figure 72. NsCDE first time setup (bootstrap)
 
    [fig_bootstrap.png]
 
@@ -6169,24 +6228,18 @@ Silent Key Tab A S -
    $NSCDE_TOOLSDIR/confset to change theme and settings. This
    settings can be further edited with Color Style Manager, or
    with the tools from other desktop environments. After bootstrap
-   script finishes setup, Color Style Manager will be run and user
-   asked to confirm default theme or change it. Do not avoid this
-   step, because some program bits are not fully setup if local
-   user configuration uses fallback bare defaults, (like a clock
-   background) and must be generated in the ~/.NsCDE/icons/NsCDE
-   directory.
+   script finishes setup, default color (Broica) and font theme
+   will be applied.
 
-   After Color Style Manager's OK button is pressed, theme will be
-   regenerated. Gtk and Qt themes will be regenerated only if
-   their checkboxes in Color Style Manager are checked in. This is
-   default since NsCDE 1.0. Setup script after the finish will ask
-   user to press RETURN to exit. This is for user's convenience to
-   read output of the setup for informative and/or diagnostic
-   reasons. It is advised that after this setup
-   $FVWM_USERDIR/NsCDE.conf is opened and further edited, for
-   example InfoStoreAdd internal FVWM variables for terminal,
-   browser, docsbrowser, taskmgr, printmgr to user's favorite
-   programs for mentioned functions.
+   After the initial theme is applied, Gtk and Qt themes
+   regenerated and integrated with NsCDE, bootstrap script will
+   ask user to press RETURN to exit. This is for user's
+   convenience to read output of the setup for informative and/or
+   diagnostic reasons. It isž advised that after this setup
+   $FVWM_USERDIR/NsCDE.conf is further edited, for example
+   InfoStoreAdd internal FVWM variables for terminal, browser,
+   docsbrowser, taskmgr, printmgr to user's favorite programs for
+   mentioned functions.
 
    Layout of the $FVWM_USERDIR after the initial setup should look
    like this:
@@ -6233,7 +6286,7 @@ Silent Key Tab A S -
    variable $[infostore.xlogcmd] will be "tail -300f
    ~/.xsession-errors".
 
-   Figure 72. Watch Errors (logging)
+   Figure 73. Watch Errors (logging)
 
    [fig_watcherrors.png]
 
@@ -6251,7 +6304,7 @@ Silent Key Tab A S -
    the "Watch Errors" window has a custom menu entry Fvwm
    Diagnostic Console which starts FVWM module FvwmConsole.
 
-   Figure 73. Personalized Window Operations Menu on "Watch
+   Figure 74. Personalized Window Operations Menu on "Watch
    Errors" window
 
    [fig_appmenu1.png]
@@ -6262,7 +6315,7 @@ Silent Key Tab A S -
    Menu "NsCDE Process Manager" which will run the same named
    application on demand.
 
-   Figure 74. FVWM Diagnostic Console
+   Figure 75. FVWM Diagnostic Console
 
    [fig_fvwmconsole.png]
      __________________________________________________________
@@ -6299,12 +6352,12 @@ Silent Key Tab A S -
    turned on by default in Color Style Manager.
      __________________________________________________________
 
-17.2. Gtk2, Gtk3, Qt4 and Qt5
+17.2. Gtk2, Gtk3, Qt4, Qt5 and Qt6
 
    $NSCDE_TOOLSDIR/themegen with $NSCDE_LIBDIR/NsCDE/python and
    with $NSCDE_DATADIR/integration/gtk2_gtk3_qt are parts of the
-   optional Gtk2, Gtk3, Qt4 and Qt5 integration suite. When run
-   from the Color Style Manager or manually with the
+   optional Gtk2, Gtk3, Qt4, Qt5 and Qt6 integration suite. When
+   run from the Color Style Manager or manually with the
    $NSCDE_TOOLSDIR/themegen, with proper options, this will
    produce $HOME/.themes/NsCDE directory with either or both Gtk2
    and Gtk3 themes. $HOME/.gtkrc-2.0 and
@@ -6312,34 +6365,35 @@ Silent Key Tab A S -
    this directory with gtk-theme-name option. Excessive button
    images on menus and buttons will be turned off of course.
 
-   Figure 75. Example: Audacious with motified NsCDE theme: GTK
+   Figure 76. Example: Audacious with motified NsCDE theme: GTK
    engine for Qt5
 
    [fig_audacious.png]
 
-   If Qt4 and/or Qt5 integration is also selected in Color Style
-   Manager, files $HOME/.config/Trolltech.conf and
-   $HOME/.config/qt5ct/qt5ct.conf will be edited to use "GTK2" Qt
-   theme engine. This means, there is no Qt4 and/or Qt5
-   integration without at least Gtk2 integration because Gtk2
-   theme in use is deciding what GTK2 Qt4 and Qt5 engine will
-   display. For Qt5 integration, make sure qt5-qtstyleplugins (or
-   something like that name) is installed:
+   If Qt4 and/or Qt5 integration based on GTK2 engine is also
+   selected in Color Style Manager, files
+   $HOME/.config/Trolltech.conf and $HOME/.config/qt5ct/qt5ct.conf
+   will be edited to use "GTK2" Qt theme engine. This means, there
+   is no Qt4 and/or Qt5 integration without at least Gtk2
+   integration because Gtk2 theme in use is deciding what GTK2 Qt4
+   and Qt5 engine will display. For Qt5 integration, make sure
+   qt5-qtstyleplugins (or something like that name) is installed:
    platformthemes/libqgtk2.so is needed.
 
-   As from NsCDE 2.1, Qt5 has an alternative Kvantum based engine
-   which can be selected instead of default gtk2 based one. It is
-   independent from gtk2 style plugin, but qt5-style-kvantum (or
-   similar system dependent package name) must be installed for
-   this to work.
+   In NsCDE 2.1, Qt5 alternative Kvantum SVG based engine was
+   introduced. It is independent from gtk2 style plugin, but
+   qt5-style-kvantum (or similar system dependent package name)
+   must be installed for this to work. From NsCDE 2.3 upwards,
+   Kvantum engine is default for Qt5 in Color Style Manager, and
+   the only one option for newer Qt6.
 
-   All integrations of this type: GTK2, GTK3, QT4 and QT5 are
+   All integrations of this type: GTK2, GTK3, QT4, QT5 and QT6 are
    turned on in the Color Style Manager.
      __________________________________________________________
 
 17.3. Mozilla: Firefox and Thunderbird
 
-   Figure 76. Firefox with NsCDE GTK3 theme and NsCDE userChrome
+   Figure 77. Firefox with NsCDE GTK3 theme and NsCDE userChrome
    and userContent CSS
 
    [fig_firefox.png]
@@ -6674,6 +6728,7 @@ Standards
        uses also old style icon paths to NsCDE/CDE icons
        configured in this same ImagePath
      * Qt5: $HOME/.config/qt5ct/qt5ct.conf
+     * Qt6: $HOME/.config/qt6ct/qt6ct.conf
      * GTK2: $HOME/.gtkrc-2.0
      * GTK3: $HOME/.config/gtk-3.0/settings.ini
 
@@ -6812,6 +6867,19 @@ Standards
    Manager and Desktop Environment agnostic. Usage of dunst(1) is
    highly recommended.
 
+   If found, and if configured in $FVWM_USERDIR/NsCDE.conf with
+   InfoStore variable nscde_use_picom set to 1, NsCDE will make
+   fresh copy of $FVWM_USERDIR/Picom.conf if it doesn't already
+   exist, and start picom(1) X compositor. Picom is very
+   configurable, and user can customize this file as per wishes
+   and needs. Usage of picom(1) is not necessary, but it may fix
+   some tearing issues or make many openings and moves on the
+   desktop look more smooth. On the other hand, it may introduce
+   bugs in rare cases, as invisible popdown menus poor screen
+   refresh and some background artefacts. Bug conditions are
+   depending on X server version, actual video driver, picom's own
+   configuration and mix of this circumstances.
+
    X Terminal program? Urxvt, xterm, mate-terminal, terminus ...
    user's choice as always. As a slight recommendation,
    mate-terminal from MATE DE can be set to look almost as Dtterm,
@@ -6919,13 +6987,13 @@ Standards
    NsCDE must be restarted again to get things right.
 
    Front Panel will appear on the primary screen, but can be moved
-   to other screens by Ctrl+Backspace pressed while pointer is on
-   the desired screen. This does not work always well when logical
-   screens are of different resolution and it is specially visible
-   when making third mouse click on the Workspace Manager buttons
-   which can be popped down below the screen instead of up to be
-   visible. On the monitors of the same resolution in SLS
-   configuration, no such problem exists.
+   to other screens by Ctrl+Backspace+Backspace pressed while
+   pointer is on the desired screen. This does not work always
+   well when logical screens are of different resolution and it is
+   specially visible when making third mouse click on the
+   Workspace Manager buttons which can be popped down below the
+   screen instead of up to be visible. On the monitors of the same
+   resolution in SLS configuration, no such problem exists.
 
    All other functions and window positioning managed directly by
    the NsCDE will handle windows and transient windows correctly,
@@ -7232,7 +7300,7 @@ export FVWM_BIN=fvwm
        found on the system it will be defined as
        $[infostore.appmgr] and placed on the Front Panel's eighth
        launcher instead of icon for default editor.
-       Figure 77. PCManFM as Application Manager
+       Figure 78. PCManFM as Application Manager
        [fig_appmgr.png]
      * Action builder (dtaction) - not likely ever. Use FvwmScript
        or maybe some Python gui bindings.
