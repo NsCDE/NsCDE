@@ -1469,24 +1469,49 @@ Widget 26
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
                End
 
-               # Qt5 "general" font
+               # Prepare fonts for Qt5 and Qt6
+               # General
                Set $PrepareQFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontNormalMediumStr {"}
                Set $PrepareQFont = (GetOutput $PrepareQFontCmd 1 -1)
+               # Fixed
+               Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
+               Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
+               
+               # Qt5 "general" font
                Set $Qt5FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
                Set $Qt5Font = (GetOutput $Qt5FontCmd 1 -1)
                If $Qt5Font <> {} Then
                Begin
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQFont {\\""}
                End
-
+      
                # Qt5 "fixed" font
-               Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
-               Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
                Set $Qt5fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
                Set $Qt5fFont = (GetOutput $Qt5fFontCmd 1 -1)
                If $Qt5fFont <> {} Then
                Begin
                   Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQfFont {\\""}
+               End
+      
+               # Qt6: perform only if $HOME/.config/qt6ct/qt6ct.conf actually exists.
+               Set $Qt6CtConfExistence = (GetOutput {ls -1 "$HOME/.config/qt6ct/qt6ct.conf" > /dev/null 2>&1; echo $?} 1 -1)
+               If $Qt6CtConfExistence == 0 Then
+               Begin
+                  # Qt6 "general" font
+                  Set $Qt6FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
+                  Set $Qt6Font = (GetOutput $Qt6FontCmd 1 -1)
+                  If $Qt6Font <> {} Then
+                  Begin
+                     Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQFont {\\""}
+                  End
+            
+                  # Qt6 "fixed" font
+                  Set $Qt6fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
+                  Set $Qt6fFont = (GetOutput $Qt6fFontCmd 1 -1)
+                  If $Qt6fFont <> {} Then
+                  Begin
+                     Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQfFont {\\""}
+                  End
                End
 
                # XSETTINGS Daemon Integration
