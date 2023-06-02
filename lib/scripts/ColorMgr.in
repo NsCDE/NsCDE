@@ -9,7 +9,7 @@ WindowLocaleTitle {Style Manager - Color}
 WindowSize 448 464
 Colorset 22
 
-      Init
+Init
 Begin
    # CurrDesk - for Backdrop syncronization during preview
    Set $CurrDesk = (Add (GetScriptArgument 1) 1)
@@ -130,10 +130,6 @@ Begin
    Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11} 1 -1)
    Set $ExtraSmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.25} 1 -1)
 
-   Set $GtkStr = {00}
-   Set $Gtk2Str = 0
-   Set $Gtk3Str = 0
-
    # Provide defaults for integration options.
    # 1. Backdrops
    # 2. X Resources
@@ -141,23 +137,121 @@ Begin
    # 4. GTK3
    # 5. Qt4
    # 6. Qt5 via GTK2 plugin
-   # 7. Qt5 via Kvantum NsCDE plugin
+   # 7. Qt5 via Kvantum NsCDE plugin 
    # 8. Qt6 via Kvantum NsCDE plugin
-   # 9. Reserved for GTK4 
+   # 9. Reserved for GTK4
    # 10. Local $FVWM_USERDIR/libexec/colormgr.local
 
-   Set $IntegrationString = {1111101101}
+   # Saved Integration String
+   # WARNING: order of options to -K of confget is important!
+   Set $IntegrationStringCmd = {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -d "" -K }
+       {integrate_backdrops,integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt4,integrate_qt5g,}
+       {integrate_qt5k,integrate_qt6,integrate_gtk4,integrate_local}
+   Set $IntegrationString = (GetOutput $IntegrationStringCmd 1 1)
 
    Set $SetBackdrops = (StrCopy $IntegrationString 1 1)
+   Set $InitialSetBackdrops = $SetBackdrops
+   If $SetBackdrops <> 0 Then
+   Begin
+      If $SetBackdrops <> 1 Then
+      Begin
+         Set $SetBackdrops = 1
+      End
+   End
+
    Set $SetXresources = (StrCopy $IntegrationString 2 2)
+   Set $InitialSetXresources = $SetXresources
+   If $SetXresources <> 0 Then
+   Begin
+      If $SetXresources <> 1 Then
+      Begin
+         Set $SetXresources = 1
+      End
+   End
+
    Set $SetGtk2 = (StrCopy $IntegrationString 3 3)
+   Set $InitialSetGtk2 = $SetGtk2
+   If $SetGtk2 <> 0 Then
+   Begin
+      If $SetGtk2 <> 1 Then
+      Begin
+         Set $SetGtk2 = 1
+      End
+   End
+
    Set $SetGtk3 = (StrCopy $IntegrationString 4 4)
+   Set $InitialSetGtk3 = $SetGtk3
+   If $SetGtk3 <> 0 Then
+   Begin
+      If $SetGtk3 <> 1 Then
+      Begin
+         Set $SetGtk3 = 1
+      End
+   End
+
    Set $SetQt4 = (StrCopy $IntegrationString 5 5)
+   Set $InitialSetQt4 = $SetQt4
+   If $SetQt4 <> 0 Then
+   Begin
+      If $SetQt4 <> 1 Then
+      Begin
+         Set $SetQt4 = 1
+      End
+   End
+
    Set $SetQt5Gtk = (StrCopy $IntegrationString 6 6)
+   Set $InitialSetQt5Gtk = $SetQt5Gtk
+   If $SetQt5Gtk <> 0 Then
+   Begin
+      If $SetQt5Gtk <> 1 Then
+      Begin
+         Set $SetQt5Gtk = 0
+      End
+   End
+
    Set $SetQt5Kv = (StrCopy $IntegrationString 7 7)
+   Set $InitialSetQt5Kv = $SetQt5Kv
+   If $SetQt5Kv <> 0 Then
+   Begin
+      If $SetQt5Kv <> 1 Then
+      Begin
+         Set $SetQt5Kv = 1
+      End
+   End
+
    Set $SetQt6Kv = (StrCopy $IntegrationString 8 8)
+   Set $InitialSetQt6Kv = $SetQt6Kv
+   If $SetQt6Kv <> 0 Then
+   Begin
+      If $SetQt6Kv <> 1 Then
+      Begin
+         Set $SetQt6Kv = 1
+      End
+   End
+
    Set $SetGtk4 = (StrCopy $IntegrationString 9 9)
+   Set $InitialSetGtk4 = $SetGtk4
+   If $SetGtk4 <> 0 Then
+   Begin
+      If $SetGtk4 <> 1 Then
+      Begin
+         Set $SetGtk4 = 1
+      End
+   End
+
    Set $SetColormgrLocal = (StrCopy $IntegrationString 10 10)
+   Set $InitialSetColormgrLocal = $SetColormgrLocal
+   If $SetColormgrLocal <> 0 Then
+   Begin
+      If $SetColormgrLocal <> 1 Then
+      Begin
+         Set $SetColormgrLocal = 1
+      End
+   End
+
+   Set $GtkStr = {00}
+   Set $Gtk2Str = 0
+   Set $Gtk3Str = 0
 
    # Locale stuff: Hack to keep leading or ending space(s)
    # which will be trimmed by LocaleTitle Widget directive.
@@ -1060,7 +1154,7 @@ Widget 21
       # Spawn integrations dialog
       1 :
       Begin
-         Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog}
+         Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog on-button } $IntegrationString
       End
       # Build a string of integrations - received with SendToModule
       # from ThemeIntegrationDialog: $IntegrationString must be
@@ -1276,7 +1370,7 @@ Widget 32
       Begin
          If $IntStrParsed <> 10 Then
          Begin
-            Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog on-ok}
+            Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog on-ok } $IntegrationString
          End
          Else
          Begin
@@ -1746,6 +1840,62 @@ Widget 32
             Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
          End
 
+         # See if there is a need to change integrate_* values in StyleMgr.ini and do it if it is.
+         If $SetBackdrops <> $InitialSetBackdrops Then
+         Begin
+            Set $WriteBackdropsCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_backdrops -v } $SetBackdrops
+            Set $WriteBackdrops = (GetOutput $WriteBackdropsCmd 1 -1)
+         End
+
+         If $SetXresources <> $InitialSetXresources Then
+         Begin
+            Set $WriteXresourcesCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_xresources -v } $SetXresources
+            Set $WriteXresources = (GetOutput $WriteXresourcesCmd 1 -1)
+         End
+
+         If $SetGtk2 <> $InitialSetGtk2 Then
+         Begin
+            Set $WriteGtk2Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk2 -v } $SetGtk2
+            Set $WriteGtk2 = (GetOutput $WriteGtk2Cmd 1 -1)
+         End
+
+         If $SetGtk3 <> $InitialSetGtk3 Then
+         Begin
+            Set $WriteGtk3Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk3 -v } $SetGtk3
+            Set $WriteGtk3 = (GetOutput $WriteGtk3Cmd 1 -1)
+         End
+
+         If $SetQt4 <> $InitialSetQt4 Then
+         Begin
+            Set $WriteQt4Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v } $SetQt4
+            Set $WriteQt4 = (GetOutput $WriteQt4Cmd 1 -1)
+         End
+
+         If $SetQt5Gtk <> $InitialSetQt5Gtk Then
+         Begin
+            Set $WriteQt5GtkCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5g -v } $SetQt5Gtk
+            Set $WriteQt5Gtk = (GetOutput $WriteQt5GtkCmd 1 -1)
+         End
+
+         If $SetQt5Kv <> $InitialSetQt5Kv Then
+         Begin
+            Set $WriteQt5KvCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5k -v } $SetQt5Kv
+            Set $WriteQt5Kv = (GetOutput $WriteQt5KvCmd 1 -1)
+         End
+
+         If $SetQt6Kv <> $InitialSetQt6Kv Then
+         Begin
+            Set $WriteQt6KvCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt6 -v } $SetQt6Kv
+            Set $WriteQt6Kv = (GetOutput $WriteQt6KvCmd 1 -1)
+         End
+
+         If $SetColormgrLocal <> $InitialSetColormgrLocal Then
+         Begin
+            Set $WriteColormgrLocalCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_local -v } $SetColormgrLocal
+            Set $WriteColormgrLocal = (GetOutput $WriteColormgrLocalCmd 1 -1)
+         End
+
+         # Signal to 4 : to reload everything.
          SendSignal 32 4
       End
       4 :

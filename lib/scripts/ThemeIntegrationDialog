@@ -49,7 +49,15 @@ Begin
    ChangeLocaleTitle 17 {Help}
 
    # Initial integration string
-   Set $IntegrationString = {1111101101}
+   Set $IntegrationString = (GetScriptArgument 2)
+
+   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)$'; echo $?}
+   Set $CheckIntegStr = (GetOutput $CheckIntegStrCmd 1 1)
+   
+   If $CheckIntegStr <> 0 Then
+   Begin
+      Set $IntegrationString = {1111101101}
+   End
 
    # Poll out from string single integrations
    Set $SetBackdrops = (StrCopy $IntegrationString 1 1)
