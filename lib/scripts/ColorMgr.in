@@ -1043,7 +1043,7 @@ Widget 19
       Begin
          If $SelectedColorset <> 0 Then
          Begin
-            Do {Module FvwmScript ModifyColor } $SelectedColorset { } (GetBack $WidgetOfColorset)
+            Do {f_ToggleFvwmModule FvwmScript ModifyColor } $SelectedColorset { } (GetBack $WidgetOfColorset)
          End
          Else
          Begin
@@ -1143,7 +1143,7 @@ Widget 21
    Position 12 370
    Type PushButton
    Flags NoReliefString
-   Title { Integration Options ... }
+   Title { Color Style Integration Options ... }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -1154,10 +1154,10 @@ Widget 21
       # Spawn integrations dialog
       1 :
       Begin
-         Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog on-button } $IntegrationString
+         Do {f_ToggleFvwmModule FvwmScript ColorIntegrationDialog on-button } $IntegrationString
       End
       # Build a string of integrations - received with SendToModule
-      # from ThemeIntegrationDialog: $IntegrationString must be
+      # from ColorIntegrationDialog: $IntegrationString must be
       # 10-digit binary number, $IntStrParsed must be 10 at the end.
       2 :
       Begin
@@ -1370,7 +1370,7 @@ Widget 32
       Begin
          If $IntStrParsed <> 10 Then
          Begin
-            Do {f_ToggleFvwmModule FvwmScript ThemeIntegrationDialog on-ok } $IntegrationString
+            Do {f_ToggleFvwmModule FvwmScript ColorIntegrationDialog on-ok } $IntegrationString
          End
          Else
          Begin
@@ -1378,7 +1378,7 @@ Widget 32
             SendSignal 32 3
          End
       End
-      # SendToModule from ThemeIntegrationDialog
+      # SendToModule from ColorIntegrationDialog
       2 :
       Begin
          Set $IntegrationsPresented = (LastString)
@@ -2007,7 +2007,7 @@ Widget 33
          # TransientDialog like windows cleanup
          Do {KillModule FvwmScript NColorsDialog}
          Do {KillModule FvwmScript ModifyColor}
-         Do {KillModule FvwmScript ThemeIntegrationDialog}
+         Do {KillModule FvwmScript ColorIntegrationDialog}
          Do {KillModule FvwmScript FilePicker}
          Do {KillModule FvwmScript ActionForm}
 

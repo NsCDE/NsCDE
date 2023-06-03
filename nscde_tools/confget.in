@@ -16,13 +16,14 @@ def cmdoptions():
     typecf = ''
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "c:s:k:K:d:h", ["conffile=", "section=", "key=", "keys=", "delim=", "help"])
+        opts, args = getopt.getopt(sys.argv[1:], "c:s:k:K:d:D:h", ["conffile=", "section=", "key=", "keys=", "defopt=", "delim=", "help"])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
     output = None
     verbose = False
     multi_concat = 0
+    defopt=0
     delim='\n'
     for o, a in opts:
         if o in ("-c", "--conffile"):
@@ -34,6 +35,8 @@ def cmdoptions():
         elif o in ("-K", "--keys"):
             key = a
             multi_concat = 1
+        elif o in ("-D", "--defopt"):
+            defopt = a
         elif o in ("-d", "--delim"):
             delim = a
         elif o in ("-h", "--help"):
@@ -42,10 +45,10 @@ def cmdoptions():
         else:
             assert False, "getopt: unhandled option"
 
-    return conffile, section, key, multi_concat, delim
+    return conffile, section, key, multi_concat, defopt, delim
 
 def main ():
-    conffile, section, key, multi_concat, delim = cmdoptions()
+    conffile, section, key, multi_concat, defopt, delim = cmdoptions()
 
     parser = configparser.ConfigParser()
     parser.optionxform = lambda option: option
@@ -55,7 +58,10 @@ def main ():
         if multi_concat:
             keys = (key.split(","))
             for kk in keys:
-                print (parser.get(section, kk), end=delim)
+                try:
+                    print (parser.get(section, kk), end=delim)
+                except configparser.NoOptionError:
+                    print (defopt, end=delim)
             if delim != '\n':
                 print ("")
         else:

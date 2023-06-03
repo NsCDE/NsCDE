@@ -28,15 +28,10 @@ Begin
    # which will be trimmed by LocaleTitle Widget directive.
    ChangeLocaleTitle 2 (GetTitle 2)
    ChangeLocaleTitle 22 (GetTitle 22)
-   ChangeLocaleTitle 23 (GetTitle 23)
-   ChangeLocaleTitle 24 (GetTitle 24)
 
    # CheckBox buttons get smaller font size
    Set $SmallLabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 2 $SmallLabelFont
-   ChangeFont 22 $SmallLabelFont
-   ChangeFont 23 $SmallLabelFont
-   ChangeFont 24 $SmallLabelFont
 
    # Rest of the widgets will get standard fonts
    Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12.5} 1 -1)
@@ -51,6 +46,7 @@ Begin
    ChangeFont 12 $LabelFont
    ChangeFont 13 $LabelFont
    ChangeFont 14 $LabelFont
+   ChangeFont 22 $LabelFont
    ChangeFont 26 $LabelFont
    ChangeFont 27 $LabelFont
    ChangeFont 28 $LabelFont
@@ -157,9 +153,100 @@ Begin
    # this in variable does not produce "}" on fvwm stderr / xsession-errors
    Set $Notavail = (Gettext {Not available})
 
-   # Manage race condition between messages for InputForm and ChoiceForm
-   # Default will be the messages listening for InputForm
-   Set $QuitStarted = 0
+   # Provide defaults for integration options.
+   # 1. X Resources
+   # 2. GTK2
+   # 3. GTK3
+   # 4. Qt5
+   # 5. Qt6
+   # 6. Reserved for GTK4
+   # 7. Local $FVWM_USERDIR/libexec/colormgr.local
+
+   # Saved Integration String
+   # WARNING: order of options to -K of confget is important!
+   Set $IntegrationStringCmd = {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -d "" -D 2 -K }
+       {integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt5,}
+       {integrate_qt6,integrate_gtk4,integrate_local}
+   Set $IntegrationString = (GetOutput $IntegrationStringCmd 1 1)
+
+   Set $SetXresources = (StrCopy $IntegrationString 1 1)
+   Set $InitialSetXresources = $SetXresources
+   If $SetXresources <> 0 Then
+   Begin
+      If $SetXresources <> 1 Then
+      Begin
+         Set $SetXresources = 1
+      End
+   End
+
+   Set $SetGtk2 = (StrCopy $IntegrationString 2 2)
+   Set $InitialSetGtk2 = $SetGtk2
+   If $SetGtk2 <> 0 Then
+   Begin
+      If $SetGtk2 <> 1 Then
+      Begin
+         Set $SetGtk2 = 1
+      End
+   End
+
+   Set $SetGtk3 = (StrCopy $IntegrationString 3 3)
+   Set $InitialSetGtk3 = $SetGtk3
+   If $SetGtk3 <> 0 Then
+   Begin
+      If $SetGtk3 <> 1 Then
+      Begin
+         Set $SetGtk3 = 1
+      End
+   End
+
+   Set $SetQt5 = (StrCopy $IntegrationString 4 4)
+   Set $InitialSetQt5 = $SetQt5
+   If $SetQt5 <> 0 Then
+   Begin
+      If $SetQt5 <> 1 Then
+      Begin
+         Set $SetQt5 = 1
+      End
+   End
+
+   Set $SetQt6 = (StrCopy $IntegrationString 5 5)
+   Set $InitialSetQt6 = $SetQt6
+   If $SetQt6 <> 0 Then
+   Begin
+      If $SetQt6 <> 1 Then
+      Begin
+         Set $SetQt6 = 1
+      End
+   End
+
+   Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
+   Set $InitialSetGtk4 = $SetGtk4
+   If $SetGtk4 <> 0 Then
+   Begin
+      If $SetGtk4 <> 1 Then
+      Begin
+         Set $SetGtk4 = 0
+      End
+   End
+
+   Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
+   Set $InitialSetFontmgrLocal = $SetFontmgrLocal
+   If $SetFontmgrLocal <> 0 Then
+   Begin
+      If $SetFontmgrLocal <> 1 Then
+      Begin
+         Set $SetFontmgrLocal = 1
+      End
+   End
+
+   # Font / Fontset mode to display
+   Set $GetFontsetChoice = (GetOutput {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined} 1 1)
+   If $GetFontsetChoice == 1 Then
+   Begin
+      ChangeValue 2 1
+      SendSignal 2 1
+   End
+
 End
 
 # MSG is the waiting for InputForm here.
@@ -1298,54 +1385,148 @@ Widget 21
       End
 End
 
-#  If $FVWM_USERDIR/libexec/fontmgr.local exists, run it
 Widget 22
    Property
-   Position 14 604
-   Size 100 20
+   Position 12 602
+   Size 504 20
    Flags NoReliefString
-   Type CheckBox
+   Type PushButton
    Font "xft:::pixelsize=14"
    Value 1
-   Title { Run User Script}
+   Title { Font Style Integration Options ...}
    Main
       Case message of
       SingleClic :
       Begin
+         SendSignal 22 1
       End
-End
-
-# GTK2/GTK3 (and Qt4/Qt5) font theme synchronization
-Widget 23
-   Property
-   Position 166 604
-   Size 100 30
-   Flags NoReliefString
-   Type CheckBox
-   Value 1
-   Title { Refresh GTK and QT}
-   Font "xft:::pixelsize=14"
-   Main
-      Case message of
-      SingleClic :
+      1 :
       Begin
+         Do {f_ToggleFvwmModule FvwmScript FontIntegrationDialog on-button } $IntegrationString
       End
-End
-
-# X Resources integration
-Widget 24
-   Property
-   Position 344 604
-   Size 100 30
-   Flags NoReliefString
-   Type CheckBox
-   Value 1
-   Title { Refresh X Resources}
-   Font "xft:::pixelsize=14"
-   Main
-      Case message of
-      SingleClic :
+      2 :
       Begin
+         Set $IntegrationString = (LastString)
+         Set $IntStrParsed = 0
+
+         Set $SetXresources = (StrCopy $IntegrationString 1 1)
+         If $SetXresources <> {1} Then
+         Begin
+            If $SetXresources <> {0} Then
+            Begin
+               Set $SetXresources = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetGtk2 = (StrCopy $IntegrationString 2 2)
+         If $SetGtk2 <> {1} Then
+         Begin
+            If $SetGtk2 <> {0} Then
+            Begin
+               Set $SetGtk2 = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetGtk3 = (StrCopy $IntegrationString 3 3)
+         If $SetGtk3 <> {1} Then
+         Begin
+            If $SetGtk3 <> {0} Then
+            Begin
+               Set $SetGtk3 = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetQt5 = (StrCopy $IntegrationString 4 4)
+         If $SetQt5 <> {1} Then
+         Begin
+            If $SetQt5 <> {0} Then
+            Begin
+               Set $SetQt5 = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetQt6 = (StrCopy $IntegrationString 5 5)
+         If $SetQt6 <> {1} Then
+         Begin
+            If $SetQt6 <> {0} Then
+            Begin
+               Set $SetQt6 = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
+         If $SetGtk4 <> {1} Then
+         Begin
+            If $SetGtk4 <> {0} Then
+            Begin
+               Set $SetGtk4 = 0
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
+      
+         Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
+         If $SetFontmgrLocal <> {1} Then
+         Begin
+            If $SetFontmgrLocal <> {0} Then
+            Begin
+               Set $SetFontmgrLocal = 1
+            End
+            Else
+            Begin
+               Set $IntStrParsed = (Add $IntStrParsed 1)
+            End
+         End
+         Else
+         Begin
+            Set $IntStrParsed = (Add $IntStrParsed 1)
+         End
       End
 End
 
@@ -1437,133 +1618,185 @@ Widget 26
       # Sleeps in integrations are set to allow asyncronous "Do" to write fontset file to the end
       3 :
       Begin
-            # User script (if exists)
-            If (GetValue 22) == 1 Then
+         # User script (if exists)
+         If $SetFontmgrLocal == 1 Then
+         Begin
+            Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" > /dev/null 2>&1; echo $?} 1 -1)
+            If $CheckUserCustomScriptExist == 0 Then
             Begin
-               Set $CheckUserCustomScriptExist = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" > /dev/null 2>&1; echo $?} 1 -1)
-               If $CheckUserCustomScriptExist == 0 Then
-               Begin
-                  Set $RunUserScriptCmd = {sleep 1; $FVWM_USERDIR/libexec/fontmgr.local "} $UserFontsetFile {"}
-                  Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
-               End
+               Set $RunUserScriptCmd = {sleep 1; $FVWM_USERDIR/libexec/fontmgr.local "} $UserFontsetFile {"}
+               Set $RunUserScript = (GetOutput $RunUserScriptCmd 1 -1)
+            End
+         End
+
+         # GTK2/GTK3, Qt5, Xsettingsd, X ...
+         If $SetGtk2 == 1 Then
+         Begin
+            # GTK2
+            Set $PrepareFontCmd = {$NSCDE_TOOLSDIR/fontmgr -T "} $FontNormalMediumStr {"}
+            Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
+            Set $Gtk2FontCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
+            Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
+            If $Gtk2Font <> {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
+            End
+         End
+
+         If $SetGtk3 == 1 Then
+         Begin
+            # GTK3
+            Set $Gtk3FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
+            Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
+            If $Gtk3Font <> {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
+            End
+         End
+
+         # Prepare fonts for Qt5 and Qt6
+         # General
+         Set $PrepareQFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontNormalMediumStr {"}
+         Set $PrepareQFont = (GetOutput $PrepareQFontCmd 1 -1)
+         # Fixed
+         Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
+         Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
+
+         If $SetQt5 == 1 Then
+         Begin
+            # Qt5 "general" font
+            Set $Qt5FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
+            Set $Qt5Font = (GetOutput $Qt5FontCmd 1 -1)
+            If $Qt5Font <> {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQFont {\\""}
             End
 
-            # GTK2/GTK3, Qt5, Xsettingsd, X ...
-            If (GetValue 23) == 1 Then
+            # Qt5 "fixed" font
+            Set $Qt5fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
+            Set $Qt5fFont = (GetOutput $Qt5fFontCmd 1 -1)
+            If $Qt5fFont <> {} Then
             Begin
-               # GTK2
-               Set $PrepareFontCmd = {$NSCDE_TOOLSDIR/fontmgr -T "} $FontNormalMediumStr {"}
-               Set $PrepareFont = (GetOutput $PrepareFontCmd 1 -1)
-               Set $Gtk2FontCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-font-name -v ' "} $PrepareFont {"' 2>&1}
-               Set $Gtk2Font = (GetOutput $Gtk2FontCmd 1 -1)
-               If $Gtk2Font <> {} Then
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQfFont {\\""}
+            End
+         End
+
+         If $SetQt6 == 1 Then
+         Begin
+            # Qt6: perform only if $HOME/.config/qt6ct/qt6ct.conf actually exists.
+            Set $Qt6CtConfExistence = (GetOutput {ls -1 "$HOME/.config/qt6ct/qt6ct.conf" > /dev/null 2>&1; echo $?} 1 -1)
+            If $Qt6CtConfExistence == 0 Then
+            Begin
+               # Qt6 "general" font
+               Set $Qt6FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
+               Set $Qt6Font = (GetOutput $Qt6FontCmd 1 -1)
+               If $Qt6Font <> {} Then
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.gtkrc-2.0: \\\"} $Gtk2Font {\\\""}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQFont {\\""}
                End
 
-               # GTK3
-               Set $Gtk3FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/gtk-3.0/settings.ini" -s Settings -k gtk-font-name -v "} $PrepareFont {" 2>&1}
-               Set $Gtk3Font = (GetOutput $Gtk3FontCmd 1 -1)
-               If $Gtk3Font <> {} Then
+               # Qt6 "fixed" font
+               Set $Qt6fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
+               Set $Qt6fFont = (GetOutput $Qt6fFontCmd 1 -1)
+               If $Qt6fFont <> {} Then
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/gtk-3.0/settings.ini: \\\"} $Gtk3Font {\\\""}
+                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQfFont {\\""}
                End
+            End
+         End
 
-               # Prepare fonts for Qt5 and Qt6
-               # General
-               Set $PrepareQFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontNormalMediumStr {"}
-               Set $PrepareQFont = (GetOutput $PrepareQFontCmd 1 -1)
-               # Fixed
-               Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
-               Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
-               
-               # Qt5 "general" font
-               Set $Qt5FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
-               Set $Qt5Font = (GetOutput $Qt5FontCmd 1 -1)
-               If $Qt5Font <> {} Then
+         # X resources
+         If $SetXresources == 1 Then
+         Begin
+            # Wait a second for $UserFontsetFile to be written ... a race.
+            Set $DoXresourcesCmd = {sleep 1; $NSCDE_TOOLSDIR/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
+            Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
+            Set $DoMiscXCmd = {sleep 1; $NSCDE_TOOLSDIR/fontmgr -M '} $FontNormalMediumStr {'}
+            Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
+            Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
+         End
+
+         # XSETTINGS Daemon Integration
+         Set $XSETTINGSFILE = (GetOutput {ls -1 "$FVWM_USERDIR/Xsettingsd.conf" 2>/dev/null} -1 1)
+
+         # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
+         If $XSETTINGSFILE <> {} Then
+         Begin
+            Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Gtk\/FontName[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+            Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
+            If $XsettingsParamExistance == 0 Then
+            Begin
+               Set $WriteXSettingsdCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"}
+                   $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
+            End
+            Else
+            Begin
+               Set $WriteXSettingsdCmd = {@ECHONE@ "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
+            End
+            Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+
+            # Custom DPI handling
+            Set $CustomDPI = (GetOutput {echo "$XFT_USE_DPI"} 1 -1)
+            If $CustomDPI <> {} Then
+            Begin
+               Set $XsettingsDpiParamExistanceCmd = {egrep -q '^([[:space:]]+)?Xft\/DPI[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
+               Set $XsettingsDpiParamExistance = (GetOutput $XsettingsDpiParamExistanceCmd 1 1)
+               If $XsettingsDpiParamExistance == 0 Then
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQFont {\\""}
+                  Set $WriteXSettingsdDpiCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1}
+                      (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
                End
-      
-               # Qt5 "fixed" font
-               Set $Qt5fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
-               Set $Qt5fFont = (GetOutput $Qt5fFontCmd 1 -1)
-               If $Qt5fFont <> {} Then
+               Else
                Begin
-                  Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt5ct/qt5ct.conf: \\"} $PrepareQfFont {\\""}
+                  Set $WriteXSettingsdDpiCmd = {@ECHONE@ "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
                End
-      
-               # Qt6: perform only if $HOME/.config/qt6ct/qt6ct.conf actually exists.
-               Set $Qt6CtConfExistence = (GetOutput {ls -1 "$HOME/.config/qt6ct/qt6ct.conf" > /dev/null 2>&1; echo $?} 1 -1)
-               If $Qt6CtConfExistence == 0 Then
-               Begin
-                  # Qt6 "general" font
-                  Set $Qt6FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k general -v '} $PrepareQFont {' 2>&1}
-                  Set $Qt6Font = (GetOutput $Qt6FontCmd 1 -1)
-                  If $Qt6Font <> {} Then
-                  Begin
-                     Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQFont {\\""}
-                  End
+               Set $WriteXSettingsdDpi = (GetOutput $WriteXSettingsdDpiCmd 1 -1)
+            End
+         End
+
+         # See if we must write new values in [FontMgr] section of StyleMgr.ini and perform if necessary.
+         If $SetXresources <> $InitialSetXresources Then
+         Begin
+            Set $WriteXresourcesCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_xresources -v } $SetXresources
+            Set $WriteXresources = (GetOutput $WriteXresourcesCmd 1 -1)
+         End
             
-                  # Qt6 "fixed" font
-                  Set $Qt6fFontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt6ct/qt6ct.conf" -s Fonts -k fixed -v '} $PrepareQfFont {' 2>&1}
-                  Set $Qt6fFont = (GetOutput $Qt6fFontCmd 1 -1)
-                  If $Qt6fFont <> {} Then
-                  Begin
-                     Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/qt6ct/qt6ct.conf: \\"} $PrepareQfFont {\\""}
-                  End
-               End
+         If $SetGtk2 <> $InitialSetGtk2 Then
+         Begin
+            Set $WriteGtk2Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk2 -v } $SetGtk2
+            Set $WriteGtk2 = (GetOutput $WriteGtk2Cmd 1 -1)
+         End
 
-               # XSETTINGS Daemon Integration
-               Set $XSETTINGSFILE = (GetOutput {ls -1 "$FVWM_USERDIR/Xsettingsd.conf" 2>/dev/null} -1 1)
-   
-               # Xsettingsd Integration - only if $FVWM_USERDIR/Xsettingsd.conf is found
-               If $XSETTINGSFILE <> {} Then
-               Begin
-                  Set $XsettingsParamExistanceCmd = {egrep -q '^([[:space:]]+)?Gtk\/FontName[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
-                  Set $XsettingsParamExistance = (GetOutput $XsettingsParamExistanceCmd 1 1)
-                  If $XsettingsParamExistance == 0 Then
-                  Begin
-                     Set $WriteXSettingsdCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?Gtk\/FontName[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1\"} $PrepareFont {\"/g' -f "} $XSETTINGSFILE {"}
-                  End
-                  Else
-                  Begin
-                     Set $WriteXSettingsdCmd = {@ECHONE@ "\n# Added by Font Style Manager\nGtk/FontName \"} $PrepareFont {\"\n" >> "} $XSETTINGSFILE {"}
-                  End
-                  Set $WriteXSettingsd = (GetOutput $WriteXSettingsdCmd 1 -1)
+         If $SetGtk3 <> $InitialSetGtk3 Then
+         Begin
+            Set $WriteGtk3Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk3 -v } $SetGtk3
+            Set $WriteGtk3 = (GetOutput $WriteGtk3Cmd 1 -1)
+         End
 
-                  # Custom DPI handling
-                  Set $CustomDPI = (GetOutput {echo "$XFT_USE_DPI"} 1 -1)
-                  If $CustomDPI <> {} Then
-                  Begin
-                     Set $XsettingsDpiParamExistanceCmd = {egrep -q '^([[:space:]]+)?Xft\/DPI[[:space:]]+' "} $XSETTINGSFILE {"; echo $?}
-                     Set $XsettingsDpiParamExistance = (GetOutput $XsettingsDpiParamExistanceCmd 1 1)
-                     If $XsettingsDpiParamExistance == 0 Then
-                     Begin
-                        Set $WriteXSettingsdDpiCmd = {$NSCDE_TOOLSDIR/ised -c 's/\(^\([[:space:]]\+\)\?Xft\/DPI[[:space:]]\+\)\(\([[:space:]]\+\)\?\([[:space:]]\+\)\?\).*/\1} (Mult $CustomDPI 1024) {/g' -f "} $XSETTINGSFILE {"}
-                     End
-                     Else
-                     Begin
-                        Set $WriteXSettingsdDpiCmd = {@ECHONE@ "\n# Added by Font Style Manager\nXft/DPI } (Mult $CustomDPI 1024) {\n" >> "} $XSETTINGSFILE {"}
-                     End
-                     Set $WriteXSettingsdDpi = (GetOutput $WriteXSettingsdDpiCmd 1 -1)
-                  End
-               End
-            End
+         If $SetQt5 <> $InitialSetQt5 Then
+         Begin
+            Set $WriteQt5Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v } $SetQt5
+            Set $WriteQt5 = (GetOutput $WriteQt5Cmd 1 -1)
+         End
 
-            # X resources
-            If (GetValue 24) == 1 Then
-            Begin
-               # Wait a second for $UserFontsetFile to be written ... a race.
-               Set $DoXresourcesCmd = {sleep 1; $NSCDE_TOOLSDIR/fontmgr -X "} $UserFontsetFile {" > "$FVWM_USERDIR/Xdefaults.fontdefs"}
-               Set $DoXresources = (GetOutput $DoXresourcesCmd 1 -1)
-               Set $DoMiscXCmd = {sleep 1; $NSCDE_TOOLSDIR/fontmgr -M '} $FontNormalMediumStr {'}
-               Set $DoXMiscX = (GetOutput $DoMiscXCmd 1 -1)
-               Do {Test (EnvMatch infostore.nscde_use_rofi 1, F $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rm -f $[FVWM_USERDIR]/NsCDE.rasi}
-            End
+         If $SetQt6 <> $InitialSetQt6 Then
+         Begin
+            Set $WriteQt6Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt6 -v } $SetQt6
+            Set $WriteQt6 = (GetOutput $WriteQt6Cmd 1 -1)
+         End
 
-            # Just step to refresh part.
-            SendSignal 26 4
+         If $SetFontmgrLocal <> $InitialSetFontmgrLocal Then
+         Begin
+            Set $WriteFontmgrLocalCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_local -v } $SetFontmgrLocal
+            Set $WriteFontmgrLocal = (GetOutput $WriteFontmgrLocalCmd 1 -1)
+         End
+
+         # Save state of font / fontset choice mode
+         Set $WriteFontsetChoiceCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined -v } (GetValue 2)
+         Set $WriteFontsetChoice = (GetOutput $WriteFontsetChoiceCmd 1 -1)
+
+         # Just step to refresh part.
+         SendSignal 26 4
       End
       4 :
       Begin
@@ -1586,6 +1819,14 @@ Widget 26
          Begin
             # For existing fontset selection, skip 26 1, go to 26 2
             SendSignal 26 2
+         End
+      End
+      6 :
+      Begin
+         Set $IntegrationsPresented = (LastString)
+         If $IntegrationsPresented <> 0 Then
+         Begin
+            SendSignal 26 5
          End
       End
 End

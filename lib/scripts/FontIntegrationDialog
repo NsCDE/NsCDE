@@ -1,0 +1,351 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-FontMgr}
+WindowLocaleTitle { Font Style - System Integration }
+WindowSize 300 402
+Colorset 22
+
+Init
+Begin
+   # Dynamic colorset for disabled items - based on CS22
+   Do {Colorset 59 fg $[shadow.cs22], bg $[bg.cs22], hi $[hilight.cs22], sh $[shadow.cs22], Plain, NoShape}
+
+   # Fonts
+   Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+   Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
+   ChangeFont 3 $SmallFont
+   ChangeFont 4 $DefaultFont
+   ChangeFont 5 $DefaultFont
+   ChangeFont 6 $DefaultFont
+   ChangeFont 7 $DefaultFont
+   ChangeFont 8 $DefaultFont
+   ChangeFont 9 $DefaultFont
+   ChangeFont 10 $DefaultFont
+   ChangeFont 12 $DefaultFont
+   ChangeFont 13 $DefaultFont
+   ChangeFont 14 $DefaultFont
+
+   # Put proper local titles on widgets
+   ChangeLocaleTitle 3 { Configure Font Integrations }
+   ChangeLocaleTitle 4 { X Resources}
+   ChangeLocaleTitle 5 { GTK2 Widgets}
+   ChangeLocaleTitle 6 { GTK3 Widgets}
+   ChangeLocaleTitle 7 { Qt5 Widgets}
+   ChangeLocaleTitle 8 { Qt6 Widgets}
+   ChangeLocaleTitle 9 { GTK4 Widgets (not yet impl.)}
+   ChangeLocaleTitle 10 { Local Hooks (fontmgr.local)}
+   ChangeLocaleTitle 12 {OK}
+   ChangeLocaleTitle 13 {Cancel}
+   ChangeLocaleTitle 14 {Help}
+
+   # Initial integration string
+   Set $IntegrationString = (GetScriptArgument 2)
+
+   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)$'; echo $?}
+   Set $CheckIntegStr = (GetOutput $CheckIntegStrCmd 1 1)
+   
+   If $CheckIntegStr <> 0 Then
+   Begin
+      Set $IntegrationString = {1111101}
+   End
+
+   # Poll out from string single integrations
+   Set $SetXresources = (StrCopy $IntegrationString 1 1)
+   Set $SetGtk2 = (StrCopy $IntegrationString 2 2)
+   Set $SetGtk3 = (StrCopy $IntegrationString 3 3)
+   Set $SetQt5 = (StrCopy $IntegrationString 4 4)
+   Set $SetQt6 = (StrCopy $IntegrationString 5 5)
+   Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
+   Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
+
+   # Put values on check boxes
+   ChangeValue 4 $SetXresources
+   ChangeValue 5 $SetGtk2
+   ChangeValue 6 $SetGtk3
+   ChangeValue 7 $SetQt5
+   ChangeValue 8 $SetQt6
+   ChangeValue 9 $SetGtk4
+
+   # Check if we have $FVWM_USERDIR/libexec/fontmgr.local
+   # If we don't have it, disable it's checkbox
+   Set $FontmgrLocalExistance = (GetOutput {ls -1 "$FVWM_USERDIR/libexec/fontmgr.local" >/dev/null 2>&1; echo $?} 1 1)
+   If $FontmgrLocalExistance == 0 Then
+   Begin
+      ChangeValue 10 $SetFontmgrLocal
+   End
+   Else
+   Begin
+      ChangeColorset 10 59
+      ChangeValue 10 0
+      ChangeLocaleTitle 10 { Local Hooks (fontmgr.local is missing)}
+   End
+
+   # GTK4 - not yet implemented - disabled colorset
+   ChangeColorset 9 59
+
+   # Keybindings
+   Key Return A 12 1 {KeyOK}
+   Key Escape A 13 1 {KeyClose}
+   Key F1 A 14 1 {KeyHelp}
+   Key Help A 14 1 {KeyHelp}
+
+   If (GetScriptArgument 1) == {on-ok} Then
+   Begin
+      Set $PerformSignal = 1
+   End
+End
+
+Widget 1
+   Property
+   Size 20 32
+   Position 8 6
+   Type ItemDraw
+   Flags NoReliefString NoFocus
+   Title {}
+   Icon NsCDE/DtFont.xpm
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 2
+Property
+   Size 284 278
+   Position 8 64
+   Type Rectangle
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Subtitle
+Widget 3
+Property
+   Size 168 24
+   Position 26 51
+   Type ItemDraw
+   Font "xft:::pixelsize=14"
+   Flags NoReliefString Left NoFocus
+   Title {XXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Xresources
+Widget 4
+Property
+   Position 20 88
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK2
+Widget 5
+Property
+   Position 20 124
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK3
+Widget 6
+Property
+   Position 20 160
+   Type CheckBox
+   Flags NoReliefString Left
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Qt5
+Widget 7
+   Property
+   Size 180 0
+   Position 20 196
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Qt6
+Widget 8
+   Property
+   Size 180 0
+   Position 20 232
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# GTK 4
+Widget 9
+   Property
+   Size 180 0
+   Position 20 268
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 9) == 1 Then
+         Begin
+            ChangeValue 9 0
+         End
+      End
+End
+
+# fontmgr.local
+Widget 10
+   Property
+   Size 200 0
+   Position 20 304
+   Type CheckBox
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Left
+   Value 0
+   Title {XXXXXXXXXXXXXXXXXXXXXXX}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If $FontmgrLocalExistance <> 0 Then
+         Begin
+            If (GetValue 10) == 1 Then
+            Begin
+               ChangeValue 10 0
+            End
+         End
+      End
+End
+
+Widget 11
+Property
+   Size 288 0
+   Position 4 352
+   Type Rectangle
+Main
+   Case message of
+      SingleClic :
+         Begin
+         End
+End
+
+# Ok button
+Widget 12
+Property
+   Size 32 20
+   Position 12 364
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 12 1
+      End
+      1 :
+      Begin
+         # Send to FontMgr integration string
+         Do {SendToModule FontMgr SendString 22 2 } (GetValue 4) (GetValue 5) (GetValue 6) (GetValue 7) (GetValue 8) (GetValue 9) (GetValue 10)
+         If $PerformSignal == 1 Then
+         Begin
+            Do {SendToModule FontMgr SendString 26 6 1}
+         End
+         Quit
+      End
+End
+
+# Cancel button
+Widget 13
+Property
+   Size 32 20
+   Position 106 364
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 16 1
+      End
+      1 :
+      Begin
+         # Tell FontMgr no action has been done
+         Do {SendToModule FontMgr SendString 26 6 0}
+         Quit
+      End
+End
+
+# Help button
+Widget 14
+Property
+   Size 32 20
+   Position 202 364
+   Type PushButton
+   Flags NoReliefString
+   LocaleTitle {XXXXXXX}
+   Font "xft:::pixelsize=15"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 14 1
+      End
+      1 :
+      Begin
+         Do {f_DisplayURL "$[gt.Font Style Manager]" html/NsCDE-FontMgr.html}
+      End
+End
+
