@@ -45,7 +45,7 @@ Begin
    # Initial integration string
    Set $IntegrationString = (GetScriptArgument 2)
 
-   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)$'; echo $?}
+   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)$'; echo $?}
    Set $CheckIntegStr = (GetOutput $CheckIntegStrCmd 1 1)
    
    If $CheckIntegStr <> 0 Then
