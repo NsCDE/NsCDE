@@ -1826,10 +1826,12 @@ Widget 32
          Do {SendToModule FrontPanel ChangeButton PanelHandleRight Icon "NsCDE/FpHandle.xpm"}
 
          # Handle fvwm2 Front Panel small artefacts
-         If $IsFvwm3 <> {1} Then
+         If $IsFvwm3 <> 1 Then
          Begin
-            For $fpid = 1 To 20 Do
+            Set $fpid = 0
+            While $fpid < 20 Do
             Begin
+               Set $fpid = (Add $fpid 1)
                Do {Test (EnvMatch infostore.NsCDE-Subpanel} $fpid
                   {-enabled 1) SendToModule FrontPanel ChangeButton NsCDE-Subpanel} $fpid
                   { Icon $[infostore.FP.LnchIcon]}
