@@ -2400,6 +2400,7 @@ AddToFunc f_FontMgrRefreshFonts
 + I f_ReadCfg Font-96dpi
 + I f_ReadCfg Font-$[NSCDE_FONT_DPI]dpi
 + I SendToModule MonthDayApplet SendString 2 4 fontrefresh
++ I All (StyleMgr) SendToModule StyleMgr SendString 1 2 fontrefresh
 + I SendToModule $[infostore.WSM] SendString 30 4 fontrefresh
 + I Test (EnvMatch infostore.nscde_use_xsettingsd 1) f_Xsettingsd restart
 + I Schedule 50 f_ReadCfg Script

@@ -130,6 +130,32 @@ Widget 1 # Handler
          If (LastString) == {Start} Then
             SendSignal 17 1
       End
+      2 :
+      Begin
+         If (LastString) == {fontrefresh} Then
+         Begin
+            Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+            Set $IconFnClean = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 11.5} 1 -1)
+            Set $IconFn = {Shadow=2 0 SE:} $IconFnClean {:antialias=0}
+         
+            ChangeFont 1 $DefaultFont
+            ChangeFont 2 $DefaultFont
+            ChangeFont 3 $DefaultFont
+            ChangeFont 4 $DefaultFont
+         
+            ChangeFont 27 $IconFn
+            ChangeFont 28 $IconFn
+            ChangeFont 29 $IconFn
+            ChangeFont 30 $IconFn
+            ChangeFont 31 $IconFn
+            ChangeFont 32 $IconFn
+            ChangeFont 33 $IconFn
+            ChangeFont 34 $IconFn
+            ChangeFont 35 $IconFn
+            ChangeFont 36 $IconFn
+            ChangeFont 37 $IconFn
+         End
+      End
 End
 
 Widget 2
