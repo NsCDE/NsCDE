@@ -95,10 +95,13 @@ M. Z.
         5.5. Color Style Manager
 
               5.5.1. Number Of Colors Dialog
-              5.5.2. Color Theme System Integration
+              5.5.2. Color Style System Integration
 
         5.6. Exec Dialog
         5.7. Font Style Manager
+
+              5.7.1. Font Theme System Integration
+
         5.8. Keyboard Style Manager
         5.9. Occupy Workspace, Occupy Page and Occupy Monitor
         5.10. Graphical Workspace Manager (GWM)
@@ -2512,12 +2515,12 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
      * Sun Help and F1: Displays this help text.
      __________________________________________________________
 
-5.5.2. Color Theme System Integration
+5.5.2. Color Style System Integration
 
-   A Color Style Manager part
+   A Color Style Manager part.
 
-   What is most important new feature in Color Style Manager are
-   integration options. This are:
+   An important new feature in NsCDE 2.3 is Color Style Manager's
+   widget integration options reworked. This are:
 
      * Own currently used backdrop synchronization (default)
      * X resources in $FVWM_USERDIR/Xdefaults (default)
@@ -2588,15 +2591,17 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    of all this to run by selecting or unselecting checkboxes of
    the particular integration point.
 
-   Figure 33. Color Style Manager: Number of Colors
+   Figure 33. Color Style Manager System Integration
 
    [fig_colormgr_integration.png]
 
-   If not opened by clicking on Integration Options ... during
-   work with Color Style Manager, this dialog will be activated
-   automatically when OK is selected Color Style Manager to remind
-   user of this important part of look integration options of
-   NsCDE.
+   Selected integrations in this dialog will be saved for the next
+   time. This means that NsCDE will respect user's choice next
+   time Color Style Manager is used without selecting or
+   unselecting this options again. This also means that any
+   non-working integration with some widget set should be
+   inspected by opening this dialog while using Color Style
+   Manager.
 
    Key Bindings:
 
@@ -2804,6 +2809,66 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        fontsets and manual font selection mode
      __________________________________________________________
 
+5.7.1. Font Theme System Integration
+
+   A Font Style Manager part.
+
+   Since NsCDE 2.3, the most important new feature in Font Style
+   Manager are integration options. This are:
+
+     * X resources in $FVWM_USERDIR/Xdefaults (default)
+     * GTK2 (default)
+     * GTK3 (default)
+     * Qt5 (default)
+     * Qt6 (depends)
+     * User's $FVWM_USERDIR/libexec/fontmgr.local script if
+       exists.
+
+   The last integration (local) is used to integrate what default
+   widget integrations cannot reach. For example, custom font in
+   the favourite terminal emulator window.
+
+   If nscde_use_xsettingsd is set to 1 in the
+   $FVWM_USERDIR/NsCDE.conf after applying new font theme, user's
+   X Settings in $FVWM_USERDIR/Xsettingsd.conf will be adjusted
+   and xsettingsd(1) daemon restarted for settings in GTK and Qt
+   applications to be applied immediately. This option can be
+   enabled by editing NsCDE.conf or during initial setup. NsCDE
+   starts xsettingsd daemon with "-c
+   $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be
+   present if it was not installed by the initial setup procedure.
+
+   This Helper dialog serves to select graphical widgets which
+   will be integrated with NsCDE. As said above, NsCDE provides
+   it's own X resources for Athena and Motif programs, theme
+   engines for GTK2, GTK3, Qt4, Qt5 and Qt6, and also extension to
+   various single programs with
+   $[FVWM_USERDIR]/libexec/fontmgr.local like calculators,
+   terminal emulators, etc. Default selection assumes average
+   modern Linux or similar system with GTK2, GTK3 and Qt5 present.
+   However, it is on user to decide here what of all this to run
+   by selecting or unselecting checkboxes of the particular
+   integration point.
+
+   Figure 37. Font Style Integrations
+
+   [fig_fontmgr_integration.png]
+
+   Selected integrations in this dialog will be saved for the next
+   time. This means that NsCDE will respect user's choice next
+   time Font Style Manager is used without selecting or
+   unselecting this options again. This also means that any
+   non-working integration with some widget set should be
+   inspected by opening this dialog while using Font Style
+   Manager.
+
+   Key Bindings:
+
+     * Ctrl+Return: Selects OK.
+     * Escape: Quits Dialog.
+     * Sun Help and F1: Displays this help text.
+     __________________________________________________________
+
 5.8. Keyboard Style Manager
 
    Keyboard Style Manager tool can be used to set four xset(1)
@@ -2835,7 +2900,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    writes $FVWM_USERDIR/Xset.conf file which is a generated xset
    command batch executed during startup.
 
-   Figure 37. Keyboard Style Manager
+   Figure 38. Keyboard Style Manager
 
    [fig_keyboardmgr.png]
 
@@ -2875,7 +2940,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    detected by FVWM and NsCDE. OK performs an action, Dismiss
    quits Occupy tool without taking action.
 
-   Figure 38. Occupy Workspace, Page or Monitor
+   Figure 39. Occupy Workspace, Page or Monitor
 
    [fig_occupy_workspace.png]
 
@@ -2923,7 +2988,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    environment. It also implements some NsCDE and FVWM specific
    options.
 
-   Figure 39. Graphical Workspace Manager - GWM
+   Figure 40. Graphical Workspace Manager - GWM
 
    [fig_gwm.png]
 
@@ -3022,7 +3087,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        be written in pager windows frames with very small font
        instead of mini icons. Not default.
 
-   Figure 40. Graphical Workspace Manager: Options
+   Figure 41. Graphical Workspace Manager: Options
 
    [fig_gwmoptions.png]
 
@@ -3070,7 +3135,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    monitor resolutions are possible and saved under separate
    sections in $FVWM_USERDIR/GeoDB.ini.
 
-   Figure 41. Window Geometry Manager
+   Figure 42. Window Geometry Manager
 
    [fig_geometrymgr.png]
 
@@ -3122,7 +3187,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    pointer to Save button for actions to be written in config
    files.
 
-   Figure 42. Mouse Style Manager
+   Figure 43. Mouse Style Manager
 
    [fig_mousemgr.png]
 
@@ -3155,7 +3220,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    this settings on runtime, and point mouse to Save button for
    changes to be written.
 
-   Figure 43. Mouse Style Manager
+   Figure 44. Mouse Style Manager
 
    [fig_powermgr.png]
 
@@ -3178,7 +3243,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    functions cannot be easy implemented even if some file manager
    is taken to act as application manager.
 
-   Figure 44. Subpanel Manager
+   Figure 45. Subpanel Manager
 
    [fig_subpanelmgr.png]
 
@@ -3229,7 +3294,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    button regenerates subpanel, while Save button does this and
    also quits Subpanel Manager.
 
-   Figure 45. Configured Subpanel
+   Figure 46. Configured Subpanel
 
    [fig_subpanel.png]
 
@@ -3271,7 +3336,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    It reloads configuration of the given subpanel after applying
    changes and exiting with OK.
 
-   Figure 46. Subpanel Settings Dialog
+   Figure 47. Subpanel Settings Dialog
 
    [fig_subpanelsettings.png]
 
@@ -3285,7 +3350,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.16. Front Panel Icon Manager
 
-   Figure 47. Front Panel Icon Manager
+   Figure 48. Front Panel Icon Manager
 
    [fig_FpIconMgr1.png]
 
@@ -3308,7 +3373,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    the contextual menu called with mouse button 3 on the Front
    Panel's icon.
 
-   Figure 48. Front Panel Icon Manager: select an action
+   Figure 49. Front Panel Icon Manager: select an action
 
    [fig_FpIconMgr2.png]
 
@@ -3343,7 +3408,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    without pm-utils but with systemd(1) and FreeBSD with
    acpiconf(8) are supported in this moment.
 
-   Figure 49. Sytem Action Dialog
+   Figure 50. Sytem Action Dialog
 
    [fig_SysActionDialog.png]
 
@@ -3369,7 +3434,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.18. Sysinfo
 
-   Figure 50. System Information Dialog (Sysinfo)
+   Figure 51. System Information Dialog (Sysinfo)
 
    [fig_sysinfo.png]
    Well known Workstation Information info dialog. It doesn't have
@@ -3416,7 +3481,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.19.1. Configuration Section: Window Behavior
 
-   Figure 51. Window Style Manager: Window and Window Icons tabs
+   Figure 52. Window Style Manager: Window and Window Icons tabs
 
    [fig_windowmgr1.png]
 
@@ -3477,7 +3542,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 5.19.3. Configuration Section: Page Edges
 
-   Figure 52. Window Style Manager: Page Edges and Animation tabs
+   Figure 53. Window Style Manager: Page Edges and Animation tabs
 
    [fig_windowmgr2.png]
 
@@ -3554,7 +3619,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
        Panel
      * Desktop Model on multi head monitor setup (FVWM3 only)
 
-   Figure 53. Workspaces and Pages Manager
+   Figure 54. Workspaces and Pages Manager
 
    [fig_wspgmgr.png]
 
@@ -3647,7 +3712,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    are refreshed. Check All Now button when pressed will refresh
    status for all items, selected or not.
 
-   Figure 54. NsCDE Process Manager
+   Figure 55. NsCDE Process Manager
 
    [fig_nprocmgr.png]
 
@@ -3667,7 +3732,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.1. ActionForm - FvwmScript
 
-   Figure 55. Action Form
+   Figure 56. Action Form
 
    [fig_action_form.png]
 
@@ -3688,7 +3753,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.3. FilePicker - FvwmScript
 
-   Figure 56. File Picker
+   Figure 57. File Picker
 
    [fig_file_picker.png]
 
@@ -3704,7 +3769,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.4. InputForm - FvwmScript
 
-   Figure 57. Input Form
+   Figure 58. Input Form
 
    [fig_input_form.png]
 
@@ -3725,7 +3790,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    clicked or receives return or escape key, it will dissapear
    immediately.
 
-   Figure 58. Wait Notice
+   Figure 59. Wait Notice
 
    [fig_wait_notice.png]
 
@@ -3735,7 +3800,7 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
 
 6.6. Splash - FvwmScript
 
-   Figure 59. NsCDE Splash Screen
+   Figure 60. NsCDE Splash Screen
 
    [fig_splash.png]
 
@@ -4037,17 +4102,17 @@ Silent Key Tab A S -
      * To open Graphical Workspace Manager or "GWM", press
        Meta+Alt+Home key binding. Keys Control+Q if pressed in the
        context of GWM window, will dismiss GWM.
-       Figure 60. GWM - Graphical Workspace Manager
+       Figure 61. GWM - Graphical Workspace Manager
        [fig_gwm.png]
      * To open Local Pager, press Meta+Backspace in any context.
        Pressing Meta+Backspace again (but in the context of Local
        Pager) dismisses Local Pager.
-       Figure 61. Local Pager
+       Figure 62. Local Pager
        [fig_localpager.png]
      * To open Global Pager, press Meta+Alt+Backspace in any
        context. Pressing Meta+Alt+Backspace again dismisses Global
        Pager.
-       Figure 62. Global Pager
+       Figure 63. Global Pager
        [fig_globalpager.png]
      * To lock the screen if X Screen Saver is enabled, press
        Meta+Alt+L.
@@ -4135,7 +4200,7 @@ Silent Key Tab A S -
      * Pressing Meta+Alt+M in the context of the Front Panel will
        open Front Panel Operations Menu by clicking leftmost top
        button just like in any other window or subpanel.
-       Figure 63. Window Options Menu (cua)
+       Figure 64. Window Options Menu (cua)
        [fig_cua_menu.png]
      * To open subpanels 1-5 and 6-10, press Meta+<number> in the
        context (focus) of the Front Panel.
@@ -4326,7 +4391,7 @@ Silent Key Tab A S -
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-       Figure 64. Window Geometry Manager
+       Figure 65. Window Geometry Manager
        [fig_geometrymgr.png]
      * Meta+Alt+F In the context of a window, frame, or corner,
        puts a current window into a real fullscreen mode. Calling
@@ -4340,7 +4405,7 @@ Silent Key Tab A S -
        Dynamic: defined in
        $NSCDE_DATADIR/defaults/Keymenu-cua.actions for automatic
        description on menus.
-       Figure 65. FVWM Ident Dialog
+       Figure 66. FVWM Ident Dialog
        [fig_fvwmident.png]
      * Meta+Alt+T In the context of a window or it's decorations
        removes title bar of that window leaving only content,
@@ -4428,7 +4493,7 @@ Silent Key Tab A S -
        semi-transient mode, this pager, if not called as full GWM
        will disappear shortly after losing mouse focus, to free up
        space on the screen.
-       Figure 66. Global Pager
+       Figure 67. Global Pager
        [fig_globalpager.png]
      * Alt+Tab is cycling trough pages of the active page of the
        current workspace from up to down and then right up to down
@@ -4451,7 +4516,7 @@ Silent Key Tab A S -
        frame sides and a title bar pops up Window Options context
        menu. In the context of an icon, it brings Icon Operations
        Menu, similar to Window Operations Menu.
-       Figure 67. Window Options Menu (nscde1x)
+       Figure 68. Window Options Menu (nscde1x)
        [fig_nscde1x_menu.png]
      * Key Meta+Alt+O - same as Meta+Space if called in the window
        context.
@@ -4838,7 +4903,7 @@ Silent Key Tab A S -
      * Control+ middle mouse click will call extended version of
        the WindowList with additional window info such as page
        number and window geometry.
-       Figure 68. Window List (Extended)
+       Figure 69. Window List (Extended)
        [fig_winlist_ext.png]
      * Left mouse button on border of the shaded Front Panel
        context will de-shade and reposition Front Panel
@@ -4924,7 +4989,7 @@ Silent Key Tab A S -
    Btn10,,M3,FVWM,f_FrontPanelPropsMenu 10 APPLET
 
 
-   Figure 69. Visual: resulting applet on the Front Panel
+   Figure 70. Visual: resulting applet on the Front Panel
 
    [fig_cust_applet.png]
 
@@ -5501,7 +5566,7 @@ Silent Key Tab A S -
 
 9.22. LocalPager.fvwmconf
 
-   Figure 70. Local Pager
+   Figure 71. Local Pager
 
    [fig_localpager.png]
 
@@ -6121,7 +6186,7 @@ Silent Key Tab A S -
    directory $PREFIX/share/doc/nscde/examples/ for MATE, KDE, LXDE
    and similar DE integrations and play with this if you like.
 
-   Figure 71. NsCDE Splash Screen
+   Figure 72. NsCDE Splash Screen
 
    [fig_splash.png]
      __________________________________________________________
@@ -6216,7 +6281,7 @@ Silent Key Tab A S -
      * Configure favorite X file manager, if desired
      * Configure favorite X text editor, if desired
 
-   Figure 72. NsCDE first time setup (bootstrap)
+   Figure 73. NsCDE first time setup (bootstrap)
 
    [fig_bootstrap.png]
 
@@ -6288,7 +6353,7 @@ Silent Key Tab A S -
    variable $[infostore.xlogcmd] will be "tail -300f
    ~/.xsession-errors".
 
-   Figure 73. Watch Errors (logging)
+   Figure 74. Watch Errors (logging)
 
    [fig_watcherrors.png]
 
@@ -6306,7 +6371,7 @@ Silent Key Tab A S -
    the "Watch Errors" window has a custom menu entry Fvwm
    Diagnostic Console which starts FVWM module FvwmConsole.
 
-   Figure 74. Personalized Window Operations Menu on "Watch
+   Figure 75. Personalized Window Operations Menu on "Watch
    Errors" window
 
    [fig_appmenu1.png]
@@ -6317,7 +6382,7 @@ Silent Key Tab A S -
    Menu "NsCDE Process Manager" which will run the same named
    application on demand.
 
-   Figure 75. FVWM Diagnostic Console
+   Figure 76. FVWM Diagnostic Console
 
    [fig_fvwmconsole.png]
      __________________________________________________________
@@ -6367,7 +6432,7 @@ Silent Key Tab A S -
    this directory with gtk-theme-name option. Excessive button
    images on menus and buttons will be turned off of course.
 
-   Figure 76. Example: Audacious with motified NsCDE theme: GTK
+   Figure 77. Example: Audacious with motified NsCDE theme: GTK
    engine for Qt5
 
    [fig_audacious.png]
@@ -6395,7 +6460,7 @@ Silent Key Tab A S -
 
 17.3. Mozilla: Firefox and Thunderbird
 
-   Figure 77. Firefox with NsCDE GTK3 theme and NsCDE userChrome
+   Figure 78. Firefox with NsCDE GTK3 theme and NsCDE userChrome
    and userContent CSS
 
    [fig_firefox.png]
@@ -7302,7 +7367,7 @@ export FVWM_BIN=fvwm
        found on the system it will be defined as
        $[infostore.appmgr] and placed on the Front Panel's eighth
        launcher instead of icon for default editor.
-       Figure 78. PCManFM as Application Manager
+       Figure 79. PCManFM as Application Manager
        [fig_appmgr.png]
      * Action builder (dtaction) - not likely ever. Use FvwmScript
        or maybe some Python gui bindings.

@@ -3429,14 +3429,14 @@ Key Bindings:
 </sect3>
 
 <sect3 id="NsCDE-ColorIntegrationDialog">
-<title>Color Theme System Integration</title>
+<title>Color Style System Integration</title>
 <para>
-A <link linkend="NsCDE-ColorMgr">Color Style Manager</link> part
+A <link linkend="NsCDE-ColorMgr">Color Style Manager</link> part.
 </para>
 
 <para>
-What is most important new feature in Color Style Manager are integration
-options. This are:
+An important new feature in NsCDE 2.3 is Color Style Manager's widget integration
+options reworked. This are:
 </para>
 
 <itemizedlist>
@@ -3522,7 +3522,7 @@ by selecting or unselecting checkboxes of the particular integration point.
 </para>
 
 <figure id="fig_colormgr_integration">
-  <title>Color Style Manager: Number of Colors</title>
+  <title>Color Style Manager System Integration</title>
   <mediaobject>
     <imageobject role="html">
       <imagedata fileref="img/fig_colormgr_integration.png" format="PNG" scale="100"/>
@@ -3534,10 +3534,10 @@ by selecting or unselecting checkboxes of the particular integration point.
 </figure>
 
 <para>
-If not opened by clicking on <guibutton>Integration Options ...</guibutton> during work with
-<link linkend="NsCDE-ColorMgr">Color Style Manager</link>, this dialog will be activated
-automatically when <guibutton>OK</guibutton> is selected Color Style Manager to remind user
-of this important part of look integration options of NsCDE.
+Selected integrations in this dialog will be saved for the next time. This means that NsCDE
+will respect user's choice next time Color Style Manager is used without selecting or unselecting
+this options again. This also means that any non-working integration with some widget set should
+be inspected by opening this dialog while using Color Style Manager.
 </para>
 
 <para>
@@ -3726,7 +3726,7 @@ if some of this widget integrations is not desirable by the user.
       <imagedata fileref="img/fig_fontmgr.png" format="PNG" scale="100"/>
     </imageobject>
     <imageobject role="fo">
-      <imagedata fileref="img/fig_fontmgr.png" format="EPS" scale="40"/>
+      <imagedata fileref="img/fig_fontmgr.png" format="EPS" scale="54"/>
     </imageobject>
   </mediaobject>
 </figure>
@@ -3786,6 +3786,7 @@ Button <guibutton>Default</guibutton> loads default
 then be saved as a choice or further customized into the new fontset. Bottom half of the
 Font Style Manager contains preview for all fonts from the one of the three selected size sets.
 </para>
+
 <para>
 Checkboxes <guilabel>Refresh GTK2/GTK3</guilabel>, and <guilabel>Refresh X Resources"</guilabel>
 are integrating font selection with popular widgets by providing <emphasis>normal medium</emphasis> font and
@@ -3856,6 +3857,98 @@ Key Bindings:
 </para></listitem>
 </itemizedlist>
 </para>
+
+<sect3 id="NsCDE-FontIntegrationDialog">
+<title>Font Theme System Integration</title>
+<para>
+A <link linkend="NsCDE-FontMgr">Font Style Manager</link> part.
+</para>
+
+<para>
+Since NsCDE 2.3, the most important new feature in Font Style Manager are integration
+options. This are:
+</para>
+
+<itemizedlist>
+<listitem><para>
+ X resources in <filename>$FVWM_USERDIR/Xdefaults</filename> (default)
+</para></listitem>
+<listitem><para>
+ GTK2 (default)
+</para></listitem>
+<listitem><para>
+ GTK3 (default)
+</para></listitem>
+<listitem><para>
+ Qt5 (default)
+</para></listitem>
+<listitem><para>
+ Qt6 (depends)
+</para></listitem>
+<listitem><para>
+ User's <filename>$FVWM_USERDIR/libexec/fontmgr.local</filename> script if exists.
+</para></listitem>
+</itemizedlist>
+
+<para>
+The last integration (local) is used to integrate what default widget integrations
+cannot reach. For example, custom font in the favourite terminal emulator window.
+</para>
+
+<para>
+If <varname>nscde_use_xsettingsd</varname> is set to 1 in the <filename>$FVWM_USERDIR/NsCDE.conf</filename>
+after applying new font theme, user's X Settings in <filename>$FVWM_USERDIR/Xsettingsd.conf</filename> will
+be adjusted and xsettingsd(1) daemon restarted for settings in GTK and Qt applications to be applied immediately.
+This option can be enabled by editing NsCDE.conf or during initial setup. NsCDE starts <command>xsettingsd</command>
+daemon with "-c $FVWM_USERDIR/Xsettingsd.conf" parameter. This file must be present if it was not
+installed by the initial setup procedure.
+</para>
+
+<para>
+This Helper dialog serves to select graphical widgets which will be integrated with NsCDE. As said above,
+NsCDE provides it's own X resources for Athena and Motif programs, theme engines for GTK2, GTK3, Qt4, Qt5
+and Qt6, and also extension to various single programs with
+<filename>$[FVWM_USERDIR]/libexec/fontmgr.local</filename> like calculators, terminal emulators, etc.
+Default selection assumes average modern Linux or similar system with GTK2, GTK3 and Qt5 present.
+However, it is on user to decide here what of all this to run by selecting or unselecting
+checkboxes of the particular integration point.
+</para>
+
+<figure id="fig_fontmgr_integration">
+  <title>Font Style Integrations</title>
+  <mediaobject>
+    <imageobject role="html">
+      <imagedata fileref="img/fig_fontmgr_integration.png" format="PNG" scale="100"/>
+    </imageobject>
+    <imageobject role="fo">
+      <imagedata fileref="img/fig_fontmgr_integration.png" format="EPS" scale="60"/>
+    </imageobject>
+  </mediaobject>
+</figure>
+
+<para>
+Selected integrations in this dialog will be saved for the next time. This means that NsCDE
+will respect user's choice next time Font Style Manager is used without selecting or unselecting
+this options again. This also means that any non-working integration with some widget set should
+be inspected by opening this dialog while using Font Style Manager.
+</para>
+
+<para>
+Key Bindings:
+<itemizedlist>
+<listitem><para>
+<keysym>Ctrl+Return</keysym>: Selects OK.
+</para></listitem>
+<listitem><para>
+<keysym>Escape</keysym>: Quits Dialog.
+</para></listitem>
+<listitem><para>
+<keysym>Sun Help and F1</keysym>: Displays this help text.
+</para></listitem>
+</itemizedlist>
+</para>
+
+</sect3>
 
 </sect2>
 
