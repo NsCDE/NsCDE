@@ -49,7 +49,7 @@ Begin
    ChangeLocaleTitle 17 {Help}
 
    # Initial integration string
-   Set $IntegrationString = (GetScriptArgument 2)
+   Set $IntegrationString = (GetScriptArgument 1)
 
    Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)$'; echo $?}
    Set $CheckIntegStr = (GetOutput $CheckIntegStrCmd 1 1)
@@ -100,15 +100,11 @@ Begin
    ChangeColorset 12 59
 
    # Keybindings
+   Key Return C 15 1 {KeyPerform}
    Key Q C 16 1 {KeyClose}
    Key Escape A 16 1 {KeyClose}
    Key F1 A 17 1 {KeyHelp}
    Key Help A 17 1 {KeyHelp}
-
-   If (GetScriptArgument 1) == {on-ok} Then
-   Begin
-      Set $PerformRestartSignal = 1
-   End
 End
 
 Widget 1
@@ -373,10 +369,6 @@ Property
       Begin
          # Send to ColorMgr integration string
          Do {SendToModule ColorMgr SendString 21 2 } (GetValue 4) (GetValue 5) (GetValue 6) (GetValue 7) (GetValue 8) (GetValue 9) (GetValue 10) (GetValue 11) (GetValue 12) (GetValue 13)
-         If $PerformRestartSignal == 1 Then
-         Begin
-            Do {SendToModule ColorMgr SendString 32 2 1}
-         End
          Quit
       End
 End
@@ -398,8 +390,7 @@ Property
       End
       1 :
       Begin
-         # Tell ColorMgr no action has been done
-         Do {SendToModule ColorMgr SendString 32 2 0}
+         # No action has been done
          Quit
       End
 End

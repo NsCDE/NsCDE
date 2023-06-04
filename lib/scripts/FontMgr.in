@@ -239,6 +239,9 @@ Begin
       End
    End
 
+   # Get ride of possible "2" initial value, otherwise we can get checked checkbox in FontIntegrationDialog
+   Set $IntegrationString = $SetXresources $SetGtk2 $SetGtk3 $SetQt5 $SetQt6 $SetGtk4 $SetFontmgrLocal
+
    # Font / Fontset mode to display
    Set $GetFontsetChoice = (GetOutput {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined} 1 1)
    If $GetFontsetChoice == 1 Then
@@ -1400,14 +1403,15 @@ Widget 22
       Begin
          SendSignal 22 1
       End
+      # Call FontIntegrationDialog
       1 :
       Begin
-         Do {f_ToggleFvwmModule FvwmScript FontIntegrationDialog on-button } $IntegrationString
+         Do {f_ToggleFvwmModule FvwmScript FontIntegrationDialog } $IntegrationString
       End
+      # Parse $IntegrationString and provide defaults if it is faulty
       2 :
       Begin
          Set $IntegrationString = (LastString)
-         Set $IntStrParsed = 0
 
          Set $SetXresources = (StrCopy $IntegrationString 1 1)
          If $SetXresources <> {1} Then
@@ -1416,16 +1420,8 @@ Widget 22
             Begin
                Set $SetXresources = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk2 = (StrCopy $IntegrationString 2 2)
          If $SetGtk2 <> {1} Then
          Begin
@@ -1433,16 +1429,8 @@ Widget 22
             Begin
                Set $SetGtk2 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk3 = (StrCopy $IntegrationString 3 3)
          If $SetGtk3 <> {1} Then
          Begin
@@ -1450,16 +1438,8 @@ Widget 22
             Begin
                Set $SetGtk3 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt5 = (StrCopy $IntegrationString 4 4)
          If $SetQt5 <> {1} Then
          Begin
@@ -1467,16 +1447,8 @@ Widget 22
             Begin
                Set $SetQt5 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt6 = (StrCopy $IntegrationString 5 5)
          If $SetQt6 <> {1} Then
          Begin
@@ -1484,16 +1456,8 @@ Widget 22
             Begin
                Set $SetQt6 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
          If $SetGtk4 <> {1} Then
          Begin
@@ -1501,16 +1465,8 @@ Widget 22
             Begin
                Set $SetGtk4 = 0
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
          If $SetFontmgrLocal <> {1} Then
          Begin
@@ -1518,14 +1474,6 @@ Widget 22
             Begin
                Set $SetFontmgrLocal = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
-         End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
          End
       End
 End
@@ -1819,14 +1767,6 @@ Widget 26
          Begin
             # For existing fontset selection, skip 26 1, go to 26 2
             SendSignal 26 2
-         End
-      End
-      6 :
-      Begin
-         Set $IntegrationsPresented = (LastString)
-         If $IntegrationsPresented <> 0 Then
-         Begin
-            SendSignal 26 5
          End
       End
 End

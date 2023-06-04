@@ -82,7 +82,6 @@ Begin
    Set $ListTotal = (GetOutput {$NSCDE_TOOLSDIR/colormgr -p | tr '|' '\n' | wc -l} 1 1)
 
    Set $PreviewContaminated = 0
-   Set $IntegrationsPresented = 0
    Set $SelectedColorset = 0
 
    Set $Current = (GetOutput {echo $NSCDE_PALETTE} 1 -1)
@@ -1154,15 +1153,14 @@ Widget 21
       # Spawn integrations dialog
       1 :
       Begin
-         Do {f_ToggleFvwmModule FvwmScript ColorIntegrationDialog on-button } $IntegrationString
+         Do {f_ToggleFvwmModule FvwmScript ColorIntegrationDialog } $IntegrationString
       End
       # Build a string of integrations - received with SendToModule
-      # from ColorIntegrationDialog: $IntegrationString must be
-      # 10-digit binary number, $IntStrParsed must be 10 at the end.
+      # from ColorIntegrationDialog. Provide defaults if value is
+      # not 0 or 1.
       2 :
       Begin
          Set $IntegrationString = (LastString)
-         Set $IntStrParsed = 0
 
          Set $SetBackdrops = (StrCopy $IntegrationString 1 1)
          If $SetBackdrops <> {1} Then
@@ -1171,16 +1169,8 @@ Widget 21
             Begin
                Set $SetBackdrops = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetXresources = (StrCopy $IntegrationString 2 2)
          If $SetXresources <> {1} Then
          Begin
@@ -1188,16 +1178,8 @@ Widget 21
             Begin
                Set $SetXresources = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk2 = (StrCopy $IntegrationString 3 3)
          If $SetGtk2 <> {1} Then
          Begin
@@ -1205,16 +1187,8 @@ Widget 21
             Begin
                Set $SetGtk2 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk3 = (StrCopy $IntegrationString 4 4)
          If $SetGtk3 <> {1} Then
          Begin
@@ -1222,16 +1196,8 @@ Widget 21
             Begin
                Set $SetGtk3 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt4 = (StrCopy $IntegrationString 5 5)
          If $SetQt4 <> {1} Then
          Begin
@@ -1239,16 +1205,8 @@ Widget 21
             Begin
                Set $SetQt4 = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt5Gtk = (StrCopy $IntegrationString 6 6)
          If $SetQt5Gtk <> {1} Then
          Begin
@@ -1256,16 +1214,8 @@ Widget 21
             Begin
                Set $SetQt5Gtk = 0
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt5Kv = (StrCopy $IntegrationString 7 7)
          If $SetQt5Kv <> {1} Then
          Begin
@@ -1273,16 +1223,8 @@ Widget 21
             Begin
                Set $SetQt5Kv = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetQt6Kv = (StrCopy $IntegrationString 8 8)
          If $SetQt6Kv <> {1} Then
          Begin
@@ -1290,16 +1232,8 @@ Widget 21
             Begin
                Set $SetQt6Kv = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetGtk4 = (StrCopy $IntegrationString 9 9)
          If $SetGtk4 <> {1} Then
          Begin
@@ -1307,16 +1241,8 @@ Widget 21
             Begin
                Set $SetGtk4 = 0
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
          End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
-         End
-      
+
          Set $SetColormgrLocal = (StrCopy $IntegrationString 10 10)
          If $SetColormgrLocal <> {1} Then
          Begin
@@ -1324,14 +1250,6 @@ Widget 21
             Begin
                Set $SetColormgrLocal = 1
             End
-            Else
-            Begin
-               Set $IntStrParsed = (Add $IntStrParsed 1)
-            End
-         End
-         Else
-         Begin
-            Set $IntStrParsed = (Add $IntStrParsed 1)
          End
       End
 End
@@ -1367,28 +1285,6 @@ Widget 32
       End
       # Main Wrapper
       1 :
-      Begin
-         If $IntStrParsed <> 10 Then
-         Begin
-            Do {f_ToggleFvwmModule FvwmScript ColorIntegrationDialog on-ok } $IntegrationString
-         End
-         Else
-         Begin
-            Set $IntegrationsPresented = 1
-            SendSignal 32 3
-         End
-      End
-      # SendToModule from ColorIntegrationDialog
-      2 :
-      Begin
-         Set $IntegrationsPresented = (LastString)
-         If $IntegrationsPresented <> 0 Then
-         Begin
-            SendSignal 32 3
-         End
-      End
-      # Don't call directly, call with 32 1
-      3 :
       Begin
          Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new color theme loaded.]" 5000}
 

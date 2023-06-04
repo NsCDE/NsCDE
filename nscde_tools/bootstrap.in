@@ -177,13 +177,19 @@ function setup_nscde
    if [ "x$ans" == "xy" ]; then
       echo "$locale_integrating GTK2 theme --> 1"
       themegen_gtk2="gtk2"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk2 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk2 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating GTK2 theme --> 0"
       themegen_gtk2="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk2 -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk2 -v 0
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating GTK2 theme --> 1"
       themegen_gtk2="gtk2"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk2 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk2 -v 1
    fi
 
    locale_integrate_gtk3_question=$(gettext -s "Do you want to enable NsCDE GTK3 theme integration?")
@@ -195,13 +201,19 @@ function setup_nscde
    if [ "x$ans" == "xy" ]; then
       echo "$locale_integrating GTK3 theme --> 1"
       themegen_gtk3="gtk3"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk3 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk3 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating GTK3 theme --> 0"
       themegen_gtk3="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk3 -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk3 -v 0
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating GTK3 theme --> 1"
       themegen_gtk3="gtk3"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_gtk3 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk3 -v 1
    fi
 
    locale_integrate_qt4_question=$(gettext -s "Do you want to enable NsCDE Qt4 theme integration?")
@@ -213,13 +225,16 @@ function setup_nscde
    if [ "x$ans" == "xy" ]; then
       echo "$locale_integrating Qt4 theme --> 1"
       themeadd_qt4="qt4"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating Qt4 theme --> 0"
       themeadd_qt4="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 0
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating Qt4 theme --> 1"
       themeadd_qt4="4"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 1
    fi
 
    locale_integrate_qt5_gtk_question=$(gettext -s "Do you want to enable NsCDE Qt5 GTK engine theme integration?")
@@ -235,15 +250,21 @@ function setup_nscde
       echo "$locale_not_integrating Qt5 GTK theme --> 0"
       themeadd_qt5g="False"
       themeadd_qt5="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5g -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 0
    elif [ "x$ans" == "xy" ]; then
       echo "$locale_not_integrating Qt5 GTK theme --> 1"
       themeadd_qt5g="qt5g"
       themeadd_qt5="$themeadd_qt5g"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5g -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 1
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating Qt5 GTK theme --> 0"
       themeadd_qt5g="False"
       themeadd_qt5="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5g -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 1
    fi
 
    locale_integrate_qt5_kvantum_question=$(gettext -s "Do you want to enable NsCDE Qt5 Kvantum engine theme integration?")
@@ -256,17 +277,23 @@ function setup_nscde
       echo "$locale_integrating Qt5 Kvantum theme --> 1"
       themeadd_qt5k="qt5k"
       themeadd_qt5="$themeadd_qt5k"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5k -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating Qt5 Kvantum theme --> 0"
       if [ "$themeadd_qt5" != "qt5g" ]; then
          themeadd_qt5k="False"
          themeadd_qt5="False"
+         $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5k -v 0
+         $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 0
       fi
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating Qt5 Kvantum theme --> 1"
       themeadd_qt5k="qt5k"
       themeadd_qt5="$themeadd_qt5k"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt5k -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt5 -v 1
    fi
 
    locale_integrate_qt6_question=$(gettext -s "Do you want to enable NsCDE Qt6 theme integration?")
@@ -278,13 +305,19 @@ function setup_nscde
    if [ "x$ans" == "xy" ]; then
       echo "$locale_integrating Qt6 Kvantum theme --> 1"
       themeadd_qt6="qt6"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt6 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt6 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating Qt6 Kvantum theme --> 0"
       themeadd_qt6="False"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt6 -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt6 -v 0
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating Qt6 Kvantum theme --> 1"
       themeadd_qt6="qt6"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt6 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt6 -v 1
    fi
 
    # Disable "fancy" xcursors
@@ -359,6 +392,8 @@ function setup_nscde
       mkdir -p "${FVWM_USERDIR}/libexec"
       cp ${NSCDE_DATADIR}/config_templates/colormgr.local "${FVWM_USERDIR}/libexec/colormgr.local"
       chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_local -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_local -v 1
    else
       echo "${FVWM_USERDIR}/libexec/colormgr.local ${already_exists}."
    fi

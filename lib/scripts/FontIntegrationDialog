@@ -14,7 +14,7 @@ Begin
    # Dynamic colorset for disabled items - based on CS22
    Do {Colorset 59 fg $[shadow.cs22], bg $[bg.cs22], hi $[hilight.cs22], sh $[shadow.cs22], Plain, NoShape}
 
-   # Fonts
+   # Widget Fonts
    Set $DefaultFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
    Set $SmallFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
    ChangeFont 3 $SmallFont
@@ -42,12 +42,14 @@ Begin
    ChangeLocaleTitle 13 {Cancel}
    ChangeLocaleTitle 14 {Help}
 
-   # Initial integration string
-   Set $IntegrationString = (GetScriptArgument 2)
+   # Initial integration string given by FontMgr
+   Set $IntegrationString = (GetScriptArgument 1)
 
-   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)(0|1|2)$'; echo $?}
+   # Sanity
+   Set $CheckIntegStrCmd = {echo '} $IntegrationString {' | egrep -q '^(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)(0|1)$'; echo $?}
    Set $CheckIntegStr = (GetOutput $CheckIntegStrCmd 1 1)
-   
+
+   # Provide defaults if initial obtained IntegrationString is faulty.
    If $CheckIntegStr <> 0 Then
    Begin
       Set $IntegrationString = {1111101}
@@ -84,7 +86,7 @@ Begin
       ChangeLocaleTitle 10 { Local Hooks (fontmgr.local is missing)}
    End
 
-   # GTK4 - not yet implemented - disabled colorset
+   # GTK4 - not yet implemented - put disabled colorset
    ChangeColorset 9 59
 
    # Keybindings
@@ -92,11 +94,6 @@ Begin
    Key Escape A 13 1 {KeyClose}
    Key F1 A 14 1 {KeyHelp}
    Key Help A 14 1 {KeyHelp}
-
-   If (GetScriptArgument 1) == {on-ok} Then
-   Begin
-      Set $PerformSignal = 1
-   End
 End
 
 Widget 1
@@ -297,10 +294,6 @@ Property
       Begin
          # Send to FontMgr integration string
          Do {SendToModule FontMgr SendString 22 2 } (GetValue 4) (GetValue 5) (GetValue 6) (GetValue 7) (GetValue 8) (GetValue 9) (GetValue 10)
-         If $PerformSignal == 1 Then
-         Begin
-            Do {SendToModule FontMgr SendString 26 6 1}
-         End
          Quit
       End
 End
@@ -322,8 +315,7 @@ Property
       End
       1 :
       Begin
-         # Tell FontMgr no action has been done
-         Do {SendToModule FontMgr SendString 26 6 0}
+         # No action has been done, no signal for FontMgr
          Quit
       End
 End
