@@ -464,8 +464,8 @@ Widget 4
          If (GetValue 4) == 2 Then
          Begin
             Set $RestoreXresources = (GetOutput {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults} 1 -1)
-            Do {f_Readcfg Backdrops}
-            Do {f_Readcfg Colorset}
+            Do {f_ReadCfg Backdrops}
+            Do {f_ReadCfg Colorset}
 
             If $Fvwm3DesktopNonGlobalMode == 1 Then
             Begin
@@ -1799,7 +1799,7 @@ Widget 32
          # Reload things with new configuration
 
          # Reread new colorset
-         Do {f_Readcfg Colorset}
+         Do {f_ReadCfg Colorset}
 
          # Handle Front Panel artefacts
          Do {Schedule 600 SendToModule FrontPanel ChangeButton FpLock Icon "NsCDE/FpLock.xpm" PressIcon "NsCDE/FpLockP.xpm"}
@@ -1842,7 +1842,7 @@ Widget 32
          # Reread backdrops
          If $SetBackdrops == 1 Then
          Begin
-            Do {f_Readcfg Backdrops}
+            Do {f_ReadCfg Backdrops}
 
             If $Fvwm3DesktopNonGlobalMode == 1 Then
             Begin
@@ -1918,8 +1918,8 @@ Widget 33
          Begin
             Set $RestoreXresources = (GetOutput {xrdb -remove; xrdb -cpp /usr/bin/cpp < $FVWM_USERDIR/Xdefaults} 1 -1)
 
-            Do {f_Readcfg Backdrops}
-            Do {f_Readcfg Colorset}
+            Do {f_ReadCfg Backdrops}
+            Do {f_ReadCfg Colorset}
             Do {Schedule 340 Refresh}
 
             If $Fvwm3DesktopNonGlobalMode == 1 Then

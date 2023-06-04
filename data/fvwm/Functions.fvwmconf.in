@@ -595,7 +595,7 @@ AddToFunc f_RestartFrontPanel
 + I f_InfoStoreTimeSet 5500 no_fp_colorset_change 1
 + I KillModule FvwmButtons FrontPanel
 + I PipeRead "$[NSCDE_TOOLSDIR]/fpseticon pre"
-+ I f_Readcfg FrontPanel
++ I f_ReadCfg FrontPanel
 + I ModuleSynchronous Timeout 5 FvwmButtons FrontPanel
 + I Wait FrontPanel
 + I All (FrontPanel,CirculateHit) Move $[infostore.frontpanel.pos.placement]
@@ -2397,13 +2397,13 @@ DestroyFunc f_FontMgrRefreshFonts
 AddToFunc f_FontMgrRefreshFonts
 + I Exec exec @KSH@ -c "cd $[HOME]; xrdb -remove; xrdb -cpp /usr/bin/cpp < .NsCDE/Xdefaults"
 + I Test (EnvIsSet XFT_USE_DPI) SetEnv NSCDE_FONT_DPI $[XFT_USE_DPI]
-+ I f_Readcfg Font-96dpi
-+ I f_Readcfg Font-$[NSCDE_FONT_DPI]dpi
++ I f_ReadCfg Font-96dpi
++ I f_ReadCfg Font-$[NSCDE_FONT_DPI]dpi
 + I SendToModule MonthDayApplet SendString 2 4 fontrefresh
 + I SendToModule $[infostore.WSM] SendString 30 4 fontrefresh
 + I Test (EnvMatch infostore.nscde_use_xsettingsd 1) f_Xsettingsd restart
-+ I Schedule 50 f_Readcfg Script
-+ I Schedule 250 f_Readcfg Style
++ I Schedule 50 f_ReadCfg Script
++ I Schedule 250 f_ReadCfg Style
 
 # Watch Errors (Xsession and FVWM3 Log)
 DestroyFunc f_WatchErrors
