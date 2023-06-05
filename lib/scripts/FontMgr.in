@@ -157,15 +157,16 @@ Begin
    # 1. X Resources
    # 2. GTK2
    # 3. GTK3
-   # 4. Qt5
-   # 5. Qt6
-   # 6. Reserved for GTK4
-   # 7. Local $FVWM_USERDIR/libexec/colormgr.local
+   # 4. Qt4
+   # 5. Qt5
+   # 6. Qt6
+   # 7. Reserved for GTK4
+   # 8. Local $FVWM_USERDIR/libexec/colormgr.local
 
    # Saved Integration String
    # WARNING: order of options to -K of confget is important!
    Set $IntegrationStringCmd = {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -d "" -D 2 -K }
-       {integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt5,integrate_qt4}
+       {integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt4,integrate_qt5,}
        {integrate_qt6,integrate_gtk4,integrate_local}
    Set $IntegrationString = (GetOutput $IntegrationStringCmd 1 1)
 
