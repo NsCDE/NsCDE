@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.3
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -74,6 +74,31 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Mon 5 Jun 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-2
+- Font and Color Style Manager: reload new themes without FVWM restart
+- Qt6 integration support
+- Optional Picom X Compositor internal support
+- Thunderbird 102+ CSS theme integration support
+- Firefox up to 113+ CSS theme integration support
+- Font and Color Style Manager reshape, add integrations as separate dialog
+- (De)Iconify X11 freeze glitch fvwm workaround
+- Front Panel initial placement fix instead of workaround
+- Fix GWM FvwmScript segfault on exit
+- More missing icons in XDG icon theme
+- Handle gsettings org.gnome.desktop.interface color-scheme
+- Xscreensaver 6.X support
+- Add detailed X resources for xcalc and some old Athena based apps
+- Tuning X resources for more old apps
+- Font and Color Style Manager: remember widget integration options
+- GTK3 theme fixes: treat nasty header bar as toolbar
+- Initial setup: add detailed integration questions, Qt6 support
+- Front Panel clock: triangle hour and minute hands to match original
+- GWMPager as popup on workspace change in no-page mode
+- Fixed some easy-to-make keyboard shortcuts accidental calls
+- Firefox and Thunderbird user.js additions for nice initial look & feel
+- Thunderbird HTML compose window toolbar fix
+- Docs update, many portability fixes, misc fixes, some typo fixes
+
 * Mon Oct 31 2022 Hegel3DReloaded <nscde@protonmail.com> - 2.3-1
 - Start with 2.3
 - Add groff-full / groff-base as dependency for panel and subpanel help
