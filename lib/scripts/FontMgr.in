@@ -165,7 +165,7 @@ Begin
    # Saved Integration String
    # WARNING: order of options to -K of confget is important!
    Set $IntegrationStringCmd = {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -d "" -D 2 -K }
-       {integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt5,}
+       {integrate_xresources,integrate_gtk2,integrate_gtk3,integrate_qt5,integrate_qt4}
        {integrate_qt6,integrate_gtk4,integrate_local}
    Set $IntegrationString = (GetOutput $IntegrationStringCmd 1 1)
 
@@ -199,7 +199,17 @@ Begin
       End
    End
 
-   Set $SetQt5 = (StrCopy $IntegrationString 4 4)
+   Set $SetQt4 = (StrCopy $IntegrationString 4 4)
+   Set $InitialSetQt4 = $SetQt4
+   If $SetQt4 <> 0 Then
+   Begin
+      If $SetQt4 <> 1 Then
+      Begin
+         Set $SetQt4 = 1
+      End
+   End
+
+   Set $SetQt5 = (StrCopy $IntegrationString 5 5)
    Set $InitialSetQt5 = $SetQt5
    If $SetQt5 <> 0 Then
    Begin
@@ -209,7 +219,7 @@ Begin
       End
    End
 
-   Set $SetQt6 = (StrCopy $IntegrationString 5 5)
+   Set $SetQt6 = (StrCopy $IntegrationString 6 6)
    Set $InitialSetQt6 = $SetQt6
    If $SetQt6 <> 0 Then
    Begin
@@ -219,7 +229,7 @@ Begin
       End
    End
 
-   Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
+   Set $SetGtk4 = (StrCopy $IntegrationString 7 7)
    Set $InitialSetGtk4 = $SetGtk4
    If $SetGtk4 <> 0 Then
    Begin
@@ -229,7 +239,7 @@ Begin
       End
    End
 
-   Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
+   Set $SetFontmgrLocal = (StrCopy $IntegrationString 8 8)
    Set $InitialSetFontmgrLocal = $SetFontmgrLocal
    If $SetFontmgrLocal <> 0 Then
    Begin
@@ -240,7 +250,7 @@ Begin
    End
 
    # Get ride of possible "2" initial value, otherwise we can get checked checkbox in FontIntegrationDialog
-   Set $IntegrationString = $SetXresources $SetGtk2 $SetGtk3 $SetQt5 $SetQt6 $SetGtk4 $SetFontmgrLocal
+   Set $IntegrationString = $SetXresources $SetGtk2 $SetGtk3 $SetQt4 $SetQt5 $SetQt6 $SetGtk4 $SetFontmgrLocal
 
    # Font / Fontset mode to display
    Set $GetFontsetChoice = (GetOutput {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined} 1 1)
@@ -1440,7 +1450,16 @@ Widget 22
             End
          End
 
-         Set $SetQt5 = (StrCopy $IntegrationString 4 4)
+         Set $SetQt4 = (StrCopy $IntegrationString 4 4)
+         If $SetQt4 <> {1} Then
+         Begin
+            If $SetQt4 <> {0} Then
+            Begin
+               Set $SetQt4 = 1
+            End
+         End
+
+         Set $SetQt5 = (StrCopy $IntegrationString 5 5)
          If $SetQt5 <> {1} Then
          Begin
             If $SetQt5 <> {0} Then
@@ -1449,7 +1468,7 @@ Widget 22
             End
          End
 
-         Set $SetQt6 = (StrCopy $IntegrationString 5 5)
+         Set $SetQt6 = (StrCopy $IntegrationString 6 6)
          If $SetQt6 <> {1} Then
          Begin
             If $SetQt6 <> {0} Then
@@ -1458,7 +1477,7 @@ Widget 22
             End
          End
 
-         Set $SetGtk4 = (StrCopy $IntegrationString 6 6)
+         Set $SetGtk4 = (StrCopy $IntegrationString 7 7)
          If $SetGtk4 <> {1} Then
          Begin
             If $SetGtk4 <> {0} Then
@@ -1467,7 +1486,7 @@ Widget 22
             End
          End
 
-         Set $SetFontmgrLocal = (StrCopy $IntegrationString 7 7)
+         Set $SetFontmgrLocal = (StrCopy $IntegrationString 8 8)
          If $SetFontmgrLocal <> {1} Then
          Begin
             If $SetFontmgrLocal <> {0} Then
@@ -1610,6 +1629,16 @@ Widget 26
          Set $PrepareQfFontCmd = {$NSCDE_TOOLSDIR/fontmgr -Q "} $FontMonoMediumStr {"}
          Set $PrepareQfFont = (GetOutput $PrepareQfFontCmd 1 -1)
 
+         If $SetQt4 == 1 Then
+         Begin
+            Set $Qt4FontCmd = {$NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k font -v '} $PrepareQFont {' 2>&1}
+            Set $Qt4Font = (GetOutput $Qt4FontCmd 1 -1)
+            If $Qt4Font <> {} Then
+            Begin
+               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error editing] $HOME/.config/Trolltech.conf: \\"} $PrepareQFont {\\""}
+            End
+         End
+
          If $SetQt5 == 1 Then
          Begin
             # Qt5 "general" font
@@ -1719,6 +1748,12 @@ Widget 26
          Begin
             Set $WriteGtk3Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_gtk3 -v } $SetGtk3
             Set $WriteGtk3 = (GetOutput $WriteGtk3Cmd 1 -1)
+         End
+
+         If $SetQt4 <> $InitialSetQt4 Then
+         Begin
+            Set $WriteQt4Cmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt4 -v } $SetQt4
+            Set $WriteQt4 = (GetOutput $WriteQt4Cmd 1 -1)
          End
 
          If $SetQt5 <> $InitialSetQt5 Then

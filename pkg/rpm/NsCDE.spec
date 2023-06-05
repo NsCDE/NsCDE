@@ -74,7 +74,7 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
-* Mon 5 Jun 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-2
+* Mon Jun 5 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-2
 - Font and Color Style Manager: reload new themes without FVWM restart
 - Qt6 integration support
 - Optional Picom X Compositor internal support

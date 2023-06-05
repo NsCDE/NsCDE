@@ -226,15 +226,18 @@ function setup_nscde
       echo "$locale_integrating Qt4 theme --> 1"
       themeadd_qt4="qt4"
       $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt4 -v 1
    elif [ "x$ans" == "xn" ]; then
       echo "$locale_not_integrating Qt4 theme --> 0"
       themeadd_qt4="False"
       $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 0
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt4 -v 0
    else
       gettext -s "Answer not understood."
       echo "$locale_integrating Qt4 theme --> 1"
-      themeadd_qt4="4"
+      themeadd_qt4="qt4"
       $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s ColorMgr -k integrate_qt4 -v 1
+      $NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k integrate_qt4 -v 1
    fi
 
    locale_integrate_qt5_gtk_question=$(gettext -s "Do you want to enable NsCDE Qt5 GTK engine theme integration?")
@@ -361,6 +364,13 @@ function setup_nscde
             gsettings set org.gnome.desktop.interface color-scheme default
          fi
       fi
+   fi
+
+   # Qt4
+   if [ "$themeadd_qt4" = "qt4" ]; then
+      mkdir -p $HOME/.config/qt5ct/{qss,colors}
+      gettext -s "Setting NsCDE parameters in Trolltech.conf."
+      $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k font -v '"DejaVu Serif,10"'
    fi
 
    # Qt5
