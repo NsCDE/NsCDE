@@ -1586,6 +1586,9 @@ Widget 26
       # Sleeps in integrations are set to allow asyncronous "Do" to write fontset file to the end
       3 :
       Begin
+         # This is the right time to display notice, and for it to last long enough.
+         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new font scheme loaded.]" 4250}
+
          # User script (if exists)
          If $SetFontmgrLocal == 1 Then
          Begin
