@@ -304,6 +304,17 @@ End
 
 QuitFunc
 Begin
+   # Remove notice if it still exists.
+   Do {SendToModule WaitNotice SendString 3 1 Quit}
+
+   # TransientDialog like windows cleanup
+   Do {KillModule FvwmScript NColorsDialog}
+   Do {KillModule FvwmScript ModifyColor}
+   Do {KillModule FvwmScript ColorIntegrationDialog}
+   Do {KillModule FvwmScript FilePicker}
+   Do {KillModule FvwmScript ActionForm}
+   Do {KillModule FvwmScript InputForm}
+
    # Cleanup on exit
    Do {Exec exec rm -f '} $FullColor {' "$FVWM_USERDIR/tmp/Colorset-Preview.conf" }
       {$FVWM_USERDIR/tmp/*-Preview $FVWM_USERDIR/tmp/backer-*.pm $FVWM_USERDIR/tmp/backer-*.png }
@@ -1289,7 +1300,7 @@ Widget 32
       # Main Wrapper
       1 :
       Begin
-         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new color theme loaded.]" 5000}
+         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new color theme loaded.]" 8000}
 
          # Build palette and program bits
          Set $PerformPaletteChangeCmd = {$NSCDE_TOOLSDIR/colormgr } $FpVariantArg { } $WsmVariantArg { -e -c } $Ncolors { -g } $PalNumToName { -F}
@@ -1905,13 +1916,6 @@ Widget 33
       End
       1 :
       Begin
-         # TransientDialog like windows cleanup
-         Do {KillModule FvwmScript NColorsDialog}
-         Do {KillModule FvwmScript ModifyColor}
-         Do {KillModule FvwmScript ColorIntegrationDialog}
-         Do {KillModule FvwmScript FilePicker}
-         Do {KillModule FvwmScript ActionForm}
-
          # Misc cleanups
          If $CustomExistedBefore <> 0 Then
          Begin

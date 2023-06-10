@@ -277,6 +277,17 @@ Begin
    End
 End
 
+QuitFunc
+Begin
+   # Remove notice if it still exists.
+   Do {SendToModule WaitNotice SendString 3 1 Quit}
+
+   # TransientDialog like windows cleanup
+   Do {KillModule FvwmScript FontIntegrationDialog}
+   Do {KillModule FvwmScript ActionForm}
+   Do {KillModule FvwmScript InputForm}
+End
+
 # Icon Logo top left
 Widget 1
    Property
@@ -1587,7 +1598,7 @@ Widget 26
       3 :
       Begin
          # This is the right time to display notice, and for it to last long enough.
-         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new font scheme loaded.]" 4250}
+         Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new font scheme loaded.]" 8000}
 
          # User script (if exists)
          If $SetFontmgrLocal == 1 Then
