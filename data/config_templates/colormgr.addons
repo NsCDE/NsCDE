@@ -270,6 +270,11 @@ function do_firefox
    if (($? > 0)); then
       echo 'user_pref("widget.non-native-theme.gtk.scrollbar.thumb-size", "0.88");' >> ${FIREFOX_CHROMEDIR}/../user.js
    fi
+   egrep -q '^([[:space:]]+)?user_pref\("widget\.gtk\.non-native-menu-styling",([[:space:]]+)?false\)([[:space:]]+)?;' \
+    ${FIREFOX_CHROMEDIR}/../user.js 2>/dev/null
+   if (($? > 0)); then
+      echo 'user_pref("widget.gtk.non-native-menu-styling", false);' >> ${FIREFOX_CHROMEDIR}/../user.js
+   fi
 }
 
 # Thunderbird
