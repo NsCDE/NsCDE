@@ -1855,6 +1855,16 @@ Widget 32
             End
          End
 
+         # Handle Front Panel Subpanels "Install Icon"
+         Set $subfpid = 0
+         While $subfpid < 20 Do
+         Begin
+            Set $subfpid = (Add $subfpid 1)
+            Do {Test (EnvMatch infostore.NsCDE-Subpanel} $subfpid {-Enabled 1)}
+               { SendToModule NsCDE-Subpanel} $subfpid { ChangeButton inst_ico_s} $subfpid
+               { Icon NsCDE/FpInstIcon.xpm}
+         End
+
          # Reread backdrops
          If $SetBackdrops == 1 Then
          Begin
