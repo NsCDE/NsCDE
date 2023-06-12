@@ -145,8 +145,17 @@ Begin
    Set $FontConstruct = $FontNormalMediumStr
 
    # Defaults for fontset
-   Set $DefaultFontset = {DejaVuSerif}
-   Set $DefaultFontsetPath = {$NSCDE_DATADIR/fontsets/} $DefaultFontset {.fontset}
+   Set $GetDefaultFontsetName = (GetOutput {$NSCDE_TOOLSDIR/getfont -F name} 1 1)
+   If $GetDefaultFontsetName == {} Then
+   Begin
+      Set $DefaultFontset = {DejaVuSerif}
+      Set $DefaultFontsetPath = {$NSCDE_DATADIR/fontsets/} $DefaultFontset {.fontset}
+   End
+   Else
+   Begin
+      Set $DefaultFontset = $GetDefaultFontsetName
+      Set $DefaultFontsetPath = (GetOutput {$NSCDE_TOOLSDIR/getfont -F path} 1 1)
+   End
    Set $FontsetPath = $DefaultFontsetPath
 
    # For Fontset info when some font from fontset does not exist, having

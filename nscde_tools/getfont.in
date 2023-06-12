@@ -150,7 +150,24 @@ function GetFont
    fi
 }
 
-while getopts f:vmt:s:pSZ:h Option
+function GetFontset
+{
+   GetFontLink=$(readlink ${FVWM_USERDIR}/Font-${NSCDE_FONT_DPI}dpi.fvwmgen)
+   if (($? == 0)); then
+      if [ -r "$GetFontLink" ]; then
+         FontsetNameExt="${GetFontLink##*/}"
+         FontsetName=${FontsetNameExt//.fontset}
+         if [ "x$1" == "xname" ]; then
+            echo $FontsetName
+         fi
+         if [ "x$1" == "xpath" ]; then
+            echo $GetFontLink
+         fi
+      fi
+   fi
+}
+
+while getopts f:vmt:s:pSZ:F:h Option
 do
    case $Option in
       f)
@@ -182,12 +199,20 @@ do
             FnMaxSize="$OPTARG"
          fi
       ;;
+      F)
+         export FontsetInfo=$OPTARG
+         export FuncToCall="GetFontset"
+      ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -h ]"
+         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -F ] [ -h ]"
          exit 0
       ;;
    esac
 done
 
-GetFont
+if [ "x$FuncToCall" == "xGetFontset" ]; then
+   GetFontset $FontsetInfo
+else
+   GetFont
+fi
 
