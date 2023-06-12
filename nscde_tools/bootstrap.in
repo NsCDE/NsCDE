@@ -642,20 +642,24 @@ function setup_nscde
       chmod u+x "${HOME}/.NsCDE/Xset.conf"
    fi
 
-   for filemgr in spacefm pcmanfm-qt pcmanfm krusader thunar caja dolphin nemo
+   filemgrs=$(<$NSCDE_DATADIR/fallback/app-catalog/filemgr)
+   for filemgr in $filemgrs
    do
       whence -q $filemgr
       if (($? == 0)); then
-         fmsugestion=$filemgr
-         break
+         detected_filemgrs="$detected_filemgrs $filemgr"
       fi
    done
+   detected_filemgrs="${detected_filemgrs# *}"
+   filemgr_suggest=${detected_filemgrs%% *}
 
+   locale_detected_X_File_Managers=$(gettext -s "Detected X File Managers on the local system:")
    locale_your_favorite_X_File_Manager_command=$(gettext -s "Your favorite X File Manager (command)?")
    locale_setting_filemgr=$(gettext -s "Setting X File Manager:")
    locale_setting_proposed_filemgr=$(gettext -s "Setting Proposed X File Manager:")
    locale_skipping_fm_set_later=$(gettext -s "Skipping File Manager selection. You can set it later in")
-   @ECHONE@ "$locale_your_favorite_X_File_Manager_command [${fmsugestion}] \c"
+   @ECHONE@ "$locale_detected_X_File_Managers ${detected_filemgrs}\n"
+   @ECHONE@ "$locale_your_favorite_X_File_Manager_command [${filemgr_suggest}] \c"
    read ans
    if [ "x$ans" != "x" ]; then
       echo "$locale_setting_filemgr filemgr --> ${ans}"
@@ -675,20 +679,20 @@ function setup_nscde
          fi
       fi
 
-   elif [ "x${fmsugestion}" != "x" ]; then
-      echo "$locale_setting_proposed_filemgr filemgr --> ${fmsugestion}"
-      $NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${fmsugestion}/g" -f "$FVWM_USERDIR/NsCDE.conf"
+   elif [ "x${filemgr_suggest}" != "x" ]; then
+      echo "$locale_setting_proposed_filemgr filemgr --> ${filemgr_suggest}"
+      $NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${filemgr_suggest}/g" -f "$FVWM_USERDIR/NsCDE.conf"
 
       # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
       whence -q xdg-mime
       if (($? == 0)); then
-         xdg-mime default ${fmsugestion}.desktop inode/directory
+         xdg-mime default ${filemgr_suggest}.desktop inode/directory
          fmresult=$(xdg-mime query default inode/directory)
-         if [ "$fmresult" != "${fmsugestion}.desktop" ]; then
-            xdg-mime default org.kde.${fmsugestion}.desktop inode/directory
+         if [ "$fmresult" != "${filemgr_suggest}.desktop" ]; then
+            xdg-mime default org.kde.${filemgr_suggest}.desktop inode/directory
             fmresult=$(xdg-mime query default inode/directory)
-            if [ "$fmresult" != "org.kde.${fmsugestion}.desktop" ]; then
-               xdg-mime default org.gnome.${fmsugestion}.desktop inode/directory
+            if [ "$fmresult" != "org.kde.${filemgr_suggest}.desktop" ]; then
+               xdg-mime default org.gnome.${filemgr_suggest}.desktop inode/directory
             fi
          fi
       fi
@@ -697,16 +701,20 @@ function setup_nscde
       echo "$locale_skipping_fm_set_later $FVWM_USERDIR/NsCDE.conf."
    fi
 
-   for xeditor in gvim emacs nedit mousepad tea pluma xfe xemacs geany bluefish uxvile xfwrite kate xfpack xjed
+   xeditors=$(<$NSCDE_DATADIR/fallback/app-catalog/text-editor)
+   for xeditor in $xeditors
    do
       whence -q $xeditor
       if (($? == 0)); then
-         xedit_suggest="$xeditor"
-         break
+         detected_xeditors="$detected_xeditors $xeditor"
       fi
    done
+   detected_xeditors="${detected_xeditors# *}"
+   xedit_suggest=${detected_xeditors%% *}
 
+   locale_detected_X_Text_Editors=$(gettext -s "Detected X Text Editors on the local system:")
    locale_your_favorite_X_Text_Editor_command=$(gettext -s "Your favorite X Text Editor (command)?")
+   @ECHONE@ "$locale_detected_X_Text_Editors ${detected_xeditors}\n"
    @ECHONE@ "$locale_your_favorite_X_Text_Editor_command [$xedit_suggest] \c"
    locale_setting_editor=$(gettext -s "Setting X Text Editor:")
    locale_setting_proposed_editor=$(gettext -s "Setting Proposed X Text Editor:")
