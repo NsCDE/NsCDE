@@ -986,8 +986,10 @@ Widget 19
          # to workaround FvwmScript For implementation which somehow truncates same
          # Rpart Gpart and Bpart values if they follow one after another - $w will
          # give difference (numbers 10 - 17). Stupid bug ...
-         For $w = 10 To 17 Do
+         Set $w = 9
+         While $w < 17 Do
          Begin
+            Set $w = (Add $w 1)
             Set $CS = (GetBack $w)
             Set $Rpart = (StrCopy $CS 1 2) (StrCopy $CS 1 2)
             Set $Gpart = (StrCopy $CS 3 4) (StrCopy $CS 3 4)
