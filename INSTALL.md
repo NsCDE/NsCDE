@@ -125,7 +125,8 @@ sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
     xscreensaver x11-xserver-utils python3-yaml python3-pyqt5 \
     qt5ct qt5-style-plugins stalonetray xterm python3 \
     python3-xdg libstroke0 xsettingsd fvwm fvwm-icons \
-    libfile-mimeinfo-perl gkrellm rofi xclip
+    libfile-mimeinfo-perl gkrellm rofi xclip libx11-dev \
+    libxext-dev libxpm-dev gettext build-essential xinit
 ```
 
 - Fedora / RHEL / CentOS / RockyLinux / openEuler
