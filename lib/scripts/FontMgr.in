@@ -271,6 +271,9 @@ Begin
       ChangeValue 2 2
       SendSignal 2 1
    End
+
+   # X compositor bug workaround
+   Set $RedrawSelf = (GetOutput {echo $NSCDE_REDRAW_WORKAROUND} 1 1)
 End
 
 # MSG is the waiting for InputForm here.
@@ -333,6 +336,12 @@ Widget 2
       End
       1 :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 2 (GetValue 2)
+         End
+
          If (GetValue 2) == 2 Then
          Begin
             Set $FontsetList = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 1 -1)
