@@ -3737,15 +3737,17 @@ named complete sets of five groups of three members of fonts defined above.
 Fontsets are stored in <filename>$NSCDE_DATADIR/fontsets</filename> and in
 <filename>$FVWM_USERDIR/fontsets</filename>. If font set is selected in
 Font Style Manager, 15 fonts from the set are loaded into preview lists of the application and can be
-immediately applied or further customized by leaving <guilabel>Use Predefined Font Set</guilabel> mode
-before saving defined scheme as <filename>$FVWM_USERDIR/fontsets/SomeName.fontset</filename> and linking this
-name to <filename>$FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.fvwmgen</filename>. List of fontsets on the left GUI list is
-inactive until button <guilabel>Use Predefined Font Set</guilabel> is not turned on, then Font Style Manager
-operates with sets of fonts, and not in compose mode with individual fonts. In this mode, right GUI list contains
-information about fontset and previewed fonts when they are selected with mouse or keyboard. This information can
+immediately applied or further customized by switching from <guilabel>Choose Existing Fontset</guilabel> mode
+to <guilabel>Create a New Fontset</guilabel> before saving defined scheme as
+<filename>$FVWM_USERDIR/fontsets/SomeNewName.fontset</filename> and linking this name to
+<filename>$FVWM_USERDIR/NsCDE-Font-${NSCDE_FONT_DPI}dpi.fvwmgen</filename>. List of fontsets on the left GUI list is
+inactive until popup menu option <guilabel>Choose Existing Fontset</guilabel> is not turned on, then Font Style Manager
+operates with existing ready made sets of fonts, and not in create/compose mode, that is, with individual fonts.
+In fontset mode, right GUI list contains information about fontset and fonts are previewed below, and can be selected
+with mouse or keyboard for text changing to see different letters. This information on the right GUI list can
 contain additional bottom line <emphasis>(Not available)</emphasis> if font from the fontset does not exist under
-this name on the system. If such fontset is loaded and saved anyway, system's XFT subsystem will select nearest
-match or the default font instead of non-existing one.
+this name or XFT alias on the system. If such fontset is loaded and saved anyway, system's XFT subsystem will select
+nearest font match or the default font instead of non-existing one, depending on it's configuration.
 </para>
 <para>
 By default, manual font selection contains list of XFT fonts found on the system in the

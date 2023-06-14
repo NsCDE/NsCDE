@@ -769,6 +769,12 @@ Widget 10
       End
       1 :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 10 (GetValue 10)
+         End
+
          If (GetValue 10) == 1 Then
          Begin
             # Holder for black on white - examine, extend if needed
@@ -896,6 +902,12 @@ Widget 12
       # Refill the right font preview field based on this popup menu selection
       1 :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 12 (GetValue 12)
+         End
+
          If (GetValue 12) == 1 Then
          Begin
             SendSignal 15 1
@@ -957,6 +969,12 @@ Widget 14
       End
       1 :
       Begin
+         # X compositor bug workaround
+         If $RedrawSelf == 1 Then
+         Begin
+            ChangeValue 14 (GetValue 14)
+         End
+
          # Parse font, make XFT font construction, update font variables for a size group
          Set $SplitFontStrCmd = {$NSCDE_TOOLSDIR/fontmgr -r '} $FontConstruct {'}
          Set $FontNameNum = (GetOutput $SplitFontStrCmd 1 -1)

@@ -2710,20 +2710,24 @@ nscde_fvwmclnt "SendToModule CheckMailApplet SendString 1 2 \
    $NSCDE_DATADIR/fontsets and in $FVWM_USERDIR/fontsets. If font
    set is selected in Font Style Manager, 15 fonts from the set
    are loaded into preview lists of the application and can be
-   immediately applied or further customized by leaving Use
-   Predefined Font Set mode before saving defined scheme as
-   $FVWM_USERDIR/fontsets/SomeName.fontset and linking this name
-   to $FVWM_USERDIR/NsCDE-Font-$NSCDE_FONT_DPI.fvwmgen. List of
-   fontsets on the left GUI list is inactive until button Use
-   Predefined Font Set is not turned on, then Font Style Manager
-   operates with sets of fonts, and not in compose mode with
-   individual fonts. In this mode, right GUI list contains
-   information about fontset and previewed fonts when they are
-   selected with mouse or keyboard. This information can contain
-   additional bottom line (Not available) if font from the fontset
-   does not exist under this name on the system. If such fontset
-   is loaded and saved anyway, system's XFT subsystem will select
-   nearest match or the default font instead of non-existing one.
+   immediately applied or further customized by switching from
+   Choose Existing Fontset mode to Create a New Fontset before
+   saving defined scheme as
+   $FVWM_USERDIR/fontsets/SomeNewName.fontset and linking this
+   name to $FVWM_USERDIR/NsCDE-Font-${NSCDE_FONT_DPI}dpi.fvwmgen.
+   List of fontsets on the left GUI list is inactive until popup
+   menu option Choose Existing Fontset is not turned on, then Font
+   Style Manager operates with existing ready made sets of fonts,
+   and not in create/compose mode, that is, with individual fonts.
+   In fontset mode, right GUI list contains information about
+   fontset and fonts are previewed below, and can be selected with
+   mouse or keyboard for text changing to see different letters.
+   This information on the right GUI list can contain additional
+   bottom line (Not available) if font from the fontset does not
+   exist under this name or XFT alias on the system. If such
+   fontset is loaded and saved anyway, system's XFT subsystem will
+   select nearest font match or the default font instead of
+   non-existing one, depending on it's configuration.
 
    By default, manual font selection contains list of XFT fonts
    found on the system in the left GUI list and their styles
@@ -7378,4 +7382,3 @@ export FVWM_BIN=fvwm
        similar programs in existence, plus FVWM's own functions
        for automatic start of programs, NsCDE is more or less
        covered here.
-
