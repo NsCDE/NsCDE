@@ -232,7 +232,7 @@ function genxresourcedefs
       @ECHONE@ "\nXft.dpi: 96\n\n"
    fi
 
-   egrep '^InfoStoreAdd font\.(|variable|monospaced)\.(normal|bold|italic)\.(small|medium|large) ".*"' \
+   egrep '^InfoStoreAdd font\.(variable|monospaced)\.(normal|bold|italic)\.(small|medium|large) ".*"' \
           "$FileIn" | awk '{ $1=""; print $0 }' | while IFS='"' read fvar xftstr
    do
       if [ "x$fvar" != "x" ]; then
