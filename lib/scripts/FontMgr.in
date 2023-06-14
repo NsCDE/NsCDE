@@ -29,12 +29,9 @@ Begin
    ChangeLocaleTitle 2 (GetTitle 2)
    ChangeLocaleTitle 22 (GetTitle 22)
 
-   # CheckBox buttons get smaller font size
-   Set $SmallLabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s small -Z 10.5} 1 -1)
-   ChangeFont 2 $SmallLabelFont
-
    # Rest of the widgets will get standard fonts
    Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12.5} 1 -1)
+   ChangeFont 2 $LabelFont
    ChangeFont 3 $LabelFont
    ChangeFont 4 $LabelFont
    ChangeFont 5 $LabelFont
@@ -264,12 +261,16 @@ Begin
 
    # Font / Fontset mode to display
    Set $GetFontsetChoice = (GetOutput {$NSCDE_TOOLSDIR/confget -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined} 1 1)
-   If $GetFontsetChoice == 1 Then
+   If $GetFontsetChoice == 0 Then
    Begin
       ChangeValue 2 1
       SendSignal 2 1
    End
-
+   Else
+   Begin
+      ChangeValue 2 2
+      SendSignal 2 1
+   End
 End
 
 # MSG is the waiting for InputForm here.
@@ -317,13 +318,13 @@ End
 # $OperationMode spreads this globally
 Widget 2
    Property
-   Position 108 14
-   Size 180 20
+   Position 108 11
+   Size 148 20
    Flags NoReliefString
-   Type CheckBox
+   Type PopupMenu
    Font "xft:::pixelsize=15"
-   Value 0
-   Title { Use Predefined Font Set          }
+   Value 2
+   Title { Create a New Fontset          | Choose Existing Fontset       }
    Main
       Case message of
       SingleClic :
@@ -332,7 +333,7 @@ Widget 2
       End
       1 :
       Begin
-         If (GetValue 2) == 1 Then
+         If (GetValue 2) == 2 Then
          Begin
             Set $FontsetList = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 1 -1)
             Set $FontsetTotalNum = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 2 -1)
@@ -1799,7 +1800,7 @@ Widget 26
          End
 
          # Save state of font / fontset choice mode
-         Set $WriteFontsetChoiceCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined -v } (GetValue 2)
+         Set $WriteFontsetChoiceCmd = {$NSCDE_TOOLSDIR/confset -t ini -c $FVWM_USERDIR/StyleMgr.ini -s FontMgr -k display_predefined -v } (Add (GetValue 2) -1)
          Set $WriteFontsetChoice = (GetOutput $WriteFontsetChoiceCmd 1 -1)
 
          # Just step to refresh part.
@@ -2195,14 +2196,14 @@ Widget 101
       # Flip flop operation mode with Ctrl F
       If (LastString) == {KeyFlipOprMode} Then
       Begin
-         If (GetValue 2) == 0 Then
+         If (GetValue 2) == 1 Then
          Begin
-            ChangeValue 2 1
+            ChangeValue 2 2
             SendSignal 2 1
          End
          Else
          Begin
-            ChangeValue 2 0
+            ChangeValue 2 1
             SendSignal 2 1
          End
       End
