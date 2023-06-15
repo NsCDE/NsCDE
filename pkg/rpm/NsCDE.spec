@@ -1,6 +1,6 @@
 Name:		NsCDE
 Version:	2.3
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
@@ -74,6 +74,11 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Fri Jun 16 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-3
+- Portability and bug fixes
+- Misc small fixes
+- Release 2.3
+
 * Mon Jun 5 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-2
 - Font and Color Style Manager: reload new themes without FVWM restart
 - Qt6 integration support
