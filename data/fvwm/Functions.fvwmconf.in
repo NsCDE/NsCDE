@@ -2120,9 +2120,17 @@ AddToFunc f_FrontPanelLockMenu
 + I Test (!EnvMatch infostore.xsc_status "Alck_disabledO") AddToMenu m_FrontPanelLockMenu "$[gt.&Suspend Screensaver]" Test (x xscreensaver) f_Xscreensaver -stop
 + I Test (!EnvMatch infostore.xsc_status "Alck_enabledO") AddToMenu m_FrontPanelLockMenu "$[gt.&Resume Screensaver]" Test (x xscreensaver) f_Xscreensaver -cont
 + I AddToMenu m_FrontPanelLockMenu "" Nop
++ I Test (x xset) AddToMenu m_FrontPanelLockMenu "$[gt.Suspend &Monitor]" f_XsetDPMS suspend
++ I Test (x xset) AddToMenu m_FrontPanelLockMenu "$[gt.Turn &off Monitor]" f_XsetDPMS off
++ I AddToMenu m_FrontPanelLockMenu "" Nop
 + I Test (!EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" Exec exec $[infostore.terminal] -e "man xscreensaver"
 + I Test (EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" Exec exec $[infostore.docsbrowser] man:xscreensaver
 + I AddToMenu m_FrontPanelLockMenu "$[gt.&Help]" f_DisplayURL "$[gt.Screensaver Help]" html/NsCDE-XscreenSaver.html
+
+DestroyFunc f_XsetDPMS
+AddToFunc f_XsetDPMS
++ I Test (!EnvMatch infostore.xsc_status "Alck_disabledO") f_Xscreensaver -lock
++ I Schedule 500 Exec exec xset dpms force $0
 
 DestroyFunc f_ShowFPPGMenu
 AddToFunc f_ShowFPPGMenu
