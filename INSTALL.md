@@ -89,6 +89,8 @@ instead. (optional)
 
 - `python34-pyxdg` or `python3-pyxdg` or `python36-pyxdg` or ... (`FVWM`)
 
+- DejaVu Serif Font (common names: dejavu-fonts dejavu-serif-fonts ttf-dejavu fonts-dejavu-core
+
 --------------------------------------------------------------------------
 
 ### Known system specific package dependencies
@@ -126,7 +128,8 @@ sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
     qt5ct qt5-style-plugins stalonetray xterm python3 \
     python3-xdg libstroke0 xsettingsd fvwm fvwm-icons \
     libfile-mimeinfo-perl gkrellm rofi xclip libx11-dev \
-    libxext-dev libxpm-dev gettext build-essential xinit
+    libxext-dev libxpm-dev gettext build-essential xinit \
+    fonts-dejavu-core
 ```
 
 - Fedora / RHEL / CentOS / RockyLinux / openEuler
@@ -135,7 +138,7 @@ sudo dnf update
 sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
     python3-pyyaml python3-qt5 qt5ct qt5-styleplugins \
     stalonetray xterm python3 python3-pyxdg libstroke xsettingsd \
-    fvwm perl-File-MimeInfo gkrellm rofi xclip
+    fvwm perl-File-MimeInfo gkrellm rofi xclip dejavu-serif-fonts
 ```
 
 - FreeBSD/ DragonflyBSD/ GhostBSD/ MidnightBSD
@@ -200,7 +203,7 @@ sudo zypper up
 sudo zypper in ksh-93uv xorg xdotool ImageMagick xscreensaver \
     python3-pyyaml python3-PyQt5 qt5ct libqt5-styleplugins \ 
     stalonetray xterm python3 libstroke xsettingsd fvwm2 \
-    perl-File-MimeInfo gkrellm rofi xclip
+    perl-File-MimeInfo gkrellm rofi xclip dejavu-fonts
 ```
 
 - Void Linux
