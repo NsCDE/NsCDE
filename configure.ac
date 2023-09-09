@@ -286,7 +286,7 @@ AS_IF([test x"$GETTEXT" = x"no"], [AC_MSG_WARN([No gettext(1) detected. Please i
 AS_IF([test x"$XDOTOOL" = x"no"] && [test x"$FVWM" != x"fvwm3"], [AC_MSG_WARN([No fvwm3 detected. You need to install xdotool(1) for NsCDE runtime.])])
 AS_IF([test x"$XSCSVR" = x"no"], [AC_MSG_WARN([No Xscreensaver installation found. This may be ok for virtual machine guest or for some simple setup.])])
 AS_IF([test x"$STALONETRAY" = x"no"], [AC_MSG_WARN([No Stalonetray was found. This NsCDE Installation will not be able to have tray applets.])])
-AS_IF([test x"$XSETTINGSD" = x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dinamically change GTK themes.])])
+AS_IF([test x"$XSETTINGSD" = x"no"], [AC_MSG_WARN([No Xsettingsd daemon was found. This NsCDE Installation will not be able to dynamically change GTK themes.])])
 AS_IF([test x"$XRANDR" = x"no"], [AC_MSG_WARN([No xrandr(1) command was found. It is advised to have X11 Server Utils installed.])])
 AS_IF([test x"$DUNST" = x"no"], [AC_MSG_WARN([No Dunst daemon was found. NsCDE and X programs will not be able to display notifications.])])
 AS_IF([test x"$XCLIP" = x"no"], [AC_MSG_WARN([No xclip(1) utility was found. NsCDE will not be able to take screenshots into the clipboard.])])
