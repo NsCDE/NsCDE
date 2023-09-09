@@ -134,7 +134,7 @@ sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
 sudo dnf update
 sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
     python3-pyyaml python3-qt5 qt5ct qt5-styleplugins \
-    stalonetray xterm pyhon3 pyhon3-pyxdg libstroke xsettingsd \
+    stalonetray xterm python3 python3-pyxdg libstroke xsettingsd \
     fvwm perl-File-MimeInfo gkrellm rofi xclip
 ```
 
@@ -143,7 +143,7 @@ sudo dnf install -y ksh xorg-x11-utils xdotool ImageMagick xscreensaver \
 su
 pkg install wget ksh93 xorg ImageMagick7 xscreensaver \ 
     py39-yaml py39-qt5 qt5ct qt5-style-plugins 
-    stalonetray xterm pyhon3 py39-xdg libstroke xsettingsd \ 
+    stalonetray xterm python3 py39-xdg libstroke xsettingsd \ 
     fvwm3 p5-File-MimeInfo gettext gkrellm2 rofi
 ```
 
@@ -185,7 +185,7 @@ emerge @nscde-desktop
 sudo dnf update
 sudo dnf install -y xorg xdotool imagemagick xscreensaver \
     python-pyyaml python-qt5 qt5ct qt5-style-plugins \
-    stalonetray xterm pyhon3 pyhon-xdg llib64stroke0 xsettingsd \
+    stalonetray xterm python3 python-xdg llib64stroke0 xsettingsd \
     fvwm2 perl-File-MimeInfo gkrellm rofi xclip
 cd ~
 git clone --depth 1 https://github.com/att/ast.git
@@ -199,7 +199,7 @@ sudo zypper ref
 sudo zypper up
 sudo zypper in ksh-93uv xorg xdotool ImageMagick xscreensaver \
     python3-pyyaml python3-PyQt5 qt5ct libqt5-styleplugins \ 
-    stalonetray xterm pyhon3 libstroke xsettingsd fvwm2 \
+    stalonetray xterm python3 libstroke xsettingsd fvwm2 \
     perl-File-MimeInfo gkrellm rofi xclip
 ```
 
@@ -208,7 +208,7 @@ sudo zypper in ksh-93uv xorg xdotool ImageMagick xscreensaver \
 xbps-install -Su
 xbps-install -Sy xorg xdotool ImageMagick xscreensaver \
     python3-yaml python3-PyQt5 qt5ct qt5-styleplugins \ 
-    stalonetray xterm pyhon3 pyhon3-xdg xsettingsd \
+    stalonetray xterm python3 python3-xdg xsettingsd \
     fvwm3 perl-File-MimeInfo gkrellm rofi xclip
 cd ~
 git clone --depth 1 https://github.com/att/ast.git
