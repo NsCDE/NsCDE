@@ -213,8 +213,9 @@ xbps-install -Sy xorg xdotool ImageMagick xscreensaver \
     python3-yaml python3-PyQt5 qt5ct qt5-styleplugins \ 
     stalonetray xterm python3 python3-xdg xsettingsd \
     fvwm3 perl-File-MimeInfo gkrellm rofi xclip
+
 cd ~
-git clone --depth 1 https://github.com/att/ast.git
+git clone --depth 1 https://github.com/att/ast.git && cd ast
 ./bin/package make
 sudo ./bin/package install
 
@@ -222,6 +223,7 @@ cd ~
 wget http://ftp.udc.es/debian/pool/main/libs/libstroke/libstroke_0.5.1.orig.tar.gz
 tar -zxvf libstroke_0.5.1.orig.tar.gz
 cd libstroke-0.5.1
+
 ./configure
 make
 sudo make install
@@ -244,7 +246,7 @@ used. Present installation is very simple:
 umask 0022
 cd /tmp
 
-# Thein either:
+# Then either:
 wget https://github.com/NsCDE/NsCDE/archive/<version>.tar.gz
 tar xpzf <version>.tar.gz
 cd NsCDE-<version>
