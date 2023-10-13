@@ -217,14 +217,6 @@ cd ~
 git clone --depth 1 https://github.com/att/ast.git
 ./bin/package make
 sudo ./bin/package install
-
-cd ~
-wget http://ftp.udc.es/debian/pool/main/libs/libstroke/libstroke_0.5.1.orig.tar.gz
-tar -zxvf libstroke_0.5.1.orig.tar.gz
-cd libstroke-0.5.1
-./configure
-make
-sudo make install
 ```
 
 - SparkyLinux
