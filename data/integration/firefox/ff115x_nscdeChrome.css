@@ -1,0 +1,1402 @@
+/*
+ * This file is a part of the NsCDE - Not so Common Desktop Environment
+ * Author: Hegel3DReloaded
+ * Licence: GPLv3
+*/
+
+/* userChrome.css NsCDE include CSS file for firefox */
+
+button {
+  border-width: 1px !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top-color: var(--nscde-ts-color-5) !important;
+  border-left-color: var(--nscde-ts-color-5) !important;
+  border-bottom-color: var(--nscde-bs-color-5) !important;
+  border-right-color: var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
+}
+
+button:-moz-any(:hover:active,[open="true"]):not([disabled="true"]) {
+  border-top-color: var(--nscde-bs-color-5) !important;
+  border-left-color: var(--nscde-bs-color-5) !important;
+  border-bottom-color: var(--nscde-ts-color-5) !important;
+  border-right-color: var(--nscde-ts-color-5) !important;
+  border-radius: 0px !important;
+}
+
+checkbox:not([disabled="true"]),
+checkbox:not([disabled="true"]):hover,
+checkbox:not([disabled="true"]) > .checkbox-check,
+checkbox:not([disabled="true"]):hover > .checkbox-check {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  border-top-color: var(--nscde-ts-color-5) !important;
+  border-left-color: var(--nscde-ts-color-5) !important;
+  border-bottom-color: var(--nscde-bs-color-5) !important;
+  border-right-color: var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+checkbox:not([disabled="true"]) > .checkbox-check:is(:active,[checked="true"]) {
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  border-top-color: var(--nscde-bs-color-5) !important;
+  border-left-color: var(--nscde-bs-color-5) !important;
+  border-bottom-color: var(--nscde-ts-color-5) !important;
+  border-right-color: var(--nscde-ts-color-5) !important;
+  border-radius: 0px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+checkbox:-moz-focusring .checkbox-check {
+  outline: none !important;
+}
+
+checkbox:-moz-focusring {
+  outline: 1px solid var(--nscde-bg-color-1) !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-bg-color-6) !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox > .checkbox-check {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#editBookmarkPanelBottomContent > checkbox > .checkbox-check:is(:active,[checked="true"]) {
+  color: var(--nscde-fg-color-6) !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+menulist {
+  appearance: auto !important;
+  -moz-default-appearance: menulist !important;
+  text-shadow: none;
+  margin: 2px 4px !important;
+  font: menu !important;
+  color: -moz-gtk-buttonactivetext !important;
+}
+
+menupopup {
+  -moz-appearance: none !important;
+  --panel-border-color: var(--nscde-bg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  border-radius: 0px !important;
+  margin-left: 0px !important;
+  margin-top: -2px !important;
+  --panel-shadow-margin: 0px !important; /* WTF idea ... */
+}
+
+menupopup > menu, menupopup > menuitem {
+  padding-block: 2px !important;
+  border-radius: 0px !important;
+  min-height: 24px !important;
+}
+
+/* 115 + Begin */
+menuitem:is([selected="true"],[open="true"],:active,:hover):not([disabled="true"]) {
+  padding-block: 1px !important;
+  padding-inline-start: 5px !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  /* This is needed to avoid jumpy menuitem on hover and select - compensation for 1px */
+  padding-top: 2px !important;
+  padding-right: 5px !important;
+  padding-bottom: 2px !important;
+  padding-left: 5px !important;
+}
+
+menubar > menu {
+  margin-top: 0px !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+menubar > menu:is([open="true"],[checked="true"],[selected="true"],:active) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  margin-top: -3px !important;
+  margin-left: -1px !important;
+  margin-right: -1px !important;
+}
+
+#context-navigation > .menuitem-iconic {
+  border-radius: 0px !important;
+}
+
+/* 115 +  End */
+
+:root {
+  --arrowpanel-menuitem-padding: 2px 4px !important;
+  --toolbarbutton-border-radius: 0 !important;
+  --arrowpanel-border-radius: 0px !important;
+  --arrowpanel-menuitem-border-radius: 0px !important;
+  --arrowpanel-color: var(--nscde-fg-color-6) !important;
+  --arrowpanel-background: var(--nscde-bg-color-6) !important;
+  --toolbarbutton-hover-background: inherit !important;
+}
+
+#PanelUI-panic-view-button,
+#panic-button-success-closebutton {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#PanelUI-panic-view-button:is(:active,[checked]),
+#panic-button-success-closebutton:is(:active,[checked]) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+#identity-popup,
+#permission-popup,
+#editBookmarkPanel,
+#sidebarMenu-popup,
+#widget-overflow,
+#protections-popup {
+  outline: none !important;
+  --arrowpanel-border-color: var(--nscde-bg-color-6) !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#sidebarMenu-popup {
+  margin-top: 6px !important;
+  margin-left: -14px !important;
+}
+
+#sidebarMenu-popup .subviewbutton {
+  padding-inline-start: 0px !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+#sidebarMenu-popup .subviewbutton .toolbarbutton-text {
+  padding-left: 4px !important;
+}
+
+#sidebarMenu-popup .subviewbutton .toolbarbutton-icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+#identity-popup,
+#permission-popup,
+#editBookmarkPanel,
+#protections-popup {
+  margin-top: 4px !important;
+  margin-left: -16px !important;
+}
+
+#editBookmarkPanel .expander-up,
+#editBookmarkPanel .expander-down,
+#editBookmarkPanelBottomButtons > button {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  font-weight: normal !important;
+}
+
+#editBookmarkPanel .expander-up:active,
+#editBookmarkPanel .expander-down:active,
+#editBookmarkPanelBottomButtons > button:active {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+#editBookmarkPanelRows input {
+  border-radius: 0px !important;
+  outline: 0px !important;
+  padding: 6px !important;
+  margin: 2px !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+#nav-bar toolbarbutton > .toolbarbutton-icon {
+  background: transparent !important;
+}
+
+#nav-bar toolbarbutton:not(.subviewbutton),
+#nav-bar toolbarbutton:hover:not(.subviewbutton) {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+  margin-left: 4px !important;
+  margin-right: 4px !important;
+}
+
+toolbarbutton:not(.subviewbutton),
+toolbarbutton:hover:not(.subviewbutton) {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  background: transparent !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
+}
+
+toolbarbutton:-moz-any(:active,[open],[checked="true"]):not([disabled="true"]) {
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-radius: 0px !important;
+}
+
+#sidebarMenu-popup toolbarseparator,
+#sidebarMenu-popup > .subviewbutton,
+.panel-arrowcontent,
+#sidebar-switcher-target,
+#sidebar-switcher-target:hover,
+#sidebar-switcher-target:not([open="true"]),
+menulist:not(#openHandler) {
+  outline: none !important;
+  border-width: 1px !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top-color: var(--nscde-ts-color-6) !important;
+  border-left-color: var(--nscde-ts-color-6) !important;
+  border-bottom-color: var(--nscde-bs-color-6) !important;
+  border-right-color: var(--nscde-bs-color-6) !important;
+}
+
+#sidebarMenu-popup > .subviewbutton {
+  border: 1px solid var(--nscde-bg-color-6) !important;
+}
+
+#sidebarMenu-popup .subviewbutton[checked],
+#sidebarMenu-popup .subviewbutton:active,
+#sidebar-switcher-target:active,
+menulist[open="true"]:not(#openHandler) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+menuseparator {
+  padding-block: 0px !important;
+  margin-top: 3px !important;
+  margin-bottom: 3px !important;
+  margin-right: 1px !important;
+  margin-left: 1px !important;
+  -moz-appearance: none !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+/* Firefox 115+ */
+menupopup menu:is([_moz-menuactive],[selected="true"],[checked="true"],:active,:hover,[open="true"]):not([disabled="true"]) {
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  padding-right: 4px !important;
+  margin-left: -1px !important;
+}
+
+/* Thick splitter */
+splitter {
+  -moz-appearance: none !important;
+  border-width: 2px !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  border-top-color: var(--nscde-ts-color-5) !important;
+  border-left-color: var(--nscde-ts-color-5) !important;
+  border-bottom-color: var(--nscde-bs-color-5) !important;
+  border-right-color: var(--nscde-bs-color-5) !important;
+}
+
+richlistbox {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+#tabbrowser-arrowscrollbox {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  max-height: 32px !important;
+}
+
+tabs {
+  border-width: 0 !important;
+}
+
+#new-tab-button,
+.tabbrowser-tab {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  margin: 1px !important;
+  --tab-label-mask-size: 0px !important;
+}
+
+#new-tab-button:active,
+#new-tab-button[open="true"],
+.tabbrowser-tab:is([visuallyselected="true"],[selected="true"],[open],:active) {
+  background-color: var(--nscde-sel-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 0px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  margin: 1px !important;
+}
+
+#alltabs-button {
+    list-style-image: url("nsicons/arrow-down.png") !important;
+}
+
+.tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true], [multiselected]) {
+  background-color: var(--nscde-bg-color-5) !important;
+}
+
+.tab-background {
+  border-radius: 0px 0px 0px 0px !important;
+  border-image: none !important;
+  margin-bottom: 0px !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  opacity: 0 !important;
+}
+
+.tab-background[selected="true"] {
+  background-color: var(--nscde-sel-color-5) !important;
+}
+
+input,
+.input-container {
+  border-width: 1px !important;
+  border-top-color: var(--nscde-bs-color-5) !important;
+  border-left-color: var(--nscde-bs-color-5) !important;
+  border-bottom-color: var(--nscde-ts-color-5) !important;
+  border-right-color: var(--nscde-ts-color-5) !important;
+  border-radius: 0px !important;
+}
+
+.input-container {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+}
+
+#urlbar {
+  --urlbar-box-bgcolor: var(--nscde-bg-color-5) !important;
+  --urlbar-box-hover-bgcolor: var(--nscde-bg-color-5) !important;
+  --urlbar-box-focus-bgcolor: var(--nscde-bg-color-5) !important;
+}
+
+.urlbar-page-action {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+.urlbar-page-action:is([open],[checked],:active) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+.urlbarView,
+#urlbar-input {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+}
+
+#searchbar,
+#urlbar-background {
+  -moz-appearance: none !important;
+  border-width: 1px !important;
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-radius: 0px !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+#pageActionButton,
+#star-button {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#pageActionButton:is([open],[checked],:active),
+#star-button:is([open],[checked],:active) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#tracking-protection-icon-container {
+  border-inline-end: none !important;
+  border-image-slice: 0 !important;
+  border-image: none !important;
+}
+
+#identity-box {
+  margin-inline: 0px !important;
+  margin-right: 4px !important;
+}
+
+#tracking-protection-icon-container,
+#tracking-protection-icon-container:hover,
+#identity-box,
+#identity-box:hover {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+#tracking-protection-icon-container:is([open],[checked],:active),
+#identity-box:is([open],[checked],:active) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+#sidebar-box {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  font-size: 10pt !important;
+}
+
+#sidebar-close,
+.tab-close-button,
+.tab-close-button:hover {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-radius: 0px !important;
+  padding: 1px !important;
+}
+
+#sidebar-close:active,
+.sidebar-close-button,
+.tab-close-button:active {
+  background-color: inherit !important;
+  color: inherit !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+.tab-close-button,
+.tab-close-button:hover {
+  width: 16px !important;
+  height: 20px !important;
+  margin-right: -6px !important;
+}
+
+.tabbrowser-tab .tab-line,
+.tabbrowser-tab .tab-line:hover {
+  background-color: transparent !important;
+}
+
+.tabs-newtab-button:hover,
+.tabbrowser-tab:hover .tab-content:hover {
+  background-color: transparent !important;
+}
+
+#nav-bar {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+#PanelUI-button {
+  display: none !important;
+}
+
+panelview {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px transparent !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#BMB_bookmarksPopup menupopup {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  --panel-padding: 0px !important;
+}
+
+#identity-popup-security-expander,
+#protections-popup-mainView,
+#protections-popup-mainView-panel-header,
+.protections-popup-empty-label,
+.tracking-protection-button,
+.protections-popup-cookiesView-list-header,
+.protections-popup-list-item > label,
+#protections-popup-mainView-panel-header > label,
+#protections-popup-mainView-panel-header > description,
+#protections-popup-trackersView > .panel-header,
+#protections-popup-sendReportView > .panel-header,
+.protections-popup-category-label,
+.protections-popup-category-state-label,
+#protections-popup-content > description,
+.protections-popup-footer-button-label,
+#protections-popup-trackers-blocked-counter-description,
+#protections-popup-sendReportView-heading > description
+#protections-popup-footer-protection-type-label,
+.protections-popup-show-report-icon,
+.protections-popup-settings-icon {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
+}
+
+.tracking-protection-icon,
+.socialblock-icon,
+.thirdpartycookies-icon,
+.cryptominers-icon,
+.fingerprinters-icon {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+}
+
+.protections-popup-category.notFound,
+.protections-popup-category.notFound:hover {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  fill: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
+  font-style: italic !important;
+  font-size: 80% !important;
+}
+
+#BMB_bookmarksPopup .subviewbutton,
+panelview .subview-subheader,
+panelview .panel-subview-body,
+panelview toolbarbutton.subviewbutton {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
+}
+
+#BMB_bookmarksPopup .subviewbutton:hover,
+#BMB_bookmarksPopup .subviewbutton {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  margin: 0px !important;
+}
+
+#identity-popup-security-expander:active,
+panelview toolbarbutton:-moz-any(:hover:active,[checked="true"]):not([disabled="true"]) {
+  -moz-appearance: none !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+#BMB_bookmarksPopup .subviewbutton:-moz-any(:hover,:active,[checked="true"]):not([disabled="true"]) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+panelview .subview-subheader {
+  font-weight: bold !important;
+}
+
+panelview toolbarseparator {
+  -moz-appearance: none !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+/* PageInfo window */
+#topBar {
+  background: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#mainDeck {
+  background: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+th > label,
+td > input,
+.table-split-column > * {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+/* Bottom bar with statusbar */
+#PersonalToolbar {
+  position: fixed !important;
+  display: flex !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  direction: rtl !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+#PersonalToolbar >  toolbarbutton {
+  padding: 0 var(--toolbarbutton-outer-padding) !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+  margin-top: 2px !important;
+  margin-bottom: 0px !important;
+  background-color: transparent !important;
+}
+
+#PersonalToolbar > toolbarbutton:is([open],[checked]),
+#PersonalToolbar > toolbarbutton:active {
+  margin-left: 1px !important;
+  margin-right: 1px !important;
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+#PersonalToolbar > toolbarbutton > .toolbarbutton-icon,
+#PersonalToolbar > toolbarbutton > .toolbarbutton-badge-stack {
+  width: var(--default_personal_toolbar_height) !important;
+  height: calc(var(--default_personal_toolbar_height) - 4px) !important;
+  padding: calc(var(--toolbarbutton-inner-padding) - 2px) !important;
+}
+
+#PersonalToolbar,
+#PersonalToolbar > :first-child + toolbarspring {
+  background-position: left 2px bottom 2px !important;
+  background-repeat: no-repeat !important;
+  background-image: -moz-element(#statuspanel) !important;
+  max-width: none !important;
+  width: 60ch;
+}
+
+/*
+  Using -moz-element() causes some problems after Firefox has been running
+  several hours such as long tab switch times.  For this reason the background
+  image is removed on hover and focused states which appears to clear the
+  state.
+*/
+
+#PersonalToolbar:hover:first-child + toolbarspring {
+  background-image: none !important;
+}
+
+#nav-bar toolbarbutton > .toolbarbutton-text {
+  margin: 0px !important;
+  padding: 0px !important;
+  font-size: 9pt !important;
+}
+
+#nav-bar toolbarbutton > .toolbarbutton-icon {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  padding: 0px !important;
+  height: 24px !important;
+  width: 24px !important;
+}
+
+/* Pre 112 code for separate reload and stop buttons */
+#reload-button, #stop-button {
+  display: -moz-box !important;
+}
+
+/* 112+ requires this to show both, reload and stop buttons */
+#reload-button:not([displaystop]) + #stop-button, #reload-button[displaystop] {
+  display: flex !important;
+}
+
+#context-navigation > .menuitem-iconic > .menu-iconic-left > .menu-iconic-icon {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 4px !important;
+}
+
+#back-button > .toolbarbutton-icon {
+  background: inherit !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.placesTree > treechildren {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+/* Library Window: Thread pane index row */
+treecol, .treecol-image {
+  -moz-appearance: none !important;
+  color: var(--nscde-fg-color-5) !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  font-weight: bold !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+  padding: 2px !important;
+}
+
+#placesView treechildren::-moz-tree-row(selected),
+#placesView treechildren::-moz-tree-cell-text(selected) {
+  background-color: var(--nscde-fg-color-5) !important;
+  color: var(--nscde-bg-color-5) !important;
+}
+
+#placesViewsBox treechildren::-moz-tree-row(odd) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#placesViewsBox treechildren::-moz-tree-row(even) {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#placesViewsBox treechildren::-moz-tree-row(odd, selected),
+#placesViewsBox treechildren::-moz-tree-cell-text(odd, selected) {
+  background-color: var(--nscde-fg-color-5) !important;
+  color: var(--nscde-bg-color-5) !important;
+}
+
+#placesViewsBox treechildren::-moz-tree-row(even, selected),
+#placesViewsBox treechildren::-moz-tree-cell-text(even, selected) {
+  background-color: var(--nscde-fg-color-5) !important;
+  color: var(--nscde-bg-color-5) !important;
+}
+
+#placesMenu > menu:active,
+#placesMenu > menu[open] {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-width: 1px !important;
+  border-top-color: var(--nscde-bs-color-6) !important;
+  border-left-color: var(--nscde-bs-color-6) !important;
+  border-bottom-color: var(--nscde-ts-color-6) !important;
+  border-right-color: var(--nscde-ts-color-6) !important;
+}
+
+#placesMenu > menu,
+#placesMenu > menu:hover {
+  -moz-default-appearance: none !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+}
+
+#placesToolbar toolbarbutton,
+#placesToolbar toolbarbutton:hover {
+  appearance: none !important;
+  margin-left: 4px !important;
+  margin-right: 4px !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-width: 1px transparent !important;
+  border: 1px solid transparent !important;
+}
+
+#placesToolbar toolbarbutton:active {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-width: 1px !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+/* Bookmarks (PersonalToolbar) Toolbar and Status Bar at the bottom */
+:root {
+  --default_personal_toolbar_height: calc(2 * var(--toolbarbutton-inner-padding) + 16px);
+}
+
+#customization-container,
+:root:not([inDOMFullscreen]) > body > #browser {
+  margin-bottom: calc(5px + var(--default_personal_toolbar_height)) !important;
+}
+
+#statuspanel {
+  height: 28px !important;
+  width: auto !important;
+  max-width: 75% !important;
+  bottom: -1000px !important;
+  left: 0px !important;
+  padding: 0px !important;
+  font-size: 90% !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  transition-property: none !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+#statuspanel-inner {
+  height: 22px !important;
+  margin-left: 2px !important;
+  margin-right: 0px !important;
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+  border: none !important;
+  font-size: inherit;
+  color: inherit !important;
+  background-color: var(--toolbar-accent-color) !important;
+}
+
+#statuspanel-label {
+  top: 0px !important;
+  margin-top: 0px !important;
+  margin-bottom: 4px !important;
+  margin-left: 4px !important;
+  border: none !important;
+  padding: 4px !important;
+  background: transparent !important;
+}
+
+/* TABS: bottom - Firefox 65 and later */
+/* /source/browser/themes/shared/tabs.inc.css */
+
+/* ROOT - VARS */
+*|*:root {
+ --tab-toolbar-navbar-overlap: 0px !important;
+
+ --tab-min-height: 32px !important; /* adjust */
+ --tab-min-width:  60px !important; /* adjust */
+
+ --personal-toolbar-height: 22px; /* personal-toolbar 22px */
+ --captionbox-adjust: calc(2px + var(--personal-toolbar-height));
+}
+
+/* TAB BAR on bottom */
+
+/* 
+ * Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/tabs_on_bottom.css
+ * made available under Mozilla Public License v. 2.0
+ * See the above repository for updates as well as full license text.
+ */
+
+/* Modify to change window drag space width */
+/*
+ * Use tabs_on_bottom_menubar_on_top_patch.css if you
+ * have menubar permanently enabled and want it on top
+*/
+
+/* IMPORTANT */
+/*
+ * Get window_control_placeholder_support.css
+ * Window controls will be all wrong without it.
+ * Additionally on Linux, you may need to get:
+ * linux_gtk_window_control_patch.css
+ */
+
+:root{
+  --uc-titlebar-padding: 0px;
+}
+
+#TabsToolbar > [flex] {
+  background-color: var(--nscde-bg-color-5) !important;
+}
+
+#toolbar-menubar[autohide="true"] > .titlebar-buttonbox-container,
+#TabsToolbar > .titlebar-buttonbox-container {
+  position: fixed;
+  display: block;
+  top: 0px;
+  right:0;
+  height: 40px;
+}
+
+@supports -moz-bool-pref("userchrome.force-window-controls-on-left.enabled") {
+  .titlebar-buttonbox-container {
+    left:0;
+    right: unset !important;
+  }
+}
+
+:root[uidensity="compact"] #TabsToolbar > .titlebar-buttonbox-container {
+  height: 32px
+}
+
+#toolbar-menubar[inactive] > .titlebar-buttonbox-container {
+  opacity: 0;
+}
+
+#navigator-toolbox {
+  padding-top: var(--uc-titlebar-padding,0px) !important;
+}
+
+.titlebar-buttonbox-container > .titlebar-buttonbox {
+  height: 100%;
+}
+
+#titlebar {
+  -moz-box-ordinal-group: 2; /* Firefox <112 compatibility */
+  order: 2;
+  -moz-appearance: none !important;
+  --tabs-navbar-shadow-size: 0px;
+  --uc-menubar-vertical-overlap: 19px; /* for hide_tabs_with_one_tab_w_window_controls.css compatibility */
+}
+
+.titlebar-placeholder,
+#TabsToolbar .titlebar-spacer {
+  display: none;
+}
+
+/* Re-order window and tab notification boxes */
+#navigator-toolbox > div {
+  display: contents;
+}
+
+/* Also hide the toolbox bottom border which isn't at bottom with this setup */
+#navigator-toolbox::after {
+  display: none !important;
+}
+
+@media (-moz-gtk-csd-close-button) {
+  .titlebar-button {
+    -moz-box-orient: vertical;
+    flex-direction: column;
+  }
+}
+
+/* These exist only for compatibility with autohide-tabstoolbar.css */
+toolbox#navigator-toolbox > toolbar#nav-bar.browser-toolbar {
+  animation: none;
+}
+#navigator-toolbox:hover #TabsToolbar {
+  animation: slidein ease-out 48ms 1;
+}
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/tabs_on_bottom_menubar_on_top_patch.css
+ * made available under Mozilla Public License v. 2.0
+ * See the above repository for updates as well as full license text.
+ */
+
+/* Menubar on top patch - use with tabs_on_bottom.css */
+/* Only really useful if menubar is ALWAYS visible */
+
+:root {
+  --uc-window-control-width: 0px !important
+}
+
+#navigator-toolbox {
+  padding-top: calc(32px + var(--uc-titlebar-padding,0px)) !important
+}
+
+#toolbar-menubar {
+  position: fixed;
+  display: flex;
+  top: var(--uc-titlebar-padding,0px);
+  height: 32px;
+  width: 100%;
+  overflow: hidden;
+  padding: 1px 1px 1px 1px !important;
+  /* FF 115+ playing stupid cat and mouse game with menubar decorations */
+  appearance: menubar !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#toolbar-menubar > .titlebar-buttonbox-container {
+  height: 32px;
+  order: 100;
+}
+
+#toolbar-menubar > [flex] {
+  flex-grow: 100;
+}
+
+#toolbar-menubar > spacer[flex] {
+  order: 99;
+  flex-grow: 1;
+  min-width: var(--uc-window-drag-space-width,20px);
+}
+
+#toolbar-menubar .titlebar-button {
+  padding: 2px 17px !important;
+}
+
+#toolbar-menubar .toolbarbutton-1 {
+  --toolbarbutton-inner-padding: 3px;
+}
+
+/* Firefox 100+ narrow screwed menubar fix - this goes out */
+/*
+menubar > menu {
+  padding: 2px 2px 4px 4px !important;
+}
+*/
+
+/* Firefox 100+ narrow screwed menubar fix */
+#toolbar-menubar menubar > menu > .menubar-text {
+  margin: 2px 4px !important;
+}
+
+/* TABS: height */
+*|*:root {
+  --tab-toolbar-navbar-overlap: 0px !important;
+  --tab-min-height: 22px !important;
+  --tab-min-width: 64px !important;
+}
+
+/* TAB BAR on bottom end */
+
+
+#TabsToolbar .toolbarbutton-1 > .toolbarbutton-icon,
+#TabsToolbar .toolbarbutton-1 > .toolbarbutton-text,
+#TabsToolbar .toolbarbutton-1 > .toolbarbutton-badge-stack {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#TabsToolbar .toolbarbutton-1:hover,
+#TabsToolbar .toolbarbutton-1 {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+#TabsToolbar .tabbrowser-tab:is(:hover):not([selected="true"]) .tab-content:not([selected="true"]) {
+  fill-opacity: 1 !important;
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+.tab-throbber[progress],
+.tab-throbber[busy],
+.tab-throbber[busy]::before {
+  opacity: 1 !important;
+  background-image: url("nsicons/Throbber.gif") !important;
+  animation: none !important;
+}
+
+.tab-throbber,
+.tab-throbber-tabslist,
+.tab-icon-pending,
+.tab-icon-image,
+.tab-sharing-icon-overlay {
+  height: 20px !important;
+  width: 20px !important;
+}
+
+#TabsToolbar .toolbarbutton-1[open],
+#TabsToolbar .toolbarbutton-1:active {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
+/*
+#tabbrowser-tabs {
+  width: 100vw !important;
+}
+*/
+
+/* indicators */
+/*
+*|*:root[privatebrowsingmode=temporary] .private-browsing-indicator {
+  position: absolute !important;
+  display: block !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  width: 14px !important;
+  pointer-events: none !important;
+}
+*/
+.private-browsing-indicator {
+  display: none !important;
+}
+
+.accessibility-indicator {
+  display: none !important;
+}
+
+/* Indicators - HIDE */
+/*
+*|*:root:not([accessibilitymode]) .accessibility-indicator {
+  display: none !important
+}
+
+*|*:root:not([privatebrowsingmode=temporary]) .private-browsing-indicator {
+  display: none !important
+}
+*/
+
+/* Drag Space */
+.titlebar-spacer[type="pre-tabs"],
+.titlebar-spacer[type="post-tabs"] {
+  width: 20px !important;
+}
+
+/* Override vertical shifts when moving a tab */
+#navigator-toolbox[movingtab] > #titlebar > #TabsToolbar {
+  padding-bottom: unset !important;
+}
+
+#navigator-toolbox[movingtab] #tabbrowser-tabs {
+  padding-bottom: unset !important;
+  margin-bottom: unset !important;
+}
+
+#navigator-toolbox[movingtab] > #nav-bar {
+  margin-top: unset !important;
+}
+
+/* window-controls - full screen */
+#TabsToolbar #window-controls {
+  position: fixed !important;
+  display: block !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  visibility: hidden !important; /* adjust: visible/hidden */
+}
+
+/* For FF 97 + */
+#TabsToolbar {
+  max-height: var(--urlbar-min-height) !important;
+}
+
+/* Overflow button */
+#widget-overflow-fixed-list toolbarbutton,
+#widget-overflow-fixed-list toolbarbutton:hover {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border: 1px solid var(--nscde-bg-color-6) !important;
+}
+
+#widget-overflow-fixed-list toolbarbutton:is(:active, :open, [selected]) {
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+.panel-arrowcontainer .menupopup-arrowscrollbox,
+.menupopup-arrowscrollbox,
+.panel-arrowbox+slot {
+  box-shadow: none !important;
+  border-radius: 0px !important;
+  margin: 0px !important;
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+.browserContainer > findbar {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+.findbar-find-previous {
+  list-style-image: url("nsicons/arrow-left.png") !important;
+}
+
+.findbar-find-next {
+  list-style-image: url("nsicons/arrow-right.png") !important;
+}
+
+input.findbar-textbox {
+  background-color: var(--nscde-bg-color-4) !important;
+  color: var(--nscde-fg-color-4) !important;
+  border-radius: 0px !important;
+  outline: 2px !important;
+}
+
+input.findbar-textbox:focus {
+  border: 1px solid var(--nscde-bg-color-1) !important;
+}
+
+#window-modal-dialog > .dialogOverlay > .dialogBox:not(.spotlightBox) {
+   border-radius: 0px !important;
+}
+
+/* Ctrl + Q */
+/* This should be --nscde-bg-color-6, but shomehow we cannot get
+ * buttons and labels to inherit the color. Pity.
+ */
+#commonDialogWindow {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+}
+
+#unified-extensions-button {
+  display: none !important;
+}
+
+#placesMenu {
+  background-color: var(--nscde-bg-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-ts-color-6) !important;
+  border-left: 1px solid var(--nscde-ts-color-6) !important;
+  border-right: 1px solid var(--nscde-bs-color-6) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-6) !important;
+}
+
+#placesMenu menu:is([checked="true"],[open="true"],[_moz_menuactive],[selected="true"],:active):not([disabled="true"]) {
+  margin-left: -1px !important;
+  background-color: var(--nscde-sel-color-6) !important;
+  color: var(--nscde-fg-color-6) !important;
+  border-top: 1px solid var(--nscde-bs-color-6) !important;
+  border-left: 1px solid var(--nscde-bs-color-6) !important;
+  border-right: 1px solid var(--nscde-ts-color-6) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-6) !important;
+}
+
+#placesToolbar #forward-button,
+#placesToolbar #back-button {
+  background-color: var(--nscde-bg-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-ts-color-5) !important;
+  border-left: 1px solid var(--nscde-ts-color-5) !important;
+  border-right: 1px solid var(--nscde-bs-color-5) !important;
+  border-bottom: 1px solid var(--nscde-bs-color-5) !important;
+}
+
+#placesToolbar #forward-button:is([checked="true"],[open="true"],:active):not([disabled="true"]),
+#placesToolbar #back-button:is([checked="true"],[open="true"],:active):not([disabled="true"]) {
+  background-color: var(--nscde-sel-color-5) !important;
+  color: var(--nscde-fg-color-5) !important;
+  border-top: 1px solid var(--nscde-bs-color-5) !important;
+  border-left: 1px solid var(--nscde-bs-color-5) !important;
+  border-right: 1px solid var(--nscde-ts-color-5) !important;
+  border-bottom: 1px solid var(--nscde-ts-color-5) !important;
+}
+
