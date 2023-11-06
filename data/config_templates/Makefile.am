@@ -25,6 +25,7 @@ install-data-hook:
 	-cp -r $(srcdir)/rofi_config $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xset.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/GeoDB.ini $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
+	-cp -r $(srcdir)/Picom.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Stalonetray.conf $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xdefaults $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
 	-cp -r $(srcdir)/Xdefaults.fontdefs $(DESTDIR)$(NSCDE_DATADIR)/config_templates/
