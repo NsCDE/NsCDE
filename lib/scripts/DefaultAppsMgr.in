@@ -46,56 +46,64 @@ Begin
    Set $TermMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M terminal} 1 -1)
    ChangeTitle 20 $TermMenu
    Set $TermCurrent = (GetOutput {echo $[infostore.terminal]} 1 -1)
-   Set $TermSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S terminal "} $TermCurrent {"} 1 1)
+   Set $TermSelCmd = {$NSCDE_TOOLSDIR/appfinder -S terminal } $TermCurrent
+   Set $TermSel = (GetOutput $TermSelCmd 1 1)
    ChangeValue 20 $TermSel
 
    # Text Editor
    Set $EditorMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M text-editor} 1 -1)
    ChangeTitle 21 $EditorMenu
    Set $EditorCurrent = (GetOutput {echo $[infostore.xeditor]} 1 -1)
-   Set $EditorSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S text-editor "} $EditorCurrent {"} 1 1)
+   Set $EditorSelCmd = {$NSCDE_TOOLSDIR/appfinder -S text-editor } $EditorCurrent
+   Set $EditorSel = (GetOutput $EditorSelCmd 1 1)
    ChangeValue 21 $EditorSel
 
    # File Manager
    Set $FileMgrMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M filemgr} 1 -1)
    ChangeTitle 22 $FileMgrMenu
    Set $FileMgrCurrent = (GetOutput {echo $[infostore.filemgr]} 1 -1)
-   Set $FileMgrSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S filemgr "} $FileMgrCurrent {"} 1 1)
+   Set $FileMgrSelCmd = {$NSCDE_TOOLSDIR/appfinder -S filemgr } $FileMgrCurrent
+   Set $FileMgrSel = (GetOutput $FileMgrSelCmd 1 1)
    ChangeValue 22 $FileMgrSel
 
    # Web Browser
    Set $BrowserMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M www-browser} 1 -1)
    ChangeTitle 23 $BrowserMenu
    Set $BrowserCurrent = (GetOutput {echo $[infostore.browser]} 1 -1)
-   Set $BrowserSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S www-browser "} $BrowserCurrent {"} 1 1)
+   Set $BrowserSelCmd = {$NSCDE_TOOLSDIR/appfinder -S www-browser } $BrowserCurrent
+   Set $BrowserSel = (GetOutput $BrowserSelCmd 1 1)
    ChangeValue 23 $BrowserSel
 
    # Mail Reader
    Set $MailMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M mailreader} 1 -1)
    ChangeTitle 24 $MailMenu
    Set $MailCurrent = (GetOutput {echo $[infostore.mailreader]} 1 -1)
-   Set $MailSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S mailreader "} $MailCurrent {"} 1 1)
+   Set $MailSelCmd = {$NSCDE_TOOLSDIR/appfinder -S mailreader } $MailCurrent
+   Set $MailSel = (GetOutput $MailSelCmd 1 1)
    ChangeValue 24 $MailSel
 
    # Task Manager
    Set $TaskMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M taskmgr} 1 -1)
    ChangeTitle 25 $TaskMenu
    Set $TaskCurrent = (GetOutput {echo $[infostore.taskmgr]} 1 -1)
-   Set $TaskSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S taskmgr "} $TaskCurrent {"} 1 1)
+   Set $TaskSelCmd = {$NSCDE_TOOLSDIR/appfinder -S taskmgr } $TaskCurrent
+   Set $TaskSel = (GetOutput $TaskSelCmd 1 1)
    ChangeValue 25 $TaskSel
 
    # Calculator
    Set $CalcMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M calculator} 1 -1)
    ChangeTitle 26 $CalcMenu
    Set $CalcCurrent = (GetOutput {echo $[infostore.calculator]} 1 -1)
-   Set $CalcSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S calculator "} $CalcCurrent {"} 1 1)
+   Set $CalcSelCmd = {$NSCDE_TOOLSDIR/appfinder -S calculator } $CalcCurrent
+   Set $CalcSel = (GetOutput $CalcSelCmd 1 1)
    ChangeValue 26 $CalcSel
 
    # Print Manager
    Set $PrintMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M printmgr} 1 -1)
    ChangeTitle 27 $PrintMenu
    Set $PrintCurrent = (GetOutput {echo $[infostore.printmgr]} 1 -1)
-   Set $PrintSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S printmgr "} $PrintCurrent {"} 1 1)
+   Set $PrintSelCmd = {$NSCDE_TOOLSDIR/appfinder -S printmgr } $PrintCurrent
+   Set $PrintSel = (GetOutput $PrintSelCmd 1 1)
    ChangeValue 27 $PrintSel
 
    # Store original values for change detection
@@ -398,14 +406,22 @@ Widget 50
       1 :
       Begin
          # Apply: set infostore values
-         Set $TermNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)) 1 -1)
-         Set $EditorNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)) 1 -1)
-         Set $FileMgrNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)) 1 -1)
-         Set $BrowserNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)) 1 -1)
-         Set $MailNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)) 1 -1)
-         Set $TaskNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)) 1 -1)
-         Set $CalcNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)) 1 -1)
-         Set $PrintNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)) 1 -1)
+         Set $TermNewCmd = {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)
+         Set $TermNew = (GetOutput $TermNewCmd 1 -1)
+         Set $EditorNewCmd = {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)
+         Set $EditorNew = (GetOutput $EditorNewCmd 1 -1)
+         Set $FileMgrNewCmd = {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)
+         Set $FileMgrNew = (GetOutput $FileMgrNewCmd 1 -1)
+         Set $BrowserNewCmd = {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)
+         Set $BrowserNew = (GetOutput $BrowserNewCmd 1 -1)
+         Set $MailNewCmd = {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)
+         Set $MailNew = (GetOutput $MailNewCmd 1 -1)
+         Set $TaskNewCmd = {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)
+         Set $TaskNew = (GetOutput $TaskNewCmd 1 -1)
+         Set $CalcNewCmd = {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)
+         Set $CalcNew = (GetOutput $CalcNewCmd 1 -1)
+         Set $PrintNewCmd = {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)
+         Set $PrintNew = (GetOutput $PrintNewCmd 1 -1)
 
          # Apply via FVWM InfoStoreAdd
          Do {InfoStoreAdd terminal "} $TermNew {"}
@@ -444,14 +460,22 @@ Widget 51
       1 :
       Begin
          # Save to NsCDE.conf using ised
-         Set $TermNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)) 1 -1)
-         Set $EditorNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)) 1 -1)
-         Set $FileMgrNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)) 1 -1)
-         Set $BrowserNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)) 1 -1)
-         Set $MailNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)) 1 -1)
-         Set $TaskNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)) 1 -1)
-         Set $CalcNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)) 1 -1)
-         Set $PrintNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)) 1 -1)
+         Set $TermNewCmd = {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)
+         Set $TermNew = (GetOutput $TermNewCmd 1 -1)
+         Set $EditorNewCmd = {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)
+         Set $EditorNew = (GetOutput $EditorNewCmd 1 -1)
+         Set $FileMgrNewCmd = {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)
+         Set $FileMgrNew = (GetOutput $FileMgrNewCmd 1 -1)
+         Set $BrowserNewCmd = {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)
+         Set $BrowserNew = (GetOutput $BrowserNewCmd 1 -1)
+         Set $MailNewCmd = {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)
+         Set $MailNew = (GetOutput $MailNewCmd 1 -1)
+         Set $TaskNewCmd = {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)
+         Set $TaskNew = (GetOutput $TaskNewCmd 1 -1)
+         Set $CalcNewCmd = {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)
+         Set $CalcNew = (GetOutput $CalcNewCmd 1 -1)
+         Set $PrintNewCmd = {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)
+         Set $PrintNew = (GetOutput $PrintNewCmd 1 -1)
 
          # Save terminal
          Set $SaveTermCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd terminal .*/InfoStoreAdd terminal } $TermNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
