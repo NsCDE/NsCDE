@@ -20,6 +20,7 @@ Test (!EnvMatch infostore.sandboxmode 1) + "$[gt.NsCDE Help]" Popup m_NsCDEHelpM
 + "$[gt.E&xecute ...]" f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
 Test (x $[infostore.terminal]) + "&Terminal" Exec exec $[infostore.terminal]
 Test (x $[infostore.filemgr]) + "&$[gt.File Manager]" Exec exec $[infostore.filemgr]
+Test (x $[infostore.appmgr]) + "&$[gt.Application Manager]" Exec exec $[infostore.appmgr]
 Test (x $[infostore.xeditor]) + "&$[gt.Editor]" Exec exec $[infostore.xeditor]
 f_AddCustomToRootMenu
 + "" Nop
@@ -77,6 +78,8 @@ Test (x xdg-open) + "$[gt.All Documentation (pdf)]%NsCDE/Fphelp.t.pm%" \
 DestroyMenu m_NsCDEMenu
 AddToMenu m_NsCDEMenu "NsCDE" Title
 + "$[gt.&Style Manager]%NsCDE/Dtstyle.t.pm%" f_ToggleFvwmModule FvwmScript StyleMgr
++ "$[gt.&Application Manager]%NsCDE/Fpapps.t.pm%" Exec exec $[infostore.appmgr]
++ "$[gt.&Default Applications]%NsCDE/Dtexec.t.pm%" f_ToggleFvwmModule FvwmScript DefaultAppsMgr
 + "$[gt.&Exec]%NsCDE/Dtexec.t.pm%" f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
 + "$[gt.&Workstation Info]%NsCDE/Dtsysinfo.t.pm%" f_ToggleFvwmModule FvwmScript Sysinfo
 + "$[gt.Workspaces and &Pages]%NsCDE/Dtfpcfg.t.pm%" f_ToggleFvwmFunc WsPgMgr Close f_RunQuickScriptDialog WsPgMgr $[infostore.desknum] $[infostore.pagematrixX] $[infostore.pagematrixY]

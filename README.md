@@ -18,30 +18,38 @@
 - 💻 FVWM-based lightweight desktop environment
 - ⚙️ GTK2/GTK3/Qt4/Qt5 theme integration
 - 🎭 Color and Font Style Managers with GUI configuration
+- 📱 **Default Applications Manager** - GUI dialog for setting default terminal, editor, file manager, browser, etc.
+- 🗂️ **pcmanfm-qt Integration** - Application Manager mode accessible from NsCDE menu, root menu, and subpanels
+- 🌐 **System Info Enhancement** - Last boot time display in Workstation Info dialog
 
 ## Installation
 
-### From DEB Package (Debian/Ubuntu)
+### From DEB Package
+
+#### Debian
 
 ```bash
-sudo apt install ./nscde-zh_*.deb
+# Download and install Debian package (replace VERSION with actual version, e.g. 2.3.10)
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
+```
 
-# Or build from source
-dpkg-buildpackage -rfakeroot -b
-sudo apt install ./nscde-zh_*.deb
+#### Ubuntu
+
+```bash
+# Download and install Ubuntu package (replace VERSION with actual version, e.g. 2.3.10)
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```
 
 ### From RPM Package
 
-[![RPM](https://img.shields.io/badge/RPM-v2.3.4_zh-blue)](https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm)
-
 ```bash
-# Direct download and install
-sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# Download latest RPM from releases page
+# https://github.com/wenyinos/NsCDE-zh/releases
 
-# Or download first then install
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
-sudo dnf install NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# Or install directly (replace VERSION with actual version)
+sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/NsCDE-VERSION-1.zh.fc43.x86_64.rpm
 ```
 
 ### From Arch Linux (AUR)

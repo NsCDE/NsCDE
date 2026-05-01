@@ -18,30 +18,38 @@
 - 💻 基于 FVWM 的轻量级桌面环境
 - ⚙️ GTK2/GTK3/Qt4/Qt5 主题集成
 - 🎭 带有 GUI 配置的色彩和字体样式管理器
+- 📱 **默认应用程序管理器** - 图形界面对话框，用于设置默认终端、编辑器、文件管理器、浏览器等
+- 🗂️ **pcmanfm-qt 集成** - 应用程序管理器模式，可从 NsCDE 菜单、根菜单和子面板访问
+- 🌐 **系统信息增强** - 工作站信息对话框显示最后启动时间
 
 ## 安装
 
-### 从 DEB 包安装（Debian/Ubuntu）
+### 从 DEB 包安装
+
+#### Debian
 
 ```bash
-sudo apt install ./nscde-zh_*.deb
+# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号，例如 2.3.10）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
+```
 
-# 或从源码构建
-dpkg-buildpackage -rfakeroot -b
-sudo apt install ./nscde-zh_*.deb
+#### Ubuntu
+
+```bash
+# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号，例如 2.3.10）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```
 
 ### 从 RPM 包安装
 
-[![RPM](https://img.shields.io/badge/RPM-v2.3.4_zh-blue)](https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm)
-
 ```bash
-# 直接下载安装
-sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# 从 releases 页面下载最新 RPM
+# https://github.com/wenyinos/NsCDE-zh/releases
 
-# 或下载后安装
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
-sudo dnf install NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# 或直接安装（将 VERSION 替换为实际版本号）
+sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/NsCDE-VERSION-1.zh.fc43.x86_64.rpm
 ```
 
 ### 从 Arch Linux（AUR）安装

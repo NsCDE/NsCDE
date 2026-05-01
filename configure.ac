@@ -6,7 +6,7 @@ dnl Author: Hegel3DReloaded
 dnl Licence: GPLv3
 dnl
 
-AC_INIT([NsCDE], 2.3.5, [nscde@protonmail.com])
+AC_INIT([NsCDE], 2.3.10, [nscde@protonmail.com])
 
 AC_CONFIG_AUX_DIR(ac-aux)
 
@@ -421,6 +421,7 @@ AC_OUTPUT(
 	lib/scripts/Makefile
 	lib/scripts/BackdropMgr
 	lib/scripts/ColorMgr
+	lib/scripts/DefaultAppsMgr
 	lib/scripts/ExecDialog
 	lib/scripts/FontMgr
 	lib/scripts/PointerMgr
