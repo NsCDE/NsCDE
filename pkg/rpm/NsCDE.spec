@@ -22,6 +22,7 @@ BuildRequires:  glibc-devel
 %endif
 Requires:	xterm ksh sed fvwm3 cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-psutil python3-yaml
+Requires:	qt5ct qt6ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
 Requires: PyQt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
 Requires: google-noto-sans-cjk-fonts google-noto-sans-cjk-vf-fonts google-noto-sans-mono-cjk-vf-fonts google-noto-sans-mono-fonts
@@ -30,7 +31,7 @@ Requires: google-noto-sans-cjk-fonts google-noto-sans-cjk-vf-fonts google-noto-s
 Requires: python3-pyqt5 libqt5-qtstyleplugins-platformtheme-gtk2 dex groff-full dejavu-fonts-ttf
 Requires: noto-sans-cjk-fonts
 %endif
-Suggests:	qt5ct
+Suggests:	qt5-qtstyleplugins
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
 Requires:	%{_bindir}/xrdb

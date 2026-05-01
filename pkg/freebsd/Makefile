@@ -39,7 +39,9 @@ RUN_DEPENDS=	ksh93:shells/ksh93 \
 		xprop:x11/xprop \
 		xdpyinfo:x11/xdpyinfo \
 		xrandr:x11/xrandr \
-		xdg-utils:devel/xdg-utils
+		xdg-utils:devel/xdg-utils \
+		qt5ct:x11/qt5ct \
+		qt6ct:x11/qt6ct
 
 USES=		autoreconf gettext-tools gmake iconv localbase python xorg
 USE_GITHUB=	yes
