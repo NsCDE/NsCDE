@@ -18,6 +18,9 @@
 - 💻 FVWM-based lightweight desktop environment
 - ⚙️ GTK2/GTK3/Qt4/Qt5 theme integration
 - 🎭 Color and Font Style Managers with GUI configuration
+- 📱 **Default Applications Manager** - GUI dialog for setting default terminal, editor, file manager, browser, etc.
+- 🗂️ **pcmanfm-qt Integration** - Application Manager mode accessible from NsCDE menu, root menu, and subpanels
+- 🌐 **System Info Enhancement** - Last boot time display in Workstation Info dialog
 
 ## Installation
 
