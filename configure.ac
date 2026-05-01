@@ -421,6 +421,7 @@ AC_OUTPUT(
 	lib/scripts/Makefile
 	lib/scripts/BackdropMgr
 	lib/scripts/ColorMgr
+	lib/scripts/DefaultAppsMgr
 	lib/scripts/ExecDialog
 	lib/scripts/FontMgr
 	lib/scripts/PointerMgr
