@@ -33,7 +33,13 @@ RUN_DEPENDS=	ksh93:shells/ksh93 \
 		${PYTHON_PKGNAMEPREFIX}qt5-pyqt>=0:devel/py-qt5-pyqt@${PY_FLAVOR} \
 		gettext:devel/gettext \
 		noto-basic>0:x11-fonts/noto-basic \
-		noto-sc>0:x11-fonts/noto-sc
+		noto-sc>0:x11-fonts/noto-sc \
+		xrdb:x11/xrdb \
+		xset:x11/xset \
+		xprop:x11/xprop \
+		xdpyinfo:x11/xdpyinfo \
+		xrandr:x11/xrandr \
+		xdg-utils:devel/xdg-utils
 
 USES=		autoreconf gettext-tools gmake iconv localbase python xorg
 USE_GITHUB=	yes
