@@ -24,27 +24,36 @@
 
 ## 安装
 
-### 从 DEB 包安装（Debian/Ubuntu）
+### 从 DEB 包安装
+
+#### Debian
+[![Debian](https://img.shields.io/badge/Debian-软件包-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
 
 ```bash
-sudo apt install ./nscde-zh_*.deb
+# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
+sudo apt install ./nscde-zh_VERSION_amd64.deb
+```
 
-# 或从源码构建
-dpkg-buildpackage -rfakeroot -b
-sudo apt install ./nscde-zh_*.deb
+#### Ubuntu
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-软件包-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
+
+```bash
+# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
+sudo apt install ./nscde-zh_VERSION_amd64.deb
 ```
 
 ### 从 RPM 包安装
 
-[![RPM](https://img.shields.io/badge/RPM-v2.3.4_zh-blue)](https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm)
+[![RPM](https://img.shields.io/github/v/release/wenyinos/NsCDE-zh?label=RPM)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
-# 直接下载安装
-sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# 从 releases 页面下载最新 RPM
+# https://github.com/wenyinos/NsCDE-zh/releases
 
-# 或下载后安装
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/v2.3.4_zh/NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
-sudo dnf install NsCDE-2.3.4-1.zh.fc43.x86_64.rpm
+# 或直接安装（将 VERSION 替换为实际版本号）
+sudo dnf install https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/NsCDE-VERSION-1.zh.fc43.x86_64.rpm
 ```
 
 ### 从 Arch Linux（AUR）安装
