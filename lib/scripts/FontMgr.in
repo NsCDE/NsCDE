@@ -457,29 +457,31 @@ Widget 3
       End
       2 :
       Begin
-         # XXX select default after deletion
-         If (LastString) == {confirmed} Then
-         Begin
-            Set $DeleteFontsetCmd = {rm -f '} $FontsetPath {' 2>&1}
-            Set $DeleteFontset = (GetOutput $DeleteFontsetCmd 1 -1)
+          # XXX select default after deletion
+          If (LastString) == {confirmed} Then
+          Begin
+             Set $DeleteFontsetCmd = {rm -f '} $FontsetPath {' 2>&1}
+             Set $DeleteFontset = (GetOutput $DeleteFontsetCmd 1 -1)
 
-            If $DeleteFontset == {} Then
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
-               Set $FontsetList = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 1 -1)
-               Set $FontsetTotalNum = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 2 -1)
-               # Refill fontset list
-               ChangeTitle 5 $FontsetList
-               # Refill all 15 font variables
-               SendSignal 3 1
-               # 10 1 is small, medium or large font group
-               SendSignal 10 1
-            End
-            Else
-            Begin
-               Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] \\\"} $FontsetName {\\\": } $DeleteFontset {"}
-            End
-         End
+             If $DeleteFontset == {} Then
+             Begin
+                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Info.xpm" "$[gt.Fontset file] \\\"} $FontsetName {\\\" $[gt.removed from inventory.]"}
+                Set $FontsetList = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 1 -1)
+                Set $FontsetTotalNum = (GetOutput {$NSCDE_TOOLSDIR/fontmgr -P} 2 -1)
+                # Refill fontset list
+                ChangeTitle 5 $FontsetList
+                # Select first item after deletion
+                ChangeValue 5 1
+                # Refill all 15 font variables
+                SendSignal 3 1
+                # 10 1 is small, medium or large font group
+                SendSignal 10 1
+             End
+             Else
+             Begin
+                Do {f_Notifier "Font Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error removing] \\\"} $FontsetName {\\\": } $DeleteFontset {"}
+             End
+          End
       End
 End
 

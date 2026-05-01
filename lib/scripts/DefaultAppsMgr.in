@@ -1,0 +1,492 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Hegel3DReloaded
+# Licence: GPLv3
+#
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-DefaultAppsMgr}
+WindowLocaleTitle {Style Manager - Default Applications}
+WindowSize 520 460
+Colorset 22
+
+Init
+Begin
+   Set $DefFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 12} 1 -1)
+   Set $LabelFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 11} 1 -1)
+   Set $BtnFont = (GetOutput {$NSCDE_TOOLSDIR/getfont -v -t normal -s medium -Z 14} 1 -1)
+
+   # Labels
+   ChangeFont 10 $LabelFont
+   ChangeFont 11 $LabelFont
+   ChangeFont 12 $LabelFont
+   ChangeFont 13 $LabelFont
+   ChangeFont 14 $LabelFont
+   ChangeFont 15 $LabelFont
+   ChangeFont 16 $LabelFont
+   ChangeFont 17 $LabelFont
+
+   # PopupMenus
+   ChangeFont 20 $DefFont
+   ChangeFont 21 $DefFont
+   ChangeFont 22 $DefFont
+   ChangeFont 23 $DefFont
+   ChangeFont 24 $DefFont
+   ChangeFont 25 $DefFont
+   ChangeFont 26 $DefFont
+   ChangeFont 27 $DefFont
+
+   # Buttons
+   ChangeFont 1 $BtnFont
+   ChangeFont 2 $BtnFont
+   ChangeFont 3 $BtnFont
+   ChangeFont 4 $BtnFont
+
+   # Build app menus from catalogs
+   # Terminal
+   Set $TermMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M terminal} 1 -1)
+   ChangeTitle 20 $TermMenu
+   Set $TermCurrent = (GetOutput {echo $[infostore.terminal]} 1 -1)
+   Set $TermSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S terminal "} $TermCurrent {"} 1 1)
+   ChangeValue 20 $TermSel
+
+   # Text Editor
+   Set $EditorMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M text-editor} 1 -1)
+   ChangeTitle 21 $EditorMenu
+   Set $EditorCurrent = (GetOutput {echo $[infostore.xeditor]} 1 -1)
+   Set $EditorSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S text-editor "} $EditorCurrent {"} 1 1)
+   ChangeValue 21 $EditorSel
+
+   # File Manager
+   Set $FileMgrMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M filemgr} 1 -1)
+   ChangeTitle 22 $FileMgrMenu
+   Set $FileMgrCurrent = (GetOutput {echo $[infostore.filemgr]} 1 -1)
+   Set $FileMgrSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S filemgr "} $FileMgrCurrent {"} 1 1)
+   ChangeValue 22 $FileMgrSel
+
+   # Web Browser
+   Set $BrowserMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M www-browser} 1 -1)
+   ChangeTitle 23 $BrowserMenu
+   Set $BrowserCurrent = (GetOutput {echo $[infostore.browser]} 1 -1)
+   Set $BrowserSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S www-browser "} $BrowserCurrent {"} 1 1)
+   ChangeValue 23 $BrowserSel
+
+   # Mail Reader
+   Set $MailMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M mailreader} 1 -1)
+   ChangeTitle 24 $MailMenu
+   Set $MailCurrent = (GetOutput {echo $[infostore.mailreader]} 1 -1)
+   Set $MailSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S mailreader "} $MailCurrent {"} 1 1)
+   ChangeValue 24 $MailSel
+
+   # Task Manager
+   Set $TaskMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M taskmgr} 1 -1)
+   ChangeTitle 25 $TaskMenu
+   Set $TaskCurrent = (GetOutput {echo $[infostore.taskmgr]} 1 -1)
+   Set $TaskSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S taskmgr "} $TaskCurrent {"} 1 1)
+   ChangeValue 25 $TaskSel
+
+   # Calculator
+   Set $CalcMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M calculator} 1 -1)
+   ChangeTitle 26 $CalcMenu
+   Set $CalcCurrent = (GetOutput {echo $[infostore.calculator]} 1 -1)
+   Set $CalcSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S calculator "} $CalcCurrent {"} 1 1)
+   ChangeValue 26 $CalcSel
+
+   # Print Manager
+   Set $PrintMenu = (GetOutput {$NSCDE_TOOLSDIR/appfinder -M printmgr} 1 -1)
+   ChangeTitle 27 $PrintMenu
+   Set $PrintCurrent = (GetOutput {echo $[infostore.printmgr]} 1 -1)
+   Set $PrintSel = (GetOutput {$NSCDE_TOOLSDIR/appfinder -S printmgr "} $PrintCurrent {"} 1 1)
+   ChangeValue 27 $PrintSel
+
+   # Store original values for change detection
+   Set $OrigTerminal = $TermCurrent
+   Set $OrigEditor = $EditorCurrent
+   Set $OrigFileMgr = $FileMgrCurrent
+   Set $OrigBrowser = $BrowserCurrent
+   Set $OrigMail = $MailCurrent
+   Set $OrigTask = $TaskCurrent
+   Set $OrigCalc = $CalcCurrent
+   Set $OrigPrint = $PrintCurrent
+
+   # Key bindings
+   Key Escape A 3 1 {KeyClose}
+   Key Q C 3 1 {KeyClose}
+   Key Return C 2 2 {KeySave}
+   Key F1 A 4 1 {KeyHelp}
+   Key Help A 4 1 {KeyHelp}
+End
+
+Widget 1
+   Property
+   Size 86 0
+   Position 10 418
+   Flags NoReliefString
+   Type PushButton
+   LocaleTitle {Apply}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 50 1
+      End
+End
+
+Widget 2
+   Property
+   Size 86 0
+   Position 106 418
+   Flags NoReliefString
+   Type PushButton
+   LocaleTitle {Save}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         SendSignal 50 1
+         SendSignal 51 1
+      End
+End
+
+Widget 3
+   Property
+   Size 86 0
+   Position 424 418
+   Flags NoReliefString
+   Type PushButton
+   LocaleTitle {Close}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 4
+   Property
+   Size 86 0
+   Position 328 418
+   Flags NoReliefString
+   Type PushButton
+   LocaleTitle {Help}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Do {f_Notifier "Default Applications Manager" "Dismiss" "NsCDE/Info.xpm" \
+            "Use this dialog to set default applications for common tasks. \
+Select the desired application from each dropdown menu, then click Apply to test \
+or Save to write changes to your NsCDE.conf configuration file."}
+      End
+End
+
+# Labels
+Widget 10
+   Property
+   Position 20 18
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Terminal Emulator:}
+End
+
+Widget 11
+   Property
+   Position 20 58
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Text Editor:}
+End
+
+Widget 12
+   Property
+   Position 20 98
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {File Manager:}
+End
+
+Widget 13
+   Property
+   Position 20 138
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Web Browser:}
+End
+
+Widget 14
+   Property
+   Position 20 178
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Mail Reader:}
+End
+
+Widget 15
+   Property
+   Position 20 218
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Task Manager:}
+End
+
+Widget 16
+   Property
+   Position 20 258
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Calculator:}
+End
+
+Widget 17
+   Property
+   Position 20 298
+   Size 140 20
+   Type Label
+   Flags NoReliefString Left
+   LocaleTitle {Print Manager:}
+End
+
+# PopupMenus for app selection
+Widget 20
+   Property
+   Position 170 14
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 21
+   Property
+   Position 170 54
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 22
+   Property
+   Position 170 94
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 23
+   Property
+   Position 170 134
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 24
+   Property
+   Position 170 174
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 25
+   Property
+   Position 170 214
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 26
+   Property
+   Position 170 254
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 27
+   Property
+   Position 170 294
+   Size 330 24
+   Type PopupMenu
+   Flags NoReliefString
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Status/info area
+Widget 30
+   Property
+   Position 20 340
+   Size 480 60
+   Type TextField
+   Flags NoReliefString Left
+   Title {}
+   Font "xft:::pixelsize=11:spacing=mono"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Handler widget for Apply/Save signals
+Widget 50
+   Property
+   Position 0 0
+   Type Menu
+   Flags NoReliefString Left Hidden
+   Value 0
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         # Apply: set infostore values
+         Set $TermNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)) 1 -1)
+         Set $EditorNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)) 1 -1)
+         Set $FileMgrNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)) 1 -1)
+         Set $BrowserNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)) 1 -1)
+         Set $MailNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)) 1 -1)
+         Set $TaskNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)) 1 -1)
+         Set $CalcNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)) 1 -1)
+         Set $PrintNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)) 1 -1)
+
+         # Apply via FVWM InfoStoreAdd
+         Do {InfoStoreAdd terminal "} $TermNew {"}
+         Do {InfoStoreAdd xeditor "} $EditorNew {"}
+         Do {InfoStoreAdd filemgr "} $FileMgrNew {"}
+         Do {InfoStoreAdd browser "} $BrowserNew {"}
+         Do {InfoStoreAdd mailreader "} $MailNew {"}
+         Do {InfoStoreAdd taskmgr "} $TaskNew {"}
+         Do {InfoStoreAdd calculator "} $CalcNew {"}
+         Do {InfoStoreAdd printmgr "} $PrintNew {"}
+
+         # Update status
+         ChangeTitle 30 (Gettext {Applied. Changes are active for this session.})
+         Do {Schedule 3000 SendToModule DefaultAppsMgr SendString 30 2 clearstatus}
+      End
+      2 :
+      Begin
+         If (LastString) == {clearstatus} Then
+            ChangeTitle 30 {}
+      End
+End
+
+# Handler widget for Save signal
+Widget 51
+   Property
+   Position 0 0
+   Type Menu
+   Flags NoReliefString Left Hidden
+   Value 0
+   Title {}
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+      1 :
+      Begin
+         # Save to NsCDE.conf using ised
+         Set $TermNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G terminal } (GetValue 20)) 1 -1)
+         Set $EditorNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G text-editor } (GetValue 21)) 1 -1)
+         Set $FileMgrNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G filemgr } (GetValue 22)) 1 -1)
+         Set $BrowserNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G www-browser } (GetValue 23)) 1 -1)
+         Set $MailNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G mailreader } (GetValue 24)) 1 -1)
+         Set $TaskNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G taskmgr } (GetValue 25)) 1 -1)
+         Set $CalcNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G calculator } (GetValue 26)) 1 -1)
+         Set $PrintNew = (GetOutput {$NSCDE_TOOLSDIR/appfinder -G printmgr } (GetValue 27)) 1 -1)
+
+         # Save terminal
+         Set $SaveTermCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd terminal .*/InfoStoreAdd terminal } $TermNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveTermCmd -1 1
+
+         # Save editor
+         Set $SaveEditorCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd xeditor .*/InfoStoreAdd xeditor } $EditorNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveEditorCmd -1 1
+
+         # Save file manager
+         Set $SaveFileMgrCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd filemgr .*/InfoStoreAdd filemgr } $FileMgrNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveFileMgrCmd -1 1
+
+         # Save browser
+         Set $SaveBrowserCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd browser .*/InfoStoreAdd browser } $BrowserNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveBrowserCmd -1 1
+
+         # Save mail reader
+         Set $SaveMailCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd mailreader .*/InfoStoreAdd mailreader } $MailNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveMailCmd -1 1
+
+         # Save task manager
+         Set $SaveTaskCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd taskmgr .*/InfoStoreAdd taskmgr } $TaskNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveTaskCmd -1 1
+
+         # Save calculator
+         Set $SaveCalcCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd calculator .*/InfoStoreAdd calculator } $CalcNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SaveCalcCmd -1 1
+
+         # Save print manager
+         Set $SavePrintCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd printmgr .*/InfoStoreAdd printmgr } $PrintNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
+         GetOutput $SavePrintCmd -1 1
+
+         # Update status
+         ChangeTitle 30 (Gettext {Saved to NsCDE.conf. Changes will persist after restart.})
+         Do {Schedule 3000 SendToModule DefaultAppsMgr SendString 30 2 clearstatus}
+      End
+End

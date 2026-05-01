@@ -15,6 +15,8 @@ MOFILES = NsCDE-BackdropMgr.hr.mo \
 	NsCDE-BeepMgr.zh.mo \
 	NsCDE-ColorMgr.hr.mo \
 	NsCDE-ColorMgr.zh.mo \
+	NsCDE-DefaultAppsMgr.hr.mo \
+	NsCDE-DefaultAppsMgr.zh.mo \
 	NsCDE-ExecDialog.hr.mo \
 	NsCDE-ExecDialog.zh.mo \
 	NsCDE-FilePicker.hr.mo \

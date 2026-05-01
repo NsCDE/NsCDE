@@ -73,4 +73,17 @@ except ImportError:
    print ("(Not available)")
 
 # System Last Booted
-# print ("syslastbooted XXX") # XXX
+try:
+   import subprocess
+   boot_time = subprocess.check_output(['uptime', '-s']).decode().strip()
+   print (boot_time)
+except Exception:
+   try:
+      import time
+      with open('/proc/uptime', 'r') as f:
+         uptime_seconds = float(f.readline().split()[0])
+         boot_timestamp = time.time() - uptime_seconds
+         boot_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(boot_timestamp))
+         print (boot_time)
+   except Exception:
+      print ("(Not available)")
