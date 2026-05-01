@@ -27,21 +27,21 @@
 ### 从 DEB 包安装
 
 #### Debian
-[![Debian](https://img.shields.io/badge/Debian-软件包-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
+[![Debian](https://img.shields.io/badge/Debian-软件包-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
-# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号）
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
-sudo apt install ./nscde-zh_VERSION_amd64.deb
+# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号，例如 2.3.5）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 ```
 
 #### Ubuntu
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-软件包-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-软件包-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
-# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号）
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
-sudo apt install ./nscde-zh_VERSION_amd64.deb
+# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号，例如 2.3.5）
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```
 
 ### 从 RPM 包安装

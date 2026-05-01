@@ -27,21 +27,21 @@
 ### From DEB Package
 
 #### Debian
-[![Debian](https://img.shields.io/badge/Debian-Package-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
+[![Debian](https://img.shields.io/badge/Debian-Package-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
-# Download and install Debian package (replace VERSION with actual version)
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
-sudo apt install ./nscde-zh_VERSION_amd64.deb
+# Download and install Debian package (replace VERSION with actual version, e.g. 2.3.5)
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 ```
 
 #### Ubuntu
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-Package-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-Package-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
-# Download and install Ubuntu package (replace VERSION with actual version)
-wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION/nscde-zh_VERSION_amd64.deb
-sudo apt install ./nscde-zh_VERSION_amd64.deb
+# Download and install Ubuntu package (replace VERSION with actual version, e.g. 2.3.5)
+wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
+sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```
 
 ### From RPM Package
