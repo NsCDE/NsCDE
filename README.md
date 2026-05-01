@@ -27,7 +27,6 @@
 ### From DEB Package
 
 #### Debian
-[![Debian](https://img.shields.io/badge/Debian-Package-blue?logo=debian)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb)
 
 ```bash
 # Download and install Debian package (replace VERSION with actual version, e.g. 2.3.5)
@@ -36,7 +35,6 @@ sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 ```
 
 #### Ubuntu
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-Package-orange?logo=ubuntu)](https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb)
 
 ```bash
 # Download and install Ubuntu package (replace VERSION with actual version, e.g. 2.3.5)
@@ -45,8 +43,6 @@ sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```
 
 ### From RPM Package
-
-[![RPM](https://img.shields.io/github/v/release/wenyinos/NsCDE-zh?label=RPM)](https://github.com/wenyinos/NsCDE-zh/releases)
 
 ```bash
 # Download latest RPM from releases page
