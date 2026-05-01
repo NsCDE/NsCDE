@@ -29,7 +29,7 @@
 #### Debian
 
 ```bash
-# Download and install Debian package (replace VERSION with actual version, e.g. 2.3.5)
+# Download and install Debian package (replace VERSION with actual version, e.g. 2.3.10)
 wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
 sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 ```
@@ -37,7 +37,7 @@ sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 #### Ubuntu
 
 ```bash
-# Download and install Ubuntu package (replace VERSION with actual version, e.g. 2.3.5)
+# Download and install Ubuntu package (replace VERSION with actual version, e.g. 2.3.10)
 wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```

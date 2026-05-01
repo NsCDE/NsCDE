@@ -2,7 +2,7 @@
 # Author: wenyinos <admin@wenyinos.com>
 
 PORTNAME=	NsCDE-zh
-DISTVERSION=	2.3.5
+DISTVERSION=	2.3.10
 CATEGORIES=	x11-wm
 
 MAINTAINER=	admin@wenyinos.com
