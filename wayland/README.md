@@ -49,6 +49,18 @@ Installed files are placed under:
 wayland/bin/nscde-labwc
 ```
 
+To apply one compositor-wide output scale during startup:
+
+```sh
+NSCDE_WAYLAND_SCALE=1.5 wayland/bin/nscde-labwc
+```
+
+For display-manager sessions, write the scale factor to:
+
+```text
+~/.config/nscde-wayland/scale
+```
+
 Static assets stay in the source or installation directory:
 
 ```text

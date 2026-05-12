@@ -2,9 +2,29 @@
 
 nscde_assets=${NSCDE_WAYLAND_ASSETS:-/usr/share/nscde-wayland/assets}
 wallpaper="$nscde_assets/photos/Flower.png"
+scale_file=${NSCDE_WAYLAND_SCALE_FILE:-"${NSCDE_WAYLAND_CONFIG:-"$HOME/.config/nscde-wayland"}/scale"}
+
+apply_global_scale() {
+	scale=${NSCDE_WAYLAND_SCALE:-}
+	if [ -z "$scale" ] && [ -r "$scale_file" ]; then
+		IFS= read -r scale < "$scale_file" || scale=
+	fi
+	case "$scale" in
+		""|*[!0123456789.]*|.*|*.*.*) return ;;
+	esac
+	command -v wlr-randr >/dev/null 2>&1 || return
+	wlr-randr | while IFS= read -r line; do
+		case "$line" in ""|" "*) continue ;; esac
+		output=${line%% *}
+		[ -n "$output" ] && wlr-randr --output "$output" --scale "$scale" >/dev/null 2>&1
+	done
+}
 
 command -v fnott >/dev/null 2>&1 && fnott &
 command -v kanshi >/dev/null 2>&1 && kanshi &
+if [ -n "${NSCDE_WAYLAND_SCALE:-}" ] || [ -r "$scale_file" ]; then
+	(sleep 1; apply_global_scale) &
+fi
 command -v sfwbar >/dev/null 2>&1 && sfwbar &
 command -v lavalauncher >/dev/null 2>&1 && lavalauncher &
 
