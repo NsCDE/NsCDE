@@ -50,3 +50,27 @@ Do not commit generated local configuration, secrets, or machine-specific paths.
 Be careful with install-related changes because the project writes into system
 prefixes, XDG directories, and session files. Keep package metadata in `pkg/`
 aligned with any dependency changes in `configure.ac` and `README*.md`.
+
+## NsCDE Runtime Isolation
+Do not write GTK, Qt, icon, MIME/default-application, or XDG search-path changes
+to the user's shared desktop configuration by default. The X11/FVWM session
+should route launched desktop applications through `nscde_xdg_run`, which scopes
+NsCDE-specific settings under `$FVWM_USERDIR/xdg/`. Legacy writes to
+`~/.config`, `~/.gtkrc-2.0`, `~/.local/share`, or global `XDG_*` variables are
+allowed only when `NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1` is explicitly set.
+
+## Wayland Runtime Isolation
+Wayland theme and desktop scripts must not globally override `XDG_CONFIG_DIRS`
+or `XDG_DATA_DIRS` from the session launcher. Keep other desktop environments,
+especially Plasma, unaffected. If a Wayland component needs NsCDE-specific
+config or icon paths, pass explicit config files or use `nscde-wayland-run` to
+scope temporary XDG values to that component only. Ordinary applications launched
+from the panel or launcher should run with the original XDG environment.
+Theme, icon, MIME/default-application, Qt, GTK, KDE, and portal settings for
+the Wayland edition must be written to NsCDE-specific extra config files, not to
+the user's shared desktop files. Do not edit `~/.config/gtk-3.0/settings.ini`,
+`~/.config/gtk-4.0/settings.ini`, `~/.gtkrc-2.0`, `~/.config/kdeglobals`,
+`~/.config/mimeapps.list`, `~/.local/share/applications/mimeapps.list`,
+`qt5ct.conf`, `qt6ct.conf`, or Kvantum globals unless the user explicitly asks.
+Prefer paths under `~/.config/nscde-wayland/` and explicit component config
+arguments.

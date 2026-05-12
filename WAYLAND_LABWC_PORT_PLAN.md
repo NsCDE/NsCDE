@@ -382,6 +382,7 @@ Wayland 版建议拆成独立包，不要并入现有 `nscde-zh` FVWM/X11 主包
 - 可以提供 systemd user units 作为增强集成，但不能只依赖它们；默认会话组件必须也能由 `nscde-labwc` 和 labwc `autostart` 启动。
 - `mako`、`swayidle`、Waybar 等可能带 systemd 依赖的组件只能作为可选依赖。
 - 发行版若将 Qt 基础库打包为依赖 `systemd-libs`，Qt 相关组件需要单独标注为“按发行版验证”。
+- Wayland 版主题、图标、默认应用、MIME、GTK、Qt、KDE 和 portal 设置必须写入 NsCDE 专用额外配置文件，不能直接覆盖用户当前桌面的共享配置。禁止默认修改 `~/.config/gtk-3.0/settings.ini`、`~/.config/gtk-4.0/settings.ini`、`~/.gtkrc-2.0`、`~/.config/kdeglobals`、`~/.config/mimeapps.list`、`~/.local/share/applications/mimeapps.list`、`qt5ct.conf`、`qt6ct.conf` 或全局 Kvantum 配置；如需生效，应通过 `nscde-wayland-run`、显式配置路径或 `~/.config/nscde-wayland/` 下的专用配置实现。
 
 ## 13. 推荐依赖
 

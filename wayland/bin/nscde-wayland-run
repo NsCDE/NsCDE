@@ -1,0 +1,53 @@
+#!/bin/sh
+
+set -eu
+
+cmd=${1:-}
+[ -n "$cmd" ] || {
+	printf '%s\n' "usage: nscde-wayland-run COMMAND [ARGS...]" >&2
+	exit 2
+}
+shift
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+wayland_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
+
+if [ -n "${NSCDE_WAYLAND_SOURCE:-}" ]; then
+	source_dir=$NSCDE_WAYLAND_SOURCE
+elif [ -d "$wayland_dir/labwc" ]; then
+	source_dir=$wayland_dir
+else
+	source_dir=/usr/share/nscde-wayland
+fi
+
+asset_source=${NSCDE_WAYLAND_ASSET_SOURCE:-"$source_dir/assets"}
+base_config_dirs=${NSCDE_BASE_XDG_CONFIG_DIRS:-${XDG_CONFIG_DIRS:-/etc/xdg}}
+base_data_dirs=${NSCDE_BASE_XDG_DATA_DIRS:-${XDG_DATA_DIRS:-/usr/local/share:/usr/share}}
+nscde_data_dirs="$source_dir:$asset_source/xdg:$base_data_dirs"
+
+case "$cmd" in
+	fuzzel)
+		XDG_CONFIG_DIRS=$base_config_dirs XDG_DATA_DIRS=$nscde_data_dirs exec fuzzel \
+			--config="$source_dir/fuzzel/fuzzel.ini" \
+			--icon-theme=NsCDE "$@"
+		;;
+	foot)
+		XDG_CONFIG_DIRS=$base_config_dirs XDG_DATA_DIRS=$base_data_dirs exec foot \
+			--config="$source_dir/foot/foot.ini" "$@"
+		;;
+	fnott)
+		XDG_CONFIG_DIRS=$base_config_dirs XDG_DATA_DIRS=$nscde_data_dirs exec fnott \
+			-c "$source_dir/fnott/fnott.ini" "$@"
+		;;
+	sfwbar)
+		NSCDE_BASE_XDG_DATA_DIRS=$base_data_dirs \
+			XDG_DATA_DIRS=$nscde_data_dirs exec sfwbar "$@"
+		;;
+	app)
+		XDG_CONFIG_DIRS=$base_config_dirs XDG_DATA_DIRS=$base_data_dirs exec "$@"
+		;;
+	*)
+		printf '%s\n' "unknown command: $cmd" >&2
+		exit 2
+		;;
+esac

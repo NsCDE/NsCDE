@@ -6,6 +6,11 @@
 # Licence: GPLv3
 #
 
+if [ "x${NSCDE_ALLOW_SHARED_DESKTOP_CONFIG:-0}" != "x1" ]; then
+   echo "Skipping shared desktop font hooks. Set NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1 to enable legacy behavior." >&2
+   exit 0
+fi
+
 FontFile="$1"
 if [ -r "$FontFile" ]; then
    NewMonoFont=$(grep -E 'InfoStoreAdd font\.monospaced\.normal\.medium' "$FontFile" | \
@@ -61,4 +66,3 @@ if (($? == 0)); then
    ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/qterminal.ini -s General -k fontFamily -v "${NewMonoFontName}"
    ${NSCDE_TOOLSDIR}/confset -c $HOME/.config/qterminal.org/qterminal.ini -s General -k fontSize -v "${NewMonoFontSize}"
 fi
-

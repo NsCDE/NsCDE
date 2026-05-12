@@ -61,12 +61,30 @@ For display-manager sessions, write the scale factor to:
 ~/.config/nscde-wayland/scale
 ```
 
+To inspect the current test session:
+
+```sh
+nscde-wayland-doctor
+```
+
+To capture a Wayland screenshot:
+
+```sh
+nscde-wayland-screenshot area
+nscde-wayland-screenshot copy-area
+```
+
 Static assets stay in the source or installation directory:
 
 ```text
 wayland/assets/
 /usr/share/nscde-wayland/assets/
 ```
+
+Component configuration for `fuzzel`, `foot`, `fnott`, and `sfwbar` also stays
+under the same Wayland project directory. `nscde-wayland-run` passes those paths
+to individual NsCDE components without changing global XDG search paths for the
+whole session.
 
 The bundled assets are copied into this subproject from the parent tree so the
 Wayland session can be built and packaged on its own. They include CDE
@@ -87,3 +105,17 @@ The labwc session then reads configuration from:
 
 Systemd is supported through the host distribution, but this session does not
 require `systemctl --user`; labwc `autostart` is the default startup path.
+
+## Runtime Isolation
+
+`nscde-labwc` does not globally override `XDG_CONFIG_DIRS` or `XDG_DATA_DIRS`.
+NsCDE-specific component paths are applied by `nscde-wayland-run` only for the
+component being launched. Use `nscde-wayland-run app COMMAND` when panel actions
+start normal desktop applications so they keep the original XDG environment.
+
+Theme, icon, MIME/default-application, GTK, Qt, KDE, and portal preferences must
+use NsCDE-specific extra config files. Do not write directly to shared desktop
+files such as `~/.config/gtk-3.0/settings.ini`, `~/.config/kdeglobals`,
+`~/.config/mimeapps.list`, `qt5ct.conf`, or `qt6ct.conf`. Keep generated
+runtime preferences under `~/.config/nscde-wayland/` or pass explicit config
+paths to the component that needs them.

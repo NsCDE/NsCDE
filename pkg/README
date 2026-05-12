@@ -4,7 +4,7 @@ If someone wants to make own Debian, RPM or Arch package, or as a template
 for distribution package, this directory contains workable files for that
 task.
 
-** Chinese Localization Version (v2.3_zh) **
+** Chinese Localization Version (v2.3.11_zh) **
 
 This version includes full Chinese (zh) translation support with 25 translation
 files. The build system has been fixed to properly compile and install Chinese
@@ -14,7 +14,7 @@ Repository: https://github.com/wenyinos/NsCDE-zh
 
 1. Debian, Ubuntu, MX Linux and friends
 
-- Obtain NsCDE-zh as a tarball release (v2.3_zh) or clone master branch from Github.
+- Obtain NsCDE-zh as a tarball release (v2.3.11_zh) or clone master branch from Github.
 
 - Make some build directory:
 
@@ -23,8 +23,8 @@ Repository: https://github.com/wenyinos/NsCDE-zh
 
 - Move the content of NsCDE-zh release or master branch to it
 
-  mv ~/NsCDE-zh nscde-zh-v2.3_zh
-  cd nscde-zh-v2.3_zh
+  mv ~/NsCDE-zh nscde-zh-v2.3.11_zh
+  cd nscde-zh-v2.3.11_zh
 
 - Symlink debian build environment into top directory
 
@@ -43,20 +43,20 @@ Repository: https://github.com/wenyinos/NsCDE-zh
 
   cd ..
   sudo -i || su -
-  dpkg -i ./nscde-zh_v2.3.2_zh-1_<arch>.deb
+  dpkg -i ./nscde-zh_2.3.11+zh-1_<arch>.deb
 
 That's it.
 
 
 2. Red Hat, CentOS, Fedora, Open SuSE and similar:
 
-- Obtain NsCDE-zh as a tarball release (v2.3_zh).
+- Obtain NsCDE-zh as a tarball release (v2.3.11_zh).
 
 - Optional step: if installing from the git master branch
   instead of release tarball, make a tarball prior to building:
 
-  mv NsCDE-zh NsCDE-zh-v2.3_zh
-  tar cpzf NsCDE-zh-v2.3_zh.tar.gz NsCDE-zh-v2.3_zh
+  mv NsCDE-zh NsCDE-zh-v2.3.11_zh
+  tar cpzf NsCDE-zh-v2.3.11_zh.tar.gz NsCDE-zh-v2.3.11_zh
 
 - Make sure you have rpm-build, gcc, autoconf, automake installed
 
@@ -64,17 +64,17 @@ That's it.
 
 - Instruct rpmbuild to find spec file in the tarball and use it:
 
-  rpmbuild -tb NsCDE-zh-v2.3_zh.tar.gz
+  rpmbuild -tb NsCDE-zh-v2.3.11_zh.tar.gz
 
 - Install it:
 
   sudo -i || su -
-  rpm -i NsCDE-zh-v2.3-3.zh.<arch>.rpm
+  rpm -i NsCDE-zh-2.3.11-1.<dist>.<arch>.rpm
 
 
 3. Arch Linux (and probably compatible packaging distros?)
 
-- Obtain NsCDE-zh as a tarball release (v2.3_zh) or clone master branch from Github.
+- Obtain NsCDE-zh as a tarball release (v2.3.11_zh) or clone master branch from Github.
 
 - Make some build directory:
 
@@ -83,18 +83,18 @@ That's it.
 
 - Move the content of NsCDE-zh release or master branch to it
 
-  mv ~/NsCDE-zh nscde-zh-v2.3_zh
+  mv ~/NsCDE-zh nscde-zh-v2.3.11_zh
   or
-  tar xzf ~/NsCDE-zh-v2.3_zh.tar.gz
-  mv NsCDE-zh-v2.3_zh nscde-zh-v2.3_zh
+  tar xzf ~/NsCDE-zh-v2.3.11_zh.tar.gz
+  mv NsCDE-zh-v2.3.11_zh nscde-zh-v2.3.11_zh
 
 - Pull out PKGBUILD file
 
-  cp nscde-zh-v2.3_zh/pkg/pacman/PKGBUILD .
+  cp nscde-zh-v2.3.11_zh/pkg/pacman/PKGBUILD .
 
 - Make a new tarball:
 
-  tar cpzf nscde-zh-v2.3_zh.tar.gz nscde-zh-v2.3_zh
+  tar cpzf nscde-zh-v2.3.11_zh.tar.gz nscde-zh-v2.3.11_zh
 
 - Build a package
 
@@ -103,5 +103,4 @@ That's it.
 Install the package:
 
    sudo -i || su -
-   pacman -U /home/user/build/nscde-zh-v2.3-3.zh-<arch>.pkg.tar.zst
-
+   pacman -U /home/user/build/nscde-zh-2.3.11-1-<arch>.pkg.tar.zst

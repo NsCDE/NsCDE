@@ -1,0 +1,299 @@
+#!@KSH@
+
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Licence: GPLv3
+#
+
+if [ "$1" == "--" ]; then
+   shift
+fi
+
+if (($# == 0)); then
+   echo "${0##*/}: no command specified" >&2
+   exit 64
+fi
+
+if [ -z "$FVWM_USERDIR" ]; then
+   FVWM_USERDIR="$HOME/.NsCDE"
+fi
+
+xdg_base="$FVWM_USERDIR/xdg"
+xdg_config_home="$xdg_base/config"
+xdg_data_home="$xdg_base/data"
+xdg_cache_home="$xdg_base/cache"
+xdg_state_home="$xdg_base/state"
+xdg_config_dirs="$xdg_base/config-dirs"
+xdg_data_dirs="$xdg_base/data-dirs"
+gtk2_rc="$xdg_config_home/gtk-2.0/gtkrc"
+mimeapps="$xdg_config_home/mimeapps.list"
+session_apps="$xdg_config_home/NsCDE/session-apps.conf"
+profile_stamp="$xdg_config_home/NsCDE/profile.stamp"
+
+mkdir -p "$xdg_config_home" "$xdg_data_home" "$xdg_cache_home" "$xdg_state_home" \
+   "$xdg_config_home/autostart" "$xdg_config_dirs" "$xdg_data_dirs" \
+   "${gtk2_rc%/*}" || exit 1
+
+if [ ! -e "$gtk2_rc" ]; then
+   : > "$gtk2_rc" || exit 1
+fi
+
+if [ -z "$NSCDE_BASE_XDG_CONFIG_DIRS" ]; then
+   NSCDE_BASE_XDG_CONFIG_DIRS="/etc/xdg"
+fi
+
+if [ -z "$NSCDE_BASE_XDG_DATA_DIRS" ]; then
+   NSCDE_BASE_XDG_DATA_DIRS="/usr/local/share:/usr/share"
+fi
+
+export NSCDE_BASE_XDG_CONFIG_DIRS
+export NSCDE_BASE_XDG_DATA_DIRS
+export XDG_CONFIG_HOME="$xdg_config_home"
+export XDG_DATA_HOME="$xdg_data_home"
+export XDG_CACHE_HOME="$xdg_cache_home"
+export XDG_STATE_HOME="$xdg_state_home"
+export XDG_CONFIG_DIRS="$xdg_config_dirs:$NSCDE_BASE_XDG_CONFIG_DIRS"
+nscde_data_dirs="$xdg_data_dirs:$xdg_data_home:$FVWM_USERDIR"
+if [ -n "$NSCDE_DATADIR" ]; then
+   nscde_data_dirs="$nscde_data_dirs:$NSCDE_DATADIR"
+fi
+export XDG_DATA_DIRS="$nscde_data_dirs:$NSCDE_BASE_XDG_DATA_DIRS"
+export XDG_CURRENT_DESKTOP=NsCDE
+export XDG_SESSION_DESKTOP=NsCDE
+export GTK2_RC_FILES="$gtk2_rc"
+export QT_QPA_PLATFORMTHEME="${QT_QPA_PLATFORMTHEME:-qt5ct}"
+unset XDG_MENU_PREFIX
+
+function confset_xdg
+{
+   [ -x "$NSCDE_TOOLSDIR/confset" ] || return 0
+   "$NSCDE_TOOLSDIR/confset" "$@"
+}
+
+function nscde_conf_value
+{
+   [ -r "$FVWM_USERDIR/NsCDE.conf" ] || return 1
+   awk -v key="$1" '$1 == "InfoStoreAdd" && $2 == key {
+      $1 = ""; $2 = ""; sub(/^[[:space:]]+/, ""); print; exit
+   }' "$FVWM_USERDIR/NsCDE.conf"
+}
+
+function nscde_app_value
+{
+   app_value=$(session_app_value "$1")
+   if [ -z "$app_value" ]; then
+      app_value=$(nscde_conf_value "$1")
+   fi
+   if [ -z "$app_value" ] || [ "$app_value" == "true" ]; then
+      if [ -x "$NSCDE_TOOLSDIR/appfinder" ] && [ -r "$NSCDE_DATADIR/fallback/app-catalog/$2" ]; then
+         app_value=$("$NSCDE_TOOLSDIR/appfinder" "$1" "$2" 2>/dev/null)
+      fi
+   fi
+   print -- "$app_value"
+}
+
+function session_app_value
+{
+   [ -r "$session_apps" ] || return 1
+   awk -F= -v key="$1" '{
+      skey = $1
+      sub(/^[[:space:]]+/, "", skey)
+      sub(/[[:space:]]+$/, "", skey)
+      if (skey == key) {
+         sub(/^[^=]*=/, "")
+         sub(/^[[:space:]]+/, "")
+         print
+         exit
+      }
+   }' "$session_apps"
+}
+
+function command_name
+{
+   cmd="${1%% *}"
+   cmd="${cmd%\"}"
+   cmd="${cmd#\"}"
+   cmd="${cmd##*/}"
+   print -- "$cmd" | grep -E -q '(^$|^\$|^true$|^nscde_fvwmclnt$|NOAPP)'
+   if (($? == 0)); then
+      return 1
+   fi
+   print -- "$cmd"
+}
+
+function desktop_for_command
+{
+   bin=$(command_name "$1") || return 1
+   candidates="$bin.desktop org.kde.$bin.desktop org.gnome.$bin.desktop"
+   oldifs="$IFS"
+   IFS=:
+   for dir in $XDG_DATA_HOME:$XDG_DATA_DIRS
+   do
+      for candidate in $candidates
+      do
+         if [ -r "$dir/applications/$candidate" ]; then
+            IFS="$oldifs"
+            print -- "$candidate"
+            return 0
+         fi
+      done
+   done
+   IFS="$oldifs"
+   print -- "$bin.desktop"
+}
+
+function set_default_desktop
+{
+   desktop="$1"
+   shift
+   [ -n "$desktop" ] || return 0
+   for mimetype in "$@"
+   do
+      confset_xdg -t ini -c "$mimeapps" -s "Default Applications" -k "$mimetype" -v "$desktop;"
+   done
+}
+
+function setup_default_apps
+{
+   browser_desktop=$(desktop_for_command "$browser_cmd")
+   filemgr_desktop=$(desktop_for_command "$filemgr_cmd")
+   editor_desktop=$(desktop_for_command "$editor_cmd")
+   mail_desktop=$(desktop_for_command "$mail_cmd")
+
+   set_default_desktop "$browser_desktop" \
+      x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml
+   set_default_desktop "$filemgr_desktop" inode/directory
+   set_default_desktop "$mail_desktop" x-scheme-handler/mailto
+   set_default_desktop "$editor_desktop" \
+      application/x-shellscript text/english text/plain text/x-c text/x-c++ \
+      text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-java \
+      text/x-makefile text/x-readme text/x-tcl
+}
+
+function setup_gtk_qt_profile
+{
+   palette_name="${NSCDE_PALETTE:-Broica}"
+   ncolors="${NSCDE_PALETTE_NCOLORS:-8}"
+   case "$ncolors" in
+      4|8) ;;
+      *) ncolors=8 ;;
+   esac
+
+   palette_path=""
+   if [ -r "$FVWM_USERDIR/palettes/$palette_name.dp" ]; then
+      palette_path="$FVWM_USERDIR/palettes/$palette_name.dp"
+   elif [ -r "$NSCDE_DATADIR/palettes/$palette_name.dp" ]; then
+      palette_path="$NSCDE_DATADIR/palettes/$palette_name.dp"
+   fi
+
+   dark_theme=0
+   if [ -n "$palette_path" ] && [ -x "$NSCDE_TOOLSDIR/palette_colorgen" ]; then
+      "$NSCDE_TOOLSDIR/palette_colorgen" -n "$ncolors" -p "$palette_path" -l 2>/dev/null | \
+         grep -E -q '^fg_color_4.* #ffffffffffff'
+      (($? == 0)) && dark_theme=1
+   fi
+
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-theme-name -v ' "NsCDE"'
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-icon-theme-name -v ' "NsCDE"'
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-font-name -v '"DejaVu Serif Book 10"'
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-application-prefer-dark-theme -v "$dark_theme"
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-button-images -v 0
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-menu-images -v 0
+   confset_xdg -t properties -c "$gtk2_rc" -k gtk-cursor-blink -v 0
+
+   for gtkver in gtk-3.0 gtk-4.0
+   do
+      gtk_settings="$xdg_config_home/$gtkver/settings.ini"
+      mkdir -p "${gtk_settings%/*}"
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-theme-name -v NsCDE
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-icon-theme-name -v NsCDE
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-cursor-theme-name -v dmz-aa
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-font-name -v "DejaVu Serif Book 10"
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-application-prefer-dark-theme -v "$dark_theme"
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-button-images -v 0
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-menu-images -v 0
+      confset_xdg -t ini -c "$gtk_settings" -s Settings -k gtk-cursor-blink -v 0
+   done
+
+   mkdir -p "$xdg_config_home/qt5ct/colors" "$xdg_config_home/qt5ct/qss" \
+      "$xdg_config_home/qt6ct/colors" "$xdg_config_home/qt6ct/qss" \
+      "$xdg_config_home/Kvantum/NsCDE" "$xdg_data_home/themes"
+
+   confset_xdg -t ini -c "$xdg_config_home/Trolltech.conf" -s Qt -k style -v 'GTK+'
+   confset_xdg -t ini -c "$xdg_config_home/Trolltech.conf" -s Qt -k font -v '"DejaVu Serif,10"'
+
+   for qtver in qt5ct qt6ct
+   do
+      qtconf="$xdg_config_home/$qtver/$qtver.conf"
+      confset_xdg -t ini -c "$qtconf" -s Fonts -k general -v '"DejaVu Serif,10"'
+      confset_xdg -t ini -c "$qtconf" -s Fonts -k fixed -v '"DejaVu Sans Mono,10"'
+      confset_xdg -t ini -c "$qtconf" -s Appearance -k style -v kvantum
+      confset_xdg -t ini -c "$qtconf" -s Appearance -k standard_dialogs -v gtk2
+      confset_xdg -t ini -c "$qtconf" -s Appearance -k icon_theme -v NsCDE
+      confset_xdg -t ini -c "$qtconf" -s Appearance -k custom_palette -v true
+      confset_xdg -t ini -c "$qtconf" -s Appearance -k color_scheme_path -v "$xdg_config_home/$qtver/colors/NsCDE-Kvantum.conf"
+      confset_xdg -t ini -c "$qtconf" -s Interface -k stylesheets -v "$xdg_config_home/$qtver/qss/NsCDE-Kvantum.qss"
+      confset_xdg -t ini -c "$qtconf" -s Interface -k menus_have_icons -v false
+      confset_xdg -t ini -c "$qtconf" -s Interface -k show_shortcuts_in_context_menus -v true
+      confset_xdg -t ini -c "$qtconf" -s Interface -k keyboard_scheme -v 5
+   done
+
+   if [ -n "$palette_path" ] && [ -x "$NSCDE_TOOLSDIR/palette_colorgen" ]; then
+      "$NSCDE_TOOLSDIR/palette_colorgen" -n "$ncolors" -p "$palette_path" \
+         -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_kvconfig.tmpl" \
+         -s -c > "$xdg_config_home/Kvantum/NsCDE/NsCDE.kvconfig" 2>/dev/null
+      "$NSCDE_TOOLSDIR/palette_colorgen" -n "$ncolors" -p "$palette_path" \
+         -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_svg.tmpl" \
+         -s -c > "$xdg_config_home/Kvantum/NsCDE/NsCDE.svg" 2>/dev/null
+      confset_xdg -t ini -c "$xdg_config_home/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
+
+      for qtver in qt5ct qt6ct
+      do
+         "$NSCDE_TOOLSDIR/palette_colorgen" -n "$ncolors" -p "$palette_path" \
+            -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE_conf.tmpl" \
+            -s -c > "$xdg_config_home/$qtver/colors/NsCDE-Kvantum.conf" 2>/dev/null
+         "$NSCDE_TOOLSDIR/palette_colorgen" -n "$ncolors" -p "$palette_path" \
+            -i "$NSCDE_DATADIR/integration/qt_kvantum/NsCDE-Kvantum_qss.tmpl" \
+            -s -c > "$xdg_config_home/$qtver/qss/NsCDE-Kvantum.qss" 2>/dev/null
+      done
+   fi
+
+   if [ -x "$NSCDE_TOOLSDIR/themegen" ] && [ -n "$NSCDE_LIBDIR" ]; then
+      NSCDE_THEME_HOME="$xdg_data_home/themes" \
+         "$NSCDE_TOOLSDIR/themegen" "$palette_name" "$ncolors" gtk2 gtk3 >/dev/null 2>&1
+   fi
+}
+
+function setup_private_xdg_profile
+{
+   [ "${NSCDE_SYNC_PRIVATE_XDG:-1}" == "0" ] && return 0
+   [ -x "$NSCDE_TOOLSDIR/confset" ] || return 0
+   [ -d "$NSCDE_DATADIR" ] || return 0
+
+   browser_cmd=$(nscde_app_value browser www-browser)
+   filemgr_cmd=$(nscde_app_value filemgr filemgr)
+   editor_cmd=$(nscde_app_value xeditor text-editor)
+   mail_cmd=$(nscde_app_value mailreader mailreader)
+
+   palette_name="${NSCDE_PALETTE:-Broica}"
+   ncolors="${NSCDE_PALETTE_NCOLORS:-8}"
+   palette_sig=""
+   if [ -r "$FVWM_USERDIR/palettes/$palette_name.dp" ]; then
+      palette_sig=$(ls -l "$FVWM_USERDIR/palettes/$palette_name.dp" 2>/dev/null)
+   elif [ -r "$NSCDE_DATADIR/palettes/$palette_name.dp" ]; then
+      palette_sig=$(ls -l "$NSCDE_DATADIR/palettes/$palette_name.dp" 2>/dev/null)
+   fi
+
+   profile_sig="$palette_name|$ncolors|$palette_sig|$browser_cmd|$filemgr_cmd|$editor_cmd|$mail_cmd"
+   old_sig=$(cat "$profile_stamp" 2>/dev/null)
+   [ "$old_sig" == "$profile_sig" ] && return 0
+
+   mkdir -p "${profile_stamp%/*}" "${mimeapps%/*}"
+   setup_default_apps
+   setup_gtk_qt_profile
+   print -- "$profile_sig" > "$profile_stamp"
+}
+
+setup_private_xdg_profile
+
+exec "$@"

@@ -1325,6 +1325,17 @@ Widget 32
          End
 
          # System widget and program integrations block.
+         Set $SharedDesktopConfigEnabled = (GetOutput {@KSH@ -c '[ "x$NSCDE_ALLOW_SHARED_DESKTOP_CONFIG" = "x1" ]; echo $?'} 1 -1)
+         If $SharedDesktopConfigEnabled <> 0 Then
+         Begin
+            Set $SetGtk2 = 0
+            Set $SetGtk3 = 0
+            Set $SetQt4 = 0
+            Set $SetQt5Gtk = 0
+            Set $SetQt5Kv = 0
+            Set $SetQt6Kv = 0
+            Set $SetColormgrLocal = 0
+         End
 
          # GTK block
          If $SetGtk2 == 1 Then
@@ -1974,4 +1985,3 @@ Widget 34
          Do {f_DisplayURL "$[gt.Color Style Manager]" html/NsCDE-ColorMgr.html}
       End
 End
-

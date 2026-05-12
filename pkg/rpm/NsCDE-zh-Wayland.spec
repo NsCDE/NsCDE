@@ -17,7 +17,7 @@ Requires:       fuzzel
 Requires:       fnott
 Requires:       sfwbar
 Requires:       lavalauncher
-Requires:       wbg
+Requires:       (wbg or swaybg)
 Requires:       wl-clipboard
 Requires:       grim
 Requires:       slurp
@@ -27,7 +27,6 @@ Requires:       pcmanfm-qt
 Requires:       nwg-look
 Requires:       qt5ct
 Requires:       qt6ct
-Recommends:     swaybg
 Recommends:     kvantum
 Recommends:     xcur2png
 Provides:       nscde-wayland = %{version}-%{release}
@@ -54,8 +53,14 @@ make -C wayland check
 %license COPYING
 %doc wayland/README.md WAYLAND_LABWC_PORT_PLAN.md
 %{_bindir}/nscde-labwc
+%{_bindir}/nscde-wayland-run
+%{_bindir}/nscde-output-scale
+%{_bindir}/nscde-wayland-screenshot
+%{_bindir}/nscde-wayland-doctor
 %{_datadir}/wayland-sessions/nscde-labwc.desktop
 %{_datadir}/nscde-wayland/
+%{_datadir}/themes/NsCDE-Wayland/
+%{_datadir}/icons/NsCDE/
 
 %changelog
 * Tue May 12 2026 wenyinos <admin@wenyinos.com> - 0.1.0-1

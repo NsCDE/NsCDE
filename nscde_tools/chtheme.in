@@ -17,6 +17,16 @@ fp_variant=""
 wsm_variant=""
 ncolors=8
 
+function shared_desktop_config_enabled
+{
+   [ "x${NSCDE_ALLOW_SHARED_DESKTOP_CONFIG:-0}" == "x1" ]
+}
+
+function skip_shared_desktop_config
+{
+   echo "Skipping shared desktop configuration writes. Set NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1 to enable legacy behavior." >&2
+}
+
 function main
 {
    if [ "x$ncolors" == "x8" ]; then
@@ -50,6 +60,7 @@ function xfunc
 function gtk2setup
 {
    if [ "x$do_gtk2" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | grep -E -q '^fg_color_4.* #ffffffffffff'
       if (($? == 0)); then
          $NSCDE_TOOLSDIR/confset -t properties -c "$HOME/.gtkrc-2.0" -k gtk-application-prefer-dark-theme -v '1'
@@ -71,6 +82,7 @@ function gtk2setup
 function gtk3setup
 {
    if [ "x$do_gtk3" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       mkdir -p "$HOME/.config/gtk-3.0"
       $NSCDE_TOOLSDIR/palette_colorgen -n $ncolors -p $palette_path -l | grep -E -q '^fg_color_4.* #ffffffffffff'
       if (($? == 0)); then
@@ -112,6 +124,7 @@ function gtkvariants
 function qt4setup
 {
    if [ "x$do_qt4" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Trolltech.conf" -s Qt -k style -v 'GTK+'
    fi
 }
@@ -119,6 +132,7 @@ function qt4setup
 function qt5gtksetup
 {
    if [ "x$do_qt5gtk" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       if [ "x$do_qt5kvantum" != "x1" ]; then
          mkdir -p "$HOME/.config/qt5ct/colors" "$HOME/.config/qt5ct/qss"
          $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/qt5ct/qt5ct.conf" -s Appearance -k style -v gtk2
@@ -134,6 +148,7 @@ function qt5gtksetup
 function qt5kvantumsetup
 {
    if [ "x$do_qt5kvantum" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       mkdir -p "$HOME/.config/qt5ct/colors" "$HOME/.config/qt5ct/qss"
       mkdir -p "$HOME/.config/Kvantum/NsCDE"
       $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
@@ -176,6 +191,7 @@ function qt5kvantumsetup
 function qt6setup
 {
    if [ "x$do_qt6" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       mkdir -p "$HOME/.config/qt6ct/colors" "$HOME/.config/qt6ct/qss"
       mkdir -p "$HOME/.config/Kvantum/NsCDE"
       $NSCDE_TOOLSDIR/confset -t ini -c "$HOME/.config/Kvantum/kvantum.kvconfig" -s General -k theme -v NsCDE
@@ -218,6 +234,7 @@ function qt6setup
 function localsetup
 {
    if [ "x$do_local" == "x1" ]; then
+      shared_desktop_config_enabled || { skip_shared_desktop_config; return; }
       if [ -x "$FVWM_USERDIR/libexec/colormgr.local" ]; then
          $FVWM_USERDIR/libexec/colormgr.local $palette_path $ncolors
       fi
@@ -234,6 +251,14 @@ function Usage
       exit 1
    else
       exit 0
+   fi
+}
+
+function private_xdg_sync
+{
+   if [ -x "$NSCDE_TOOLSDIR/nscde_xdg_run" ]; then
+      NSCDE_PALETTE="$palette_name" NSCDE_PALETTE_NCOLORS="$ncolors" \
+         "$NSCDE_TOOLSDIR/nscde_xdg_run" -- true >/dev/null 2>&1
    fi
 }
 
@@ -290,6 +315,8 @@ function reload
       fi
       nscde_fvwmclnt 'Test (EnvMatch infostore.nscde_use_xsettingsd 1) Schedule 2000 f_Xsettingsd start'
    fi
+
+   private_xdg_sync
 
    # Final touch
    whence -q xrefresh && xrefresh

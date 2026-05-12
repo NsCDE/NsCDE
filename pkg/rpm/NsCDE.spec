@@ -1,5 +1,5 @@
 Name:		NsCDE-zh
-Version:	2.3.10
+Version:	2.3.11
 Release:	1%{?dist}
 Summary:	Not so Common Desktop Environment - Chinese Localization
 AutoReqProv:	no
@@ -81,6 +81,9 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Wed May 13 2026 wenyinos <admin@wenyinos.com>  - 2.3.11-1
+- Update to 2.3.11 release
+
 * Fri May 1 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-1
 - Update to 2.3.10 release
 - Add DefaultAppsMgr FvwmScript GUI dialog

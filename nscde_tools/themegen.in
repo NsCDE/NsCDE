@@ -42,7 +42,8 @@ from Opts import Opts
 from MotifColors import readMotifColors2
 
 helptxt="""Generate GTK2 and GTK3 theme in style of CDE/Motif
-Directory 'NsCDE' will be be created as ~/.themes/NsCDE
+Directory 'NsCDE' will be created under NSCDE_THEME_HOME, XDG_DATA_HOME/themes,
+or ~/.themes.
 
 Usage:
    themegen <palettename> ncolors gtk2 gtk3
@@ -95,6 +96,13 @@ opts.themeGtk3=(sys.argv[4])
 userhome = os.path.expanduser("~")
 nscdetheme = "NsCDE"
 # nscdetheme="NsCDE-" + palettefile
+themehome = os.environ.get("NSCDE_THEME_HOME")
+if not themehome:
+    xdg_data_home = os.environ.get("XDG_DATA_HOME")
+    if xdg_data_home:
+        themehome = os.path.join(xdg_data_home, "themes")
+    else:
+        themehome = os.path.join(userhome, ".themes")
 
 if os.path.exists(userhome + "/.NsCDE/palettes/" + palettefile + ".dp"):
     opts.currentpalettefile=(userhome + "/.NsCDE/palettes/" + palettefile + ".dp")
@@ -108,7 +116,7 @@ else:
     sys.exit()
 
 Globals.themedir=nscde_datadir + "/integration/gtk2_gtk3_qt"
-Globals.userthemedir=os.path.join(userhome,'.themes',nscdetheme)
+Globals.userthemedir=os.path.join(themehome,nscdetheme)
 Globals.themesrcdir=Globals.themedir
 Globals.palettedir=os.path.join(Globals.themedir,'palettes')
 
@@ -116,4 +124,3 @@ theme=Theme(opts)
 Globals.colorshash=readMotifColors2(opts.ncolors,opts.currentpalettefile)
 theme.initTheme()
 theme.updateThemeNow()
-

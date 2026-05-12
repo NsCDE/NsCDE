@@ -2,13 +2,16 @@
 <openbox_menu>
   <menu id="root-menu" label="NsCDE">
     <item label="Terminal">
-      <action name="Execute" command="foot" />
+      <action name="Execute" command="nscde-wayland-run foot" />
     </item>
     <item label="File Manager">
-      <action name="Execute" command="pcmanfm-qt" />
+      <action name="Execute" command="nscde-wayland-run app pcmanfm-qt" />
     </item>
     <item label="Run">
-      <action name="Execute" command="fuzzel" />
+      <action name="Execute" command="nscde-wayland-run fuzzel" />
+    </item>
+    <item label="Screenshot Area">
+      <action name="Execute" command="nscde-wayland-screenshot area" />
     </item>
     <menu id="display-scale-menu" label="Display Scale">
       <item label="Scale 1.0x">
@@ -21,6 +24,9 @@
         <action name="Execute" command="nscde-output-scale 2" />
       </item>
     </menu>
+    <item label="Session Diagnostics">
+      <action name="Execute" command="nscde-wayland-run foot -e nscde-wayland-doctor" />
+    </item>
     <separator />
     <item label="Reconfigure">
       <action name="Reconfigure" />

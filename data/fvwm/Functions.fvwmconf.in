@@ -428,7 +428,7 @@ AddToFunc f_ScreenShot
 # Middle mouse on titlebar
 DestroyFunc f_XwinInfo
 AddToFunc f_XwinInfo
-+ I Test (x xwininfo) Current Exec exec $[infostore.terminal] -e \
++ I Test (x xwininfo) Current f_NsCDEExec $[infostore.terminal] -e \
     "@KSH@ -c '@ECHONE@ \"\033]0;X Window Info\007\"; xwininfo -all -id $[w.id] | less'"
 + I TestRc (NoMatch) None ("NsCDE-Notifier.f_XwinInfo") f_Notifier \
  "XwinInfo Function Error" "Dismiss" "NsCDE/Error.xpm" \
@@ -437,7 +437,7 @@ AddToFunc f_XwinInfo
 # Middle mouse on titlebar
 DestroyFunc f_Xprop
 AddToFunc f_Xprop
-+ I Test (x xprop) Current Exec exec $[infostore.terminal] -e \
++ I Test (x xprop) Current f_NsCDEExec $[infostore.terminal] -e \
     "@KSH@ -c '@ECHONE@ \"\033]0;X Window Properties\007\"; xprop -id $[w.id] | less'"
 + I TestRc (NoMatch) None ("NsCDE-Notifier.f_Xprop") f_Notifier \
  "X Prop Function Error" "Dismiss" "NsCDE/Error.xpm" \
@@ -642,7 +642,7 @@ AddToFunc f_KeyFromSubpanelToFP
 # We must call fvwm-menu-desktop here to regenerate local icon cache just in case
 DestroyFunc f_RefreshSubpanel
 AddToFunc f_RefreshSubpanel
-+ I PipeRead "fvwm-menu-desktop --mini-icon-dir $[FVWM_USERDIR]/icons --enable-mini-icons -s 32 --theme NsCDE --include-items none > /dev/null 2>&1"
++ I PipeRead "XDG_MENU_PREFIX=nscde- fvwm-menu-desktop --mini-icon-dir $[FVWM_USERDIR]/icons --enable-mini-icons -s 32 --theme NsCDE --include-items none > /dev/null 2>&1"
 + I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -w > $[FVWM_USERDIR]/Subpanels.fvwm2.fvwmgen 2> /dev/null"
 + I PipeRead "$[NSCDE_TOOLSDIR]/generate_subpanels -f > $[FVWM_USERDIR]/Subpanels.fvwm3.fvwmgen 2> /dev/null"
 + I f_ReadCfg Subpanels
@@ -664,6 +664,10 @@ AddToFunc f_ReloadSwitchedSubpanels
 # must be separated because f_FrontPanelActionStyler is called by very
 # active configure_window event handled by f_SysMapEvent,
 # so any PipeRead or Exec can have significant impact on performance.
+DestroyFunc f_NsCDEExec
+AddToFunc f_NsCDEExec
++ I Exec exec $[NSCDE_TOOLSDIR]/nscde_xdg_run -- $[0-]
+
 DestroyFunc f_FrontPanelAction
 AddToFunc f_FrontPanelAction
 + I Piperead "$[NSCDE_TOOLSDIR]/fpexec $0 $1"
@@ -1113,13 +1117,13 @@ AddToFunc f_WideTerm
 DestroyFunc f_WarpOrExec
 AddToFunc f_WarpOrExec
 + I Next ($0, CirculateHit) WarpToWindow 50 50
-+ I TestRc (NoMatch) None ($0) Test (x $1) Exec exec $[2-]
++ I TestRc (NoMatch) None ($0) Test (x $1) f_NsCDEExec $[2-]
 
 # Exec program if it is not present, move to page/desk if present
 # elseware, close if $1 is Close and present + visible on the current page.
 DestroyFunc f_ToggleExecWindow
 AddToFunc f_ToggleExecWindow
-+ I None ($0,CirculateHit) Exec exec $[2-]
++ I None ($0,CirculateHit) f_NsCDEExec $[2-]
 + I Next ($0,CirculateHit,CurrentPage,Visible) $1
 + I Next ($0,CirculateHit) MoveToDesk
 + I Next ($0,CirculateHit) MoveToPage
@@ -1332,7 +1336,7 @@ AddToFunc f_PolkitAgent
 DestroyFunc f_DisplayURL
 AddToFunc f_DisplayURL
 + I Module FvwmScript WaitNotice "$[gt.Displaying NsCDE Documentation]:" "$0" " ... " 1800
-+ I Exec exec $[infostore.docsbrowser] @DOCUMENTATION_ROOT@/$1
++ I f_NsCDEExec $[infostore.docsbrowser] @DOCUMENTATION_ROOT@/$1
 
 # FVWM Version check function - usually called on init
 DestroyFunc f_FvwmVersionCheck
@@ -2045,24 +2049,24 @@ AddToFunc f_WindowOpsFPHandle
 DestroyFunc f_ApplicationsMenu
 AddToFunc f_ApplicationsMenu
 + I Test (EnvIsSet APPMENU) \
-    PipeRead "fvwm-menu-desktop -e --enable-mini-icons \
+    PipeRead "XDG_MENU_PREFIX=nscde- fvwm-menu-desktop -e --enable-mini-icons \
     --theme NsCDE --insert-in-menu m_Applications --include-items none \
     --app-icon ${NSCDE_DATADIR}/icons/NsCDE/Nominiicon.xpm --menu-type applications \
-    --desktop $[APPMENU] --mini-icon-dir ${FVWM_USERDIR}/icons | uniq
+    --desktop $[APPMENU] --mini-icon-dir ${FVWM_USERDIR}/icons | sed 's/Exec exec /f_NsCDEExec /g' | uniq
 + I TestRc (Match) Break
 + I Test (EnvIsSet XDG_CURRENT_DESKTOP, !EnvMatch XDG_CURRENT_DESKTOP "") \
     PipeRead 'echo $(echo "SetEnv APPMENU "; echo $(echo $XDG_CURRENT_DESKTOP | tr A-Z a-z))'
 + I Test (EnvIsSet APPMENU) \
-    PipeRead "fvwm-menu-desktop -e --enable-mini-icons \
+    PipeRead "XDG_MENU_PREFIX=nscde- fvwm-menu-desktop -e --enable-mini-icons \
     --theme NsCDE --insert-in-menu m_Applications --include-items none \
     --app-icon ${NSCDE_DATADIR}/icons/NsCDE/Nominiicon.xpm --menu-type applications \
-    --desktop $[APPMENU] --mini-icon-dir ${FVWM_USERDIR}/icons | uniq
+    --desktop $[APPMENU] --mini-icon-dir ${FVWM_USERDIR}/icons | sed 's/Exec exec /f_NsCDEExec /g' | uniq
 + I TestRc (Match) Break
 + I TestRc (NoMatch) \
-    PipeRead "fvwm-menu-desktop -e --enable-mini-icons \
+    PipeRead "XDG_MENU_PREFIX=nscde- fvwm-menu-desktop -e --enable-mini-icons \
     --theme NsCDE --insert-in-menu m_Applications --include-items none \
     --app-icon ${NSCDE_DATADIR}/icons/NsCDE/Nominiicon.xpm --menu-type applications \
-    --desktop nscde --mini-icon-dir ${FVWM_USERDIR}/icons | uniq
+    --desktop nscde --mini-icon-dir ${FVWM_USERDIR}/icons | sed 's/Exec exec /f_NsCDEExec /g' | uniq
  
 DestroyFunc f_IconOps
 AddToFunc f_IconOps
@@ -2114,7 +2118,7 @@ AddToFunc f_FrontPanelLockMenu
 + I AddToMenu m_FrontPanelLockMenu " $[gt.Lock] " Title
 + I Test (EnvMatch infostore.nscde_use_xscreensaver 0) AddToMenu m_FrontPanelLockMenu "$[gt.(Disabled)]" Nop
 + I Test (EnvMatch infostore.nscde_use_xscreensaver 0, x xscreensaver) \
-  AddToMenu m_FrontPanelLockMenu "$[gt.&Help]" Exec exec $[infostore.terminal] -e "man xscreensaver"
+  AddToMenu m_FrontPanelLockMenu "$[gt.&Help]" f_NsCDEExec $[infostore.terminal] -e "man xscreensaver"
 + I Test (EnvMatch infostore.nscde_use_xscreensaver 0) Break 1
 + I AddToMenu m_FrontPanelLockMenu "$[gt.&Lock Display]" Test (x xscreensaver) f_Xscreensaver -lock
 + I Test (!EnvMatch infostore.xsc_status "Alck_disabledO") AddToMenu m_FrontPanelLockMenu "$[gt.&Suspend Screensaver]" Test (x xscreensaver) f_Xscreensaver -stop
@@ -2123,8 +2127,8 @@ AddToFunc f_FrontPanelLockMenu
 + I Test (x xset) AddToMenu m_FrontPanelLockMenu "$[gt.Suspend &Monitor]" f_XsetDPMS suspend
 + I Test (x xset) AddToMenu m_FrontPanelLockMenu "$[gt.Turn &off Monitor]" f_XsetDPMS off
 + I AddToMenu m_FrontPanelLockMenu "" Nop
-+ I Test (!EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" Exec exec $[infostore.terminal] -e "man xscreensaver"
-+ I Test (EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" Exec exec $[infostore.docsbrowser] man:xscreensaver
++ I Test (!EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" f_NsCDEExec $[infostore.terminal] -e "man xscreensaver"
++ I Test (EnvMatch infostore.docsbrowser.rawman 1) AddToMenu m_FrontPanelLockMenu "$[gt.Read &Man Page]" f_NsCDEExec $[infostore.docsbrowser] man:xscreensaver
 + I AddToMenu m_FrontPanelLockMenu "$[gt.&Help]" f_DisplayURL "$[gt.Screensaver Help]" html/NsCDE-XscreenSaver.html
 
 DestroyFunc f_XsetDPMS
@@ -2146,7 +2150,7 @@ DestroyFunc f_CheckMail
 AddToFunc f_CheckMail
 DestroyFunc f_CheckMail
 AddToFunc f_CheckMail
-+ I Test (!EnvMatch infostore.mailreader *NOAPP*) Exec exec $[infostore.mailreader]
++ I Test (!EnvMatch infostore.mailreader *NOAPP*) f_NsCDEExec $[infostore.mailreader]
 + I Test (EnvMatch infostore.mailreader *NOAPP*) None ("NsCDE-Notifier.f_CheckMail") f_Notifier \
     "Check Mail Function" "Dismiss" "NsCDE/Info.xpm" \
     "$[gt.Default E-mail application is not set. You can set] \$\[infostore.mailreader\] $[gt.in your] $[FVWM_USERDIR]/NsCDE.conf\
@@ -2339,7 +2343,7 @@ AddToFunc f_SameWspActionForWSM
 # app for processes and system resources.
 DestroyFunc f_FpLiteClickAction
 AddToFunc f_FpLiteClickAction
-+ I Exec exec $[infostore.taskmgr]
++ I f_NsCDEExec $[infostore.taskmgr]
 + I Test (EnvMatch infostore.taskmgr *NOAPP*) None ("FpLite Function Error") f_Notifier \
  "FpLite Function Error" "Dismiss" "NsCDE/Error.xpm" \
  "$[gt.Error: Func:f_FpLiteClickAction: Cannot find any known task manager in path.] $[PATH]."
@@ -2466,7 +2470,7 @@ AddToFunc f_RofiSetup
   -c 's/__ROFI_DEFAULT_FONT__/$[infostore.rofi_def_font]/g; s/__ROFI_MONO_FONT__/$[infostore.rofi_mono_font]/g; s/__ROFI_LARGE_FONT__/$[infostore.rofi_large_font]/g' \
   -f $[FVWM_USERDIR]/tmp/NsCDE.rasi
 + I Schedule 800 Exec exec mv -f $[FVWM_USERDIR]/tmp/NsCDE.rasi $[FVWM_USERDIR]/NsCDE.rasi
-+ I Test (!f $[HOME]/.config/rofi/config) \
++ I Test (EnvMatch NSCDE_ALLOW_SHARED_DESKTOP_CONFIG 1, !f $[HOME]/.config/rofi/config) \
     Exec exec @KSH@ -c "mkdir -p $[HOME]/.config/rofi && cp -f $[NSCDE_DATADIR]/config_templates/rofi_config $[HOME]/.config/rofi/config"
 + I InfoStoreRemove rofi_def_font
 + I InfoStoreRemove rofi_mono_font
@@ -2475,10 +2479,10 @@ AddToFunc f_RofiSetup
 # Call rofi with our theme
 DestroyFunc f_Rofi
 AddToFunc f_Rofi
-+ I Test (f $[FVWM_USERDIR]/NsCDE.rasi) Exec exec rofi -theme $[FVWM_USERDIR]/NsCDE.rasi -show $0
++ I Test (f $[FVWM_USERDIR]/NsCDE.rasi) f_NsCDEExec rofi -theme $[FVWM_USERDIR]/NsCDE.rasi -show $0
 + I Test (f $[FVWM_USERDIR]/NsCDE.rasi) Break 1
 + I Test (!f $[FVWM_USERDIR]/NsCDE.rasi) f_RofiSetup 3200
-+ I Test (!f $[FVWM_USERDIR]/NsCDE.rasi) Schedule 3200 Exec exec rofi -theme $[FVWM_USERDIR]/NsCDE.rasi -show $0
++ I Test (!f $[FVWM_USERDIR]/NsCDE.rasi) Schedule 3200 f_NsCDEExec rofi -theme $[FVWM_USERDIR]/NsCDE.rasi -show $0
 
 # Rename helper for GWM Rename workspace functionality
 DestroyFunc f_GWMRenameWorkspaceHelper
@@ -2515,4 +2519,3 @@ AddToFunc f_Upgrade_1x_to_2x
 + I Test (!EnvMatch FVWM_IS_FVWM3 1, Version < 2.6.8) Schedule 1800 All ("migrate_nscde_1x_2x", CirculateHit) Maximize ewmhiwa
 + I Schedule 2000 All ("migrate_nscde_1x_2x", CirculateHit) Layer 0 6
 + I Break
-

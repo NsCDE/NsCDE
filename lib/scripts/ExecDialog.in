@@ -130,11 +130,11 @@ Widget 1
       Begin
             If (GetValue 2) == 0 Then
             Begin
-               Do {Exec exec @KSH@ -c '} (GetTitle 4) { & disown'}
+               Do {Exec exec $[NSCDE_TOOLSDIR]/nscde_xdg_run -- @KSH@ -c '} (GetTitle 4) { & disown'}
             End
             Else
             Begin
-               Do {Exec exec $[infostore.terminal] -e '} (GetTitle 4) {' & disown}
+               Do {Exec exec $[NSCDE_TOOLSDIR]/nscde_xdg_run -- $[infostore.terminal] -e '} (GetTitle 4) {' & disown}
             End
             Do {Exec echo '} (GetTitle 4) {' >> $FVWM_USERDIR/.Exec-History}
 
@@ -268,4 +268,3 @@ Widget 8
    Title {WWWWWWWWWWWWWWWWWWWWWWWWWWW}
    Flags NoReliefString Hidden NoFocus
 End
-

@@ -1,0 +1,64 @@
+#!/bin/sh
+
+set -eu
+
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+config_dir=${NSCDE_WAYLAND_CONFIG:-"$config_home/nscde-wayland"}
+scale_file=${NSCDE_WAYLAND_SCALE_FILE:-"$config_dir/scale"}
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+status_cmd() {
+	name=$1
+	if command -v "$name" >/dev/null 2>&1; then
+		printf 'ok      %s\n' "$name"
+	else
+		printf 'missing %s\n' "$name"
+	fi
+}
+
+status_project_tool() {
+	name=$1
+	if command -v "$name" >/dev/null 2>&1; then
+		printf 'ok      %s\n' "$name"
+	elif [ -x "$script_dir/$name" ]; then
+		printf 'ok      %s (%s)\n' "$name" "$script_dir/$name"
+	else
+		printf 'missing %s\n' "$name"
+	fi
+}
+
+printf 'NsCDE Wayland diagnostics\n'
+printf 'session type: %s\n' "${XDG_SESSION_TYPE:-unset}"
+printf 'current desktop: %s\n' "${XDG_CURRENT_DESKTOP:-unset}"
+printf 'wayland display: %s\n' "${WAYLAND_DISPLAY:-unset}"
+printf 'x11 display: %s\n' "${DISPLAY:-unset}"
+printf 'config dir: %s\n' "$config_dir"
+if [ -r "$scale_file" ]; then
+	printf 'output scale: %s\n' "$(sed -n '1p' "$scale_file")"
+else
+	printf 'output scale: unset\n'
+fi
+
+printf '\nproject tools:\n'
+for cmd in nscde-labwc nscde-output-scale nscde-wayland-screenshot nscde-wayland-doctor; do
+	status_project_tool "$cmd"
+done
+
+printf '\nrequired components:\n'
+for cmd in labwc foot fuzzel fnott sfwbar lavalauncher wl-copy grim slurp wlr-randr kanshi pcmanfm-qt nwg-look; do
+	status_cmd "$cmd"
+done
+
+printf '\nwallpaper provider:\n'
+if command -v wbg >/dev/null 2>&1; then
+	status_cmd wbg
+elif command -v swaybg >/dev/null 2>&1; then
+	status_cmd swaybg
+else
+	printf 'missing wbg or swaybg\n'
+fi
+
+printf '\noptional components:\n'
+for cmd in kvantummanager xcur2png; do
+	status_cmd "$cmd"
+done
