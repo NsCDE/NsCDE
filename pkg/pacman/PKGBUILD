@@ -27,11 +27,11 @@ optdepends=('xclip: Copy screen, window of area shot to X11 clipboard'
 'arandr: Screen settings'
 'kcalc: Calculator')
 provides=('nscde-zh')
-source=($pkgname-$pkgver.tar.gz::https://github.com/wenyinos/NsCDE-zh/archive/refs/tags/v${pkgver}_zh.tar.gz)
+source=($pkgname-$pkgver.tar.gz::https://github.com/wenyinos/NsCDE-zh/archive/refs/tags/v${pkgver}.tar.gz)
 sha256sums=('SKIP')
 
 build() {
-  cd "$srcdir/NsCDE-zh-${pkgver}_zh"
+  cd "$srcdir/NsCDE-zh-${pkgver}"
 
   autoreconf -ivf
   ./configure --prefix=/usr --libexecdir=/usr/lib
@@ -39,7 +39,7 @@ build() {
 }
 
 package() {
-  cd "$srcdir/NsCDE-zh-${pkgver}_zh"
+  cd "$srcdir/NsCDE-zh-${pkgver}"
 
   make DESTDIR="$pkgdir/" install
 }
