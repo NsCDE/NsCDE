@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -eu
+
+scale=${1:-}
+case "$scale" in
+	""|*[!0123456789.]*|.*|*.*.*)
+		printf '%s\n' "usage: nscde-output-scale SCALE" >&2
+		exit 2
+		;;
+esac
+
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+config_dir=${NSCDE_WAYLAND_CONFIG:-"$config_home/nscde-wayland"}
+scale_file=${NSCDE_WAYLAND_SCALE_FILE:-"$config_dir/scale"}
+
+mkdir -p "$config_dir"
+printf '%s\n' "$scale" > "$scale_file"
+
+command -v wlr-randr >/dev/null 2>&1 || exit 0
+wlr-randr 2>/dev/null | while IFS= read -r line; do
+	case "$line" in ""|" "*) continue ;; esac
+	output=${line%% *}
+	[ -n "$output" ] && wlr-randr --output "$output" --scale "$scale" >/dev/null 2>&1
+done
