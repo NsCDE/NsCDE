@@ -1,0 +1,69 @@
+#!/bin/sh
+
+set -eu
+
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+data_home=${XDG_DATA_HOME:-"$HOME/.local/share"}
+config_dir="$config_home/nscde-wayland"
+labwc_config_dir="$config_dir/labwc"
+asset_dir="$data_home/nscde-wayland"
+theme_dir="$data_home/themes/NsCDE-Wayland"
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+wayland_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
+
+if [ -n "${NSCDE_SOURCE_ROOT:-}" ]; then
+	source_root=$NSCDE_SOURCE_ROOT
+elif [ -d "$wayland_dir/../data" ]; then
+	source_root=$(CDPATH= cd -- "$wayland_dir/.." && pwd)
+else
+	source_root=
+fi
+
+if [ -n "$source_root" ]; then
+	data_source=${NSCDE_DATA_SOURCE:-"$source_root/data"}
+	icon_source=${NSCDE_ICON_SOURCE:-"$source_root/xdg/icons/NsCDE"}
+	wayland_source=${NSCDE_WAYLAND_SOURCE:-"$source_root/wayland"}
+else
+	data_source=${NSCDE_DATA_SOURCE:-"/usr/share/NsCDE"}
+	icon_source=${NSCDE_ICON_SOURCE:-"/usr/share/icons/NsCDE"}
+	wayland_source=${NSCDE_WAYLAND_SOURCE:-"/usr/share/NsCDE/wayland"}
+fi
+
+copy_file_once() {
+	src=$1
+	dst=$2
+	if [ -f "$src" ] && [ ! -e "$dst" ]; then
+		mkdir -p "$(dirname -- "$dst")"
+		cp "$src" "$dst"
+	fi
+}
+
+copy_dir_once() {
+	src=$1
+	dst=$2
+	if [ -d "$src" ] && [ ! -e "$dst" ]; then
+		mkdir -p "$(dirname -- "$dst")"
+		cp -R "$src" "$dst"
+	fi
+}
+
+mkdir -p "$labwc_config_dir" "$asset_dir/photos"
+copy_dir_once "$icon_source" "$asset_dir/icons/NsCDE"
+copy_dir_once "$wayland_source/themes/NsCDE-Wayland" "$theme_dir"
+copy_file_once "$data_source/photos/Flower.png" "$asset_dir/photos/Flower.png"
+copy_file_once "$wayland_source/labwc/rc.xml" "$labwc_config_dir/rc.xml"
+copy_file_once "$wayland_source/labwc/menu.xml" "$labwc_config_dir/menu.xml"
+copy_file_once "$wayland_source/labwc/autostart" "$labwc_config_dir/autostart"
+
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=nscde-labwc
+export XDG_CURRENT_DESKTOP=NsCDE:labwc
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM=wayland
+export MOZ_ENABLE_WAYLAND=1
+export SDL_VIDEODRIVER=wayland
+export CLUTTER_BACKEND=wayland
+export NSCDE_WAYLAND_CONFIG="$config_dir"
+export NSCDE_WAYLAND_DATA="$asset_dir"
+
+exec labwc -C "$labwc_config_dir" "$@"
