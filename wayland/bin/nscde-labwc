@@ -46,6 +46,6 @@ export NSCDE_WAYLAND_CONFIG="$config_dir"
 export NSCDE_WAYLAND_DATA="$source_dir"
 export NSCDE_WAYLAND_ASSETS="$asset_source"
 export XCURSOR_PATH="$asset_source/icons:${XCURSOR_PATH:-}"
-export XDG_DATA_DIRS="$asset_source/xdg:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+export XDG_DATA_DIRS="$source_dir:$asset_source/xdg:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 
 exec labwc -C "$labwc_config_dir" "$@"
