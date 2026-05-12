@@ -1,12 +1,12 @@
 Name:           xcur2png
 Version:        0.7.1
-Release:        3.2
+Release:        3.3
 Summary:        Take PNG images from Xcursor and generate xcursorgen config-file
 Group:          User Interface/X
 License:        GPLv3
 URL:            https://github.com/eworm-de/xcur2png
 Source0:        https://github.com/eworm-de/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  pkgconfig libpng-devel libXcursor-devel
+BuildRequires:  gcc make pkgconfig libpng-devel libXcursor-devel
 
 %description
 xcur2png is a program which let you take PNG image from X cursor,
@@ -29,6 +29,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/xcur2png.1*
 
 %changelog
+* Tue May 12 2026 NsCDE COPR <ruojiner@users.noreply.github.com> - 0.7.1-3.3
+- Add explicit compiler and make build requirements for Fedora COPR
+
 * Tue May 12 2026 NsCDE COPR <ruojiner@users.noreply.github.com> - 0.7.1-3.2
 - Use GitHub release source because the original upstream host no longer resolves in COPR
 
