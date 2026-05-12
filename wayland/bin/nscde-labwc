@@ -3,31 +3,22 @@
 set -eu
 
 config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
-data_home=${XDG_DATA_HOME:-"$HOME/.local/share"}
 config_dir="$config_home/nscde-wayland"
 labwc_config_dir="$config_dir/labwc"
-asset_dir="$data_home/nscde-wayland"
-theme_dir="$data_home/themes/NsCDE-Wayland"
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 wayland_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
 
-if [ -n "${NSCDE_SOURCE_ROOT:-}" ]; then
-	source_root=$NSCDE_SOURCE_ROOT
-elif [ -d "$wayland_dir/../data" ]; then
-	source_root=$(CDPATH= cd -- "$wayland_dir/.." && pwd)
+if [ -n "${NSCDE_WAYLAND_SOURCE:-}" ]; then
+	source_dir=$NSCDE_WAYLAND_SOURCE
+elif [ -d "$wayland_dir/labwc" ]; then
+	source_dir=$wayland_dir
 else
-	source_root=
+	source_dir=/usr/share/nscde-wayland
 fi
 
-if [ -n "$source_root" ]; then
-	data_source=${NSCDE_DATA_SOURCE:-"$source_root/data"}
-	icon_source=${NSCDE_ICON_SOURCE:-"$source_root/xdg/icons/NsCDE"}
-	wayland_source=${NSCDE_WAYLAND_SOURCE:-"$source_root/wayland"}
-else
-	data_source=${NSCDE_DATA_SOURCE:-"/usr/share/NsCDE"}
-	icon_source=${NSCDE_ICON_SOURCE:-"/usr/share/icons/NsCDE"}
-	wayland_source=${NSCDE_WAYLAND_SOURCE:-"/usr/share/NsCDE/wayland"}
-fi
+asset_source=${NSCDE_WAYLAND_ASSET_SOURCE:-"$source_dir/assets"}
+theme_source=${NSCDE_WAYLAND_THEME_SOURCE:-"$source_dir/themes/NsCDE-Wayland"}
+labwc_source=${NSCDE_WAYLAND_LABWC_SOURCE:-"$source_dir/labwc"}
 
 copy_file_once() {
 	src=$1
@@ -38,22 +29,10 @@ copy_file_once() {
 	fi
 }
 
-copy_dir_once() {
-	src=$1
-	dst=$2
-	if [ -d "$src" ] && [ ! -e "$dst" ]; then
-		mkdir -p "$(dirname -- "$dst")"
-		cp -R "$src" "$dst"
-	fi
-}
-
-mkdir -p "$labwc_config_dir" "$asset_dir/photos"
-copy_dir_once "$icon_source" "$asset_dir/icons/NsCDE"
-copy_dir_once "$wayland_source/themes/NsCDE-Wayland" "$theme_dir"
-copy_file_once "$data_source/photos/Flower.png" "$asset_dir/photos/Flower.png"
-copy_file_once "$wayland_source/labwc/rc.xml" "$labwc_config_dir/rc.xml"
-copy_file_once "$wayland_source/labwc/menu.xml" "$labwc_config_dir/menu.xml"
-copy_file_once "$wayland_source/labwc/autostart" "$labwc_config_dir/autostart"
+mkdir -p "$labwc_config_dir"
+copy_file_once "$labwc_source/rc.xml" "$labwc_config_dir/rc.xml"
+copy_file_once "$labwc_source/menu.xml" "$labwc_config_dir/menu.xml"
+copy_file_once "$labwc_source/autostart" "$labwc_config_dir/autostart"
 
 export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP=nscde-labwc
@@ -64,6 +43,9 @@ export MOZ_ENABLE_WAYLAND=1
 export SDL_VIDEODRIVER=wayland
 export CLUTTER_BACKEND=wayland
 export NSCDE_WAYLAND_CONFIG="$config_dir"
-export NSCDE_WAYLAND_DATA="$asset_dir"
+export NSCDE_WAYLAND_DATA="$source_dir"
+export NSCDE_WAYLAND_ASSETS="$asset_source"
+export XCURSOR_PATH="$asset_source/icons:${XCURSOR_PATH:-}"
+export XDG_DATA_DIRS="$asset_source/xdg:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 
 exec labwc -C "$labwc_config_dir" "$@"

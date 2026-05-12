@@ -1,13 +1,13 @@
 # NsCDE Wayland Labwc Prototype
 
-This directory contains the first Wayland session scaffold for an
-NsCDE-like desktop based on labwc.
+This directory is a standalone Wayland session project for an NsCDE-like
+desktop based on labwc.
 
 The prototype keeps two rules:
 
 - NsCDE-provided session components run as native Wayland clients.
-- Runtime configuration uses copied assets, not direct references to the
-  existing NsCDE data or icon directories.
+- Runtime configuration uses copied assets from this project, not direct
+  references to the parent NsCDE tree.
 
 ## Initial Components
 
@@ -19,17 +19,52 @@ The prototype keeps two rules:
 - `swaybg` or `wbg` for wallpaper.
 - `wl-clipboard`, `grim`, `slurp`, `wlr-randr`, and `kanshi` for Wayland tools.
 
-## Running From the Source Tree
+## Build And Install
+
+This subproject is intentionally independent from the parent Autotools build.
 
 ```sh
-NSCDE_SOURCE_ROOT=/path/to/NsCDE-zh wayland/bin/nscde-labwc
+cd wayland
+make check
+sudo make install PREFIX=/usr
 ```
 
-On first run, the launcher copies selected assets into:
+For packaging, use `DESTDIR`:
+
+```sh
+make install PREFIX=/usr DESTDIR="$pkgdir"
+```
+
+Installed files are placed under:
 
 ```text
-~/.local/share/nscde-wayland/
-~/.local/share/themes/NsCDE-Wayland/
+/usr/bin/nscde-labwc
+/usr/share/wayland-sessions/nscde-labwc.desktop
+/usr/share/nscde-wayland/
+```
+
+## Running From The Source Tree
+
+```sh
+wayland/bin/nscde-labwc
+```
+
+Static assets stay in the source or installation directory:
+
+```text
+wayland/assets/
+/usr/share/nscde-wayland/assets/
+```
+
+The bundled assets are copied into this subproject from the parent tree so the
+Wayland session can be built and packaged on its own. They include CDE
+backdrops, palettes, photos, fontsets, icon sets, XDG menu metadata, integration
+templates, and translation sources.
+
+On first run, only editable labwc configuration is copied into:
+
+```text
+~/.config/nscde-wayland/labwc/
 ```
 
 The labwc session then reads configuration from:
