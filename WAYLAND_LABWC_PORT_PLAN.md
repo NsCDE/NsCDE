@@ -6,6 +6,8 @@
 
 `NsCDE-zh` 可以做 Wayland + labwc 方向的移植，但不能进行“平移式移植”。当前项目本质上是一个围绕 FVWM/FVWM3 深度定制的桌面环境，大量功能依赖 FVWM 配置语言、FvwmButtons、FvwmScript、FvwmCommand 以及 X11 工具链。
 
+Wayland 版目标应明确为可安装的完整桌面环境套件。默认组件应兼容非 systemd 系统，同时继续支持 systemd 系统。可以允许用户通过 Xwayland 运行旧 X11 应用，但 `NsCDE-labwc` 自带会话组件不能依赖 Xwayland，也不能把 systemd 作为唯一 init 或 user service manager。
+
 如果目标是在 labwc 上复刻 NsCDE 的 CDE 风格外观、面板、菜单、主题、中文本地化体验，那么技术上可行，并且项目中大量视觉素材和主题逻辑可以复用。
 
 如果目标是让现有 `data/fvwm/*.fvwmconf`、`FvwmScript` 和 `FvwmButtons` 原样跑在 labwc 上，则基本不可行。labwc 不兼容 FVWM 模块生态，Wayland 的安全模型也不允许许多 X11 时代的全局窗口控制和读屏操作。
@@ -137,17 +139,17 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 
 ## 7. 建议替代技术栈
 
-原则：可以保留 Xwayland 让用户运行旧 X11 应用，但 `NsCDE-labwc` 自带会话组件必须原生 Wayland。不要把 `rofi`、`tint2`、`polybar`、`stalonetray`、`xclip`、`xdotool`、`xrandr`、`xrdb`、`xset`、`xscreensaver`、`fvwm-root`、`lxappearance` 作为 Wayland 版默认组件。
+原则：可以保留 Xwayland 让用户运行旧 X11 应用，但 `NsCDE-labwc` 自带会话组件必须原生 Wayland。默认组件应避免 systemd 硬依赖：会话启动和后台组件管理不能只依赖 `systemctl --user`，seat 管理应支持 `seatd`、`elogind` 和 `systemd-logind`。不要把 `rofi`、`tint2`、`polybar`、`stalonetray`、`xclip`、`xdotool`、`xrandr`、`xrdb`、`xset`、`xscreensaver`、`fvwm-root`、`lxappearance` 作为 Wayland 版默认组件。
 
 | 功能 | 当前实现 | Wayland/labwc 替代 |
 |---|---|---|
-| 窗口管理器 | FVWM3 | `labwc`，可启用 Xwayland 兼容用户应用 |
+| 窗口管理器 | FVWM3 | `labwc` + `seatd` / `elogind` / `systemd-logind`，可启用 Xwayland 兼容用户应用 |
 | 面板/前面板 | FvwmButtons | `sfwbar` + `lavalauncher`，后续自研 layer-shell panel |
 | 菜单 | FVWM menu | labwc `menu.xml` / pipe-menu / 自研 XDG menugen |
 | 背景 | `fvwm-root` | `swaybg`、`wbg` |
 | 显示器配置 | `xrandr` | `wlr-randr`、`kanshi` |
 | 剪贴板 | `xclip` | `wl-copy`、`wl-paste` |
-| 通知 | `dunst` | `mako` |
+| 通知 | `dunst` | `fnott`，避免默认依赖 `mako` 的 systemd-libs 打包 |
 | 启动器 | `rofi` / FVWM ExecDialog | `fuzzel` |
 | 文件管理器 | 外部 XDG 默认应用 | `PCManFM-Qt`，用 Qt Wayland 后端启动 |
 | 终端 | `xterm` | `foot`，备用 `QTerminal` |
@@ -155,7 +157,7 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 | 截图 | X11 工具 | `grim`、`slurp` |
 | 主题 | FVWM colorsets + GTK theme | labwc/Openbox theme + GTK CSS + Qt theme |
 | 托盘 | `stalonetray` XEmbed | `sfwbar` SNI tray |
-| GTK/Qt 设置 | `xrdb`、`xsettingsd` | `nwg-look`、`gsettings`、`qt5ct`、`qt6ct`、`Kvantum` |
+| GTK/Qt 设置 | `xrdb`、`xsettingsd` | `nwg-look`、`gsettings`、`qt5ct`、`qt6ct`、`Kvantum`，按发行版确认 Qt 包是否拉入 systemd-libs |
 | 快捷键 | FVWM keybindings | labwc `rc.xml` |
 | 鼠标绑定 | FVWM mousebindings | labwc `rc.xml` |
 | 窗口动作 | FVWM functions | labwc actions，复杂逻辑需要外部工具或降级 |
@@ -183,17 +185,19 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 任务：
 
 1. 在测试机或虚拟机安装 labwc。
-2. 验证 `swaybg`/`wbg` 设置背景。
-3. 验证 `mako`/`dunst` 通知。
-4. 验证 `wl-clipboard`。
-5. 验证 `grim` + `slurp` 截图/取色替代方案。
-6. 验证 labwc `rc.xml` 的窗口动作、快捷键、鼠标绑定能力。
-7. 验证 labwc `menu.xml` 和 pipe-menu 可行性。
+2. 验证 `seatd`、`elogind` 和 `systemd-logind` 启动 labwc，确保 systemd 是受支持路径但不是唯一依赖。
+3. 验证 `swaybg`/`wbg` 设置背景。
+4. 验证 `fnott` 通知。
+5. 验证 `wl-clipboard`。
+6. 验证 `grim` + `slurp` 截图/取色替代方案。
+7. 验证 labwc `rc.xml` 的窗口动作、快捷键、鼠标绑定能力。
+8. 验证 labwc `menu.xml` 和 pipe-menu 可行性。
+9. 验证启动脚本和 `autostart` 不强制调用 `systemctl --user`；如提供 systemd user units，应有非 systemd 启动路径。
 
 交付物：
 
 - 一份最小 labwc 会话配置。
-- 一份 Wayland 依赖列表。
+- 一份 Wayland 依赖列表，并标注非 systemd 兼容依赖、systemd 增强依赖和可选依赖。
 - 一份功能差异清单。
 
 预计时间：2 到 5 天。
@@ -211,7 +215,7 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 5. 写 labwc/Openbox theme 生成器。
 6. 使用 `swaybg` 或 `wbg` 设置背景。
 7. 用 `sfwbar` + `lavalauncher` 临时模拟前面板、任务栏、托盘和固定启动按钮。
-8. 用 `mako` 处理通知。
+8. 用 `fnott` 处理通知。
 9. 用 `foot`、`fuzzel`、`PCManFM-Qt`、`wl-clipboard`、`grim`、`slurp` 替换基础工具。
 
 交付物：
@@ -320,7 +324,8 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 7. GTK/Qt/Firefox 主题联动。
 8. 中文字体默认配置。
 9. Debian/RPM/Arch 打包。
-10. 文档和迁移指南。
+10. 提供完整桌面环境元包。
+11. 文档和迁移指南。
 
 交付物：
 
@@ -340,6 +345,7 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 | labwc action 不如 FVWM 丰富 | 某些窗口行为无法等价 | 只保留常用行为，复杂逻辑放进辅助 daemon/panel |
 | workspace/page 模型不同 | CDE workspace manager 难以完全复刻 | 初版只支持 workspace，后续模拟 page 或放弃 page |
 | 主题一致性难 | GTK/Qt/Xwayland/Firefox 风格不统一 | 分层生成主题，明确支持矩阵 |
+| 发行版包引入 systemd-libs | 非 systemd 发行版兼容性下降 | 默认依赖避免 systemd-only 组件；Qt、idle、通知组件按发行版做条件依赖 |
 | 多显示器行为复杂 | 背景、面板位置、DPI 处理复杂 | 先单显示器稳定，再引入 `wlr-randr`/`kanshi` 支持 |
 
 ## 11. 建议的首批文件
@@ -355,12 +361,34 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 - `wayland/tools/nscde-labwc-themegen.in`
 - `wayland/tools/nscde-labwc-menugen.in`
 - `wayland/themes/labwc/themerc.in`
+- `wayland/packaging/nscde-wayland-desktop.md`
 
-## 12. 推荐依赖
+## 12. 完整桌面环境打包方案
+
+Wayland 版建议拆成独立包，不要并入现有 `nscde-zh` FVWM/X11 主包：
+
+| 包名 | 作用 | 内容 |
+|---|---|---|
+| `nscde-zh` | 现有 FVWM/X11 版 | 保持不动 |
+| `nscde-wayland-session` | Wayland 会话核心 | `nscde-labwc` 启动脚本、`nscde-labwc.desktop`、labwc 配置模板 |
+| `nscde-wayland-themes` | 主题资源 | labwc/Openbox theme、GTK CSS、Qt/Kvantum、sfwbar、fuzzel、foot、fnott 配色 |
+| `nscde-wayland-tools` | 生成器和辅助工具 | menu/theme/autostart 生成器、迁移脚本 |
+| `nscde-wayland-desktop` | 完整桌面环境元包 | 拉起默认组件依赖，不放代码或只放说明 |
+
+打包规则：
+
+- `nscde-wayland-desktop` 默认依赖必须可在非 systemd 系统上满足，同时支持 systemd 发行版。
+- 使用 `seatd | elogind | systemd-logind` 表达 seat 管理能力，不要求其中某一个作为唯一实现。
+- 可以提供 systemd user units 作为增强集成，但不能只依赖它们；默认会话组件必须也能由 `nscde-labwc` 和 labwc `autostart` 启动。
+- `mako`、`swayidle`、Waybar 等可能带 systemd 依赖的组件只能作为可选依赖。
+- 发行版若将 Qt 基础库打包为依赖 `systemd-libs`，Qt 相关组件需要单独标注为“按发行版验证”。
+
+## 13. 推荐依赖
 
 基础依赖：
 
 - `labwc`
+- `seatd`、`elogind` 或 `systemd-logind`
 - `wayland-utils`
 - `wlr-randr`
 - `kanshi`（可选）
@@ -370,12 +398,11 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 - `fuzzel`
 - `PCManFM-Qt`
 - `foot`
-- `mako`
+- `fnott`
 - `wl-clipboard`
 - `grim`
 - `slurp`
 - `swaylock`
-- `swayidle`
 - `nwg-look`
 - `qt5ct` / `qt6ct`
 - `Kvantum`
@@ -385,13 +412,20 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 - `python3-psutil`
 - `python3-pyqt5` 或 GTK 绑定
 
+可选依赖：
+
+- `swayidle`：仅在发行版提供无 systemd 构建，或接受 logind/elogind 功能差异时启用。
+- `mako`：仅在发行版不强制拉入 systemd-libs 时作为通知替代。
+- `Waybar`：仅作为现代状态栏替代，不作为默认 CDE 风格 panel。
+- systemd user units：仅作为 systemd 发行版的集成增强，不作为唯一启动机制。
+
 如果开发原生 panel，还需要按选型补充：
 
 - GTK3/GTK4 开发包。
 - `gtk-layer-shell` 或对应语言绑定。
 - StatusNotifierItem 支持库。
 
-## 13. 推荐产品定位
+## 14. 推荐产品定位
 
 不建议宣传为“NsCDE 原样 Wayland 移植”。更合适的定位是：
 
@@ -403,7 +437,7 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 
 基于 labwc 的 CDE 风格 Wayland 桌面环境，复用 NsCDE 的中文本地化、图标、调色板、背景和主题理念，但重新实现 panel、菜单、设置管理器和 Wayland 集成。
 
-## 14. 最小可行版本定义
+## 15. 最小可行版本定义
 
 `NsCDE-labwc Lite` 最小可行版本应包含：
 
@@ -416,6 +450,8 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 7. 中文字体显示正常。
 8. 可设置主题、字体和背景，至少通过命令行或配置文件实现。
 9. 项目自带组件原生 Wayland 运行；允许用户应用通过 Xwayland 兼容运行。
+10. 默认会话组件可在 `seatd`、`elogind` 或 `systemd-logind` 环境中运行；systemd 受支持但不是硬依赖。
+11. 提供 `nscde-wayland-desktop` 元包或等价安装目标。
 
 不要求首版实现：
 
@@ -424,10 +460,11 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 - 所有 CDE 子面板功能。
 - 所有复杂窗口操作函数。
 - 完整多显示器体验。
+- suspend/resume 前后 idle hook 的完整 logind 集成。
 
-## 15. 最终建议
+## 16. 最终建议
 
-建议先做 `NsCDE-labwc Lite`，重点复用视觉资产和主题生成逻辑，以 `labwc` + `sfwbar` + `lavalauncher` + `fuzzel` 快速落地外观和基础工作流。等基础体验稳定后，再投入自研 `nscde-panel` 和设置中心。
+建议先做 `NsCDE-labwc Lite`，重点复用视觉资产和主题生成逻辑，以 `labwc` + `seatd/elogind/systemd-logind` + `sfwbar` + `lavalauncher` + `fuzzel` + `fnott` 快速落地外观和基础工作流。等基础体验稳定后，再投入自研 `nscde-panel` 和设置中心。
 
 这条路线可以最大程度降低风险：
 
@@ -435,6 +472,7 @@ labwc 适合作为 NsCDE Wayland 版的窗口合成器基础，但不能代替 F
 - 避免被 FVWM 兼容性拖住。
 - 让 Wayland 版本从第一阶段就能启动和体验。
 - 保证 NsCDE 自带组件走原生 Wayland，同时不阻止用户运行 Xwayland 应用。
+- 保证默认组件可运行在非 systemd 系统上，同时为 systemd 系统保留增强集成；不要求 `systemctl --user` 作为唯一启动机制。
 - 后续可以逐步补齐功能，而不是一开始追求完全等价。
 
-验收时可用 `xlsclients` 检查默认会话组件，不应出现 `sfwbar`、`lavalauncher`、`fuzzel`、`PCManFM-Qt`、`foot`、`mako`、`swaybg` 等项目自带组件。
+验收时可用 `xlsclients` 检查默认会话组件，不应出现 `sfwbar`、`lavalauncher`、`fuzzel`、`PCManFM-Qt`、`foot`、`fnott`、`swaybg` 等项目自带组件。另需分别验证非 systemd 的 `seatd`/`elogind` 启动路径和 systemd-logind 启动路径，并检查项目脚本不把 `systemctl --user` 作为唯一启动方式。
