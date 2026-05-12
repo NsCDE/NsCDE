@@ -1,6 +1,6 @@
 Name:		NsCDE-zh
 Version:	2.3.10
-Release:	1%{?dist}
+Release:	3%{?dist}
 Summary:	Not so Common Desktop Environment - Chinese Localization
 AutoReqProv:	no
 
@@ -13,6 +13,7 @@ BuildRequires:  gcc
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	make
+BuildRequires:	python3
 BuildRequires:	gettext libX11-devel libXext-devel libXpm-devel
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  glibc-headers
@@ -24,7 +25,7 @@ Requires:	xterm ksh sed fvwm3 cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-psutil python3-yaml
 Requires:	qt5ct qt6ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-Requires: PyQt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
+Requires: python3-qt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
 Requires: google-noto-sans-cjk-fonts google-noto-sans-cjk-vf-fonts google-noto-sans-mono-cjk-vf-fonts google-noto-sans-mono-fonts
 %endif
 %if 0%{?suse_version}
@@ -80,7 +81,13 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
-* Thu May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-1
+* Wed May 13 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-3
+- Add python3 build dependency for generated script shebangs
+
+* Wed May 13 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-2
+- Fix Fedora PyQt5 dependency package name
+
+* Fri May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-1
 - Update to 2.3.10 release
 - Add DefaultAppsMgr FvwmScript GUI dialog
 - Integrate pcmanfm-qt Application Manager mode
@@ -89,7 +96,7 @@ autoreconf -ivf
 - Fix Calendar text color in GTK3 CSS
 - Update packaging dependencies
 
-* Thu May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.5-1
+* Fri May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.5-1
 - Update to 2.3.5 release
 - Add DefaultAppsMgr FvwmScript GUI dialog
 - Integrate pcmanfm-qt Application Manager mode
