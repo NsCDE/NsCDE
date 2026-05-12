@@ -29,10 +29,36 @@ copy_file_once() {
 	fi
 }
 
+repair_labwc_mouse_defaults() {
+	cfg=$labwc_config_dir/rc.xml
+	[ -f "$cfg" ] || return
+	grep -q 'ShowMenu" menu="root-menu"' "$cfg" || return
+	if awk '
+		/<mouse>/ { in_mouse=1 }
+		in_mouse && /<default/ { found=1 }
+		/<\/mouse>/ { in_mouse=0 }
+		END { exit found ? 0 : 1 }
+	' "$cfg"; then
+		return
+	fi
+	tmp=$cfg.tmp.$$
+	backup=$cfg.bak-before-mouse-default
+	awk '
+		/<mouse>/ && !done { print; print "    <default />"; done=1; next }
+		{ print }
+	' "$cfg" > "$tmp" || {
+		rm -f "$tmp"
+		return
+	}
+	[ -e "$backup" ] || cp "$cfg" "$backup"
+	mv "$tmp" "$cfg"
+}
+
 mkdir -p "$labwc_config_dir"
 copy_file_once "$labwc_source/rc.xml" "$labwc_config_dir/rc.xml"
 copy_file_once "$labwc_source/menu.xml" "$labwc_config_dir/menu.xml"
 copy_file_once "$labwc_source/autostart" "$labwc_config_dir/autostart"
+repair_labwc_mouse_defaults
 
 export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP=nscde-labwc
