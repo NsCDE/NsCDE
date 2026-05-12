@@ -10,17 +10,17 @@ Test (!x $[infostore.terminal]) f_FindApp terminal terminal
 # Notice: Common default for Init and Session function
 DestroyFunc CommonInitFunction
 AddToFunc CommonInitFunction
-+ I Test (x dex-autostart) f_NsCDEExec dex-autostart -e NsCDE --term $[infostore.terminal] -s $[FVWM_USERDIR]/xdg/config/autostart -a
-+ I Test (!x dex-autostart, x dex) f_NsCDEExec dex -e NsCDE --term $[$infostore.terminal] -s $[FVWM_USERDIR]/xdg/config/autostart -a
++ I Test (x dex-autostart) Exec exec dex-autostart -e NsCDE --term $[infostore.terminal] -s $[HOME]/.config/autostart -a
++ I Test (!x dex-autostart, x dex) Exec exec dex -e NsCDE --term $[$infostore.terminal] -s $[HOME]/.config/autostart -a
 
 # Do not destroy InitFunction, just append to it
 AddToFunc InitFunction
 + I GotoDeskAndPage 0 0 0
 + I CommonInitFunction
-+ I Test (x gkrellm) f_NsCDEExec gkrellm
++ I Test (x gkrellm) Exec exec gkrellm
 + I Test (x gkrellm) Wait gkrellm
 + I Test (x gkrellm) Schedule 500 All (Gkrellm) Move screen p $[infostore.gkrellm.pos.placement]
-+ I Test (f "$[FVWM_USERDIR]/NsCDE.conf") f_NsCDEExec $[infostore.terminal]
++ I Test (f "$[FVWM_USERDIR]/NsCDE.conf") Exec exec $[infostore.terminal]
 + I Schedule 1640 Prev ($[infostore.terminal]) Move screen c 50-50w 50-16w
 + I Schedule 1640 Prev (*term*,*xvt*) Move screen c 50-50w 50-16w
 + I Schedule 1640 Prev (*xvt*) Move screen c 50-50w 50-16w
@@ -51,3 +51,4 @@ AddToFunc SessionExitFunction
 # Does not wait for Schedule command to finish
 # DestroyFunc ExitFunction
 # AddToFunc ExitFunction
+

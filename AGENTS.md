@@ -1,76 +1,76 @@
-# Repository Guidelines
+# NsCDE-zh Agent Guide
 
-## Project Structure & Module Organization
-NsCDE-zh is an Autotools-based desktop environment project. Top-level
-configuration lives in `configure.ac`, `Makefile.am`, and generated
-`configure` / `Makefile.in` files. C helper programs are under `src/`
-(`colorpicker`, `pclock`, `XOverrideFontCursor`). Runtime scripts and tools are
-split between `nscde_tools/` and `lib/scripts/`, with Python helpers in
-`lib/python/`. Theme, FVWM, palette, backdrop, and photo assets live in `data/`.
-Desktop integration files are in `xdg/`, translations in `po/`, package recipes
-in `pkg/`, and user documentation in `doc/`, `README*.md`, and `NsCDE.wiki/`.
+## Project Overview
 
-## Build, Test, and Development Commands
-- `./autogen.sh`: regenerate Autotools files after changing `configure.ac` or
-  `Makefile.am`.
-- `./configure --prefix=/usr`: configure paths and check required tools such as
-  `ksh`, `msgfmt`, `sed`, X11 utilities, FVWM, and Python modules.
-- `make`: build C helpers, generated scripts, localization files, and installable
-  assets.
-- `sudo make install`: install the configured build; use only on a disposable VM
-  or test system when validating install behavior.
-- `make clean`: remove generated build outputs, including compiled `.mo` files.
-- `msgfmt -o po/NsCDE.zh.mo po/NsCDE.zh.po`: validate a changed translation file.
+NsCDE-zh is a Chinese (Simplified) localization fork of [NsCDE](https://github.com/NsCDE/NsCDE) — a retro CDE-style desktop environment built on FVWM. The codebase is primarily Korn Shell scripts, Python 3, FvwmScript GUI programs, and C utilities.
 
-## Coding Style & Naming Conventions
-Match the surrounding file style. Shell templates use `ksh` syntax, uppercase
-environment variables such as `NSCDE_TOOLSDIR`, and PascalCase function names in
-manager scripts. C files use tabs for block indentation and plain `snake_case`
-locals. Python code currently follows compact legacy spacing; keep changes
-minimal and avoid broad formatting-only edits. Preserve `.in` templates when
-values are substituted by `configure`.
+## Build System
 
-## Testing Guidelines
-There is no standalone automated test suite in this repository. Treat
-`./configure && make` as the baseline validation. For translations, run `msgfmt`
-on touched `.po` files. For scripts, prefer targeted runtime checks in an X11/FVWM
-session or VM, especially when changing files under `nscde_tools/`, `lib/scripts/`,
-or `data/fvwm/`.
+Autoconf/Automake. **Required order:**
 
-## Commit & Pull Request Guidelines
-Recent history uses concise Conventional Commit prefixes such as `fix:` and
-`chore:`, alongside short Chinese maintenance messages. Prefer
-`type: imperative summary`, for example `fix: handle DefaultAppsMgr output`.
-Keep commits focused on one concern. PRs should describe the changed component,
-list validation commands, mention affected distributions or desktop sessions,
-and include screenshots for visible UI/theme changes.
+```bash
+./autogen.sh          # runs autoreconf -f -i -v
+./configure --prefix=/usr
+make
+sudo make install
+```
 
-## Security & Configuration Tips
-Do not commit generated local configuration, secrets, or machine-specific paths.
-Be careful with install-related changes because the project writes into system
-prefixes, XDG directories, and session files. Keep package metadata in `pkg/`
-aligned with any dependency changes in `configure.ac` and `README*.md`.
+Build dependencies (Debian/Ubuntu):
+```
+autoconf automake gcc make libx11-dev libxext-dev libxpm-dev ksh gettext
+```
 
-## NsCDE Runtime Isolation
-Do not write GTK, Qt, icon, MIME/default-application, or XDG search-path changes
-to the user's shared desktop configuration by default. The X11/FVWM session
-should route launched desktop applications through `nscde_xdg_run`, which scopes
-NsCDE-specific settings under `$FVWM_USERDIR/xdg/`. Legacy writes to
-`~/.config`, `~/.gtkrc-2.0`, `~/.local/share`, or global `XDG_*` variables are
-allowed only when `NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1` is explicitly set.
+Runtime dependencies: `ksh fvwm python3 python3-yaml python3-pyxdg python3-psutil PyQt5 qt5ct xsettingsd stalonetray dunst xclip xdotool imagemagick xterm`
 
-## Wayland Runtime Isolation
-Wayland theme and desktop scripts must not globally override `XDG_CONFIG_DIRS`
-or `XDG_DATA_DIRS` from the session launcher. Keep other desktop environments,
-especially Plasma, unaffected. If a Wayland component needs NsCDE-specific
-config or icon paths, pass explicit config files or use `nscde-wayland-run` to
-scope temporary XDG values to that component only. Ordinary applications launched
-from the panel or launcher should run with the original XDG environment.
-Theme, icon, MIME/default-application, Qt, GTK, KDE, and portal settings for
-the Wayland edition must be written to NsCDE-specific extra config files, not to
-the user's shared desktop files. Do not edit `~/.config/gtk-3.0/settings.ini`,
-`~/.config/gtk-4.0/settings.ini`, `~/.gtkrc-2.0`, `~/.config/kdeglobals`,
-`~/.config/mimeapps.list`, `~/.local/share/applications/mimeapps.list`,
-`qt5ct.conf`, `qt6ct.conf`, or Kvantum globals unless the user explicitly asks.
-Prefer paths under `~/.config/nscde-wayland/` and explicit component config
-arguments.
+## Version
+
+Single source of truth: `configure.ac` line `AC_INIT([NsCDE], 2.3.4, ...)`. CI extracts version from this line.
+
+## Directory Structure
+
+- `src/` — C utilities (colorpicker, pclock, XOverrideFontCursor)
+- `lib/python/` — Python theme engines (`.py.in` templates, processed by configure)
+- `lib/scripts/` — FvwmScript GUI dialogs (ColorMgr, FontMgr, WindowMgr, etc.)
+- `lib/fvwm-modules/` — FVWM module configs
+- `data/fvwm/` — FVWM configuration files (`.fvwmconf`, `.fvwmconf.in`)
+- `data/backdrops/`, `data/palettes/` — CDE-style visual assets
+- `nscde_tools/` — Shell script utilities (`.in` templates). These are the main runtime tools.
+- `po/` — gettext `.po` translation files (Croatian `hr` and Chinese `zh`)
+- `pkg/` — Packaging for Debian, RPM, Arch (pacman), FreeBSD
+- `xdg/` — XDG desktop entries and menus
+- `bin/` — Main entry points (`nscde`, `nscde_fvwmclnt`)
+- `doc/` — Documentation (docbook format)
+
+## Key Technical Facts
+
+- **Shell**: All shell scripts use AT&T Korn Shell 93 (`ksh`). Not bash, not mksh.
+- **Templates**: Files ending in `.in` are processed by `configure` to substitute paths (e.g., `@NSCDE_DATADIR@`, `@KSH@`, `@PYTHON@`). Never edit generated output files directly.
+- **FVWM version**: Supports both FVWM2 and FVWM3. FrontPanel config differs between them (`FrontPanel.fvwm2.fvwmconf` vs `FrontPanel.fvwm3.fvwmconf`).
+- **Localization**: Uses gettext. `.po` files in `po/` compile to `.mo` files. The main `NsCDE.po`/`NsCDE.zh.po` contains Notifier/FVWM menu translations. **Warning**: recompiling `NsCDE.mo` requires immediate NsCDE restart or FVWM will segfault.
+- **Install paths**: Defaults to `/usr/local` (`$NSCDE_ROOT`). User config goes to `~/.NsCDE` (`$FVWM_USERDIR`), not `~/.fvwm`.
+
+## Packaging
+
+CI (`.github/workflows/build-packages.yml`) builds for Debian, Ubuntu, Fedora RPM, Arch, and FreeBSD. Version tags follow pattern `v2.3.4_zh`.
+
+```bash
+# Debian
+dpkg-buildpackage -rfakeroot -b
+
+# Arch
+makepkg -si
+
+# RPM: uses pkg/rpm/NsCDE.spec with rpmbuild
+```
+
+## Locale Configuration
+
+Supported locales defined in `configure.ac`: `LOCALES="hr zh"`. To add a new locale, update this line and create corresponding `.po` files following existing patterns.
+
+## Common Pitfalls
+
+- Don't confuse ksh syntax with bash (e.g., `[[ ]]` behavior, `echo -ne` usage)
+- `.in` files contain `@VARIABLE@` placeholders — these are substituted at build time
+- FvwmScript dialogs have fixed widget sizes; translations must fit within them
+- Some child dialogs share parent `.po` files (e.g., NColorsDialog uses NsCDE-ColorMgr.po)
+- The `bootstrap` script (`nscde_tools/bootstrap.in`) runs on first login and sets up `~/.NsCDE`

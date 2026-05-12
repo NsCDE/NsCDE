@@ -2,7 +2,7 @@ name: Build and Test Packages
 
 on:
   push:
-    branches: [main, master, develop, fix/packaging-improvements]
+    branches: [main, develop, fix/packaging-improvements]
     tags:
       - 'v*'
   pull_request:
@@ -30,9 +30,8 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/v}"
             VERSION="${VERSION%_zh}"
-            VERSION="${VERSION%+zh}"
           else
-            VERSION=$(sed -nE 's/^AC_INIT\(\[NsCDE\],[[:space:]]*([0-9]+(\.[0-9]+)*).*/\1/p' configure.ac | head -n 1)
+            VERSION=$(grep -oP 'AC_INIT\(\[NsCDE\],\s*\K[0-9.]+' configure.ac)
           fi
           if [ -z "$VERSION" ]; then
             echo "ERROR: Failed to extract version from configure.ac"

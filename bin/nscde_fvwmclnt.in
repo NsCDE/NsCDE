@@ -46,17 +46,10 @@ if [ "x$FVWM_CLNT" == "x" ]; then
    FVWM_CLNT="FvwmCommand"
 fi
 
-# Route NsCDE default application launchers through the private XDG wrapper.
-if (($# == 1)); then
-   NSCDE_FVWM_CMD="$1"
-   if [[ "$NSCDE_FVWM_CMD" == "Exec exec \$[infostore."* ]]; then
-      set -- "f_NsCDEExec ${NSCDE_FVWM_CMD#Exec exec }"
-   fi
-fi
-
 # Execute FvwmCommand if found, with all of the argument vector provided
 if [ "x$FVWM_CLNT" != "x" ]; then
    exec $FVWM_CLNT "$@"
 else
    echo "ERROR: Cannot find suitable FvwmCommand for your setup." >&2
 fi
+

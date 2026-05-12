@@ -29,7 +29,7 @@
 #### Debian
 
 ```bash
-# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号，例如 2.3.11）
+# 下载并安装 Debian 软件包（将 VERSION 替换为实际版本号，例如 2.3.10）
 wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1_amd64.deb
 sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 ```
@@ -37,7 +37,7 @@ sudo apt install ./nscde-zh_VERSION+zh-1_amd64.deb
 #### Ubuntu
 
 ```bash
-# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号，例如 2.3.11）
+# 下载并安装 Ubuntu 软件包（将 VERSION 替换为实际版本号，例如 2.3.10）
 wget https://github.com/wenyinos/NsCDE-zh/releases/download/vVERSION+zh/nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 sudo apt install ./nscde-zh_VERSION+zh-1ubuntu1_amd64.deb
 ```

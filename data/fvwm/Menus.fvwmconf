@@ -18,10 +18,10 @@ Test (!EnvMatch infostore.sandboxmode 1) + "$[gt.Applications]" Popup m_Applicat
 Test (!EnvMatch infostore.sandboxmode 1) + "$[gt.NsCDE Help]" Popup m_NsCDEHelpMenu
 + "" Nop
 + "$[gt.E&xecute ...]" f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
-Test (x $[infostore.terminal]) + "&Terminal" f_NsCDEExec $[infostore.terminal]
-Test (x $[infostore.filemgr]) + "&$[gt.File Manager]" f_NsCDEExec $[infostore.filemgr]
-Test (x $[infostore.appmgr]) + "&$[gt.Application Manager]" f_NsCDEExec $[infostore.appmgr]
-Test (x $[infostore.xeditor]) + "&$[gt.Editor]" f_NsCDEExec $[infostore.xeditor]
+Test (x $[infostore.terminal]) + "&Terminal" Exec exec $[infostore.terminal]
+Test (x $[infostore.filemgr]) + "&$[gt.File Manager]" Exec exec $[infostore.filemgr]
+Test (x $[infostore.appmgr]) + "&$[gt.Application Manager]" Exec exec $[infostore.appmgr]
+Test (x $[infostore.xeditor]) + "&$[gt.Editor]" Exec exec $[infostore.xeditor]
 f_AddCustomToRootMenu
 + "" Nop
 + "$[gt.Window Operations ...]" Popup m_WindowOpsSubMenu
@@ -78,7 +78,7 @@ Test (x xdg-open) + "$[gt.All Documentation (pdf)]%NsCDE/Fphelp.t.pm%" \
 DestroyMenu m_NsCDEMenu
 AddToMenu m_NsCDEMenu "NsCDE" Title
 + "$[gt.&Style Manager]%NsCDE/Dtstyle.t.pm%" f_ToggleFvwmModule FvwmScript StyleMgr
-+ "$[gt.&Application Manager]%NsCDE/Fpapps.t.pm%" f_NsCDEExec $[infostore.appmgr]
++ "$[gt.&Application Manager]%NsCDE/Fpapps.t.pm%" Exec exec $[infostore.appmgr]
 + "$[gt.&Default Applications]%NsCDE/Dtexec.t.pm%" f_ToggleFvwmModule FvwmScript DefaultAppsMgr
 + "$[gt.&Exec]%NsCDE/Dtexec.t.pm%" f_ToggleFvwmFunc ExecDialog Close f_RunQuickScriptDialog ExecDialog
 + "$[gt.&Workstation Info]%NsCDE/Dtsysinfo.t.pm%" f_ToggleFvwmModule FvwmScript Sysinfo
@@ -266,3 +266,4 @@ ChangeMenuStyle CommonAppMenu m_FrontPanelLockMenu m_FrontPanelLiteMenu \
 ChangeMenuStyle PGMAppMenu m_GoToPage
 
 ChangeMenuStyle XDGAppMenu m_Applications
+

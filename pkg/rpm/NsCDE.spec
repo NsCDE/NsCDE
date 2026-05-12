@@ -1,19 +1,18 @@
 Name:		NsCDE-zh
-Version:	2.3.11
+Version:	2.3.10
 Release:	1%{?dist}
 Summary:	Not so Common Desktop Environment - Chinese Localization
 AutoReqProv:	no
 
 License:	GPLv3
 URL:		https://github.com/wenyinos/NsCDE-zh
-Source0:	%{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:	%{url}/archive/refs/tags/v%{version}_zh/%{name}-%{version}_zh.tar.gz
 
 BuildRequires:  ksh
 BuildRequires:  gcc
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	make
-BuildRequires:	python3
 BuildRequires:	gettext libX11-devel libXext-devel libXpm-devel
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  glibc-headers
@@ -25,7 +24,7 @@ Requires:	xterm ksh sed fvwm3 cpp xsettingsd stalonetray dunst xclip xdotool
 Requires:	python3-pyxdg python3-psutil python3-yaml
 Requires:	qt5ct qt6ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-Requires: python3-qt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
+Requires: PyQt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
 Requires: google-noto-sans-cjk-fonts google-noto-sans-cjk-vf-fonts google-noto-sans-mono-cjk-vf-fonts google-noto-sans-mono-fonts
 %endif
 %if 0%{?suse_version}
@@ -55,12 +54,12 @@ lightweight hybrid desktop environment.
 
 
 %prep
-%autosetup -p1 -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}_zh
 
 
 %build
 autoreconf -ivf
-%configure --prefix=/usr --sysconfdir=/etc --libexecdir=%{_libexecdir}/NsCDE --with-python-shebang=/usr/bin/python3
+%configure --prefix=/usr --sysconfdir=/etc --libexecdir=%{_libexecdir}/NsCDE
 %make_build
 
 %install
@@ -81,10 +80,7 @@ autoreconf -ivf
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
-* Wed May 13 2026 wenyinos <admin@wenyinos.com>  - 2.3.11-1
-- Update to 2.3.11 release
-
-* Fri May 1 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-1
+* Thu May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.10-1
 - Update to 2.3.10 release
 - Add DefaultAppsMgr FvwmScript GUI dialog
 - Integrate pcmanfm-qt Application Manager mode
@@ -93,7 +89,7 @@ autoreconf -ivf
 - Fix Calendar text color in GTK3 CSS
 - Update packaging dependencies
 
-* Fri May 1 2026 wenyinos <admin@wenyinos.com>  - 2.3.5-1
+* Thu May 01 2026 wenyinos <admin@wenyinos.com>  - 2.3.5-1
 - Update to 2.3.5 release
 - Add DefaultAppsMgr FvwmScript GUI dialog
 - Integrate pcmanfm-qt Application Manager mode

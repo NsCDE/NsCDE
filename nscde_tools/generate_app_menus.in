@@ -36,9 +36,6 @@ if (($file_err == 0)); then
    cur_res=""
    cat ${menufilelist} | grep -E -v "^#" | sort -u | while IFS="," read cls res itemname action
    do
-      if [[ "$action" == "Exec exec "* ]]; then
-         action="f_NsCDEExec ${action#Exec exec }"
-      fi
       if [ "${cls}" == "${curr_cls}" ] && [ "${res}" == "${curr_res}" ]; then
          echo "+ I Test (EnvMatch infostore.menuitem.clres \"${cls},${res}\") AddToMenu \"$menuname\" \"$itemname\" $action"
       else
@@ -53,3 +50,4 @@ else
 fi
 
 echo "+ I InfoStoreRemove menuitem.clres"
+

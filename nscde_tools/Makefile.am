@@ -36,7 +36,6 @@ SCRIPTINS = \
 	keymenu \
 	mkpagemenu \
 	migrate_nscde_1x_2x \
-	nscde_xdg_run \
 	palette_colorgen \
 	strip_icon_path \
 	style_managers.shlib \
@@ -66,3 +65,4 @@ uninstall-hook:
 	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/$(OS_PLUS_MACHINE_ARCH) || : ; \
 	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR)/FvwmScripts || : ; \
 	rmdir $(DESTDIR)$(NSCDE_TOOLSDIR) || :
+

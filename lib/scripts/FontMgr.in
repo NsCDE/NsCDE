@@ -1639,17 +1639,6 @@ Widget 26
          # This is the right time to display notice, and for it to last long enough.
          Do {Module FvwmScript WaitNotice "$[gt.Working ...]" "$[gt.Please wait for changes to be applied]" "$[gt.and new font scheme loaded.]" 8000}
 
-         Set $SharedDesktopConfigEnabled = (GetOutput {@KSH@ -c '[ "x$NSCDE_ALLOW_SHARED_DESKTOP_CONFIG" = "x1" ]; echo $?'} 1 -1)
-         If $SharedDesktopConfigEnabled <> 0 Then
-         Begin
-            Set $SetGtk2 = 0
-            Set $SetGtk3 = 0
-            Set $SetQt4 = 0
-            Set $SetQt5 = 0
-            Set $SetQt6 = 0
-            Set $SetFontmgrLocal = 0
-         End
-
          # User script (if exists)
          If $SetFontmgrLocal == 1 Then
          Begin
@@ -2249,3 +2238,4 @@ Widget 101
       End
    End
 End
+

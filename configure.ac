@@ -6,7 +6,7 @@ dnl Author: Hegel3DReloaded
 dnl Licence: GPLv3
 dnl
 
-AC_INIT([NsCDE], 2.3.11, [nscde@protonmail.com])
+AC_INIT([NsCDE], 2.3.10, [nscde@protonmail.com])
 
 AC_CONFIG_AUX_DIR(ac-aux)
 
@@ -456,7 +456,6 @@ AC_OUTPUT(
 	nscde_tools/keymenu
 	nscde_tools/mkpagemenu
 	nscde_tools/migrate_nscde_1x_2x
-	nscde_tools/nscde_xdg_run
 	nscde_tools/strip_icon_path
 	nscde_tools/subpanel_menuitem_props
 	nscde_tools/style_managers.shlib

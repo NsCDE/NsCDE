@@ -135,7 +135,7 @@ function view_man_page
    ;;
    esac
 
-   echo "f_NsCDEExec \$[infostore.docsbrowser] ${TMPDIR}/${Unique}_man_page_${Str}.html"
+   echo "Exec exec \$[infostore.docsbrowser] ${TMPDIR}/${Unique}_man_page_${Str}.html"
    echo "Schedule 10000 Exec exec rm -f ${TMPDIR}/${Unique}_man_page_${Str}.html"
 }
 
@@ -146,7 +146,7 @@ function view_raw_man_page
       return 1
    fi
 
-   echo "f_NsCDEExec \$[infostore.docsbrowser] man:${Str}"
+   echo "Exec exec \$[infostore.docsbrowser] man:${Str}"
 }
 
 function man_path
@@ -285,3 +285,4 @@ if (($MANRET != 0)); then
       fi
    fi
 fi
+

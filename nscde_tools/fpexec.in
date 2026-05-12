@@ -23,7 +23,7 @@ if [ "x${ActionLine}" != "x" ]; then
    echo $ActionLine | while IFS="," read button icon mousebutton check cmd
    do
       if [ "$check" == "NOCHK" ]; then
-         echo "f_NsCDEExec $cmd"
+         echo "Exec exec $cmd"
       elif [ "$check" == "FVWM" ]; then
          # Find the docs if this was mouse button 3
          if [ "${cmd%% *}" == "f_FrontPanelPropsMenu" ] && [ "$mousebutton" == "M3" ]; then
@@ -46,14 +46,14 @@ if [ "x${ActionLine}" != "x" ]; then
          echo "$cmd"
       elif [ "$check" == "__SPECIAL8__" ]; then
          if [ "x$NSCDE_HAS_APPMGR" == "x1" ]; then
-            echo "f_NsCDEExec $[infostore.appmgr]"
+            echo "Exec exec $[infostore.appmgr]"
          else
-            echo "f_NsCDEExec $[infostore.xeditor]"
+            echo "Exec exec $[infostore.xeditor]"
          fi
       elif [ "${icon}" == "__APPLET__" ]; then
          echo "$cmd"
       else
-         echo "Test (x $check) f_NsCDEExec $cmd"
+         echo "Test (x $check) Exec exec $cmd"
       fi
    done
 else

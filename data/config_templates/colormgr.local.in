@@ -12,11 +12,6 @@
 export PPATH="$1"
 export NCOLORS="$2"
 
-if [ "x${NSCDE_ALLOW_SHARED_DESKTOP_CONFIG:-0}" != "x1" ]; then
-   echo "Skipping shared desktop color hooks. Set NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1 to enable legacy behavior." >&2
-   exit 0
-fi
-
 # Firefox: fill the path to /home/USER/.mozilla/firefox/profile.xxx if you use it.
 # If empty, thunderbird CSS will not be integrated with NsCDE.
 export FIREFOX_PROFILEDIR=""
@@ -63,3 +58,4 @@ do_fix_qt5
 do_fix_qt6
 
 # Add here your own local hooks freely ...
+

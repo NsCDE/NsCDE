@@ -59,11 +59,6 @@ if [ -z "$FVWM_USERDIR" ]; then
    exit 6
 fi
 
-function shared_desktop_config_enabled
-{
-   [ "x${NSCDE_ALLOW_SHARED_DESKTOP_CONFIG:-0}" == "x1" ]
-}
-
 function setup_nscde
 {
    mode="$1"
@@ -329,37 +324,16 @@ function setup_nscde
       "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s FontMgr -k integrate_qt6 -v 1
    fi
 
-   if ! shared_desktop_config_enabled; then
-      gettext -s "Skipping shared desktop appearance integration. Set NSCDE_ALLOW_SHARED_DESKTOP_CONFIG=1 to enable legacy GTK, Qt, icon, and default-application writes."
-      themegen_gtk2="False"
-      themegen_gtk3="False"
-      themeadd_qt4="False"
-      themeadd_qt5g="False"
-      themeadd_qt5k="False"
-      themeadd_qt5="False"
-      themeadd_qt6="False"
-      for key in integrate_gtk2 integrate_gtk3 integrate_qt4 integrate_qt5g integrate_qt5k integrate_qt6
-      do
-         "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s ColorMgr -k "$key" -v 0
-      done
-      for key in integrate_gtk2 integrate_gtk3 integrate_qt4 integrate_qt5 integrate_qt6
-      do
-         "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s FontMgr -k "$key" -v 0
-      done
-   fi
-
    # Disable "fancy" xcursors
-   if shared_desktop_config_enabled; then
-      if [ ! -e "$HOME/.icons/default/index.theme" ]; then
-         locale_Writing=$(gettext -s "Writing")
-         echo "$locale_Writing $HOME/.icons/default/index.theme ..."
-         mkdir -p "$HOME/.icons/default"
-         @ECHONE@ '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
-      else
-         locale_setting_default_cursor_theme=$(gettext -s "Setting default cursor theme")
-         echo "${HOME}/.icons/default/index.theme ${already_exists}. ${locale_setting_default_cursor_theme}."
-         "${NSCDE_TOOLSDIR}/confset" -t ini -c "$HOME/.icons/default/index.theme" -s "Icon Theme" -k Inherits -v dmz-aa
-      fi
+   if [ ! -e "$HOME/.icons/default/index.theme" ]; then
+      locale_Writing=$(gettext -s "Writing")
+      echo "$locale_Writing $HOME/.icons/default/index.theme ..."
+      mkdir -p "$HOME/.icons/default"
+      @ECHONE@ '[Icon Theme]\nInherits=dmz-aa\n' > "$HOME/.icons/default/index.theme"
+   else
+      locale_setting_default_cursor_theme=$(gettext -s "Setting default cursor theme")
+      echo "${HOME}/.icons/default/index.theme ${already_exists}. ${locale_setting_default_cursor_theme}."
+      "${NSCDE_TOOLSDIR}/confset" -t ini -c "$HOME/.icons/default/index.theme" -s "Icon Theme" -k Inherits -v dmz-aa
    fi
 
    # Gtk2
@@ -383,14 +357,12 @@ function setup_nscde
    fi
 
    # Weird gsettings idiocy reported as issue
-   if shared_desktop_config_enabled; then
-      whence -q gsettings
+   whence -q gsettings
+   if (($? == 0)); then
+      gcolorscheme=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)
       if (($? == 0)); then
-         gcolorscheme=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)
-         if (($? == 0)); then
-            if [ "$gcolorscheme" != "'default'" ]; then
-               gsettings set org.gnome.desktop.interface color-scheme default
-            fi
+         if [ "$gcolorscheme" != "'default'" ]; then
+            gsettings set org.gnome.desktop.interface color-scheme default
          fi
       fi
    fi
@@ -431,15 +403,10 @@ function setup_nscde
       mkdir -p "${FVWM_USERDIR}/libexec"
       cp "${NSCDE_DATADIR}/config_templates/colormgr.local" "${FVWM_USERDIR}/libexec/colormgr.local"
       chmod +x "${FVWM_USERDIR}/libexec/colormgr.local"
-   else
-      echo "${FVWM_USERDIR}/libexec/colormgr.local ${already_exists}."
-   fi
-   if shared_desktop_config_enabled; then
       "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s ColorMgr -k integrate_local -v 1
       "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s FontMgr -k integrate_local -v 1
    else
-      "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s ColorMgr -k integrate_local -v 0
-      "${NSCDE_TOOLSDIR}/confset" -t ini -c "$FVWM_USERDIR/StyleMgr.ini" -s FontMgr -k integrate_local -v 0
+      echo "${FVWM_USERDIR}/libexec/colormgr.local ${already_exists}."
    fi
 
    # Font Manager local hooks
@@ -454,19 +421,15 @@ function setup_nscde
    fi
 
    # Generate themes and change the screen
-   if shared_desktop_config_enabled; then
-      locale_generating_default_theme_for_gtk2_gtk3_in=$(gettext -s "Generating default theme for Gtk2/Gtk3 in")
-      echo "$locale_generating_default_theme_for_gtk2_gtk3_in $HOME/.themes/NsCDE ..."
-      mkdir -p "$HOME/.themes"
-   fi
-   local_theme_arg=""
-   shared_desktop_config_enabled && local_theme_arg="-l"
+   locale_generating_default_theme_for_gtk2_gtk3_in=$(gettext -s "Generating default theme for Gtk2/Gtk3 in")
+   echo "$locale_generating_default_theme_for_gtk2_gtk3_in $HOME/.themes/NsCDE ..."
+   mkdir -p "$HOME/.themes"
    if [ -d "/usr/share/qt6" ] || [ -d "/usr/local/share/qt6" ] || [ -d "/usr/pkg/share/qt6" ]; then
       "${NSCDE_TOOLSDIR}/chtheme" -p "$NSCDE_PALETTE" -n "$NSCDE_PALETTE_NCOLORS" -5 -m -b -x \
-         -g "${themegen_gtk2},${themegen_gtk3}" -q "${themeadd_qt4},${themeadd_qt5},${themeadd_qt6}" $local_theme_arg
+         -g "${themegen_gtk2},${themegen_gtk3}" -q "${themeadd_qt4},${themeadd_qt5},${themeadd_qt6}" -l
    else
       "${NSCDE_TOOLSDIR}/chtheme" -p "$NSCDE_PALETTE" -n "$NSCDE_PALETTE_NCOLORS" -5 -m -b -x \
-         -g "${themegen_gtk2},${themegen_gtk3}" -q "${themeadd_qt4},${themeadd_qt5},False" $local_theme_arg
+         -g "${themegen_gtk2},${themegen_gtk3}" -q "${themeadd_qt4},${themeadd_qt5},False" -l
    fi
    # Reload is separate, so that new configs are in place.
    "${NSCDE_TOOLSDIR}/chtheme" -p "$NSCDE_PALETTE" -n "$NSCDE_PALETTE_NCOLORS" -R
@@ -660,7 +623,7 @@ function setup_nscde
       if [ "x$ans" == "xy" ]; then
          echo "$locale_enabling nscde_use_rofi --> 1"
          "${NSCDE_TOOLSDIR}/ised" -c 's/# InfoStoreAdd nscde_use_rofi 1/InfoStoreAdd nscde_use_rofi 1/g' -f "$FVWM_USERDIR/NsCDE.conf"
-         if shared_desktop_config_enabled && [ ! -e "$HOME/.config/rofi/config" ] ; then
+         if [ ! -e "$HOME/.config/rofi/config" ] ; then
             @ECHONE@ "$HOME/.config/rofi/config "; gettext -s "does not exist."
             gettext -s -n "Installing default rofi config file as "; echo "$HOME/.config/rofi/config."
             mkdir -p "$HOME/.config/rofi"
@@ -706,7 +669,7 @@ function setup_nscde
       "${NSCDE_TOOLSDIR}/ised" -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${ans}/g" -f "$FVWM_USERDIR/NsCDE.conf"
 
       # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
-      shared_desktop_config_enabled && whence -q xdg-mime
+      whence -q xdg-mime
       if (($? == 0)); then
          xdg-mime default "${ans}.desktop" inode/directory
          fmresult=$(xdg-mime query default inode/directory)
@@ -724,7 +687,7 @@ function setup_nscde
       "${NSCDE_TOOLSDIR}/ised" -c "s/InfoStoreAdd filemgr true/InfoStoreAdd filemgr ${filemgr_suggest}/g" -f "$FVWM_USERDIR/NsCDE.conf"
 
       # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
-      shared_desktop_config_enabled && whence -q xdg-mime
+      whence -q xdg-mime
       if (($? == 0)); then
          xdg-mime default "${filemgr_suggest}.desktop" inode/directory
          fmresult=$(xdg-mime query default inode/directory)
@@ -767,7 +730,7 @@ function setup_nscde
 
          # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
          txtmimes="application/x-shellscript text/english text/plain text/x-c text/x-c++ text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-java text/x-makefile text/x-readme text/x-tcl"
-         shared_desktop_config_enabled && whence -q xdg-mime
+         whence -q xdg-mime
          if (($? == 0)); then
             xdg-mime default "${ans}.desktop" text/plain
             txtresult=$(xdg-mime query default text/plain)
@@ -805,7 +768,7 @@ function setup_nscde
 
          # Insanely retarded xdg utils. No exit status, no error, no listings of desktop files.
          txtmimes="application/x-shellscript text/english text/plain text/x-c text/x-c++ text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-java text/x-makefile text/x-readme text/x-tcl"
-         shared_desktop_config_enabled && whence -q xdg-mime
+         whence -q xdg-mime
          if (($? == 0)); then
             xdg-mime default "${xedit_suggest}.desktop" text/plain
             txtresult=$(xdg-mime query default text/plain)
@@ -866,11 +829,8 @@ function setup_nscde
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'EdgeThickness 1'
       whence -q xrandr && xrandr --dpi 96
    fi
-   if [ -x "$NSCDE_TOOLSDIR/nscde_xdg_run" ]; then
-      "$NSCDE_TOOLSDIR/nscde_xdg_run" -- true >/dev/null 2>&1
-   fi
    if [ "$mode" == "initial" ]; then
-      $NSCDE_ROOT/bin/nscde_fvwmclnt 'f_NsCDEExec $[infostore.terminal]'
+      $NSCDE_ROOT/bin/nscde_fvwmclnt 'Exec exec $[infostore.terminal]'
       $NSCDE_ROOT/bin/nscde_fvwmclnt 'f_DisplayURL "$[gt.NsCDE Documentation]" NsCDE.pdf'
    fi
    $NSCDE_ROOT/bin/nscde_fvwmclnt 'Schedule 250 Restart'

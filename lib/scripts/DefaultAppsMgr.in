@@ -433,20 +433,6 @@ Widget 50
          Do {InfoStoreAdd calculator "} $CalcNew {"}
          Do {InfoStoreAdd printmgr "} $PrintNew {"}
 
-         # Sync session-only defaults into the NsCDE-private XDG profile.
-         Set $SessionAppsDirCmd = {mkdir -p "$FVWM_USERDIR/xdg/config/NsCDE"}
-         GetOutput $SessionAppsDirCmd -1 1
-         Set $SessionEditorCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k xeditor -v "} $EditorNew {"}
-         GetOutput $SessionEditorCmd -1 1
-         Set $SessionFileMgrCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k filemgr -v "} $FileMgrNew {"}
-         GetOutput $SessionFileMgrCmd -1 1
-         Set $SessionBrowserCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k browser -v "} $BrowserNew {"}
-         GetOutput $SessionBrowserCmd -1 1
-         Set $SessionMailCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k mailreader -v "} $MailNew {"}
-         GetOutput $SessionMailCmd -1 1
-         Set $SyncXdgCmd = {$NSCDE_TOOLSDIR/nscde_xdg_run -- true}
-         GetOutput $SyncXdgCmd -1 1
-
          # Update status
          ChangeTitle 30 (Gettext {Applied. Changes are active for this session.})
          Do {Schedule 3000 SendToModule DefaultAppsMgr SendString 30 2 clearstatus}
@@ -522,21 +508,6 @@ Widget 51
          # Save print manager
          Set $SavePrintCmd = {$NSCDE_TOOLSDIR/ised -c "s/InfoStoreAdd printmgr .*/InfoStoreAdd printmgr } $PrintNew {/g" -f "$FVWM_USERDIR/NsCDE.conf"}
          GetOutput $SavePrintCmd -1 1
-
-         Set $SessionAppsDirCmd = {mkdir -p "$FVWM_USERDIR/xdg/config/NsCDE"}
-         GetOutput $SessionAppsDirCmd -1 1
-         Set $SessionEditorCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k xeditor -v "} $EditorNew {"}
-         GetOutput $SessionEditorCmd -1 1
-         Set $SessionFileMgrCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k filemgr -v "} $FileMgrNew {"}
-         GetOutput $SessionFileMgrCmd -1 1
-         Set $SessionBrowserCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k browser -v "} $BrowserNew {"}
-         GetOutput $SessionBrowserCmd -1 1
-         Set $SessionMailCmd = {$NSCDE_TOOLSDIR/confset -t properties -c "$FVWM_USERDIR/xdg/config/NsCDE/session-apps.conf" -k mailreader -v "} $MailNew {"}
-         GetOutput $SessionMailCmd -1 1
-
-         # Refresh NsCDE-private XDG defaults after persistent app changes.
-         Set $SyncXdgCmd = {$NSCDE_TOOLSDIR/nscde_xdg_run -- true}
-         GetOutput $SyncXdgCmd -1 1
 
          # Update status
          ChangeTitle 30 (Gettext {Saved to NsCDE.conf. Changes will persist after restart.})
