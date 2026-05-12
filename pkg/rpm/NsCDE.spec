@@ -6,7 +6,7 @@ AutoReqProv:	no
 
 License:	GPLv3
 URL:		https://github.com/wenyinos/NsCDE-zh
-Source0:	%{url}/archive/refs/tags/v%{version}_zh/%{name}-%{version}_zh.tar.gz
+Source0:	%{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  ksh
 BuildRequires:  gcc
@@ -55,7 +55,7 @@ lightweight hybrid desktop environment.
 
 
 %prep
-%autosetup -p1 -n %{name}-%{version}_zh
+%autosetup -p1 -n %{name}-%{version}
 
 
 %build
