@@ -15,6 +15,7 @@ all:
 check:
 	sh -n bin/nscde-labwc
 	sh -n labwc/autostart
+	test -s sfwbar/sfwbar.config
 	xmllint --noout labwc/rc.xml labwc/menu.xml
 
 install:
@@ -23,7 +24,7 @@ install:
 	$(INSTALL) -d "$(DESTDIR)$(SESSIONDIR)"
 	$(INSTALL) -m 0644 session/nscde-labwc.desktop "$(DESTDIR)$(SESSIONDIR)/nscde-labwc.desktop"
 	$(INSTALL) -d "$(DESTDIR)$(PROJECTDATADIR)"
-	cp -R labwc themes assets "$(DESTDIR)$(PROJECTDATADIR)/"
+	cp -R labwc themes assets sfwbar "$(DESTDIR)$(PROJECTDATADIR)/"
 
 uninstall:
 	rm -f "$(DESTDIR)$(BINDIR)/nscde-labwc"
