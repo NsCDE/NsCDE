@@ -1,6 +1,6 @@
 Name:           xcur2png
 Version:        0.7.1
-Release:        3.3
+Release:        3.4
 Summary:        Take PNG images from Xcursor and generate xcursorgen config-file
 Group:          User Interface/X
 License:        GPLv3
@@ -14,6 +14,7 @@ and generate config-file which is reusable by xcursorgen.
 
 %prep
 %setup -q
+sed -i 's/^  extern dry_run;$/  extern int dry_run;/' xcur2png.c
 
 %build
 %configure
@@ -29,6 +30,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_mandir}/man1/xcur2png.1*
 
 %changelog
+* Tue May 12 2026 NsCDE COPR <ruojiner@users.noreply.github.com> - 0.7.1-3.4
+- Fix implicit int declaration for modern Fedora compilers
+
 * Tue May 12 2026 NsCDE COPR <ruojiner@users.noreply.github.com> - 0.7.1-3.3
 - Add explicit compiler and make build requirements for Fedora COPR
 
