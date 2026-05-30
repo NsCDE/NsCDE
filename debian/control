@@ -1,0 +1,84 @@
+Source: nscde
+Section: x11
+Priority: optional
+Maintainer: Reaper <JohnGrimmReaper@disroot.org>
+Build-Depends:
+ debhelper-compat (= 13),
+ gettext,
+ ksh93u+m | ksh,
+ libx11-dev,
+ libxext-dev,
+ libxpm-dev,
+ python3,
+ python3-psutil,
+ python3-pyqt5,
+ python3-xdg,
+ python3-yaml
+Standards-Version: 4.7.4.1
+Rules-Requires-Root: no
+Homepage: https://github.com/NsCDE/NsCDE
+Vcs-Browser: https://github.com/johngrimmreaper/NsCDE
+Vcs-Git: https://github.com/johngrimmreaper/NsCDE.git
+
+Package: nscde
+Architecture: any
+Depends:
+ nscde-data (= ${source:Version}),
+ nscde-icon-theme (= ${source:Version}),
+ ${shlibs:Depends},
+ ${misc:Depends},
+ fvwm,
+ imagemagick,
+ ksh93u+m | ksh,
+ python3,
+ python3-psutil,
+ python3-pyqt5,
+ python3-xdg,
+ python3-yaml,
+ x11-utils,
+ x11-xserver-utils,
+ xdotool,
+ xterm
+Recommends:
+ dunst,
+ fonts-dejavu-core,
+ nscde-doc,
+ qt5-style-plugins,
+ rofi,
+ stalonetray,
+ xclip,
+ xscreensaver,
+ xsettingsd
+Suggests:
+ picom
+Description: modern CDE-like desktop environment
+ NsCDE is a retro but powerful desktop environment inspired by the
+ Common Desktop Environment. It provides a CDE-like workflow, front panel,
+ window management configuration, icons, color management, and desktop
+ integration on top of FVWM.
+
+Package: nscde-data
+Architecture: all
+Depends:
+ ${misc:Depends}
+Description: data files for NsCDE
+ This package contains architecture-independent data files used by NsCDE,
+ including FVWM configuration, palettes, backdrops, templates, integration
+ files, localization files, and supporting scripts.
+
+Package: nscde-icon-theme
+Architecture: all
+Depends:
+ ${misc:Depends}
+Description: icon theme for NsCDE
+ This package contains the NsCDE icon theme used by the NsCDE desktop
+ environment and its XDG desktop integration.
+
+Package: nscde-doc
+Architecture: all
+Section: doc
+Depends:
+ ${misc:Depends}
+Description: documentation for NsCDE
+ This package contains user documentation, examples, release notes, and
+ HTML/PDF documentation for the NsCDE desktop environment.

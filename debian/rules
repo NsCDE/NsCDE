@@ -1,0 +1,30 @@
+#!/usr/bin/make -f
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+%:
+	dh $@ --without autoreconf
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--libdir=/usr/lib
+
+override_dh_auto_build:
+	touch aclocal.m4 configure
+	find . -name Makefile.in -exec touch {} +
+	dh_auto_build
+
+execute_after_dh_auto_install:
+	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE
+	find debian/tmp/usr/lib/NsCDE -path '*/Linux_*/*' -name XOverrideFontCursor.so -exec mv -t debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE {} +
+	find debian/tmp/usr/libexec/NsCDE -path '*/Linux_*/*' \( -name colorpicker -o -name fpclock \) -exec mv -t debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE {} +
+	find debian/tmp/usr/lib/NsCDE debian/tmp/usr/libexec/NsCDE -type d -empty -delete
+
+override_dh_auto_clean:
+	# Avoid upstream distclean: it tries to regenerate autotools files.
+	true
+
+override_dh_clean:
+	dh_clean -Xautom4te.cache
