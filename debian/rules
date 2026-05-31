@@ -27,9 +27,18 @@ execute_after_dh_auto_install:
 	sed -i 's#\$$NSCDE_LIBDIR/\$$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor\.so#/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE/XOverrideFontCursor.so#g' debian/tmp/usr/lib/NsCDE/fvwm-modules/FvwmScript
 	find debian/tmp/usr/lib/NsCDE debian/tmp/usr/libexec/NsCDE -type d -empty -delete
 
+execute_after_dh_install:
+	rm -f debian/nscde-data/usr/libexec/NsCDE/colorpicker
+	rm -f debian/nscde-data/usr/libexec/NsCDE/fpclock
+	rm -f debian/nscde-data/usr/lib/NsCDE/fvwm-modules/FvwmScript
+
 execute_after_dh_fixperms:
-	chmod 0644 debian/nscde-data/usr/lib/NsCDE/python/*.py
-	chmod 0644 debian/nscde-data/usr/libexec/NsCDE/style_managers.shlib
+	if [ -d debian/nscde-data/usr/lib/NsCDE/python ]; then \
+		find debian/nscde-data/usr/lib/NsCDE/python -type f -name '*.py' -exec chmod 0644 {} +; \
+	fi
+	if [ -e debian/nscde-data/usr/libexec/NsCDE/style_managers.shlib ]; then \
+		chmod 0644 debian/nscde-data/usr/libexec/NsCDE/style_managers.shlib; \
+	fi
 
 override_dh_auto_clean:
 	# Avoid upstream distclean: it tries to regenerate autotools files.
