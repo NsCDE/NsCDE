@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+include /usr/share/dpkg/architecture.mk
 
 %:
 	dh $@ --without autoreconf
@@ -21,6 +21,10 @@ execute_after_dh_auto_install:
 	mkdir -p debian/tmp/usr/libexec/NsCDE/$(DEB_HOST_MULTIARCH)
 	find debian/tmp/usr/lib/NsCDE -path '*/Linux_*/*' -name XOverrideFontCursor.so -exec mv -t debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE {} +
 	find debian/tmp/usr/libexec/NsCDE -path '*/Linux_*/*' \( -name colorpicker -o -name fpclock \) -exec mv -t debian/tmp/usr/libexec/NsCDE/$(DEB_HOST_MULTIARCH) {} +
+	# Debian relocates native helpers to DEB_HOST_MULTIARCH paths; adjust upstream wrappers.
+	sed -i 's#\$${NSCDE_TOOLSDIR}/\$${OS_PLUS_MACHINE_ARCH}/colorpicker#$${NSCDE_TOOLSDIR}/$(DEB_HOST_MULTIARCH)/colorpicker#g' debian/tmp/usr/libexec/NsCDE/colorpicker
+	sed -i 's#\$${NSCDE_TOOLSDIR}/\$${NSCDE_OS}_\$${MARCH}/fpclock#$${NSCDE_TOOLSDIR}/$(DEB_HOST_MULTIARCH)/fpclock#g' debian/tmp/usr/libexec/NsCDE/fpclock
+	sed -i 's#\$$NSCDE_LIBDIR/\$$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor\.so#/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE/XOverrideFontCursor.so#g' debian/tmp/usr/lib/NsCDE/fvwm-modules/FvwmScript
 	find debian/tmp/usr/lib/NsCDE debian/tmp/usr/libexec/NsCDE -type d -empty -delete
 
 execute_after_dh_fixperms:
