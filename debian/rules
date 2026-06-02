@@ -39,6 +39,7 @@ execute_after_dh_install:
 	rm -f debian/nscde-data/usr/libexec/NsCDE/fpclock
 	rm -f debian/nscde-data/usr/lib/NsCDE/fvwm-modules/FvwmScript
 	rm -rf debian/nscde-data/usr/libexec/NsCDE/$(DEB_HOST_MULTIARCH)
+	find debian/nscde-data/usr/lib/NsCDE debian/nscde-data/usr/libexec/NsCDE -type d -empty -delete 2>/dev/null || true
 
 execute_after_dh_fixperms:
 	if [ -d debian/nscde-data/usr/lib/NsCDE/python ]; then \
