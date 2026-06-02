@@ -25,6 +25,13 @@ execute_after_dh_auto_install:
 	sed -i 's#\$${NSCDE_TOOLSDIR}/\$${OS_PLUS_MACHINE_ARCH}/colorpicker#$${NSCDE_TOOLSDIR}/$(DEB_HOST_MULTIARCH)/colorpicker#g' debian/tmp/usr/libexec/NsCDE/colorpicker
 	sed -i 's#\$${NSCDE_TOOLSDIR}/\$${NSCDE_OS}_\$${MARCH}/fpclock#$${NSCDE_TOOLSDIR}/$(DEB_HOST_MULTIARCH)/fpclock#g' debian/tmp/usr/libexec/NsCDE/fpclock
 	sed -i 's#\$$NSCDE_LIBDIR/\$$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor\.so#/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE/XOverrideFontCursor.so#g' debian/tmp/usr/lib/NsCDE/fvwm-modules/FvwmScript
+	# Use the packaged ksh alternative path instead of upstream /usr/bin/ksh93.
+	grep -RIl '^#!/usr/bin/ksh93$$' \
+		debian/tmp/usr/bin \
+		debian/tmp/usr/lib/NsCDE \
+		debian/tmp/usr/libexec/NsCDE \
+		debian/tmp/usr/share/NsCDE \
+		| xargs -r sed -i '1s|^#!/usr/bin/ksh93$$|#!/bin/ksh|'
 	find debian/tmp/usr/lib/NsCDE debian/tmp/usr/libexec/NsCDE -type d -empty -delete
 
 execute_after_dh_install:
