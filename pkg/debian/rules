@@ -47,3 +47,10 @@ execute_after_dh_fixperms:
 
 override_dh_compress:
 	dh_compress -X.pdf -X.txt -XREADME
+
+override_dh_auto_clean:
+	# Avoid upstream distclean: it tries to regenerate autotools files.
+	true
+
+override_dh_clean:
+	dh_clean -Xautom4te.cache
