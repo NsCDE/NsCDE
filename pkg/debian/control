@@ -3,22 +3,58 @@ Section: x11
 Priority: optional
 Maintainer: Hegel3DReloaded <nscde@protonmail.com>
 Build-Depends:
- libc6-dev, libxext-dev, x11proto-dev, libx11-dev, libxpm-dev, ksh | ksh93,
- autotools-dev, automake, build-essential, debhelper-compat (= 11), gettext
-Standards-Version: 4.5.0
-Homepage: https://github.com/NsCDE
+ debhelper-compat (= 13),
+ gettext,
+ ksh93u+m,
+ libx11-dev,
+ libxext-dev,
+ libxpm-dev,
+ python3,
+ python3-psutil,
+ python3-pyqt5,
+ python3-xdg,
+ python3-yaml
+Standards-Version: 4.7.4.1
+Rules-Requires-Root: no
+Homepage: https://github.com/NsCDE/NsCDE
+Vcs-Browser: https://github.com/NsCDE/NsCDE
+Vcs-Git: https://github.com/NsCDE/NsCDE.git
 
 Package: nscde
 Architecture: any
-Multi-Arch: foreign
 Depends:
- libc6, fvwm | fvwm3, ksh93 | ksh, stalonetray, xsettingsd, imagemagick,
- x11-xserver-utils, x11-utils, cpp, xterm, python3, python3-xdg,
- python3-yaml, python3-psutil, python3-pyqt5, xdotool, xdg-utils,
- gettext, fonts-dejavu-core, groff-base, groff
-Recommends: xclip, xscreensaver, dex, gtk2-engines-pixbuf, dunst,
- qt5-gtk2-platformtheme, qt5-gtk-platformtheme
-Suggests: rofi, gkrellm, gkrellm-xkb, gkrelltop, qt5ct, picom
+ ${shlibs:Depends},
+ ${misc:Depends},
+ fvwm | fvwm3,
+ imagemagick,
+ ksh93u+m,
+ python3,
+ python3-psutil,
+ python3-pyqt5,
+ python3-xdg,
+ python3-yaml,
+ stalonetray,
+ x11-utils,
+ x11-xserver-utils,
+ xdotool,
+ xdg-utils,
+ xsettingsd,
+ xterm
+Recommends:
+ dunst,
+ fonts-dejavu-core,
+ qt5-style-plugins,
+ rofi,
+ xclip,
+ xscreensaver
+Suggests:
+ gkrellm,
+ gkrellm-xkb,
+ gkrelltop,
+ pcmanfm-qt,
+ picom,
+ qt5ct,
+ qt6ct
 Description: Not so Common Desktop Environment
  NsCDE is a retro but powerful UNIX desktop environment which resembles
  CDE look (and partially feel) but with a more powerful and flexible
@@ -29,4 +65,3 @@ Description: Not so Common Desktop Environment
  combined with a couple other free software components and custom FVWM
  applications and a lot of configuration, NsCDE can be considered a
  lightweight hybrid desktop environment.
-
