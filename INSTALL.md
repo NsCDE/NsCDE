@@ -227,6 +227,7 @@ cd libstroke-0.5.1
 ./configure
 make
 sudo make install
+=======
 ```
 
 - SparkyLinux
