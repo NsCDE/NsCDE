@@ -329,8 +329,12 @@ generated in the `~/.NsCDE/icons/NsCDE directory`.
 
 After Color Style Manager's OK button is pressed, theme will be regenerated. 
 `Gtk` and `Qt` themes will be regenerated only if their checkboxes in Color 
-Style Manager are checked in. Setup script after the finish will ask user to 
-press `RETURN` to exit. This is for user's convenience to read output of the 
+Style Manager are checked in. When these checkboxes are selected, their related
+files into the above list will be overwritten and a backup of these files will
+be made with a name similar to 
+~/gtk+qt-dot-files-before-nscde-changes-20-09-2024_02-41-20.tar
+Setup script after the finish will ask user to press `RETURN` to exit.
+This is for user's convenience to read output of the 
 setup for informative and/or diagnostic reasons. It is advised after this setup 
 to open `$FVWM_USERDIR/NsCDE.conf` and set up InfoStoreAdd internal `FVWM` 
 variables for `terminal`, `filemgr` and `xeditor` to user's favorite programs for 
