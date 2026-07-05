@@ -123,7 +123,7 @@ trizen -S nscde-git
 ``` sh
 sudo apt update
 sudo apt dist-upgrade
-sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
+sudo apt install -y ksh x11-utils xdotool imagemagick \
     xscreensaver x11-xserver-utils python3-yaml python3-pyqt5 \
     qt5ct qt5-style-plugins stalonetray xterm python3 \
     python3-xdg libstroke0 xsettingsd fvwm fvwm-icons \
@@ -131,6 +131,9 @@ sudo apt install -y ksh xutils/x11-utils xdotool imagemagick \
     libxext-dev libxpm-dev gettext build-essential xinit \
     fonts-dejavu-core
 ```
+
+Note that on Debian releases prior to Buster, the `x11-utils` package is named
+`xutils/x11-utils`.
 
 - Fedora / RHEL / CentOS / RockyLinux / openEuler
 ``` sh
