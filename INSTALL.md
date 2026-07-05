@@ -150,6 +150,14 @@ pkg install wget ksh93 xorg ImageMagick7 xscreensaver \
     fvwm3 p5-File-MimeInfo gettext gkrellm2 rofi
 ```
 
+- OpenBSD
+
+```sh
+doas pkg_add ksh93 gmake gettext-tools xscreensaver xsettingsd xclip \
+     automake autoconf fvwm3 py3-qt5 py3-yaml py3-psutil ImageMagick \
+     xdotool dunst stalonetray qt5styleplugins sudo gsed git
+```
+
 - Gentoo/ Funtoo / Calculate/ Sabayon/ Redcore
 ``` sh
 echo "app-shells/ksh \n
