@@ -1,3 +1,12 @@
+# Notice to all:
+
+I have been busy past 3 years, and many asked if project is alive.
+I have a plan to return in autumn. Firefox and Thunderbird CSS
+are too much forward and themes for them (which were in mess anyway)
+doesn't match cleanly anymore. Also, there are things to fix, commit
+and so on. After the vacations and hot summer. September. Thanks to
+all who care. I'll be back. :-)
+
 # **Not so Common Desktop Environment (NsCDE)**
 
 [![Github commits](https://img.shields.io/github/last-commit/NsCDE/NsCDE)](https://github.com/NsCDE/NsCDE/commits/master)
