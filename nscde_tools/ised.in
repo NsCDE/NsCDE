@@ -30,7 +30,7 @@ case $NSCDE_OS in
          if (($? == 0)); then
             SED="sed"
          else
-            echo "Error: ${0##*/}: Cannot find GNU sed."
+            echo "错误：${0##*/}：找不到 GNU sed。"
          exit 4
          fi
       fi
@@ -44,7 +44,7 @@ case $NSCDE_OS in
       if (($? == 0)); then
          SED="gsed"
       else
-         echo "Error: ${0##*/}: Cannot find GNU sed."
+         echo "错误：${0##*/}：找不到 GNU sed。"
          exit 4
       fi
    fi
@@ -67,7 +67,7 @@ do
       TO_STDOUT=1
    ;;
    h)
-      echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
+      echo "用法：${0##*/} -s <sed选项> -c <sed代码> [ -f <输入文件> ] [ -h ]"
       exit 0
    ;;
    esac

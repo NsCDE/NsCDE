@@ -53,7 +53,7 @@ elif [ "$OS" == "OpenBSD" ]; then
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
-      echo "Error: Unknown ACPI operation mode."
+      echo "错误：未知的 ACPI 操作模式。"
       exit 4
    fi
 fi
@@ -86,7 +86,7 @@ function hibernate
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hibernate to disk is not supported on NetBSD."
+      echo "注意：NetBSD 不支持休眠到磁盘。"
    elif [ "$Opmode" == "openbsd" ]; then
       /usr/sbin/apm -Z
    fi
@@ -99,13 +99,13 @@ function hybrid_suspend
    elif [ "$Opmode" == "systemd" ]; then
       systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
-      echo "Not available on $OS" >&2
+      echo "$OS 不可用" >&2
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on NetBSD."
+      echo "注意：NetBSD 不支持混合挂起。"
    elif [ "$Opmode" == "openbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on OpenBSD."
+      echo "注意：OpenBSD 不支持混合挂起。"
    fi
 }
 
@@ -153,7 +153,7 @@ function f_reboot
 
 function usage
 {
-   echo "Usage: ${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
+   echo "用法：${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
    exit 0
 }
 

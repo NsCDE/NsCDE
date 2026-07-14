@@ -27,6 +27,7 @@ Requires: python3-yaml PyQt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-
 %if 0%{?suse_version}
 Requires: python3-qt5 python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex groff-full dejavu-fonts
 %endif
+Recommends:	wqy-bitmap-fonts
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
 Requires:	%{_bindir}/xrdb

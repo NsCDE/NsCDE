@@ -33,7 +33,7 @@ function find_cmd_in_subpanel
          exit 0
       fi
    else
-      echo "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
+      echo "错误：${0##*/}：子面板搜索为空，第 ${LineInSubpanel} 行，子面板 ${SubpanelNo}"
       exit 1
    fi
 }
@@ -55,7 +55,7 @@ elif [ "$Mode" == "-rsubp" ]; then
    RawMan=1
    find_cmd_in_subpanel
 else
-   echo "Error: ${0##*/}: Unknown mode of operation."
+   echo "错误：${0##*/}：未知的操作模式。"
    exit 1
 fi
 

@@ -22,7 +22,7 @@ WsmVariant=0
 if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
    . ${NSCDE_TOOLSDIR}/style_managers.shlib
 else
-   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   echo "错误：无法加载 ${NSCDE_TOOLSDIR}/style_managers.shlib。"
    exit 1
 fi
 
@@ -50,7 +50,7 @@ function GenFullPalette
 
       echo ${FVWM_USERDIR}/tmp/_fullpalette.xpm
    else
-      echo "Error: Cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
+      echo "错误：无法打开 ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
       exit 3
    fi
 }
@@ -467,7 +467,7 @@ do
          if (($PreviewMode == 0)); then
             ProgBits
          else
-            echo "Not performing pixmap modification in preview mode."
+            echo "预览模式下不执行像素图修改。"
          fi
       ;;
       b)
@@ -477,7 +477,7 @@ do
          Xresources
       ;;
       h)
-         echo "Usage: ${0##*/} <options> ..."
+         echo "用法：${0##*/} <options> ..."
       ;;
    esac
 done

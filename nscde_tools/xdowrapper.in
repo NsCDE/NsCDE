@@ -11,7 +11,7 @@
 
 type -qp xdotool
 if (($? != 0)); then
-   echo "No xdotool found. Exiting." >&2
+   echo "未找到 xdotool，无法继续。" >&2
    exit 1
 fi
 
@@ -24,7 +24,7 @@ function xdofunc
       if (($? == 0)); then
          xdotool search --name "NsCDE-Subpanel${subp}$" > /dev/null 2>&1
          if (($? == 0)); then
-            echo "Refreshing subpanel NsCDE-Subpanel${subp}" >&2
+            echo "正在刷新子面板 NsCDE-Subpanel${subp}" >&2
             $NSCDE_ROOT/bin/nscde_fvwmclnt "Exec exec xdotool search --name "NsCDE-Subpanel${subp}\$" \
                          set_window --name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\" \
                          --icon-name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\""

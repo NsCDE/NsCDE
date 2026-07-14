@@ -13,12 +13,12 @@ PrintFnSize=0
 PrettyName=0
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "No \$NSCDE_DATADIR set. Exiting."
+   echo "错误：未设置 \$NSCDE_DATADIR，无法继续。"
    exit 3
 fi
 
 if [ -z $FVWM_USERDIR ]; then
-   echo "No \$FVWM_USERDIR set. Exiting."
+   echo "错误：未设置 \$FVWM_USERDIR，无法继续。"
    exit 4
 fi
 
@@ -62,7 +62,7 @@ function GetFont
          fncnffile="$FnFile"
          sysfncnffile="$FnFile"
       else
-         echo "Error: Cannot read $FnFile"
+         echo "错误：无法读取 $FnFile"
          exit 3
       fi
    fi
@@ -204,7 +204,7 @@ do
          export FuncToCall="GetFontset"
       ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -F ] [ -h ]"
+         echo "用法：${0##*/} [ -f <文件> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z 最大大小 ] [ -F ] [ -h ]"
          exit 0
       ;;
    esac

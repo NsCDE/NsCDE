@@ -20,7 +20,7 @@ EchoInfo=0
 if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
    . ${NSCDE_TOOLSDIR}/style_managers.shlib
 else
-   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   echo "错误：无法加载 ${NSCDE_TOOLSDIR}/style_managers.shlib。"
    exit 1
 fi
 
@@ -163,7 +163,7 @@ function GeneratePhotoPreview
             if (($? == 0)) then
                ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
             else
-               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+               echo "错误：照片 $PhotoNamePath 转换失败。"
             fi
             OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/Backdrops.fvwmgen")
             sededpath=$(echo "$ConvertedPhoto" | sed 's/\//\\\//g')
@@ -172,7 +172,7 @@ function GeneratePhotoPreview
                rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
             fi
          else
-            echo "Error getting image path for $1."
+            echo "错误：获取图片路径失败：$1。"
          fi
       else
          if [ -s "$PhotoNamePath" ]; then
@@ -184,12 +184,12 @@ function GeneratePhotoPreview
             if (($? == 0)) then
                ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
             else
-               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+               echo "错误：照片 $PhotoNamePath 转换失败。"
             fi
             bgcs_clean=$(echo "${bgcs}" | sed 's/\\//g')
             echo "Colorset 3${Desk} bg ${bgcs_clean}, $PixmapVariant $ConvertedPhoto" >> ${FVWM_USERDIR}/Backdrops.fvwmgen
          else
-            echo "Error getting image path for $1."
+            echo "错误：获取图片路径失败：$1。"
          fi
       fi
 
@@ -276,7 +276,7 @@ do
          GetBackdropByNumber $OPTARG
       ;;
       h)
-         echo "Usage: ${0##*/} <options ...>"
+         echo "用法：${0##*/} <options ...>"
       ;;
    esac
 done

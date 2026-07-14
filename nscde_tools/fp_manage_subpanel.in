@@ -1,39 +1,39 @@
 #!@KSH@
 
 if [ -z $HOME ]; then
-   echo "Error: HOME is not set cannot continue."
+   echo "错误：HOME 未设置，无法继续。"
    exit 3
 fi
 
 if [ -z $NSCDE_ROOT ]; then
-   echo "Error: NSCDE_ROOT is not set cannot continue."
+   echo "错误：NSCDE_ROOT 未设置，无法继续。"
    exit 4
 fi
 
 if [ ! -e "$NSCDE_ROOT" ]; then
-   echo "Error: NSCDE_ROOT does not exist. Cannot continue."
+   echo "错误：NSCDE_ROOT 不存在，无法继续。"
    exit 5
 fi
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "Error: NSCDE_DATADIR is not set cannot continue."
+   echo "错误：NSCDE_DATADIR 未设置，无法继续。"
    exit 4
 fi
 
 if [ ! -e "$NSCDE_DATADIR" ]; then
-   echo "Error: NSCDE_DATADIR does not exist. Cannot continue."
+   echo "错误：NSCDE_DATADIR 不存在，无法继续。"
    exit 5
 fi
 
 if [ -z $FVWM_USERDIR ]; then
-   echo "Error: FVWM_USERDIR is not set cannot continue."
+   echo "错误：FVWM_USERDIR 未设置，无法继续。"
    exit 6
 fi
 
 function add_subpanel
 {
    if [ "x$SubpanelNo" == "x" ]; then
-      echo "ERROR: Missing subpanel number."
+      echo "错误：缺少子面板编号。"
       exit 9
    fi
 
@@ -47,7 +47,7 @@ function add_subpanel
          egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
          $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,0/S${SubpanelNo},ENABLED,1/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
-         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
+         echo "错误：无法打开 $NSCDE_DATADIR/defaults/Subpanels.actions 进行读取。"
          exit 8
       fi
    fi
@@ -56,7 +56,7 @@ function add_subpanel
 function delete_subpanel
 {
    if [ "x$SubpanelNo" == "x" ]; then
-      echo "ERROR: Missing subpanel number."
+      echo "错误：缺少子面板编号。"
       exit 9
    fi
 
@@ -70,7 +70,7 @@ function delete_subpanel
          egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED|ENTRY),.*" "$NSCDE_DATADIR/defaults/Subpanels.actions" >> "$FVWM_USERDIR/Subpanels.actions"
          $NSCDE_TOOLSDIR/ised -c "s/^S${SubpanelNo},ENABLED,1/S${SubpanelNo},ENABLED,0/g" -f "$FVWM_USERDIR/Subpanels.actions"
       else
-         echo "ERROR: Cannot open $NSCDE_DATADIR/defaults/Subpanels.actions for reading."
+         echo "错误：无法打开 $NSCDE_DATADIR/defaults/Subpanels.actions 进行读取。"
          exit 8
       fi
    fi
@@ -340,7 +340,7 @@ do
          SubpLocalDefCheck=$(egrep "^S${SubpanelNo},(NAME|WIDTH|ENABLED),.*" "$FVWM_USERDIR/Subpanels.actions" 2>/dev/null | wc -l)
 
          if (($SubpLocalDefCheck != 0)) && (($SubpLocalDefCheck != 3)); then
-            echo "ERROR: invalid configuration for subpanel ${SubpanelNo} in $FVWM_USERDIR/Subpanels.actions."
+            echo "错误：子面板 ${SubpanelNo} 在 $FVWM_USERDIR/Subpanels.actions 中的配置无效。"
             exit 7
          fi
       ;;
