@@ -6,19 +6,29 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 if [ -z $NSCDE_ROOT ]; then
-   echo "错误：NSCDE_ROOT 未设置，无法继续。"
+   gettext -s "Error: NSCDE_ROOT is not set. Exiting."
    exit 2
 fi
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "错误：NSCDE_DATADIR 未设置，无法继续。"
+   gettext -s "Error: NSCDE_DATADIR is not set. Exiting."
    exit 2
 fi
 
 type -p fc-list > /dev/null
 if (($? != 0)); then
-   echo "错误：未找到 fc-list 命令。"
+   gettext -s "Error: fc-list command not found."
    exit 3
 fi
 
@@ -31,12 +41,12 @@ FNUMS=$(echo "$FNAMES" | sort -u | grep -En '.*')
 function findfontsets
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "未定义 NSCDE_ROOT，无法继续。"
+      gettext -s "No NSCDE_ROOT defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "未定义 NSCDE_DATADIR，无法继续。"
+      gettext -s "No NSCDE_DATADIR defined. Exiting."
       exit 2
    fi
 
@@ -330,7 +340,7 @@ do
          miscintegrations
       ;;
       h)
-         echo "用法：..."
+         echo "Usage: ..."
       ;;
    esac
 done

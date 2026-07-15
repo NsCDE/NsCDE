@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 export LC_ALL=C
 
 # Initialize default values for some variables
@@ -13,12 +23,12 @@ PrintFnSize=0
 PrettyName=0
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "错误：未设置 \$NSCDE_DATADIR，无法继续。"
+   gettext -s "No \$NSCDE_DATADIR set. Exiting."
    exit 3
 fi
 
 if [ -z $FVWM_USERDIR ]; then
-   echo "错误：未设置 \$FVWM_USERDIR，无法继续。"
+   gettext -s "No \$FVWM_USERDIR set. Exiting."
    exit 4
 fi
 
@@ -62,7 +72,7 @@ function GetFont
          fncnffile="$FnFile"
          sysfncnffile="$FnFile"
       else
-         echo "错误：无法读取 $FnFile"
+         gettext -s "Error: Cannot read $FnFile"
          exit 3
       fi
    fi
@@ -204,7 +214,7 @@ do
          export FuncToCall="GetFontset"
       ;;
       h)
-         echo "用法：${0##*/} [ -f <文件> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z 最大大小 ] [ -F ] [ -h ]"
+         gettext -s "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -F ] [ -h ]"
          exit 0
       ;;
    esac

@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 valsep="$1"
 varname="$2"
 varnewval="$3"
@@ -19,7 +29,7 @@ eval varcontent='$'$varname
 for argv in "$valsep" "$varname" "$varnewval"
 do
    if [ "x$argv" == "x" ]; then
-      echo "用法：${0##*/} <分隔符> <变量名> <变量值>" >&2
+      gettext -s "Usage: ${0##*/} <separator> <varname> <varvalue>" >&2
       if [ "x$varname" != "x" ]; then
          echo "$varcontent"
       fi

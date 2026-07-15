@@ -6,10 +6,20 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 BaseName="${0##*/}"
 
 if [ ! -d "$NSCDE_TOOLSDIR" ]; then
-   echo "错误：NSCDE_TOOLSDIR 未定义。"
+   gettext -s "Error: NSCDE_TOOLSDIR is not defined."
    exit 10
 fi
 
@@ -232,7 +242,7 @@ function localsetup
 
 function Usage
 {
-   echo "用法：${BaseName} [ -p <调色板名称> ] [ -n <颜色数量> ] [ -5 | -8 ] [ -w ] [ -m ]"
+   gettext -s "Usage: ${BaseName} [ -p <Palette Name> ] [ -n <No of Colors> ] [ -5 | -8 ] [ -w ] [ -m ]"
    echo "               [ -b ] [ -x ] [ -g <gtk2|False,gtk3|False,gtk4|False> ] [ -q qt4,qt5g|qt5k,qt6 ]"
    echo "               [ -l ] [ -r ] [ -R ] [ -h ]"
 
@@ -308,7 +318,7 @@ do
          palette_name="$OPTARG"
          palette_path=$($NSCDE_TOOLSDIR/colormgr -e -c $ncolors -g "$palette_name")
          if [ ! -r "$palette_path" ]; then
-            echo "未找到调色板 $palette_name。路径：\"$palette_path\"。"
+            gettext -s "Palette $palette_name was not found. Path: \"$palette_path\"."
             exit 9
          fi
       ;;

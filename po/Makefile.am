@@ -58,7 +58,9 @@ MOFILES = NsCDE-BackdropMgr.hr.mo \
 	NsCDE.hr.mo \
 	NsCDE.zh_CN.mo \
 	nscde-bootstrap.hr.mo \
-	nscde-bootstrap.zh_CN.mo
+	nscde-bootstrap.zh_CN.mo \
+	nscde-tools.hr.mo \
+	nscde-tools.zh_CN.mo
 
 all: $(MOFILES)
 
