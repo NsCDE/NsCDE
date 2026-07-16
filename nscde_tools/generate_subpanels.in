@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 while getopts wfsh OPT
 do
    case $OPT in
@@ -30,7 +40,7 @@ fi
 
 if [ -z $FVWM_USERDIR ]; then
    if [[ -z $SYSMODE ]]; then
-      echo "Error: FVWM_USERDIR is not set."
+      gettext -s "Error: FVWM_USERDIR is not set."
       exit 2
    fi
 fi

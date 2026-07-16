@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 PATH="/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin:$PATH"
 Action=$1
 
@@ -53,7 +63,7 @@ elif [ "$OS" == "OpenBSD" ]; then
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
-      echo "Error: Unknown ACPI operation mode."
+      gettext -s "Error: Unknown ACPI operation mode."
       exit 4
    fi
 fi
@@ -86,7 +96,7 @@ function hibernate
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hibernate to disk is not supported on NetBSD."
+      gettext -s "Notice: Hibernate to disk is not supported on NetBSD."
    elif [ "$Opmode" == "openbsd" ]; then
       /usr/sbin/apm -Z
    fi
@@ -99,13 +109,13 @@ function hybrid_suspend
    elif [ "$Opmode" == "systemd" ]; then
       systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
-      echo "Not available on $OS" >&2
+      gettext -s "Not available on $OS" >&2
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on NetBSD."
+      gettext -s "Notice: Hybrid suspend is not supported on NetBSD."
    elif [ "$Opmode" == "openbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on OpenBSD."
+      gettext -s "Notice: Hybrid suspend is not supported on OpenBSD."
    fi
 }
 
@@ -153,7 +163,7 @@ function f_reboot
 
 function usage
 {
-   echo "Usage: ${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
+   gettext -s "Usage: ${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
    exit 0
 }
 

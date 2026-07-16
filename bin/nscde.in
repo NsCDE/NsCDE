@@ -108,6 +108,10 @@ if [ -x "${FVWM_USERDIR}/libexec/pre_start.sh" ]; then
    . "${FVWM_USERDIR}/libexec/pre_start.sh"
 fi
 
+# Register bitmap fonts for CJK support
+xset +fp /usr/share/fonts/wqy-bitmapfont 2>/dev/null
+xset fp rehash 2>/dev/null
+
 # Now exec fvwm. Forking Main.fvwmconf should be a rare case,
 # but we never know. From Main everything else is read.
 if [ -r ${FVWM_USERDIR}/Main.fvwmconf ]; then

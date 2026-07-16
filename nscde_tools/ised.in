@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 # Wrapper for sed used heavily in FvwmScript scripts
 # We are not using "sed -i" since GNU sed is not present on
 # all systems, specially not under it's original name.
@@ -30,7 +40,7 @@ case $NSCDE_OS in
          if (($? == 0)); then
             SED="sed"
          else
-            echo "Error: ${0##*/}: Cannot find GNU sed."
+            gettext -s "Error: ${0##*/}: Cannot find GNU sed."
          exit 4
          fi
       fi
@@ -44,7 +54,7 @@ case $NSCDE_OS in
       if (($? == 0)); then
          SED="gsed"
       else
-         echo "Error: ${0##*/}: Cannot find GNU sed."
+         gettext -s "Error: ${0##*/}: Cannot find GNU sed."
          exit 4
       fi
    fi
@@ -67,7 +77,7 @@ do
       TO_STDOUT=1
    ;;
    h)
-      echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
+      gettext -s "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
       exit 0
    ;;
    esac
