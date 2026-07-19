@@ -751,6 +751,12 @@ Widget 17
             Do {Test (!x mate-session-properties) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found." "NoCmd"}
             Set $CheckDeskRc = {Listed}
          End
+         If $CheckDesk == {LXQt} Then
+         Begin
+               Do {Test (x lxqt-config-session) Exec exec lxqt-config-session}
+               Do {Test (!x lxqt-config-session) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxqt-config-session found." "NoCmd"}
+               Set $CheckDeskRc = {Listed}
+         End
          If $CheckDesk == {LXDE} Then
          Begin
             Do {Test (x lxsession-edit) Exec exec lxsession-edit}
