@@ -1,0 +1,851 @@
+name: NsCDE package CI - Ubuntu 26.10
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TARGET_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+  TARGET_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+  DEBIAN_FRONTEND: noninteractive
+
+concurrency:
+  group: nscde-deb-ubuntu-26.10-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and diagnose NsCDE DEBs on Ubuntu 26.10
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      package_manifest_sha256: ${{ steps.deb_artifacts.outputs.manifest_sha256 }}
+    container:
+      image: ubuntu:26.10
+
+    steps:
+      - name: Show pristine Ubuntu 26.10 container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cat /etc/os-release
+          uname -a
+          printf 'CPUs: %s\n' "$(nproc)"
+          printf 'Architecture: %s\n' "$(dpkg --print-architecture)"
+          df -h /
+
+      - name: Install DEB build prerequisites
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          apt-get -o Acquire::Retries=3 update
+          apt-get -o Acquire::Retries=3 upgrade -y
+          apt-get -o Acquire::Retries=3 install -y --no-install-recommends \
+            build-essential ca-certificates devscripts dpkg-dev equivs fakeroot \
+            file findutils git passwd python3 util-linux
+          apt-get clean
+
+      - name: Check out exact NsCDE commit under test
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.TARGET_REPOSITORY }}
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust GitHub checkout mount inside container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Show NsCDE commit under test
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          git show --no-patch \
+            --format='commit:    %H%nauthor:    %an <%ae>%nauthor date: %aI%ncommitter: %cn <%ce>%ncommit date: %cI%nsubject:   %s' HEAD
+          git status --short --branch
+
+      - name: Test canonical build-log analyzer
+        shell: bash
+        run: |
+          python3 -B -m unittest discover \
+            -s .github/scripts/tests \
+            -p 'test_analyze_build_log.py' \
+            -v
+
+      - name: Simulate a fresh local Git clone for packaging
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          useradd --create-home --shell /bin/bash nscdebuild
+          source_tree=/home/nscdebuild/nscde-code
+          target_sha="$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)"
+          rm -rf "$source_tree"
+          git clone --no-local --no-checkout "$GITHUB_WORKSPACE" "$source_tree"
+          git -C "$source_tree" checkout --detach "$target_sha"
+          seed_tree="$(git -C "$GITHUB_WORKSPACE" rev-parse 'HEAD^{tree}')"
+          clone_tree="$(git -C "$source_tree" rev-parse 'HEAD^{tree}')"
+          printf 'CI seed tree: %s\nlocal clone:  %s\n' "$seed_tree" "$clone_tree"
+          test "$seed_tree" = "$clone_tree"
+          test -z "$(git -C "$source_tree" status --porcelain)"
+          chown -R nscdebuild:nscdebuild "$source_tree"
+          git config --global --add safe.directory "$source_tree"
+          printf 'SOURCE_TREE=%s\n' "$source_tree" >> "$GITHUB_ENV"
+
+      - name: Prepare and inspect Debian packaging tree
+        id: packaging
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test ! -e "$SOURCE_TREE/debian"
+          cp -a "$SOURCE_TREE/pkg/debian" "$SOURCE_TREE/debian"
+          chown -R nscdebuild:nscdebuild "$SOURCE_TREE/debian"
+          test -f "$SOURCE_TREE/debian/control"
+          test -f "$SOURCE_TREE/debian/changelog"
+          test -x "$SOURCE_TREE/debian/rules"
+          diff -qr "$SOURCE_TREE/pkg/debian" "$SOURCE_TREE/debian"
+          product_revision="$(git -C "$SOURCE_TREE" rev-parse HEAD)"
+          packaging_revision="$product_revision"
+          packaging_tree="$(git -C "$SOURCE_TREE" rev-parse 'HEAD:pkg/debian')"
+          test "$product_revision" = "$TARGET_SHA"
+          test "$(git -C "$SOURCE_TREE" cat-file -t "$packaging_tree")" = tree
+          echo '=== exact source and packaging identity ==='
+          printf 'product revision:   %s\n' "$product_revision"
+          printf 'packaging revision: %s\n' "$packaging_revision"
+          printf 'packaging tree:     %s\n' "$packaging_tree"
+          {
+            echo '### Exact source and packaging identity'
+            echo
+            printf -- '- Product revision: `%s`\n' "$product_revision"
+            printf -- '- Packaging revision: `%s` (same repository revision)\n' "$packaging_revision"
+            printf -- '- Packaging tree (`pkg/debian`): `%s`\n' "$packaging_tree"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo '=== package changelog metadata ==='
+          dpkg-parsechangelog -l "$SOURCE_TREE/debian/changelog"
+          echo '=== package stanzas and dependency declarations ==='
+          grep -nE '^(Source|Package|Architecture|Build-Depends|Depends|Recommends|Suggests):' "$SOURCE_TREE/debian/control" || true
+          echo '=== binary packages declared ==='
+          awk '/^Package:/ {print $2}' "$SOURCE_TREE/debian/control"
+          echo '=== packaging files ==='
+          find "$SOURCE_TREE/debian" -maxdepth 2 -type f -printf '%P\n' | LC_ALL=C sort
+
+      - name: Install declared Build-Depends
+        id: builddeps
+        if: ${{ steps.packaging.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cd /tmp
+          mk-build-deps \
+            --install \
+            --remove \
+            --tool 'apt-get -y -o Acquire::Retries=3 --no-install-recommends' \
+            "$SOURCE_TREE/debian/control"
+          dpkg-checkbuilddeps "$SOURCE_TREE/debian/control"
+
+      - name: Snapshot compiler, repositories and DEB toolchain
+        if: ${{ steps.builddeps.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== operating system ==='
+          cat /etc/os-release
+          echo '=== APT sources ==='
+          grep -RhvE '^[[:space:]]*(#|$)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null || true
+          echo '=== compiler ==='
+          gcc --version
+          gcc -v 2>&1
+          echo '=== linker ==='
+          ld --version | head -n 2
+          echo '=== Debian build tools ==='
+          dpkg --version | head -n 2
+          dpkg-buildpackage --version
+          dh --version 2>/dev/null || true
+          make --version | head -n 2
+          autoconf --version | head -n 2 || true
+          automake --version | head -n 2 || true
+          python3 --version
+          echo '=== exact core package versions ==='
+          dpkg-query -W -f='${binary:Package}\t${Version}\n' \
+            build-essential gcc libc6 binutils make autoconf automake debhelper \
+            devscripts dpkg-dev fakeroot python3 ksh93u+m gettext 2>/dev/null || true
+          echo '=== Build-Depends consistency ==='
+          dpkg-checkbuilddeps "$SOURCE_TREE/debian/control"
+          echo '=== relevant build variables ==='
+          printf 'CC=%s\nCXX=%s\nCPPFLAGS=%s\nCFLAGS=%s\nCXXFLAGS=%s\nLDFLAGS=%s\nPATH=%s\n' \
+            "${CC-}" "${CXX-}" "${CPPFLAGS-}" "${CFLAGS-}" "${CXXFLAGS-}" "${LDFLAGS-}" "$PATH"
+
+      - name: Build NsCDE binary packages with log capture
+        id: deb_build
+        if: ${{ steps.builddeps.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          build_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          printf 'DEB build PATH: %s\n' "$build_path"
+          set +e
+          runuser -u nscdebuild -- env \
+            HOME=/home/nscdebuild \
+            PATH="$build_path" \
+            DEBIAN_FRONTEND=noninteractive \
+            bash -lc "cd '$SOURCE_TREE' && dpkg-buildpackage -b -us -uc" \
+            2>&1 | tee "$RUNNER_TEMP/nscde-dpkg-buildpackage.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Analyze NsCDE DEB build log
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 "$GITHUB_WORKSPACE/.github/scripts/analyze-build-log.py" \
+            --log "$RUNNER_TEMP/nscde-dpkg-buildpackage.log" \
+            --label 'NsCDE DEB build / Ubuntu 26.10' \
+            --output-dir "$RUNNER_TEMP/ci-diagnostics/build" \
+            --summary-file "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect and inspect DEB artifacts
+        id: deb_artifacts
+        if: ${{ steps.deb_build.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          artifact_dir="$GITHUB_WORKSPACE/out"
+          test ! -e "$artifact_dir"
+          mkdir "$artifact_dir"
+          find /home/nscdebuild -maxdepth 1 -type f \
+            \( -name 'nscde*.deb' -o -name 'nscde*.ddeb' -o -name 'nscde*.changes' -o -name 'nscde*.buildinfo' \) \
+            -exec cp -v '{}' "$artifact_dir/" ';'
+          shopt -s nullglob
+          packages=("$artifact_dir"/*.deb "$artifact_dir"/*.ddeb)
+          if [[ ! -e "${packages[0]-}" ]]; then
+            echo 'ERROR: package build produced no .deb or .ddeb binary package objects' >&2
+            exit 1
+          fi
+          build_architecture="$(dpkg --print-architecture)"
+          declare -A seen_package_names=()
+          for package in "${packages[@]}"; do
+            package_name="$(dpkg-deb -f "$package" Package)"
+            package_version="$(dpkg-deb -f "$package" Version)"
+            package_architecture="$(dpkg-deb -f "$package" Architecture)"
+            test -n "$package_name"
+            test -n "$package_version"
+            test -n "$package_architecture"
+            if [[ -n "${seen_package_names[$package_name]+x}" ]]; then
+              echo "ERROR: duplicate binary package name produced: $package_name" >&2
+              exit 1
+            fi
+            seen_package_names["$package_name"]=1
+            case "$package_architecture" in
+              "$build_architecture"|all) ;;
+              *) echo "ERROR: unexpected architecture '$package_architecture' for $package_name" >&2; exit 1 ;;
+            esac
+          done
+          mapfile -d '' transported_files < <(
+            find "$artifact_dir" -maxdepth 1 -type f ! -name SHA256SUMS -printf '%f\0' |
+              LC_ALL=C sort -z
+          )
+          test "${#transported_files[@]}" -gt 0
+          (
+            cd "$artifact_dir"
+            sha256sum "${transported_files[@]}"
+          ) > "$artifact_dir/SHA256SUMS"
+          test -s "$artifact_dir/SHA256SUMS"
+          test "$(wc -l < "$artifact_dir/SHA256SUMS")" -eq "${#transported_files[@]}"
+          manifest_sha256="$(sha256sum "$artifact_dir/SHA256SUMS" | awk '{print $1}')"
+          [[ "$manifest_sha256" =~ ^[0-9a-f]{64}$ ]]
+          printf 'manifest_sha256=%s\n' "$manifest_sha256" >> "$GITHUB_OUTPUT"
+          (
+            cd "$artifact_dir"
+            sha256sum --check --strict SHA256SUMS
+          )
+          echo '=== generated artifacts ==='
+          find "$artifact_dir" -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort
+          echo '=== transported object SHA256 manifest ==='
+          cat "$artifact_dir/SHA256SUMS"
+          echo '=== package metadata ==='
+          for package in "${packages[@]}"; do
+            echo
+            echo "--- $package ---"
+            dpkg-deb -f "$package" Package Version Architecture Depends Recommends Suggests
+            dpkg-deb --info "$package" | sed -n '1,80p'
+          done
+          {
+            echo '### Produced package object identities'
+            echo
+            echo 'The following manifest is transported with the packages and must verify before installation:'
+            echo
+            printf -- '- Manifest SHA-256: `%s`\n' "$manifest_sha256"
+            echo
+            echo '```text'
+            cat "$artifact_dir/SHA256SUMS"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload required package transport artifact
+        id: package_upload
+        if: ${{ steps.deb_artifacts.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-ubuntu-26.10-${{ env.TARGET_SHA }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Collect DEB build stage summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          {
+            echo '## Ubuntu 26.10 DEB build result'
+            echo
+            echo '| Stage | Outcome |'
+            echo '|---|---|'
+            printf '| Packaging metadata | `%s` |\n' '${{ steps.packaging.outcome }}'
+            printf '| Build-Depends | `%s` |\n' '${{ steps.builddeps.outcome }}'
+            printf '| DEB build | `%s` |\n' '${{ steps.deb_build.outcome }}'
+            printf '| DEB artifact inspection and SHA-256 manifest | `%s` |\n' '${{ steps.deb_artifacts.outcome }}'
+            printf '| Required package transport upload | `%s` |\n' '${{ steps.package_upload.outcome }}'
+            echo
+            echo 'The packages are built from a clean detached clone of the exact CI commit by an unprivileged build user. Build logs are analyzed for root compiler/linker failures before recursive Make noise.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare optional DEB diagnostic artifact bundle
+        id: diagnostics_prepare
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bundle="$RUNNER_TEMP/ci-diagnostics/raw"
+          mkdir -p "$bundle"
+          test ! -f "$RUNNER_TEMP/nscde-dpkg-buildpackage.log" || cp -a "$RUNNER_TEMP/nscde-dpkg-buildpackage.log" "$bundle/"
+          if test -n "${SOURCE_TREE-}" && test -d "$SOURCE_TREE/debian"; then
+            cp -a "$SOURCE_TREE/debian/control" "$bundle/debian-control" || true
+            cp -a "$SOURCE_TREE/debian/changelog" "$bundle/debian-changelog" || true
+            cp -a "$SOURCE_TREE/debian/rules" "$bundle/debian-rules" || true
+          fi
+          {
+            echo '=== NsCDE commit ==='
+            git -C "$GITHUB_WORKSPACE" show --no-patch --format='%H%n%aI%n%an <%ae>%n%s' HEAD || true
+            echo '=== operating system ==='
+            cat /etc/os-release || true
+            echo '=== APT sources ==='
+            grep -RhvE '^[[:space:]]*(#|$)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null || true
+            echo '=== compiler ==='
+            gcc --version || true
+            echo '=== Debian tools ==='
+            dpkg --version | head -n 2 || true
+            dpkg-buildpackage --version || true
+            echo '=== installed build packages ==='
+            dpkg-query -W -f='${binary:Package}\t${Version}\n' 2>/dev/null | LC_ALL=C sort || true
+            echo '=== allowlisted CI context ==='
+            printf 'GITHUB_WORKFLOW=%s\n' "$GITHUB_WORKFLOW"
+            printf 'GITHUB_RUN_ID=%s\n' "$GITHUB_RUN_ID"
+            printf 'GITHUB_RUN_ATTEMPT=%s\n' "$GITHUB_RUN_ATTEMPT"
+            printf 'GITHUB_EVENT_NAME=%s\n' "$GITHUB_EVENT_NAME"
+            printf 'GITHUB_REPOSITORY=%s\n' "$GITHUB_REPOSITORY"
+            printf 'GITHUB_REF=%s\n' "$GITHUB_REF"
+            printf 'GITHUB_SHA=%s\n' "$GITHUB_SHA"
+            printf 'TARGET_REPOSITORY=%s\n' "$TARGET_REPOSITORY"
+            printf 'TARGET_SHA=%s\n' "$TARGET_SHA"
+            printf 'RUNNER_OS=%s\n' "$RUNNER_OS"
+            printf 'RUNNER_ARCH=%s\n' "$RUNNER_ARCH"
+          } > "$bundle/environment.txt"
+
+      - name: Upload optional DEB diagnostic artifact bundle
+        id: diagnostics_upload
+        if: ${{ always() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-ubuntu-26.10-build-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/ci-diagnostics
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 6
+
+      - name: Final DEB package-construction gate
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          packaging='${{ steps.packaging.outcome }}'
+          builddeps='${{ steps.builddeps.outcome }}'
+          build='${{ steps.deb_build.outcome }}'
+          artifacts='${{ steps.deb_artifacts.outcome }}'
+          package_upload='${{ steps.package_upload.outcome }}'
+          diagnostics_prepare='${{ steps.diagnostics_prepare.outcome }}'
+          diagnostics_upload='${{ steps.diagnostics_upload.outcome }}'
+          printf 'packaging=%s builddeps=%s build=%s artifacts=%s package_upload=%s diagnostics_prepare=%s diagnostics_upload=%s\n' \
+            "$packaging" "$builddeps" "$build" "$artifacts" "$package_upload" "$diagnostics_prepare" "$diagnostics_upload"
+          test "$packaging" = success
+          test "$builddeps" = success
+          test "$build" = success
+          test "$artifacts" = success
+          test "$package_upload" = success
+
+  test-install:
+    name: Install and diagnose NsCDE DEBs on clean Ubuntu 26.10
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: ubuntu:26.10
+
+    steps:
+      - name: Show pristine Ubuntu 26.10 runtime container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cat /etc/os-release
+          uname -a
+          printf 'Architecture: %s\n' "$(dpkg --print-architecture)"
+
+      - name: Install runtime diagnostic prerequisites
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          apt-get -o Acquire::Retries=3 update
+          apt-get -o Acquire::Retries=3 install -y --no-install-recommends ca-certificates file findutils
+          apt-get clean
+
+      - name: Download required package transport artifact
+        id: package_download
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: nscde-ubuntu-26.10-${{ env.TARGET_SHA }}
+          path: artifact
+
+      - name: Verify transported package object identities
+        id: package_identity
+        if: ${{ steps.package_download.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          manifest=artifact/SHA256SUMS
+          test -s "$manifest"
+          expected_manifest_sha256='${{ needs.build.outputs.package_manifest_sha256 }}'
+          [[ "$expected_manifest_sha256" =~ ^[0-9a-f]{64}$ ]]
+          actual_manifest_sha256="$(sha256sum "$manifest" | awk '{print $1}')"
+          test "$actual_manifest_sha256" = "$expected_manifest_sha256"
+          expected_files="$RUNNER_TEMP/transport-expected-files.txt"
+          actual_files="$RUNNER_TEMP/transport-actual-files.txt"
+          sed 's/^[0-9a-f]\{64\}  //' "$manifest" | LC_ALL=C sort > "$expected_files"
+          find artifact -maxdepth 1 -type f ! -name SHA256SUMS -printf '%f\n' |
+            LC_ALL=C sort > "$actual_files"
+          test -s "$expected_files"
+          test -s "$actual_files"
+          test "$(wc -l < "$manifest")" -eq "$(wc -l < "$expected_files")"
+          diff -u "$expected_files" "$actual_files"
+          (
+            cd artifact
+            sha256sum --check --strict SHA256SUMS
+          )
+          echo '=== verified transported object SHA256 manifest ==='
+          cat "$manifest"
+          {
+            echo '### Verified package transport identity'
+            echo
+            printf -- '- Producer source revision: `%s`\n' "$TARGET_SHA"
+            printf -- '- Verified manifest SHA-256: `%s`\n' "$actual_manifest_sha256"
+            echo '- The downloaded file set exactly matches the producer manifest.'
+            echo '- Every transported object passed SHA-256 verification before package inspection or installation.'
+            echo
+            echo '```text'
+            cat "$manifest"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Inspect downloaded packages
+        id: downloaded
+        if: ${{ steps.package_identity.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== downloaded files ==='
+          find artifact -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort
+          shopt -s nullglob
+          packages=(artifact/*.deb artifact/*.ddeb)
+          if [[ ! -e "${packages[0]-}" ]]; then
+            echo 'ERROR: transported artifact contains no .deb or .ddeb binary package objects' >&2
+            exit 1
+          fi
+          consumer_architecture="$(dpkg --print-architecture)"
+          declare -A seen_package_names=()
+          for package in "${packages[@]}"; do
+            package_name="$(dpkg-deb -f "$package" Package)"
+            package_version="$(dpkg-deb -f "$package" Version)"
+            package_architecture="$(dpkg-deb -f "$package" Architecture)"
+            test -n "$package_name"
+            test -n "$package_version"
+            test -n "$package_architecture"
+            if [[ -n "${seen_package_names[$package_name]+x}" ]]; then
+              echo "ERROR: duplicate transported binary package name: $package_name" >&2
+              exit 1
+            fi
+            seen_package_names["$package_name"]=1
+            case "$package_architecture" in
+              "$consumer_architecture"|all) ;;
+              *) echo "ERROR: unexpected architecture '$package_architecture' for $package_name" >&2; exit 1 ;;
+            esac
+            echo
+            echo "--- $package ---"
+            dpkg-deb -f "$package" Package Version Architecture Depends Recommends Suggests
+          done
+
+      - name: Verify clean pre-install state
+        id: clean_state
+        if: ${{ steps.downloaded.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          shopt -s nullglob
+          debs=(artifact/*.deb)
+          if [[ ! -e "${debs[0]-}" ]]; then
+            echo 'ERROR: no installable .deb packages were transported' >&2
+            exit 1
+          fi
+          for package_file in "${debs[@]}"; do
+            package="$(dpkg-deb -f "$package_file" Package)"
+            test -n "$package"
+            if dpkg-query -W -f='${db:Status-Status}\n' "$package" 2>/dev/null | grep -qx installed; then
+              echo "ERROR: $package is already installed in the clean runtime container" >&2
+              exit 1
+            fi
+          done
+
+      - name: Require complete package payload installation
+        id: payload_policy
+        if: ${{ steps.clean_state.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          echo '=== active dpkg path exclusions before package installation ==='
+          shopt -s nullglob
+          dpkg_configs=(/etc/dpkg/dpkg.cfg /etc/dpkg/dpkg.cfg.d/*)
+          path_exclude_count=0
+          for config in "${dpkg_configs[@]}"; do
+            test -f "$config" || continue
+            matches="$(grep -nE '^[[:space:]]*path-exclude([[:space:]]*=[[:space:]]*|[[:space:]]+)' "$config" || true)"
+            test -n "$matches" || continue
+            printf -- '--- %s ---\n%s\n' "$config" "$matches"
+            match_count="$(printf '%s\n' "$matches" | wc -l)"
+            ((path_exclude_count += match_count))
+            sed -Ei '/^[[:space:]]*path-exclude([[:space:]]*=[[:space:]]*|[[:space:]]+)/d' "$config"
+          done
+          if grep -RnsE '^[[:space:]]*path-exclude([[:space:]]*=[[:space:]]*|[[:space:]]+)' \
+            /etc/dpkg/dpkg.cfg /etc/dpkg/dpkg.cfg.d; then
+            echo 'ERROR: active dpkg path exclusions remain' >&2
+            exit 1
+          fi
+          printf 'Disabled dpkg path-exclude directives: %d\n' "$path_exclude_count"
+          {
+            echo '### Complete package payload policy'
+            echo
+            printf -- '- Disabled active `dpkg` path-exclude directives: **%d**\n' "$path_exclude_count"
+            echo '- NsCDE packages will be installed without container image payload exclusions before strict manifest verification.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Install generated DEBs with log capture
+        id: install
+        if: ${{ steps.payload_policy.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          shopt -s nullglob
+          debs=(artifact/*.deb)
+          if [[ ! -e "${debs[0]-}" ]]; then
+            echo 'ERROR: no installable .deb packages were transported' >&2
+            exit 1
+          fi
+          install_debs=()
+          for package in "${debs[@]}"; do install_debs+=("$(readlink -f "$package")"); done
+          set +e
+          {
+            apt-get -o Acquire::Retries=3 update
+            apt-get -o Acquire::Retries=3 install -y --no-install-recommends "${install_debs[@]}"
+          } 2>&1 | tee "$RUNNER_TEMP/nscde-deb-install.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Verify installed DEB packages
+        id: package_verify
+        if: ${{ steps.install.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          shopt -s nullglob
+          debs=(artifact/*.deb)
+          if [[ ! -e "${debs[0]-}" ]]; then
+            echo 'ERROR: no installable .deb packages were transported' >&2
+            exit 1
+          fi
+          package_names=()
+          declare -A seen_package_names=()
+          for package_file in "${debs[@]}"; do
+            package_name="$(dpkg-deb -f "$package_file" Package)"
+            test -n "$package_name"
+            if [[ -n "${seen_package_names[$package_name]+x}" ]]; then
+              echo "ERROR: duplicate installable binary package name: $package_name" >&2
+              exit 1
+            fi
+            seen_package_names["$package_name"]=1
+            package_names+=("$package_name")
+          done
+          dpkg-query -W -f='${binary:Package}\t${Version}\t${Architecture}\t${db:Status-Status}\n' "${package_names[@]}"
+          apt-get check
+          dpkg --audit
+          verification_log="$RUNNER_TEMP/nscde-dpkg-verify.txt"
+          if ! dpkg -V "${package_names[@]}" > "$verification_log" 2>&1; then
+            echo 'ERROR: dpkg package verification returned a failure status' >&2
+            cat "$verification_log" >&2
+            exit 1
+          fi
+          if test -s "$verification_log"; then
+            echo 'ERROR: dpkg package verification reported missing or modified payload files' >&2
+            cat "$verification_log" >&2
+            exit 1
+          fi
+          echo 'dpkg package verification reported no missing or modified payload files.'
+
+      - name: Verify installed NsCDE tree and runtime linkage
+        id: runtime_verify
+        if: ${{ steps.package_verify.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          required_paths=(/usr/bin/nscde /usr/bin/nscde_fvwmclnt /usr/share/xsessions/nscde.desktop /usr/share/NsCDE)
+          for path in "${required_paths[@]}"; do
+            test -e "$path" || { echo "ERROR: missing installed path: $path" >&2; exit 1; }
+            ls -ld "$path"
+          done
+          package_paths="$RUNNER_TEMP/nscde-package-paths.txt"
+          : > "$package_paths"
+          shopt -s nullglob
+          debs=(artifact/*.deb)
+          if [[ ! -e "${debs[0]-}" ]]; then
+            echo 'ERROR: no installable .deb packages were transported' >&2
+            exit 1
+          fi
+          for package_file in "${debs[@]}"; do
+            package="$(dpkg-deb -f "$package_file" Package)"
+            test -n "$package"
+            dpkg -L "$package" >> "$package_paths"
+          done
+          LC_ALL=C sort -u -o "$package_paths" "$package_paths"
+          elf_count=0
+          while IFS= read -r candidate; do
+            test -f "$candidate" || continue
+            file -b "$candidate" | grep -q '^ELF ' || continue
+            ((elf_count += 1))
+            dependencies="$(ldd "$candidate" 2>&1 || true)"
+            if grep -q '=> not found' <<<"$dependencies"; then
+              echo "ERROR: unresolved runtime dependency: $candidate" >&2
+              printf '%s\n' "$dependencies" >&2
+              exit 1
+            fi
+          done < "$package_paths"
+          test "$elf_count" -gt 0
+          broken_links=0
+          while IFS= read -r candidate; do
+            test -L "$candidate" || continue
+            if ! test -e "$candidate"; then
+              printf 'ERROR: broken link: %s -> %s\n' "$candidate" "$(readlink "$candidate")" >&2
+              broken_links=1
+            fi
+          done < "$package_paths"
+          test "$broken_links" -eq 0
+          printf 'ELF files checked: %d\n' "$elf_count"
+
+      - name: Verify resolved NsCDE runtime provider provenance
+        id: providers
+        if: ${{ steps.package_verify.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== package dependency fields ==='
+          shopt -s nullglob
+          debs=(artifact/*.deb)
+          if [[ ! -e "${debs[0]-}" ]]; then
+            echo 'ERROR: no installable .deb packages were transported' >&2
+            exit 1
+          fi
+          package_names=()
+          for package_file in "${debs[@]}"; do
+            package_names+=("$(dpkg-deb -f "$package_file" Package)")
+          done
+          for package in "${package_names[@]}"; do
+            echo
+            echo "--- $package ---"
+            dpkg-query -W -f='Depends: ${Depends}\nRecommends: ${Recommends}\nSuggests: ${Suggests}\n' "$package"
+          done
+          echo '=== installed dependency graph ==='
+          apt-cache depends --installed "${package_names[@]}"
+          echo '=== positive FVWM runtime provider provenance ==='
+          selected_provider=
+          for candidate in fvwm3 fvwm2 fvwm; do
+            if command -v "$candidate" >/dev/null 2>&1; then
+              selected_provider="$candidate"
+              break
+            fi
+          done
+          test -n "$selected_provider"
+          provider_path="$(command -v "$selected_provider")"
+          provider_realpath="$(readlink -f "$provider_path")"
+          test -x "$provider_realpath"
+          if ownership="$(dpkg-query -S "$provider_path" 2>/dev/null)"; then
+            :
+          elif ownership="$(dpkg-query -S "$provider_realpath" 2>/dev/null)"; then
+            :
+          else
+            echo "ERROR: no package owns the selected FVWM provider: $provider_path" >&2
+            exit 1
+          fi
+          provider_package="$(printf '%s\n' "$ownership" | awk -F': ' 'NR == 1 {print $1}')"
+          test -n "$provider_package"
+          provider_status="$(dpkg-query -W -f='${db:Status-Status}' "$provider_package")"
+          provider_version="$(dpkg-query -W -f='${Version}' "$provider_package")"
+          test "$provider_status" = installed
+          printf 'selected command: %s\n' "$selected_provider"
+          printf 'resolved path:    %s\n' "$provider_realpath"
+          printf 'owning package:   %s\n' "$provider_package"
+          printf 'package version:  %s\n' "$provider_version"
+          {
+            echo '### Positive FVWM runtime provider provenance'
+            echo
+            printf -- '- Selected command: `%s`\n' "$selected_provider"
+            printf -- '- Resolved executable: `%s`\n' "$provider_realpath"
+            printf -- '- Owning package: `%s`\n' "$provider_package"
+            printf -- '- Package version: `%s`\n' "$provider_version"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect DEB installation stage summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          {
+            echo '## Ubuntu 26.10 DEB clean-install result'
+            echo
+            echo '| Stage | Outcome |'
+            echo '|---|---|'
+            printf '| Required package transport download | `%s` |\n' '${{ steps.package_download.outcome }}'
+            printf '| SHA-256 object identity verification | `%s` |\n' '${{ steps.package_identity.outcome }}'
+            printf '| Downloaded artifact inspection | `%s` |\n' '${{ steps.downloaded.outcome }}'
+            printf '| Clean pre-install state | `%s` |\n' '${{ steps.clean_state.outcome }}'
+            printf '| Complete payload policy | `%s` |\n' '${{ steps.payload_policy.outcome }}'
+            printf '| Package installation | `%s` |\n' '${{ steps.install.outcome }}'
+            printf '| dpkg/APT verification | `%s` |\n' '${{ steps.package_verify.outcome }}'
+            printf '| Installed tree / ELF linkage | `%s` |\n' '${{ steps.runtime_verify.outcome }}'
+            printf '| Runtime provider provenance | `%s` |\n' '${{ steps.providers.outcome }}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare optional installation diagnostic artifact bundle
+        id: install_diagnostics_prepare
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bundle="$RUNNER_TEMP/ci-diagnostics/install"
+          mkdir -p "$bundle"
+          test ! -f "$RUNNER_TEMP/nscde-deb-install.log" || cp -a "$RUNNER_TEMP/nscde-deb-install.log" "$bundle/"
+          test ! -f "$RUNNER_TEMP/nscde-dpkg-verify.txt" || cp -a "$RUNNER_TEMP/nscde-dpkg-verify.txt" "$bundle/"
+          test ! -f "$RUNNER_TEMP/nscde-package-paths.txt" || cp -a "$RUNNER_TEMP/nscde-package-paths.txt" "$bundle/"
+          {
+            echo '=== operating system ==='
+            cat /etc/os-release || true
+            echo '=== installed NsCDE packages ==='
+            shopt -s nullglob
+            debs=(artifact/*.deb)
+            package_names=()
+            for package_file in "${debs[@]}"; do
+              test -e "$package_file" || continue
+              package_names+=("$(dpkg-deb -f "$package_file" Package)")
+            done
+            if [[ -n "${package_names[0]-}" ]]; then
+              dpkg-query -W -f='${binary:Package}\t${Version}\t${Architecture}\t${db:Status-Status}\n' "${package_names[@]}" 2>/dev/null || true
+            fi
+            echo '=== dependency consistency ==='
+            apt-get check || true
+            echo '=== dpkg audit ==='
+            dpkg --audit || true
+            echo '=== package ownership ==='
+            dpkg -S /usr/bin/nscde /usr/bin/nscde_fvwmclnt /usr/share/xsessions/nscde.desktop 2>/dev/null || true
+            echo '=== allowlisted CI context ==='
+            printf 'GITHUB_WORKFLOW=%s\n' "$GITHUB_WORKFLOW"
+            printf 'GITHUB_RUN_ID=%s\n' "$GITHUB_RUN_ID"
+            printf 'GITHUB_RUN_ATTEMPT=%s\n' "$GITHUB_RUN_ATTEMPT"
+            printf 'GITHUB_EVENT_NAME=%s\n' "$GITHUB_EVENT_NAME"
+            printf 'GITHUB_REPOSITORY=%s\n' "$GITHUB_REPOSITORY"
+            printf 'GITHUB_REF=%s\n' "$GITHUB_REF"
+            printf 'GITHUB_SHA=%s\n' "$GITHUB_SHA"
+            printf 'TARGET_REPOSITORY=%s\n' "$TARGET_REPOSITORY"
+            printf 'TARGET_SHA=%s\n' "$TARGET_SHA"
+            printf 'RUNNER_OS=%s\n' "$RUNNER_OS"
+            printf 'RUNNER_ARCH=%s\n' "$RUNNER_ARCH"
+          } > "$bundle/environment.txt"
+
+      - name: Upload optional installation diagnostic artifact bundle
+        id: install_diagnostics_upload
+        if: ${{ always() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-ubuntu-26.10-install-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/ci-diagnostics
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 6
+
+      - name: Final clean package-installation gate
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          package_download='${{ steps.package_download.outcome }}'
+          package_identity='${{ steps.package_identity.outcome }}'
+          downloaded='${{ steps.downloaded.outcome }}'
+          clean='${{ steps.clean_state.outcome }}'
+          payload_policy='${{ steps.payload_policy.outcome }}'
+          install='${{ steps.install.outcome }}'
+          package_verify='${{ steps.package_verify.outcome }}'
+          runtime_verify='${{ steps.runtime_verify.outcome }}'
+          providers='${{ steps.providers.outcome }}'
+          diagnostics_prepare='${{ steps.install_diagnostics_prepare.outcome }}'
+          diagnostics_upload='${{ steps.install_diagnostics_upload.outcome }}'
+          printf 'package_download=%s package_identity=%s downloaded=%s clean=%s payload_policy=%s install=%s package_verify=%s runtime_verify=%s providers=%s diagnostics_prepare=%s diagnostics_upload=%s\n' \
+            "$package_download" "$package_identity" "$downloaded" "$clean" "$payload_policy" "$install" "$package_verify" "$runtime_verify" "$providers" "$diagnostics_prepare" "$diagnostics_upload"
+          test "$package_download" = success
+          test "$package_identity" = success
+          test "$downloaded" = success
+          test "$clean" = success
+          test "$payload_policy" = success
+          test "$install" = success
+          test "$package_verify" = success
+          test "$runtime_verify" = success
+          test "$providers" = success
