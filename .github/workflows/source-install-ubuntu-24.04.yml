@@ -1,0 +1,495 @@
+name: NsCDE source install CI - Ubuntu 24.04
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TARGET_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+  TARGET_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+  DEBIAN_FRONTEND: noninteractive
+
+concurrency:
+  group: nscde-source-install-ubuntu-24.04-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-install:
+    name: Build, install and diagnose NsCDE source on Ubuntu 24.04
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: ubuntu:24.04
+
+    steps:
+      - name: Show pristine Ubuntu 24.04 container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cat /etc/os-release
+          uname -a
+          printf 'CPUs: %s\n' "$(nproc)"
+          printf 'Architecture: %s\n' "$(dpkg --print-architecture)"
+          df -h /
+
+      - name: Install source-build and runtime prerequisites
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          apt-get -o Acquire::Retries=3 update
+          apt-get -o Acquire::Retries=3 upgrade -y
+          apt-get -o Acquire::Retries=3 install -y --no-install-recommends \
+            autoconf \
+            automake \
+            binutils \
+            build-essential \
+            ca-certificates \
+            dunst \
+            file \
+            findutils \
+            fonts-dejavu-core \
+            fvwm \
+            fvwm-icons \
+            gettext \
+            git \
+            gkrellm \
+            imagemagick \
+            ksh \
+            libfile-mimeinfo-perl \
+            libstroke0 \
+            libx11-dev \
+            libxext-dev \
+            libxpm-dev \
+            passwd \
+            python3 \
+            python3-psutil \
+            python3-pyqt5 \
+            python3-xdg \
+            python3-yaml \
+            qt5-style-plugins \
+            qt5ct \
+            rofi \
+            stalonetray \
+            util-linux \
+            x11-utils \
+            x11-xserver-utils \
+            xclip \
+            xdg-utils \
+            xdotool \
+            xinit \
+            xscreensaver \
+            xsettingsd \
+            xterm
+          apt-get clean
+
+      - name: Check out exact NsCDE commit under test
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.TARGET_REPOSITORY }}
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust GitHub checkout mount inside container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Show NsCDE commit under test
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          git show --no-patch \
+            --format='commit:    %H%nauthor:    %an <%ae>%nauthor date: %aI%ncommitter: %cn <%ce>%ncommit date: %cI%nsubject:   %s' \
+            HEAD
+          git status --short --branch
+
+      - name: Test canonical build-log analyzer
+        shell: bash
+        run: |
+          python3 -B -m unittest discover \
+            -s .github/scripts/tests \
+            -p 'test_analyze_build_log.py' \
+            -v
+
+      - name: Simulate a fresh local Git clone for source installation
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          useradd --create-home --shell /bin/bash nscdebuild
+          source_tree=/home/nscdebuild/nscde-code
+          target_sha="$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)"
+          rm -rf "$source_tree"
+          git clone --no-local --no-checkout "$GITHUB_WORKSPACE" "$source_tree"
+          git -C "$source_tree" checkout --detach "$target_sha"
+          seed_tree="$(git -C "$GITHUB_WORKSPACE" rev-parse 'HEAD^{tree}')"
+          clone_tree="$(git -C "$source_tree" rev-parse 'HEAD^{tree}')"
+          printf 'CI seed tree: %s\nlocal clone:  %s\n' "$seed_tree" "$clone_tree"
+          test "$seed_tree" = "$clone_tree"
+          test "$(git -C "$source_tree" rev-parse HEAD)" = "$TARGET_SHA"
+          test -z "$(git -C "$source_tree" status --porcelain)"
+          chown -R nscdebuild:nscdebuild "$source_tree"
+          git config --global --add safe.directory "$source_tree"
+          printf 'SOURCE_TREE=%s\n' "$source_tree" >> "$GITHUB_ENV"
+
+      - name: Verify source-build environment
+        id: environment
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -x "$SOURCE_TREE/configure"
+          for command_name in gcc make autoconf automake ksh fvwm xdotool convert xterm gettext msgfmt; do
+            command_path="$(command -v "$command_name")"
+            printf '%s -> %s\n' "$command_name" "$command_path"
+            dpkg-query -S "$command_path" 2>/dev/null || true
+          done
+          python3 - <<'PY'
+          import psutil
+          import yaml
+          import xdg
+          import PyQt5
+          print("Python runtime modules are available")
+          PY
+
+      - name: Snapshot compiler, repositories and source-build toolchain
+        if: ${{ steps.environment.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== operating system ==='
+          cat /etc/os-release
+          echo '=== APT sources ==='
+          grep -RhvE '^[[:space:]]*(#|$)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null || true
+          echo '=== compiler ==='
+          gcc --version
+          gcc -v 2>&1
+          echo '=== linker ==='
+          ld --version | head -n 2
+          echo '=== build tools ==='
+          make --version | head -n 2
+          autoconf --version | head -n 2
+          automake --version | head -n 2
+          gettext --version | head -n 2
+          python3 --version
+          echo '=== exact source-build/runtime package versions ==='
+          dpkg-query -W -f='${binary:Package}\t${Version}\n' \
+            autoconf automake binutils build-essential dunst fonts-dejavu-core \
+            fvwm fvwm-icons gettext gkrellm imagemagick ksh libfile-mimeinfo-perl \
+            libstroke0 libx11-dev libxext-dev libxpm-dev python3 python3-psutil \
+            python3-pyqt5 python3-xdg python3-yaml qt5-style-plugins qt5ct rofi \
+            stalonetray x11-utils x11-xserver-utils xclip xdg-utils xdotool xinit \
+            xscreensaver xsettingsd xterm 2>/dev/null || true
+          echo '=== relevant build variables ==='
+          printf 'CC=%s\nCXX=%s\nCPPFLAGS=%s\nCFLAGS=%s\nCXXFLAGS=%s\nLDFLAGS=%s\nPATH=%s\n' \
+            "${CC-}" "${CXX-}" "${CPPFLAGS-}" "${CFLAGS-}" "${CXXFLAGS-}" "${LDFLAGS-}" "$PATH"
+
+      - name: Configure NsCDE with maintainer default prefix
+        id: configure
+        if: ${{ steps.environment.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          build_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          set +e
+          runuser -u nscdebuild -- env HOME=/home/nscdebuild PATH="$build_path" \
+            bash -lc "cd '$SOURCE_TREE' && ./configure" \
+            2>&1 | tee "$RUNNER_TEMP/nscde-configure.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          if (( status != 0 )); then
+            exit "$status"
+          fi
+          test -f "$SOURCE_TREE/Makefile"
+          test -f "$SOURCE_TREE/config.status"
+          echo '=== configured installation paths ==='
+          grep -E '^(prefix|exec_prefix|bindir|libdir|libexecdir|datarootdir|sysconfdir|docdir) = ' "$SOURCE_TREE/Makefile" || true
+          grep -Fqx 'prefix = /usr/local' "$SOURCE_TREE/Makefile"
+          grep -Fqx 'exec_prefix = ${prefix}' "$SOURCE_TREE/Makefile"
+
+      - name: Analyze NsCDE configure log
+        id: configure_analyzer
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 "$GITHUB_WORKSPACE/.github/scripts/analyze-build-log.py" \
+            --log "$RUNNER_TEMP/nscde-configure.log" \
+            --label 'NsCDE configure / Ubuntu 24.04 source install' \
+            --output-dir "$RUNNER_TEMP/ci-diagnostics/configure" \
+            --summary-file "$GITHUB_STEP_SUMMARY"
+
+      - name: Build NsCDE from source with log capture
+        id: build
+        if: ${{ steps.configure.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          build_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          set +e
+          runuser -u nscdebuild -- env HOME=/home/nscdebuild PATH="$build_path" \
+            bash -lc "cd '$SOURCE_TREE' && make -k -j2 --output-sync=target V=1" \
+            2>&1 | tee "$RUNNER_TEMP/nscde-make.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Analyze NsCDE source build log
+        id: build_analyzer
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 "$GITHUB_WORKSPACE/.github/scripts/analyze-build-log.py" \
+            --log "$RUNNER_TEMP/nscde-make.log" \
+            --label 'NsCDE make build / Ubuntu 24.04 source install' \
+            --output-dir "$RUNNER_TEMP/ci-diagnostics/build" \
+            --summary-file "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify clean default installation prefix
+        id: clean_install
+        if: ${{ steps.build.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test ! -e /usr/local/bin/nscde
+          test ! -e /usr/local/bin/nscde_fvwmclnt
+          find /usr/local -xdev -mindepth 1 -printf '%P\n' | LC_ALL=C sort -u \
+            > "$RUNNER_TEMP/usr-local-before.txt"
+
+      - name: Install NsCDE using upstream make install
+        id: install
+        if: ${{ steps.clean_install.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          set +e
+          make -C "$SOURCE_TREE" install 2>&1 | tee "$RUNNER_TEMP/nscde-make-install.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Verify installed NsCDE tree and runtime linkage
+        id: runtime_verify
+        if: ${{ steps.install.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -x /usr/local/bin/nscde
+          test -x /usr/local/bin/nscde_fvwmclnt
+          find /usr/local -xdev -mindepth 1 -printf '%P\n' | LC_ALL=C sort -u \
+            > "$RUNNER_TEMP/usr-local-after.txt"
+          comm -13 "$RUNNER_TEMP/usr-local-before.txt" "$RUNNER_TEMP/usr-local-after.txt" \
+            > "$RUNNER_TEMP/nscde-installed-paths.txt"
+          test -s "$RUNNER_TEMP/nscde-installed-paths.txt"
+          grep -Fxq 'bin/nscde' "$RUNNER_TEMP/nscde-installed-paths.txt"
+          grep -Fxq 'bin/nscde_fvwmclnt' "$RUNNER_TEMP/nscde-installed-paths.txt"
+          if ! grep -Eq '(^|/)NsCDE(/|$)' "$RUNNER_TEMP/nscde-installed-paths.txt"; then
+            echo 'ERROR: no NsCDE installation payload was added below /usr/local' >&2
+            exit 1
+          fi
+          echo '=== newly installed /usr/local payload ==='
+          cat "$RUNNER_TEMP/nscde-installed-paths.txt"
+          echo '=== required launchers ==='
+          ls -l /usr/local/bin/nscde /usr/local/bin/nscde_fvwmclnt
+          echo '=== ELF runtime dependency scan ==='
+          : > "$RUNNER_TEMP/nscde-ldd.txt"
+          elf_count=0
+          while IFS= read -r relative_path; do
+            test -n "$relative_path" || continue
+            path="/usr/local/$relative_path"
+            if [[ -L "$path" && ! -e "$path" ]]; then
+              echo "ERROR: broken installed symlink: $path" >&2
+              exit 1
+            fi
+            if [[ -f "$path" ]] && file -b "$path" | grep -q '^ELF '; then
+              ((elf_count += 1))
+              printf '\n--- %s ---\n' "$path" | tee -a "$RUNNER_TEMP/nscde-ldd.txt"
+              dependencies="$(ldd "$path" 2>&1 || true)"
+              printf '%s\n' "$dependencies" | tee -a "$RUNNER_TEMP/nscde-ldd.txt"
+              if grep -q '=> not found' <<<"$dependencies"; then
+                echo "ERROR: unresolved runtime library in $path" >&2
+                exit 1
+              fi
+            fi
+          done < "$RUNNER_TEMP/nscde-installed-paths.txt"
+          if (( elf_count == 0 )); then
+            echo 'ERROR: no installed ELF objects were examined' >&2
+            exit 1
+          fi
+          printf 'ELF files checked: %d\n' "$elf_count"
+
+      - name: Verify resolved source-install runtime providers
+        id: providers
+        if: ${{ steps.runtime_verify.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== installed launcher types ==='
+          file /usr/local/bin/nscde /usr/local/bin/nscde_fvwmclnt
+          echo '=== positive FVWM runtime provider provenance ==='
+          selected_provider=
+          for candidate in fvwm3 fvwm2 fvwm; do
+            if command -v "$candidate" >/dev/null 2>&1; then selected_provider="$candidate"; break; fi
+          done
+          test -n "$selected_provider"
+          provider_path="$(command -v "$selected_provider")"
+          provider_realpath="$(readlink -f "$provider_path")"
+          test -x "$provider_realpath"
+          if ownership="$(dpkg-query -S "$provider_path" 2>/dev/null)"; then
+            :
+          elif ownership="$(dpkg-query -S "$provider_realpath" 2>/dev/null)"; then
+            :
+          else
+            echo "ERROR: no package owns the selected FVWM provider: $provider_path" >&2
+            exit 1
+          fi
+          provider_package="$(printf '%s\n' "$ownership" | awk -F': ' 'NR == 1 {print $1}')"
+          test -n "$provider_package"
+          provider_status="$(dpkg-query -W -f='${db:Status-Status}' "$provider_package")"
+          provider_version="$(dpkg-query -W -f='${Version}' "$provider_package")"
+          test "$provider_status" = installed
+          printf 'selected command: %s\nresolved path:    %s\nowning package:   %s\npackage version:  %s\n' \
+            "$selected_provider" "$provider_realpath" "$provider_package" "$provider_version"
+          {
+            echo '### Positive FVWM runtime provider provenance'
+            echo
+            printf -- '- Selected command: `%s`\n' "$selected_provider"
+            printf -- '- Resolved executable: `%s`\n' "$provider_realpath"
+            printf -- '- Owning package: `%s`\n' "$provider_package"
+            printf -- '- Package version: `%s`\n' "$provider_version"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo '=== key runtime command providers ==='
+          for command_name in fvwm ksh python3 convert xdotool xterm dunst stalonetray xsettingsd xclip rofi xscreensaver; do
+            if command -v "$command_name" >/dev/null 2>&1; then
+              command_path="$(command -v "$command_name")"
+              printf '%s -> %s -> ' "$command_name" "$command_path"
+              dpkg-query -S "$command_path" 2>/dev/null || echo '(provider query unavailable)'
+            else
+              printf '%s -> (not found)\n' "$command_name"
+            fi
+          done
+
+      - name: Collect source-install stage summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          {
+            echo '## Ubuntu 24.04 source-install result'
+            echo
+            echo '| Stage | Outcome |'
+            echo '|---|---|'
+            printf '| Source-build environment | `%s` |\n' '${{ steps.environment.outcome }}'
+            printf '| Default-prefix configure | `%s` |\n' '${{ steps.configure.outcome }}'
+            printf '| Configure analyzer | `%s` |\n' '${{ steps.configure_analyzer.outcome }}'
+            printf '| Source build | `%s` |\n' '${{ steps.build.outcome }}'
+            printf '| Build analyzer | `%s` |\n' '${{ steps.build_analyzer.outcome }}'
+            printf '| Clean `/usr/local` pre-install state | `%s` |\n' '${{ steps.clean_install.outcome }}'
+            printf '| Upstream `make install` | `%s` |\n' '${{ steps.install.outcome }}'
+            printf '| Installed tree/runtime linkage | `%s` |\n' '${{ steps.runtime_verify.outcome }}'
+            printf '| Runtime provider provenance | `%s` |\n' '${{ steps.providers.outcome }}'
+            echo
+            echo 'The workflow builds a clean detached clone of the exact CI commit as an unprivileged user, uses `make -k -j2 --output-sync=target V=1` for readable diagnostics, keeps the maintainer default `/usr/local` prefix, and performs the real upstream `make install` into a pristine Ubuntu container.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare optional source-install diagnostic artifact bundle
+        id: diagnostics_prepare
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bundle="$RUNNER_TEMP/ci-diagnostics/raw"
+          mkdir -p "$bundle"
+          for path in \
+            "$RUNNER_TEMP/nscde-configure.log" \
+            "$RUNNER_TEMP/nscde-make.log" \
+            "$RUNNER_TEMP/nscde-make-install.log" \
+            "$RUNNER_TEMP/usr-local-before.txt" \
+            "$RUNNER_TEMP/usr-local-after.txt" \
+            "$RUNNER_TEMP/nscde-installed-paths.txt" \
+            "$RUNNER_TEMP/nscde-ldd.txt"; do
+            test ! -f "$path" || cp -a "$path" "$bundle/"
+          done
+          if test -n "${SOURCE_TREE-}" && test -d "$SOURCE_TREE"; then
+            test ! -f "$SOURCE_TREE/config.log" || cp -a "$SOURCE_TREE/config.log" "$bundle/"
+            test ! -f "$SOURCE_TREE/config.status" || cp -a "$SOURCE_TREE/config.status" "$bundle/"
+            test ! -f "$SOURCE_TREE/Makefile" || cp -a "$SOURCE_TREE/Makefile" "$bundle/generated-Makefile"
+          fi
+          {
+            echo '=== NsCDE commit ==='
+            git -C "$GITHUB_WORKSPACE" show --no-patch --format='%H%n%aI%n%an <%ae>%n%s' HEAD || true
+            echo '=== operating system ==='
+            cat /etc/os-release || true
+            echo '=== APT sources ==='
+            grep -RhvE '^[[:space:]]*(#|$)' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null || true
+            echo '=== compiler ==='
+            gcc --version || true
+            echo '=== build tools ==='
+            make --version | head -n 2 || true
+            autoconf --version | head -n 2 || true
+            automake --version | head -n 2 || true
+            echo '=== installed packages ==='
+            dpkg-query -W -f='${binary:Package}\t${Version}\n' 2>/dev/null | LC_ALL=C sort || true
+            echo '=== selected build variables ==='
+            printf 'CC=%s\nCXX=%s\nCPPFLAGS=%s\nCFLAGS=%s\nCXXFLAGS=%s\nLDFLAGS=%s\nPATH=%s\n' \
+              "${CC-}" "${CXX-}" "${CPPFLAGS-}" "${CFLAGS-}" "${CXXFLAGS-}" "${LDFLAGS-}" "$PATH"
+            echo '=== allowlisted CI context ==='
+            printf 'GITHUB_WORKFLOW=%s\nGITHUB_RUN_ID=%s\nGITHUB_RUN_ATTEMPT=%s\nGITHUB_EVENT_NAME=%s\nGITHUB_REPOSITORY=%s\nGITHUB_REF=%s\nGITHUB_SHA=%s\nTARGET_REPOSITORY=%s\nTARGET_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' \
+              "$GITHUB_WORKFLOW" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_EVENT_NAME" "$GITHUB_REPOSITORY" "$GITHUB_REF" "$GITHUB_SHA" "$TARGET_REPOSITORY" "$TARGET_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
+          } > "$bundle/environment.txt"
+
+      - name: Upload optional source-install diagnostic artifact bundle
+        id: diagnostics_upload
+        if: ${{ always() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-source-install-ubuntu-24.04-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/ci-diagnostics
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 6
+
+      - name: Final source-install diagnostic gate
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          environment='${{ steps.environment.outcome }}'
+          configure='${{ steps.configure.outcome }}'
+          configure_analyzer='${{ steps.configure_analyzer.outcome }}'
+          build='${{ steps.build.outcome }}'
+          build_analyzer='${{ steps.build_analyzer.outcome }}'
+          clean_install='${{ steps.clean_install.outcome }}'
+          install='${{ steps.install.outcome }}'
+          runtime_verify='${{ steps.runtime_verify.outcome }}'
+          providers='${{ steps.providers.outcome }}'
+          diagnostics_prepare='${{ steps.diagnostics_prepare.outcome }}'
+          diagnostics_upload='${{ steps.diagnostics_upload.outcome }}'
+          printf 'environment=%s configure=%s configure_analyzer=%s build=%s build_analyzer=%s clean_install=%s install=%s runtime_verify=%s providers=%s diagnostics_prepare=%s diagnostics_upload=%s\n' \
+            "$environment" "$configure" "$configure_analyzer" "$build" "$build_analyzer" "$clean_install" "$install" "$runtime_verify" "$providers" "$diagnostics_prepare" "$diagnostics_upload"
+          test "$environment" = success
+          test "$configure" = success
+          test "$configure_analyzer" = success
+          test "$build" = success
+          test "$build_analyzer" = success
+          test "$clean_install" = success
+          test "$install" = success
+          test "$runtime_verify" = success
+          test "$providers" = success
