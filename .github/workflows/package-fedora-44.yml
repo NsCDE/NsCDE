@@ -1,0 +1,764 @@
+name: NsCDE RPM CI - Fedora 44
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TARGET_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+  TARGET_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
+concurrency:
+  group: nscde-rpm-fedora-44-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and diagnose NsCDE RPM on Fedora 44
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: fedora:44
+
+    outputs:
+      package_manifest_sha256: ${{ steps.rpm_artifacts.outputs.manifest_sha256 }}
+
+    steps:
+      - name: Show pristine Fedora container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cat /etc/os-release
+          uname -a
+          printf 'CPUs: %s\n' "$(nproc)"
+          rpm --eval '%{_arch}'
+
+      - name: Install Fedora RPM-build prerequisites
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          dnf -y upgrade --refresh
+          dnf -y install \
+            ca-certificates dnf5-plugins file findutils git gzip python3 \
+            rpm-build rpmdevtools shadow-utils tar util-linux
+          dnf clean all
+
+      - name: Check out exact NsCDE commit under test
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.TARGET_REPOSITORY }}
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Trust GitHub checkout mount inside Fedora container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Show NsCDE commit under test
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          git show --no-patch \
+            --format='commit:    %H%nauthor:    %an <%ae>%nauthor date: %aI%ncommitter: %cn <%ce>%ncommit date: %cI%nsubject:   %s' \
+            HEAD
+          git status --short --branch
+
+      - name: Run canonical build-log analyzer regression tests
+        id: analyzer_tests
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 -B -m unittest discover \
+            -s "$GITHUB_WORKSPACE/.github/scripts/tests" \
+            -p 'test_analyze_build_log.py' \
+            -v
+
+      - name: Simulate a fresh local Git clone for packaging
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          source_tree="$RUNNER_TEMP/nscde-code"
+          target_sha="$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)"
+          rm -rf "$source_tree"
+          git clone --no-local --no-checkout "$GITHUB_WORKSPACE" "$source_tree"
+          git -C "$source_tree" checkout --detach "$target_sha"
+          seed_tree="$(git -C "$GITHUB_WORKSPACE" rev-parse 'HEAD^{tree}')"
+          clone_tree="$(git -C "$source_tree" rev-parse 'HEAD^{tree}')"
+          printf 'CI seed tree: %s\nlocal clone:  %s\n' "$seed_tree" "$clone_tree"
+          test "$seed_tree" = "$clone_tree"
+          test -z "$(git -C "$source_tree" status --porcelain)"
+          useradd --create-home --shell /bin/bash nscdebuild
+          chown -R nscdebuild:nscdebuild "$source_tree"
+          git config --global --add safe.directory "$source_tree"
+          {
+            printf 'SOURCE_TREE=%s\n' "$source_tree"
+            echo 'RPMBUILD_TOPDIR=/home/nscdebuild/rpmbuild'
+          } >> "$GITHUB_ENV"
+
+      - name: Inspect RPM packaging metadata
+        id: rpm_metadata
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          spec="$SOURCE_TREE/pkg/rpm/NsCDE.spec"
+          test -f "$spec"
+          rpmspec -q --qf 'Name: %{NAME}\nVersion: %{VERSION}\nRelease: %{RELEASE}\nArch: %{ARCH}\n' "$spec"
+          echo '=== declared sources ==='
+          spectool -S "$spec"
+          echo '=== declared build requirements ==='
+          rpmspec -q --buildrequires "$spec" | LC_ALL=C sort -u
+          echo '=== declared runtime requirements ==='
+          rpmspec -q --requires "$spec" | LC_ALL=C sort -u
+
+      - name: Install spec BuildRequires
+        id: builddeps
+        if: ${{ steps.rpm_metadata.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          dnf -y builddep "$SOURCE_TREE/pkg/rpm/NsCDE.spec"
+
+      - name: Snapshot compiler, repositories and RPM toolchain
+        if: ${{ steps.builddeps.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          echo '=== Fedora release ==='
+          cat /etc/fedora-release
+          echo '=== enabled repositories ==='
+          dnf repolist
+          echo '=== compiler ==='
+          gcc --version
+          gcc -v 2>&1
+          echo '=== linker ==='
+          ld --version | head -n 2
+          echo '=== RPM/build tools ==='
+          rpm --version
+          rpmbuild --version
+          make --version | head -n 2
+          autoconf --version | head -n 2
+          automake --version | head -n 2
+          python3 --version
+          echo '=== exact core RPM versions ==='
+          rpm -q gcc glibc binutils make autoconf automake rpm-build rpmdevtools python3 ksh gettext || true
+          echo '=== resolved BuildRequires providers ==='
+          while IFS= read -r requirement; do
+            test -n "$requirement" || continue
+            printf '%s -> ' "$requirement"
+            rpm -q --whatprovides "$requirement" 2>/dev/null || echo '(provider query unavailable)'
+          done < <(rpmspec -q --buildrequires "$SOURCE_TREE/pkg/rpm/NsCDE.spec" | LC_ALL=C sort -u)
+          echo '=== relevant build variables ==='
+          printf 'CC=%s\nCXX=%s\nCPPFLAGS=%s\nCFLAGS=%s\nCXXFLAGS=%s\nLDFLAGS=%s\nPATH=%s\n' \
+            "${CC-}" "${CXX-}" "${CPPFLAGS-}" "${CFLAGS-}" "${CXXFLAGS-}" "${LDFLAGS-}" "$PATH"
+
+      - name: Create RPM source archive from exact cloned commit
+        id: source_archive
+        if: ${{ steps.builddeps.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          spec="$SOURCE_TREE/pkg/rpm/NsCDE.spec"
+          runuser -u nscdebuild -- env HOME=/home/nscdebuild rpmdev-setuptree
+          source_url="$(spectool -S "$spec" | awk '$1 == "Source0:" { print $2; exit }')"
+          source_file="${source_url##*/}"
+          test -n "$source_url"
+          case "$source_file" in *.tar.gz) ;; *) echo "Unsupported Source0: $source_file" >&2; exit 1 ;; esac
+          archive_root="${source_file%.tar.gz}"
+          test "$(git -C "$SOURCE_TREE" rev-parse HEAD)" = "$TARGET_SHA"
+          printf 'Packaging exact commit: %s\nSpec Source0: %s\nArchive root: %s/\n' \
+            "$TARGET_SHA" "$source_url" "$archive_root"
+          git -C "$SOURCE_TREE" archive \
+            --format=tar.gz --prefix="${archive_root}/" HEAD \
+            > "$RPMBUILD_TOPDIR/SOURCES/$source_file"
+          chown nscdebuild:nscdebuild "$RPMBUILD_TOPDIR/SOURCES/$source_file"
+          test -s "$RPMBUILD_TOPDIR/SOURCES/$source_file"
+          sha256sum "$RPMBUILD_TOPDIR/SOURCES/$source_file"
+          tar -tzf "$RPMBUILD_TOPDIR/SOURCES/$source_file" | \
+            awk -F/ -v root="$archive_root" '$1 != root { exit 1 }'
+          tar -tzf "$RPMBUILD_TOPDIR/SOURCES/$source_file" | sed -n '1,20p'
+
+      - name: Build binary and source RPMs with log capture
+        id: rpm_build
+        if: ${{ steps.source_archive.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          build_path=/usr/bin:/bin:/usr/sbin:/sbin
+          printf 'RPM build PATH: %s\n' "$build_path"
+          for command_name in python3 ksh93 ksh; do
+            if command -v "$command_name" >/dev/null 2>&1; then
+              command_path="$(command -v "$command_name")"
+              printf '%s -> %s\n' "$command_name" "$command_path"
+              rpm -qf "$command_path" || true
+            fi
+          done
+          set +e
+          runuser -u nscdebuild -- env HOME=/home/nscdebuild PATH="$build_path" \
+            rpmbuild -ba --define "_topdir $RPMBUILD_TOPDIR" \
+            "$SOURCE_TREE/pkg/rpm/NsCDE.spec" \
+            2>&1 | tee "$RUNNER_TEMP/nscde-rpmbuild.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Analyze NsCDE RPM build log
+        id: package_analyzer
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 "$GITHUB_WORKSPACE/.github/scripts/analyze-build-log.py" \
+            --log "$RUNNER_TEMP/nscde-rpmbuild.log" \
+            --label 'NsCDE RPM build / Fedora 44' \
+            --output-dir "$RUNNER_TEMP/ci-diagnostics/build" \
+            --summary-file "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect and inspect RPM artifacts
+        id: rpm_artifacts
+        if: ${{ steps.rpm_build.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          artifact_dir="$GITHUB_WORKSPACE/out"
+          test ! -e "$artifact_dir"
+          mkdir "$artifact_dir"
+
+          mapfile -d '' -t rpm_sources < <(
+            find "$RPMBUILD_TOPDIR/RPMS" "$RPMBUILD_TOPDIR/SRPMS" \
+              -type f -name '*.rpm' -print0 | LC_ALL=C sort -z
+          )
+          test "${#rpm_sources[@]}" -gt 0
+
+          declare -A seen_basenames=()
+          declare -A seen_identities=()
+          binary_count=0
+          source_count=0
+
+          for source in "${rpm_sources[@]}"; do
+            basename="${source##*/}"
+            if [[ -n "${seen_basenames[$basename]+x}" ]]; then
+              echo "ERROR: duplicate RPM transport filename: $basename" >&2
+              exit 1
+            fi
+            seen_basenames["$basename"]=1
+
+            package="$artifact_dir/$basename"
+            cp -v "$source" "$package"
+
+            IFS=$'\t' read -r package_name package_version package_release package_arch < <(
+              rpm -qp --qf '%{NAME}\t%{VERSION}\t%{RELEASE}\t%{ARCH}\n' "$package"
+            )
+            test -n "$package_name"
+            test -n "$package_version"
+            test -n "$package_release"
+            test -n "$package_arch"
+            case "$package" in
+              *.src.rpm|*.nosrc.rpm) package_class=source ;;
+              *) package_class=binary ;;
+            esac
+            identity="$package_class|$package_name|$package_version|$package_release|$package_arch"
+            if [[ -n "${seen_identities[$identity]+x}" ]]; then
+              echo "ERROR: duplicate RPM identity within object class: $identity" >&2
+              exit 1
+            fi
+            seen_identities["$identity"]=1
+
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+              "$package_class" "$basename" "$package_name" "$package_version" "$package_release" "$package_arch"
+            rpm -K --nosignature "$package"
+
+            case "$package_class" in
+              source) ((source_count += 1)) ;;
+              binary) ((binary_count += 1)) ;;
+            esac
+          done
+
+          test "$binary_count" -gt 0
+          test "$source_count" -gt 0
+
+          mapfile -t transported_files < <(
+            find "$artifact_dir" -maxdepth 1 -type f -name '*.rpm' -printf '%f\n' | LC_ALL=C sort
+          )
+          test "${#transported_files[@]}" -gt 0
+          (
+            cd "$artifact_dir"
+            sha256sum "${transported_files[@]}"
+          ) > "$artifact_dir/SHA256SUMS"
+          test -s "$artifact_dir/SHA256SUMS"
+          test "$(wc -l < "$artifact_dir/SHA256SUMS")" -eq "${#transported_files[@]}"
+          manifest_sha256="$(sha256sum "$artifact_dir/SHA256SUMS" | awk '{print $1}')"
+          [[ "$manifest_sha256" =~ ^[0-9a-f]{64}$ ]]
+          printf 'manifest_sha256=%s\n' "$manifest_sha256" >> "$GITHUB_OUTPUT"
+          (
+            cd "$artifact_dir"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+          echo '=== generated RPMs ==='
+          find "$artifact_dir" -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort
+          echo '=== transported object SHA256 manifest ==='
+          cat "$artifact_dir/SHA256SUMS"
+
+          echo '=== generated binary RPM requirements ==='
+          while IFS= read -r package; do
+            printf '\n%s:\n' "$package"
+            rpm -qp --requires "$package" | LC_ALL=C sort -u
+          done < <(
+            find "$artifact_dir" -maxdepth 1 -type f -name '*.rpm' \
+              ! -name '*.src.rpm' ! -name '*.nosrc.rpm' -print | LC_ALL=C sort
+          )
+
+          {
+            echo '### RPM transport identity'
+            echo
+            printf -- '- Binary RPM objects: **%d**\n' "$binary_count"
+            printf -- '- Source RPM objects: **%d**\n' "$source_count"
+            printf -- '- Manifest SHA-256: `%s`\n' "$manifest_sha256"
+            echo
+            echo 'The complete RPM object set is transported with this manifest and must verify exactly before installation.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect RPM build stage summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          {
+            echo '## Fedora 44 RPM stage result'
+            echo
+            echo '| Stage | Outcome |'
+            echo '|---|---|'
+            printf '| RPM metadata | `%s` |\n' '${{ steps.rpm_metadata.outcome }}'
+            printf '| BuildRequires | `%s` |\n' '${{ steps.builddeps.outcome }}'
+            printf '| Source archive | `%s` |\n' '${{ steps.source_archive.outcome }}'
+            printf '| Analyzer regression tests | `%s` |\n' '${{ steps.analyzer_tests.outcome }}'
+            printf '| RPM build | `%s` |\n' '${{ steps.rpm_build.outcome }}'
+            printf '| Canonical analyzer | `%s` |\n' '${{ steps.package_analyzer.outcome }}'
+            printf '| RPM artifact inspection and SHA-256 manifest | `%s` |\n' '${{ steps.rpm_artifacts.outcome }}'
+            echo
+            echo 'The RPM is built from a clean detached clone of the exact CI commit by an unprivileged build user. Build logs are analyzed for root compiler/linker failures before recursive Make noise.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload required RPM transport artifact
+        id: rpm_transport
+        if: ${{ steps.rpm_artifacts.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-fedora-44-${{ env.TARGET_SHA }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Prepare RPM diagnostic artifact bundle
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bundle="$RUNNER_TEMP/ci-diagnostics/raw"
+          mkdir -p "$bundle"
+          test ! -f "$RUNNER_TEMP/nscde-rpmbuild.log" || cp -a "$RUNNER_TEMP/nscde-rpmbuild.log" "$bundle/"
+          test ! -f "$SOURCE_TREE/pkg/rpm/NsCDE.spec" || cp -a "$SOURCE_TREE/pkg/rpm/NsCDE.spec" "$bundle/"
+          {
+            echo '=== NsCDE commit ==='
+            git -C "$GITHUB_WORKSPACE" show --no-patch --format='%H%n%aI%n%an <%ae>%n%s' HEAD || true
+            echo '=== Fedora ==='
+            cat /etc/fedora-release || true
+            echo '=== repositories ==='
+            dnf repolist || true
+            echo '=== compiler / RPM tools ==='
+            gcc --version || true
+            rpm --version || true
+            rpmbuild --version || true
+            echo '=== relevant build variables ==='
+            printf 'CC=%s\nCXX=%s\nCPPFLAGS=%s\nCFLAGS=%s\nCXXFLAGS=%s\nLDFLAGS=%s\nPATH=%s\n' \
+              "${CC-}" "${CXX-}" "${CPPFLAGS-}" "${CFLAGS-}" "${CXXFLAGS-}" "${LDFLAGS-}" "$PATH"
+          } > "$bundle/environment.txt"
+
+      - name: Upload RPM diagnostic artifact bundle
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-fedora-44-build-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/ci-diagnostics
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 6
+
+      - name: Final RPM build diagnostic gate
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          analyzer_tests='${{ steps.analyzer_tests.outcome }}'
+          metadata='${{ steps.rpm_metadata.outcome }}'
+          builddeps='${{ steps.builddeps.outcome }}'
+          archive='${{ steps.source_archive.outcome }}'
+          build='${{ steps.rpm_build.outcome }}'
+          analyzer='${{ steps.package_analyzer.outcome }}'
+          artifacts='${{ steps.rpm_artifacts.outcome }}'
+          transport='${{ steps.rpm_transport.outcome }}'
+          printf 'analyzer_tests=%s metadata=%s builddeps=%s archive=%s build=%s analyzer=%s artifacts=%s transport=%s\n' \
+            "$analyzer_tests" "$metadata" "$builddeps" "$archive" "$build" "$analyzer" "$artifacts" "$transport"
+          test "$analyzer_tests" = success
+          test "$metadata" = success
+          test "$builddeps" = success
+          test "$archive" = success
+          test "$build" = success
+          test "$analyzer" = success
+          test "$artifacts" = success
+          test "$transport" = success
+
+  install-test:
+    name: Install and diagnose NsCDE RPM on clean Fedora 44
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: fedora:44
+
+    steps:
+      - name: Show pristine Fedora runtime container
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cat /etc/os-release
+          uname -a
+          printf 'CPUs: %s\n' "$(nproc)"
+          rpm --eval '%{_arch}'
+
+      - name: Install runtime diagnostic prerequisites
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          dnf -y upgrade --refresh
+          dnf -y install ca-certificates diffutils file findutils
+          dnf clean all
+          dnf -y makecache --refresh
+          dnf repolist
+
+      - name: Download required RPM transport artifact
+        id: rpm_download
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: nscde-fedora-44-${{ env.TARGET_SHA }}
+          path: artifacts
+
+      - name: Verify exact downloaded RPM object identity
+        id: rpm_identity
+        if: ${{ steps.rpm_download.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          manifest=artifacts/SHA256SUMS
+          test -s "$manifest"
+
+          expected_manifest_sha256='${{ needs.build.outputs.package_manifest_sha256 }}'
+          [[ "$expected_manifest_sha256" =~ ^[0-9a-f]{64}$ ]]
+          actual_manifest_sha256="$(sha256sum "$manifest" | awk '{print $1}')"
+          test "$actual_manifest_sha256" = "$expected_manifest_sha256"
+
+          expected_files="$RUNNER_TEMP/transport-expected-files.txt"
+          actual_files="$RUNNER_TEMP/transport-actual-files.txt"
+          sed 's/^[0-9a-f]\{64\}  //' "$manifest" | LC_ALL=C sort > "$expected_files"
+          find artifacts -maxdepth 1 -type f ! -name SHA256SUMS -printf '%f\n' | \
+            LC_ALL=C sort > "$actual_files"
+          test -s "$expected_files"
+          test "$(wc -l < "$manifest")" -eq "$(wc -l < "$expected_files")"
+          diff -u "$expected_files" "$actual_files"
+
+          (
+            cd artifacts
+            sha256sum --check --strict SHA256SUMS
+          )
+
+          declare -A seen_identities=()
+          binary_count=0
+          while IFS= read -r package; do
+            IFS=$'\t' read -r package_name package_version package_release package_arch < <(
+              rpm -qp --qf '%{NAME}\t%{VERSION}\t%{RELEASE}\t%{ARCH}\n' "$package"
+            )
+            test -n "$package_name"
+            test -n "$package_version"
+            test -n "$package_release"
+            test -n "$package_arch"
+            case "$package" in
+              *.src.rpm|*.nosrc.rpm) package_class=source ;;
+              *) package_class=binary ;;
+            esac
+            identity="$package_class|$package_name|$package_version|$package_release|$package_arch"
+            if [[ -n "${seen_identities[$identity]+x}" ]]; then
+              echo "ERROR: duplicate downloaded RPM identity within object class: $identity" >&2
+              exit 1
+            fi
+            seen_identities["$identity"]=1
+            rpm -K --nosignature "$package"
+            if test "$package_class" = binary; then
+              ((binary_count += 1))
+            fi
+          done < <(find artifacts -maxdepth 1 -type f -name '*.rpm' -print | LC_ALL=C sort)
+          test "$binary_count" -gt 0
+
+          echo '=== verified transported object SHA256 manifest ==='
+          cat "$manifest"
+          {
+            echo '### Verified RPM transport identity'
+            echo
+            printf -- '- Verified manifest SHA-256: `%s`\n' "$actual_manifest_sha256"
+            echo '- The downloaded file set exactly matches the producer manifest.'
+            printf -- '- Binary RPM objects discovered: **%d**\n' "$binary_count"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify clean pre-install state
+        id: clean_state
+        if: ${{ steps.rpm_identity.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mapfile -t package_names < <(
+            find artifacts -maxdepth 1 -type f -name '*.rpm' \
+              ! -name '*.src.rpm' ! -name '*.nosrc.rpm' \
+              -exec rpm -qp --qf '%{NAME}\n' '{}' ';' | LC_ALL=C sort -u
+          )
+          test "${#package_names[@]}" -gt 0
+          for package_name in "${package_names[@]}"; do
+            if rpm -q "$package_name" >/dev/null 2>&1; then
+              echo "ERROR: produced package is already installed in clean consumer: $package_name" >&2
+              exit 1
+            fi
+          done
+          test ! -e /usr/share/xsessions/nscde.desktop
+          echo 'All produced RPM package names are absent: clean installation target confirmed'
+
+      - name: Install generated binary RPMs with log capture
+        id: rpm_install
+        if: ${{ steps.clean_state.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mapfile -t packages < <(
+            find artifacts -maxdepth 1 -type f -name '*.rpm' \
+              ! -name '*.src.rpm' ! -name '*.nosrc.rpm' -print | LC_ALL=C sort
+          )
+          test "${#packages[@]}" -gt 0
+          printf 'Installing:\n%s\n' "${packages[@]}"
+          set +e
+          dnf -y --setopt=optional_metadata_types=filelists install "${packages[@]}" \
+            2>&1 | tee "$RUNNER_TEMP/nscde-install.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Verify installed RPM packages
+        id: rpm_verify
+        if: ${{ steps.rpm_install.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          declare -A seen_package_names=()
+          while IFS= read -r package; do
+            package_name="$(rpm -qp --qf '%{NAME}' "$package")"
+            expected_nevra="$(rpm -qp --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}' "$package")"
+            if [[ -n "${seen_package_names[$package_name]+x}" ]]; then
+              echo "ERROR: conflicting produced binary RPM package name: $package_name" >&2
+              exit 1
+            fi
+            seen_package_names["$package_name"]=1
+            actual_nevra="$(rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}' "$package_name")"
+            test "$actual_nevra" = "$expected_nevra"
+            rpm -V "$package_name"
+          done < <(
+            find artifacts -maxdepth 1 -type f -name '*.rpm' \
+              ! -name '*.src.rpm' ! -name '*.nosrc.rpm' -print | LC_ALL=C sort
+          )
+          test "${#seen_package_names[@]}" -gt 0
+          rpm -q NsCDE
+          dnf -y check
+
+      - name: Verify installed produced-package tree and runtime linkage
+        id: runtime_verify
+        if: ${{ steps.rpm_verify.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          for program in /usr/bin/nscde /usr/bin/nscde_fvwmclnt; do
+            test -x "$program"
+            ls -l "$program"
+          done
+          test -f /usr/share/xsessions/nscde.desktop
+          test -d /usr/share/NsCDE
+          command -v ldd
+
+          mapfile -t package_names < <(
+            find artifacts -maxdepth 1 -type f -name '*.rpm' \
+              ! -name '*.src.rpm' ! -name '*.nosrc.rpm' \
+              -exec rpm -qp --qf '%{NAME}\n' '{}' ';' | LC_ALL=C sort -u
+          )
+          test "${#package_names[@]}" -gt 0
+
+          owned_paths="$RUNNER_TEMP/produced-package-paths.txt"
+          : > "$owned_paths"
+          for package_name in "${package_names[@]}"; do
+            rpm -ql "$package_name" >> "$owned_paths"
+          done
+          LC_ALL=C sort -u -o "$owned_paths" "$owned_paths"
+
+          elf_count=0
+          while IFS= read -r candidate; do
+            test -f "$candidate" || continue
+            file -b "$candidate" | grep -q '^ELF ' || continue
+            ((elf_count += 1))
+            dependencies="$(ldd "$candidate" 2>&1 || true)"
+            if grep -q '=> not found' <<<"$dependencies"; then
+              echo "ERROR: unresolved runtime dependency: $candidate" >&2
+              printf '%s\n' "$dependencies" >&2
+              exit 1
+            fi
+          done < "$owned_paths"
+          test "$elf_count" -gt 0
+
+          broken_links=0
+          while IFS= read -r candidate; do
+            if test -L "$candidate" && ! test -e "$candidate"; then
+              printf 'ERROR: broken link: %s -> %s\n' "$candidate" "$(readlink "$candidate")" >&2
+              broken_links=1
+            fi
+          done < "$owned_paths"
+          test "$broken_links" -eq 0
+          printf 'Produced-package ELF files checked: %d\n' "$elf_count"
+
+      - name: Verify resolved FVWM runtime provider provenance
+        id: providers
+        if: ${{ steps.runtime_verify.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          selected_provider=
+          for candidate in fvwm3 fvwm; do
+            if command -v "$candidate" >/dev/null 2>&1; then
+              selected_provider="$candidate"
+              break
+            fi
+          done
+          test -n "$selected_provider"
+
+          provider_path="$(command -v "$selected_provider")"
+          provider_realpath="$(readlink -f "$provider_path")"
+          test -x "$provider_realpath"
+
+          if provider_package="$(rpm -qf "$provider_path" --qf '%{NAME}\n' 2>/dev/null)"; then
+            :
+          elif provider_package="$(rpm -qf "$provider_realpath" --qf '%{NAME}\n' 2>/dev/null)"; then
+            :
+          else
+            echo "ERROR: no RPM owns the selected FVWM provider: $provider_path" >&2
+            exit 1
+          fi
+          test -n "$provider_package"
+          provider_nevra="$(rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}' "$provider_package")"
+          rpm -V "$provider_package"
+
+          printf 'selected command: %s\n' "$selected_provider"
+          printf 'resolved path:    %s\n' "$provider_realpath"
+          printf 'owning package:   %s\n' "$provider_package"
+          printf 'package NEVRA:    %s\n' "$provider_nevra"
+          {
+            echo '### Positive FVWM runtime provider provenance'
+            echo
+            printf -- '- Selected command: `%s`\n' "$selected_provider"
+            printf -- '- Resolved executable: `%s`\n' "$provider_realpath"
+            printf -- '- Owning RPM: `%s`\n' "$provider_package"
+            printf -- '- Package NEVRA: `%s`\n' "$provider_nevra"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect installation stage summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          {
+            echo '## Fedora 44 clean-install result'
+            echo
+            echo '| Stage | Outcome |'
+            echo '|---|---|'
+            printf '| RPM artifact download | `%s` |\n' '${{ steps.rpm_download.outcome }}'
+            printf '| Exact RPM object identity | `%s` |\n' '${{ steps.rpm_identity.outcome }}'
+            printf '| Clean pre-install state | `%s` |\n' '${{ steps.clean_state.outcome }}'
+            printf '| RPM installation | `%s` |\n' '${{ steps.rpm_install.outcome }}'
+            printf '| RPM verification | `%s` |\n' '${{ steps.rpm_verify.outcome }}'
+            printf '| Produced-package tree / ELF linkage | `%s` |\n' '${{ steps.runtime_verify.outcome }}'
+            printf '| FVWM runtime provider provenance | `%s` |\n' '${{ steps.providers.outcome }}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare optional installation diagnostic artifact bundle
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          bundle="$RUNNER_TEMP/install-diagnostics"
+          mkdir -p "$bundle"
+          test ! -f "$RUNNER_TEMP/nscde-install.log" || cp -a "$RUNNER_TEMP/nscde-install.log" "$bundle/"
+          {
+            cat /etc/os-release || true
+            echo '=== repositories ==='
+            dnf repolist || true
+            echo '=== installed NsCDE package ==='
+            rpm -qi NsCDE || true
+            echo '=== NsCDE files ==='
+            rpm -ql NsCDE || true
+            echo '=== NsCDE requirements ==='
+            rpm -q --requires NsCDE || true
+          } > "$bundle/runtime-environment.txt"
+
+      - name: Upload optional installation diagnostic artifact bundle
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nscde-fedora-44-install-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/install-diagnostics
+          if-no-files-found: warn
+          retention-days: 14
+          compression-level: 6
+
+      - name: Final installation diagnostic gate
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          download='${{ steps.rpm_download.outcome }}'
+          identity='${{ steps.rpm_identity.outcome }}'
+          clean='${{ steps.clean_state.outcome }}'
+          install='${{ steps.rpm_install.outcome }}'
+          verify='${{ steps.rpm_verify.outcome }}'
+          runtime='${{ steps.runtime_verify.outcome }}'
+          providers='${{ steps.providers.outcome }}'
+          printf 'download=%s identity=%s clean=%s install=%s verify=%s runtime=%s providers=%s\n' \
+            "$download" "$identity" "$clean" "$install" "$verify" "$runtime" "$providers"
+          test "$download" = success
+          test "$identity" = success
+          test "$clean" = success
+          test "$install" = success
+          test "$verify" = success
+          test "$runtime" = success
+          test "$providers" = success
