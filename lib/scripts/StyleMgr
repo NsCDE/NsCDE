@@ -743,44 +743,47 @@ Widget 17
          ShowWidget 6
          ChangePosition 6 719 31
          ChangeSize 6 68 77
-         Set $CheckSessionManager = (GetOutput {echo $SESSION_MANAGER} 1 -1)
          Set $CheckDesk = (GetOutput {echo $XDG_CURRENT_DESKTOP} 1 -1)
          Set $CheckDeskRc = {NotListed}
-         If $CheckSessionManager <> {} Then
+         If $CheckDesk == {MATE} Then
          Begin
-            If $CheckDesk == {MATE} Then
-            Begin
-               Do {Test (x mate-session-properties) Exec exec mate-session-properties}
-               Do {Test (!x mate-session-properties) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found." "NoCmd"}
-               Set $CheckDeskRc = {Listed}
-            End
-            If $CheckDesk == {LXDE} Then
-            Begin
-               Do {Test (x lxsession-edit) Exec exec lxsession-edit}
-               Do {Test (!x lxsession-edit) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxsession-edit found." "NoCmd"}
-               Set $CheckDeskRc = {Listed}
-            End
-            If $CheckDesk == {GNOME} Then
-            Begin
-               Do {Test (x gnome-tweaks) Exec exec gnome-tweaks}
-               Do {Test (!x gnome-tweaks) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No gnome-tweaks found." "NoCmd"}
-               Set $CheckDeskRc = {Listed}
-            End
-            If $CheckDesk == {KDE} Then
-            Begin
-               Do {Test (x kcmshell5) Exec exec kcmshell5 kcmsmserver autostart kcmkded}
-               Do {Test (!x kcmshell5) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No kcmshell5 found." "NoCmd"}
-               Set $CheckDeskRc = {Listed}
-            End
-
-            If $CheckDeskRc == {NotListed} Then
-            Begin
-               Do {None (NsCDE-Notifier.NotSupp) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "Session Manager from desktop } $CheckDesk { not (yet) supported." "NotSupp"}
-            End
+            Do {Test (x mate-session-properties) Exec exec mate-session-properties}
+            Do {Test (!x mate-session-properties) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No mate-session-properties found." "NoCmd"}
+            Set $CheckDeskRc = {Listed}
          End
-         Else
+         If $CheckDesk == {LXQt} Then
          Begin
-            Do {None (NsCDE-Notifier.NoSess) f_Notifier "Style Manager" "Dismiss" "NsCDE/Info.xpm" "NsCDE appears not to be running under the X Session Manager." "NoSess"}
+               Do {Test (x lxqt-config-session) Exec exec lxqt-config-session}
+               Do {Test (!x lxqt-config-session) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxqt-config-session found." "NoCmd"}
+               Set $CheckDeskRc = {Listed}
+         End
+         If $CheckDesk == {LXDE} Then
+         Begin
+            Do {Test (x lxsession-edit) Exec exec lxsession-edit}
+            Do {Test (!x lxsession-edit) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No lxsession-edit found." "NoCmd"}
+            Set $CheckDeskRc = {Listed}
+         End
+         If $CheckDesk == {GNOME} Then
+         Begin
+            Do {Test (x gnome-tweaks) Exec exec gnome-tweaks}
+            Do {Test (!x gnome-tweaks) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No gnome-tweaks found." "NoCmd"}
+            Set $CheckDeskRc = {Listed}
+         End
+         If $CheckDesk == {KDE} Then
+         Begin
+            Do {Test (x kcmshell5) Exec exec kcmshell5 kcmsmserver autostart kcmkded}
+            Do {Test (!x kcmshell5) None (NsCDE-Notifier.NoCmd) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "No kcmshell5 found." "NoCmd"}
+            Set $CheckDeskRc = {Listed}
+         End
+         If $CheckDesk == {NsCDE} Then
+         Begin
+            Do {None (NsCDE-Notifier.NoSess) f_Notifier "Style Manager" "Dismiss" "NsCDE/Info.xpm" "NsCDE appears not to be integrated into a session manager." "NoSess"}
+            Set $CheckDeskRc = {Listed}
+         End
+
+         If $CheckDeskRc == {NotListed} Then
+         Begin
+            Do {None (NsCDE-Notifier.NotSupp) f_Notifier "Style Manager" "Dismiss" "NsCDE/Error.xpm" "Session Manager from desktop } $CheckDesk { not (yet) supported." "NotSupp"}
          End
       End
 End

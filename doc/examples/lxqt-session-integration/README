@@ -1,0 +1,11 @@
+You must use lxqt-config-session to tweak LXQt in the following way:
+- In LXQt Modules, uncheck everything except PolicyKit manager and power management.
+- In X11 settings, type nscde as the window manager.
+
+Optionally you can also turn off the confirmation prompt before logging out in base settings
+of LXQt session settings.
+
+If you want logging out to work properly, you need to add this into your ~/.NsCDE/NsCDE.conf:
+SetEnv QuitCmd "Exec exec lxqt-leave --logout"
+
+You should also make sure that "Configure GTK styles" is unchecked in lxqt-config-appearance
