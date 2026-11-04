@@ -1,5 +1,5 @@
 Name:		NsCDE-zh
-Version:	2.4.3.3
+Version:	2.4.3.4
 Release:	1%{?dist}
 Summary:	Not so Common Desktop Environment
 
@@ -88,6 +88,9 @@ grep -rlI '^#!.*/usr/sbin/' %{buildroot} 2>/dev/null | \
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Wed Nov 04 2026 Wenyin Root <ruojiner@hotmail.com> - 2.4.3.4-1
+- Version 2.4.3.4
+
 * Fri Jun 16 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-3
 - Portability and bug fixes
 - Misc small fixes

@@ -1,6 +1,6 @@
 # Working example of Arch Linux PKGBUILD for NsCDE 2.X
 pkgname=nscde-zh
-pkgver=2.4.3.3
+pkgver=2.4.3.4
 pkgrel=1
 pkgdesc="Not so Common Desktop Environment: Modern and functional CDE based on FVWM"
 arch=('x86_64' 'aarch64')
