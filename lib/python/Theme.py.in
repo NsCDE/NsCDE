@@ -26,9 +26,9 @@ class Theme():
         # checkDir(userhome)
         homedotthemes=os.path.join(userhome,'.themes')
         if not os.path.exists(homedotthemes):
-            print ('Dot themes dir not found. Creating: '+homedotthemes)
+            print ('Themes directory not found; creating: '+homedotthemes)
             try: os.makedirs(homedotthemes)
-            except OSError as e: sys.stderr.write("Failed to create ~/.themes stop.\n"), e
+            except OSError as e: sys.stderr.write("Failed to create ~/.themes: "+str(e)+"\n")
             sys.exit(2)
 
         # if .themes/NsCDE not exist: copy
@@ -39,8 +39,8 @@ class Theme():
             print (Globals.themesrcdir)
             #sys.exit()
             if not os.path.exists(Globals.themedir):
-                print ('NOT FOUND THEME DIR '+Globals.themedir)
-                print ('Trying to copy from default ')
+                print ('Theme directory not found: '+Globals.themedir)
+                print ('Copying the default theme from: '+Globals.themesrcdir)
                 shutil.copytree(Globals.themesrcdir,Globals.themedir,symlinks=True)
 
             if os.path.lexists(Globals.userthemedir): shutil.rmtree(Globals.userthemedir)
@@ -60,8 +60,8 @@ class Theme():
 
     # Zees eeze nedded unly vunce
     def doUpdateTheme(self):
-        print ("Generate for Gtk2:", self.opts.themeGtk2)
-        print ("Generate for Gtk3:", self.opts.themeGtk3)
+        print ("Generating Gtk2 theme:", self.opts.themeGtk2)
+        print ("Generating Gtk3 theme:", self.opts.themeGtk3)
 
         palettefilefullpath=os.path.join(Globals.palettedir,self.opts.currentpalettefile)
 
@@ -74,4 +74,3 @@ class Theme():
             filename=os.path.join(Globals.userthemedir,'gtk-3.20/cdecolors.css')
             ThemeGtk.gengtk3colors(filename,self.opts)
             ThemeGtk.updateThemeImages(self.opts)
-

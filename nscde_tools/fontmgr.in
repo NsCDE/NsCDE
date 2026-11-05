@@ -18,7 +18,7 @@ fi
 
 type -p fc-list > /dev/null
 if (($? != 0)); then
-   echo "Error: fc-list command not found."
+   echo "Error: the fc-list command was not found."
    exit 3
 fi
 
@@ -31,12 +31,12 @@ FNUMS=$(echo "$FNAMES" | sort -u | grep -En '.*')
 function findfontsets
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      echo "NSCDE_ROOT is not defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      echo "NSCDE_DATADIR is not defined. Exiting."
       exit 2
    fi
 
@@ -330,8 +330,7 @@ do
          miscintegrations
       ;;
       h)
-         echo "Usage: ..."
+         echo "Usage: ${0##*/} [ -pP ] [ -F <font-set number> ] [ -f <font-set name> ] [ -gGnN <value> ] [ -s <style> ] [ -rXmTQM <value> ] [ -h ]"
       ;;
    esac
 done
-

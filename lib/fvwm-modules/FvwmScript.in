@@ -22,7 +22,7 @@ if [ -x "$NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so" ]; then
             fi
          fi
       else
-         echo "Notice: $NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so is already ld-preloaded, skipping" >&2
+         echo "Notice: $NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so is already preloaded; skipping it." >&2
       fi
    else
       export LD_PRELOAD="$NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so"
@@ -31,4 +31,3 @@ fi
 
 # Call the real FvwmScript
 exec ${FVWM_MODULEDIR}/FvwmScript "$@"
-

@@ -53,7 +53,7 @@ elif [ "$OS" == "OpenBSD" ]; then
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
-      echo "Error: Unknown ACPI operation mode."
+      echo "Error: unknown ACPI operation mode."
       exit 4
    fi
 fi
@@ -86,7 +86,7 @@ function hibernate
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hibernate to disk is not supported on NetBSD."
+      echo "Notice: hibernation to disk is not supported on NetBSD."
    elif [ "$Opmode" == "openbsd" ]; then
       /usr/sbin/apm -Z
    fi
@@ -99,13 +99,13 @@ function hybrid_suspend
    elif [ "$Opmode" == "systemd" ]; then
       systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
-      echo "Not available on $OS" >&2
+      echo "Not available on $OS." >&2
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on NetBSD."
+      echo "Notice: hybrid suspend is not supported on NetBSD."
    elif [ "$Opmode" == "openbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on OpenBSD."
+      echo "Notice: hybrid suspend is not supported on OpenBSD."
    fi
 }
 
@@ -182,4 +182,3 @@ case $Action in
       usage
    ;;
 esac
-

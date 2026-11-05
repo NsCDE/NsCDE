@@ -7,7 +7,7 @@
 #
 
 # NsCDE: colormgr shell script
-# ColorMgr FvwmScript backgroud worker
+# ColorMgr FvwmScript background worker
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -22,7 +22,7 @@ WsmVariant=0
 if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
    . ${NSCDE_TOOLSDIR}/style_managers.shlib
 else
-   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   echo "Error: cannot load ${NSCDE_TOOLSDIR}/style_managers.shlib."
    exit 1
 fi
 
@@ -50,7 +50,7 @@ function GenFullPalette
 
       echo ${FVWM_USERDIR}/tmp/_fullpalette.xpm
    else
-      echo "Error: Cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
+      echo "Error: cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm."
       exit 3
    fi
 }
@@ -467,7 +467,7 @@ do
          if (($PreviewMode == 0)); then
             ProgBits
          else
-            echo "Not performing pixmap modification in preview mode."
+            echo "Pixmap modification is disabled in preview mode."
          fi
       ;;
       b)
@@ -481,4 +481,3 @@ do
       ;;
    esac
 done
-

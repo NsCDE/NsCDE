@@ -34,7 +34,7 @@ function defaultcf
 # Without xrandr(1) we cannot continue.
 type -qp xrandr
 if (($? != 0)); then
-   echo "${0##*/}: xrandr command is not available in PATH. Setting default one monitor setup." >&2
+   echo "${0##*/}: xrandr is not available in PATH; using a single-monitor setup." >&2
    defaultcf
    exit 0
 fi
@@ -46,7 +46,7 @@ mdata=$(xrandr --listmonitors)
 # for this Xinerama/SLS support.
 screencnt=$(echo "$xdata" | wc -l)
 if (($screencnt > 1)); then
-   echo "${0##*/}: More than one local screen handling is not yet tested and hence not supported." >&2
+   echo "${0##*/}: multiple local X screens are not currently supported." >&2
    defaultcf
    exit 0
 fi
@@ -81,7 +81,7 @@ if (($? == 0)); then
       echo "InfoStoreAdd lscrn.cnt $moncnt"
    fi
 else
-   echo "${0##*/}: Error in handling monitor count: \"$moncnt\""
+   echo "${0##*/}: invalid monitor count: $moncnt."
    defaultcf
    exit 0
 fi
@@ -133,7 +133,7 @@ do
          rootmenudata=$(@ECHONE@ "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           All MoveToScreen ${scrvar}")
       fi
    else
-      echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
+      echo "${0##*/}: invalid geometry for monitor $mname (width: $scwidth; height: $scheight)." >&2
       defaultcf
       break
    fi
@@ -216,4 +216,3 @@ if [ "x${check_fvwm3}" == "x1" ] ; then
       done < "$UserBackdropsFile"
    fi
 fi
-

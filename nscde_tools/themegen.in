@@ -12,14 +12,14 @@ import shutil
 
 nscde_libdir = os.environ.get('NSCDE_LIBDIR')
 if not nscde_libdir:
-   sys.stderr.write("NSCDE_LIBDIR not set. Stop.\n")
+   sys.stderr.write("NSCDE_LIBDIR is not set. Stopping.\n")
    sys.exit(1)
 else:
    sys.path.append(nscde_libdir + "/python")
 
 nscde_datadir = os.environ.get('NSCDE_DATADIR')
 if not nscde_datadir:
-   sys.stderr.write("NSCDE_DATADIR not defined. Stop.\n")
+   sys.stderr.write("NSCDE_DATADIR is not defined. Stopping.\n")
    sys.exit(1)
 
 themegen="""
@@ -42,7 +42,7 @@ from Opts import Opts
 from MotifColors import readMotifColors2
 
 helptxt="""Generate GTK2 and GTK3 theme in style of CDE/Motif
-Directory 'NsCDE' will be be created as ~/.themes/NsCDE
+Directory 'NsCDE' will be created as ~/.themes/NsCDE
 
 Usage:
    themegen <palettename> ncolors gtk2 gtk3
@@ -116,4 +116,3 @@ theme=Theme(opts)
 Globals.colorshash=readMotifColors2(opts.ncolors,opts.currentpalettefile)
 theme.initTheme()
 theme.updateThemeNow()
-

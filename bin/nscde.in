@@ -10,7 +10,7 @@
 
 # Basic sanity check.
 if [ -z $HOME ]; then
-   echo "Error: HOME not set." >&2
+   echo "Error: HOME is not set." >&2
    exit 2
 else
    export NSCDE_VERSION="@VERSION@"
@@ -35,7 +35,7 @@ echo "${DpiInfo}" | egrep -q "^[[:digit:]]+x[[:digit:]]+$"
 if (($? == 0)); then
    export DPI="${DpiInfo##*x}"
 else
-   echo "Warning: DPI \"$DPI\" is not recognized as X DPI specification. Setting DPI to 96"
+   echo "Warning: DPI value $DPI is not a valid X DPI specification; using 96 instead."
    export DPI=96
 fi
 
@@ -70,8 +70,7 @@ if [ "x$FVWM_BIN" == "x" ]; then
    done
 fi
 if [ "x$FVWM_BIN" == "x" ]; then
-   echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH and"
-   echo "environment variable FVWM_BIN is not set. Exiting."
+   echo "Error: none of fvwm, fvwm2, or fvwm3 was found in $PATH, and FVWM_BIN is not set. Exiting."
    exit 3
 fi
 
@@ -82,17 +81,17 @@ if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
    if (($? == 0)); then
       xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
    else
-      echo "Warning: cannot find xrdb or cpp in ${PATH}, ${FVWM_USERDIR}/Xdefaults will not be processed"
+      echo "Warning: xrdb or cpp was not found in ${PATH}; ${FVWM_USERDIR}/Xdefaults will not be processed."
    fi
 else
-   echo "Warning: cannot read ${FVWM_USERDIR}/Xdefaults file"
+   echo "Warning: cannot read ${FVWM_USERDIR}/Xdefaults."
 fi
 
 # Handle our app-defaults dir if it exists.
 if [ -d "${FVWM_USERDIR}/app-defaults" ]; then
    export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
 else
-   echo "Warning: cannot find ${FVWM_USERDIR}/app-defaults directory"
+   echo "Warning: directory ${FVWM_USERDIR}/app-defaults was not found."
 fi
 
 # Set xset(1), setxkbmap(1), xgamma(1), xmodmap(1) and such things from
@@ -100,7 +99,7 @@ fi
 if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
    . "${FVWM_USERDIR}/Xset.conf"
 else
-   echo "Notice: ${FVWM_USERDIR}/Xset.conf does not exist"
+   echo "Notice: ${FVWM_USERDIR}/Xset.conf does not exist."
 fi
 
 # Early user customizations if needed can be set here.
@@ -119,4 +118,3 @@ fi
 # Do not be picky if there is some failure left.
 # Do the best effort and exit always with 0.
 exit 0
-

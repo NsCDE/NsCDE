@@ -37,7 +37,7 @@ class Opts():
     # load and replace current object namespace with loaded
     # note: this way because yaml.load/save looks nicer when works on dict instead of class
     def load(self,filename):
-        print ('Opts() LOADING '+filename)
+        print ('Loading options from: '+filename)
         with open(filename, 'r') as stream:
             tmpdict = yaml.load(stream)
         # if file is empty(tmpdict=None), do nothing. Then in all classes default values for opts will be used
@@ -48,10 +48,10 @@ class Opts():
     # save namespace (or something)
     def save(self,filename):
         backup=filename+'.backup'
-        print ('Copying old config file to '+backup)
+        print ('Backing up configuration to: '+backup)
         cmd='cp'+' '+filename+' '+backup
         output = subprocess.check_output(cmd, shell=True)
-        print ('Opts() SAVING CONFIG FILE '+filename)
+        print ('Saving configuration to: '+filename)
         with open(filename, 'w') as outfile:
             yaml.dump(self.__dict__, outfile)
 
@@ -90,4 +90,3 @@ def main():
 
 if __name__ == '__main__':
    main()
-

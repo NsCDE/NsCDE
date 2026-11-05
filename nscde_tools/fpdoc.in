@@ -33,7 +33,7 @@ function find_cmd_in_subpanel
          exit 0
       fi
    else
-      echo "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
+      echo "Error: ${0##*/}: no entry found for line ${LineInSubpanel} in subpanel ${SubpanelNo}."
       exit 1
    fi
 }
@@ -55,7 +55,7 @@ elif [ "$Mode" == "-rsubp" ]; then
    RawMan=1
    find_cmd_in_subpanel
 else
-   echo "Error: ${0##*/}: Unknown mode of operation."
+   echo "Error: ${0##*/}: unknown operation mode."
    exit 1
 fi
 
@@ -285,4 +285,3 @@ if (($MANRET != 0)); then
       fi
    fi
 fi
-

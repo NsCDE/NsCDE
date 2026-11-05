@@ -232,7 +232,7 @@ function localsetup
 
 function Usage
 {
-   echo "Usage: ${BaseName} [ -p <Palette Name> ] [ -n <No of Colors> ] [ -5 | -8 ] [ -w ] [ -m ]"
+   echo "Usage: ${BaseName} [ -p <palette name> ] [ -n <number of colors> ] [ -5 | -8 ] [ -w ] [ -m ]"
    echo "               [ -b ] [ -x ] [ -g <gtk2|False,gtk3|False,gtk4|False> ] [ -q qt4,qt5g|qt5k,qt6 ]"
    echo "               [ -l ] [ -r ] [ -R ] [ -h ]"
 
@@ -308,7 +308,7 @@ do
          palette_name="$OPTARG"
          palette_path=$($NSCDE_TOOLSDIR/colormgr -e -c $ncolors -g "$palette_name")
          if [ ! -r "$palette_path" ]; then
-            echo "Palette $palette_name was not found. Path: \"$palette_path\"."
+            echo "Palette $palette_name was not found at $palette_path."
             exit 9
          fi
       ;;
@@ -406,4 +406,3 @@ fi
 if [ "x$ncolors" == "x" ]; then
    Usage Err
 fi
-

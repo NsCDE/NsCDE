@@ -9,7 +9,7 @@
 import configparser, getopt, os, sys, re
 
 def usage():
-    print ("confset [ -c <file> -t [ properties|ini ] [ -s <section> ] -k <key> -v <value> | [ -h ]")
+    print ("Usage: confset -c <file> [ -t <properties|ini> ] [ -s <section> ] -k <key> [ -v <value> | -r ] [ -h ]")
 
 def cmdoptions():
     section = ''
@@ -72,7 +72,7 @@ def main ():
                 parser.set(section, key, value)
         except configparser.NoSectionError:
             if not removekey:
-                print ("No section named " + section + " creating it.")
+                print ("Section " + section + " does not exist; creating it.")
                 parser.add_section(section)
                 parser.set(section, key, value)
 
@@ -99,7 +99,7 @@ def main ():
                             cff.write(dkey + '=' + val)
             cff.close()
         except:
-            print ("Cannot open file", conffile, "trying to create it.")
+            print ("Cannot open " + conffile + "; trying to create it.")
             fh = open(conffile, 'w')
             fh.write(key + ' = ' + value + '\n')
             fh.close()
@@ -108,4 +108,3 @@ def main ():
 if __name__ == '__main__':
     cmdoptions()
     main()
-

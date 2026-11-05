@@ -5,19 +5,19 @@
 #
 
 # NsCDE: routines common for Style Managers ColorMgr and BackdropMgr
-# FvwmScript backgroud workers
+# FvwmScript background workers
 
 # Scans system and user path for palettes and stores them in SysPalettes and UserPalettes variables
 # Used in other API functions and in managers
 function FindPalettes
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      echo "NSCDE_ROOT is not defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      echo "NSCDE_DATADIR is not defined. Exiting."
       exit 2
    fi
 
@@ -36,12 +36,12 @@ function FindPalettes
 function FindBackdrops
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      echo "NSCDE_ROOT is not defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      echo "NSCDE_DATADIR is not defined. Exiting."
       exit 2
    fi
 
@@ -60,12 +60,12 @@ function FindBackdrops
 function FindPhotos
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      echo "NSCDE_ROOT is not defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      echo "NSCDE_DATADIR is not defined. Exiting."
       exit 2
    fi
 
@@ -240,4 +240,3 @@ function GetPaletteByName
       fi
    done
 }
-
