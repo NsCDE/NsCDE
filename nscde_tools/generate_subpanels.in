@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 while getopts wfsh OPT
 do
    case $OPT in
@@ -19,7 +32,8 @@ do
       SYSMODE=1
    ;;
    h)
-      echo "Usage: ${0##*/} [ -w ] [ -f ] [ -h ]"
+      printf "$(nscde_gettext 'Usage: %s [ -w ] [ -f ] [ -h ]')\n" "${0##*/}"
+      exit 0
    ;;
    esac
 done
@@ -30,7 +44,7 @@ fi
 
 if [ -z $FVWM_USERDIR ]; then
    if [[ -z $SYSMODE ]]; then
-      echo "Error: FVWM_USERDIR is not set."
+      printf '%s\n' "$(nscde_gettext 'Error: FVWM_USERDIR is not set.')"
       exit 2
    fi
 fi
@@ -175,4 +189,3 @@ do
       ((id = id + 1))
    done
 done
-

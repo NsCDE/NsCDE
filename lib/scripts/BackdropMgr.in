@@ -147,7 +147,7 @@ Widget 1
    Type ItemDraw
    Flags NoReliefString Left NoFocus
    Colorset 22
-   Title { Backdrops }
+   LocaleTitle { Backdrops }
    Font "xft:::pixelsize=16"
    Main
       Case message of
@@ -296,7 +296,7 @@ Widget 5
 
          # Set picture name in the upper title
          Set $StrSpace = (Add $StrLen 84)
-         Set $NameInTitle = { Pictures: } $PhotoName
+         Set $NameInTitle = { } (Gettext {Pictures:}) { } $PhotoName
          ChangeSize 1 $StrSpace 22
          ChangeTitle 1 $NameInTitle
       End
@@ -356,7 +356,7 @@ Widget 6
    Font "xft:::pixelsize=15"
    Flags NoReliefString Left
    Value 0
-   Title { Use this backdrop for all workspaces}
+   LocaleTitle { Use this backdrop for all workspaces}
    Colorset 22
    Main
       Case message of
@@ -384,7 +384,7 @@ Widget 7
    Font "xft:::pixelsize=15"
    Flags NoReliefString Left
    Value 0
-   Title { Use a photo or picture}
+   LocaleTitle { Use a photo or picture}
    Colorset 22
    Main
       Case message of
@@ -392,7 +392,7 @@ Widget 7
       Begin
          If (GetValue 7) == 1 Then
          Begin
-            ChangeTitle 1 { Pictures }
+            ChangeLocaleTitle 1 { Pictures }
             ChangeSize 1 80 22
             Set $Photos = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -P} 1 -1)
             ChangeTitle 5 $Photos
@@ -408,7 +408,7 @@ Widget 7
          End
          Else
          Begin
-            ChangeTitle 1 { Backdrops }
+            ChangeLocaleTitle 1 { Backdrops }
             ChangeSize 1 90 22
             Set $Backdrops = (GetOutput {$NSCDE_TOOLSDIR/backdropmgr -p} 1 -1)
             ChangeTitle 5 $Backdrops
@@ -460,7 +460,7 @@ Widget 9
    Type PopupMenu
    Flags NoReliefString
    Value 0
-   Title { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
+   LocaleTitle { Default for this Workspace| Background Variant 1| Background Variant 2| Background Variant 3| Background Variant 4 }
    Font "xft:::pixelsize=15"
    Colorset 22
    Main
@@ -545,11 +545,11 @@ Widget 10
          If $CurrentPalette == {DEFAULT} Then
          Begin
             Set $CurrentPalette = $DefaultPalette
-            ChangeTitle 10 { Load Custom Palette ...}
+            ChangeLocaleTitle 10 { Load Custom Palette ... }
          End
          Else
          Begin
-            Set $NewWidgetTitle = {Palette: } $CurrentPalette
+            Set $NewWidgetTitle = (Gettext {Palette:}) { } $CurrentPalette
             ChangeTitle 10 $NewWidgetTitle
          End
       End
@@ -561,7 +561,7 @@ Widget 11
    Position 340 342
    Type PushButton
    Flags NoReliefString
-   Title { Preview | Preview | Revert }
+   LocaleTitle { Preview | Preview | Revert }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -726,7 +726,7 @@ Widget 12
                   # Workaround FvwmScript lack of programatic cases or elifs ...
                   If $CheckPhotoFileConv <> {noconv} Then
                   Begin
-                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "Error from $[NSCDE_TOOLSDIR]/backdropmgr: } $CheckPhotoFileConv {."}
+                     Do {f_Notifier "Backdrop Style Manager" "Dismiss" "NsCDE/Error.xpm" "$[gt.Error from backdropmgr:] } $CheckPhotoFileConv {."}
                   End
                End
             End
@@ -1006,4 +1006,3 @@ Widget 19
          Do {f_DisplayURL "$[gt.Backdrop Style Manager]" html/NsCDE-BackdropMgr.html}
       End
 End
-

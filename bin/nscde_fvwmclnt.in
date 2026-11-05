@@ -14,6 +14,19 @@
 # fvwm2 with fvwm2 as binary name
 # fallback if found
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="NsCDE"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Check if NsCDE FVWM_BIN is set, and try to find FvwmCommand in the same directory.
 if [ "x$FVWM_BIN" != "x" ]; then
    FVWM_BASE=${FVWM_BIN%/*}
@@ -50,6 +63,5 @@ fi
 if [ "x$FVWM_CLNT" != "x" ]; then
    exec $FVWM_CLNT "$@"
 else
-   echo "ERROR: Cannot find suitable FvwmCommand for your setup." >&2
+   printf '%s\n' "$(nscde_gettext 'Error: cannot find a suitable FvwmCommand for this setup.')" >&2
 fi
-

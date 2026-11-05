@@ -9,9 +9,22 @@
 OLD_LC_ALL="$LC_ALL"
 IFS=" "
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 function usage
 {
-   echo "Usage: ${0##*/} -t <title> -b <buttontitle> -i <icon> [ -s <textstr> | -f <file> ] [ -l <catalog name> ] [ -h ]"
+   printf "$(nscde_gettext 'Usage: %s -t <title> -b <button title> -i <icon> [ -s <text> | -f <file> ] [ -l <catalog name> ] [ -h ]')\n" "${0##*/}"
    exit $1
 }
 
@@ -57,14 +70,14 @@ while getopts t:b:i:s:f:l:h Option
 do
    case $Option in
       t)
-         if $(whence -q gettext); then
+         if whence -q gettext; then
             sh_WindowTitle=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
          else
             sh_WindowTitle="$OPTARG"
          fi
       ;;
       b)
-         if $(whence -q gettext); then
+         if whence -q gettext; then
             sh_ButtonTitle=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
          else
             sh_ButtonTitle="$OPTARG"
@@ -74,7 +87,7 @@ do
          sh_IconFile="$OPTARG"
       ;;
       s)
-         if $(whence -q gettext); then
+         if whence -q gettext; then
             sh_TextString=$(TEXTDOMAINDIR="$NSCDE_ROOT/share/locale" gettext -d NsCDE -s "$OPTARG")
          else
             sh_TextString="$OPTARG"
@@ -251,4 +264,3 @@ Widget 3
 End
 
 EOF
-

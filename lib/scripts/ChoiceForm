@@ -4,7 +4,8 @@
 # Licence: GPLv3
 #
 
-WindowTitle {Question}
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE}
+WindowLocaleTitle {Question}
 WindowSize 400 134
 Colorset 22
 
@@ -22,7 +23,7 @@ Begin
 
         If $TaskText == {} Then
         Begin
-           ChangeTitle 1 {Please select option you want:}
+           ChangeLocaleTitle 1 {Please select option you want:}
         End
         Else
         Begin
@@ -44,7 +45,7 @@ Begin
 
         If $OkStr == {} Then
         Begin
-           ChangeTitle 4 {OK}
+           ChangeLocaleTitle 4 {OK}
         End
         Else
         Begin
@@ -53,7 +54,7 @@ Begin
 
         If $CancelStr == {} Then
         Begin
-           ChangeTitle 5 {Cancel}
+           ChangeLocaleTitle 5 {Cancel}
         End
         Else
         Begin
@@ -117,7 +118,7 @@ Widget 4
    Size 96 0
    Position 16 94
    Type PushButton
-   Title {OK}
+   LocaleTitle {OK}
    Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
@@ -138,7 +139,7 @@ Widget 5
    Size 96 0
    Position 288 94
    Type PushButton
-   Title {Dismiss}
+   LocaleTitle {Dismiss}
    Font "xft:::pixelsize=15"
    Flags NoReliefString Center
    Main
@@ -166,4 +167,3 @@ Widget 6
       Begin
       End
 End
-

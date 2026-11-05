@@ -5,7 +5,7 @@
 #
 
 UseGettext {$NSCDE_ROOT/share/locale;NsCDE-Subpanel:$NSCDE_ROOT/share/locale;NsCDE-Subpanels}
-WindowTitle {Subpanel Settings}
+WindowLocaleTitle {Subpanel Settings}
 WindowSize 370 270
 Colorset 22
 
@@ -131,7 +131,7 @@ Widget 1
    Size 320 20
    Type ItemDraw
    Flags NoReliefString Left NoFocus
-   Title {Subpanel Settings: }
+   LocaleTitle {Subpanel Settings: }
    Font "xft:::pixelsize=15"
    Main
       Case message of
@@ -410,12 +410,12 @@ Widget 14
 
          If $GenerateFvwmButtonsCfg2 <> {} Then
          Begin
-            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg2 {\\\""}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "$[gt.Unexpected output from generate_subpanels command: ]\\\"} $GenerateFvwmButtonsCfg2 {\\\""}
          End
 
          If $GenerateFvwmButtonsCfg3 <> {} Then
          Begin
-            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "Unexpected output from generate_subpanels command: \\\"} $GenerateFvwmButtonsCfg3 {\\\""}
+            Do {f_Notifier "Subpanel Settings" "Dismiss" "NsCDE/Error.xpm" "$[gt.Unexpected output from generate_subpanels command: ]\\\"} $GenerateFvwmButtonsCfg3 {\\\""}
          End
 
          # Case where disabled subpanel has been enabled
@@ -513,4 +513,3 @@ Widget 17
          End
       End
 End
-

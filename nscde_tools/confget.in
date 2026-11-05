@@ -6,10 +6,14 @@
 # Licence: GPLv3
 #
 
-import configparser, getopt, os, sys, re
+import configparser, getopt, os, sys, re, gettext
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 def usage():
-    print ("confget [ -c <file> [ -s <section> ] -k <key> [ -h ]")
+    print (_("Usage: confget -c <file> [ -s <section> ] -k <key> [ -h ]"))
 
 def cmdoptions():
     section = ''
@@ -75,4 +79,3 @@ def main ():
 if __name__ == '__main__':
     cmdoptions()
     main()
-

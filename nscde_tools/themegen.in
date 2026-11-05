@@ -9,23 +9,28 @@
 import os
 import sys
 import shutil
+import gettext
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 nscde_libdir = os.environ.get('NSCDE_LIBDIR')
 if not nscde_libdir:
-   sys.stderr.write("NSCDE_LIBDIR not set. Stop.\n")
+   sys.stderr.write(_("NSCDE_LIBDIR is not set. Stopping.\n"))
    sys.exit(1)
 else:
    sys.path.append(nscde_libdir + "/python")
 
 nscde_datadir = os.environ.get('NSCDE_DATADIR')
 if not nscde_datadir:
-   sys.stderr.write("NSCDE_DATADIR not defined. Stop.\n")
+   sys.stderr.write(_("NSCDE_DATADIR is not defined. Stopping.\n"))
    sys.exit(1)
 
-themegen="""
+themegen=_("""
 For this script to work you need to install the Python 3
 Qt4 (PyQt4) modules, or Python 3 Qt5 (PyQt5) modules.
-"""
+""")
 
 try:
    from PyQt4 import QtCore, QtGui
@@ -41,8 +46,8 @@ from Theme import Theme
 from Opts import Opts
 from MotifColors import readMotifColors2
 
-helptxt="""Generate GTK2 and GTK3 theme in style of CDE/Motif
-Directory 'NsCDE' will be be created as ~/.themes/NsCDE
+helptxt=_("""Generate GTK2 and GTK3 theme in style of CDE/Motif
+Directory 'NsCDE' will be created as ~/.themes/NsCDE
 
 Usage:
    themegen <palettename> ncolors gtk2 gtk3
@@ -74,7 +79,7 @@ Examples:
 
     From file which is not in system's nor user's palette directory:
        themegen /home/jdoe/pixmaps/MyNewPalette.dp 8 gtk2 gtk3
-""".format(**locals())
+""").format(**locals())
 
 if len(sys.argv)!=5:
     print (helptxt)
@@ -104,7 +109,7 @@ elif os.path.exists(palettefile):
     opts.currentpalettefile=palettefile
     # nscdetheme="NsCDE-" + os.path.basename(nscdetheme.replace(".dp", ""))
 else:
-    print ('Palette not found: ' + palettefile)
+    print (_('Palette not found: %s') % palettefile)
     sys.exit()
 
 Globals.themedir=nscde_datadir + "/integration/gtk2_gtk3_qt"
@@ -116,4 +121,3 @@ theme=Theme(opts)
 Globals.colorshash=readMotifColors2(opts.ncolors,opts.currentpalettefile)
 theme.initTheme()
 theme.updateThemeNow()
-

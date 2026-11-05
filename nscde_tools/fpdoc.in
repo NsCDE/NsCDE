@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Called from f_FrontPanelPropsMenu and f_SubpanelPropsMenu to
 # populate Help menu item as best as it can with fuzzy finding
 # internal docs or man pages.
@@ -33,7 +46,7 @@ function find_cmd_in_subpanel
          exit 0
       fi
    else
-      echo "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
+      printf "$(nscde_gettext 'Error: %s: no entry found for line %s in subpanel %s.')\n" "${0##*/}" "$LineInSubpanel" "$SubpanelNo"
       exit 1
    fi
 }
@@ -55,13 +68,11 @@ elif [ "$Mode" == "-rsubp" ]; then
    RawMan=1
    find_cmd_in_subpanel
 else
-   echo "Error: ${0##*/}: Unknown mode of operation."
+   printf "$(nscde_gettext 'Error: %s: unknown operation mode.')\n" "${0##*/}"
    exit 1
 fi
 
 OS=$(uname -s)
-
-echo "Echo Debug ========> Fpdoc string we parse: $Str"
 
 if [ "x$TMPDIR" == "x" ]; then
    TMPDIR=${FVWM_USERDIR}/tmp
@@ -285,4 +296,3 @@ if (($MANRET != 0)); then
       fi
    fi
 fi
-

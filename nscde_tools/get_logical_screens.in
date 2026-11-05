@@ -11,6 +11,19 @@
 # and export this as FVWM infostore variables for use in FVWM
 # On a cloned display, this will simply return one global size
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 IFS=" "
 check_fvwm3=${FVWM_IS_FVWM3}
 
@@ -34,7 +47,7 @@ function defaultcf
 # Without xrandr(1) we cannot continue.
 type -qp xrandr
 if (($? != 0)); then
-   echo "${0##*/}: xrandr command is not available in PATH. Setting default one monitor setup." >&2
+   printf "$(nscde_gettext '%s: xrandr is not available in PATH; using a single-monitor setup.')\n" "${0##*/}" >&2
    defaultcf
    exit 0
 fi
@@ -46,7 +59,7 @@ mdata=$(xrandr --listmonitors)
 # for this Xinerama/SLS support.
 screencnt=$(echo "$xdata" | wc -l)
 if (($screencnt > 1)); then
-   echo "${0##*/}: More than one local screen handling is not yet tested and hence not supported." >&2
+   printf "$(nscde_gettext '%s: multiple local X screens are not currently supported.')\n" "${0##*/}" >&2
    defaultcf
    exit 0
 fi
@@ -81,7 +94,7 @@ if (($? == 0)); then
       echo "InfoStoreAdd lscrn.cnt $moncnt"
    fi
 else
-   echo "${0##*/}: Error in handling monitor count: \"$moncnt\""
+   printf "$(nscde_gettext '%s: invalid monitor count: %s.')\n" "${0##*/}" "$moncnt"
    defaultcf
    exit 0
 fi
@@ -130,10 +143,10 @@ do
          echo "InfoStoreAdd lscrn.${scrvar}.pos.x $scpos_x"
          echo "InfoStoreAdd lscrn.${scrvar}.pos.y $scpos_y"
          echo "InfoStoreAdd lscrn.${scrvar}.name $mname"
-         rootmenudata=$(@ECHONE@ "$rootmenudata\nAddToMenu m_SlsMoveAll \"Move To Logical Screen: &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           All MoveToScreen ${scrvar}")
+         rootmenudata=$(@ECHONE@ "$rootmenudata\nAddToMenu m_SlsMoveAll \"\$[gt.Move To Logical Screen:] &${scnum} ($[infostore.lscrn.${scrvar}.name]) ...\"           All MoveToScreen ${scrvar}")
       fi
    else
-      echo "${0##*/}: Error in handling monitor $mname width: (\"$scwidth\") or height (\"$scheight\")" >&2
+      printf "$(nscde_gettext '%s: invalid geometry for monitor %s (width: %s; height: %s).')\n" "${0##*/}" "$mname" "$scwidth" "$scheight" >&2
       defaultcf
       break
    fi
@@ -144,7 +157,7 @@ if (($scpos_sum > 0)); then
    echo ""
    echo "DestroyMenu m_SlsMoveAll"
    echo "AddToMenu m_SlsMoveAll"
-   echo "+ \"&Move All Windows To This Screen\"            f_MoveAllToThisScreen"
+   echo '+ "$[gt.&Move All Windows To This Screen]"            f_MoveAllToThisScreen'
    echo "+ \"\" Nop"
    echo "$rootmenudata" | egrep -v '^$'
 
@@ -216,4 +229,3 @@ if [ "x${check_fvwm3}" == "x1" ] ; then
       done < "$UserBackdropsFile"
    fi
 fi
-

@@ -6,12 +6,25 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # This script is workaround for xdotool which is workaround for non-patched FvwmButtons
 # to get names of the subpanels in place.
 
 type -qp xdotool
 if (($? != 0)); then
-   echo "No xdotool found. Exiting." >&2
+   printf '%s\n' "$(nscde_gettext 'xdotool was not found. Exiting.')" >&2
    exit 1
 fi
 
@@ -24,7 +37,7 @@ function xdofunc
       if (($? == 0)); then
          xdotool search --name "NsCDE-Subpanel${subp}$" > /dev/null 2>&1
          if (($? == 0)); then
-            echo "Refreshing subpanel NsCDE-Subpanel${subp}" >&2
+            printf "$(nscde_gettext 'Refreshing subpanel %s')\n" "NsCDE-Subpanel${subp}" >&2
             $NSCDE_ROOT/bin/nscde_fvwmclnt "Exec exec xdotool search --name "NsCDE-Subpanel${subp}\$" \
                          set_window --name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\" \
                          --icon-name \"\$[infostore.NsCDE-Subpanel${subp}-Name]\""
@@ -49,4 +62,3 @@ do
 
    (( cnt = cnt + 1 ))
 done
-

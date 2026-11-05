@@ -22,6 +22,11 @@ import os
 import sys
 import shutil
 import getopt
+import gettext
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 bg=[0,0,0,0,0,0,0,0,0]
 fg=[0,0,0,0,0,0,0,0,0]
@@ -729,7 +734,7 @@ def gencdecolors(palettefile,n,infile,outdir,fext,shorten_colorhex):
 
 
 def usage():
-    print ("Used to generate colorsets for fvwm, Xresources, backdrops and element pixmaps")
+    print (_("Generate colorsets for FVWM, X resources, backdrops, and interface pixmaps."))
 
 def main():
     shorten_colorhex = 0
@@ -816,4 +821,3 @@ def main():
 # Action ...
 if __name__ == '__main__':
     main()
-

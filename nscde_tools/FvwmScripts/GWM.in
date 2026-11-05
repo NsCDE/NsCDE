@@ -13,9 +13,22 @@ write_gwm_conf=0
 write_gwm_script=0
 prepare_piperead=0
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 function usage
 {
-   echo "Usage: ${0##*/} -w <vp width> -h <vp height> -f <reduction factor> -d <no of desks> [ -c <pager conf file> ] [ -s ] | [ -H ]"
+   printf "$(nscde_gettext 'Usage: %s -w <viewport width> -h <viewport height> -f <reduction factor> -d <number of desks> [ -c <pager configuration file> ] [ -s ] | [ -H ]')\n" "${0##*/}"
    exit $1
 }
 
@@ -770,4 +783,3 @@ fi
 if (($write_gwm_script == 1)); then
    WriteGwmScript
 fi
-

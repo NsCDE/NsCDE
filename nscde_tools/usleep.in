@@ -8,11 +8,16 @@
 
 import time
 import sys
+import gettext
+import os
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 usleep = lambda x: time.sleep(x/1000000.0)
 
 try:
    usleep(int(sys.argv[1]))
 except:
-    print("Usage: usleep <microseconds>")
-
+    print(_("Usage: usleep <microseconds>"))

@@ -9,18 +9,32 @@
 # NsCDE: colormgr shell script
 # BackdropMgr FvwmScript backgroud worker
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# Keep numeric and sort output stable without overriding the user's message locale.
+export LC_NUMERIC=C
+export LC_COLLATE=C
 
 # Defaults for -t and -e.
 PreviewMode=0
 EchoInfo=0
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Load common functions
 if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
    . ${NSCDE_TOOLSDIR}/style_managers.shlib
 else
-   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   printf "$(nscde_gettext 'Error: cannot load %s.')\n" "${NSCDE_TOOLSDIR}/style_managers.shlib"
    exit 1
 fi
 
@@ -32,7 +46,7 @@ fi
 function CheckBackdrop
 {
    if [ -x $(type -p file) ]; then
-      file $1 | grep -q 'X pixmap image'
+      LC_ALL=C file "$1" | grep -q 'X pixmap image'
       if (($? == 0)); then
          echo "xpixmap"
       else
@@ -163,7 +177,7 @@ function GeneratePhotoPreview
             if (($? == 0)) then
                ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
             else
-               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+               printf "$(nscde_gettext 'Error: could not convert photo %s.')\n" "$PhotoNamePath"
             fi
             OldBackdrop=$(egrep "Colorset 3${Desk}( bg ${bgcs},)? (Tiled|Aspect)?Pixmap (.*)" "${FVWM_USERDIR}/Backdrops.fvwmgen")
             sededpath=$(echo "$ConvertedPhoto" | sed 's/\//\\\//g')
@@ -172,7 +186,7 @@ function GeneratePhotoPreview
                rm -f "${FVWM_USERDIR}/backer/${OldBackdrop##*/}"
             fi
          else
-            echo "Error getting image path for $1."
+            printf "$(nscde_gettext 'Error: could not get the image path for %s.')\n" "$1"
          fi
       else
          if [ -s "$PhotoNamePath" ]; then
@@ -184,12 +198,12 @@ function GeneratePhotoPreview
             if (($? == 0)) then
                ConvertedPhoto="$[FVWM_USERDIR]/backer/Desk${Desk}-${PhotoNamePath##*/}"
             else
-               echo "Error: convert of photo $PhotoNamePath did not suceeded."
+               printf "$(nscde_gettext 'Error: could not convert photo %s.')\n" "$PhotoNamePath"
             fi
             bgcs_clean=$(echo "${bgcs}" | sed 's/\\//g')
             echo "Colorset 3${Desk} bg ${bgcs_clean}, $PixmapVariant $ConvertedPhoto" >> ${FVWM_USERDIR}/Backdrops.fvwmgen
          else
-            echo "Error getting image path for $1."
+            printf "$(nscde_gettext 'Error: could not get the image path for %s.')\n" "$1"
          fi
       fi
 
@@ -276,7 +290,7 @@ do
          GetBackdropByNumber $OPTARG
       ;;
       h)
-         echo "Usage: ${0##*/} <options ...>"
+         printf "$(nscde_gettext 'Usage: %s <options ...>')\n" "${0##*/}"
       ;;
    esac
 done

@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Function: examine_entrypart
 # Purpose: detect and count missing
 # entries until next valid one
@@ -64,14 +77,14 @@ function subpanels_file_tstamp
    REGEN=0
    if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen" ]]; then
       if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen" ]; then
-         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.fvwm2.fvwmgen ... regenerating last one." >&2
+         printf "$(nscde_gettext '%s is newer than %s; regenerating the latter.')\n" "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/Subpanels.fvwm2.fvwmgen" >&2
          $NSCDE_TOOLSDIR/generate_subpanels -w > $FVWM_USERDIR/Subpanels.fvwm2.fvwmgen
          REGEN=1
       fi
    fi
    if [[ -r "$FVWM_USERDIR/Subpanels.actions" && -r "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen" ]]; then
       if [ "$FVWM_USERDIR/Subpanels.actions" -nt "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen" ]; then
-         echo "File $FVWM_USERDIR/Subpanels.actions is newer than $FVWM_USERDIR/Subpanels.fvwm3.fvwmgen ... regenerating last one." >&2
+         printf "$(nscde_gettext '%s is newer than %s; regenerating the latter.')\n" "$FVWM_USERDIR/Subpanels.actions" "$FVWM_USERDIR/Subpanels.fvwm3.fvwmgen" >&2
          $NSCDE_TOOLSDIR/generate_subpanels -f > $FVWM_USERDIR/Subpanels.fvwm3.fvwmgen
          REGEN=1
       fi
@@ -301,14 +314,14 @@ function manage_entry
             $NSCDE_ROOT/bin/nscde_fvwmclnt "f_Notifier \"Subpanel Properties\" \"Dismiss\" \"NsCDE/Error.xpm\" \
                         \"$[gt.Action for item] '$TITLE' $[gt.not performed on Subpanel] $subpid. $[gt.Errors found in] $tmpfile.\""
          else
-            echo "Action for item $TITLE not performed on Subpanel $subpid. Errors in $tmpfile found." >&2
+            printf "$(nscde_gettext 'Action for item %s was not performed on subpanel %s; errors were written to %s.')\n" "$TITLE" "$subpid" "$tmpfile" >&2
          fi
          exit 2
       fi
    fi
 
    if [ -f "$tmpfile" ]; then
-      echo "Removing stale tmp file $tmpfile" >&2
+      printf "$(nscde_gettext 'Removing stale temporary file %s.')\n" "$tmpfile" >&2
       rm -f "$tmpfile"
    fi
 }
@@ -406,7 +419,7 @@ function copy_to_main_panel
       entry_to_copy=$(egrep -h "^S${subpid},ENTRY,*" "$NSCDE_DATADIR/defaults/Subpanels.actions" | sed -n "${entryid}p")
    fi
    if [ "x$entry_to_copy" == "x" ]; then
-      echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): internal error. No entry in system Subpanels.actons file."
+      printf '%s\n' "$(nscde_gettext 'Error: subpanel_menuitem_props (copy_to_main_panel): no entry in the system Subpanels.actions file.')"
       exit 10
    fi
    echo "$entry_to_copy" | tail -1 | while IFS="," read smark emark title type icon cmd
@@ -414,7 +427,7 @@ function copy_to_main_panel
       for content in "$title" "$icon" "$cmd"
       do
          if [ "x$content" == "x" ]; then
-            echo "ERROR: subpanel_menuitem_props (copy_to_main_panel): empty title, icon or command definition."
+            printf '%s\n' "$(nscde_gettext 'Error: subpanel_menuitem_props (copy_to_main_panel): the title, icon, or command is empty.')"
             exit 10
          fi
       done
@@ -441,7 +454,7 @@ function copy_to_main_panel
 
       # Try find_appropriate_icon with different extensions.
       if (($ENOICON == 1)); then
-         echo "Trying heuristics with icon extension formats while searching for an icon ..."
+         printf '%s\n' "$(nscde_gettext 'Trying alternate file extensions while searching for an icon ...')"
          export ENOICON=0
          case "$icon_ext" in
          'png')
@@ -693,7 +706,7 @@ function delete_confirm
 {
    if [[ -n $DISPLAY ]]; then
       $NSCDE_ROOT/bin/nscde_fvwmclnt "f_RunQuickScriptDialog ActionForm \
-                   \"$[gt.Delete item] \\\"$TITLE\\\" $[gt.from the subpanel] ${subpid}?\" \
+                   \"$[gt.Delete item] \\\"$TITLE\\\"? $[gt.Subpanel]: ${subpid}.\" \
                    $[gt.Yes] $[gt.No] \"$[gt.Confirm Entry Deletion]\" \
                    \"f_DeleteFromSubpanel $subpid $entryid\" Nop"
    fi
@@ -744,4 +757,3 @@ do
       ;;
    esac
 done
-

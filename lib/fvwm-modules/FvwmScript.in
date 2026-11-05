@@ -1,5 +1,18 @@
 #!@KSH@
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="NsCDE"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Check if there is a XOverrideFontCursor.so for LD_PRELOAD and if LD_PRELOAD is already in
 # use so we can append to the variable, and be careful to use colon as library object separator
 OS_PLUS_MACHINE_ARCH=$(uname -sm | tr ' ' '_')
@@ -22,7 +35,7 @@ if [ -x "$NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so" ]; then
             fi
          fi
       else
-         echo "Notice: $NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so is already ld-preloaded, skipping" >&2
+         printf "$(nscde_gettext 'Notice: %s is already preloaded; skipping it.')\n" "$NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so" >&2
       fi
    else
       export LD_PRELOAD="$NSCDE_LIBDIR/$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor.so"
@@ -31,4 +44,3 @@ fi
 
 # Call the real FvwmScript
 exec ${FVWM_MODULEDIR}/FvwmScript "$@"
-
