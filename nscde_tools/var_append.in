@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 valsep="$1"
 varname="$2"
 varnewval="$3"
@@ -19,7 +32,7 @@ eval varcontent='$'$varname
 for argv in "$valsep" "$varname" "$varnewval"
 do
    if [ "x$argv" == "x" ]; then
-      echo "Usage: ${0##*/} <separator> <varname> <varvalue>" >&2
+      printf "$(nscde_gettext 'Usage: %s <separator> <variable name> <variable value>')\n" "${0##*/}" >&2
       if [ "x$varname" != "x" ]; then
          echo "$varcontent"
       fi

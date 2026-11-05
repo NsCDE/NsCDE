@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 funcname=$1
 menuname=$2
 
@@ -46,8 +59,7 @@ if (($file_err == 0)); then
       curr_res="${res}"
    done
 else
-   echo "${0##*/}: No valid applications menus file found." >&2
+   printf "$(nscde_gettext '%s: no valid application-menu file was found.')\n" "${0##*/}" >&2
 fi
 
 echo "+ I InfoStoreRemove menuitem.clres"
-

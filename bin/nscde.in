@@ -8,9 +8,22 @@
 
 # Main starting wrapper
 
+TEXTDOMAINDIR="@NSCDE_DATADIR@/../locale"
+TEXTDOMAIN="NsCDE"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Basic sanity check.
 if [ -z $HOME ]; then
-   echo "Error: HOME not set." >&2
+   printf '%s\n' "$(nscde_gettext 'Error: HOME is not set.')" >&2
    exit 2
 else
    export NSCDE_VERSION="@VERSION@"
@@ -18,7 +31,7 @@ fi
 
 # Either print version and exit, or construct main options for and output
 if [ "$1" == "-V" ]; then
-   echo "NsCDE Version $NSCDE_VERSION"
+   printf "$(nscde_gettext 'NsCDE Version %s')\n" "$NSCDE_VERSION"
    exit 0
 elif [ "$1" == "-v" ]; then
    echo "$NSCDE_VERSION"
@@ -35,7 +48,7 @@ echo "${DpiInfo}" | egrep -q "^[[:digit:]]+x[[:digit:]]+$"
 if (($? == 0)); then
    export DPI="${DpiInfo##*x}"
 else
-   echo "Warning: DPI \"$DPI\" is not recognized as X DPI specification. Setting DPI to 96"
+   printf "$(nscde_gettext 'Warning: DPI value %s is not a valid X DPI specification; using 96 instead.')\n" "$DpiInfo"
    export DPI=96
 fi
 
@@ -70,8 +83,7 @@ if [ "x$FVWM_BIN" == "x" ]; then
    done
 fi
 if [ "x$FVWM_BIN" == "x" ]; then
-   echo "Error: cannot detect niether fvwm, fvwm2 nor fvwm3 in $PATH and"
-   echo "environment variable FVWM_BIN is not set. Exiting."
+   printf "$(nscde_gettext 'Error: none of fvwm, fvwm2, or fvwm3 was found in %s, and FVWM_BIN is not set. Exiting.')\n" "$PATH"
    exit 3
 fi
 
@@ -82,17 +94,17 @@ if [ -r "${FVWM_USERDIR}/Xdefaults" ]; then
    if (($? == 0)); then
       xrdb -remove && xrdb -cpp /usr/bin/cpp < ${FVWM_USERDIR}/Xdefaults
    else
-      echo "Warning: cannot find xrdb or cpp in ${PATH}, ${FVWM_USERDIR}/Xdefaults will not be processed"
+      printf "$(nscde_gettext 'Warning: xrdb or cpp was not found in %s; %s will not be processed.')\n" "$PATH" "${FVWM_USERDIR}/Xdefaults"
    fi
 else
-   echo "Warning: cannot read ${FVWM_USERDIR}/Xdefaults file"
+   printf "$(nscde_gettext 'Warning: cannot read %s.')\n" "${FVWM_USERDIR}/Xdefaults"
 fi
 
 # Handle our app-defaults dir if it exists.
 if [ -d "${FVWM_USERDIR}/app-defaults" ]; then
    export XAPPLRESDIR="${FVWM_USERDIR}/app-defaults"
 else
-   echo "Warning: cannot find ${FVWM_USERDIR}/app-defaults directory"
+   printf "$(nscde_gettext 'Warning: directory %s was not found.')\n" "${FVWM_USERDIR}/app-defaults"
 fi
 
 # Set xset(1), setxkbmap(1), xgamma(1), xmodmap(1) and such things from
@@ -100,7 +112,7 @@ fi
 if [ -r "${FVWM_USERDIR}/Xset.conf" ]; then
    . "${FVWM_USERDIR}/Xset.conf"
 else
-   echo "Notice: ${FVWM_USERDIR}/Xset.conf does not exist"
+   printf "$(nscde_gettext 'Notice: %s does not exist.')\n" "${FVWM_USERDIR}/Xset.conf"
 fi
 
 # Early user customizations if needed can be set here.
@@ -119,4 +131,3 @@ fi
 # Do not be picky if there is some failure left.
 # Do the best effort and exit always with 0.
 exit 0
-

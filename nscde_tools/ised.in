@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Wrapper for sed used heavily in FvwmScript scripts
 # We are not using "sed -i" since GNU sed is not present on
 # all systems, specially not under it's original name.
@@ -30,7 +43,7 @@ case $NSCDE_OS in
          if (($? == 0)); then
             SED="sed"
          else
-            echo "Error: ${0##*/}: Cannot find GNU sed."
+            printf "$(nscde_gettext 'Error: %s: cannot find GNU sed.')\n" "${0##*/}"
          exit 4
          fi
       fi
@@ -44,7 +57,7 @@ case $NSCDE_OS in
       if (($? == 0)); then
          SED="gsed"
       else
-         echo "Error: ${0##*/}: Cannot find GNU sed."
+         printf "$(nscde_gettext 'Error: %s: cannot find GNU sed.')\n" "${0##*/}"
          exit 4
       fi
    fi
@@ -67,7 +80,7 @@ do
       TO_STDOUT=1
    ;;
    h)
-      echo "Usage: ${0##*/} -s <sedopts> -c <sedcode> [ -f <inputfile> ] [ -h ]"
+      printf "$(nscde_gettext 'Usage: %s -s <sed options> -c <sed code> [ -f <input file> ] [ -h ]')\n" "${0##*/}"
       exit 0
    ;;
    esac

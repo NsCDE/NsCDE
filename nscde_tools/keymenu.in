@@ -6,13 +6,26 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 KeybindingsType="$2"
 
 if [ "x${KeybindingsType}" == "x" ]; then
-   echo "NsCDE: KeybindingsType was empty, using default: cua." >&2
-   KeybindingsType="cucuaa"
+   printf '%s\n' "$(nscde_gettext 'NsCDE: KeybindingsType is empty; using the default: cua.')" >&2
+   KeybindingsType="cua"
 else
-   echo "NsCDE: Using KeybindingsType ${2}." >&2
+   printf "$(nscde_gettext 'NsCDE: using KeybindingsType %s.')\n" "$KeybindingsType" >&2
 fi
 
 function config_for_menu
@@ -119,4 +132,3 @@ do
       ;;
    esac
 done
-

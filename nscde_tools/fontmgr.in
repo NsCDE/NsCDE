@@ -6,19 +6,32 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 if [ -z $NSCDE_ROOT ]; then
-   echo "Error: NSCDE_ROOT is not set. Exiting."
+   printf '%s\n' "$(nscde_gettext 'Error: NSCDE_ROOT is not set. Exiting.')"
    exit 2
 fi
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "Error: NSCDE_DATADIR is not set. Exiting."
+   printf '%s\n' "$(nscde_gettext 'Error: NSCDE_DATADIR is not set. Exiting.')"
    exit 2
 fi
 
 type -p fc-list > /dev/null
 if (($? != 0)); then
-   echo "Error: fc-list command not found."
+   printf '%s\n' "$(nscde_gettext 'Error: the fc-list command was not found.')"
    exit 3
 fi
 
@@ -31,12 +44,12 @@ FNUMS=$(echo "$FNAMES" | sort -u | grep -En '.*')
 function findfontsets
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      printf '%s\n' "$(nscde_gettext 'NSCDE_ROOT is not defined. Exiting.')"
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      printf '%s\n' "$(nscde_gettext 'NSCDE_DATADIR is not defined. Exiting.')"
       exit 2
    fi
 
@@ -330,8 +343,7 @@ do
          miscintegrations
       ;;
       h)
-         echo "Usage: ..."
+         printf "$(nscde_gettext 'Usage: %s [ -pP ] [ -F <font-set number> ] [ -f <font-set name> ] [ -gGnN <value> ] [ -s <style> ] [ -rXmTQM <value> ] [ -h ]')\n" "${0##*/}"
       ;;
    esac
 done
-

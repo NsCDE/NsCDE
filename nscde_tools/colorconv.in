@@ -9,6 +9,12 @@
 import colorsys
 import sys
 import getopt
+import gettext
+import os
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 def hsv2rgb(hsv1, hsv2, hsv3):
    hsv1 = float(hsv1)
@@ -36,7 +42,7 @@ def rgb2hex(rgb1, rgb2, rgb3, x11_16_bit):
       print ('%01s%02x%02x%02x%02x%02x%02x' % ("#", rgb1, rgb1, rgb2, rgb2, rgb3, rgb3))
 
 def usage():
-    print ("colorcalc [ -R | --rgb <R/G/B> ] | [ -H | --hsv <H/S/V> ] | -x | -X | --hex <R/G/B> | -h | --help")
+    print (_("Usage: colorconv [ -R | --rgb <R/G/B> ] | [ -H | --hsv <H/S/V> ] | -x | -X | --hex <R/G/B> | -h | --help"))
 
 def main():
     try:
@@ -68,4 +74,3 @@ def main():
 # Action ...
 if __name__ == '__main__':
     main()
-

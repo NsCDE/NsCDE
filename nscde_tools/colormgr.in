@@ -9,8 +9,9 @@
 # NsCDE: colormgr shell script
 # ColorMgr FvwmScript backgroud worker
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# Keep numeric and sort output stable without overriding the user's message locale.
+export LC_NUMERIC=C
+export LC_COLLATE=C
 
 # Defaults for -t and -e.
 PreviewMode=0
@@ -18,11 +19,24 @@ EchoInfo=0
 FpVariant=5
 WsmVariant=0
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 # Load common functions
 if [ -f "${NSCDE_TOOLSDIR}/style_managers.shlib" ]; then
    . ${NSCDE_TOOLSDIR}/style_managers.shlib
 else
-   echo "Error: cannot source ${NSCDE_TOOLSDIR}/style_managers.shlib."
+   printf "$(nscde_gettext 'Error: cannot load %s.')\n" "${NSCDE_TOOLSDIR}/style_managers.shlib"
    exit 1
 fi
 
@@ -50,7 +64,7 @@ function GenFullPalette
 
       echo ${FVWM_USERDIR}/tmp/_fullpalette.xpm
    else
-      echo "Error: Cannot open ${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
+      printf "$(nscde_gettext 'Error: cannot open %s.')\n" "${NSCDE_DATADIR}/config_templates/progbits/FullPalette.xpm"
       exit 3
    fi
 }
@@ -467,7 +481,7 @@ do
          if (($PreviewMode == 0)); then
             ProgBits
          else
-            echo "Not performing pixmap modification in preview mode."
+            printf '%s\n' "$(nscde_gettext 'Pixmap modification is disabled in preview mode.')"
          fi
       ;;
       b)
@@ -477,8 +491,7 @@ do
          Xresources
       ;;
       h)
-         echo "Usage: ${0##*/} <options> ..."
+         printf "$(nscde_gettext 'Usage: %s <options> ...')\n" "${0##*/}"
       ;;
    esac
 done
-

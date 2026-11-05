@@ -6,6 +6,19 @@
 # Licence: GPLv3
 #
 
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
 PATH="/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin:$PATH"
 Action=$1
 
@@ -53,7 +66,7 @@ elif [ "$OS" == "OpenBSD" ]; then
 else
    Opmode=$2
    if [ "x$Opmode" == "x" ]; then
-      echo "Error: Unknown ACPI operation mode."
+      printf '%s\n' "$(nscde_gettext 'Error: unknown ACPI operation mode.')"
       exit 4
    fi
 fi
@@ -86,7 +99,7 @@ function hibernate
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hibernate to disk is not supported on NetBSD."
+      printf '%s\n' "$(nscde_gettext 'Notice: hibernation to disk is not supported on NetBSD.')"
    elif [ "$Opmode" == "openbsd" ]; then
       /usr/sbin/apm -Z
    fi
@@ -99,13 +112,13 @@ function hybrid_suspend
    elif [ "$Opmode" == "systemd" ]; then
       systemctl hybrid-sleep -i
    elif [ "$Opmode" == "acpiconf" ]; then
-      echo "Not available on $OS" >&2
+      printf "$(nscde_gettext 'Not available on %s.')\n" "$OS" >&2
    elif [ "$Opmode" == "sunos" ]; then
       pfexec sys-suspend -n
    elif [ "$Opmode" == "netbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on NetBSD."
+      printf '%s\n' "$(nscde_gettext 'Notice: hybrid suspend is not supported on NetBSD.')"
    elif [ "$Opmode" == "openbsd" ]; then
-      echo "Notice: Hybrid suspend is not supported on OpenBSD."
+      printf '%s\n' "$(nscde_gettext 'Notice: hybrid suspend is not supported on OpenBSD.')"
    fi
 }
 
@@ -153,7 +166,7 @@ function f_reboot
 
 function usage
 {
-   echo "Usage: ${0##*/} [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]"
+   printf "$(nscde_gettext 'Usage: %s [ suspend | hibernate | hybrid-suspend | poweroff | reboot ] [ opmode ]')\n" "${0##*/}"
    exit 0
 }
 
@@ -182,4 +195,3 @@ case $Action in
       usage
    ;;
 esac
-

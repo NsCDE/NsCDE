@@ -6,19 +6,35 @@
 # Licence: GPLv3
 #
 
-export LC_ALL=C
+TEXTDOMAINDIR="${NSCDE_DATADIR:-@NSCDE_DATADIR@}/../locale"
+TEXTDOMAIN="nscde-tools"
+export TEXTDOMAINDIR TEXTDOMAIN
+
+function nscde_gettext
+{
+   if whence -q gettext; then
+      gettext "$1"
+   else
+      printf '%s' "$1"
+   fi
+}
+
+# Font calculations require stable numeric and sorting conventions, but message
+# translation must continue to follow the user's locale.
+export LC_NUMERIC=C
+export LC_COLLATE=C
 
 # Initialize default values for some variables
 PrintFnSize=0
 PrettyName=0
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "No \$NSCDE_DATADIR set. Exiting."
+   printf '%s\n' "$(nscde_gettext 'NSCDE_DATADIR is not set. Exiting.')"
    exit 3
 fi
 
 if [ -z $FVWM_USERDIR ]; then
-   echo "No \$FVWM_USERDIR set. Exiting."
+   printf '%s\n' "$(nscde_gettext 'FVWM_USERDIR is not set. Exiting.')"
    exit 4
 fi
 
@@ -62,7 +78,7 @@ function GetFont
          fncnffile="$FnFile"
          sysfncnffile="$FnFile"
       else
-         echo "Error: Cannot read $FnFile"
+         printf "$(nscde_gettext 'Error: cannot read %s.')\n" "$FnFile"
          exit 3
       fi
    fi
@@ -204,7 +220,7 @@ do
          export FuncToCall="GetFontset"
       ;;
       h)
-         echo "Usage: ${0##*/} [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z maxsize ] [ -F ] [ -h ]"
+         printf "$(nscde_gettext 'Usage: %s [ -f <file> ] [ -v(ariable) | -m(onospaced) ] [ -t <normal | bold | italic> ] [ -s <small | medium | large> ] [ -S ] [ -Z <maximum size> ] [ -F ] [ -h ]')\n" "${0##*/}"
          exit 0
       ;;
    esac
@@ -215,4 +231,3 @@ if [ "x$FuncToCall" == "xGetFontset" ]; then
 else
    GetFont
 fi
-

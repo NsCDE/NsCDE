@@ -10,6 +10,11 @@ import platform
 import os
 import pwd
 import socket
+import gettext
+
+_LOCALE_BASE = os.environ.get("NSCDE_DATADIR") or "@NSCDE_DATADIR@"
+_LOCALE_DIR = os.path.normpath(os.path.join(_LOCALE_BASE, os.pardir, "locale"))
+_ = gettext.translation("nscde-tools", localedir=_LOCALE_DIR, fallback=True).gettext
 
 # User Name
 print (pwd.getpwuid(os.getuid()).pw_name)
@@ -24,7 +29,7 @@ try:
     # Internet (IP) Address
     print (socket.gethostbyname(socket.gethostname()))
 except:
-    print ("(none)")
+    print (_("(none)"))
 
 # Internet Domain
 try:
@@ -32,7 +37,7 @@ try:
     domainpart = finddomain.split(".", 1)[1]
     print (domainpart)
 except:
-    print ("(none)")
+    print (_("(none)"))
 
 try:
    import psutil
@@ -55,10 +60,10 @@ try:
    print (str(swapmem_pct) + "% " + "(" + str(swapmem_pct) + "/" + str(swapmem_mb) + ") " + str(swapmem_avail) + "MB")
 
 except ImportError:
-   physmem_mb = "(Not available)"
-   swapmem_mb = "(Not available)"
-   swapmem_avail = "(Not available)"
-   swapmem_pct = "(Not available)"
+   physmem_mb = _("(Not available)")
+   swapmem_mb = _("(Not available)")
+   swapmem_avail = _("(Not available)")
+   swapmem_pct = _("(Not available)")
 
    # Physical Memory (RAM)
    print (physmem_mb)
@@ -70,7 +75,7 @@ except ImportError:
    print (swapmem_pct)
 
    # Virtual Memory in Use
-   print ("(Not available)")
+   print (_("(Not available)"))
 
 # System Last Booted
 # print ("syslastbooted XXX") # XXX
