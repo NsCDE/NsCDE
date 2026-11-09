@@ -11,6 +11,15 @@ override_dh_auto_configure:
 		--sysconfdir=/etc \
 		--libdir=/usr/lib
 
+# With a single binary package dh_auto_install would install directly into
+# debian/<pkg>/; keep the debian/tmp staging area so that
+# execute_after_dh_auto_install and dh_install work as before.
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
+
+# Git checkout does not preserve mtimes; without touching the generated
+# autotools files make would try to regenerate them with aclocal-1.18,
+# which is not available in the Ubuntu build environment.
 override_dh_auto_build:
 	touch aclocal.m4 configure
 	find . -name Makefile.in -exec touch {} +
@@ -27,22 +36,15 @@ execute_after_dh_auto_install:
 	sed -i 's#$$NSCDE_LIBDIR/$$OS_PLUS_MACHINE_ARCH/XOverrideFontCursor\.so#/usr/lib/$(DEB_HOST_MULTIARCH)/NsCDE/XOverrideFontCursor.so#g' debian/tmp/usr/lib/NsCDE/fvwm-modules/FvwmScript
 	find debian/tmp/usr/lib/NsCDE debian/tmp/usr/libexec/NsCDE -type d -empty -delete
 
-execute_after_dh_install:
-	rm -f debian/nscde-data/usr/libexec/NsCDE/colorpicker
-	rm -f debian/nscde-data/usr/libexec/NsCDE/fpclock
-	rm -f debian/nscde-data/usr/lib/NsCDE/fvwm-modules/FvwmScript
-	rm -rf debian/nscde-data/usr/libexec/NsCDE/$(DEB_HOST_MULTIARCH)
-	find debian/nscde-data/usr/lib/NsCDE debian/nscde-data/usr/libexec/NsCDE -type d -empty -delete 2>/dev/null || true
-
 execute_after_dh_fixperms:
-	if [ -d debian/nscde ]; then \
-		find debian/nscde -name "XOverrideFontCursor.so" -exec chmod 0755 {} \; ; \
+	if [ -d debian/nscde-zh ]; then \
+		find debian/nscde-zh -name "XOverrideFontCursor.so" -exec chmod 0755 {} \; ; \
 	fi
-	if [ -d debian/nscde-data/usr/lib/NsCDE/python ]; then \
-		find debian/nscde-data/usr/lib/NsCDE/python -type f -name '*.py' -exec chmod 0644 {} +; \
+	if [ -d debian/nscde-zh/usr/lib/NsCDE/python ]; then \
+		find debian/nscde-zh/usr/lib/NsCDE/python -type f -name '*.py' -exec chmod 0644 {} +; \
 	fi
-	if [ -e debian/nscde-data/usr/libexec/NsCDE/style_managers.shlib ]; then \
-		chmod 0644 debian/nscde-data/usr/libexec/NsCDE/style_managers.shlib; \
+	if [ -e debian/nscde-zh/usr/libexec/NsCDE/style_managers.shlib ]; then \
+		chmod 0644 debian/nscde-zh/usr/libexec/NsCDE/style_managers.shlib; \
 	fi
 
 override_dh_compress:

@@ -1,0 +1,270 @@
+#
+# This file is a part of the NsCDE - Not so Common Desktop Environment
+# Author: Wenyin Root
+# Licence: GPLv3
+#
+# Default Applications style manager: set the default X terminal emulator,
+# editor and file manager without editing NsCDE.conf by hand.
+# Values are stored as "InfoStoreAdd <key> <command>" lines in
+# $FVWM_USERDIR/NsCDE.conf and applied to the running session immediately.
+
+UseGettext {$NSCDE_ROOT/share/locale;NsCDE-DefaultApps}
+WindowLocaleTitle {Default Applications}
+WindowSize 444 344
+Colorset 22
+Font xft::size=11
+
+Init
+Begin
+   Set $NSCDEFILE = (GetOutput {echo $FVWM_USERDIR/NsCDE.conf} -1 1)
+
+   # Read current values from NsCDE.conf (InfoStoreAdd lines)
+   Set $CurrentTerm = (GetOutput {awk '/^InfoStoreAdd terminal /{print $3; exit}' $FVWM_USERDIR/NsCDE.conf} 0 0)
+   Set $CurrentEditor = (GetOutput {awk '/^InfoStoreAdd xeditor /{print $3; exit}' $FVWM_USERDIR/NsCDE.conf} 0 0)
+   Set $CurrentFilemgr = (GetOutput {awk '/^InfoStoreAdd filemgr /{print $3; exit}' $FVWM_USERDIR/NsCDE.conf} 0 0)
+
+   If $CurrentTerm == {} Then
+   Begin
+      Set $CurrentTerm = (GetOutput {$NSCDE_TOOLSDIR/appfinder terminal terminal} 0 0)
+   End
+
+   ChangeValue 3 $CurrentTerm
+   ChangeValue 7 $CurrentEditor
+   ChangeValue 10 $CurrentFilemgr
+End
+
+Widget 1
+   Property
+   Size 436 336
+   Position 4 4
+   Type Rectangle
+   Flags NoReliefString
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Terminal ---------------------------------------------------------------
+Widget 2
+   Property
+   Size 140 20
+   Position 16 20
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Terminal}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 3
+   Property
+   Size 200 20
+   Position 150 18
+   Type TextField
+   Flags NoReliefString
+   Font "xft:::pixelsize=13"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 4
+   Property
+   Size 70 0
+   Position 356 18
+   Type PopupMenu
+   Value 0
+   Flags NoReliefString
+   LocaleTitle {xterm|alacritty|kitty|konsole|gnome-terminal|xfce4-terminal|wezterm}
+   Font "xft:::pixelsize=13"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 4) == 1 Then ChangeValue 3 {xterm}
+         If (GetValue 4) == 2 Then ChangeValue 3 {alacritty}
+         If (GetValue 4) == 3 Then ChangeValue 3 {kitty}
+         If (GetValue 4) == 4 Then ChangeValue 3 {konsole}
+         If (GetValue 4) == 5 Then ChangeValue 3 {gnome-terminal}
+         If (GetValue 4) == 6 Then ChangeValue 3 {xfce4-terminal}
+         If (GetValue 4) == 7 Then ChangeValue 3 {wezterm}
+      End
+End
+
+# Editor -----------------------------------------------------------------
+Widget 5
+   Property
+   Size 140 20
+   Position 16 60
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {Editor}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 6
+   Property
+   Size 70 0
+   Position 356 58
+   Type PopupMenu
+   Value 0
+   Flags NoReliefString
+   LocaleTitle {vim|nvim|emacs|gedit|kate|mousepad|kwrite}
+   Font "xft:::pixelsize=13"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 6) == 1 Then ChangeValue 7 {vim}
+         If (GetValue 6) == 2 Then ChangeValue 7 {nvim}
+         If (GetValue 6) == 3 Then ChangeValue 7 {emacs}
+         If (GetValue 6) == 4 Then ChangeValue 7 {gedit}
+         If (GetValue 6) == 5 Then ChangeValue 7 {kate}
+         If (GetValue 6) == 6 Then ChangeValue 7 {mousepad}
+         If (GetValue 6) == 7 Then ChangeValue 7 {kwrite}
+      End
+End
+
+Widget 7
+   Property
+   Size 200 20
+   Position 150 58
+   Type TextField
+   Flags NoReliefString
+   Font "xft:::pixelsize=13"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# File Manager ------------------------------------------------------------
+Widget 8
+   Property
+   Size 140 20
+   Position 16 100
+   Type ItemDraw
+   Flags NoReliefString NoFocus Left
+   LocaleTitle {File Manager}
+   Font "xft:::pixelsize=14"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+Widget 9
+   Property
+   Size 70 0
+   Position 356 98
+   Type PopupMenu
+   Value 0
+   Flags NoReliefString
+   LocaleTitle {pcmanfm-qt|thunar|dolphin|nautilus|nemo|krusader}
+   Font "xft:::pixelsize=13"
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         If (GetValue 9) == 1 Then ChangeValue 10 {pcmanfm-qt}
+         If (GetValue 9) == 2 Then ChangeValue 10 {thunar}
+         If (GetValue 9) == 3 Then ChangeValue 10 {dolphin}
+         If (GetValue 9) == 4 Then ChangeValue 10 {nautilus}
+         If (GetValue 9) == 5 Then ChangeValue 10 {nemo}
+         If (GetValue 9) == 6 Then ChangeValue 10 {krusader}
+      End
+End
+
+Widget 10
+   Property
+   Size 200 20
+   Position 150 98
+   Type TextField
+   Flags NoReliefString
+   Font "xft:::pixelsize=13"
+   Colorset 20
+   Main
+      Case message of
+      SingleClic :
+      Begin
+      End
+End
+
+# Buttons ---------------------------------------------------------------
+Widget 11
+   Property
+   Size 96 0
+   Position 16 294
+   Type PushButton
+   LocaleTitle {OK}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Set $TermCmd = (GetTitle 3)
+         Set $EditorCmd = (GetTitle 7)
+         Set $FilemgrCmd = (GetTitle 10)
+         Set $TermFile = $NSCDEFILE
+         Set $EditorFile = $NSCDEFILE
+         Set $FilemgrFile = $NSCDEFILE
+
+         # Terminal
+         Exec exec sh -c "sed -i 's|^InfoStoreAdd terminal .*|InfoStoreAdd terminal $TermCmd|' $TermFile; grep -q '^InfoStoreAdd terminal ' $TermFile || echo 'InfoStoreAdd terminal $TermCmd' >> $TermFile; nscde_fvwmclnt 'InfoStoreAdd terminal $TermCmd'"
+         # Editor
+         Exec exec sh -c "sed -i 's|^InfoStoreAdd xeditor .*|InfoStoreAdd xeditor $EditorCmd|' $EditorFile; grep -q '^InfoStoreAdd xeditor ' $EditorFile || echo 'InfoStoreAdd xeditor $EditorCmd' >> $EditorFile; nscde_fvwmclnt 'InfoStoreAdd xeditor $EditorCmd'"
+         # File Manager
+         Exec exec sh -c "sed -i 's|^InfoStoreAdd filemgr .*|InfoStoreAdd filemgr $FilemgrCmd|' $FilemgrFile; grep -q '^InfoStoreAdd filemgr ' $FilemgrFile || echo 'InfoStoreAdd filemgr $FilemgrCmd' >> $FilemgrFile; nscde_fvwmclnt 'InfoStoreAdd filemgr $FilemgrCmd'"
+         Quit
+      End
+End
+
+Widget 12
+   Property
+   Size 96 0
+   Position 244 294
+   Type PushButton
+   LocaleTitle {Cancel}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Quit
+      End
+End
+
+Widget 13
+   Property
+   Size 96 0
+   Position 344 294
+   Type PushButton
+   LocaleTitle {Help}
+   Font "xft:::pixelsize=15"
+   Flags NoReliefString Center
+   Main
+      Case message of
+      SingleClic :
+      Begin
+         Exec exec $[infostore.terminal] -e man nscde
+      End
+End

@@ -6,6 +6,16 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 # Called from f_FrontPanelPropsMenu and f_SubpanelPropsMenu to
 # populate Help menu item as best as it can with fuzzy finding
 # internal docs or man pages.
@@ -33,7 +43,7 @@ function find_cmd_in_subpanel
          exit 0
       fi
    else
-      echo "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
+      gettext -s "Error: ${0##*/}: Empty subpanel search for line ${LineInSubpanel} in subpanel ${SubpanelNo}"
       exit 1
    fi
 }
@@ -55,7 +65,7 @@ elif [ "$Mode" == "-rsubp" ]; then
    RawMan=1
    find_cmd_in_subpanel
 else
-   echo "Error: ${0##*/}: Unknown mode of operation."
+   gettext -s "Error: ${0##*/}: Unknown mode of operation."
    exit 1
 fi
 

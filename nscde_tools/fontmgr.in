@@ -6,19 +6,29 @@
 # Licence: GPLv3
 #
 
+export TEXTDOMAINDIR="$NSCDE_ROOT/share/locale"
+export TEXTDOMAIN="nscde-tools"
+
+# Handle gettext absence
+function _echo { shift; echo "$@"; }
+whence -q gettext
+if (($? != 0)); then
+   alias gettext="_echo"
+fi
+
 if [ -z $NSCDE_ROOT ]; then
-   echo "Error: NSCDE_ROOT is not set. Exiting."
+   gettext -s "Error: NSCDE_ROOT is not set. Exiting."
    exit 2
 fi
 
 if [ -z $NSCDE_DATADIR ]; then
-   echo "Error: NSCDE_DATADIR is not set. Exiting."
+   gettext -s "Error: NSCDE_DATADIR is not set. Exiting."
    exit 2
 fi
 
 type -p fc-list > /dev/null
 if (($? != 0)); then
-   echo "Error: fc-list command not found."
+   gettext -s "Error: fc-list command not found."
    exit 3
 fi
 
@@ -31,12 +41,12 @@ FNUMS=$(echo "$FNAMES" | sort -u | grep -En '.*')
 function findfontsets
 {
    if [ -z $NSCDE_ROOT ]; then
-      echo "No NSCDE_ROOT defined. Exiting."
+      gettext -s "No NSCDE_ROOT defined. Exiting."
       exit 2
    fi
 
    if [ -z $NSCDE_DATADIR ]; then
-      echo "No NSCDE_DATADIR defined. Exiting."
+      gettext -s "No NSCDE_DATADIR defined. Exiting."
       exit 2
    fi
 

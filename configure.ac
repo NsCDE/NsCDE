@@ -6,7 +6,7 @@ dnl Author: Hegel3DReloaded
 dnl Licence: GPLv3
 dnl
 
-AC_INIT([NsCDE], 2.4, [nscde@protonmail.com])
+AC_INIT([NsCDE], 2.4.3.4, [nscde@protonmail.com])
 
 AC_CONFIG_AUX_DIR(ac-aux)
 
@@ -67,7 +67,7 @@ AC_MSG_RESULT($XSESSDIR)
 
 AC_SUBST(xsessiondir)
 
-LOCALES="hr"
+LOCALES="hr zh_CN"
 AC_SUBST(LOCALES)
 
 AC_SUBST(ECHONE)
@@ -335,13 +335,6 @@ AS_IF([test "x${HAVE_PYMOD_PWD}" = x"no"], [AC_MSG_WARN([Python 3 module pwd is 
 
 AX_PYTHON_MODULE([socket], [])
 AS_IF([test "x${HAVE_PYMOD_SOCKET}" = x"no"], [AC_MSG_WARN([Python 3 module socket is required for NsCDE runtime.])])
-
-AX_PYTHON_MODULE([PyQt5], [])
-AX_PYTHON_MODULE([PyQt4], [])
-
-AS_IF([test "x${HAVE_PYMOD_PYQT5}" = "xno"], 
-	AS_IF([test "x${HAVE_PYMOD_PYQT4}" = "xno"],
-	[AC_MSG_WARN([Either python module PyQt5 or older PyQt4 are required for NsCDE runtime.])]))
 
 if test -z $XSESSDIR ; then
    if test -d "/usr/share/xsessions"; then

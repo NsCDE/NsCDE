@@ -1,0 +1,253 @@
+# GitHub Actions workflow: build NsCDE-zh packages (deb / rpm / Arch)
+# Uses packaging recipes from the pkg/ directory. Package names are unified
+# as "nscde-zh" (and the NsCDE-zh branding) to distinguish from upstream NsCDE.
+#
+# Builds for amd64 and arm64 via a matrix. Triggered on:
+#   - push to master
+#   - tags (release builds)
+#   - pull requests against master
+#   - manual dispatch (Actions tab -> Run workflow)
+
+name: Build packages
+
+on:
+  push:
+    branches: [master]
+    tags: ['*']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+
+  # ------------------------------------------------------- i18n quality gate
+  check-i18n:
+    name: Check zh_CN translations
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gettext
+        run: sudo apt-get install -y gettext
+
+      - name: Verify all .po files compile
+        run: |
+          for f in po/*.zh_CN.po; do
+            msgfmt --check -o /dev/null "$f" || { echo "FAIL: $f"; exit 1; }
+          done
+          echo "All zh_CN .po files compile OK"
+
+      - name: Verify translation completeness
+        run: |
+          python3 - <<'PYEOF'
+          import re, glob
+          # msgstr must be translated (contain Han) unless it is a header,
+          # proper noun or config value that is intentionally kept as-is.
+          allowed = re.compile(
+              r'^(NsCDE-|LibreOffice|Rofi|GWM|WenQuanYi|000|Broj|Pomoc|Otka|U Redu|Zadano)')
+          han = re.compile(r'[一-鿿]')
+          fail = 0
+          for f in sorted(glob.glob('po/*.zh_CN.po')):
+              lines = open(f, encoding='utf-8').read().splitlines()
+              cur = None
+              for ln in lines:
+                  m = re.match(r'msgid "(.*)"', ln)
+                  if m:
+                      cur = m.group(1); continue
+                  m = re.match(r'msgstr "(.*)"', ln)
+                  if m and cur and cur != '' and m.group(1):
+                      s = m.group(1)
+                      if not han.search(s) and not allowed.match(s):
+                          fail += 1
+                          print(f'  {f}: untranslated [{cur}] -> [{s}]')
+                      cur = None
+          if fail:
+              print(f'{fail} untranslated msgstr found')
+              raise SystemExit(1)
+          print('All zh_CN translations complete')
+          PYEOF
+
+  # ---------------------------------------------------------------- deb
+  build-deb:
+    name: Debian/Ubuntu .deb (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runs-on: ubuntu-24.04
+          - arch: arm64
+            runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            devscripts debhelper gettext ksh gcc autoconf automake \
+            libx11-dev libxext-dev libxpm-dev \
+            python3 python3-psutil python3-pyqt5 python3-xdg python3-yaml \
+            xdg-utils x11-utils x11-xserver-utils xdotool xterm imagemagick
+
+      - name: Build .deb packages
+        run: |
+          ln -s pkg/debian debian
+          # -d: skip Build-Depends auto-resolution; dependencies are already
+          # installed above (ksh93u+m package name is distro-specific).
+          debuild -uc -us -b -d
+
+      - name: Collect artifacts
+        run: |
+          # debuild writes results to the parent directory
+          cp -v ../*.deb ../*.dsc ../*.changes ../*.buildinfo ./ 2>/dev/null || true
+
+      - name: Upload .deb artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nscde-zh-deb-${{ matrix.arch }}
+          path: |
+            *.deb
+            *.dsc
+            *.changes
+            *.buildinfo
+
+  # ---------------------------------------------------------------- rpm
+  build-rpm:
+    name: Fedora/RHEL .rpm (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runs-on: ubuntu-24.04
+          - arch: arm64
+            runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runs-on }}
+    container: fedora:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          dnf install -y \
+            rpm-build make gcc autoconf automake gettext ksh \
+            libX11-devel libXt-devel libXext-devel libXpm-devel \
+            python3-pyxdg python3-psutil python3-pyyaml python3-qt5 \
+            qt5-qtstyleplugins qt5ct wqy-bitmap-fonts \
+            xterm xsettingsd stalonetray dunst xclip xdotool dex-autostart \
+            groff-base dejavu-serif-fonts
+
+      - name: Build .rpm package
+        run: |
+          VERSION=$(grep -oP 'AC_INIT\(\[NsCDE\], \K[0-9.]+' configure.ac)
+          # Sync spec version + Source0 with the source tree version
+          sed -i "s|releases/download/[0-9.]*/NsCDE-[0-9.]*\.tar\.gz|releases/download/${VERSION}/NsCDE-${VERSION}.tar.gz|" pkg/rpm/NsCDE.spec
+          sed -i "s/^Version:.*/Version:\t${VERSION}/" pkg/rpm/NsCDE.spec
+
+          mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          cp pkg/rpm/NsCDE.spec rpmbuild/SPECS/
+
+          # Local source tarball named to match Source0 basename
+          # (<version>.tar.gz) so rpmbuild uses it instead of downloading.
+          cp -a "$PWD" /tmp/NsCDE-$VERSION
+          (cd /tmp && tar cpzf "$GITHUB_WORKSPACE/rpmbuild/SOURCES/$VERSION.tar.gz" NsCDE-$VERSION)
+
+          rpmbuild --define "_topdir $GITHUB_WORKSPACE/rpmbuild" -bb rpmbuild/SPECS/NsCDE.spec
+
+      - name: Upload .rpm artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nscde-zh-rpm-${{ matrix.arch }}
+          path: |
+            rpmbuild/RPMS/**/*.rpm
+            !rpmbuild/RPMS/**/*debug*.rpm
+
+  # ---------------------------------------------------------------- Arch
+  build-arch:
+    name: Arch Linux .pkg.tar.zst (x86_64)
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          pacman -Sy --noconfirm --needed \
+            base-devel autoconf automake ksh \
+            libxext libx11 libxpm stalonetray xsettingsd fvwm3 glibc \
+            imagemagick xorg-xprop xorg-xrdb xorg-xset xorg-xdpyinfo \
+            xorg-xrefresh xorg-xmodmap xorg-xrandr xorgproto gcc xterm \
+            python python-pyxdg python-yaml python-psutil python-pyqt5 \
+            xdotool xdg-utils gettext groff ttf-dejavu wqy-bitmapfont
+
+      - name: Build Arch package
+        run: |
+          VERSION=$(grep -oP 'AC_INIT\(\[NsCDE\], \K[0-9.]+' configure.ac)
+          sed -i "s/^pkgver=.*/pkgver=$VERSION/" pkg/pacman/PKGBUILD
+
+          # Source tarball named nscde-zh-$VERSION.tar.gz as the PKGBUILD expects
+          cp -a "$PWD" /tmp/nscde-zh-$VERSION
+          (cd /tmp && tar cpzf nscde-zh-$VERSION.tar.gz nscde-zh-$VERSION)
+          cp /tmp/nscde-zh-$VERSION.tar.gz pkg/pacman/
+
+          # makepkg refuses to run as root; run it as an unprivileged user
+          useradd -m builder
+          chown -R builder:builder "$GITHUB_WORKSPACE" /home/builder
+          su builder -c "cd '$GITHUB_WORKSPACE/pkg/pacman' && makepkg --noconfirm"
+
+      - name: Upload Arch artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nscde-zh-arch
+          path: |
+            pkg/pacman/*.pkg.tar.*
+            !pkg/pacman/*-debug-*.pkg.tar.*
+
+  # ---------------------------------------------------------------- release
+  release:
+    name: Create GitHub Release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-deb, build-rpm, build-arch]
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          {
+            echo "body<<EOF"
+            echo "NsCDE-zh ${{ github.ref_name }} 自动打包构建产物。"
+            echo ""
+            echo "### 变更（自 $([ -n "$PREV_TAG" ] && echo "$PREV_TAG" || echo 上一版本)）"
+            git log --oneline --no-merges "$([ -n "$PREV_TAG" ] && echo "$PREV_TAG..HEAD" || echo "-10")" 2>/dev/null | head -30
+            echo ""
+            echo "### 支持的包格式"
+            echo "- Debian/Ubuntu (.deb，amd64 + arm64)"
+            echo "- Fedora/RHEL (.rpm，amd64 + arm64)"
+            echo "- Arch Linux (.pkg.tar.zst，x86_64)"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+          pattern: 'nscde-zh-*'
+      - name: Create Release and upload assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: NsCDE-zh ${{ github.ref_name }}
+          body: ${{ steps.notes.outputs.body }}
+          files: |
+            artifacts/**/*.deb
+            artifacts/**/*.rpm
+            artifacts/**/*.pkg.tar.zst
+          fail_on_unmatched_files: false

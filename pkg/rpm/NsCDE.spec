@@ -1,32 +1,39 @@
-Name:		NsCDE
-Version:	2.3
-Release:	3%{?dist}
+Name:		NsCDE-zh
+Version:	2.4.3.4
+Release:	1%{?dist}
 Summary:	Not so Common Desktop Environment
 
 License:	GPLv3
-URL:		https://github.com/NsCDE
-Source0:	https://github.com/NsCDE/NsCDE/releases/download/2.3/NsCDE-2.3.tar.gz
+URL:		https://github.com/WenYin-Community/NsCDE
+Source0:	https://github.com/WenYin-Community/NsCDE/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires:  ksh
 BuildRequires:  gcc
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	make
-BuildRequires:	gettext libX11-devel libXt-devel libXext-devel libXpm-devel
+BuildRequires:	gettext libX11-devel libXt-devel libXext-devel libXpm-devel python3
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  glibc-headers
 %endif
 %if 0%{?suse_version}
 BuildRequires:  glibc-devel
 %endif
-Requires:	xterm ksh sed fvwm cpp xsettingsd stalonetray dunst xclip xdotool
+Requires:	xterm ksh sed cpp xsettingsd stalonetray dunst xclip xdotool
+# fvwm2 is EOL; fvwm3 is preferred but fvwm2 still works.
+# On openSUSE, fvwm3 is only available from the OBS repo
+# X11:windowmanagers (https://build.opensuse.org/project/show/X11:windowmanagers),
+# not from the official oss repo, so zypper resolves this to fvwm2
+# unless that repo is enabled.
+Requires:	(fvwm3 or fvwm)
 Requires:	python3-pyxdg python3-psutil qt5ct
 %if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-Requires: python3-yaml PyQt5 qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
+Requires: python3-pyyaml qt5-qtstyleplugins dex-autostart groff-base dejavu-serif-fonts
 %endif
 %if 0%{?suse_version}
-Requires: python3-qt5 python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex groff-full dejavu-fonts
+Requires: python3-pyaml libqt5-qtstyleplugins-platformtheme-gtk2 dex groff-full dejavu-fonts
 %endif
+Requires:	wqy-bitmap-fonts
 Requires:	%{_bindir}/convert
 Requires:	%{_bindir}/import
 Requires:	%{_bindir}/xrdb
@@ -49,7 +56,8 @@ lightweight hybrid desktop environment.
 
 
 %prep
-%autosetup -p1
+# Source0 codeload tarball unpacks to NsCDE-<tag>, not %{name}-%{version}
+%autosetup -p1 -n NsCDE-%{version}
 
 
 %build
@@ -59,21 +67,30 @@ autoreconf -ivf
 
 %install
 %make_install
+# Fedora usrmerge: the ksh and python3 packages only provide /usr/bin paths.
+# configure may write /usr/sbin/ksh93 or /usr/sbin/python3 shebangs, which
+# would make RPM auto-dependency generation emit unresolvable file requires.
+# Normalize every /usr/sbin interpreter shebang to /usr/bin.
+grep -rlI '^#!.*/usr/sbin/' %{buildroot} 2>/dev/null | \
+	xargs -r sed -i 's|^#! */usr/sbin/|#!/usr/bin/|' 2>/dev/null || true
 
 %files
 %{_bindir}/*
-%{_libexecdir}/%{name}/
-%{_libdir}/%{name}/
+%{_libexecdir}/NsCDE/
+%{_libdir}/NsCDE/
 %{_datadir}/applications/
 %{_datadir}/desktop-directories/
 %{_datadir}/xsessions/nscde.desktop
 %{_datadir}/icons/
 %{_datadir}/doc/nscde/
 %{_datadir}/locale/*
-%{_datadir}/%{name}/
+%{_datadir}/NsCDE/
 %{_sysconfdir}/xdg/menus/nscde-applications.menu
 
 %changelog
+* Wed Nov 04 2026 Wenyin Root <ruojiner@hotmail.com> - 2.4.3.4-1
+- Version 2.4.3.4
+
 * Fri Jun 16 2023 Hegel3DReloaded <nscde@protonmail.com>  - 2.3-3
 - Portability and bug fixes
 - Misc small fixes

@@ -10,6 +10,8 @@
 import os.path
 import yaml
 import subprocess
+import gettext
+_ = gettext.gettext
 
 # loadable opts for various classes. Maybe get rid of functions later
 class Opts():
@@ -37,7 +39,7 @@ class Opts():
     # load and replace current object namespace with loaded
     # note: this way because yaml.load/save looks nicer when works on dict instead of class
     def load(self,filename):
-        print ('Opts() LOADING '+filename)
+        print (_('Opts() LOADING ')+filename)
         with open(filename, 'r') as stream:
             tmpdict = yaml.load(stream)
         # if file is empty(tmpdict=None), do nothing. Then in all classes default values for opts will be used
@@ -48,10 +50,10 @@ class Opts():
     # save namespace (or something)
     def save(self,filename):
         backup=filename+'.backup'
-        print ('Copying old config file to '+backup)
+        print (_('Copying old config file to ')+backup)
         cmd='cp'+' '+filename+' '+backup
         output = subprocess.check_output(cmd, shell=True)
-        print ('Opts() SAVING CONFIG FILE '+filename)
+        print (_('Opts() SAVING CONFIG FILE ')+filename)
         with open(filename, 'w') as outfile:
             yaml.dump(self.__dict__, outfile)
 

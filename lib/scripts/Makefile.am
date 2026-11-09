@@ -10,7 +10,7 @@ DYNSCRIPTS = BackdropMgr ColorMgr ExecDialog FontMgr PowerSaveMgr \
 	SubpanelSettings Sysinfo KeyboardMgr PointerMgr
 
 FVWMSCRIPTS = ActionForm BackdropMgr BeepMgr CheckMailApplet ChoiceForm \
-	ColorMgr ExecDialog FilePicker FontMgr FpLite GeometryMgr \
+	ColorMgr DefaultApps ExecDialog FilePicker FontMgr FpLite GeometryMgr \
 	GWMOptions InputForm KeyboardMgr ModifyColor MonthDayApplet \
 	NColorsDialog NProcMgr Occupy PaletteDialog PointerMgr \
 	PowerSaveMgr StyleMgr SubpanelMgr SubpanelSettings \

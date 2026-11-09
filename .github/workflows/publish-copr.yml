@@ -1,0 +1,108 @@
+# GitHub Actions workflow: trigger a COPR build of nscde-zh
+# (https://copr.fedorainfracloud.org/coprs/ruojiner/NsCDE-zh/)
+#
+# The COPR package NsCDE-zh is configured as a SCM build: COPR clones the
+# GitHub source repo and builds from pkg/rpm/NsCDE.spec (spec + codeload
+# source tarball). This workflow only triggers the build with copr-cli.
+#
+# Requires repository secrets COPR_LOGIN and COPR_TOKEN (the login and API
+# token of the COPR account owning the project).
+#
+# Triggered on:
+#   - tags (e.g. 2.4) - builds the matching git tag
+#   - manual dispatch with an explicit version
+
+name: Publish to COPR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version/tag to build (e.g. 2.4)'
+        required: true
+  push:
+    tags: ['*']
+
+jobs:
+  build-copr:
+    name: Trigger COPR build of NsCDE-zh
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "ver=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ver=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install copr-cli
+        run: |
+          pip3 install --break-system-packages copr-cli
+
+      - name: Configure COPR credentials
+        env:
+          COPR_LOGIN: ${{ secrets.COPR_LOGIN }}
+          COPR_TOKEN: ${{ secrets.COPR_TOKEN }}
+        run: |
+          if [ -z "$COPR_LOGIN" ] || [ -z "$COPR_TOKEN" ]; then
+            echo "::error::COPR_LOGIN or COPR_TOKEN secret is empty or not accessible"
+            exit 1
+          fi
+          mkdir -p ~/.config
+          cat > ~/.config/copr <<EOF
+          [copr-cli]
+          login = ${COPR_LOGIN}
+          token = ${COPR_TOKEN}
+          copr_url = https://copr.fedorainfracloud.org
+          EOF
+          chmod 600 ~/.config/copr
+
+      - name: Trigger COPR build (SCM from GitHub)
+        id: copr
+        run: |
+          VERSION="${{ steps.version.outputs.ver }}"
+          echo "Triggering COPR build of NsCDE-zh @ ${VERSION} ..."
+          OUT=$(copr-cli buildscm --nowait ruojiner/NsCDE-zh \
+            --clone-url https://github.com/WenYin-Community/NsCDE.git \
+            --commit "$VERSION" \
+            --subdir pkg/rpm \
+            --spec NsCDE.spec 2>&1)
+          echo "$OUT"
+          BUILD_ID=$(echo "$OUT" | grep -oE '[0-9]+' | tail -1)
+          if [ -z "$BUILD_ID" ]; then
+            echo "::error::Could not determine COPR build ID"
+            exit 1
+          fi
+          echo "build_id=$BUILD_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for COPR build to finish
+        run: |
+          BUILD_ID="${{ steps.copr.outputs.build_id }}"
+          echo "Watching COPR build $BUILD_ID (up to 30 min) ..."
+          for i in $(seq 1 60); do
+            STATE=$(copr-cli status "$BUILD_ID" 2>/dev/null | head -1)
+            echo "  build $BUILD_ID: $STATE"
+            case "$STATE" in
+              succeeded)
+                echo "COPR build $BUILD_ID succeeded"
+                exit 0
+                ;;
+              failed|error)
+                echo "::error::COPR build $BUILD_ID failed"
+                exit 1
+                ;;
+            esac
+            sleep 30
+          done
+          echo "::error::COPR build $BUILD_ID timed out"
+          exit 1
+
+      - name: Report build status
+        run: |
+          echo "Build submitted. Check status:"
+          echo "  copr-cli status ruojiner/NsCDE-zh"
+          echo "  https://copr.fedorainfracloud.org/coprs/ruojiner/NsCDE-zh/"

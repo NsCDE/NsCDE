@@ -1,0 +1,89 @@
+# GitHub Actions workflow: publish the Arch PKGBUILD to the AUR
+# (https://aur.archlinux.org/packages/nscde-zh)
+#
+# The AUR hosts source packages (PKGBUILD + .SRCINFO), not prebuilt binaries.
+# The source is a git source pinned to the matching GitHub tag.
+#
+# Requires the repository secret AUR_SSH_PRIVATE_KEY (an SSH key registered
+# with the AUR account that owns nscde-zh).
+#
+# Triggered on:
+#   - tags (release builds) matching e.g. 2.4
+#   - manual dispatch with an explicit version
+
+name: Publish to AUR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 2.4)'
+        required: true
+  push:
+    tags: ['*']
+
+jobs:
+  publish-aur:
+    name: Publish nscde-zh to AUR
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "ver=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ver=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install tools
+        run: |
+          pacman -Sy --noconfirm --needed git base-devel openssh
+
+      - name: Prepare AUR PKGBUILD and .SRCINFO
+        run: |
+          VERSION="${{ steps.version.outputs.ver }}"
+          # Adapt the packaged PKGBUILD for AUR:
+          # - sync version/release
+          # - source the code from the matching GitHub tag instead of a tarball
+          sed -i "s/^pkgver=.*/pkgver=$VERSION/" pkg/pacman/PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" pkg/pacman/PKGBUILD
+          sed -i "s|^source=.*|source=(\"nscde-zh-\$pkgver::git+https://github.com/WenYin-Community/NsCDE.git#tag=\$pkgver\")|" pkg/pacman/PKGBUILD
+          sed -i "s/^md5sums=.*/sha256sums=('SKIP')/" pkg/pacman/PKGBUILD
+          # makepkg refuses to run as root; run it as an unprivileged user
+          useradd -m builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+          su builder -c "cd '$GITHUB_WORKSPACE/pkg/pacman' && makepkg --printsrcinfo" > pkg/pacman/.SRCINFO
+
+      - name: Publish to AUR
+        env:
+          AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "$AUR_SSH_PRIVATE_KEY" ]; then
+            echo "::error::AUR_SSH_PRIVATE_KEY secret is empty or not accessible to this repository"
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          echo "$AUR_SSH_PRIVATE_KEY" > ~/.ssh/aur
+          chmod 600 ~/.ssh/aur
+          # Use explicit ssh options (not ~/.ssh/config) to avoid host key
+          # verification failures in the throwaway container.
+          export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/aur -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null"
+          # Clone the AUR repo and sync PKGBUILD + .SRCINFO
+          git clone ssh://aur@aur.archlinux.org/nscde-zh.git /tmp/aur
+          cp pkg/pacman/PKGBUILD /tmp/aur/
+          cp pkg/pacman/.SRCINFO /tmp/aur/
+          cd /tmp/aur
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PKGBUILD .SRCINFO
+          if ! git diff --cached --quiet; then
+            git commit -m "Update to ${{ steps.version.outputs.ver }}"
+            git push
+            echo "Published nscde-zh ${{ steps.version.outputs.ver }} to AUR"
+          else
+            echo "No changes to publish (already up to date)"
+          fi

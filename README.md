@@ -9,6 +9,24 @@ all who care. I'll be back. :-)
 
 # **Not so Common Desktop Environment (NsCDE)**
 
+## 简体中文汉化版（NsCDE-zh）
+
+本项目是 [NsCDE](https://github.com/NsCDE/NsCDE) 的**简体中文汉化分支**，在保留原版 CDE 复古风格与完整功能的基础上，对界面进行了全面简体中文本地化。本仓库由旧开发仓库 [wenyinos/NsCDE-zh](https://github.com/wenyinos/NsCDE-zh)（已归档）迁移而来，为**当前正式维护仓库**。
+
+**汉化范围**：
+- 全部 26 个 gettext 翻译域（FVWM 菜单、FvwmScript 对话框、样式管理器、启动/迁移脚本、Python 工具）**100% 简体中文化**
+- 中文字体支持：内置文泉驿点阵宋体（WenQuanYi Bitmap Song）回退，缺字时自动回退 Noto Sans CJK SC，小字号下依然清晰锐利
+- 软件包命名 `nscde-zh`（Debian/Arch）/ `NsCDE-zh`（RPM），与上游区分
+
+**安装**：
+- **Debian/Ubuntu**：从 [Releases](https://github.com/WenYin-Community/NsCDE/releases) 下载 `.deb` 安装
+- **Fedora/RHEL**：`sudo dnf copr enable ruojiner/NsCDE-zh && sudo dnf install NsCDE-zh`
+- **Arch Linux**：AUR 包 [nscde-zh](https://aur.archlinux.org/packages/nscde-zh)
+
+**使用**：以 `LANG=zh_CN.UTF-8`（或 `LC_MESSAGES=zh_CN.UTF-8`）登录，启动 NsCDE 即为中文界面。
+
+---
+
 [![Github commits](https://img.shields.io/github/last-commit/NsCDE/NsCDE)](https://github.com/NsCDE/NsCDE/commits/master)
 [![GitHub contributors](https://img.shields.io/github/contributors/NsCDE/NsCDE)](https://github.com/NsCDE/NsCDE/graphs/contributors)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/NsCDE/NsCDE/pull/new)
